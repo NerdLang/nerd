@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-var VERSION = "v0.0.6";
+var VERSION = "v0.0.7";
 
 var fs = require('fs');
 var os = require('os');
@@ -103,7 +103,6 @@ function Build()
           fs.writeFileSync(zipFolder + path.sep + "project.json", '{"main": "' + main + '"}');
           var zip = new Zip();
           zip.addLocalFolder(zipFolder);
-          console.log(zipFolder);
           var zipBuffer = Buffer.from(zip.toBuffer()).toString("base64");
 
           var data = "{ \"project\" : \"" + zipBuffer + "\"}";
@@ -158,7 +157,7 @@ function Build()
                   if(CLI.cli["--run"])
                   {
                     if(PLATFORM != "win32") child_process.execSync("chmod +x " + to);
-                    console.log(child_process.execSync("./" + to).toString());
+                    console.log(child_process.execSync(to).toString());
                   }
                 }
               });
