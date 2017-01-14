@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-var VERSION = "v0.0.1";
+var VERSION = "v0.0.5";
 
 var fs = require('fs');
 var os = require('os');
@@ -62,7 +62,7 @@ function Build()
         else if(ARCH == "x32") target = "linux-x86-64";
         break;
 
-      case "windows":
+      case "win32":
         if(ARCH == "x64") target = "win-x86-32";
         else if(ARCH == "x32") target = "win-x86-64";
         break;
@@ -99,7 +99,7 @@ function Build()
           var zipFolder = fName.split(path.sep);
           var main = fName.split(path.sep);
           main = main[main.length - 1];
-          zipFolder = CURRENT + path.sep + zipFolder.slice(0, zipFolder.length - 1).join(path.sep) + path.sep;
+          zipFolder = "." + path.sep + zipFolder.slice(0, zipFolder.length - 1).join(path.sep) + path.sep;
           fs.writeFileSync(zipFolder + path.sep + "project.json", '{"main": "' + main + '"}');
           var zip = new Zip();
           zip.addLocalFolder(zipFolder, "/");
@@ -143,7 +143,7 @@ function Build()
               else
               {
                 var end = ".bin";
-                if(PLATFORM == "windows") end = ".exe";
+                if(PLATFORM == "win32") end = ".exe";
                 to = tmp[tmp.length-1].split(".")[0] + end;
               }
               fs.writeFile(to, bin, function(err, data)
@@ -156,7 +156,7 @@ function Build()
                 {
                   if(CLI.cli["--run"])
                   {
-                    child_process.execSync("chmod +x " + to);
+                    if(PLATFORM != "win32") child_process.execSync("chmod +x " + to);
                     console.log(child_process.execSync("./" + to).toString());
                   }
                 }
