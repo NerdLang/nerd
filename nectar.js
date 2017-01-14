@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-var VERSION = "v0.0.7";
+var VERSION = "v0.0.8";
 
 var fs = require('fs');
 var os = require('os');
@@ -156,8 +156,15 @@ function Build()
                 {
                   if(CLI.cli["--run"])
                   {
-                    if(PLATFORM != "win32") child_process.execSync("chmod +x " + to);
-                    console.log(child_process.execSync(to).toString());
+                    if(PLATFORM == "win32")
+                    {
+                      console.log(child_process.execSync(to).toString());
+                    }
+                    else
+                    {
+                      child_process.execSync("chmod +x " + to);
+                      console.log(child_process.execSync("." + path.sep + to).toString());
+                    }
                   }
                 }
               });
