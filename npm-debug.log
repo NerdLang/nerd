@@ -1,0 +1,25 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/bin/nodejs', '/usr/bin/npm', 'publish' ]
+2 info using npm@4.0.5
+3 info using node@v7.4.0
+4 verbose publish [ '.' ]
+5 verbose stack Error: Invalid version: "0.0.0.1"
+5 verbose stack     at Object.fixVersionField (/usr/lib/node_modules/npm/node_modules/normalize-package-data/lib/fixer.js:191:13)
+5 verbose stack     at /usr/lib/node_modules/npm/node_modules/normalize-package-data/lib/normalize.js:32:38
+5 verbose stack     at Array.forEach (native)
+5 verbose stack     at normalize (/usr/lib/node_modules/npm/node_modules/normalize-package-data/lib/normalize.js:31:15)
+5 verbose stack     at final (/usr/lib/node_modules/npm/node_modules/read-package-json/read-json.js:349:5)
+5 verbose stack     at then (/usr/lib/node_modules/npm/node_modules/read-package-json/read-json.js:124:5)
+5 verbose stack     at /usr/lib/node_modules/npm/node_modules/read-package-json/read-json.js:311:12
+5 verbose stack     at /usr/lib/node_modules/npm/node_modules/graceful-fs/graceful-fs.js:78:16
+5 verbose stack     at tryToString (fs.js:426:3)
+5 verbose stack     at FSReqWrap.readFileAfterClose [as oncomplete] (fs.js:413:12)
+6 verbose cwd /home/adrien/workspace/git/nectarjs
+7 error Linux 3.16.0-4-amd64
+8 error argv "/usr/bin/nodejs" "/usr/bin/npm" "publish"
+9 error node v7.4.0
+10 error npm  v4.0.5
+11 error Invalid version: "0.0.0.1"
+12 error If you need help, you may report this error at:
+12 error     <https://github.com/npm/npm/issues>
+13 verbose exit [ 1, true ]
