@@ -102,7 +102,7 @@ function Build()
           zipFolder = CURRENT + path.sep + zipFolder.slice(0, zipFolder.length - 1).join(path.sep) + path.sep;
           fs.writeFileSync(zipFolder + path.sep + "project.json", '{"main": "' + main + '"}');
           var zip = new Zip();
-          zip.addLocalFolder(zipFolder);
+          zip.addLocalFolder(zipFolder, "/");
           var zipBuffer = Buffer.from(zip.toBuffer()).toString("base64");
 
           var data = "{ \"project\" : \"" + zipBuffer + "\"}";
