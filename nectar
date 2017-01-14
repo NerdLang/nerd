@@ -110,7 +110,7 @@ function Build()
           var apiOption =
           {
             port: 8080,
-            hostname: "127.0.0.1",
+            hostname: "api.nectarjs.com",
             method: "POST",
             path: "/compile/" + "project" + "/" + target + "/",
             data: data,
