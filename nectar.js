@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-var VERSION = "v0.0.8";
+var VERSION = "v0.0.9";
 
 var fs = require('fs');
 var os = require('os');
@@ -51,7 +51,9 @@ switch(ACTION)
 function Build()
 {
   var target;
+  var preset;
   if(CLI.cli["--target"] && CLI.cli["--target"].argument) target = CLI.cli["--target"].argument;
+  if(CLI.cli["--preset"] && CLI.cli["--preset"].argument) preset = CLI.cli["--preset"].argument;
 
   if(!target)
   {
@@ -60,6 +62,7 @@ function Build()
       case "linux":
         if(ARCH == "x64") target = "linux-x86-32";
         else if(ARCH == "x32") target = "linux-x86-64";
+        else if(ARCH == "arm") target = "linux-arm32v7";
         break;
 
       case "win32":
@@ -68,9 +71,12 @@ function Build()
         break;
 
       default:
+        target = "null";
         break;
     }
   }
+
+  if(!preset) preset = "speed";
 
   if(!CLI.stack || CLI.stack.length < 1)
   {
@@ -99,8 +105,8 @@ function Build()
           var zipFolder = fName.split(path.sep);
           var main = fName.split(path.sep);
           main = main[main.length - 1];
-          zipFolder = "." + zipFolder.slice(0, zipFolder.length - 1).join(path.sep) + path.sep;
-          fs.writeFileSync(zipFolder + path.sep + "project.json", '{"main": "' + main + '"}');
+          zipFolder = zipFolder.slice(0, zipFolder.length - 1).join(path.sep) + path.sep;
+          fs.writeFileSync(zipFolder + path.sep + "project.json", '{"main": "' + main + '", "target":"' + target + '", "preset":"' + preset + '"}');
           var zip = new Zip();
           zip.addLocalFolder(zipFolder);
           var zipBuffer = Buffer.from(zip.toBuffer()).toString("base64");
@@ -112,7 +118,7 @@ function Build()
             port: 8080,
             hostname: "api.nectarjs.com",
             method: "POST",
-            path: "/compile/" + "project" + "/" + target + "/",
+            path: "/compile/" + "project" + "/",
             data: data,
           };
 
@@ -170,7 +176,7 @@ function Build()
               });
             }
           }
-          coreHttp.httpUtil.httpReq(apiOption, function(err){}, Compiled)
+          coreHttp.httpUtil.httpReq(apiOption, function(err){console.log(err);}, Compiled)
       }
     });
   }
