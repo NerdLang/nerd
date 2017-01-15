@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-var VERSION = "v0.0.9";
+var VERSION = "0.0.9";
 
 var fs = require('fs');
 var os = require('os');
@@ -32,7 +32,7 @@ else if(CLI.cli['--version'] || CLI.cli["-v"]) ACTION = "version";
 switch(ACTION)
 {
   case "version":
-    console.log("Nectar " + VERSION);
+    console.log("Nectar v" + VERSION);
     break;
 
   case "help":
@@ -111,7 +111,7 @@ function Build()
           zip.addLocalFolder(zipFolder);
           var zipBuffer = Buffer.from(zip.toBuffer()).toString("base64");
 
-          var data = "{ \"project\" : \"" + zipBuffer + "\"}";
+          var data = '{ "project" : "' + zipBuffer + '", "version":"' + VERSION + '"}';
 
           var apiOption =
           {
