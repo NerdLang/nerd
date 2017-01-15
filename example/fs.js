@@ -1,5 +1,4 @@
-require("MAIN_PATH/base/libjs/fs.js");
-
+require("fs");
 
 var test = "./test.txt";
 fs.writeFileSync(test, "A text !");

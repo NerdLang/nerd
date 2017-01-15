@@ -1,4 +1,4 @@
-require("MAIN_PATH/base/libjs/process.js");
+require("process");
 var e = process.execSync("echo ok");
 console.log(e);
 console.log(e.length);
