@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-var VERSION = "0.0.11";
+var VERSION = "0.0.12";
 
 var fs = require('fs');
 var os = require('os');
@@ -50,9 +50,13 @@ switch(ACTION)
 
 function Build()
 {
+  var single = false;
+  if(CLI.cli["--single"]) single = true;
+
   var target;
-  var preset;
   if(CLI.cli["--target"] && CLI.cli["--target"].argument) target = CLI.cli["--target"].argument;
+
+  var preset;
   if(CLI.cli["--preset"] && CLI.cli["--preset"].argument) preset = CLI.cli["--preset"].argument;
 
   if(!target)
@@ -93,7 +97,7 @@ function Build()
   {
     var fName = CLI.stack[CLI.stack.length - 1];
 
-    fs.readFile(fName, function(err, data)
+    fs.readFile(fName, function(err, fileData)
     {
       if(err)
       {
@@ -102,27 +106,38 @@ function Build()
       }
       else
       {
-          var zipArray = fName.split(path.sep);
-          var main = fName.split(path.sep);
-          main = main[main.length - 1];
-          var zipFolder = "";
-          for(var i = 0; i < zipArray.length - 1; i++)
+          var data = "";
+          var fPath = "";
+          if(single)
           {
-            zipFolder += zipArray[i] + path.sep;
+            data = '{ "source" : "' + fileData.toString("base64") + '", "version":"' + VERSION + '"}';
+            fPath = "/compile/" + "single" + "/" + target + "/" + preset + "/";
           }
-          fs.writeFileSync(zipFolder + "project.json", '{"main": "' + main + '", "target":"' + target + '", "preset":"' + preset + '"}');
-          var zip = new Zip();
-          zip.addLocalFolder(zipFolder);
-          var zipBuffer = Buffer.from(zip.toBuffer()).toString("base64");
+          else
+          {
+            var zipArray = fName.split(path.sep);
+            var main = fName.split(path.sep);
+            main = main[main.length - 1];
+            var zipFolder = "";
+            for(var i = 0; i < zipArray.length - 1; i++)
+            {
+              zipFolder += zipArray[i] + path.sep;
+            }
 
-          var data = '{ "project" : "' + zipBuffer + '", "version":"' + VERSION + '"}';
+            fs.writeFileSync(zipFolder + "project.json", '{"main": "' + main + '", "target":"' + target + '", "preset":"' + preset + '"}');
+            var zip = new Zip();
+            zip.addLocalFolder(zipFolder);
+            var zipBuffer = Buffer.from(zip.toBuffer()).toString("base64");
+            data = '{ "project" : "' + zipBuffer + '", "version":"' + VERSION + '"}';
+            fPath = "/compile/" + "project" + "/";
+          }
 
           var apiOption =
           {
             port: 8080,
             hostname: "api.nectarjs.com",
             method: "POST",
-            path: "/compile/" + "project" + "/",
+            path: fPath,
             data: data,
           };
 
@@ -188,7 +203,7 @@ function Build()
 
 function Help()
 {
-  console.log("\nnectar [--target the_target] [--run] source.js\n");
+  console.log("\nnectar [--target the-target] [--run] [--single] [--preset speed|size] source.js\n");
   console.log("Targets :");
   for(var i = 0; i < TARGET.length; i++)
   {
