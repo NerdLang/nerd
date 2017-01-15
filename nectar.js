@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-var VERSION = "0.0.12";
+var VERSION = "0.0.13";
 
 var fs = require('fs');
 var os = require('os');
@@ -15,6 +15,11 @@ var CURRENT = process.cwd();
 var TARGET = require('./base/compiler/target.js');
 var PLATFORM = os.platform();
 var ARCH = os.arch();
+var CONFIGPATH = os.homedir() + path.sep + ".nectar";
+var CONFIGFILE = CONFIGPATH + "/" + "nectar.json";
+CONFIG = {};
+Init();
+readConfig();
 
 var CLI = parseCLI(process.argv);
 
@@ -26,8 +31,10 @@ if(CLI.error)
 
 var ACTION = "build";
 if(CLI.cli["--help"] || CLI.cli["-h"]) ACTION = "help";
-else if(CLI.cli['--version'] || CLI.cli["-v"]) ACTION = "version";
-
+else if(CLI.cli["--version"] || CLI.cli["-v"]) ACTION = "version";
+else if(CLI.cli["--setid"] || CLI.cli["--setkey"]) ACTION = "setconfig";
+else if(CLI.cli["--config"]) ACTION = "showconfig";
+else if(CLI.cli["--reinit"]) ACTION = "reinitconfig";
 
 switch(ACTION)
 {
@@ -39,6 +46,18 @@ switch(ACTION)
     Help();
     break;
 
+  case "setconfig":
+    setConfig();
+    break;
+
+  case "showconfig":
+    showConfig();
+    break;
+
+  case "reinitconfig":
+    reinitConfig();
+    break;
+
   case "build":
     Build(CLI);
     break;
@@ -46,6 +65,78 @@ switch(ACTION)
   default:
     Help();
     break;
+}
+
+function Init()
+{
+  try
+  {
+      fs.mkdirSync(CONFIGPATH);
+  } catch (e){}
+  try
+  {
+      var writeConfig = false;
+      var config = "";
+      config = fs.readFileSync(CONFIGFILE);
+      config = JSON.parse(config)
+  }
+  catch (e)
+  {
+    writeConfig = true;
+  }
+
+  if(!config || writeConfig)
+  {
+    var defaultConfig = { id: "", key:""};
+    fs.writeFileSync(CONFIGFILE, JSON.stringify(defaultConfig));
+  }
+
+}
+
+function readConfig()
+{
+  try
+  {
+    var tmp = fs.readFileSync(CONFIGFILE);
+    CONFIG = JSON.parse(tmp);
+  }
+  catch (e)
+  {
+    Init();
+    readConfig();
+  }
+}
+
+function showConfig()
+{
+  console.log("Current config :");
+  console.log("id  : " + CONFIG.id);
+  console.log("key : " + CONFIG.key);
+}
+
+function setConfig()
+{
+  if(CLI.cli["--setid"]) CONFIG.id = CLI.cli["--setid"].argument;
+  if(CLI.cli["--setkey"]) CONFIG.key = CLI.cli["--setkey"].argument;
+  try
+  {
+    fs.writeFileSync(CONFIGFILE, JSON.stringify(CONFIG));
+  } catch (e)
+  {
+      console.log(e);
+  }
+}
+
+function reinitConfig()
+{
+  try
+  {
+    var defaultConfig = { id: "", key:""};
+    fs.writeFileSync(CONFIGFILE, JSON.stringify(defaultConfig));
+  } catch (e)
+  {
+      console.log(e);
+  }
 }
 
 function Build()
@@ -63,6 +154,7 @@ function Build()
   {
     switch(PLATFORM)
     {
+      case "android":
       case "linux":
         if(ARCH == "x64") target = "linux-x86-32";
         else if(ARCH == "x32") target = "linux-x86-64";
@@ -110,7 +202,7 @@ function Build()
           var fPath = "";
           if(single)
           {
-            data = '{ "source" : "' + fileData.toString("base64") + '", "version":"' + VERSION + '"}';
+            data = '{ "source" : "' + fileData.toString("base64") + '", "version":"' + VERSION + '", "id":"' + CONFIG.id + '", "key":"' + CONFIG.key + '"}';
             fPath = "/compile/" + "single" + "/" + target + "/" + preset + "/";
           }
           else
@@ -128,7 +220,7 @@ function Build()
             var zip = new Zip();
             zip.addLocalFolder(zipFolder);
             var zipBuffer = Buffer.from(zip.toBuffer()).toString("base64");
-            data = '{ "project" : "' + zipBuffer + '", "version":"' + VERSION + '"}';
+            data = '{ "project" : "' + zipBuffer + '", "version":"' + VERSION + '", "id":"' + CONFIG.id + '", "key":"' + CONFIG.key + '"}';
             fPath = "/compile/" + "project" + "/";
           }
 
@@ -203,7 +295,7 @@ function Build()
 
 function Help()
 {
-  console.log("\nnectar [--target the-target] [--run] [--single] [--preset speed|size] source.js\n");
+  console.log("\nnectar [--target the-target] [--run] [--single] [--preset speed|size] [-o output] [--setid id] [--setkey key] [--config] [--reinit] source.js\n");
   console.log("Targets :");
   for(var i = 0; i < TARGET.length; i++)
   {
