@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-var VERSION = "0.0.10";
+var VERSION = "0.0.11";
 
 var fs = require('fs');
 var os = require('os');
@@ -102,11 +102,15 @@ function Build()
       }
       else
       {
-          var zipFolder = fName.split(path.sep);
+          var zipArray = fName.split(path.sep);
           var main = fName.split(path.sep);
           main = main[main.length - 1];
-          zipFolder = zipFolder.slice(0, zipFolder.length - 1).join(path.sep) + path.sep;
-          fs.writeFileSync(zipFolder + path.sep + "project.json", '{"main": "' + main + '", "target":"' + target + '", "preset":"' + preset + '"}');
+          var zipFolder = "";
+          for(var i = 0; i < zipArray.length - 1; i++)
+          {
+            zipFolder += zipArray[i] + path.sep;
+          }
+          fs.writeFileSync(zipFolder + "project.json", '{"main": "' + main + '", "target":"' + target + '", "preset":"' + preset + '"}');
           var zip = new Zip();
           zip.addLocalFolder(zipFolder);
           var zipBuffer = Buffer.from(zip.toBuffer()).toString("base64");
