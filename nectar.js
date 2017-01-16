@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-var VERSION = "0.0.19";
+var VERSION = "0.0.20";
 
 var fs = require('fs');
 var os = require('os');
@@ -35,7 +35,7 @@ else if(CLI.cli["--version"] || CLI.cli["-v"]) ACTION = "version";
 else if(CLI.cli["--setid"] || CLI.cli["--setkey"]) ACTION = "setconfig";
 else if(CLI.cli["--config"]) ACTION = "showconfig";
 else if(CLI.cli["--reinit"]) ACTION = "reinitconfig";
-else if(CLI.cli["--clean"]) ACTION = "clean";
+else if(CLI.cli["--clean"] || CLI.cli["--purge"]) ACTION = "clean";
 
 switch(ACTION)
 {
@@ -376,7 +376,7 @@ function Help()
   console.log("configure :\nnectar [--setid id] [--setkey key]\n")
   console.log("Show configuration :\nnectar --config\n")
   console.log("Reinit configuration :\nnectar --reinit\n")
-  console.log("Clean project :\nnectar --clean [--purge]\n")
+  console.log("Clean project :\nnectar [--clean] [--purge]\n")
   console.log("Available targets :");
   for(var i = 0; i < TARGET.length; i++)
   {
