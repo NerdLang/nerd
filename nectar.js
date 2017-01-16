@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-var VERSION = "0.0.17";
+var VERSION = "0.0.18";
 
 var fs = require('fs');
 var os = require('os');
@@ -35,6 +35,7 @@ else if(CLI.cli["--version"] || CLI.cli["-v"]) ACTION = "version";
 else if(CLI.cli["--setid"] || CLI.cli["--setkey"]) ACTION = "setconfig";
 else if(CLI.cli["--config"]) ACTION = "showconfig";
 else if(CLI.cli["--reinit"]) ACTION = "reinitconfig";
+else if(CLI.cli["--clean"]) ACTION = "clean";
 
 switch(ACTION)
 {
@@ -59,7 +60,11 @@ switch(ACTION)
     break;
 
   case "build":
-    Build(CLI);
+    Build();
+    break;
+
+  case "clean":
+    Clean();
     break;
 
   default:
@@ -139,7 +144,38 @@ function reinitConfig()
   }
 }
 
-function Build()
+function Clean(purge)
+{
+  var project = "project.json";
+  if(CLI.stack && CLI.stack.length > 0)
+  {
+    project = CLI.stack[CLI.stack.length - 1];
+  }
+  try
+  {
+    var pConf = fs.readFileSync(project);
+    var jConf = JSON.parse(pConf);
+    if(jConf.main)
+    {
+      if( (CLI.cli["--purge"] || purge) && jConf.out)
+      {
+        var outFile = jConf.out;
+        if(jConf.out[0] != path.sep)
+        {
+          outFile = path.join(path.dirname(project), jConf.out);
+        }
+        try{fs.unlinkSync(outFile);}catch(e){}
+      }
+    }
+    try{fs.unlinkSync(project)}catch(e){}
+  }
+  catch (e)
+  {
+    console.dir(e.message);
+  }
+}
+
+function Build(prepare)
 {
   var llvm = false;
   if(CLI.cli["--llvm"]) llvm = true;
@@ -179,7 +215,7 @@ function Build()
 
   if(!CLI.stack || CLI.stack.length < 1)
   {
-    console.log("Missing file to compile");
+    console.log("Missing file to compile, 'nectar --help' if you need help");
     return;
   }
   else if(!target || TARGET.indexOf(target) < 0)
@@ -201,18 +237,37 @@ function Build()
       }
       else
       {
+        var fProject = false;
+        var prjectConf = {};
+        if(path.basename(fName) == "project.json")
+        {
+          try
+          {
+              projectConf = JSON.parse(fileData);
+              fProject = true;
+              single = false;
+          }
+          catch (e)
+          {
+            console.log("project.json : " + e.message);
+            return;
+          }
+        }
+
           var data = "";
           var fPath = "";
           if(single)
           {
-            data = '{ "source" : "' + fileData.toString("base64") + '", "llvm":' + llvm + ', "version":"' + VERSION + '", "id":"' + CONFIG.id + '", "key":"' + CONFIG.key + '"}';
+            data = '{ "source" : "' + fileData.toString("base64") + '", "llvm":' + llvm + ', "version":"' + VERSION + '", "id":"' + CONFIG.id + '"}';
             fPath = "/compile/" + "single" + "/" + target + "/" + preset + "/";
           }
           else
           {
             var zipArray = fName.split(path.sep);
+
             var main = fName.split(path.sep);
             main = main[main.length - 1];
+
             var zipFolder = "";
             for(var i = 0; i < zipArray.length - 1; i++)
             {
@@ -223,11 +278,36 @@ function Build()
               var toZip = CURRENT.split(path.sep);
                zipFolder =  ".." + path.sep + toZip[toZip.length - 1] + path.sep;
             }
-            fs.writeFileSync(zipFolder + "project.json", '{"main": "' + main + '", "llvm":' + llvm + ', "target":"' + target + '", "preset":"' + preset + '"}');
+
+            var tmp = fName.split("/");
+            var to = "";
+
+            if(CLI.cli["-o"])
+            {
+              to = CLI.cli["-o"].argument;
+            }
+            else
+            {
+              var end = ".bin";
+              if(PLATFORM == "win32") end = ".exe";
+              to = tmp[tmp.length-1].split(".")[0] + end;
+            }
+            if(fProject)
+            {
+              main = projectConf.main;
+              to = projectConf.out;
+              llvm = projectConf.llvm;
+              target = projectConf.target;
+              preset = projectConf.preset;
+              Clean(true);
+            }
+
+            fs.writeFileSync(zipFolder + "project.json", '{"main": "' + main + '", "out": "'+ to + '", "llvm":' + llvm + ', "target":"' + target + '", "preset":"' + preset + '"}');
+            to = zipFolder + to;
             var zip = new Zip();
             zip.addLocalFolder(zipFolder);
             var zipBuffer = Buffer.from(zip.toBuffer()).toString("base64");
-            data = '{ "project" : "' + zipBuffer + '", "version":"' + VERSION + '", "id":"' + CONFIG.id + '", "key":"' + CONFIG.key + '"}';
+            data = '{ "project" : "' + zipBuffer + '", "version":"' + VERSION + '", "id":"' + CONFIG.id + '"}';
             fPath = "/compile/" + "project" + "/";
           }
 
@@ -258,18 +338,7 @@ function Build()
               {
                   bin = new Buffer(result.data, 'base64');
               }
-              var tmp = fName.split("/");
-              var to = "";
-              if(CLI.cli["-o"])
-              {
-                to = CLI.cli["-o"].argument;
-              }
-              else
-              {
-                var end = ".bin";
-                if(PLATFORM == "win32") end = ".exe";
-                to = tmp[tmp.length-1].split(".")[0] + end;
-              }
+
               fs.writeFile(to, bin, function(err, data)
               {
                 if(err)
@@ -294,7 +363,7 @@ function Build()
               });
             }
           }
-          coreHttp.httpUtil.httpReq(apiOption, function(err){console.log(err);}, Compiled)
+          if(!CLI.cli["--prepare"]) coreHttp.httpUtil.httpReq(apiOption, function(err){console.log(err);}, Compiled)
       }
     });
   }
@@ -302,8 +371,13 @@ function Build()
 
 function Help()
 {
-  console.log("\nnectar [--target the-target] [--run] [--single] [--preset speed|size] [-o output] [--setid id] [--setkey key] [--config] [--reinit] [--llvm] source.js\n");
-  console.log("Targets :");
+  console.log("Nectar v" + VERSION);
+  console.log("\nnectar [--target the-target] [--run] [--single] [--preset speed|size] [-o output] [--reinit] [--llvm] source.js|project.json\n");
+  console.log("configure :\nnectar [--setid id] [--setkey key]\n")
+  console.log("Show configuration :\nnectar --config\n")
+  console.log("Reinit configuration :\nnectar --reinit\n")
+  console.log("Clean project :\nnectar --clean [--purge]\n")
+  console.log("Available targets :");
   for(var i = 0; i < TARGET.length; i++)
   {
     console.log("-> " + TARGET[i]);
