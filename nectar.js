@@ -372,7 +372,7 @@ function Build(prepare)
 function Help()
 {
   console.log("Nectar v" + VERSION);
-  console.log("\nnectar [--target the-target] [--run] [--single] [--preset speed|size] [-o output] [--reinit] [--llvm] source.js|project.json\n");
+  console.log("\nnectar [--target the-target] [--run] [--single] [--preset speed|size] [-o output] [--reinit] [--llvm] [--prepare] source.js|project.json\n");
   console.log("configure :\nnectar [--setid id] [--setkey key]\n")
   console.log("Show configuration :\nnectar --config\n")
   console.log("Reinit configuration :\nnectar --reinit\n")
