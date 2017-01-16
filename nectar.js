@@ -218,7 +218,11 @@ function Build()
             {
               zipFolder += zipArray[i] + path.sep;
             }
-            if(zipArray.length < 2) zipFolder += process.cwd();
+            if(zipArray.length < 2)
+            {
+              var toZip = CURRENT.split(path.sep);
+               zipFolder =  ".." + path.sep + toZip[toZip.length - 1] + path.sep;
+            }
             fs.writeFileSync(zipFolder + "project.json", '{"main": "' + main + '", "llvm":' + llvm + ', "target":"' + target + '", "preset":"' + preset + '"}');
             var zip = new Zip();
             zip.addLocalFolder(zipFolder);
