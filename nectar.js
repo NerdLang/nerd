@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-var VERSION = "0.0.18";
+var VERSION = "0.0.19";
 
 var fs = require('fs');
 var os = require('os');
@@ -253,6 +253,18 @@ function Build(prepare)
             return;
           }
         }
+          var to = "";
+          var tmp = fName.split("/");
+          if(CLI.cli["-o"])
+          {
+            to = CLI.cli["-o"].argument;
+          }
+          else
+          {
+            var end = ".bin";
+            if(PLATFORM == "win32") end = ".exe";
+            to = tmp[tmp.length-1].split(".")[0] + end;
+          }
 
           var data = "";
           var fPath = "";
@@ -279,19 +291,6 @@ function Build(prepare)
                zipFolder =  ".." + path.sep + toZip[toZip.length - 1] + path.sep;
             }
 
-            var tmp = fName.split("/");
-            var to = "";
-
-            if(CLI.cli["-o"])
-            {
-              to = CLI.cli["-o"].argument;
-            }
-            else
-            {
-              var end = ".bin";
-              if(PLATFORM == "win32") end = ".exe";
-              to = tmp[tmp.length-1].split(".")[0] + end;
-            }
             if(fProject)
             {
               main = projectConf.main;
@@ -343,7 +342,8 @@ function Build(prepare)
               {
                 if(err)
                 {
-                  console.log(err);
+
+                  console.log(to + " -> " + err.message);
                 }
                 else
                 {
