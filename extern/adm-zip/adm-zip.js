@@ -197,7 +197,7 @@ module.exports = function(/*String*/input) {
                     zipPath="";
                 }
                  var p = localPath.split("\\").join("/").split("/").pop();
-                
+
                  if(zipName){
                     this.addFile(zipPath+zipName, fs.readFileSync(localPath), "", 0)
                  }else{
@@ -235,23 +235,35 @@ module.exports = function(/*String*/input) {
             }else{
                 zipPath="";
             }
+
 			localPath = localPath.split("\\").join("/"); //windows fix
+
             localPath = pth.normalize(localPath);
+
             if (localPath.charAt(localPath.length - 1) != "/")
                 localPath += "/";
+			var regPath = localPath;
+
+      if(require('os').platform == "win32") regPath = regPath.replace(/\.\./g, "..."); // fix windows pb
 
             if (fs.existsSync(localPath)) {
 
                 var items = Utils.findFiles(localPath),
                     self = this;
 
-                if (items.length) {
-                    items.forEach(function(path) {
-						var p = path.split("\\").join("/").replace( new RegExp(localPath, 'i'), ""); //windows fix
-                        if (filter(p)) {
-                            if (p.charAt(p.length - 1) !== "/") {
+                if (items.length)
+				{
+                    items.forEach(function(path)
+					{
+						var p = path.split("\\").join("/").replace( new RegExp(regPath, 'i'), ""); //windows fix
+
+						if (filter(p))
+						{
+							if (p.charAt(p.length - 1) !== "/")
+							{
                                 self.addFile(zipPath+p, fs.readFileSync(path), "", 0)
-                            } else {
+                            } else
+							{
                                 self.addFile(zipPath+p, new Buffer(0), "", 0)
                             }
                         }
@@ -331,10 +343,12 @@ module.exports = function(/*String*/input) {
 
             var target = pth.resolve(targetPath, maintainEntryPath ? item.entryName : pth.basename(item.entryName));
 
-            if (item.isDirectory) {
+            if (item.isDirectory)
+			{
                 target = pth.resolve(target, "..");
                 var children = _zip.getEntryChildren(item);
-                children.forEach(function(child) {
+                children.forEach(function(child)
+				{
                     if (child.isDirectory) return;
                     var content = child.getData();
                     if (!content) {
@@ -398,7 +412,7 @@ module.exports = function(/*String*/input) {
             }
 
             var entries = _zip.entries;
-            var i = entries.length; 
+            var i = entries.length;
             entries.forEach(function(entry) {
                 if(i <= 0) return; // Had an error already
 
@@ -427,7 +441,7 @@ module.exports = function(/*String*/input) {
                         if(--i == 0)
                             callback(undefined);
                     });
-                    
+
                 });
             })
         },

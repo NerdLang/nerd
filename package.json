@@ -1,6 +1,6 @@
 {
   "name": "nectarjs",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "description": "Javascript's God Mod",
   "main": "nectar",
   "bin": {
