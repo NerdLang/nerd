@@ -19,7 +19,7 @@ function fibonacci2(n)
 function fibonacci3(n)
 {
   if (n < 2)  return n;
-  return fibonacci2(n - 2) + fibonacci2(n - 1);
+  return fibonacci3(n - 2) + fibonacci3(n - 1);
 }
 
 function testFn()
@@ -155,11 +155,9 @@ console.log(array[0].a);
 
 var adrien = {name: "Adrien", house:"toto", color:"blue", "age": 28};
 var lucie = {name: "Lucie", appart:"Limoux", color:"rose,blanc,dorée", "age": 24};
-var avelyne = {yo:"a", color:"youp", tarla:"ok"};
 
 console.write("adrien.color : ");console.log(adrien.color);
 console.write("lucie.name : ");console.log(lucie.name);
-console.write("avelyne.yo : ");console.log(avelyne.yo);
 
-var peopleArray = [adrien, lucie, avelyne];
+var peopleArray = [adrien, lucie];
 console.write("peopleArray[0].name = "); console.log(peopleArray[0].name);

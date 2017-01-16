@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-var VERSION = "0.0.13";
+var VERSION = "0.0.14";
 
 var fs = require('fs');
 var os = require('os');
@@ -141,6 +141,9 @@ function reinitConfig()
 
 function Build()
 {
+  var llvm = false;
+  if(CLI.cli["--llvm"]) llvm = true;
+
   var single = false;
   if(CLI.cli["--single"]) single = true;
 
@@ -156,8 +159,8 @@ function Build()
     {
       case "android":
       case "linux":
-        if(ARCH == "x64") target = "linux-x86-32";
-        else if(ARCH == "x32") target = "linux-x86-64";
+        if(ARCH == "x64") target = "linux-x86-64";
+        else if(ARCH == "x32") target = "linux-x86-32";
         else if(ARCH == "arm") target = "linux-arm32v7";
         break;
 
@@ -202,7 +205,7 @@ function Build()
           var fPath = "";
           if(single)
           {
-            data = '{ "source" : "' + fileData.toString("base64") + '", "version":"' + VERSION + '", "id":"' + CONFIG.id + '", "key":"' + CONFIG.key + '"}';
+            data = '{ "source" : "' + fileData.toString("base64") + '", "llvm":' + llvm + ', "version":"' + VERSION + '", "id":"' + CONFIG.id + '", "key":"' + CONFIG.key + '"}';
             fPath = "/compile/" + "single" + "/" + target + "/" + preset + "/";
           }
           else
@@ -215,8 +218,8 @@ function Build()
             {
               zipFolder += zipArray[i] + path.sep;
             }
-
-            fs.writeFileSync(zipFolder + "project.json", '{"main": "' + main + '", "target":"' + target + '", "preset":"' + preset + '"}');
+            if(zipArray.length < 2) zipFolder += process.cwd();
+            fs.writeFileSync(zipFolder + "project.json", '{"main": "' + main + '", "llvm":' + llvm + ', "target":"' + target + '", "preset":"' + preset + '"}');
             var zip = new Zip();
             zip.addLocalFolder(zipFolder);
             var zipBuffer = Buffer.from(zip.toBuffer()).toString("base64");
@@ -295,7 +298,7 @@ function Build()
 
 function Help()
 {
-  console.log("\nnectar [--target the-target] [--run] [--single] [--preset speed|size] [-o output] [--setid id] [--setkey key] [--config] [--reinit] source.js\n");
+  console.log("\nnectar [--target the-target] [--run] [--single] [--preset speed|size] [-o output] [--setid id] [--setkey key] [--config] [--reinit] [--llvm] source.js\n");
   console.log("Targets :");
   for(var i = 0; i < TARGET.length; i++)
   {
