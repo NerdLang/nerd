@@ -244,7 +244,7 @@ module.exports = function(/*String*/input) {
                 localPath += "/";
 			var regPath = localPath;
 
-      if(require('os').platform == "win32") regPath = regPath.replace(/\.\./g, "..."); // fix windows pb
+      if(require('os').platform() == "win32") regPath = regPath.replace(/\.\./g, "..."); // fix windows pb
 
             if (fs.existsSync(localPath)) {
 
