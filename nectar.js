@@ -27,7 +27,7 @@
  *
  */
 
-var VERSION = "0.0.22";
+var VERSION = "0.0.23";
 
 var fs = require('fs');
 var os = require('os');
@@ -280,7 +280,7 @@ function Build(prepare)
 
   if(!CLI.stack || CLI.stack.length < 1)
   {
-    console.log("[!] Missing file to compile, 'nectar --help' if you need help");
+    console.log("[!] Missing file to compile or project.json path, 'nectar --help' if you need help");
     return;
   }
   else if(!target || TARGET.indexOf(target) < 0)
@@ -297,7 +297,7 @@ function Build(prepare)
     {
       if(err)
       {
-        console.log("[!] Error : " + err);
+        console.log("[!] Error : " + err.message);
         return;
       }
       else
