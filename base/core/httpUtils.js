@@ -1,6 +1,6 @@
 /*
  * This file is part of NectarJS
- * Copyright (c) 2014-2017 Adrien THIERRY
+ * Copyright (c) 2017 Adrien THIERRY
  * http://nectarjs.com - http://seraum.com
  *
  * sources : https://github.com/seraum/nectarjs

@@ -1,5 +1,33 @@
 #!/usr/bin/env node
-var VERSION = "0.0.20";
+
+/*
+ * This file is part of NectarJS
+ * Copyright (c) 2017 Adrien THIERRY
+ * http://nectarjs.com - http://seraum.com
+ *
+ * sources : https://github.com/seraum/nectarjs
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ *
+ */
+
+var VERSION = "0.0.21";
 
 var fs = require('fs');
 var os = require('os');
@@ -40,7 +68,7 @@ else if(CLI.cli["--clean"] || CLI.cli["--purge"]) ACTION = "clean";
 switch(ACTION)
 {
   case "version":
-    console.log("Nectar v" + VERSION);
+    showVersion();
     break;
 
   case "help":
@@ -114,7 +142,7 @@ function readConfig()
 
 function showConfig()
 {
-  console.log("Current config :");
+  console.log("[*] Current config :");
   console.log("id  : " + CONFIG.id);
   console.log("key : " + CONFIG.key);
 }
@@ -171,7 +199,7 @@ function Clean(purge)
   }
   catch (e)
   {
-    console.dir(e.message);
+    console.dir("[!] Error : " + e.message);
   }
 }
 
@@ -215,13 +243,13 @@ function Build(prepare)
 
   if(!CLI.stack || CLI.stack.length < 1)
   {
-    console.log("Missing file to compile, 'nectar --help' if you need help");
+    console.log("[!] Missing file to compile, 'nectar --help' if you need help");
     return;
   }
   else if(!target || TARGET.indexOf(target) < 0)
   {
-    console.log("\nBad target");
-    Help();
+    console.log("[!] Bad target\n");
+    showTarget();
     return;
   }
   else
@@ -232,7 +260,7 @@ function Build(prepare)
     {
       if(err)
       {
-        console.log("Error : " + err);
+        console.log("[!] Error : " + err);
         return;
       }
       else
@@ -249,7 +277,7 @@ function Build(prepare)
           }
           catch (e)
           {
-            console.log("project.json : " + e.message);
+            console.log("[!] Error with project.json : " + e.message);
             return;
           }
         }
@@ -342,8 +370,7 @@ function Build(prepare)
               {
                 if(err)
                 {
-
-                  console.log(to + " -> " + err.message);
+                  console.log("[!] Error with " + to + " : " + err.message);
                 }
                 else
                 {
@@ -363,24 +390,44 @@ function Build(prepare)
               });
             }
           }
-          if(!CLI.cli["--prepare"]) coreHttp.httpUtil.httpReq(apiOption, function(err){console.log(err);}, Compiled)
+          if(!CLI.cli["--prepare"]) coreHttp.httpUtil.httpReq(apiOption, function(err){console.log("[!] Network error : " + err.message);}, Compiled)
+          else
+          {
+              console.log("[*] Project configuration :\n");
+              console.log("Main file : " + main);
+              console.log("Output    : " + to);
+              console.log("Target    : " + target);
+              console.log("LLVM      : " + llvm);
+              console.log("Preset    : " + preset);
+              console.log();
+          }
       }
     });
   }
 }
 
-function Help()
+function showVersion()
 {
-  console.log("Nectar v" + VERSION);
-  console.log("\nnectar [--target the-target] [--run] [--single] [--preset speed|size] [-o output] [--reinit] [--llvm] [--prepare] source.js|project.json\n");
-  console.log("configure :\nnectar [--setid id] [--setkey key]\n")
-  console.log("Show configuration :\nnectar --config\n")
-  console.log("Reinit configuration :\nnectar --reinit\n")
-  console.log("Clean project :\nnectar [--clean] [--purge]\n")
-  console.log("Available targets :");
+  console.log("NectarJS Client v" + VERSION);
+}
+
+function showTarget()
+{
+  console.log("[*] Available targets :");
   for(var i = 0; i < TARGET.length; i++)
   {
     console.log("-> " + TARGET[i]);
   }
   console.log();
+}
+
+function Help()
+{
+  showVersion();
+  console.log("\n[*] Compile :\nnectar [--target the-target] [--run] [--single] [--preset speed|size] [-o output] [--reinit] [--llvm] [--prepare] source.js|project.json\n");
+  console.log("[*] configure :\nnectar [--setid id] [--setkey key]\n");
+  console.log("[*] Show configuration :\nnectar --config\n");
+  console.log("[*] Reinit configuration :\nnectar --reinit\n");
+  console.log("[*] Clean project :\nnectar [--clean] [--purge] [path_to_project.json]\n");
+  showTarget();
 }
