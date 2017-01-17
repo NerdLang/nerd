@@ -61,6 +61,7 @@ var ACTION = "build";
 if(CLI.cli["--help"] || CLI.cli["-h"]) ACTION = "help";
 else if(CLI.cli["--version"] || CLI.cli["-v"]) ACTION = "version";
 else if(CLI.cli["--setid"] || CLI.cli["--setkey"]) ACTION = "setconfig";
+else if(CLI.cli["--project"]) ACTION = "showproject";
 else if(CLI.cli["--config"]) ACTION = "showconfig";
 else if(CLI.cli["--reinit"]) ACTION = "reinitconfig";
 else if(CLI.cli["--clean"] || CLI.cli["--purge"]) ACTION = "clean";
@@ -73,6 +74,10 @@ switch(ACTION)
 
   case "help":
     Help();
+    break;
+
+  case "showproject":
+    showProject();
     break;
 
   case "setconfig":
@@ -172,6 +177,26 @@ function reinitConfig()
   }
 }
 
+function showProject()
+{
+  var project = "project.json";
+  if(CLI.stack && CLI.stack.length > 0)
+  {
+    project = CLI.stack[CLI.stack.length - 1];
+  }
+  try
+  {
+    var pConf = fs.readFileSync(project);
+    var jConf = JSON.parse(pConf);
+    printProject(jConf);
+  }
+  catch (e)
+  {
+    console.dir("[!] Error : " + e.message);
+  }
+
+}
+
 function Clean(purge)
 {
   var project = "project.json";
@@ -201,6 +226,18 @@ function Clean(purge)
   {
     console.dir("[!] Error : " + e.message);
   }
+}
+
+function printProject(obj)
+{
+  console.log();
+  console.log("[*] Project configuration :\n");
+  console.log("Main file : " + obj.main);
+  console.log("Output    : " + obj.out);
+  console.log("Target    : " + obj.target);
+  console.log("LLVM      : " + obj.llvm);
+  console.log("Preset    : " + obj.preset);
+  console.log();
 }
 
 function Build(prepare)
@@ -282,8 +319,13 @@ function Build(prepare)
           }
         }
           var to = "";
+          var projTo = "";
           var tmp = fName.split("/");
-          if(CLI.cli["-o"])
+          if(fProject)
+	  {
+	    to = projectConf.out;
+    	  }
+          else if(CLI.cli["-o"])
           {
             to = CLI.cli["-o"].argument;
           }
@@ -293,8 +335,12 @@ function Build(prepare)
             if(PLATFORM == "win32") end = ".exe";
             to = tmp[tmp.length-1].split(".")[0] + end;
           }
-
-          var data = "";
+	  projTo = to;
+	
+	  var main = fName.split(path.sep);
+          main = main[main.length - 1]; 
+          
+	  var data = "";
           var fPath = "";
           if(single)
           {
@@ -304,9 +350,6 @@ function Build(prepare)
           else
           {
             var zipArray = fName.split(path.sep);
-
-            var main = fName.split(path.sep);
-            main = main[main.length - 1];
 
             var zipFolder = "";
             for(var i = 0; i < zipArray.length - 1; i++)
@@ -346,7 +389,7 @@ function Build(prepare)
             path: fPath,
             data: data,
           };
-
+	  
           function Compiled(data)
           {
             var result = JSON.parse(data);
@@ -384,7 +427,7 @@ function Build(prepare)
                     else size += (bin.length / 1000000) + " mo";
                     console.log(size);
                     console.log("Main file : " + main);
-                    console.log("Output    : " + to);
+                    console.log("Output    : " + projTo);
                     console.log("Target    : " + target);
                     console.log("LLVM      : " + llvm);
                     console.log("Preset    : " + preset);
@@ -408,13 +451,8 @@ function Build(prepare)
           if(!CLI.cli["--prepare"]) coreHttp.httpUtil.httpReq(apiOption, function(err){console.log("[!] Network error : " + err.message);}, Compiled)
           else
           {
-              console.log("[*] Project configuration :\n");
-              console.log("Main file : " + main);
-              console.log("Output    : " + to);
-              console.log("Target    : " + target);
-              console.log("LLVM      : " + llvm);
-              console.log("Preset    : " + preset);
-              console.log();
+	      var pObj = {main: main, out:projTo, target:target, llvm:llvm, preset:preset};
+	      printProject(pObj);
           }
       }
     });
