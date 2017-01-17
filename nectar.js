@@ -27,7 +27,7 @@
  *
  */
 
-var VERSION = "0.0.21";
+var VERSION = "0.0.22";
 
 var fs = require('fs');
 var os = require('os');
@@ -374,6 +374,21 @@ function Build(prepare)
                 }
                 else
                 {
+                  if(CLI.cli["--verbose"])
+                  {
+                    console.log("[+] Compilation done\n");
+                    console.log("[*] Informations :\n");
+                    var size = "Size      : ";
+                    if(bin.length < 1000) size += bin.length + " o";
+                    else if(bin.length < 1000000) size += (bin.length / 1000) + " ko";
+                    else size += (bin.length / 1000000) + " mo";
+                    console.log(size);
+                    console.log("Main file : " + main);
+                    console.log("Output    : " + to);
+                    console.log("Target    : " + target);
+                    console.log("LLVM      : " + llvm);
+                    console.log("Preset    : " + preset);
+                  }
                   if(CLI.cli["--run"])
                   {
                     if(PLATFORM == "win32")
