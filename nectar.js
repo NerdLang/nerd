@@ -359,14 +359,22 @@ function Build(prepare)
           }
 	  projTo = to;
 
-	  var main = fName.split(path.sep);
+	       var main = fName.split(path.sep);
           main = main[main.length - 1];
 
-	  var data = "";
+	        var data = "";
           var fPath = "";
+
           if(single)
           {
-            data = '{ "source" : "' + Crypto.encrypt(fileData.toString("base64"), CONFIG.key) + '", "llvm":' + llvm + ', "version":"' + VERSION + '", "id":"' + CONFIG.id + '"}';
+            var jsSource = fileData.toString("base64");
+            if(!CONFIG.hash || validHash.indexOf(CONFIG.hash) < 0)
+            {
+              console.dir("[!] Hash is not valid, please set valid one : nectar --sethash MD5|SHA256|SHA512");
+              return;
+            }
+            var signature = Crypto.returnHash(CONFIG.hash, jsSource);
+            data = '{ "source" : "' + Crypto.encrypt(jsSource, CONFIG.key) + '", "llvm":' + llvm + ', "version":"' + VERSION + '", "id":"' + CONFIG.id + '", "signature": "' + signature + '"}';
             fPath = "/compile/" + "single" + "/" + target + "/" + preset + "/";
           }
           else

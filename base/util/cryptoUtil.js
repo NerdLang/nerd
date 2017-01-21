@@ -33,15 +33,15 @@ var Crypto =
       switch (name)
       {
         case "MD5":
-          return createMD5(str);
+          return Crypto.createMD5(str);
           break;
 
         case "SHA256":
-          return createSHA256(str);
+          return Crypto.createSHA256(str);
           break;
 
         case "SHA512":
-          return createSHA512(str);
+          return Crypto.createSHA512(str);
           break;
 
         default:
