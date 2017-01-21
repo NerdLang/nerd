@@ -288,8 +288,8 @@ function Build(prepare)
         break;
 
       case "win32":
-        if(ARCH == "x64") target = "win-x86-32";
-        else if(ARCH == "x32") target = "win-x86-64";
+        if(ARCH == "x64") target = "win-x86-64";
+        else if(ARCH == "x32") target = "win-x86-32";
         break;
 
       default:
@@ -520,9 +520,10 @@ function Help()
 {
   showVersion();
   console.log("\n[*] Compile :\nnectar [--target the-target] [--run] [--single] [--preset speed|size] [-o output] [--reinit] [--llvm] [--prepare] source.js|project.json\n");
-  console.log("[*] configure :\nnectar [--setid id] [--setkey key]\n");
+  console.log("[*] configure :\nnectar [--setid id] [--setkey key] [--sethash MD5|SHA256|SHA512]\n");
   console.log("[*] Show configuration :\nnectar --config\n");
   console.log("[*] Reinit configuration :\nnectar --reinit\n");
+  console.log("[*] Show project :\nnectar [--project] [project.json]\n");
   console.log("[*] Clean project :\nnectar [--clean] [--purge] [path_to_project.json]\n");
   showTarget();
 }

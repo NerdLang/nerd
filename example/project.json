@@ -1,0 +1,1 @@
+{"main": "loop.js", "out": "loop.bin", "llvm":false, "target":"linux-x86-64", "preset":"speed"}
