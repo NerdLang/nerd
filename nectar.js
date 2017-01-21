@@ -38,7 +38,8 @@ var querystring = require('querystring');
 var child_process = require('child_process');
 
 var parseCLI = require('./base/cli/cliParser.js');
-var coreHttp = require('./base/core/httpUtils.js');
+var coreHttp = require('./base/util/httpUtils.js');
+var Crypto = require('./base/util/cryptoUtil.js')
 var CURRENT = process.cwd();
 var TARGET = require('./base/compiler/target.js');
 var PLATFORM = os.platform();
@@ -48,6 +49,8 @@ var CONFIGFILE = CONFIGPATH + "/" + "nectar.json";
 CONFIG = {};
 Init();
 readConfig();
+
+var validHash = ["MD5", "SHA256", "SHA512"];
 
 var CLI = parseCLI(process.argv);
 
@@ -60,7 +63,7 @@ if(CLI.error)
 var ACTION = "build";
 if(CLI.cli["--help"] || CLI.cli["-h"]) ACTION = "help";
 else if(CLI.cli["--version"] || CLI.cli["-v"]) ACTION = "version";
-else if(CLI.cli["--setid"] || CLI.cli["--setkey"]) ACTION = "setconfig";
+else if(CLI.cli["--setid"] || CLI.cli["--setkey"] || CLI.cli["--sethash"]) ACTION = "setconfig";
 else if(CLI.cli["--project"]) ACTION = "showproject";
 else if(CLI.cli["--config"]) ACTION = "showconfig";
 else if(CLI.cli["--reinit"]) ACTION = "reinitconfig";
@@ -125,7 +128,7 @@ function Init()
 
   if(!config || writeConfig)
   {
-    var defaultConfig = { id: "", key:""};
+    var defaultConfig = { id: "", key:"", "hash":"SHA256"};
     fs.writeFileSync(CONFIGFILE, JSON.stringify(defaultConfig));
   }
 
@@ -148,14 +151,28 @@ function readConfig()
 function showConfig()
 {
   console.log("[*] Current config :");
-  console.log("id  : " + CONFIG.id);
-  console.log("key : " + CONFIG.key);
+  console.log("id   : " + CONFIG.id);
+  console.log("key  : " + CONFIG.key);
+  console.log("hash : " + CONFIG.hash);
 }
 
 function setConfig()
 {
   if(CLI.cli["--setid"]) CONFIG.id = CLI.cli["--setid"].argument;
   if(CLI.cli["--setkey"]) CONFIG.key = CLI.cli["--setkey"].argument;
+  if(CLI.cli["--sethash"])
+  {
+    var hash = CLI.cli["--sethash"].argument.toUpperCase();
+    if(validHash.indexOf(hash) < 0)
+    {
+      console.dir("[!] Hash is not valid and won't be saved. Valid hash are : MD5, SHA256 ans SHA512");
+    }
+    else
+    {
+        CONFIG.hash = hash;
+    }
+
+  }
   try
   {
     fs.writeFileSync(CONFIGFILE, JSON.stringify(CONFIG));
@@ -169,7 +186,7 @@ function reinitConfig()
 {
   try
   {
-    var defaultConfig = { id: "", key:""};
+    var defaultConfig = { id: "", key:"", hash:"SHA256"};
     fs.writeFileSync(CONFIGFILE, JSON.stringify(defaultConfig));
   } catch (e)
   {
@@ -242,6 +259,11 @@ function printProject(obj)
 
 function Build(prepare)
 {
+  if(!CONFIG.id || !CONFIG.key || CONFIG.id.length == 0 || CONFIG.key.length == 0)
+  {
+    console.dir("[!] Please set your id and your key before build (see nectar --help)");
+    return;
+  }
   var llvm = false;
   if(CLI.cli["--llvm"]) llvm = true;
 
@@ -336,15 +358,15 @@ function Build(prepare)
             to = tmp[tmp.length-1].split(".")[0] + end;
           }
 	  projTo = to;
-	
+
 	  var main = fName.split(path.sep);
-          main = main[main.length - 1]; 
-          
+          main = main[main.length - 1];
+
 	  var data = "";
           var fPath = "";
           if(single)
           {
-            data = '{ "source" : "' + fileData.toString("base64") + '", "llvm":' + llvm + ', "version":"' + VERSION + '", "id":"' + CONFIG.id + '"}';
+            data = '{ "source" : "' + Crypto.encrypt(fileData.toString("base64"), CONFIG.key) + '", "llvm":' + llvm + ', "version":"' + VERSION + '", "id":"' + CONFIG.id + '"}';
             fPath = "/compile/" + "single" + "/" + target + "/" + preset + "/";
           }
           else
@@ -377,7 +399,16 @@ function Build(prepare)
             var zip = new Zip();
             zip.addLocalFolder(zipFolder);
             var zipBuffer = Buffer.from(zip.toBuffer()).toString("base64");
-            data = '{ "project" : "' + zipBuffer + '", "version":"' + VERSION + '", "id":"' + CONFIG.id + '"}';
+
+            if(!CONFIG.hash || validHash.indexOf(CONFIG.hash) < 0)
+            {
+              console.dir("[!] Hash is not valid, please set valid one : nectar --sethash MD5|SHA256|SHA512");
+              return;
+            }
+            var signature = Crypto.returnHash(CONFIG.hash, zipBuffer);
+
+            zipBuffer = Crypto.encrypt(zip.toBuffer().toString("base64"), CONFIG.key);
+            data = '{ "project" : "' + zipBuffer + '", "version":"' + VERSION + '", "id":"' + CONFIG.id + '", "signature": "' + signature + '"}';
             fPath = "/compile/" + "project" + "/";
           }
 
@@ -389,7 +420,7 @@ function Build(prepare)
             path: fPath,
             data: data,
           };
-	  
+
           function Compiled(data)
           {
             var result = JSON.parse(data);
@@ -399,15 +430,18 @@ function Build(prepare)
             }
             else
             {
-              var bin;
+
+              var bin = Crypto.decrypt(result.data, CONFIG.key);
+
               if (typeof Buffer.from === "function")
               {
-                  bin = Buffer.from(result.data, 'base64');
+                  bin = Buffer.from(bin, 'base64');
               }
               else
               {
-                  bin = new Buffer(result.data, 'base64');
+                  bin = new Buffer(bin, 'base64');
               }
+
 
               fs.writeFile(to, bin, function(err, data)
               {
