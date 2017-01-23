@@ -1,2 +1,2 @@
 # nectarjs
-Javascript's God Mod
+Javascript's God Mode
