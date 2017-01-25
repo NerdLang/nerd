@@ -9,6 +9,14 @@ Once done, install NectarJS : `npm install -g nectarjs`
 
 Verify that NectarJS is installed with : `nectar --help`
 
+# Configuration
+
+You need to enter your id and you security key. Code is encrypted in AES during compilation.
+
+To set your id, use `--setid myid`
+
+To set your key, use `--setkey mykey`
+
 # Basic compilation
 
 The simplest way to use NectarJS is :
