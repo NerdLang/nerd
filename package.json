@@ -28,7 +28,7 @@
     "linux",
     "windows",
     "arduino",
-    "raspberry",
+    "raspberry"
   ],
   "author": "Adrien THIERRY <adrien.thierryfr@gmail.com> (http://seraum.com)",
   "license": "MIT",
