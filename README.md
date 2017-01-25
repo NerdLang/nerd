@@ -1,5 +1,6 @@
 # NectarJS
-Javascript's God Mode
+
+Javascript's God Mode : one language to rule them all. Code everything, everywhere, for everything.
 
 # Install
 
