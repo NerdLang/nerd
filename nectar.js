@@ -27,7 +27,7 @@
  *
  */
 
-var VERSION = "0.0.23";
+var VERSION = "0.0.24";
 
 var fs = require('fs');
 var os = require('os');
@@ -39,6 +39,8 @@ var child_process = require('child_process');
 
 var parseCLI = require('./base/cli/cliParser.js');
 var coreHttp = require('./base/util/httpUtils.js');
+var getExt = require('./base/util/getExt.js');
+var getTips = require('./base/util/getTips.js');
 var Crypto = require('./base/util/cryptoUtil.js')
 var CURRENT = process.cwd();
 var TARGET = require('./base/compiler/target.js');
@@ -63,7 +65,7 @@ if(CLI.error)
 var ACTION = "build";
 if(CLI.cli["--help"] || CLI.cli["-h"]) ACTION = "help";
 else if(CLI.cli["--version"] || CLI.cli["-v"]) ACTION = "version";
-else if(CLI.cli["--setid"] || CLI.cli["--setkey"] || CLI.cli["--sethash"]) ACTION = "setconfig";
+else if(CLI.cli["--setid"] || CLI.cli["--setkey"] || CLI.cli["--sethash"] || CLI.cli["--setapi"] || CLI.cli["--setport"]) ACTION = "setconfig";
 else if(CLI.cli["--project"]) ACTION = "showproject";
 else if(CLI.cli["--config"]) ACTION = "showconfig";
 else if(CLI.cli["--reinit"]) ACTION = "reinitconfig";
@@ -128,7 +130,7 @@ function Init()
 
   if(!config || writeConfig)
   {
-    var defaultConfig = { id: "", key:"", "hash":"SHA256"};
+    var defaultConfig = { id: "", key:"", "hash":"SHA256", "api":"api.nectarjs.com", "port":8080};
     fs.writeFileSync(CONFIGFILE, JSON.stringify(defaultConfig));
   }
 
@@ -148,37 +150,52 @@ function readConfig()
   }
 }
 
-function showConfig()
+function showConfig(str)
 {
-  console.log("[*] Current config :");
+  console.log();
+  if(str) console.log(str);
+  else console.log("[*] Current config :");
   console.log("id   : " + CONFIG.id);
   console.log("key  : " + CONFIG.key);
   console.log("hash : " + CONFIG.hash);
+  console.log("api : " + CONFIG.api);
+  console.log("port : " + CONFIG.port);
+  console.log();
 }
 
 function setConfig()
 {
-  if(CLI.cli["--setid"]) CONFIG.id = CLI.cli["--setid"].argument;
-  if(CLI.cli["--setkey"]) CONFIG.key = CLI.cli["--setkey"].argument;
-  if(CLI.cli["--sethash"])
-  {
-    var hash = CLI.cli["--sethash"].argument.toUpperCase();
-    if(validHash.indexOf(hash) < 0)
-    {
-      console.dir("[!] Hash is not valid and won't be saved. Valid hash are : MD5, SHA256 ans SHA512");
-    }
-    else
-    {
-        CONFIG.hash = hash;
-    }
-
-  }
   try
   {
+    if(CLI.cli["--setid"]) CONFIG.id = CLI.cli["--setid"].argument;
+    if(CLI.cli["--setkey"]) CONFIG.key = CLI.cli["--setkey"].argument;
+    if(CLI.cli["--setapi"]) CONFIG.api = CLI.cli["--setapi"].argument;
+    if(CLI.cli["--setport"]) CONFIG.port = parseInt(CLI.cli["--setport"].argument);
+
+    if(isNaN(CONFIG.port))
+    {
+      console.dir("[!] This port is not valid : '" + CLI.cli["--setport"].argument +"', please specify a number.");
+      return;
+    }
+
+    if(CLI.cli["--sethash"])
+    {
+      var hash = CLI.cli["--sethash"].argument.toUpperCase();
+      if(validHash.indexOf(hash) < 0)
+      {
+        console.dir("[!] Hash is not valid and won't be saved. Valid hash are : MD5, SHA256 ans SHA512");
+      }
+      else
+      {
+          CONFIG.hash = hash;
+      }
+    }
+
     fs.writeFileSync(CONFIGFILE, JSON.stringify(CONFIG));
-  } catch (e)
+  }
+  catch (e)
   {
-      console.log(e);
+    console.log(e);
   }
 }
 
@@ -186,8 +203,10 @@ function reinitConfig()
 {
   try
   {
-    var defaultConfig = { id: "", key:"", hash:"SHA256"};
+    var defaultConfig = { id: "", key:"", hash:"SHA256", "api":"api.nectarjs.com", "port":8080};
     fs.writeFileSync(CONFIGFILE, JSON.stringify(defaultConfig));
+    readConfig();
+    showConfig("[*] Config reinitialized :");
   } catch (e)
   {
       console.log(e);
@@ -340,24 +359,25 @@ function Build(prepare)
             return;
           }
         }
+
           var to = "";
           var projTo = "";
           var tmp = fName.split("/");
           if(fProject)
-	  {
-	    to = projectConf.out;
-    	  }
+	         {
+	            to = projectConf.out;
+    	     }
           else if(CLI.cli["-o"])
           {
             to = CLI.cli["-o"].argument;
           }
           else
           {
-            var end = ".bin";
-            if(PLATFORM == "win32") end = ".exe";
+            var end = getExt(target);
             to = tmp[tmp.length-1].split(".")[0] + end;
           }
-	  projTo = to;
+
+         projTo = to;
 
 	       var main = fName.split(path.sep);
           main = main[main.length - 1];
@@ -401,6 +421,7 @@ function Build(prepare)
               preset = projectConf.preset;
               Clean(true);
             }
+            var tips = getTips(target, to);
 
             fs.writeFileSync(zipFolder + "project.json", '{"main": "' + main + '", "out": "'+ to + '", "llvm":' + llvm + ', "target":"' + target + '", "preset":"' + preset + '"}');
             to = zipFolder + to;
@@ -422,8 +443,8 @@ function Build(prepare)
 
           var apiOption =
           {
-            port: 8080,
-            hostname: "api.nectarjs.com",
+            port: CONFIG.port,
+            hostname: CONFIG.api,
             method: "POST",
             path: fPath,
             data: data,
@@ -474,6 +495,7 @@ function Build(prepare)
                     console.log("LLVM      : " + llvm);
                     console.log("Preset    : " + preset);
                   }
+                  if(CLI.cli["--tips"] && tips.length > 0) console.log("\n" + tips + "\n");
                   if(CLI.cli["--run"])
                   {
                     if(PLATFORM == "win32")
@@ -490,11 +512,14 @@ function Build(prepare)
               });
             }
           }
-          if(!CLI.cli["--prepare"]) coreHttp.httpUtil.httpReq(apiOption, function(err){console.log("[!] Network error : " + err.message);}, Compiled)
+          if(!CLI.cli["--prepare"])
+          {
+             coreHttp.httpUtil.httpReq(apiOption, function(err){console.log("[!] Network error : " + err.message);}, Compiled)
+          }
           else
           {
-	      var pObj = {main: main, out:projTo, target:target, llvm:llvm, preset:preset};
-	      printProject(pObj);
+	           var pObj = {main: main, out:projTo, target:target, llvm:llvm, preset:preset};
+	            printProject(pObj);
           }
       }
     });
@@ -519,11 +544,12 @@ function showTarget()
 function Help()
 {
   showVersion();
-  console.log("\n[*] Compile :\nnectar [--target the-target] [--run] [--single] [--preset speed|size] [-o output] [--reinit] [--llvm] [--prepare] source.js|project.json\n");
+  console.log("\n[*] Compile :\nnectar [--target the-target] [--run] [--single] [--preset speed|size] [-o output] [--reinit] [--llvm] [--prepare] [--tips] source.js|project.json\n");
   console.log("[*] configure :\nnectar [--setid id] [--setkey key] [--sethash MD5|SHA256|SHA512]\n");
   console.log("[*] Show configuration :\nnectar --config\n");
   console.log("[*] Reinit configuration :\nnectar --reinit\n");
   console.log("[*] Show project :\nnectar [--project] [project.json]\n");
   console.log("[*] Clean project :\nnectar [--clean] [--purge] [path_to_project.json]\n");
+  console.log("[*] Nectar version :\nnectar --version\n");
   showTarget();
 }
