@@ -27,7 +27,7 @@
  *
  */
 
-var VERSION = "0.0.24";
+var VERSION = "0.0.25";
 
 var fs = require('fs');
 var os = require('os');
@@ -271,7 +271,6 @@ function printProject(obj)
   console.log("Main file : " + obj.main);
   console.log("Output    : " + obj.out);
   console.log("Target    : " + obj.target);
-  console.log("LLVM      : " + obj.llvm);
   console.log("Preset    : " + obj.preset);
   console.log();
 }
@@ -283,8 +282,6 @@ function Build(prepare)
     console.dir("[!] Please set your id and your key before build (see nectar --help)");
     return;
   }
-  var llvm = false;
-  if(CLI.cli["--llvm"]) llvm = true;
 
   var single = false;
   if(CLI.cli["--single"]) single = true;
@@ -394,7 +391,7 @@ function Build(prepare)
               return;
             }
             var signature = Crypto.returnHash(CONFIG.hash, jsSource);
-            data = '{ "source" : "' + Crypto.encrypt(jsSource, CONFIG.key) + '", "llvm":' + llvm + ', "version":"' + VERSION + '", "id":"' + CONFIG.id + '", "signature": "' + signature + '"}';
+            data = '{ "source" : "' + Crypto.encrypt(jsSource, CONFIG.key) + '", "version":"' + VERSION + '", "id":"' + CONFIG.id + '", "signature": "' + signature + '"}';
             fPath = "/compile/" + "single" + "/" + target + "/" + preset + "/";
           }
           else
@@ -416,14 +413,13 @@ function Build(prepare)
             {
               main = projectConf.main;
               to = projectConf.out;
-              llvm = projectConf.llvm;
               target = projectConf.target;
               preset = projectConf.preset;
               Clean(true);
             }
             var tips = getTips(target, to);
 
-            fs.writeFileSync(zipFolder + "project.json", '{"main": "' + main + '", "out": "'+ to + '", "llvm":' + llvm + ', "target":"' + target + '", "preset":"' + preset + '"}');
+            fs.writeFileSync(zipFolder + "project.json", '{"main": "' + main + '", "out": "'+ to + '", "target":"' + target + '", "preset":"' + preset + '"}');
             to = zipFolder + to;
             var zip = new Zip();
             zip.addLocalFolder(zipFolder);
@@ -492,7 +488,6 @@ function Build(prepare)
                     console.log("Main file : " + main);
                     console.log("Output    : " + projTo);
                     console.log("Target    : " + target);
-                    console.log("LLVM      : " + llvm);
                     console.log("Preset    : " + preset);
                   }
                   if(CLI.cli["--tips"] && tips.length > 0) console.log("\n" + tips + "\n");
@@ -518,7 +513,7 @@ function Build(prepare)
           }
           else
           {
-	           var pObj = {main: main, out:projTo, target:target, llvm:llvm, preset:preset};
+	           var pObj = {main: main, out:projTo, target:target, preset:preset};
 	            printProject(pObj);
           }
       }
@@ -544,7 +539,7 @@ function showTarget()
 function Help()
 {
   showVersion();
-  console.log("\n[*] Compile :\nnectar [--target the-target] [--run] [--single] [--preset speed|size] [-o output] [--reinit] [--llvm] [--prepare] [--tips] source.js|project.json\n");
+  console.log("\n[*] Compile :\nnectar [--target the-target] [--run] [--single] [--preset speed|size] [-o output] [--reinit] [--prepare] [--tips] source.js|project.json\n");
   console.log("[*] configure :\nnectar [--setid id] [--setkey key] [--sethash MD5|SHA256|SHA512]\n");
   console.log("[*] Show configuration :\nnectar --config\n");
   console.log("[*] Reinit configuration :\nnectar --reinit\n");
