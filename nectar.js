@@ -27,7 +27,7 @@
  *
  */
 
-var VERSION = "0.0.25";
+var VERSION = "0.0.26";
 
 var fs = require('fs');
 var os = require('os');
@@ -381,7 +381,7 @@ function Build(prepare)
 
 	        var data = "";
           var fPath = "";
-
+          var tips = "";
           if(single)
           {
             var jsSource = fileData.toString("base64");
@@ -393,6 +393,7 @@ function Build(prepare)
             var signature = Crypto.returnHash(CONFIG.hash, jsSource);
             data = '{ "source" : "' + Crypto.encrypt(jsSource, CONFIG.key) + '", "version":"' + VERSION + '", "id":"' + CONFIG.id + '", "signature": "' + signature + '"}';
             fPath = "/compile/" + "single" + "/" + target + "/" + preset + "/";
+            tips = getTips(target, to);
           }
           else
           {
@@ -417,7 +418,7 @@ function Build(prepare)
               preset = projectConf.preset;
               Clean(true);
             }
-            var tips = getTips(target, to);
+            tips = getTips(target, to);
 
             fs.writeFileSync(zipFolder + "project.json", '{"main": "' + main + '", "out": "'+ to + '", "target":"' + target + '", "preset":"' + preset + '"}');
             to = zipFolder + to;
@@ -490,7 +491,7 @@ function Build(prepare)
                     console.log("Target    : " + target);
                     console.log("Preset    : " + preset);
                   }
-                  if(CLI.cli["--tips"] && tips.length > 0) console.log("\n" + tips + "\n");
+                  if(CLI.cli["--tips"] && tips && tips.length > 0) console.log("\n" + tips + "\n");
                   if(CLI.cli["--run"])
                   {
                     if(PLATFORM == "win32")
