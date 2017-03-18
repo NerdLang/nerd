@@ -27,7 +27,7 @@
  *
  */
 
-var VERSION = "0.0.28";
+var VERSION = "0.0.29";
 
 var fs = require('fs');
 var os = require('os');
@@ -318,12 +318,12 @@ function Build(prepare)
 
   if(!CLI.stack || CLI.stack.length < 1)
   {
-    console.log("[!] Missing file to compile or project.json path, 'nectar --help' if you need help");
+    console.error("[!] Missing file to compile or project.json path, 'nectar --help' if you need help");
     return;
   }
   else if(!target || TARGET.indexOf(target) < 0)
   {
-    console.log("[!] Bad target\n");
+    console.error("[!] Bad target\n");
     showTarget();
     return;
   }
@@ -335,7 +335,7 @@ function Build(prepare)
     {
       if(err)
       {
-        console.log("[!] Error : " + err.message);
+        console.error("[!] Error : " + err.message);
         return;
       }
       else
@@ -352,7 +352,7 @@ function Build(prepare)
           }
           catch (e)
           {
-            console.log("[!] Error with project.json : " + e.message);
+            console.error("[!] Error with project.json : " + e.message);
             return;
           }
         }
@@ -452,8 +452,7 @@ function Build(prepare)
             var result = JSON.parse(data);
             if(result.success == false)
             {
-              console.error(result.message);
-	            process.exit(1);
+              console.error(result.message, 5);
             }
             else
             {
