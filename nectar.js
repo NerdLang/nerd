@@ -27,7 +27,7 @@
  *
  */
 
-var VERSION = "0.0.32";
+var VERSION = "0.0.33";
 
 var fs = require('fs');
 var os = require('os');
@@ -502,7 +502,9 @@ function Build(prepare)
                     else
                     {
                       child_process.execSync("chmod +x " + to);
-                      console.log(child_process.execSync("." + path.sep + to).toString());
+                      var before = "";
+                      if(to[0] && to[0] != "/") before = "." + path.sep;
+                      console.log(child_process.execSync(before + to).toString());
                     }
                   }
                 }
