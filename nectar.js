@@ -27,7 +27,7 @@
  *
  */
 
-var VERSION = "0.0.27";
+var VERSION = "0.0.28";
 
 var fs = require('fs');
 var os = require('os');
@@ -452,8 +452,8 @@ function Build(prepare)
             var result = JSON.parse(data);
             if(result.success == false)
             {
-              console.log(result.message);
-	      process.exit(1);
+              console.error(result.message);
+	            process.exit(1);
             }
             else
             {
@@ -474,7 +474,7 @@ function Build(prepare)
               {
                 if(err)
                 {
-                  console.log("[!] Error with " + to + " : " + err.message);
+                  console.error("[!] Error with " + to + " : " + err.message);
                 }
                 else
                 {
