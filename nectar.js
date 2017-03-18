@@ -27,7 +27,7 @@
  *
  */
 
-var VERSION = "0.0.31";
+var VERSION = "0.0.32";
 
 var fs = require('fs');
 var os = require('os');
@@ -453,6 +453,7 @@ function Build(prepare)
             if(result.success == false)
             {
               console.error(result.message);
+              process.exit(1);
             }
             else
             {
