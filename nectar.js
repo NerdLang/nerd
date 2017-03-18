@@ -27,7 +27,7 @@
  *
  */
 
-var VERSION = "0.0.29";
+var VERSION = "0.0.30";
 
 var fs = require('fs');
 var os = require('os');
@@ -452,7 +452,7 @@ function Build(prepare)
             var result = JSON.parse(data);
             if(result.success == false)
             {
-              console.error(result.message, 5);
+              process.stderr.write("I will goto the STDERR")(result.message);
             }
             else
             {
