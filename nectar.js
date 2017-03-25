@@ -27,7 +27,7 @@
  *
  */
 
-var VERSION = "0.0.34";
+var VERSION = "0.0.35";
 
 var fs = require('fs');
 var os = require('os');
@@ -407,7 +407,11 @@ function Build(prepare)
             if(zipArray.length < 2)
             {
               var toZip = CURRENT.split(path.sep);
-               zipFolder =  ".." + path.sep + toZip[toZip.length - 1] + path.sep;
+	      if(PLATFORM == "win32")
+	      {
+	         zipFolder =  "";
+	      }
+	      else zipFolder =  ".." + path.sep + toZip[toZip.length - 1] + path.sep;
             }
 
             if(fProject)
