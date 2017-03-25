@@ -27,7 +27,7 @@
  *
  */
 
-var VERSION = "0.0.35";
+var VERSION = "0.0.36";
 
 var fs = require('fs');
 var os = require('os');
@@ -64,6 +64,7 @@ if(CLI.error)
 
 var ACTION = "build";
 if(CLI.cli["--help"] || CLI.cli["-h"]) ACTION = "help";
+else if(CLI.cli["--example"] || CLI.cli["--examples"]) ACTION = "example";
 else if(CLI.cli["--version"] || CLI.cli["-v"]) ACTION = "version";
 else if(CLI.cli["--setid"] || CLI.cli["--setkey"] || CLI.cli["--sethash"] || CLI.cli["--setapi"] || CLI.cli["--setport"]) ACTION = "setconfig";
 else if(CLI.cli["--project"]) ACTION = "showproject";
@@ -79,6 +80,10 @@ switch(ACTION)
 
   case "help":
     Help();
+    break;
+
+  case "example":
+    copyExample();
     break;
 
   case "showproject":
@@ -210,6 +215,38 @@ function reinitConfig()
   } catch (e)
   {
       console.log(e);
+  }
+}
+
+function getExampleFiles (dir, list)
+{
+    list = list || [];
+    var files = fs.readdirSync(dir);
+    for (var i in files)
+    {
+        var name = dir + '/' + files[i];
+        if (fs.statSync(name).isDirectory())
+        {
+            getExampleFiles(name, list);
+        }
+        else
+        {
+            list.push(name);
+        }
+    }
+    return list;
+}
+
+function copyExample()
+{
+  var list = getExampleFiles(path.join(__dirname, "example"));
+  for(var l in list)
+  {
+    var name = list[l].split(path.sep);
+    name = name[name.length - 1];
+    var content = fs.readFileSync(list[l]);
+    fs.writeFileSync(name, content);
+    console.log("[+] Copy of " + name + " done");
   }
 }
 
@@ -558,6 +595,7 @@ function Help()
   console.log("[*] Reinit configuration :\nnectar --reinit\n");
   console.log("[*] Show project :\nnectar [--project] [project.json]\n");
   console.log("[*] Clean project :\nnectar [--clean] [--purge] [path_to_project.json]\n");
+  console.log("[*] Copy example files :\nnectar --example\n");
   console.log("[*] Nectar version :\nnectar --version\n");
   showTarget();
 }
