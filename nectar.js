@@ -27,7 +27,7 @@
  *
  */
 
-var VERSION = "0.0.36";
+var VERSION = "0.0.37";
 
 var fs = require('fs');
 var os = require('os');
@@ -519,6 +519,7 @@ function Build(prepare)
                 }
                 else
                 {
+                  fs.chmodSync(to, "755");
                   if(CLI.cli["--verbose"])
                   {
                     console.log("[+] Compilation done\n");
@@ -542,7 +543,6 @@ function Build(prepare)
                     }
                     else
                     {
-                      child_process.execSync("chmod +x " + to);
                       var before = "";
                       if(to[0] && to[0] != "/") before = "." + path.sep;
                       child_process.execFile(before + to, function(error, stdout, stderr)
