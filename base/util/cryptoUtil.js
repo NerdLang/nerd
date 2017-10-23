@@ -29,13 +29,13 @@ var Crypto =
 {
   encrypt: function(text, password)
   {
-    var iv = crypto.randomBytes(16);
+    var iv = crypto.randomBytes(32).toString('hex').slice(0, 16);
     if(password == undefined) password = wf.CONF['AES_KEY'];
     var algorithm = 'aes-256-ctr';
-    var cipher = crypto.createCipheriv(algorithm, password, iv)
+    var cipher = crypto.createCipheriv(algorithm, Crypto.createSHA256(password).slice(0, 32), iv)
     var crypted = cipher.update(text, 'utf8', 'hex')
     crypted += cipher.final('hex');
-    return crypted;
+    return iv + ":" + crypted;
   },
 
   decrypt: function(text, password)
@@ -43,17 +43,18 @@ var Crypto =
     try
     {
             var encryptedArray = text.split(':');
-            var iv = new Buffer(encryptedArray[0], 'hex');
+            var iv = encryptedArray[0];
             var encrypted = new Buffer(encryptedArray[1], 'hex');
             if(password == undefined) password = wf.CONF['AES_KEY'];
             var algorithm = 'aes-256-ctr';
-            var decipher = crypto.createDecipher(algorithm, password, iv)
+            var decipher = crypto.createDecipheriv(algorithm, Crypto.createSHA256(password).slice(0, 32), iv)
             var dec = decipher.update(encrypted, 'hex', 'utf8')
             dec += decipher.final('utf8');
             return dec;
     }
     catch(e)
     {
+      console.dir(e);
       return "";
     };
   },
@@ -98,4 +99,5 @@ var Crypto =
 		    return shasum.update(str).digest('hex');
 	  },
 }
+
 module.exports = Crypto;

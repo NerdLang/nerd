@@ -27,7 +27,7 @@
  *
  */
 
-var VERSION = "0.0.42";
+var VERSION = "0.0.43";
 
 var fs = require('fs');
 var os = require('os');
@@ -472,6 +472,7 @@ function Build(prepare)
               console.dir("[!] Hash is not valid, please set valid one : nectar --sethash MD5|SHA256|SHA512");
               return;
             }
+
             var signature = Crypto.returnHash(CONFIG.hash, zipBuffer);
 
             zipBuffer = Crypto.encrypt(zip.toBuffer().toString("base64"), CONFIG.key);
