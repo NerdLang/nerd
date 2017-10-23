@@ -28,7 +28,7 @@
 var crypto = require('crypto');
 var Crypto =
 {
-  encrypt = function(text, password)
+  encrypt: function(text, password)
   {
     var iv = Crypto.randomBytes(16);
     if(password == undefined) password = wf.CONF['AES_KEY'];
@@ -39,7 +39,7 @@ var Crypto =
     return crypted;
   },
 
-  decrypt = function(text, password)
+  decrypt: function(text, password)
   {
     try
     {
