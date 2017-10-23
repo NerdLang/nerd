@@ -24,13 +24,13 @@
  * SOFTWARE.
  *
  */
-
+var nodeCrypto = require("Crypto");
 var crypto = require('crypto');
 var Crypto =
 {
   encrypt: function(text, password)
   {
-    var iv = Crypto.randomBytes(16);
+    var iv = nodeCrypto.randomBytes(16);
     if(password == undefined) password = wf.CONF['AES_KEY'];
     var algorithm = 'aes-256-ctr';
     var cipher = crypto.createCipheriv(algorithm, password, iv)
