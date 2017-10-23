@@ -27,7 +27,7 @@
  *
  */
 
-var VERSION = "0.0.40";
+var VERSION = "0.0.41";
 
 var fs = require('fs');
 var os = require('os');
