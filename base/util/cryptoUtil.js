@@ -24,36 +24,40 @@
  * SOFTWARE.
  *
  */
- 
+
 var crypto = require('crypto');
 var Crypto =
 {
-    encrypt: function(text, password)
-    {
-      if(password == undefined) password = wf.CONF['AES_KEY'];
-      var algorithm = 'aes-256-ctr';
-      var cipher = crypto.createCipher(algorithm, password)
-      var crypted = cipher.update(text, 'utf8', 'hex')
-      crypted += cipher.final('hex');
-      return crypted;
-    },
+  encrypt = function(text, password)
+  {
+    var iv = Crypto.randomBytes(16);
+    if(password == undefined) password = wf.CONF['AES_KEY'];
+    var algorithm = 'aes-256-ctr';
+    var cipher = crypto.createCipheriv(algorithm, password, iv)
+    var crypted = cipher.update(text, 'utf8', 'hex')
+    crypted += cipher.final('hex');
+    return crypted;
+  };
 
-    decrypt: function(text, password)
+  decrypt = function(text, password)
+  {
+    try
     {
-  		try
-  		{
-              if(password == undefined) password = wf.CONF['AES_KEY'];
-              var algorithm = 'aes-256-ctr';
-              var decipher = crypto.createDecipher(algorithm, password)
-              var dec = decipher.update(text, 'hex', 'utf8')
-              dec += decipher.final('utf8');
-              return dec;
-  		}
-  		catch(e)
-  		{
-  			return "";
-  		};
-    },
+            var encryptedArray = text.split(':');
+            var iv = new Buffer(encryptedArray[0], 'hex');
+            var encrypted = new Buffer(encryptedArray[1], 'hex');
+            if(password == undefined) password = wf.CONF['AES_KEY'];
+            var algorithm = 'aes-256-ctr';
+            var decipher = crypto.createDecipher(algorithm, password, iv)
+            var dec = decipher.update(encrypted, 'hex', 'utf8')
+            dec += decipher.final('utf8');
+            return dec;
+    }
+    catch(e)
+    {
+      return "";
+    };
+  };
 
     returnHash: function(name, str)
     {
