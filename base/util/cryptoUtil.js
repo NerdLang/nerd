@@ -37,7 +37,7 @@ var Crypto =
     var crypted = cipher.update(text, 'utf8', 'hex')
     crypted += cipher.final('hex');
     return crypted;
-  };
+  },
 
   decrypt = function(text, password)
   {
@@ -57,7 +57,7 @@ var Crypto =
     {
       return "";
     };
-  };
+  },
 
     returnHash: function(name, str)
     {
