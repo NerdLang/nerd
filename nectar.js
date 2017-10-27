@@ -27,7 +27,7 @@
  *
  */
 
-var VERSION = "0.0.44";
+var VERSION = "0.0.45";
 
 var fs = require('fs');
 var os = require('os');
@@ -239,11 +239,20 @@ function getExampleFiles (dir, list)
 
 function copyExample()
 {
+  var folder = ["c"];
   var list = getExampleFiles(path.join(__dirname, "example"));
   for(var l in list)
   {
     var name = list[l].split(path.sep);
-    name = name[name.length - 1];
+    if(name[name.length - 2] && folder.indexOf(name[name.length - 2]) > -1)
+    {
+      try
+      {
+        fs.mkdirSync(name[name.length - 2]);
+      }catch(e){}
+      name = name[name.length - 2] + "/" + name[name.length - 1];
+    }
+    else name = name[name.length - 1];
     var content = fs.readFileSync(list[l]);
     fs.writeFileSync(name, content);
     console.log("[+] Copy of " + name + " done");
