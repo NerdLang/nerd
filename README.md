@@ -2,6 +2,8 @@
 
 Javascript's God Mode : one language to rule them all. Code everything, everywhere, for everything.
 
+Join us on Slack : [NectarJS' Slack](http://api.nectarjs.com:3000/)
+
 Get your free key here : [NectarJS free Key](http://nectar-lang.com/key/)
 
 # Install
