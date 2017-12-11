@@ -1,6 +1,6 @@
-require("fs");
+var fs = require("fs");
 
-var test = "./test.txt";
-fs.writeFileSync(test, "A text !");
-console.log(fs.readFileSync(test));
-fs.unlinkSync(test);
+fs.writeFileSync("test.njs", "Some content");
+fs.appendFileSync("test.njs", "\nWe add something\n");
+console.log(fs.readFileSync("test.njs"));
+fs.unlinkSync("test.njs");
