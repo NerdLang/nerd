@@ -2,6 +2,8 @@
 
 Javascript's God Mode : one language to rule them all. Code everything, everywhere, for everything.
 
+Join us on Slack : [NectarJS' Slack](http://api.nectarjs.com:3000/)
+
 Get your free key here : [NectarJS free Key](http://nectar-lang.com/key/)
 
 # Install
@@ -46,7 +48,7 @@ if `--single` is not specified, NectarJS will create a `project.json` file in th
 
 You can create a `project.json` file without compilation with : `nectar --prepare file.js`
 
-To show a project configuration : `nectar --projet` in the project folder or `nectar --project /path/to/projet.json`
+To show a project configuration : `nectar --project` in the project folder or `nectar --project /path/to/projet.json`
 
 To compile a project, simply call `nectar project.json`
 
