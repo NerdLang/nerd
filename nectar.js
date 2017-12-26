@@ -27,7 +27,7 @@
  *
  */
 
-var VERSION = "0.0.46";
+var VERSION = "0.0.47";
 
 var fs = require('fs');
 var os = require('os');
@@ -386,6 +386,11 @@ function Build(prepare)
       }
       else
       {
+
+        /* CHECKING */
+        Check(fName);
+        /* END CHECKING */
+
         var fProject = false;
         var prjectConf = {};
         if(path.basename(fName) == "project.json")
@@ -594,6 +599,44 @@ function showTarget()
     console.log("-> " + TARGET[i]);
   }
   console.log();
+}
+
+function Check(file)
+{
+  /* Check for Esprima */
+  var esprima;
+  try
+  {
+    esprima = require("esprima");
+
+  } catch(e)
+  {
+    console.log(os.EOL + "[!] Please, install dependencies with command : npm install or npm update, for enabling code checking capabilities" + os.EOL);
+    if(CLI.cli["--check"]) process.exit();
+    return;
+  };
+
+  /* Check for script */
+  var script = "";
+  try
+  {
+    script = fs.readFileSync(file).toString();
+  } catch (e)
+  {
+    console.log(e);
+    if(CLI.cli["--check"]) process.exit();
+    return;
+  }
+
+  /* Check for errors */
+  try
+  {
+    esprima.parseScript(script);
+  } catch(e)
+  {
+    console.log(os.EOL + e.message + " at index : " + e.index + os.EOL);
+  }
+  if(CLI.cli["--check"]) process.exit();
 }
 
 function Help()

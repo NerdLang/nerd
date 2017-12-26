@@ -1,6 +1,6 @@
 {
   "name": "nectarjs",
-  "version": "0.0.46",
+  "version": "0.0.47",
   "description": "Javascript's God Mod",
   "main": "nectar",
   "bin": {
@@ -10,6 +10,9 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/seraum/nectarjs.git"
+  },
+  "dependencies": {
+    "esprima": "latest"
   },
   "keywords": [
     "nectar",
@@ -33,11 +36,11 @@
   "author": "Adrien THIERRY <adrien.thierryfr@gmail.com> (http://seraum.com)",
   "license": "MIT",
   "licenses": [
-  {
-    "type": "MIT",
-    "url": "https://github.com/seraum/nectarjs/blob/master/LICENSE"
-  }
-],
+    {
+      "type": "MIT",
+      "url": "https://github.com/seraum/nectarjs/blob/master/LICENSE"
+    }
+  ],
   "bugs": {
     "url": "https://github.com/seraum/nectarjs/issues"
   },

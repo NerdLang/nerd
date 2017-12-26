@@ -42,6 +42,10 @@ For more informations about compilation output, use `--verbose`
 
 For help, use `--help`
 
+# Check syntax
+
+You can only check syntax without compilation with argument `--check`.
+
 # Project management
 
 if `--single` is not specified, NectarJS will create a `project.json` file in the project directory.
