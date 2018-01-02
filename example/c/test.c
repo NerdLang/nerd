@@ -7,5 +7,5 @@ var test()
 
 var entier()
 {
-  return _N_Create_Int(42);
+  return __N_Create_Int(42);
 }
