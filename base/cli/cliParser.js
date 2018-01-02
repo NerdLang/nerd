@@ -30,7 +30,7 @@ function parseCLI(args)
 {
   var result = {error: false, msg: "", cli:{}, stack: [], useless: []};
   var useless = [0, 1];
-  var withArgs = ["--target", "-o", "--preset", "--setid", "--setkey", "--setapi", "--setport", "--sethash"];
+  var withArgs = ["--target", "-o", "--preset", "--setid", "--setkey", "--setapi", "--setport", "--sethash", "--flash"];
   var noArgs = ["--debug", "--example", "--examples" ,"--build", "--prepare", "--project", "--run", "--clean", "--purge", "--check", "--verbose", "-v", "--tips", "--version", "--help", "-h", "--release", "--single", "--config", "--reinit"];
 
 

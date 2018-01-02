@@ -1,6 +1,6 @@
 {
   "name": "nectarjs",
-  "version": "0.0.47",
+  "version": "0.0.49",
   "description": "Javascript's God Mod",
   "main": "nectar",
   "bin": {
@@ -10,9 +10,6 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/seraum/nectarjs.git"
-  },
-  "dependencies": {
-    "esprima": "latest"
   },
   "keywords": [
     "nectar",

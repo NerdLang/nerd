@@ -27,7 +27,7 @@
  *
  */
 
-var VERSION = "0.0.47";
+var VERSION = "0.0.49";
 
 var fs = require('fs');
 var os = require('os');
@@ -41,6 +41,7 @@ var parseCLI = require('./base/cli/cliParser.js');
 var coreHttp = require('./base/util/httpUtils.js');
 var getExt = require('./base/util/getExt.js');
 var getTips = require('./base/util/getTips.js');
+var Flash = require('./base/util/flash.js');
 var Crypto = require('./base/util/cryptoUtil.js')
 var CURRENT = process.cwd();
 var TARGET = require('./base/compiler/target.js');
@@ -458,6 +459,7 @@ function Build(prepare)
             if(zipArray.length < 2)
             {
               var toZip = CURRENT.split(path.sep);
+
 	      if(PLATFORM == "win32")
 	      {
 	         zipFolder =  "";
@@ -534,8 +536,11 @@ function Build(prepare)
                 }
                 else
                 {
+                  var verb = false;
+                  if(CLI.cli["--verbose"]) verb = true;
+
                   fs.chmodSync(to, "755");
-                  if(CLI.cli["--verbose"])
+                  if(verb)
                   {
                     console.log("[+] Compilation done\n");
                     console.log("[*] Informations :\n");
@@ -550,6 +555,9 @@ function Build(prepare)
                     console.log("Preset    : " + preset);
                   }
                   if(CLI.cli["--tips"] && tips && tips.length > 0) console.log("\n" + tips + "\n");
+
+                  if(CLI.cli["--flash"]) Flash(to, CLI.cli["--flash"].argument, target, verb);
+
                   if(CLI.cli["--run"])
                   {
                     if(PLATFORM == "win32")
@@ -611,8 +619,11 @@ function Check(file)
 
   } catch(e)
   {
-    console.log(os.EOL + "[!] Please, install dependencies with command : npm install or npm update, for enabling code checking capabilities" + os.EOL);
-    if(CLI.cli["--check"]) process.exit();
+    if(CLI.cli["--check"])
+    {
+      console.log(os.EOL + "[!] Please, install esprima with command : npm install -g esprima" + os.EOL);
+      process.exit(1);
+    }
     return;
   };
 

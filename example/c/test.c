@@ -2,10 +2,10 @@
 var test()
 {
   printf("IN C\n");
-  return _js_String("C TO JS");
+  return __N_Create_String("C TO JS");
 }
 
 var entier()
 {
-  return _js_Int(42);
+  return _N_Create_Int(42);
 }
