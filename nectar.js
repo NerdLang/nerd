@@ -27,7 +27,7 @@
  *
  */
 
-var VERSION = "0.0.50";
+var VERSION = "0.0.51";
 
 var fs = require('fs');
 var os = require('os');
@@ -392,6 +392,10 @@ function Build(prepare)
         Check(fName);
         /* END CHECKING */
 
+        var ext = "js";
+        var _Ext = fName.split(".");
+        if(_Ext.length > 1) ext = _Ext[_Ext.length - 1];
+
         var fProject = false;
         var prjectConf = {};
         if(path.basename(fName) == "project.json")
@@ -443,7 +447,7 @@ function Build(prepare)
               return;
             }
             var signature = Crypto.returnHash(CONFIG.hash, jsSource);
-            data = '{ "source" : "' + Crypto.encrypt(jsSource, CONFIG.key) + '", "version":"' + VERSION + '", "id":"' + CONFIG.id + '", "signature": "' + signature + '"}';
+            data = '{ "source" : "' + Crypto.encrypt(jsSource, CONFIG.key) + '", "ext": "' + ext + '", "version":"' + VERSION + '", "id":"' + CONFIG.id + '", "signature": "' + signature + '"}';
             fPath = "/compile/" + "single" + "/" + target + "/" + preset + "/";
             tips = getTips(target, to);
           }
