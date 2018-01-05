@@ -261,9 +261,11 @@ module.exports = function(/*String*/input) {
 			{
 			    if (p.charAt(p.length - 1) !== pth.sep)
 			    {
+				p = p.replace(/\\/g, "/");
                                 self.addFile(zipPath+p, fs.readFileSync(_path), "", 0)
                             } else
 			    {
+				p = p.replace(/\\/g, "/");
                                 self.addFile(zipPath+p, new Buffer(0), "", 0)
                             }
                         }
