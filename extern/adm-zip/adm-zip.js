@@ -251,19 +251,19 @@ module.exports = function(/*String*/input) {
                 var items = Utils.findFiles(localPath),
                     self = this;
 
-                if (items.length)
-				{
-                    items.forEach(function(path)
-					{
-						var p = path.split("\\").join("/").replace( new RegExp(regPath, 'i'), ""); //windows fix
+                if (items.length)		
+		{
+                    items.forEach(function(_path)
+		    {
+			var p = pth.normalize(_path);
 
-						if (filter(p))
-						{
-							if (p.charAt(p.length - 1) !== "/")
-							{
-                                self.addFile(zipPath+p, fs.readFileSync(path), "", 0)
+			if (filter(p))
+			{
+			    if (p.charAt(p.length - 1) !== pth.sep)
+			    {
+                                self.addFile(zipPath+p, fs.readFileSync(_path), "", 0)
                             } else
-							{
+			    {
                                 self.addFile(zipPath+p, new Buffer(0), "", 0)
                             }
                         }
