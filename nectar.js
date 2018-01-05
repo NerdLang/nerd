@@ -225,7 +225,7 @@ function getExampleFiles (dir, list)
     var files = fs.readdirSync(dir);
     for (var i in files)
     {
-        var name = dir + '/' + files[i];
+        var name = dir + path.sep + files[i];
         if (fs.statSync(name).isDirectory())
         {
             getExampleFiles(name, list);
