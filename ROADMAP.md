@@ -70,6 +70,9 @@
   - [ ] isSafeInteger()
   - [ ] parseFloat()
   - [ ] parseInt()
+  
+  - [ ] Math
+    - [ ] ...
 
 ## NodeJS compatibility
 
