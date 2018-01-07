@@ -1,7 +1,7 @@
 # NectarJS
 Javascript's God Mode : one language to rule them all. Code everything, everywhere, for everything, in JS, TS, CS and more.
 
-<img src="http://api.nectarjs.com:3000/badge.svg">
+[![Slack](http://api.nectarjs.com:3000/badge.svg)](http://api.nectarjs.com:3000/)
 
 [![NPM](https://nodei.co/npm/nectarjs.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/nectarjs/)
 
