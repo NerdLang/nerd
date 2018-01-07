@@ -11,7 +11,7 @@
   - [ ] Number
     - [x] int
     - [ ] float
-    - [ ] bigint
+    - [ ] bigint (#15)
   - [x] Array
   - [ ] Object
   - [ ] Mixed Array / Object
