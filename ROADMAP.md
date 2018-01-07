@@ -6,6 +6,16 @@
 
 - [x] Variable algorithms benchmark and selection
 
+- [ ] var
+  - [x] String
+  - [ ] Number
+    - [x] int
+    - [ ] float
+    - [ ] bigint
+  - [x] Array
+  - [ ] Object
+  - [ ] Mixed Array / Object
+
 - [ ] Instructions / Expressions
   - [x] if / else if / else
   - [x] switch
