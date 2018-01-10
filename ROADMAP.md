@@ -83,6 +83,13 @@
   
   - [ ] Math
     - [ ] ...
+    
+- [ ] Date
+  - [ ] now()
+  - [ ] parse()
+  - [ ] getDate()
+  - [ ] getDay()
+  - [ ] ...
 
 ## NodeJS compatibility
 
