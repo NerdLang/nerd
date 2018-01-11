@@ -72,6 +72,7 @@
 - [ ] String
   - [ ] fromCharCode()
   - [ ] fromCodePoint()
+  - [ ] charsets : unicode / utf8 / ...
   
 - [ ] Number
   - [ ] isFinite()
