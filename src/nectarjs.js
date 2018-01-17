@@ -1,50 +1,19 @@
-#!/usr/bin/env node
-
-/*
- * This file is part of NectarJS
- * Copyright (c) 2017 Adrien THIERRY
- * http://nectarjs.com - http://seraum.com
- *
- * sources : https://github.com/seraum/nectarjs
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
-
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
-
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- *
- */
-
-var VERSION = "0.0.53";
-
 var fs = require('fs');
 var os = require('os');
 var path = require('path');
-var Zip = require('./extern/adm-zip/adm-zip.js');
+var Zip = require('../extern/adm-zip/adm-zip.js');
 var process = require('process');
 var querystring = require('querystring');
 var child_process = require('child_process');
 
-var parseCLI = require('./base/cli/cliParser.js');
-var coreHttp = require('./base/util/httpUtils.js');
-var getExt = require('./base/util/getExt.js');
-var getTips = require('./base/util/getTips.js');
-var Flash = require('./base/util/flash.js');
-var Crypto = require('./base/util/cryptoUtil.js')
+var parseCLI = require('../base/cli/cliParser.js');
+var coreHttp = require('../base/util/httpUtils.js');
+var getExt = require('../base/util/getExt.js');
+var getTips = require('../base/util/getTips.js');
+var Flash = require('../base/util/flash.js');
+var Crypto = require('../base/util/cryptoUtil.js')
 var CURRENT = process.cwd();
-var TARGET = require('./base/compiler/target.js');
+var TARGET = require('../base/compiler/target.js');
 var PLATFORM = os.platform();
 var ARCH = os.arch();
 var CONFIGPATH = os.homedir() + path.sep + ".nectar";
@@ -60,7 +29,7 @@ var CLI = parseCLI(process.argv);
 if(CLI.error)
 {
   console.log(CLI.msg);
-  return;
+  process.exit(0);
 }
 
 var ACTION = "build";
