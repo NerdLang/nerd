@@ -1,0 +1,8 @@
+**/*.*
+!/build/**/*.*
+/build/.gitkeep
+!README.md
+!LICENSE
+!package.json
+!index.js
+!index.d.ts

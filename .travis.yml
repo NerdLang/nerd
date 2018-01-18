@@ -1,0 +1,29 @@
+language: node_js
+
+node_js:
+  - '8'
+
+before_script:
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./codeclimate
+  - chmod +x ./codeclimate
+  - npm install
+
+script:
+  - npm run test
+  - ./codeclimate format-coverage ./coverage/lcov.info --input-type lcov
+
+  - ./codeclimate before-build
+  - npm run build
+  - ./codeclimate after-build --exit-code $TRAVIS_TEST_RESULT
+
+before_deploy:
+  - rm ./codeclimate
+  - npm prune --production
+
+deploy:
+  provider: npm
+  skip_cleanup: true
+  on:
+    branch: master
+    tags: true
+
