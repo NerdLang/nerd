@@ -3,12 +3,23 @@
   "extends": "standard",
   "env": {
     "browser": false,
-    "node": true
+    "node": true,
+    "jest": true
   },
   "globals": {
     "VERSION": true,
     "ENV": true,
     "ENV_DEVELOPMENT": true,
     "ENV_PRODUCTION": true
+  },
+  "plugins": [
+    "jest"
+  ],
+  "rules": {
+    "jest/no-disabled-tests": "warn",
+    "jest/no-focused-tests": "error",
+    "jest/no-identical-title": "error",
+    "jest/prefer-to-have-length": "warn",
+    "jest/valid-expect": "error"
   }
 }

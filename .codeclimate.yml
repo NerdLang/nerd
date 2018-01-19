@@ -16,7 +16,7 @@ ratings:
   - "src/*.js"
 
 exclude_paths:
-  - "LICENSE"
+  - "*"
   - ".*"
   - "**/*.*"
   - "!**/*.js"
