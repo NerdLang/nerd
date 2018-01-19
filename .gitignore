@@ -60,5 +60,6 @@ typings/
 # next.js build output
 .next
 
+/coverage/
 /build/
 .idea

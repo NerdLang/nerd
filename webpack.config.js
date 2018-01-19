@@ -6,6 +6,19 @@ const ROOT = __dirname
 const pkg = require('./package')
 const ENV = (process.env.NODE_ENV || 'development').toLowerCase()
 const ENV_PRODUCTION = ENV === 'production'
+const getBabelConfig = () => {
+  const babelrc = JSON.parse(fs.readFileSync('./.babelrc', 'utf8'))
+
+  // temporary:
+  // only webpack needs for modules = false
+  babelrc.presets.forEach((preset) => {
+    if (Array.isArray(preset) && preset[0] === '@babel/preset-env') {
+      preset[1].modules = false
+    }
+  })
+
+  return babelrc
+}
 
 const banner = (buildDate => env => `/**!
  * @build-info ${env} - ${buildDate}
@@ -46,7 +59,8 @@ const config = ({ ENV, ENV_PRODUCTION }) => {
         {
           test: /\.js?$/,
           loader: 'babel-loader',
-          exclude: /node_modules/
+          exclude: /node_modules/,
+          options: getBabelConfig()
         }
       ]
     },
