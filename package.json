@@ -13,7 +13,9 @@
     "dev": "NODE_ENV=development npm run webpack",
     "dev:watch": "npm run dev -- -w",
     "test:watch": "npm run test -- --watch",
-    "build": "NODE_ENV=production npm run webpack"
+    "build": "NODE_ENV=production npm run webpack",
+    "cz": "git-cz",
+    "release": "standard-version && git push --follow-tags origin master"
   },
   "repository": {
     "type": "git",
@@ -58,6 +60,8 @@
     "babel-eslint": "^7.2.3",
     "babel-jest": "^22.1.0",
     "babel-loader": "^8.0.0-beta.0",
+    "commitizen": "^2.9.6",
+    "cz-conventional-changelog": "^2.1.0",
     "eslint": "^4.15.0",
     "eslint-config-standard": "^11.0.0-beta.0",
     "eslint-loader": "^1.9.0",
@@ -67,6 +71,7 @@
     "eslint-plugin-promise": "^3.6.0",
     "eslint-plugin-standard": "^3.0.1",
     "jest": "^22.1.3",
+    "standard-version": "^4.3.0",
     "uglifyjs-webpack-plugin": "^1.1.6",
     "webpack": "^3.10.0"
   },
