@@ -6,6 +6,7 @@ node_js:
 notifications:
   email: false
   slack:
+    on_pull_requests: false
     rooms:
       - nectarjs:G1EUEAR24IZvH2an3vt9IXnT#general
 
@@ -15,6 +16,7 @@ cache:
     - $HOME/.npm
 
 before_script:
+  - export CHANGES=$(git diff --name-only --no-merges $TRAVIS_COMMIT_RANGE)
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./codeclimate
   - chmod +x ./codeclimate
   - ./codeclimate before-build
@@ -24,7 +26,7 @@ script:
   - npm run test
   - ./codeclimate format-coverage ./coverage/lcov.info --input-type lcov
 
-  - npm run build
+  - npm run build -- -- --env.changes "$CHANGES"
 
 after_script:
   - ./codeclimate after-build --exit-code $TRAVIS_TEST_RESULT

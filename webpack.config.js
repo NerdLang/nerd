@@ -82,8 +82,9 @@ const config = ({ ENV, ENV_PRODUCTION }) => {
   }
 }
 
-module.exports = (env) => {
-  console.log(env, process.env.NODE_ENV);
+module.exports = (env = {}) => {
+  env.changes = (env.changes || '').split('\n')
+  console.log(process.env.NODE_ENV, env);
   return process.exit(0);
 
   const tasks = [
