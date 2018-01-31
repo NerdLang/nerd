@@ -6,8 +6,6 @@ node_js:
 notifications:
   email: false
   slack:
-    on_success: :change
-    on_failure: :change
     rooms:
       - nectarjs:G1EUEAR24IZvH2an3vt9IXnT#general
 
