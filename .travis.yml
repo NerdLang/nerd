@@ -4,24 +4,33 @@ node_js:
   - '8'
 
 notifications:
+  email: false
   slack:
     on_success: :change
     on_failure: :change
     rooms:
       - nectarjs:G1EUEAR24IZvH2an3vt9IXnT#general
 
+cache:
+  directories:
+    - node_modules
+    - $HOME/.npm
+
 before_script:
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./codeclimate
   - chmod +x ./codeclimate
+  - ./codeclimate before-build
   - npm install
 
 script:
   - npm run test
   - ./codeclimate format-coverage ./coverage/lcov.info --input-type lcov
 
-  - ./codeclimate before-build
   - npm run build
+
+after_script:
   - ./codeclimate after-build --exit-code $TRAVIS_TEST_RESULT
+
 
 before_deploy:
   - rm ./codeclimate
@@ -33,4 +42,3 @@ deploy:
   on:
     branch: master
     tags: true
-
