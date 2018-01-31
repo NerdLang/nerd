@@ -1,0 +1,12 @@
+{
+  "name": "@nectarjs/cli",
+  "version": "0.0.53",
+  "description": "Javascript's God Mod - CLI",
+  "scripts": {
+    "test": "jest --coverage",
+    "webpack": "webpack --env.package $(echo $PWD) --config ../../webpack.config.js",
+    "dev": "NODE_ENV=development npm run webpack",
+    "build": "NODE_ENV=production npm run webpack"
+  },
+  "dependencies": {}
+}

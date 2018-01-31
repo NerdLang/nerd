@@ -82,7 +82,10 @@ const config = ({ ENV, ENV_PRODUCTION }) => {
   }
 }
 
-module.exports = () => {
+module.exports = (env) => {
+  console.log(env, process.env.NODE_ENV);
+  return process.exit(0);
+
   const tasks = [
     config({ ENV: 'development', ENV_PRODUCTION: false })
   ]
