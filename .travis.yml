@@ -5,8 +5,10 @@ node_js:
 
 notifications:
   slack:
+    on_success: :change
+    on_failure: :change
     rooms:
-      secure: KSDHY+xJUASyEYU1gBV8LMpv6vmTh4ElsJSFgYpzFSIQWGt+7KBahQOzymepfXCMB8kvlBCOMBLr9dDWK6SpnNoyKsEMoXrk68GE6Ii59v7FOblPEGLwmZ200u8btzzEl9/2mY6jGPsBD7j2Df9lvZYoCrRrEwXM/Q++tLZahCWTyv9P+yDDOohUis8ThAFDhvZP++7g+/xKmIknOSx1am4qEtVe4mN+aGM9m4weRDZTq0rKtH5HG6827dkYCRzz4xRFFwgyBiY+0JPTYczQ5+Me2xE0iavwjCROzV7HSI251prpr0uL1dwRZRnFJueRiyGi5tIDpeWbiCJZHzwDA/m4FNp3XStLsderYtFcPxYu2uZFwOuEvmJm5LHqepXM79W8xdUPRNWZcAWCy52V/FwVw/TAaSW12fUUacZwxIYwAe9ZGIm9xmTmkcFQ28Gev50CIjj415yu3TbFeXnOMxHCrGeQ7I9NIvIw88o0IuZ0W73nG9L/wLBMpmo7L8Yx+bRMPhS1PdQD5JllqGxH1Eg4cN2v5cnjhIHAVt13k1zwbxzS37P88sGxRSdidGF1hcDGbBriiJJx7sl5lxZePSpVOy/6hg4bY4aIbATufQIv32/Z6f5/fTeoD7XUcvrfQuIWxix7UNwlSRTfZ4TzlicNKz9tmDP+bX7/oe5qdLg=
+      - nectarjs:G1EUEAR24IZvH2an3vt9IXnT#general
 
 before_script:
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./codeclimate
