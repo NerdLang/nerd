@@ -2,12 +2,13 @@ const path = require('path')
 const fs = require('fs')
 const webpack = require('webpack')
 
-const ROOT = __dirname
-const pkg = require('./package')
+
 const ENV = (process.env.NODE_ENV || 'development').toLowerCase()
 const ENV_PRODUCTION = ENV === 'production'
+const ROOT = __dirname
+
 const getBabelConfig = () => {
-  const babelrc = JSON.parse(fs.readFileSync('./.babelrc', 'utf8'))
+  const babelrc = JSON.parse(fs.readFileSync(path.join(ROOT, '.babelrc'), 'utf8'))
 
   // temporary:
   // only webpack needs for modules = false
@@ -20,7 +21,7 @@ const getBabelConfig = () => {
   return babelrc
 }
 
-const banner = (buildDate => env => `/**!
+const banner = (buildDate => (env, pkg) => `/**!
  * @build-info ${env} - ${buildDate}
 
  * @name ${pkg.name}
@@ -29,21 +30,24 @@ const banner = (buildDate => env => `/**!
  * @description ${pkg.description}
 
  * @homepage ${pkg.homepage}
- * @keywords [ ${pkg.keywords.join(', ')} ]
+ * @keywords [ ${[pkg.keywords || []].join(', ')} ]
 
- * @license ${fs.readFileSync('./LICENSE', 'utf8')}
+ * @license ${fs.readFileSync(path.join(ROOT, 'LICENSE'), 'utf8')}
 **/`)(new Date())
 
-const config = ({ ENV, ENV_PRODUCTION }) => {
+const config = (env, { ENV, ENV_PRODUCTION }) => {
+  const packageRoot = env.root;
+  const pkg = require(path.join(env.root, 'package.json'))
+
   return {
     target: 'node',
     devtool: 'source-map',
-    context: path.join(ROOT, 'src'),
-    entry: [`./${pkg.name}.js`],
+    context: path.join(packageRoot, 'src'),
+    entry: [`./index.js`],
     output: {
       libraryTarget: 'commonjs2',
-      path: path.join(ROOT, 'build'),
-      filename: `${pkg.name}.${ENV}.js`
+      path: path.join(packageRoot, 'dist'),
+      filename: `index.${ENV}.js`
     },
     module: {
       rules: [
@@ -69,7 +73,7 @@ const config = ({ ENV, ENV_PRODUCTION }) => {
     },
     plugins: [
       new webpack.BannerPlugin({
-        banner: banner(ENV),
+        banner: banner(ENV, pkg),
         raw: true
       }),
       new webpack.DefinePlugin({
@@ -83,17 +87,15 @@ const config = ({ ENV, ENV_PRODUCTION }) => {
 }
 
 module.exports = (env = {}) => {
-  env.changes = (env.changes || '').split('\n')
-  console.log(process.env.NODE_ENV, env);
-  return process.exit(0);
+  env.root = env.root || ROOT
 
   const tasks = [
-    config({ ENV: 'development', ENV_PRODUCTION: false })
+    config(env, { ENV: 'development', ENV_PRODUCTION: false })
   ]
 
   if (ENV_PRODUCTION) {
     const UglifyEs = require('uglifyjs-webpack-plugin')
-    const task = config({ ENV, ENV_PRODUCTION })
+    const task = config(env, { ENV, ENV_PRODUCTION })
 
     if (ENV_PRODUCTION) {
       task.plugins.push(

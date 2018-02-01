@@ -63,3 +63,4 @@ typings/
 /coverage/
 /build/
 .idea
+dist/

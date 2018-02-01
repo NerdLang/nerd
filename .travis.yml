@@ -16,7 +16,6 @@ cache:
     - $HOME/.npm
 
 before_script:
-  - export CHANGES=$(git diff --name-only --no-merges $TRAVIS_COMMIT_RANGE)
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./codeclimate
   - chmod +x ./codeclimate
   - ./codeclimate before-build
@@ -26,7 +25,8 @@ script:
   - npm run test
   - ./codeclimate format-coverage ./coverage/lcov.info --input-type lcov
 
-  - npm run build -- -- --env.changes "$CHANGES"
+  - lerna run bootstrap
+  - lerna exec npm run build
 
 after_script:
   - ./codeclimate after-build --exit-code $TRAVIS_TEST_RESULT
@@ -34,7 +34,7 @@ after_script:
 
 before_deploy:
   - rm ./codeclimate
-  - npm prune --production
+  - lerna exec npm prune --production
 
 deploy:
   provider: npm
