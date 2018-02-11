@@ -8,11 +8,7 @@
   },
   "scripts": {
     "test": "jest --coverage",
-    "webpack": "webpack --config webpack.config.js",
-    "dev": "NODE_ENV=development npm run webpack",
-    "dev:watch": "npm run dev -- -w",
     "test:watch": "npm run test -- --watch",
-    "build": "NODE_ENV=production npm run webpack",
     "cz": "git-cz",
     "release": "standard-version && git push --follow-tags origin master"
   },

@@ -15,30 +15,26 @@ cache:
     - node_modules
     - $HOME/.npm
 
-before_script:
+install:
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./codeclimate
+  - yarn --pure-lockfile
+  - lerna run bootstrap
+
+before_script:
   - chmod +x ./codeclimate
   - ./codeclimate before-build
-  - npm install
 
 script:
-  - npm run test
+  - yarn test
   - ./codeclimate format-coverage ./coverage/lcov.info --input-type lcov
 
-  - lerna run bootstrap
   - lerna exec npm run build
 
 after_script:
   - ./codeclimate after-build --exit-code $TRAVIS_TEST_RESULT
-
-
-before_deploy:
   - rm ./codeclimate
-  - lerna exec npm prune --production
 
-deploy:
-  provider: npm
-  skip_cleanup: true
-  on:
-    branch: master
-    tags: true
+after_success: .travis/lernaPublish.sh
+
+git:
+  depth: 10

@@ -1,11 +1,12 @@
 {
   "name": "@nectarjs/cli",
+  "license": "MIT",
   "version": "0.0.53",
   "description": "Javascript's God Mod - CLI",
+  "main": "index.js",
   "scripts": {
     "webpack": "webpack --env.root $(echo $PWD) --config ../../webpack.config.js",
     "dev": "NODE_ENV=development npm run webpack",
     "build": "NODE_ENV=production npm run webpack"
-  },
-  "dependencies": {}
+  }
 }
