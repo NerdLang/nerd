@@ -22,6 +22,7 @@ install:
 
 before_script:
   - chmod +x ./codeclimate
+  - chmod +x ./.travis/lernaPublish.sh
   - ./codeclimate before-build
 
 script:
