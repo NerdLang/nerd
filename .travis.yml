@@ -3,27 +3,39 @@ language: node_js
 node_js:
   - '8'
 
-before_script:
+notifications:
+  email: false
+  slack:
+    on_pull_requests: false
+    rooms:
+      - nectarjs:G1EUEAR24IZvH2an3vt9IXnT#general
+
+cache:
+  directories:
+    - node_modules
+    - $HOME/.npm
+
+install:
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./codeclimate
+  - yarn --pure-lockfile
+  - lerna run bootstrap
+
+before_script:
   - chmod +x ./codeclimate
-  - npm install
+  - chmod +x ./.travis/lernaPublish.sh
+  - ./codeclimate before-build
 
 script:
-  - npm run test
+  - yarn test
   - ./codeclimate format-coverage ./coverage/lcov.info --input-type lcov
 
-  - ./codeclimate before-build
-  - npm run build
+  - lerna exec npm run build
+
+after_script:
   - ./codeclimate after-build --exit-code $TRAVIS_TEST_RESULT
-
-before_deploy:
   - rm ./codeclimate
-  - npm prune --production
 
-deploy:
-  provider: npm
-  skip_cleanup: true
-  on:
-    branch: master
-    tags: true
+after_success: .travis/lernaPublish.sh
 
+git:
+  depth: 10

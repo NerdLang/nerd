@@ -2,21 +2,21 @@
   "name": "nectarjs",
   "version": "0.0.53",
   "description": "Javascript's God Mod",
-  "private": false,
   "main": "index.js",
   "bin": {
     "nectar": "./index.js"
   },
   "scripts": {
-    "test": "jest --coverage",
-    "webpack": "webpack --config webpack.config.js",
-    "dev": "NODE_ENV=development npm run webpack",
-    "dev:watch": "npm run dev -- -w",
+    "test": "NODE_ENV=testing jest --coverage",
     "test:watch": "npm run test -- --watch",
-    "build": "NODE_ENV=production npm run webpack",
     "cz": "git-cz",
-    "release": "standard-version && git push --follow-tags origin master"
+    "release": "standard-version && git push --follow-tags origin master",
+    "webpack": "webpack --config webpack.config.js"
   },
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/seraum/nectarjs.git"
@@ -52,7 +52,6 @@
     "url": "https://github.com/seraum/nectarjs/issues"
   },
   "homepage": "https://nectarjs.com",
-  "dependencies": {},
   "devDependencies": {
     "@babel/core": "^7.0.0-beta.38",
     "@babel/preset-env": "^7.0.0-beta.38",
@@ -62,26 +61,19 @@
     "babel-loader": "^8.0.0-beta.0",
     "commitizen": "^2.9.6",
     "cz-conventional-changelog": "^2.1.0",
+    "cz-lerna-changelog": "^1.2.1",
     "eslint": "^4.15.0",
-    "eslint-config-standard": "^11.0.0-beta.0",
+    "eslint-config-airbnb-base": "^12.1.0",
     "eslint-loader": "^1.9.0",
     "eslint-plugin-import": "^2.8.0",
     "eslint-plugin-jest": "^21.7.0",
-    "eslint-plugin-node": "^5.2.1",
-    "eslint-plugin-promise": "^3.6.0",
-    "eslint-plugin-standard": "^3.0.1",
     "jest": "^22.1.3",
+    "lerna": "^2.9.0",
     "standard-version": "^4.3.0",
     "uglifyjs-webpack-plugin": "^1.1.6",
     "webpack": "^3.10.0"
   },
   "publishConfig": {
     "access": "public"
-  },
-  "jest": {
-    "browser": false,
-    "transform": {
-      ".js$": "babel-jest"
-    }
   }
 }

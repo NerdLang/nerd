@@ -1,27 +1,20 @@
-const path = require('path')
-const fs = require('fs')
-const webpack = require('webpack')
+/* eslint-disable global-require, import/no-dynamic-require, no-param-reassign */
 
-const ROOT = __dirname
-const pkg = require('./package')
-const ENV = (process.env.NODE_ENV || 'development').toLowerCase()
-const ENV_PRODUCTION = ENV === 'production'
-const getBabelConfig = () => {
-  const babelrc = JSON.parse(fs.readFileSync('./.babelrc', 'utf8'))
+const path = require('path');
+const fs = require('fs');
+const webpack = require('webpack');
 
-  // temporary:
-  // only webpack needs for modules = false
-  babelrc.presets.forEach((preset) => {
-    if (Array.isArray(preset) && preset[0] === '@babel/preset-env') {
-      preset[1].modules = false
-    }
-  })
+const NODE_ENV = (process.env.NODE_ENV || 'development').toLowerCase();
+const NODE_ENV_PRODUCTION = NODE_ENV === 'production';
+const ROOT = __dirname;
+const LICENSE = fs.readFileSync(path.join(ROOT, 'LICENSE'), 'utf8');
 
-  return babelrc
-}
+const build = (config, { ENV, ENV_PRODUCTION }) => {
+  const packageRoot = config.root;
+  const pkg = require(path.join(config.root, 'package.json'));
 
-const banner = (buildDate => env => `/**!
- * @build-info ${env} - ${buildDate}
+  const banner = `/**!
+ * @build-info ${config} - ${new Date()}
 
  * @name ${pkg.name}
  * @version ${pkg.version}
@@ -29,21 +22,20 @@ const banner = (buildDate => env => `/**!
  * @description ${pkg.description}
 
  * @homepage ${pkg.homepage}
- * @keywords [ ${pkg.keywords.join(', ')} ]
+ * @keywords [ ${[pkg.keywords || []].join(', ')} ]
 
- * @license ${fs.readFileSync('./LICENSE', 'utf8')}
-**/`)(new Date())
+ * @license ${LICENSE}
+**/`;
 
-const config = ({ ENV, ENV_PRODUCTION }) => {
   return {
     target: 'node',
     devtool: 'source-map',
-    context: path.join(ROOT, 'src'),
-    entry: [`./${pkg.name}.js`],
+    context: path.join(packageRoot, 'src'),
+    entry: ['./index.js'],
     output: {
       libraryTarget: 'commonjs2',
-      path: path.join(ROOT, 'build'),
-      filename: `${pkg.name}.${ENV}.js`
+      path: path.join(packageRoot, 'dist'),
+      filename: `index.${ENV}.js`,
     },
     module: {
       rules: [
@@ -60,53 +52,52 @@ const config = ({ ENV, ENV_PRODUCTION }) => {
           test: /\.js?$/,
           loader: 'babel-loader',
           exclude: /node_modules/,
-          options: getBabelConfig()
-        }
-      ]
+        },
+      ],
     },
     resolve: {
-      extensions: ['.js']
+      extensions: ['.js'],
     },
     plugins: [
       new webpack.BannerPlugin({
-        banner: banner(ENV),
-        raw: true
+        banner,
+        raw: true,
       }),
       new webpack.DefinePlugin({
         VERSION: JSON.stringify(pkg.version),
         ENV: JSON.stringify(ENV),
         ENV_PRODUCTION: JSON.stringify(ENV_PRODUCTION),
-        ENV_DEVELOPMENT: JSON.stringify(!ENV_PRODUCTION)
-      })
-    ]
-  }
-}
+        ENV_DEVELOPMENT: JSON.stringify(!ENV_PRODUCTION),
+      }),
+    ],
+  };
+};
 
-module.exports = () => {
+module.exports = (env = {}) => {
+  env.root = env.root || ROOT;
+
   const tasks = [
-    config({ ENV: 'development', ENV_PRODUCTION: false })
-  ]
+    build(env, { ENV: 'development', ENV_PRODUCTION: false }),
+  ];
 
-  if (ENV_PRODUCTION) {
-    const UglifyEs = require('uglifyjs-webpack-plugin')
-    const task = config({ ENV, ENV_PRODUCTION })
+  if (NODE_ENV_PRODUCTION) {
+    const UglifyEs = require('uglifyjs-webpack-plugin');
+    const task = build(env, { ENV: 'production', ENV_PRODUCTION: true });
 
-    if (ENV_PRODUCTION) {
-      task.plugins.push(
-        new UglifyEs({
-          sourceMap: true,
-          uglifyOptions: {
-            output: {
-              quote_style: 1,
-              comments: 'some'
-            }
-          }
-        })
-      )
+    if (NODE_ENV_PRODUCTION) {
+      task.plugins.push(new UglifyEs({
+        sourceMap: true,
+        uglifyOptions: {
+          output: {
+            quote_style: 1,
+            comments: 'some',
+          },
+        },
+      }));
     }
 
-    tasks.push(task)
+    tasks.push(task);
   }
 
-  return Promise.resolve(tasks)
-}
+  return Promise.resolve(tasks);
+};

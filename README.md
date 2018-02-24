@@ -4,10 +4,10 @@ Javascript's God Mode : one language to rule them all. Code everything, everywhe
 [![users](https://img.shields.io/badge/dynamic/json.svg?label=Registered%20Users&colorB=ffa500&prefix=&suffix=&query=$.data&uri=http://nectar-lang.com/stats/users.json)](http://nectar-lang.com/key) [![Slack](http://api.nectarjs.com:3000/badge.svg)](http://api.nectarjs.com:3000/) [![Contribute](https://img.shields.io/badge/Contribution-Open-brightgreen.svg)](http://nectar-lang.com/contribute/) [![Sandbox](https://img.shields.io/badge/Sandbox-Alpha_v0.1-blue.svg)](http://nectar-lang.com)
 
 [![npm version](https://img.shields.io/npm/v/nectarjs.svg)](https://www.npmjs.com/package/nectarjs)
-[![Build Status](https://travis-ci.org/seraum/nectarjs.svg?branch=master)](https://travis-ci.org/seraum/nectarjs)
+[![Build Status](https://travis-ci.org/NectarJS/nectarjs/.svg?branch=master)](https://travis-ci.org/NectarJS/nectarjs/)
 [![npm downloads](https://img.shields.io/npm/dm/nectarjs.svg)](https://www.npmjs.com/package/nectarjs)
 [![Code Climate](https://codeclimate.com/github/seraum/nectarjs/badges/gpa.svg)](https://codeclimate.com/github/seraum/nectarjs)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/02e8b0d9ba383c19ae50/test_coverage)](https://codeclimate.com/github/seraum/nectarjs/test_coverage)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/cdc3de12aa8e03e2af7f/test_coverage)](https://codeclimate.com/github/seraum/nectarjs/test_coverage)
 [![npm version](https://img.shields.io/npm/l/nectarjs.svg)](https://github.com/seraum/nectarjs/blob/master/LICENSE)
 
 [![NPM](https://nodei.co/npm/nectarjs.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/nectarjs/)
