@@ -1,12 +1,16 @@
 #!/bin/bash
 set -e
 
-if [ $TRAVIS_PULL_REQUEST ] || [ "$TRAVIS_BRANCH" != "master" ]; then
-  exit 0
-fi
+#if [ $TRAVIS_PULL_REQUEST ] || [ "$TRAVIS_BRANCH" != "master" ]; then
+#  echo "SKIPPING DEPLOY."
+#  exit 0
+#fi
 
 if [ ! $TRAVIS_TAG ]; then
-  echo "BUMP VERSION: "
+  echo "BUMPING VERSION: "
+  git config user.name "Continuous Integration"
+  git config user.password ${GH_TOKEN}
+
   lerna publish --conventional-commits --yes --skip-npm
   git push --follow-tags origin master
 

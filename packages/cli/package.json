@@ -5,7 +5,7 @@
   "description": "Javascript's God Mod - CLI",
   "main": "index.js",
   "scripts": {
-    "webpack": "webpack --env.root $(echo $PWD) --config ../../webpack.config.js",
+    "webpack": "cd ../ && npm run webpack -- --env.root \"$OLDPWD\"",
     "dev": "NODE_ENV=development npm run webpack",
     "build": "NODE_ENV=production npm run webpack"
   }
