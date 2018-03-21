@@ -37,7 +37,7 @@ The output file name will be automatically choosen regarding the target. You can
 
 You can select a target for compilation with `--target [THE TARGET]`
 
-The `--single` argument launch the compilation of the file in argument. If you need to `require('')` file in your current folder, you need to remove `--single` to switch to porject mode.
+The `--single` argument launch the compilation of the file in argument. If you need to `require('')` file in your current folder, you need to remove `--single` to switch to project mode.
 
 NectarJS can run directly your application after compilation if you specify `--run`. The program will be executed only if the `--target` match your system.
 
