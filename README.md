@@ -110,11 +110,13 @@ If you want to code with your smartphone or tablet, you can download `Termux`, a
 * if / else
 * if / else if / else
 
-
-
 ### Operations
 
 * Plus
 * Minus
 * Divide
 * Multiplicate
+
+### Exceptions
+
+* try/catch block
