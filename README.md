@@ -86,37 +86,3 @@ If you want to code with your smartphone or tablet, you can download `Termux`, a
 * arduino-mega1280 -> Arduino Mega with Atmega 1280
 
 * arduino-mega2560 -> Arduino Mega with Atmega 2560
-
-#NectarScript Definition (NS)
-
-## NS0.1
-
-### Types
-
-* Undefined
-* Null
-* Boolean
-* String
-* Number
-
-### Semantics
-
-* for
-* while
-
-### Conditions
-
-* if
-* if / else
-* if / else if / else
-
-### Operations
-
-* Plus
-* Minus
-* Divide
-* Multiplicate
-
-### Exceptions
-
-* try/catch block
