@@ -9,6 +9,12 @@ Join us on Slack : [NectarJS' Slack](http://api.nectarjs.com:3000/)
 
 Get your free key here : [NectarJS free Key](http://nectar-lang.com/key/)
 
+# Current NectarScript version
+
+Current : **NS-0.0**
+
+Next : [**NS-0.1**](https://github.com/NectarJS/nectarscript/blob/master/nectarscript-0.1.MD)
+
 # Install
 
 You need `NodeJS` to install `NectarJS` : `https://nodejs.org/en/download/`.
