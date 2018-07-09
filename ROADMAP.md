@@ -4,17 +4,26 @@
 
 - [x] Parsing ES6 and ES7
 
+- [X] Code checker
+
+- [ ] Trace execution (debug)
+
+- [X] Compilation Errors
+
 - [x] Variable algorithms benchmark and selection
 
 - [ ] var
   - [x] String
+    - [X] length
+    - [ ] replace
+    - [ ] charAt
   - [ ] Number
     - [x] int
     - [ ] float
     - [ ] bigint (#15)
   - [x] Array
-  - [ ] Object
-  - [ ] Mixed Array / Object
+  - [X] Object
+  - [X] Mixed Array / Object
 
 - [ ] Instructions / Expressions
   - [x] if / else if / else
@@ -26,7 +35,7 @@
   - [x] Function
   - [x] New
   - [x] Nested function
-  - [ ] Operations on differents var type
+  - [X] Operations on differents var type
   
 - [ ] Console
   - [ ] assert()
@@ -94,6 +103,8 @@
 
 ## NodeJS compatibility
 
+- [X] LibUV
+
 - [ ] Process
 
 - [ ] ChildProcess
@@ -102,9 +113,13 @@
 
 - [ ] OS
 
-- [ ] http/https
+- [X] http
 
-- [ ] ...
+- [ ] https
+
+- [ ] Crypto
+
+- [ ] cluster
 
 ## Module compatibility
 
@@ -127,6 +142,7 @@
     - [x] Mega 1580
     - [x] Mega 2560
     - [ ] ...
+- [ ] STM32
     
 ## Android
 
@@ -140,9 +156,9 @@
 
 - [ ] Documentation
 - [ ] Bridges
-  - [x] C
+  - [x] C++
   - [x] Python
   - [ ] Ruby
   - [x] TypeScript
-  - [ ] Ruby
+  - [ ] Java
   
