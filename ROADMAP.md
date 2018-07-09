@@ -124,10 +124,12 @@
 ## Module compatibility
 
 -[ ] Require
+
     - [ ] require sub-modules (CommonJS like)
+    
       - [x] modules.export
+      
       - [ ] import / export
-- [ ] ...
 
 ## IOT compatibility
 
