@@ -9,7 +9,7 @@ Join us on Slack : [NectarJS' Slack](http://api.nectarjs.com:3000/)
 
 Get your free key here : [NectarJS free Key](http://nectar-lang.com/key/)
 
-Full documentation is here : [NectarJS free Key](https://nectarjs.gitbook.io/nectarjs/)
+Full documentation is here : [Gitbook](https://nectarjs.gitbook.io/nectarjs/)
 
 # Current NectarScript version
 
