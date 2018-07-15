@@ -27,7 +27,7 @@
  *
  */
 
-var VERSION = "0.0.53";
+var VERSION = "0.0.54";
 
 var fs = require('fs');
 var os = require('os');
@@ -339,6 +339,9 @@ function Build(prepare)
   var preset;
   if(CLI.cli["--preset"] && CLI.cli["--preset"].argument) preset = CLI.cli["--preset"].argument;
 
+  var env;
+  if(CLI.cli["--env"] && CLI.cli["--env"].argument) env = CLI.cli["--env"].argument;
+
   if(!target)
   {
     switch(PLATFORM)
@@ -362,6 +365,7 @@ function Build(prepare)
   }
 
   if(!preset) preset = "speed";
+  if(!env) env = "std";
 
   if(!CLI.stack || CLI.stack.length < 1)
   {
@@ -464,11 +468,11 @@ function Build(prepare)
             {
               var toZip = CURRENT.split(path.sep);
 
-	      if(PLATFORM == "win32")
-	      {
-	         zipFolder =  "";
-	      }
-	      else zipFolder =  ".." + path.sep + toZip[toZip.length - 1] + path.sep;
+      	      if(PLATFORM == "win32")
+      	      {
+      	         zipFolder =  "";
+      	      }
+      	      else zipFolder =  ".." + path.sep + toZip[toZip.length - 1] + path.sep;
             }
 
             if(fProject)
@@ -477,14 +481,16 @@ function Build(prepare)
               to = projectConf.out;
               target = projectConf.target;
               preset = projectConf.preset;
+              env = projectConf.env;
               Clean(true);
             }
             tips = getTips(target, to);
 
-            fs.writeFileSync(zipFolder + "project.json", '{"main": "' + main + '", "out": "'+ to + '", "target":"' + target + '", "preset":"' + preset + '"}');
-            to = zipFolder + to;
+            fs.writeFileSync(zipFolder + "project.json", '{"main": "' + main + '", "out": "'+ to + '", "target":"' + target + '", "preset":"' + preset + '", "env": "' + env + '"}');
+            process.chdir(zipFolder);
+            //to = zipFolder + to;
             var zip = new Zip();
-            zip.addLocalFolder(zipFolder);
+            zip.addLocalFolder("./");
             var zipBuffer = Buffer.from(zip.toBuffer()).toString("base64");
 
             if(!CONFIG.hash || validHash.indexOf(CONFIG.hash) < 0)
@@ -615,42 +621,8 @@ function showTarget()
 
 function Check(file)
 {
-  /* Check for Esprima */
-  var esprima;
-  try
-  {
-    esprima = require("esprima");
+  if(file.split('.').pop() != "js") return;
 
-  } catch(e)
-  {
-    if(CLI.cli["--check"])
-    {
-      console.log(os.EOL + "[!] Please, install esprima with command : npm install -g esprima" + os.EOL);
-      process.exit(1);
-    }
-    return;
-  };
-
-  /* Check for script */
-  var script = "";
-  try
-  {
-    script = fs.readFileSync(file).toString();
-  } catch (e)
-  {
-    console.log(e);
-    if(CLI.cli["--check"]) process.exit();
-    return;
-  }
-
-  /* Check for errors */
-  try
-  {
-    esprima.parseScript(script);
-  } catch(e)
-  {
-    console.log(os.EOL + e.message + " at index : " + e.index + os.EOL);
-  }
   if(CLI.cli["--check"]) process.exit();
 }
 
