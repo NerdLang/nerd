@@ -27,7 +27,7 @@
  *
  */
 
-var VERSION = "0.0.54";
+var VERSION = "0.0.55";
 
 var fs = require('fs');
 var os = require('os');
@@ -346,6 +346,9 @@ function Build(prepare)
   {
     switch(PLATFORM)
     {
+      case "darwin":
+        target = "mac-osx";
+      break;
       case "android":
       case "linux":
         if(ARCH == "x64") target = "linux-x86-64";
