@@ -17,7 +17,7 @@ function getExt(target)
     case "win-x86-64":
       return "-" + target + ".exe";
       break;
-    case "mac-osw":
+    case "mac-osx":
     case "linux-x86-32":
     case "linux-x86-64":
     case "linux-arm32v7":

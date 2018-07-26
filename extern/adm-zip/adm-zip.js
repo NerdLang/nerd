@@ -251,7 +251,7 @@ module.exports = function(/*String*/input) {
                 var items = Utils.findFiles(localPath),
                     self = this;
 
-                if (items.length)		
+                if (items.length)
 		{
                     items.forEach(function(_path)
 		    {

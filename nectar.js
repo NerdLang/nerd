@@ -27,7 +27,7 @@
  *
  */
 
-var VERSION = "0.0.55";
+var VERSION = "0.1.0";
 
 var fs = require('fs');
 var os = require('os');
@@ -136,7 +136,7 @@ function Init()
 
   if(!config || writeConfig)
   {
-    var defaultConfig = { id: "", key:"", "hash":"SHA256", "api":"api.nectarjs.com", "port":8080};
+    var defaultConfig = { id: "", key:"", "hash":"SHA256", "api":"api.nectarjs.com", "port":443};
     fs.writeFileSync(CONFIGFILE, JSON.stringify(defaultConfig));
   }
 
@@ -209,7 +209,7 @@ function reinitConfig()
 {
   try
   {
-    var defaultConfig = { id: "", key:"", hash:"SHA256", "api":"api.nectarjs.com", "port":8080};
+    var defaultConfig = { id: "", key:"", hash:"SHA256", "api":"api.nectarjs.com", "port":443};
     fs.writeFileSync(CONFIGFILE, JSON.stringify(defaultConfig));
     readConfig();
     showConfig("[*] Config reinitialized :");
@@ -506,7 +506,7 @@ function Build(prepare)
 
             zipBuffer = Crypto.encrypt(zip.toBuffer().toString("base64"), CONFIG.key);
             data = '{ "project" : "' + zipBuffer + '", "version":"' + VERSION + '", "id":"' + CONFIG.id + '", "signature": "' + signature + '"}';
-            fPath = "/compile/" + "project" + "/";
+            fPath = "/compile/" + "project" + "/" + target + "/" + preset + "/";
           }
 
           var apiOption =
@@ -520,10 +520,21 @@ function Build(prepare)
 
           function Compiled(data)
           {
-            var result = JSON.parse(data);
-            if(result.success == false)
+            var result;
+            try
             {
-              console.error(result.message);
+              result = JSON.parse(data);
+            }
+            catch(e)
+            {
+              console.error("[!] Unexpected network error");
+              process.exit(1);
+            }
+
+            if(!result.success)
+            {
+              if(result.message) console.error(result.message);
+              else console.error("[!] Unexpected network error");
               process.exit(1);
             }
             else
@@ -595,7 +606,10 @@ function Build(prepare)
           }
           if(!CLI.cli["--prepare"])
           {
-             coreHttp.httpUtil.httpReq(apiOption, function(err){console.log("[!] Network error : " + err.message);}, Compiled)
+            var httpHandler;
+            if(CONFIG.port == 443) httpHandler = coreHttp.httpsUtil;
+            else httpHandler = coreHttp.httpUtil;
+             httpHandler.httpReq(apiOption, function(err){console.log("[!] Network error : " + err.message);}, Compiled)
           }
           else
           {
