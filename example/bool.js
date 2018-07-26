@@ -1,12 +1,3 @@
 var test = true;
 console.log(typeof test);
-console.log(test.toString());
 console.log(test);
-var fTest = false;
-console.log(typeof fTest);
-console.log(fTest);
-console.write("ToString : ");
-console.log(fTest.toString());
-var b = "result : ";
-var c = test.toString();
-console.log(b + c);
