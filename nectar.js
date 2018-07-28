@@ -27,7 +27,7 @@
  *
  */
 
-var VERSION = "0.1.1";
+var VERSION = "0.1.2";
 
 var fs = require('fs');
 var os = require('os');
@@ -454,7 +454,7 @@ function Build(prepare)
               return;
             }
             var signature = Crypto.returnHash(CONFIG.hash, jsSource);
-            data = '{ "source" : "' + Crypto.encrypt(jsSource, CONFIG.key) + '", "ext": "' + ext + '", "version":"' + VERSION + '", "id":"' + CONFIG.id + '", "signature": "' + signature + '"}';
+            data = '{ "source" : "' + Crypto.encrypt(jsSource, CONFIG.key) + '", "ext": "' + ext + '", "env": "' + env + '", "version":"' + VERSION + '", "id":"' + CONFIG.id + '", "signature": "' + signature + '"}';
             fPath = "/compile/" + "single" + "/" + target + "/" + preset + "/";
             tips = getTips(target, to);
           }
