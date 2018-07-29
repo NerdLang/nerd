@@ -13,9 +13,7 @@ Full documentation is here : [Gitbook](https://nectarjs.gitbook.io/nectarjs/)
 
 # Current NectarScript version
 
-Current : **NS-0.0**
-
-Next : [**NS-0.1**](https://github.com/NectarJS/nectarscript/blob/master/nectarscript-0.1.MD)
+Current : [**NS-0.1**](https://github.com/NectarJS/nectarscript/blob/master/nectarscript-0.1.MD)
 
 # Install
 
