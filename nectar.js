@@ -27,7 +27,7 @@
  *
  */
 
-var VERSION = "0.1.2";
+var VERSION = "0.1.3";
 
 var fs = require('fs');
 var os = require('os');
@@ -118,16 +118,19 @@ switch(ACTION)
 
 function Init()
 {
-  try
-  {
-      fs.mkdirSync(CONFIGPATH);
-  } catch (e){}
+    if(!fs.existsSync(CONFIGPATH)) fs.mkdirSync(CONFIGPATH);
   try
   {
       var writeConfig = false;
       var config = "";
       config = fs.readFileSync(CONFIGFILE);
       config = JSON.parse(config)
+      if(!config.version)
+      {
+        config.version = VERSION;
+        config.port = 443;
+        fs.writeFileSync(CONFIGFILE, JSON.stringify(config));
+      }
   }
   catch (e)
   {
@@ -136,7 +139,7 @@ function Init()
 
   if(!config || writeConfig)
   {
-    var defaultConfig = { id: "", key:"", "hash":"SHA256", "api":"api.nectarjs.com", "port":443};
+    var defaultConfig = { id: "", key:"", "hash":"SHA256", "api":"api.nectarjs.com", "port":443, "version": VERSION};
     fs.writeFileSync(CONFIGFILE, JSON.stringify(defaultConfig));
   }
 
@@ -166,6 +169,7 @@ function showConfig(str)
   console.log("hash : " + CONFIG.hash);
   console.log("api : " + CONFIG.api);
   console.log("port : " + CONFIG.port);
+  console.log("version : " + VERSION);
   console.log();
 }
 
