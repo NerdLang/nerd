@@ -27,7 +27,7 @@
  *
  */
 
-var VERSION = "0.1.3";
+var VERSION = "0.1.4";
 
 var fs = require('fs');
 var os = require('os');
@@ -465,23 +465,23 @@ function Build(prepare)
           else
           {
             var zipArray = fName.split(path.sep);
-
             var zipFolder = "";
             for(var i = 0; i < zipArray.length - 1; i++)
             {
               zipFolder += zipArray[i] + path.sep;
             }
-            if(zipArray.length < 2)
+			var admZipPath = zipFolder;
+            if(true || zipArray.length < 2)
             {
               var toZip = CURRENT.split(path.sep);
 
       	      if(PLATFORM == "win32")
       	      {
-      	         zipFolder =  "";
+      	         zipFolder = ".." + path.sep + toZip[toZip.length - 1] + path.sep;
       	      }
       	      else zipFolder =  ".." + path.sep + toZip[toZip.length - 1] + path.sep;
             }
-
+		
             if(fProject)
             {
               main = projectConf.main;
@@ -492,12 +492,16 @@ function Build(prepare)
               Clean(true);
             }
             tips = getTips(target, to);
-
+			
             fs.writeFileSync(zipFolder + "project.json", '{"main": "' + main + '", "out": "'+ to + '", "target":"' + target + '", "preset":"' + preset + '", "env": "' + env + '"}');
-            process.chdir(zipFolder);
-            //to = zipFolder + to;
+
             var zip = new Zip();
-            zip.addLocalFolder("./");
+            zip.addLocalFolder(admZipPath, "./");
+			var E = zip.getEntries();
+			for(var e in E)
+			{
+				E[e].entryName = path.basename(E[e].entryName);
+			}
             var zipBuffer = Buffer.from(zip.toBuffer()).toString("base64");
 
             if(!CONFIG.hash || validHash.indexOf(CONFIG.hash) < 0)
