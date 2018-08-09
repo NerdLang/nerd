@@ -11,7 +11,7 @@ Join us on Slack : [NectarJS' Slack](https://join.slack.com/t/nectarjs/shared_in
 
 Get your free key here : [NectarJS free Key](http://nectar-lang.com/key/)
 
-Full documentation is here : [Gitbook](https://nectarjs.gitbook.io/nectarjs/)
+Full documentation is here : [NetcarJS Doc](https://doc.nectarjs.com/)
 
 # Current NectarScript version
 
