@@ -1,4 +1,6 @@
 module.exports = Flash;
+var fs = require("fs");
+var path = require("path");
 
 function Flash(from, to, target, verb)
 {
@@ -46,6 +48,6 @@ function execFlashArduino(from, to, model, driver, bauds, verb)
 
 function execFlashSTM32(from, to)
 {
-  fs.writeFileSync(to, from);
+  fs.writeFileSync(path.join(to, from), fs.readFileSync(from));
   console.log("[+ Flashed]");
 }
