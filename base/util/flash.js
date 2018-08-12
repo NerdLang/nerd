@@ -48,6 +48,14 @@ function execFlashArduino(from, to, model, driver, bauds, verb)
 
 function execFlashSTM32(from, to)
 {
-  fs.writeFileSync(path.join(to, from), fs.readFileSync(from));
-  console.log("[+ Flashed]");
+  try
+  {
+    fs.writeFileSync(path.join(to, from), fs.readFileSync(from));
+    console.log("[+ Flashed]");
+  }
+  catch(e)
+  {
+    console.log("[!] Your file is compiled, but an error occured while flashing, please try again.")
+  }
+
 }

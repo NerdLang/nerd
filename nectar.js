@@ -27,7 +27,7 @@
  *
  */
 
-var VERSION = "0.1.4";
+var VERSION = "0.1.5";
 
 var fs = require('fs');
 var os = require('os');
@@ -481,7 +481,7 @@ function Build(prepare)
       	      }
       	      else zipFolder =  ".." + path.sep + toZip[toZip.length - 1] + path.sep;
             }
-		
+
             if(fProject)
             {
               main = projectConf.main;
@@ -492,7 +492,7 @@ function Build(prepare)
               Clean(true);
             }
             tips = getTips(target, to);
-			
+
             fs.writeFileSync(zipFolder + "project.json", '{"main": "' + main + '", "out": "'+ to + '", "target":"' + target + '", "preset":"' + preset + '", "env": "' + env + '"}');
 
             var zip = new Zip();
