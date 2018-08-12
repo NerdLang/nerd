@@ -95,3 +95,7 @@ If you want to code with your smartphone or tablet, you can download `Termux`, a
 * arduino-mega1280 -> Arduino Mega with Atmega 1280
 
 * arduino-mega2560 -> Arduino Mega with Atmega 2560
+
+* nucleo-l152re -> STM32 Nucleo L152RE
+
+* nucleo-l432kc -> STM32 Nucleo L432KC
