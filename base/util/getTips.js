@@ -31,6 +31,9 @@ function getTips(target, file)
     case "arduino-mega2560":
       return "[*] Tips : avrdude -p m2560 -c wiring -P [COMPORT] -b 115200 -F -U flash:w:" + file;
       break;
+    case "nucleo-l152re":
+    case "nucleo-l432kc":
+      return "[*] Connect your nucleo on your computer, and symple copy/paste " + file + " on the nucleo drive"
     default:
       return "";
       break;
