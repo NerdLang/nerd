@@ -8,6 +8,8 @@
 
 - [ ] Trace execution (debug)
 
+- [ ] CLI arguments
+
 - [X] Compilation Errors
 
 - [x] Variable algorithms benchmark and selection
