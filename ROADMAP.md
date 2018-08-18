@@ -125,13 +125,15 @@
 
 ## Module compatibility
 
--[ ] Require
+- [ ] Require
 
     - [ ] require sub-modules (CommonJS like)
     
       - [x] modules.export
       
       - [ ] import / export
+      
+ - [x] Expose field in nectar key in package.json
 
 ## IOT compatibility
 
