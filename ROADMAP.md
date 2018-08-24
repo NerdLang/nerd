@@ -168,3 +168,7 @@
   - [x] TypeScript
   - [ ] Java
   
+## More
+
+- [ ] UI for NectarJS cli tool
+- [ ] Smartphone NectarJS app
