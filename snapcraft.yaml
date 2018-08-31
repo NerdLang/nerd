@@ -1,0 +1,22 @@
+name: nectarjs
+version: '0.1.6'
+summary: Javascript's God Mod
+description: |
+  Compile your JavaScript for everything
+grade: stable # must be 'stable' to release into candidate/stable channels
+confinement: strict # use 'strict' once you have the right plugs and slots
+
+apps:
+
+  nectar:
+    command: nectar
+    plugs: [network-bind, home, network]
+
+  njs:
+    command: nectar
+    plugs: [network-bind, home, network]
+
+parts:
+  nectar:
+    source: .
+    plugin: nodejs
