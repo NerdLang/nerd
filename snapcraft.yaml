@@ -1,4 +1,4 @@
-name: nectarjs
+name: nectar
 version: '0.1.7'
 summary: God Mod for JavaScript
 description: |
@@ -9,12 +9,12 @@ confinement: strict # use 'strict' once you have the right plugs and slots
 
 apps:
 
-  nectarjs:
-    command: bin/nectar
-    aliases: [nectar, njs]
+  nectar:
+    command: nectar
+    aliases: [njs]
     plugs: [network-bind, home, network, removable-media, i2c]
 
 parts:
-  nectarjs:
+  nectar:
     source: .
     plugin: nodejs
