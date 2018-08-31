@@ -5,7 +5,7 @@
   "main": "nectar",
   "bin": {
     "nectar": "./nectar.js",
-    "njs": "./nectar.js",
+    "njs": "./nectar.js"
   },
   "scripts": {},
   "repository": {
