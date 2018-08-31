@@ -1,6 +1,6 @@
 name: nectarjs
 version: '0.1.6'
-summary: Javascript's God Mod
+summary: God Mod for JavaScript
 description: |
   Compile your JavaScript for everything
 grade: stable # must be 'stable' to release into candidate/stable channels
