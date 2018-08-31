@@ -9,11 +9,11 @@ confinement: strict # use 'strict' once you have the right plugs and slots
 apps:
 
   nectar:
-    command: nectar
+    command: nectar.js
     plugs: [network-bind, home, network]
 
   njs:
-    command: nectar
+    command: nectar.js
     plugs: [network-bind, home, network]
 
 parts:
