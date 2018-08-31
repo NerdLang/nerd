@@ -4,7 +4,8 @@
   "description": "Javascript's God Mod",
   "main": "nectar",
   "bin": {
-    "nectar": "./nectar.js"
+    "nectar": "./nectar.js",
+    "njs": "./nectar.js",
   },
   "scripts": {},
   "repository": {
