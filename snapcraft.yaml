@@ -13,7 +13,7 @@ apps:
     plugs: [network-bind, home, network]
 
   njs:
-    command: nectar
+    command: njs
     plugs: [network-bind, home, network]
 
 parts:
