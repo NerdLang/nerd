@@ -4,8 +4,8 @@ summary: God Mod for JavaScript
 description: |
   Compile your JavaScript for everything
   
-grade: devel # must be 'stable' to release into candidate/stable channels
-confinement: classic # use 'strict' once you have the right plugs and slots
+grade: stable # must be 'stable' to release into candidate/stable channels
+confinement: strict # use 'strict' once you have the right plugs and slots
 
 apps:
 
