@@ -11,11 +11,11 @@ apps:
 
   nectar:
     command: nectar
-    plugs: [network-bind, home, network]
+    plugs: [network-bind, home, network, removable-media, i2c]
 
   njs:
     command: njs
-    plugs: [network-bind, home, network]
+    plugs: [network-bind, home, network, removable-media, i2c]
 
 parts:
   nectar:
