@@ -10,14 +10,14 @@ confinement: strict # use 'strict' once you have the right plugs and slots
 apps:
 
   nectar:
-    command: nectar
+    command: bin/nectar
     plugs: [network-bind, home, network, removable-media, i2c]
 
   njs:
-    command: njs
+    command: bin/njs
     plugs: [network-bind, home, network, removable-media, i2c]
 
 parts:
-  nectar:
+  nectarjs:
     source: .
     plugin: nodejs
