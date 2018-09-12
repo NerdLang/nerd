@@ -33,6 +33,14 @@ Once done, install NectarJS : `npm install -g nectarjs`
 
 Verify that NectarJS is installed with : `nectar --help`
 
+## Snap - Snapcraft
+
+You can also install NectarJS with Snap :
+
+`snap install nectarjs`
+
+You have to create a symlink on your system to be able to use `nectar` or `njs` in cli.
+
 # Configuration
 
 You need to enter your id and you security key. Code is encrypted in AES during compilation.
