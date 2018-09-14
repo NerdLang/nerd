@@ -13,7 +13,7 @@ Javascript's God Mode : one language to rule them all. Code everything, everywhe
 
 [![NPM](https://nodei.co/npm/nectarjs.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/nectarjs/)
 
-Join us on Slack : [NectarJS' Slack](https://join.slack.com/t/nectarjs/shared_invite/enQtNDA4MDMwNzE1MjA3LTc1NmVjNGRiMmYwOGRjNDg0M2IwYTAyZDM2MDY4MjllNjcxNDU2NzhiNTgzNDQxZjI2NDcxNzA5MTBlNjE1NDc)
+Join us on Slack : [NectarJS' Slack](https://join.slack.com/t/nectarjs/shared_invite/enQtNDMxOTEyNzg5Mzk1LTdkZWI3ZTQ2ZTNhMjQyOTk0YTFlNTUzMGQwZjRkNjkyOGQyNWFiOWFjNjRlNzUyYzcxZGQwYjY4MjRlMTg5NzI)
 
 Get your free key here : [NectarJS free Key](http://nectar-lang.com/key/)
 
