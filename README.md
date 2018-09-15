@@ -95,6 +95,8 @@ If you want to code with your smartphone or tablet, you can download `Termux`, a
 
 * wast -> WebAssembly AST
 
+* mac-osx -> Max OSX
+
 * linux-x86-32 -> Linux x86 32 bits
 
 * linux-x86-64 -> Linux x86 64 bits
