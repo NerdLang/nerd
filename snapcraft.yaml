@@ -12,7 +12,7 @@ apps:
   nectarjs:
     command: nectar
     aliases: [njs]
-    plugs: [network-bind, home, network, removable-media, i2c]
+    plugs: [network-bind, home, network, removable-media, i2c, iio, location-control, serial-port, classic-support]
 
 parts:
   nectarjs:
