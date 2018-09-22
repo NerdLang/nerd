@@ -5,13 +5,13 @@ description: |
   Compile your JavaScript for everything
   
 grade: stable # must be 'stable' to release into candidate/stable channels
-confinement: classic # use 'strict' once you have the right plugs and slots
+confinement: strict # use 'strict' once you have the right plugs and slots
 
 apps:
 
   nectarjs:
     command: nectar
-    plugs: [network-bind, home, network, removable-media, i2c, iio, location-control, serial-port, classic-support]
+    plugs: [network-bind, home, network, removable-media, i2c, iio, location-control, serial-port]
 
 parts:
   nectarjs:
