@@ -496,12 +496,16 @@ function Build(prepare)
             fs.writeFileSync(zipFolder + "project.json", '{"main": "' + main + '", "out": "'+ to + '", "target":"' + target + '", "preset":"' + preset + '", "env": "' + env + '"}');
 
             var zip = new Zip();
+            if(admZipPath.length == 0)
+            {
+              admZipPath = process.cwd();
+            }
             zip.addLocalFolder(admZipPath, "./");
-			var E = zip.getEntries();
-			for(var e in E)
-			{
-				E[e].entryName = path.basename(E[e].entryName);
-			}
+      			var E = zip.getEntries();
+      			for(var e in E)
+      			{
+      				E[e].entryName = path.basename(E[e].entryName);
+      			}
             var zipBuffer = Buffer.from(zip.toBuffer()).toString("base64");
 
             if(!CONFIG.hash || validHash.indexOf(CONFIG.hash) < 0)
