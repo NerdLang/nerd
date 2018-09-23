@@ -1,5 +1,5 @@
 name: nectarjs
-version: '0.1.7'
+version: '0.1.8'
 summary: God Mod for JavaScript
 description: |
   Compile your JavaScript for everything
@@ -11,7 +11,7 @@ apps:
 
   nectarjs:
     command: nectar
-    plugs: [network-bind, home, network, removable-media, i2c, iio, location-control, serial-port]
+    plugs: [network-bind, home, network, removable-media, i2c, iio, serial-port]
 
 parts:
   nectarjs:

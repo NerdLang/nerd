@@ -23,10 +23,10 @@ module.exports = function () {
     var _dataHeader = {};
 
     function setTime(val) {
-        var val = new Date(val);
+        val = new Date(val);
         _time = (val.getFullYear() - 1980 & 0x7f) << 25  // b09-16 years from 1980
             | (val.getMonth() + 1) << 21                 // b05-08 month
-            | val.getDay() << 16                         // b00-04 hour
+            | val.getDate() << 16                        // b00-04 hour
 
             // 2 bytes time
             | val.getHours() << 11    // b11-15 hour
@@ -92,7 +92,7 @@ module.exports = function () {
         get offset () { return _offset },
         set offset (val) { _offset = val },
 
-        get encripted () { return (_flags & 1) == 1 },
+        get encripted () { return (_flags & 1) === 1 },
 
         get entryHeaderSize () {
             return Constants.CENHDR + _fnameLen + _extraLen + _comLen;
@@ -109,7 +109,7 @@ module.exports = function () {
         loadDataHeaderFromBinary : function(/*Buffer*/input) {
             var data = input.slice(_offset, _offset + Constants.LOCHDR);
             // 30 bytes and should start with "PK\003\004"
-            if (data.readUInt32LE(0) != Constants.LOCSIG) {
+            if (data.readUInt32LE(0) !== Constants.LOCSIG) {
                 throw Utils.Errors.INVALID_LOC;
             }
             _dataHeader = {
@@ -136,7 +136,7 @@ module.exports = function () {
 
         loadFromBinary : function(/*Buffer*/data) {
             // data should be 46 bytes and start with "PK 01 02"
-            if (data.length != Constants.CENHDR || data.readUInt32LE(0) != Constants.CENSIG) {
+            if (data.length !== Constants.CENHDR || data.readUInt32LE(0) !== Constants.CENSIG) {
                 throw Utils.Errors.INVALID_CEN;
             }
             // version made by
@@ -173,7 +173,7 @@ module.exports = function () {
 
         dataHeaderToBinary : function() {
             // LOC header size (30 bytes)
-            var data = new Buffer(Constants.LOCHDR);
+            var data = Buffer.alloc(Constants.LOCHDR);
             // "PK\003\004"
             data.writeUInt32LE(Constants.LOCSIG, 0);
             // version needed to extract
@@ -199,7 +199,7 @@ module.exports = function () {
 
         entryHeaderToBinary : function() {
             // CEN header size (46 bytes)
-            var data = new Buffer(Constants.CENHDR + _fnameLen + _extraLen + _comLen);
+            var data = Buffer.alloc(Constants.CENHDR + _fnameLen + _extraLen + _comLen);
             // "PK\001\002"
             data.writeUInt32LE(Constants.CENSIG, 0);
             // version made by
@@ -213,7 +213,7 @@ module.exports = function () {
             // modification time (2 bytes time, 2 bytes date)
             data.writeUInt32LE(_time, Constants.CENTIM);
             // uncompressed file crc-32 value
-            data.writeInt32LE(_crc, Constants.CENCRC, true);
+            data.writeUInt32LE(_crc, Constants.CENCRC);
             // compressed size
             data.writeUInt32LE(_compressedSize, Constants.CENSIZ);
             // uncompressed size
@@ -243,7 +243,7 @@ module.exports = function () {
                 '\t"version" : ' + _version + ",\n" +
                 '\t"flags" : ' + _flags + ",\n" +
                 '\t"method" : ' + Utils.methodToString(_method) + ",\n" +
-                '\t"time" : ' + _time + ",\n" +
+                '\t"time" : ' + this.time + ",\n" +
                 '\t"crc" : 0x' + _crc.toString(16).toUpperCase() + ",\n" +
                 '\t"compressedSize" : ' + _compressedSize + " bytes,\n" +
                 '\t"size" : ' + _size + " bytes,\n" +

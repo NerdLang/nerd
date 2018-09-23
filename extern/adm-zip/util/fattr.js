@@ -1,4 +1,4 @@
-var fs = require("fs"),
+var fs = require("./fileSystem").require(),
     pth = require("path");
 	
 fs.existsSync = fs.existsSync || pth.existsSync;

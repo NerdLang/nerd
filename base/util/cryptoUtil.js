@@ -44,7 +44,7 @@ var Crypto =
     {
             var encryptedArray = text.split(':');
             var iv = encryptedArray[0];
-            var encrypted = new Buffer(encryptedArray[1], 'hex');
+            var encrypted = Buffer.from(encryptedArray[1], 'hex');
             if(password == undefined) password = wf.CONF['AES_KEY'];
             var algorithm = 'aes-256-ctr';
             var decipher = crypto.createDecipheriv(algorithm, Crypto.createSHA256(password).slice(0, 32), iv)

@@ -6,15 +6,15 @@ var Utils = require("./util"),
 module.exports = function (/*Buffer*/input) {
 
     var _entryHeader = new Headers.EntryHeader(),
-        _entryName = new Buffer(0),
-        _comment = new Buffer(0),
+        _entryName = Buffer.alloc(0),
+        _comment = Buffer.alloc(0),
         _isDirectory = false,
         uncompressedData = null,
-        _extra = new Buffer(0);
+        _extra = Buffer.alloc(0);
 
     function getCompressedDataFromZip() {
         if (!input || !Buffer.isBuffer(input)) {
-            return new Buffer(0);
+            return Buffer.alloc(0);
         }
         _entryHeader.loadDataHeaderFromBinary(input);
         return input.slice(_entryHeader.realDataOffset, _entryHeader.realDataOffset + _entryHeader.compressedSize)
@@ -22,8 +22,8 @@ module.exports = function (/*Buffer*/input) {
 
     function crc32OK(data) {
         // if bit 3 (0x08) of the general-purpose flags field is set, then the CRC-32 and file sizes are not known when the header is written
-        if (_entryHeader.flags & 0x8 != 0x8) {
-           if (Utils.crc32(data) != _entryHeader.crc) {
+        if ((_entryHeader.flags & 0x8) !== 0x8) {
+           if (Utils.crc32(data) !== _entryHeader.crc) {
                return false;
            }
         } else {
@@ -41,20 +41,19 @@ module.exports = function (/*Buffer*/input) {
         }
         if (_isDirectory) {
             if (async && callback) {
-                callback(new Buffer(0), Utils.Errors.DIRECTORY_CONTENT_ERROR); //si added error.
+                callback(Buffer.alloc(0), Utils.Errors.DIRECTORY_CONTENT_ERROR); //si added error.
             }
-            return new Buffer(0);
+            return Buffer.alloc(0);
         }
 
         var compressedData = getCompressedDataFromZip();
        
-        if (compressedData.length == 0) {
+        if (compressedData.length === 0) {
             if (async && callback) callback(compressedData, Utils.Errors.NO_DATA);//si added error.
             return compressedData;
         }
 
-        var data = new Buffer(_entryHeader.size);
-        data.fill(0);
+        var data = Buffer.alloc(_entryHeader.size);
 
         switch (_entryHeader.method) {
             case Utils.Constants.STORED:
@@ -66,11 +65,11 @@ module.exports = function (/*Buffer*/input) {
                     if (async && callback) callback(data);
                     return data;
                 }
-                break;
             case Utils.Constants.DEFLATED:
                 var inflater = new Methods.Inflater(compressedData);
                 if (!async) {
-                    inflater.inflate(data);
+                    var result = inflater.inflate(data);
+                    result.copy(data, 0);
                     if (!crc32OK(data)) {
                         console.warn(Utils.Errors.BAD_CRC + " " + _entryName.toString())
                     }
@@ -87,7 +86,7 @@ module.exports = function (/*Buffer*/input) {
                 }
                 break;
             default:
-                if (async && callback) callback(new Buffer(0), Utils.Errors.UNKNOWN_METHOD);
+                if (async && callback) callback(Buffer.alloc(0), Utils.Errors.UNKNOWN_METHOD);
                 return Utils.Errors.UNKNOWN_METHOD;
         }
     }
@@ -106,13 +105,11 @@ module.exports = function (/*Buffer*/input) {
                 case Utils.Constants.STORED:
                     _entryHeader.compressedSize = _entryHeader.size;
 
-                    compressedData = new Buffer(uncompressedData.length);
+                    compressedData = Buffer.alloc(uncompressedData.length);
                     uncompressedData.copy(compressedData);
 
                     if (async && callback) callback(compressedData);
                     return compressedData;
-
-                    break;
                 default:
                 case Utils.Constants.DEFLATED:
 
@@ -123,7 +120,7 @@ module.exports = function (/*Buffer*/input) {
                         return deflated;
                     } else {
                         deflater.deflateAsync(function(data) {
-                            compressedData = new Buffer(data.length);
+                            compressedData = Buffer.alloc(data.length);
                             _entryHeader.compressedSize = data.length;
                             data.copy(compressedData);
                             callback && callback(compressedData);
@@ -134,9 +131,9 @@ module.exports = function (/*Buffer*/input) {
             }
         } else {
             if (async && callback) {
-                callback(new Buffer(0));
+                callback(Buffer.alloc(0));
             } else {
-                return new Buffer(0);
+                return Buffer.alloc(0);
             }
         }
     }
@@ -198,7 +195,7 @@ module.exports = function (/*Buffer*/input) {
         set entryName (val) {
             _entryName = Utils.toBuffer(val);
             var lastChar = _entryName[_entryName.length - 1];
-            _isDirectory = (lastChar == 47) || (lastChar == 92);
+            _isDirectory = (lastChar === 47) || (lastChar === 92);
             _entryHeader.fileNameLength = _entryName.length;
         },
 
@@ -232,17 +229,26 @@ module.exports = function (/*Buffer*/input) {
                 _entryHeader.size = uncompressedData.length;
                 _entryHeader.method = Utils.Constants.DEFLATED;
                 _entryHeader.crc = Utils.crc32(value);
+                _entryHeader.changed = true;
             } else { // folders and blank files should be stored
                 _entryHeader.method = Utils.Constants.STORED;
             }
         },
 
         getData : function(pass) {
-            return decompress(false, null, pass);
+            if (_entryHeader.changed) {
+				return uncompressedData;
+			} else {
+				return decompress(false, null, pass);
+            }
         },
 
         getDataAsync : function(/*Function*/callback, pass) {
-            decompress(true, callback, pass)
+			if (_entryHeader.changed) {
+				callback(uncompressedData)
+			} else {
+				decompress(true, callback, pass)
+            }
         },
 
         set attr(attr) { _entryHeader.attr = attr; },
@@ -272,10 +278,10 @@ module.exports = function (/*Buffer*/input) {
         toString : function() {
             return '{\n' +
                 '\t"entryName" : "' + _entryName.toString() + "\",\n" +
-                '\t"name" : "' + _entryName.toString().split("/").pop() + "\",\n" +
+                '\t"name" : "' + (_isDirectory ? _entryName.toString().replace(/\/$/, '').split("/").pop() : _entryName.toString().split("/").pop()) + "\",\n" +
                 '\t"comment" : "' + _comment.toString() + "\",\n" +
                 '\t"isDirectory" : ' + _isDirectory + ",\n" +
-                '\t"header" : ' + _entryHeader.toString().replace(/\t/mg, "\t\t") + ",\n" +
+                '\t"header" : ' + _entryHeader.toString().replace(/\t/mg, "\t\t").replace(/}/mg, "\t}")  + ",\n" +
                 '\t"compressedData" : <' + (input && input.length  + " bytes buffer" || "null") + ">\n" +
                 '\t"data" : <' + (uncompressedData && uncompressedData.length  + " bytes buffer" || "null") + ">\n" +
                 '}';

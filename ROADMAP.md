@@ -8,7 +8,7 @@
 
 - [ ] Trace execution (debug)
 
-- [ ] CLI arguments
+- [X] CLI arguments
 
 - [X] Compilation Errors
 
@@ -38,7 +38,7 @@
   - [x] New
   - [x] Nested function
   - [X] Operations on differents var type
-  
+
 - [ ] Console
   - [ ] assert()
   - [ ] clear()
@@ -79,12 +79,12 @@
   - [ ] isFrozen()
   - [ ] isSealed()
   - [ ] keys()
-  
+
 - [ ] String
   - [ ] fromCharCode()
   - [ ] fromCodePoint()
   - [ ] charsets : unicode / utf8 / ...
-  
+
 - [ ] Number
   - [ ] isFinite()
   - [ ] isInteger()
@@ -92,10 +92,10 @@
   - [ ] isSafeInteger()
   - [ ] parseFloat()
   - [ ] parseInt()
-  
+
   - [ ] Math
     - [ ] ...
-    
+
 - [ ] Date
   - [ ] now()
   - [ ] parse()
@@ -128,11 +128,11 @@
 - [ ] Require
 
     - [ ] require sub-modules (CommonJS like)
-    
+
       - [x] modules.export
-      
+
       - [ ] import / export
-      
+
  - [x] Expose field in nectar key in package.json
 
 ## IOT compatibility
@@ -143,21 +143,21 @@
     - [x] digitalWrite  
     - [x] constants : LOW / HIGH / INPUT / OUTPUT
     - [ ] ...
-  - [ ] Models 
+  - [ ] Models
     - [x] Uno
     - [x] Mega 1580
     - [x] Mega 2560
     - [ ] ...
 - [ ] STM32
-    
+
 ## Android
 
 - [ ] ...
 
 ## iOS
-    
+
 - [ ] ...
-    
+
 ## API
 
 - [ ] Documentation
@@ -167,7 +167,7 @@
   - [ ] Ruby
   - [x] TypeScript
   - [ ] Java
-  
+
 ## More
 
 - [ ] UI for NectarJS cli tool

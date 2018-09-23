@@ -1,6 +1,6 @@
 {
   "name": "nectarjs",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "Javascript's God Mod",
   "main": "nectar",
   "bin": {
@@ -29,7 +29,9 @@
     "linux",
     "windows",
     "arduino",
-    "raspberry"
+    "raspberry",
+    "stm32",
+    "nucleo"
   ],
   "author": "Adrien THIERRY <adrien.thierryfr@gmail.com> (http://seraum.com)",
   "license": "MIT",

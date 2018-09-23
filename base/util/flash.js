@@ -40,6 +40,12 @@ function execFlashArduino(from, to, model, driver, bauds, verb)
     if(verb) process.stdout.write(data.toString());
   });
 
+  _flash.on('error', function(err)
+  {
+    console.log("[!] Error :");
+    console.log(err)
+  });
+
   _flash.on('close', function(code)
   {
     console.log("[+] Flashed")

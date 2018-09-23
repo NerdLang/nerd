@@ -1,4 +1,4 @@
-var fs = require("fs"),
+var fs = require("./fileSystem").require(),
     pth = require('path');
 
 fs.existsSync = fs.existsSync || pth.existsSync;
@@ -9,13 +9,13 @@ module.exports = (function() {
         Constants = require('./constants'),
         Errors = require('./errors'),
 
-        PATH_SEPARATOR = pth.normalize("/");
+        PATH_SEPARATOR = pth.sep;
 
 
     function mkdirSync(/*String*/path) {
         var resolvedPath = path.split(PATH_SEPARATOR)[0];
         path.split(PATH_SEPARATOR).forEach(function(name) {
-            if (!name || name.substr(-1,1) == ":") return;
+            if (!name || name.substr(-1,1) === ":") return;
             resolvedPath += PATH_SEPARATOR + name;
             var stat;
             try {
@@ -28,14 +28,14 @@ module.exports = (function() {
         });
     }
 
-    function findSync(/*String*/root, /*RegExp*/pattern, /*Boolean*/recoursive) {
+    function findSync(/*String*/dir, /*RegExp*/pattern, /*Boolean*/recoursive) {
         if (typeof pattern === 'boolean') {
             recoursive = pattern;
             pattern = undefined;
         }
         var files = [];
-        fs.readdirSync(root).forEach(function(file) {
-            var path = pth.join(root, file);
+        fs.readdirSync(dir).forEach(function(file) {
+            var path = pth.join(dir, file);
 
             if (fs.statSync(path).isDirectory() && recoursive)
                 files = files.concat(findSync(path, pattern, recoursive));
@@ -54,12 +54,15 @@ module.exports = (function() {
         },
 
         crc32 : function(buf) {
-            var b = new Buffer(4);
+            if (typeof buf === 'string') {
+                buf = Buffer.alloc(buf.length, buf);
+            }
+            var b = Buffer.alloc(4);
             if (!crcTable.length) {
                 for (var n = 0; n < 256; n++) {
                     var c = n;
                     for (var k = 8; --k >= 0;)  //
-                        if ((c & 1) != 0)  { c = 0xedb88320 ^ (c >>> 1); } else { c = c >>> 1; }
+                        if ((c & 1) !== 0)  { c = 0xedb88320 ^ (c >>> 1); } else { c = c >>> 1; }
                     if (c < 0) {
                         b.writeInt32LE(c, 0);
                         c = b.readUInt32LE(0);
@@ -89,7 +92,7 @@ module.exports = (function() {
         writeFileTo : function(/*String*/path, /*Buffer*/content, /*Boolean*/overwrite, /*Number*/attr) {
             if (fs.existsSync(path)) {
                 if (!overwrite)
-                    return false; // cannot overwite
+                    return false; // cannot overwrite
 
                 var stat = fs.statSync(path);
                 if (stat.isDirectory()) {
@@ -109,8 +112,15 @@ module.exports = (function() {
                 fd = fs.openSync(path, 'w', 438);
             }
             if (fd) {
-                fs.writeSync(fd, content, 0, content.length, 0);
-                fs.closeSync(fd);
+                try {
+                    fs.writeSync(fd, content, 0, content.length, 0);
+                }
+                catch (e){
+                    throw e;
+                }
+                finally {
+                    fs.closeSync(fd);
+                }
             }
             fs.chmodSync(path, attr || 438);
             return true;
@@ -135,13 +145,13 @@ module.exports = (function() {
                     fs.exists(folder, function(exists) {
                         if(!exists)
                             mkdirSync(folder);
-                        
+
                         fs.open(path, 'w', 438, function(err, fd) {
                             if(err) {
-                                fs.chmod(path, 438, function(err) {
+                                fs.chmod(path, 438, function() {
                                     fs.open(path, 'w', 438, function(err, fd) {
-                                        fs.write(fd, content, 0, content.length, 0, function(err, written, buffer) {
-                                            fs.close(fd, function(err) {
+                                        fs.write(fd, content, 0, content.length, 0, function() {
+                                            fs.close(fd, function() {
                                                 fs.chmod(path, attr || 438, function() {
                                                     callback(true);
                                                 })
@@ -151,8 +161,8 @@ module.exports = (function() {
                                 })
                             } else {
                                 if(fd) {
-                                    fs.write(fd, content, 0, content.length, 0, function(err, written, buffer) {
-                                        fs.close(fd, function(err) {
+                                    fs.write(fd, content, 0, content.length, 0, function() {
+                                        fs.close(fd, function() {
                                             fs.chmod(path, attr || 438, function() {
                                                 callback(true);
                                             })
@@ -186,10 +196,10 @@ module.exports = (function() {
             if (Buffer.isBuffer(input)) {
                 return input;
             } else {
-                if (input.length == 0) {
-                    return new Buffer(0)
+                if (input.length === 0) {
+                    return Buffer.alloc(0)
                 }
-                return new Buffer(input, 'utf8');
+                return Buffer.alloc(input.length, input, 'utf8');
             }
         },
 

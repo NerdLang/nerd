@@ -31,7 +31,7 @@ module.exports = function () {
 
         loadFromBinary : function(/*Buffer*/data) {
             // data should be 22 bytes and start with "PK 05 06"
-            if (data.length != Constants.ENDHDR || data.readUInt32LE(0) != Constants.ENDSIG)
+            if (data.length !== Constants.ENDHDR || data.readUInt32LE(0) !== Constants.ENDSIG)
                 throw Utils.Errors.INVALID_END;
 
             // number of entries on this volume
@@ -47,7 +47,7 @@ module.exports = function () {
         },
 
         toBinary : function() {
-           var b = new Buffer(Constants.ENDHDR + _commentLength);
+           var b = Buffer.alloc(Constants.ENDHDR + _commentLength);
             // "PK 05 06" signature
             b.writeUInt32LE(Constants.ENDSIG, 0);
             b.writeUInt32LE(0, 4);

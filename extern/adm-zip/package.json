@@ -1,66 +1,20 @@
 {
-  "_args": [
-    [
-      {
-        "raw": "adm-zip",
-        "scope": null,
-        "escapedName": "adm-zip",
-        "name": "adm-zip",
-        "rawSpec": "",
-        "spec": "latest",
-        "type": "tag"
-      },
-      "/home/adrien/workspace/git/nectarjs"
-    ]
+  "name": "adm-zip",
+  "version": "0.4.12",
+  "description": "Javascript implementation of zip for nodejs with support for electron original-fs. Allows user to create or extract zip files both in memory or to/from disk",
+  "keywords": [
+    "zip",
+    "methods",
+    "archive",
+    "unzip"
   ],
-  "_from": "adm-zip@latest",
-  "_id": "adm-zip@0.4.7",
-  "_inCache": true,
-  "_location": "/adm-zip",
-  "_nodeVersion": "0.12.0",
-  "_npmUser": {
-    "name": "cthackers",
-    "email": "iacob.campia@gmail.com"
-  },
-  "_npmVersion": "2.5.1",
-  "_phantomChildren": {},
-  "_requested": {
-    "raw": "adm-zip",
-    "scope": null,
-    "escapedName": "adm-zip",
-    "name": "adm-zip",
-    "rawSpec": "",
-    "spec": "latest",
-    "type": "tag"
-  },
-  "_requiredBy": [
-    "#USER"
-  ],
-  "_resolved": "https://registry.npmjs.org/adm-zip/-/adm-zip-0.4.7.tgz",
-  "_shasum": "8606c2cbf1c426ce8c8ec00174447fd49b6eafc1",
-  "_shrinkwrap": null,
-  "_spec": "adm-zip",
-  "_where": "/home/adrien/workspace/git/nectarjs",
-  "author": {
-    "name": "Nasca Iacob",
-    "email": "sy@another-d-mention.ro",
-    "url": "https://github.com/cthackers"
-  },
+  "homepage": "https://github.com/cthackers/adm-zip",
+  "author": "Nasca Iacob <sy@another-d-mention.ro> (https://github.com/cthackers)",
   "bugs": {
-    "url": "https://github.com/cthackers/adm-zip/issues",
-    "email": "sy@another-d-mention.ro"
+    "email": "sy@another-d-mention.ro",
+    "url": "https://github.com/cthackers/adm-zip/issues"
   },
-  "dependencies": {},
-  "description": "A Javascript implementation of zip for nodejs. Allows user to create or extract zip files both in memory or to/from disk",
-  "devDependencies": {},
-  "directories": {},
-  "dist": {
-    "shasum": "8606c2cbf1c426ce8c8ec00174447fd49b6eafc1",
-    "tarball": "https://registry.npmjs.org/adm-zip/-/adm-zip-0.4.7.tgz"
-  },
-  "engines": {
-    "node": ">=0.3.0"
-  },
+  "license": "MIT",
   "files": [
     "adm-zip.js",
     "headers",
@@ -69,34 +23,12 @@
     "zipEntry.js",
     "zipFile.js"
   ],
-  "gitHead": "6708a3e5788ff9e67ddba288397f7788a5c02855",
-  "homepage": "http://github.com/cthackers/adm-zip",
-  "keywords": [
-    "zip",
-    "methods",
-    "archive",
-    "unzip"
-  ],
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "https://raw.github.com/cthackers/adm-zip/master/MIT-LICENSE.txt"
-    }
-  ],
   "main": "adm-zip.js",
-  "maintainers": [
-    {
-      "name": "cthackers",
-      "email": "sy@another-d-mention.ro"
-    }
-  ],
-  "name": "adm-zip",
-  "optionalDependencies": {},
-  "readme": "ERROR: No README data found!",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/cthackers/adm-zip.git"
+    "url": "https://github.com/cthackers/adm-zip.git"
   },
-  "scripts": {},
-  "version": "0.4.7"
+  "engines": {
+    "node": ">=0.3.0"
+  }
 }
