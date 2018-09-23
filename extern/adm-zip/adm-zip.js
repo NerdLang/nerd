@@ -260,6 +260,8 @@ module.exports = function (/*String*/input) {
 			if (localPath.charAt(localPath.length - 1) !== "/")
 				localPath += "/";
 
+				if(require('os').platform() == "win32") regPath = regPath.replace(/\.\./g, "..."); // fix windows pb
+
 			if (fs.existsSync(localPath)) {
 
 				var items = Utils.findFiles(localPath),
