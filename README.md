@@ -9,7 +9,7 @@ Javascript's God Mode : one language to rule them all. Code everything, everywhe
 [![Compilations](https://img.shields.io/badge/dynamic/json.svg?label=Compilations%20&url=https%3A%2F%2Fapi.nectarjs.com%2Fcount.json&query=%24.data.count&colorB=blue)](https://nectarjs.com)
 [![users](https://img.shields.io/badge/dynamic/json.svg?label=Registered%20Users&colorB=ffa500&prefix=&suffix=&query=$.data&uri=http://nectar-lang.com/stats/users.json)](http://nectar-lang.com/key) [![Slack](https://img.shields.io/badge/dynamic/json.svg?label=Slack%20Users&colorB=blue&prefix=&suffix=&query=$.data&uri=http://nectar-lang.com/stats/slack.json)](https://join.slack.com/t/nectarjs/shared_invite/enQtNDMxOTEyNzg5Mzk1LTdkZWI3ZTQ2ZTNhMjQyOTk0YTFlNTUzMGQwZjRkNjkyOGQyNWFiOWFjNjRlNzUyYzcxZGQwYjY4MjRlMTg5NzI) 
 
-[![Contribute](https://img.shields.io/badge/Contribution-Open-brightgreen.svg)](http://nectar-lang.com/contribute/) [![Sandbox](https://img.shields.io/badge/Sandbox-Beta_v0.1-green.svg)](http://nectar-lang.com) [![Snap Status](https://build.snapcraft.io/badge/NectarJS/nectarjs.svg)](https://build.snapcraft.io/user/NectarJS/nectarjs)
+[![Contribute](https://img.shields.io/badge/Contribution-Open-brightgreen.svg)](http://nectar-lang.com/contribute/) [![Sandbox](https://img.shields.io/badge/Sandbox-Beta_v0.1-green.svg)](http://nectar-lang.com) 
 
 [![NPM](https://nodei.co/npm/nectarjs.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/nectarjs/)
 
@@ -33,13 +33,6 @@ Once done, install NectarJS : `npm install -g nectarjs`
 
 Verify that NectarJS is installed with : `nectar --help`
 
-## Snap - Snapcraft
-
-You can also install NectarJS with Snap :
-
-`snap install nectarjs`
-
-You have to create a symlink on your system to be able to use `nectar` or `njs` in cli.
 
 # Configuration
 
