@@ -149,6 +149,11 @@
     - [x] Mega 2560
     - [ ] ...
 - [ ] STM32
+    - [x] Nucleo l152re
+    - [x] Nucleo l432kc
+- [ ] ESP
+    - [ ] ESP32
+    - [ ] ESP8266
 
 ## Android
 
