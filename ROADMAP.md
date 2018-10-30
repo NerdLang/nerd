@@ -135,7 +135,7 @@
 
  - [x] Expose field in nectar key in package.json
 
-## IOT compatibility
+## IOT compatibility
 
 - [ ] Arduino
   - [ ] Code
