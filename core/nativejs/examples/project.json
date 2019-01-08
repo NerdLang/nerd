@@ -1,0 +1,1 @@
+{"main": "string.js", "out": "string-linux-x86-64.bin", "target":"linux-x86-64", "preset":"speed", "env": "std"}

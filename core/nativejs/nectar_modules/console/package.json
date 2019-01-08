@@ -1,0 +1,37 @@
+{
+  "name": "console",
+  "description": "NectarJS Console module",
+  "main": "index.js",
+  "bugs":
+  {
+    "url": "https://github.com/NectarJS/nectar-modules/issues"
+  },
+
+  "directories":
+  {
+    "root": "."
+  },
+  "homepage": "https://github.com/NectarJS/nectar-modules#readme",
+  "keywords":
+  [
+    "nectarjs",
+    "console",
+    "nodejs",
+    "node"
+  ],
+  "license":
+  {
+    "type": "MIT",
+    "url": "https://github.com/NectarJS/nectar-modules/blob/master/LICENSE"
+  },
+  "repository":
+  {
+    "type": "git",
+    "url": "git+ssh://git@github.com/NectarJS/nectar-modules.git"
+  },
+  "version": "0.0.1",
+  "nectar":
+  {
+    "env": ["std", "node"]
+  }
+}

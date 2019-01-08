@@ -1,0 +1,40 @@
+{
+  "name": "arduino-simple-lcd",
+  "description": "Simple arduino LCD lib for NectarJS",
+  "main": "index.js",
+  "bugs":
+  {
+    "url": "https://github.com/NectarJS/nectar-modules/issues"
+  },
+
+  "directories":
+  {
+    "root": ".",
+    "lib": "lib"
+  },
+  "homepage": "https://github.com/NectarJS/nectar-modules#readme",
+  "keywords":
+  [
+    "nectarjs",
+    "arduino",
+    "iot",
+    "lcd"
+  ],
+  "license":
+  {
+    "type": "MIT",
+    "url": "https://github.com/NectarJS/nectar-modules/blob/master/LICENSE"
+  },
+  "repository":
+  {
+    "type": "git",
+    "url": "git+ssh://git@github.com/NectarJS/nectar-modules.git"
+  },
+  "version": "0.0.1",
+  "nectar":
+  {
+    "env": ["arduino"],
+    "target": ["arduino-uno", "arduino-mega2560", "arduino-mega1280"],
+    "expose": ["arduino_LiquidCrystal", "arduino_beginLCD", "arduino_setCursorLCD", "arduino_clearLCD", "arduino_printLCD"]
+  }
+}
