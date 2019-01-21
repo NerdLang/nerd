@@ -11,8 +11,6 @@ Javascript's God Mode : one language to rule them all. Code everything, everywhe
 [![Metrics](https://img.shields.io/badge/Metrics-ON-green.svg)](https://app.databox.com/datawall/1584c72f8ba105f7c7435fbcdf0921c405b6bdf4b)
 [![Uptime](https://img.shields.io/badge/dynamic/json.svg?label=API%20Uptime&url=https%3A%2F%2Fapi.uptimerobot.com%2FgetMonitors%3FapiKey%3Dm780802413-76e2ae897675f9ab020aa79f%26responseTimes%3D0%26logs%3D1%26format%3Djson%26noJsonCallback%3D1&query=%24.monitors.monitor%5B0%5D.alltimeuptimeratio&colorB=green&suffix=%25)](https://status.nectarjs.com)
 
-[![Contribute](https://img.shields.io/badge/Contribution-Open-brightgreen.svg)](http://nectar-lang.com/contribute/) [![Sandbox](https://img.shields.io/badge/Sandbox-Beta_v0.1-green.svg)](http://nectar-lang.com) 
-
 [![NPM](https://nodei.co/npm/nectarjs.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/nectarjs/)
 
 Join us on Slack : [NectarJS' Slack](https://join.slack.com/t/nectarjs/shared_invite/enQtNDMxOTEyNzg5Mzk1LTdkZWI3ZTQ2ZTNhMjQyOTk0YTFlNTUzMGQwZjRkNjkyOGQyNWFiOWFjNjRlNzUyYzcxZGQwYjY4MjRlMTg5NzI)
