@@ -4,6 +4,8 @@
   
 Javascript's God Mode : one language to rule them all. Code everything, everywhere, for everything, in JS, TS, CS and more.
 
+[![Trello](https://img.shields.io/badge/Trello-Join-brightgreen.svg)](https://trello.com/invite/b/6F4rvEj2/9d7677f9dc6b5bf2f5b33e45fc794182/nectarjs)
+
 [![Presale](https://img.shields.io/badge/NEW:NECTOP-PRESALE_/%20PREVENTE-green.svg?longCache=false&style=for-the-badge)](https://prevente.nectar.global/?code=git18)
 
 <hr></hr>
