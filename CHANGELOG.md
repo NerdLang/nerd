@@ -1,4 +1,9 @@
 #CURRENT
+* Add core/nativejs
+* Add --caas switch
+* Default local compilation with core/nativejs
+
+#VERSION 0.1.8
 * Add njs-http module
 * Add process module (std & node env)
 * Add static linking to mac-osx and win-x86* targets

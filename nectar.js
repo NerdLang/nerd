@@ -25,7 +25,9 @@
  *
  */
 
-var VERSION = "0.1.8";
+var VERSION = "0.2.0";
+
+var DEFAULT_COMPILER = "g++";
 
 var fs = require('fs');
 var os = require('os');
@@ -332,6 +334,8 @@ function Build(prepare)
     return;
   }
 
+  if(CLI.cli["--compiler"] && CLI.cli["--compiler"].argument) DEFAULT_COMPILER = CLI.cli["--compiler"].argument;
+
   var single = false;
   if(CLI.cli["--single"]) single = true;
 
@@ -447,7 +451,7 @@ function Build(prepare)
 	        var data = "";
           var fPath = "";
           var tips = "";
-          if(single)
+          if(single && CLI.cli["--caas"])
           {
             var jsSource = fileData.toString("base64");
             if(!CONFIG.hash || validHash.indexOf(CONFIG.hash) < 0)
@@ -460,7 +464,7 @@ function Build(prepare)
             fPath = "/compile/" + "single" + "/" + target + "/" + preset + "/";
             tips = getTips(target, to);
           }
-          else
+          else if(CLI.cli["--caas"])
           {
             var zipArray = fName.split(path.sep);
             var zipFolder = "";
@@ -614,13 +618,21 @@ function Build(prepare)
               });
             }
           }
-          if(!CLI.cli["--prepare"])
+          if(!CLI.cli["--prepare"] && CLI.cli["--caas"])
           {
             var httpHandler;
             if(CONFIG.port == 443) httpHandler = coreHttp.httpsUtil;
             else httpHandler = coreHttp.httpUtil;
              httpHandler.httpReq(apiOption, function(err){console.log("[!] Network error : " + err.message);}, Compiled)
           }
+          else if(!CLI.cli["--prepare"])
+          {
+			  var _current = path.dirname(path.resolve(process.argv[1]));
+			  var _native = path.join(_current, "core", "nativejs");
+			  var _to = path.resolve(to);
+			  var _fullPathCompile = path.resolve(fName);
+			  console.log(child_process.execSync("cd " + _native + " && ./njs " + _fullPathCompile + " --compiler " + DEFAULT_COMPILER + " -o " + _to));
+		  }
           else
           {
 	           var pObj = {main: main, out:projTo, target:target, preset:preset};
