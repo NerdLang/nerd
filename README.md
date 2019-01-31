@@ -4,7 +4,7 @@
   
 Javascript's God Mode : one language to rule them all. Code everything, everywhere, for everything, in JS, TS, CS and more.
 
-NectarJS is now fully open source. Default behavior is local JS compilation with g++. To change target compile, use --compiler, or to switch to cloud compiler, use --caas 
+NectarJS is now fully open source. Default behavior is local JS compilation with g++. To change local target compiler, use --compiler, or to switch to cloud compiler, use --caas 
 
 We need help, join us : [![NectarJS' Slack](https://img.shields.io/badge/Slack-Join-brightgreen.svg)](https://join.slack.com/t/nectarjs/shared_invite/enQtNDMxOTEyNzg5Mzk1LTdkZWI3ZTQ2ZTNhMjQyOTk0YTFlNTUzMGQwZjRkNjkyOGQyNWFiOWFjNjRlNzUyYzcxZGQwYjY4MjRlMTg5NzI)   [![Trello](https://img.shields.io/badge/Trello-Join-brightgreen.svg)](https://trello.com/invite/b/6F4rvEj2/9d7677f9dc6b5bf2f5b33e45fc794182/nectarjs)
 
