@@ -66,9 +66,64 @@ function Compiler()
 
   this.Squel = NJS_ENV.base;
 
-  this.Parse = function()
+  this.Parse = function(obj)
   {
+    var _str = "";
+    if(obj.body) obj = obj.body;
 
+    for(var o in obj)
+  	{
+      WHERE = "MAIN";
+  		switch(obj[o].type)
+  		{
+  			case "FunctionDeclaration":
+				WHERE = "function";
+				//_str += FunctionDeclaration(obj[o]);
+  				break;
+
+  			case "ExpressionStatement":
+				//_str += ExpressionStatement(obj[o]);
+  				break;
+			case "ReturnStatement":
+				//_str += ReturnStatement(obj[o]);
+			  break;
+			case "VariableDeclaration":
+				//_str += VariableDeclaration(obj[o]);
+			  break;
+			case "VariableDeclarator":
+				  //_str += VariableDeclarator(obj[o]);
+			  break;
+			case "IfStatement":
+				//_str += IfStatement(obj[o])
+			  break;
+			case "EmptyStatement":
+			  break;
+			case "ForStatement":
+				//_str += ForStatement(obj[o]);
+			  break;
+			case "WhileStatement":
+				  //_str += WhileStatement(obj[o]);
+			  break;
+			case "DoWhileStatement":
+				  console.error("Parser for DoWhileStatement is not implemented yet");
+				  process.exit(1);
+			  break;
+			case "BreakStatement":
+				  console.error("Parser for BreakStatement is not implemented yet");
+				  process.exit(1);
+			  break;
+			case "SwitchStatement":
+				  console.error("Parser for SwitchStatement is not implemented yet");
+				  process.exit(1);
+          break;
+  			default:
+          ERROR = true;
+  				console.log("Parser for " + obj[o].type + " is not implemented yet");
+  				break;
+  		}
+  	}
+
+    return _str;
   }
 
   this.Compile = function()
@@ -83,7 +138,9 @@ function Compiler()
 
   this.CLI = function(compiler, out, TO, option)
   {
-    return compiler + " -d " + path.dirname(out) + " " + option + " " + TO;
+	execSync("cpp -P .nectar/" + out + ".java > .nectar/" + out + ".java && cpp -P compiler/java/src/VAR.java > .nectar/VAR.java");
+	
+    return compiler + " -d " + path.dirname(out) + " " + option + " .nectar/VAR.java " + TO;
   }
 
   this.Run = function(out)
@@ -95,9 +152,9 @@ function Compiler()
       if(i > 0) i += ".";
       _class += tmp[i];
     }
-    return "cd " + path.dirname(out) + " && java " + _class;
+    return "cd " + path.dirname(out) + " && java " + out.split(".class")[0];
   }
-
+ 
 }
 
 module.exports = new Compiler();

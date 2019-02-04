@@ -22,17 +22,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-
-#define __GET_VAR(_var) _var._local[_var._type]
-
-public class __CLASSNAME__
+ 
+public class VAR
 {
-    public static void main(String[] args)
-    {
-		var a = new VAR("test var");
-        System.out.println(__GET_VAR(a));
-        
-        var a = new VAR(100);
-        System.out.println(_GET_VAR(a));
-    }
+	public Object[] _local = new Object[]{false, 0, new String(), new Object()};
+	public int _type = -1;
+	
+	public VAR(String _var)
+	{
+		_type = 2;
+		_local[_type] = _var;
+	}
+	
+	public VAR(int _var)
+	{
+		_type = 1;
+		_local[_type] = _var;
+	}
 }
