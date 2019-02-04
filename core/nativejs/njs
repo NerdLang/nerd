@@ -166,7 +166,7 @@ function Build(CLI)
   source = escodegen.generate(CLEAN);
 
 
-  source = COMPILER.Pre(source);
+  if(COMPILER.Pre) source = COMPILER.Pre(source);
 
   source = genStdLib() + source;
 
@@ -176,25 +176,28 @@ function Build(CLI)
 
   source = GENERATED + source;
 
-  genCheck(CHECKDIR);
-
-  var warn = "";
-  /* TEST FILE WITH ESLINT */
-  try
+  if(NJS_ENV.check)
   {
-    warn = execSync("eslint --no-ignore --fix --config " + FINAL_CHECK + " " + file);
-  }
-  catch(e)
-  {
-    var result = e.stdout.toString();
-    result = "\n" + result.split("\n").splice(2).join("\n");
-    console.error("NectarJS: Compilation Error : \n" + result);
-    process.exit(1);
-  }
-  if(warn.length > 0)
-  {
-    warn = "\n" + warn.toString().split("\n").splice(2).join("\n");
-    console.log("NectarJS: Compilation Warning : \n" + warn);
+	  genCheck(CHECKDIR);
+	
+	  var warn = "";
+	  /* TEST FILE WITH ESLINT */
+	  try
+	  {
+	    warn = execSync("eslint --no-ignore --fix --config " + FINAL_CHECK + " " + file);
+	  }
+	  catch(e)
+	  {
+	    var result = e.stdout.toString();
+	    result = "\n" + result.split("\n").splice(2).join("\n");
+	    console.error("NectarJS: Compilation Error : \n" + result);
+	    process.exit(1);
+	  }
+	  if(warn.length > 0)
+	  {
+	    warn = "\n" + warn.toString().split("\n").splice(2).join("\n");
+	    console.log("NectarJS: Compilation Warning : \n" + warn);
+  	  }
   }
 
   /* END TEST FILE WITH ESLINT */
@@ -233,8 +236,8 @@ function Build(CLI)
 
 
 
-  intermediate = COMPILER.Post(MAIN);
-  intermediate = COMPILER.Post(BODY);
+  if(COMPILER.Post) intermediate = COMPILER.Post(MAIN);
+  if(COMPILER.Post) intermediate = COMPILER.Post(BODY);
 
 */
   fnOptimizer(AST);

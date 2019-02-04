@@ -26,8 +26,45 @@
 function Compiler()
 {
   this.Default = "javac";
-  this.Squel = "squel.java";
   this.End = ".java";
+
+  var EXISTING_ENV =
+  {
+    java: require("./env/java.js"),
+  }
+  global.NJS_ENV = EXISTING_ENV["java"];
+
+  global.createRandomVar = require("./tools/createRandomVar.js");
+
+  global.getClass = require("./gen/getClass.js");
+  global.setClass = require("./gen/setClass.js");
+  global.genRequire = require('./gen/genRequire.js');
+  global.genInclude = require("./gen/genInclude.js");
+  global.getLibC = require("./gen/getLibC.js");
+  global.genStdLib = require("./gen/genStdLib.js");
+  global.genGlobal = require("./gen/genGlobal.js");
+  global.genTarget = require("./gen/genTarget.js");
+
+  global.CBFN = [];
+  global.LOCAL_PARAM = [];
+  global.fnOptimizer = require("./optim/fnOptimizer.js");
+
+  global.VARIABLE = [];
+  global.FUNCSTACK = [];
+  global.FUNCINDEX = 0;
+  global.DECLARATION = "";
+  global.INTERMEDIATE = "";
+  global.RANDOMVAR = [];
+
+
+  global.GLOBAL_DECLARATION = "";
+  global.GLOBAL_GEN = "";
+  global.GLOBAL_VAR = [];
+
+  global.GENERATED = "";
+
+
+  this.Squel = NJS_ENV.base;
 
   this.Parse = function()
   {
