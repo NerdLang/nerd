@@ -359,6 +359,7 @@ function Build(prepare)
       case "linux":
         if(ARCH == "x64") target = "linux-x86-64";
         else if(ARCH == "x32") target = "linux-x86-32";
+	else if(ARCH == "armv6") target = "linux-armv6";
         else if(ARCH == "arm") target = "linux-arm32v7";
         break;
 
