@@ -632,7 +632,7 @@ function Build(prepare)
 			  var _native = path.join(_current, "core", "nativejs");
 			  var _to = path.resolve(to);
 			  var _fullPathCompile = path.resolve(fName);
-			  console.log(child_process.execSync("cd " + _native + " && ./njs " + _fullPathCompile + " --compiler " + DEFAULT_COMPILER + " -o " + _to));
+			  console.log(child_process.execSync("cd " + _native + " && node njs " + _fullPathCompile + " --compiler " + DEFAULT_COMPILER + " -o " + _to));
 		  }
           else
           {
