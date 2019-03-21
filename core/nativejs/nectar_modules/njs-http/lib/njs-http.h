@@ -28,6 +28,12 @@ var __NJS_HTTP_GET(var _uri, var _cb)
   return __NJS_Create_Undefined();
 }
 
+var __NJS_HTTP_SET_BASE_DIR(var _dir)
+{
+  __NJS_HTTP_SRV.set_base_dir(__NJS_Get_String(_dir));
+  return var(UNDEFINED, 0);
+}
+
 var __NJS_HTTP_LISTEN(var _host, var _port)
 {
   __NJS_HTTP_SRV.listen(__NJS_Get_String(_host), __NJS_Get_Int(_port));
