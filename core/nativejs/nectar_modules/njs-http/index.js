@@ -12,4 +12,9 @@ njs_server.listen = function(_host, _port)
   __NJS_HTTP_LISTEN(_host, _port);
 };
 
+njs_server.setBaseDir = function(_dir)
+{
+  __NJS_HTTP_SET_BASE_DIR(_dir);
+};
+
 module.exports = njs_server;
