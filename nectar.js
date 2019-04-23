@@ -364,8 +364,8 @@ function Build(prepare)
         break;
 
       case "win32":
-        if(ARCH == "x64") target = "win-x86-64";
-        else if(ARCH == "x32") target = "win-x86-32";
+        if(ARCH == "x64" || ARCH == 'ia64') target = "win-x86-64";
+        else if(ARCH == "x32" || ARCH == 'ia32') target = "win-x86-32";
         break;
 
       default:
@@ -380,12 +380,6 @@ function Build(prepare)
   if(!CLI.stack || CLI.stack.length < 1)
   {
     console.error("[!] Missing file to compile or project.json path, 'nectar --help' if you need help");
-    return;
-  }
-  else if(!target || TARGET.indexOf(target) < 0)
-  {
-    console.error("[!] Bad target\n");
-    showTarget();
     return;
   }
   else
@@ -433,6 +427,7 @@ function Build(prepare)
           if(fProject)
 	         {
 	            to = projectConf.out;
+		    target = projectConf.target
     	     }
           else if(CLI.cli["-o"])
           {
@@ -445,7 +440,13 @@ function Build(prepare)
           }
 
          projTo = to;
-
+	
+	  if(!target || TARGET.indexOf(target) < 0)
+	  {
+	    console.error("[!] Bad target\n");
+	    showTarget();
+	    return;
+	  }
 	       var main = fName.split(path.sep);
           main = main[main.length - 1];
 
