@@ -35,6 +35,7 @@ Once done, install NectarJS : `npm install -g nectarjs`
 
 Verify that NectarJS is installed with : `nectar --help`
 
+Native compilation on Windows needs G++ and pthread lib.
 
 # Configuration
 
