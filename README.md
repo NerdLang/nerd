@@ -1,4 +1,10 @@
 <p align="center" style="margin:auto";>
+
+<b>[!] NectarJS is stalled right now because of the lack of time and the lack of community, don't hesitate to contact me to help me start it again. [!]</b>
+
+</p>
+
+<p align="center" style="margin:auto";>
   
 <img height="64" src="https://i.imgur.com/oXRdycNl.png">
   
