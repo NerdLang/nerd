@@ -17,8 +17,6 @@ We need help, join us : [![NectarJS' Slack](https://img.shields.io/badge/Slack-J
 
 Join us on Slack : [NectarJS' Slack](https://join.slack.com/t/nectarjs/shared_invite/enQtNDMxOTEyNzg5Mzk1LTdkZWI3ZTQ2ZTNhMjQyOTk0YTFlNTUzMGQwZjRkNjkyOGQyNWFiOWFjNjRlNzUyYzcxZGQwYjY4MjRlMTg5NzI)
 
-Get your free key here : [NectarJS free Key](http://nectar-lang.com/key/)
-
 Full documentation is here : [NetcarJS Doc](https://doc.nectarjs.com/)
 
 </p>
