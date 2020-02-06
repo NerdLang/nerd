@@ -3,7 +3,6 @@
 * Remove core
 * Remove base
 * Remove externe
-* Remove example 
 
 #VERSION 0.1.9
 * Add core/nativejs
