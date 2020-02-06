@@ -1,7 +1,9 @@
 <p align="center" style="margin:auto";>
   
 <img height="64" src="https://i.imgur.com/oXRdycNl.png">
-  
+
+<br>
+
 Javascript's God Mode : one language to rule them all. Code everything, everywhere, for everything, in JS, TS, CS and more.
 
 Any questions or ideas, join us : [![NectarJS' Slack](https://img.shields.io/badge/Discord-Join-brightgreen.svg)](https://discord.gg/VHY2Uct)   [![Trello](https://img.shields.io/badge/Trello-Join-brightgreen.svg)](https://trello.com/invite/b/6F4rvEj2/9d7677f9dc6b5bf2f5b33e45fc794182/nectarjs)
