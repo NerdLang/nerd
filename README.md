@@ -1,18 +1,10 @@
 <p align="center" style="margin:auto";>
-
-<b>[!] NectarJS is stalled right now because of the lack of time and the lack of community, don't hesitate to contact me to help me start it again. [!]</b>
-
-</p>
-
-<p align="center" style="margin:auto";>
   
 <img height="64" src="https://i.imgur.com/oXRdycNl.png">
   
 Javascript's God Mode : one language to rule them all. Code everything, everywhere, for everything, in JS, TS, CS and more.
 
-NectarJS is now fully open source. Default behavior is local JS compilation with g++. To change local target compiler, use --compiler, or to switch to cloud compiler, use --caas 
-
-We need help, join us : [![NectarJS' Slack](https://img.shields.io/badge/Slack-Join-brightgreen.svg)](https://join.slack.com/t/nectarjs/shared_invite/enQtNDMxOTEyNzg5Mzk1LTdkZWI3ZTQ2ZTNhMjQyOTk0YTFlNTUzMGQwZjRkNjkyOGQyNWFiOWFjNjRlNzUyYzcxZGQwYjY4MjRlMTg5NzI)   [![Trello](https://img.shields.io/badge/Trello-Join-brightgreen.svg)](https://trello.com/invite/b/6F4rvEj2/9d7677f9dc6b5bf2f5b33e45fc794182/nectarjs)
+Any questions or ideas, join us : [![NectarJS' Slack](https://img.shields.io/badge/Slack-Join-brightgreen.svg)](https://discord.gg/VHY2Uct)   [![Trello](https://img.shields.io/badge/Trello-Join-brightgreen.svg)](https://trello.com/invite/b/6F4rvEj2/9d7677f9dc6b5bf2f5b33e45fc794182/nectarjs)
 
 <hr></hr>
 
@@ -20,8 +12,6 @@ We need help, join us : [![NectarJS' Slack](https://img.shields.io/badge/Slack-J
 [![Uptime](https://img.shields.io/badge/dynamic/json.svg?label=API%20Uptime&url=https%3A%2F%2Fapi.uptimerobot.com%2FgetMonitors%3FapiKey%3Dm780802413-76e2ae897675f9ab020aa79f%26responseTimes%3D0%26logs%3D1%26format%3Djson%26noJsonCallback%3D1&query=%24.monitors.monitor%5B0%5D.alltimeuptimeratio&colorB=green&suffix=%25)](https://status.nectarjs.com)
 
 [![NPM](https://nodei.co/npm/nectarjs.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/nectarjs/)
-
-Join us on Slack : [NectarJS' Slack](https://join.slack.com/t/nectarjs/shared_invite/enQtNDMxOTEyNzg5Mzk1LTdkZWI3ZTQ2ZTNhMjQyOTk0YTFlNTUzMGQwZjRkNjkyOGQyNWFiOWFjNjRlNzUyYzcxZGQwYjY4MjRlMTg5NzI)
 
 Full documentation is here : [NetcarJS Doc](https://doc.nectarjs.com/)
 
@@ -40,6 +30,8 @@ Once done, install NectarJS : `npm install -g nectarjs`
 Verify that NectarJS is installed with : `nectar --help`
 
 Native compilation on Windows needs G++ and pthread lib.
+
+Python execution needs a working Python env
 
 # Configuration
 
