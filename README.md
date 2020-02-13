@@ -25,61 +25,29 @@ Current : [**NS-0.1**](https://github.com/NectarJS/nectarscript/blob/master/nect
 
 # Install
 
-You need `NodeJS` to install `NectarJS` : `https://nodejs.org/en/download/`.
+Unzip your platform version
 
-Once done, install NectarJS : `npm install -g nectarjs`
+And that's all.
 
-Verify that NectarJS is installed with : `nectar --help`
-
-Native compilation on Windows needs G++ and pthread lib.
-
-Python execution needs a working Python env
-
-# Configuration
-
-You need to enter your id and you security key. Code is encrypted in AES during compilation.
-
-To set your id, use `--setid myid`
-
-To set your key, use `--setkey mykey`
-
-# Basic compilation
+# Basic bytecode compilation
 
 The simplest way to use NectarJS is :
 
 ```
-nectar file.js
+nectar --compile bc file.js
 ```
 
 The output file name will be automatically choosen regarding the target. You can specify another output with `-o something.out`
 
-You can select a target for compilation with `--target [THE TARGET]`
+You can run any JS or BIN file like this :
 
-The `--single` argument launch the compilation of the file in argument. If you need to `require('')` file in your current folder, you need to remove `--single` to switch to project mode.
-
-NectarJS can run directly your application after compilation if you specify `--run`. The program will be executed only if the `--target` match your system.
+```
+nectar file.[js|bin]
+```
 
 For more informations about compilation output, use `--verbose`
 
 For help, use `--help`
-
-# Check syntax
-
-You can only check syntax without compilation with argument `--check`.
-
-# Project management
-
-if `--single` is not specified, NectarJS will create a `project.json` file in the project directory.
-
-You can create a `project.json` file without compilation with : `nectar --prepare file.js`
-
-To show a project configuration : `nectar --project` in the project folder or `nectar --project /path/to/projet.json`
-
-To compile a project, simply call `nectar project.json`
-
-# Coding with your smartphone or tablet
-
-If you want to code with your smartphone or tablet, you can download `Termux`, a console app that let you install `nodejs` for your device. Simply install NectarJS with `npm install -g nectarjs`, and you can start coding with your smartphone for all other platforms.
 
 # Available targets
 
