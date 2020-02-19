@@ -31,9 +31,15 @@
     "arduino",
     "raspberry",
     "stm32",
-    "nucleo"
+    "nucleo",
+	"express",
+	"uwebsocket",
+	"http",
+	"https",
+	"bytcode",
+	"wasm",
   ],
-  "author": "Adrien THIERRY <adrien.thierryfr@gmail.com> (http://seraum.com)",
+  "author": "Adrien THIERRY <adrien.thierryfr@gmail.com> (https://seraum.com)",
   "license": "MIT",
   "licenses": [
     {

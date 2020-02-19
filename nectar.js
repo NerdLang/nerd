@@ -29,6 +29,7 @@ var VERSION = "0.2.2";
 
 var AVAILABLE = ["linux_x64", "win32_x64"];
 var DL = ["nectar-linux-x64-0-2-2.zip", "nectar-win-x64-0-2-2.zip"];
+var DLHOST = "https://download.nectarjs.com/";
 
 var os = require("os");
 var platform = os.platform();
