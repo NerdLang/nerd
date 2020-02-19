@@ -25,11 +25,32 @@
  *
  */
 
-var VERSION = "0.2.0";
+var VERSION = "0.2.2";
 
-console.log();
-console.log("Nectar v" + VERSION);
-console.log("We are upgrading NectarJS, please come back later");
-console.log();
-console.log("You can follow the dev on our Discord: https://discord.gg/VHY2Uct");
-console.log();
+var AVAILABLE = ["linux_x64", "win32_x64"];
+var DL = ["nectar-linux-x64-0-2-2.zip", "nectar-win-x64-0-2-2.zip"];
+
+var os = require("os");
+var platform = os.platform();
+var arch = os.arch();
+
+var target = platform + "_" + arch;
+
+if(AVAILABLE.indexOf(target) < 0)
+{
+	console.log();
+	console.log("[!] Your platform is not compatible yet: " + target);
+	console.log("[!] Please open an issue: https://github.com/nectarjs/nectarjs");
+	process.exit(1);
+}
+
+/*** if --install 
+	download DL file and put it in a folder ./bin/ and unzip it
+
+	else verify the executable and call it
+***/
+
+
+
+
+
