@@ -25,9 +25,9 @@ Current : [**NS-0.1**](https://github.com/NectarJS/nectarscript/blob/master/nect
 
 # Install
 
-Unzip your platform version
+npm install -g nectarjs
 
-And that's all.
+To reinstall, use nectar --install
 
 # Basic bytecode compilation
 
