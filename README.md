@@ -74,3 +74,7 @@ For help, use `--help`
 * nucleo-l152re -> STM32 Nucleo L152RE
 
 * nucleo-l432kc -> STM32 Nucleo L432KC
+
+# Credit
+* QuickJS - Fabrice Bellard and Charlie Gordon
+* uWebSockets - Alex Hultman
