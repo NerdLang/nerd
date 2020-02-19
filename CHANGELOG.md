@@ -1,4 +1,12 @@
 #CURRENT
+* Add --install
+* Add win-x64
+* Add linux-x64
+
+#VERSION 0.2.1
+* Starting new arch
+
+#VERSION 0.2.0
 * MODIFYING ARCH OF NectarJS
 * Remove core
 * Remove base
