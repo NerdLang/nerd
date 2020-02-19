@@ -19,10 +19,6 @@ Full documentation is here : [NetcarJS Doc](https://doc.nectarjs.com/)
 
 </p>
 
-# Current NectarScript version
-
-Current : [**NS-0.1**](https://github.com/NectarJS/nectarscript/blob/master/nectarscript-0.1.MD)
-
 # Install
 
 npm install -g nectarjs
