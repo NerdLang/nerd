@@ -1,14 +1,11 @@
 #!/usr/bin/env node
 
-/*
+/* NectarJS
  * This file is part of NectarJS
  * Copyright (c) 2020 Adrien THIERRY
  * http://nectarjs.com - https://nectrium.com
  *
  * sources : https://github.com/nectarjs/nectarjs
- *
- * NectarJS
- * Copyright (C) 2019 Adrien THIERRY - Necrium
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -100,7 +97,13 @@ else
 	else 
 	{
 		var _args = process.argv.splice(2);
-		var _exec = spawn(target_file, _args, {stdio: [process.stdin, process.stdout, process.stderr]});
+		var _exec = spawn(target_file, 
+			_args,
+			{
+				stdio: [process.stdin, process.stdout, process.stderr],
+				cwd: process.cwd(),
+				env: process.env
+			});
 	}
 }
 

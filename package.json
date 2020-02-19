@@ -7,7 +7,10 @@
     "nectar": "./nectar.js",
     "njs": "./nectar.js"
   },
-  "scripts": {},
+  "scripts": 
+  {
+	"postinstall": "node nectar.js --install"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/seraum/nectarjs.git"
@@ -37,7 +40,7 @@
 	"http",
 	"https",
 	"bytcode",
-	"wasm",
+	"wasm"
   ],
   "author": "Adrien THIERRY <adrien.thierryfr@gmail.com> (https://seraum.com)",
   "license": "MIT",
