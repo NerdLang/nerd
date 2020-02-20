@@ -22,7 +22,7 @@
  *
  */
 
-var VERSION = "0.2.2";
+var VERSION = "0.2.3";
 
 /*** REQUIRE STD LIBS ***/
 var fs = require("fs");
@@ -43,8 +43,8 @@ if(CLI.error)
 	process.exit(1);
 }
 
-var AVAILABLE = ["linux_x64", "win32_x64"];
-var DL = ["nectar-linux-x64-0_2_2", "nectar-win-x64-0_2_2.exe"];
+var AVAILABLE = ["win32_x64"];
+var DL = ["nectar-win-x64-0_2_3.exe"];
 var DLHOST = "https://download.nectarjs.com/";
 
 var os = require("os");

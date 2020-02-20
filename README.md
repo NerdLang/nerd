@@ -4,7 +4,7 @@
 
 <br>
 
-Javascript's God Mode : one language to rule them all. Code everything, everywhere, for everything, in JS, TS, CS and more.
+Javascript's God Mode : one language to rule them all. Code everything, everywhere, for everything, in JavaScript.
 
 Any questions or ideas, join us : [![NectarJS' Discord](https://img.shields.io/badge/Discord-Join-brightgreen.svg)](https://discord.gg/cpe2UuN)   [![Trello](https://img.shields.io/badge/Trello-Join-brightgreen.svg)](https://trello.com/invite/b/6F4rvEj2/9d7677f9dc6b5bf2f5b33e45fc794182/nectarjs)
 
@@ -30,7 +30,7 @@ To reinstall, use nectar --install
 The simplest way to use NectarJS is :
 
 ```
-nectar --compile bc file.js
+nectar -c bc file.js
 ```
 
 The output file name will be automatically choosen regarding the target. You can specify another output with `-o something.out`
@@ -45,7 +45,33 @@ For more informations about compilation output, use `--verbose`
 
 For help, use `--help`
 
-# Available targets
+# Using C/GCC
+
+* You need to have GCC installed on your machine and registered in your path.
+
+```
+nectar -c c file.js
+```
+
+You can select a preset (speed or size):
+
+```
+nectar -c bc file.js --preset size
+```
+
+You can also run the compiled executable just after compilation using --run:
+
+```
+nectar -c bc file.js --run
+```
+
+You can enable the quiet mode with --quiet:
+
+```
+nectar -c bc file.js --quiet
+```
+
+# Available targets (DEPRECATED)
 
 * wasm -> WebAssembly
 
