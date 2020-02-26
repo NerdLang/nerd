@@ -1,6 +1,6 @@
 {
   "name": "nectarjs",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "Javascript's God Mod",
   "main": "nectar",
   "bin": {
@@ -40,7 +40,9 @@
 	"http",
 	"https",
 	"bytcode",
-	"wasm"
+	"wasm",
+	"arm",
+	"arm64"
   ],
   "author": "Adrien THIERRY <adrien.thierryfr@gmail.com> (https://seraum.com)",
   "license": "MIT",
