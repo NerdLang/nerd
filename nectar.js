@@ -22,7 +22,7 @@
  *
  */
 
-var VERSION = "0.2.4";
+var VERSION = "0.2.5";
 
 /*** REQUIRE STD LIBS ***/
 var fs = require("fs");
