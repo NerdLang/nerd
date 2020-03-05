@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
-/* NectarJS
+/*
  * This file is part of NectarJS
- * Copyright (c) 2020 Adrien THIERRY
- * http://nectarjs.com - https://nectrium.com
+ * Copyright (c) 2017 - 2020 Adrien THIERRY
+ * http://nectarjs.com - https://seraum.com/
  *
  * sources : https://github.com/nectarjs/nectarjs
  * 
@@ -22,91 +22,399 @@
  *
  */
 
-var VERSION = "0.2.5";
+var VERSION = "0.2.6";
 
-/*** REQUIRE STD LIBS ***/
-var fs = require("fs");
-var https = require("https");
-var path = require("path");
-var spawn = require("child_process").spawnSync;
+global.fs = require('fs');
+global.os = require('os');
+global.path = require('path');
+global.process = require('process');
+global.querystring = require('querystring');
+global.child_process = require('child_process');
+global.execSync = child_process.execSync;
 
-/*** REQUIRE NECTAR LIBS ***/
-var parseCli = require("./lib/cli/cliParser");
+var parseCLI = require('./base/cli/cliParser.js');
+var coreHttp = require('./base/util/httpUtils.js');
+var getExt = require('./base/util/getExt.js');
+var getTips = require('./base/util/getTips.js');
+var Flash = require('./base/util/flash.js');
+var rmdir = require("./base/util/rmdir.js");
+var CURRENT = process.cwd();
+var TARGET = require('./base/compiler/target.js');
+var PLATFORM = os.platform();
+var ARCH = os.arch();
 
-/*** PARSE CLI ***/
-var CLI = parseCli(process.argv);
+var COMPILER = require("./compiler/compiler.js");
 
-/*** CHECK CLI ERRORS ***/
+var CLI = parseCLI(process.argv);
+
 if(CLI.error)
 {
-	console.log(CLI.msg);
-	process.exit(1);
+  console.log(CLI.msg);
+  return;
 }
 
-var AVAILABLE = ["win32_x64", "linux_x64", "linux_arm64", "android_arm64"];
-var DL = ["nectar-win-x64-0_2_4.exe", "nectar-linux-x64-0_2_4", "nectar-linux-arm64-0_2_4", "nectar-linux-arm64-0_2_4"];
-var DLHOST = "https://download.nectarjs.com/";
+var ACTION = "build";
+if(CLI.cli["--help"] || CLI.cli["-h"]) ACTION = "help";
+else if(CLI.cli["--example"] || CLI.cli["--examples"]) ACTION = "example";
+else if(CLI.cli["--version"] || CLI.cli["-v"]) ACTION = "version";
+else if(CLI.cli["--project"]) ACTION = "showproject";
+else if(CLI.cli["--clean"] || CLI.cli["--purge"]) ACTION = "clean";
 
-var os = require("os");
-var platform = os.platform();
-var arch = os.arch();
-
-var target = platform + "_" + arch;
-var file_to_dl = AVAILABLE.indexOf(target);
-
-if(file_to_dl < 0)
+switch(ACTION)
 {
-	console.log();
-	console.log("[!] Your platform is not compatible yet: " + target);
-	console.log("[!] Please open an issue: https://github.com/nectarjs/nectarjs");
-	process.exit(1);
+  case "version":
+    showVersion();
+    break;
+
+  case "help":
+    Help();
+    break;
+
+  case "example":
+    copyExample();
+    break;
+
+  case "showproject":
+    showProject();
+    break;
+
+  case "build":
+    Build();
+    break;
+
+  case "clean":
+    Clean();
+    break;
+
+  default:
+    Help();
+    break;
 }
-var target_dir = path.join(__dirname, "bin");
-var target_file = path.join(target_dir, DL[file_to_dl]);
 
-if(CLI.cli["--install"])
+function getExampleFiles (dir, list)
 {
-	try 
-	{
-		fs.mkdirSync(target_dir);
-	}
-	catch(e){}
+    list = list || [];
+    var files = fs.readdirSync(dir);
+    for (var i in files)
+    {
+        var name = dir + path.sep + files[i];
+        if (fs.statSync(name).isDirectory())
+        {
+            getExampleFiles(name, list);
+        }
+        else
+        {
+            list.push(name);
+        }
+    }
+    return list;
+}
 
-	const dest = fs.createWriteStream(target_file);
-	console.log("[+] Downloading " + DL[file_to_dl]);
+function copyExample()
+{
+  var folder = ["c"];
+  var list = getExampleFiles(path.join(__dirname, "example"));
+  for(var l in list)
+  {
+    var name = list[l].split(path.sep);
+    if(name[name.length - 2] && folder.indexOf(name[name.length - 2]) > -1)
+    {
+      try
+      {
+        fs.mkdirSync(name[name.length - 2]);
+      }catch(e){}
+      name = name[name.length - 2] + "/" + name[name.length - 1];
+    }
+    else name = name[name.length - 1];
+    var content = fs.readFileSync(list[l]);
+    fs.writeFileSync(name, content);
+    console.log("[+] Copy of " + name + " done");
+  }
+}
+
+function showProject()
+{
+  var project = "project.json";
+  if(CLI.stack && CLI.stack.length > 0)
+  {
+    project = CLI.stack[CLI.stack.length - 1];
+  }
+  try
+  {
+    var pConf = fs.readFileSync(project);
+    var jConf = JSON.parse(pConf);
+    printProject(jConf);
+  }
+  catch (e)
+  {
+    console.dir("[!] Error : " + e.message);
+  }
+
+}
+
+function Clean(purge)
+{
+  var project = "project.json";
+  if(CLI.stack && CLI.stack.length > 0)
+  {
+    project = CLI.stack[CLI.stack.length - 1];
+  }
+  try
+  {
+    var pConf = fs.readFileSync(project);
+    var jConf = JSON.parse(pConf);
+    if(jConf.main)
+    {
+      if( (CLI.cli["--purge"] || purge) && jConf.out)
+      {
+        var outFile = jConf.out;
+        if(jConf.out[0] != path.sep)
+        {
+          outFile = path.join(path.dirname(project), jConf.out);
+        }
+        try{fs.unlinkSync(outFile);}catch(e){}
+      }
+    }
+    try{fs.unlinkSync(project)}catch(e){}
+  }
+  catch (e)
+  {
+    console.dir("[!] Error : " + e.message);
+  }
+}
+
+function printProject(obj)
+{
+  console.log();
+  console.log("[*] Project configuration :\n");
+  console.log("Main file : " + obj.main);
+  console.log("Output    : " + obj.out);
+  console.log("Target    : " + obj.target);
+  console.log("Preset    : " + obj.preset);
+  console.log();
+}
+
+function Build(prepare)
+{ 
+
+  if(CLI.cli["--compiler"] && CLI.cli["--compiler"].argument) COMPILER.COMPILER = CLI.cli["--compiler"].argument;
+
+  var single = false;
+  if(CLI.cli["--single"]) single = true;
+
+  var preset;
+  if(CLI.cli["--preset"] && CLI.cli["--preset"].argument) preset = CLI.cli["--preset"].argument;
+
+  var env;
+  if(CLI.cli["--env"] && CLI.cli["--env"].argument) env = CLI.cli["--env"].argument;
+
+  if(!preset) preset = "speed";
+  if(!env) env = "std";
+
+  if(!CLI.stack || CLI.stack.length < 1)
+  {
+    console.error("[!] Missing file to compile or project.json path, 'nectar --help' if you need help");
+    return;
+  }
+  else
+  {
+	var QUIET = false;
+    var _in = CLI.stack[0];
+
+    fs.readFile(_in, function(err, fileData)
+    {
+      if(err)
+      {
+        console.error("[!] Error : " + err.message);
+        return;
+      }
+      else
+      {
+
+        /* CHECKING */
+        Check(_in);
+        /* END CHECKING */
+
+        var ext = "js";
+        var _Ext = _in.split(".");
+        if(_Ext.length > 1) ext = _Ext[_Ext.length - 1];
+
+		/*** CREATE COMPIL ENV ***/
+		var _current = process.cwd();
+		var _npath = path.join(_current, ".nectar");
+		try { fs.mkdirSync(_npath); } catch(e){};
+		var _tmp = path.join(_npath, Math.random().toString(36).substr(2, 5));
+		try { fs.mkdirSync(_tmp); } catch(e){};
+		
+		/*** PREPARE SRC ***/
+		COMPILER.Prepare(_tmp);
+
+        var fProject = false;
+        var prjectConf = {};
+        if(path.basename(_in) == "project.json")
+        {
+          try
+          {
+              projectConf = JSON.parse(fileData);
+              fProject = true;
+              single = false;
+          }
+          catch (e)
+          {
+            console.error("[!] Error with project.json : " + e.message);
+            return;
+          }
+        }
+
+		/*** GET FILES NAME ***/
+		var _binoutput = "";
+		if(fProject)
+		{
+			_binoutput = projectConf.out;
+		}
+		else _binoutput = path.basename(_in).slice(0, path.basename(_in).length - path.extname(_in).length);
+		
+		if(CLI.cli["-o"])
+		{
+			_binoutput = CLI.cli["-o"].argument[0];
+		}
+		else if(CLI.cli["--out"])
+		{
+			_binoutput = CLI.cli["--out"].argument[0];
+		}
+		
+		_binoutput = path.join(process.cwd(), _binoutput)
+		if(PLATFORM == "win32") _binoutput += ".exe";
+		
+		var _cout = path.join(_tmp, path.basename(_in).slice(0, path.basename(_in).length - path.extname(_in).length) + ".cpp");
+		
+		COMPILER.OUT = _binoutput;
 	
-	const request = https.get(DLHOST + DL[file_to_dl], function(response) {
-	response.pipe(dest);
-	response.on("end", function()
-	{
-	 console.log("[*] NectarJS successfully installed");
-	});
-	}).on("error", function(_err)
-	{
-			console.log(_err);
+		var projTo = "";
+		var tmp = _in.split("/");
+
+		projTo = _binoutput;
+	
+		var main = _in.split(path.sep);
+		main = main[main.length - 1];
+
+		var tips = "";
+
+		if(!QUIET) console.log("[*] Generating source file");
+	
+		var _code = fs.readFileSync(path.resolve(_in)).toString();
+		COMPILER.Parse(_code);
+		fs.writeFileSync(_cout, COMPILER.MAIN);
+	
+		var _args = [_in, "-o", _cout];
+
+		//process.chdir(_tmp);
+
+		if(CLI.cli["--preset"] && CLI.cli["--preset"].argument == "speed")
+		{
+			COMPILER.OPTION += " -Ofast";
+		}
+		else if(CLI.cli["--preset"] && CLI.cli["--preset"].argument == "size")
+		{
+			COMPILER.OPTION += " -Os";
+		}
+		else 
+		{
+			COMPILER.OPTION += " -O1";
+		}
+		if(!QUIET) console.log("[*] Compiling");
+		try 
+		{
+			COMPILER.Compile(_tmp, _cout);
+			fs.chmodSync(_binoutput, "755");
+		}
+		catch(e)
+		{
+			console.log("[!] GCC/G++ compilation error: please verify GCC/G++ is installed and in your path");
 			process.exit(1);
-	});
-}
-else 
-{
-	if(!fs.existsSync(target_file))
-	{
-		console.log("[!] Please install NectarJS first with: nectar --install");
-		process.exit(1);
-	}
-	else 
-	{
-		var _args = process.argv.splice(2);
-		var _exec = spawn(target_file, 
-			_args,
+		}
+		
+		if(!CLI.cli["--conserve"])
+		{
+			process.chdir(_current);
+			rmdir(_tmp, function() {});
+		}
+		
+		var verb = false;
+		if(CLI.cli["--verbose"]) verb = true;
+		
+		var bin = fs.statSync(_binoutput);
+		
+		if(verb)
+		{
+			console.log("[+] Compilation done\n");
+			console.log("[*] Informations :\n");
+			var size = "Size      : ";
+			if(bin.size < 1000) size += bin.size + " o";
+			else if(bin.size < 1000000) size += (bin.size / 1000) + " ko";
+			else size += (bin.size / 1000000) + " mo";
+			console.log(size);
+			console.log("Main file : " + main);
+			console.log("Output    : " + projTo);
+			console.log("Preset    : " + preset);
+		}
+		
+		//if(CLI.cli["--tips"] && tips && tips.length > 0) console.log("\n" + tips + "\n");
+
+		if(CLI.cli["--flash"]) Flash(to, CLI.cli["--flash"].argument, target, verb);
+		
+		if(CLI.cli["--run"])
+		{
+			var _binexec = child_process.spawnSync(_binoutput, 
+			[],
 			{
 				stdio: [process.stdin, process.stdout, process.stderr],
 				cwd: process.cwd(),
 				env: process.env
 			});
-	}
+			if(_binexec.error)
+			{
+				console.log(_binexec.error);
+			}
+		}	
+		/*
+		  if(!CLI.cli["--prepare"])
+          {
+			  var _current = path.dirname(path.resolve(process.argv[1]));
+			  var _native = path.join(_current, "core", "nativejs");
+			  var _to = path.resolve(to);
+			  var _fullPathCompile = path.resolve(fName);
+			  console.log(child_process.execSync("cd " + _native + " && node njs " + _fullPathCompile + " --compiler " + DEFAULT_COMPILER + " -o " + _to));
+		  }
+          else
+          {
+	           var pObj = {main: main, out:projTo, target:target, preset:preset};
+	            printProject(pObj);
+          }
+		*/
+      }
+    });
+  }
 }
 
+function showVersion()
+{
+  console.log("NectarJS v" + VERSION);
+}
 
+function Check(file)
+{
+  if(file.split('.').pop() != "js") return;
 
+  if(CLI.cli["--check"]) process.exit();
+}
 
+function Help()
+{
+  showVersion();
+  console.log("\n[*] Compile :\nnectar [--target the-target] [--run] [--preset speed|size] [-o output] [--tips] [--flash device] source.js|project.json\n");
+  console.log("[*] Show project :\nnectar [--project] [project.json]\n");
+  console.log("[*] Clean project :\nnectar [--clean] [--purge] [path_to_project.json]\n");
+  console.log("[*] Copy example files :\nnectar --example\n");
+  console.log("[*] Nectar version :\nnectar --version\n");
+}

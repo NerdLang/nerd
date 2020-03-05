@@ -1,4 +1,5 @@
 var test = true;
+
 console.log("Test is : " + test + " | and type -> " + typeof test);
 
 if(test)
