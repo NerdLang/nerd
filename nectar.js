@@ -22,7 +22,7 @@
  *
  */
 
-var VERSION = "0.2.8";
+var VERSION = "0.2.9";
 
 global.fs = require('fs');
 global.os = require('os');
