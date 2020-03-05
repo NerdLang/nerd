@@ -548,7 +548,7 @@ inline var Array()
   return var(ARRAY, _arr);
 }
 
-inline __NJS_Boolean_Result(var _v)
+inline var __NJS_Boolean_Result(var _v)
 {
   if(_v.type == NUMBER) return _v.value.i;
   else if(_v.type == BOOLEAN) return _v.value.b;
