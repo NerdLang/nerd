@@ -260,7 +260,6 @@ function Compiler()
 				while(_match = _reg.exec(_code[j]))
 				{
 					_code[j] = _code[j].replace(_reg, _parser[i][1]);
-					console.log(_code[j]);
 				}
 			}
 		}
@@ -287,7 +286,6 @@ function Compiler()
 		}
 	}
 
-	console.log(_code);
 	_code = _code.filter(function (el) {return el.length > 0;}); // remove null lines
 	_handler.CODE = _code.join("") + ";";
 	_handler.INIT = _handler.INIT.join(";");
