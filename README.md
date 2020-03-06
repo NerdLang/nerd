@@ -20,8 +20,6 @@ Full documentation is here : [NetcarJS Doc](https://doc.nectarjs.com/)
 
 npm install -g nectarjs
 
-To reinstall, use nectar --install
-
 # Basic bytecode compilation
 
 The simplest way to use NectarJS is :
@@ -48,9 +46,13 @@ For more informations about compilation output, use `--verbose`
 
 For help, use `--help`
 
-# Using native/QuickJS compiler
+# Using native compiler
 
 * You need to have GCC installed on your machine and registered in your path to compile.
+
+You can install Mingw for Windows here : https://osdn.net/projects/mingw/downloads/68260/mingw-get-setup.exe/
+
+On linux, you can install it with your distro (apt install gcc, yum install gcc, ...)
 
 ```
 nectar -b native file.js
