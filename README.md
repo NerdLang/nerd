@@ -101,6 +101,3 @@ nectar -c bc file.js --quiet
 
 * nucleo-l432kc -> STM32 Nucleo L432KC
 
-# Credit
-* QuickJS - Fabrice Bellard and Charlie Gordon
-* uWebSockets - Alex Hultman
