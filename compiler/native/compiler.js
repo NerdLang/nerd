@@ -298,6 +298,12 @@ function Compiler()
 		fs.copyFileSync(__dirname + "/src/njs.h", path.join(_folder, "njs.h"));
 	};
 
+	this.Out = function(_name)
+	{
+		if(PLATFORM == "win32" && path.extname(_name) != ".exe") _handler.OUT = _name + ".exe";
+		return _handler.OUT;
+	}
+
 	this.CLI = function(compiler, out, target, option)
 	{
 		return `${compiler} ${target} -Wl,--gc-sections -ffunction-sections -fdata-sections -fpermissive -w -s -o ${out} ${option}`;
@@ -305,6 +311,7 @@ function Compiler()
 	  
 	this.Compile = function(_folder, _file)
 	{
+		
 		fs.writeFileSync(_file, _handler.MAIN);
 		process.chdir(_folder);
 		var _exec = _handler.CLI(_handler.COMPILER, _handler.OUT, _file, _handler.OPTION);

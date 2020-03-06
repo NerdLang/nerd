@@ -24,6 +24,8 @@
  */
 
 var VERSION = "0.2.9";
+var VALID_COMPILER = ["native", "bc", "qjs"];
+
 
 global.fs = require('fs');
 global.os = require('os');
@@ -44,7 +46,8 @@ var TARGET = require('./base/compiler/target.js');
 var PLATFORM = os.platform();
 var ARCH = os.arch();
 
-var COMPILER = require("./compiler/compiler.js");
+var COMPILER;
+var DEFAULT_COMPILER = "native";
 
 var CLI = parseCLI(process.argv);
 
@@ -197,11 +200,12 @@ function printProject(obj)
 
 function Build(prepare)
 { 
-
+  if(CLI.cli["--build"]) DEFAULT_COMPILER = CLI.cli["--build"].argument;
+  else if(CLI.cli["-b"]) DEFAULT_COMPILER = CLI.cli["-b"].argument;
+  
+  COMPILER = require(path.join(__dirname, "compiler", DEFAULT_COMPILER, "compiler.js"));
+  
   if(CLI.cli["--compiler"] && CLI.cli["--compiler"].argument) COMPILER.COMPILER = CLI.cli["--compiler"].argument;
-
-  var single = false;
-  if(CLI.cli["--single"]) single = true;
 
   var preset;
   if(CLI.cli["--preset"] && CLI.cli["--preset"].argument) preset = CLI.cli["--preset"].argument;
@@ -277,19 +281,18 @@ function Build(prepare)
 		
 		if(CLI.cli["-o"])
 		{
-			_binoutput = CLI.cli["-o"].argument[0];
+			_binoutput = CLI.cli["-o"].argument;
 		}
 		else if(CLI.cli["--out"])
 		{
-			_binoutput = CLI.cli["--out"].argument[0];
+			_binoutput = CLI.cli["--out"].argument;
 		}
 		
 		_binoutput = path.join(process.cwd(), _binoutput)
-		if(PLATFORM == "win32") _binoutput += ".exe";
 		
 		var _cout = path.join(_tmp, path.basename(_in).slice(0, path.basename(_in).length - path.extname(_in).length) + ".cpp");
 		
-		COMPILER.OUT = _binoutput;
+		_binoutput = COMPILER.Out(_binoutput);
 	
 		var projTo = "";
 		var tmp = _in.split("/");
@@ -331,7 +334,8 @@ function Build(prepare)
 		}
 		catch(e)
 		{
-			console.log("[!] GCC/G++ compilation error: please verify GCC/G++ is installed and in your path");
+			console.log("[!] Compilation error");
+			console.log(e);
 			process.exit(1);
 		}
 		

@@ -10,9 +10,6 @@ Any questions or ideas, join us : [![NectarJS' Discord](https://img.shields.io/b
 
 <hr></hr>
 
-[![Metrics](https://img.shields.io/badge/Metrics-ON-green.svg)](https://app.databox.com/datawall/1584c72f8ba105f7c7435fbcdf0921c405b6bdf4b)
-[![Uptime](https://img.shields.io/badge/dynamic/json.svg?label=API%20Uptime&url=https%3A%2F%2Fapi.uptimerobot.com%2FgetMonitors%3FapiKey%3Dm780802413-76e2ae897675f9ab020aa79f%26responseTimes%3D0%26logs%3D1%26format%3Djson%26noJsonCallback%3D1&query=%24.monitors.monitor%5B0%5D.alltimeuptimeratio&colorB=green&suffix=%25)](https://status.nectarjs.com)
-
 [![NPM](https://nodei.co/npm/nectarjs.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/nectarjs/)
 
 Full documentation is here : [NetcarJS Doc](https://doc.nectarjs.com/)
@@ -30,74 +27,82 @@ To reinstall, use nectar --install
 The simplest way to use NectarJS is :
 
 ```
-nectar -c bc file.js
+nectar file.js
 ```
 
 The output file name will be automatically choosen regarding the target. You can specify another output with `-o something.out`
 
+To show more compilation infos :
+
+```
+nectar --verbose file.js
+```
+
 You can run any JS or BIN file like this :
 
 ```
-nectar file.[js|bin]
+nectar --exec file[.js|.bin|.exe]
 ```
 
 For more informations about compilation output, use `--verbose`
 
 For help, use `--help`
 
-# Using C/GCC
+# Using native/QuickJS compiler
 
-* You need to have GCC installed on your machine and registered in your path.
+* You need to have GCC installed on your machine and registered in your path to compile.
 
 ```
-nectar -c c file.js
+nectar -b native file.js
+or
+nectar file.js
 ```
 
 You can select a preset (speed or size):
 
 ```
-nectar -c bc file.js --preset size
+nectar -b bc file.js --preset [size|size]
 ```
 
 You can also run the compiled executable just after compilation using --run:
 
 ```
-nectar -c bc file.js --run
+nectar -b bc file.js --run
 ```
 
 You can enable the quiet mode with --quiet:
 
 ```
-nectar -c bc file.js --quiet
+nectar -b bc file.js --quiet
 ```
 
-# Available targets (DEPRECATED)
+# Tested on this targets/platforms :
 
-* wasm -> WebAssembly
+* wasm
 
-* asm-js -> ASM.js
+* asm-js
 
-* wast -> WebAssembly AST
+* wast
 
-* mac-osx -> Mac OSX
+* mac-osx
 
-* linux-x86-32 -> Linux x86 32 bits
+* linux-x86-32
 
-* linux-x86-64 -> Linux x86 64 bits
+* linux-x86-64
 
-* linux-arm32v7 -> Linux arm 32 v7 bits, compatible with Android and Raspberry
+* linux-arm32v7
 
-* win-x86-32 -> Windows x86 32 bits
+* win-x86-32
 
-* win-x86-64 -> Windows x86 64 bits
+* win-x86-64
 
-* arduino-uno -> Arduino UNO
+* arduino-uno
 
-* arduino-mega1280 -> Arduino Mega with Atmega 1280
+* arduino-mega1280
 
-* arduino-mega2560 -> Arduino Mega with Atmega 2560
+* arduino-mega2560
 
-* nucleo-l152re -> STM32 Nucleo L152RE
+* nucleo-l152re
 
-* nucleo-l432kc -> STM32 Nucleo L432KC
+* nucleo-l432kc
 
