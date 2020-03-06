@@ -300,7 +300,7 @@ function Compiler()
 
 	this.Out = function(_name)
 	{
-		if(PLATFORM == "win32" && path.extname(_name) != ".exe") _handler.OUT = _name + ".exe";
+		if(os.platform() == "win32" && path.extname(_name) != ".exe") _handler.OUT = _name + ".exe";
 		return _handler.OUT;
 	}
 
