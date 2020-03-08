@@ -125,6 +125,11 @@ function Compiler()
 		}
 		return _code;
 	}
+	
+	function varParam(_var)
+	{
+		return _var.replace(/^ *([0-9]+|"[.]")/, "var($a)");
+	}
 
 	function createFunction(_code)
 	{	
@@ -225,64 +230,65 @@ function Compiler()
 		}
 		return _code;
 	}
-
+	
+	function selfCall(_code, _match, _reg, _index)
+	{
+		var _NJS = "__NJS_";
+		var _noCall = ["var", "if", "else if", "else", "catch", "while", "for", "do"];
+		if(_match[1].indexOf(_NJS) < 0 && _noCall.indexOf(_match[1]) < 0)
+		{
+			return _code.replace(_reg, "$1.__NJS_Self_Call($2)");
+		}
+		else return _code;		
+	}
+	
 	var _parser = 
 	[
-		[/var +([a-zA-Z0-9_\-]+)? *$/, "var $1 = Object()"], //var
-		[/\. *((?!__NJS_)(.*?))\(( *)\) */, '.__NJS_Call((char*)"$1")'],
-		[/\. *((?!__NJS_)(.*?))\((.+)\) */, '.__NJS_Call((char*)"$1", $3)'],
-		[/\. *((?!__NJS_)[a-zA-Z0-9_\-]+) *(?:\=) *(.)/, '.__NJS_Set((char*)"$1", $2)'],
-		[/((?!__NJS_)[a-zA-Z0-9_\-]+|\)|\]) *(?:\.) *((?!__NJS_)[a-zA-Z0-9_\-]+)/, '$1.__NJS_Get((char*)"$2")'],
-		[/{[ \t\n]+}/, "Object()"], // replace {} by Object(),
-		[/typeof +([a-zA-Z0-9_\-]+)/, "__NJS_Typeof($1)"], // typeof,
-		[/[ \t\n]+((?!__NJS_|if +|else +|else if +|while +|catch *\()[a-zA-Z0-9_\-]+) *(?!__NJS_)\((.*)\)/, " $1.__NJS_Self_Call($2)"], // typeof,
-		[/catch *\(e\)/, "catch(var)"], // typeof,
-		[/(?!__NJS_)[ \t\n\=](?:\(|)(true|false)(?=[ &\n\;])/, "__NJS_Create_Boolean($1)"],
-		[/(?!__NJS_)[ \t\n\=](?:\(|)(true|false)[\)]/, "__NJS_Create_Boolean($1)"],
+		[/var +([a-zA-Z0-9_\-]+)? *$/g, "var $1 = Object()"], //var
+		[/\. *\b((?!__NJS_)(.*?))\(( *)\) */g, '.__NJS_Call((char*)"$1")'],
+		[/\. *\b((?!__NJS_)(.*?))\((.+)\) */g, '.__NJS_Call((char*)"$1", $3)'],
+		[/\. *((?!__NJS_)[a-zA-Z0-9_\-]+) *(?:\=) *(.)/g, '.__NJS_Set((char*)"$1", $2)'],
+		[/\b((?!__NJS_)[a-zA-Z0-9_\-]+|\)|\]) *(?:\.) *((?!__NJS_)[a-zA-Z0-9_\-]+)/g, '$1.__NJS_Get((char*)"$2")'],
+		[/{[ \t\n]+}/g, "Object()"], // replace {} by Object(),
+		[/typeof +([a-zA-Z0-9_\-]+)/g, "__NJS_Typeof($1)"], // typeof,
+		[/\b((?!__NJS_)[a-zA-Z0-9_\-]+) *\((.*?)\)/g, selfCall], // typeof,
+		[/catch *\(e\)/g, "catch(var)"], // typeof,
+		[/\b(?!__NJS_)[ \t\n\=](?:\(|)(true|false)(?=[ &\n\;])/g, "__NJS_Create_Boolean($1)"],
+		[/\b(?!__NJS_)[ \t\n\=](?:\(|)(true|false)[\)]/g, "__NJS_Create_Boolean($1)"],
 	];
 
+	var _match;
 	for(var i = 0; i < _parser.length; i++)
 	{
 		var _reg = new RegExp(_parser[i][0]);
-		
 		for(var j = 0; j < _code.length; j++)
 		{
-			
-			if(typeof _parser[i][1] == "function")
+			while(_match = _reg.exec(_code[j]))
 			{
-				while(_match = _reg.exec(_code[j]))
+				if(typeof _parser[i][1] == "function")
 				{
 					_code[j] = _parser[i][1](_code[j], _match, _reg);
 				}
-			}
-			else if(typeof _parser[i][1] == "string")
-			{
-				while(_match = _reg.exec(_code[j]))
+				else if(typeof _parser[i][1] == "string")
 				{
 					_code[j] = _code[j].replace(_reg, _parser[i][1]);
+					
 				}
-			}
+			}			
 		}
 		
 		_handler.INIT = _handler.INIT.join(os.EOL).split(os.EOL);
 		
 		for(var j = 0; j < _handler.INIT.length; j++)
 		{
-			
-			if(typeof _parser[i][1] == "function")
+			while(_match = _reg.exec(_code[j]))
 			{
-				while(_match = _reg.exec(_handler.INIT[j]))
-				{
+				if(typeof _parser[i][1] == "function")
 					_handler.INIT[j] = _parser[i][1](_handler.INIT[j], _match, _reg);
-				}
+				else if(typeof _parser[i][1] == "string")
+					_handler.INIT[j] = _code[j].replace(_reg, _parser[i][1]);
 			}
-			else if(typeof _parser[i][1] == "string")
-			{
-				while(_match = _reg.exec(_handler.INIT[j]))
-				{
-					_handler.INIT[j] = _handler.INIT[j].replace(_reg, _parser[i][1]);
-				}
-			}
+			
 		}
 	}
 
