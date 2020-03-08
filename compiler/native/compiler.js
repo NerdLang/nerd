@@ -312,7 +312,7 @@ function Compiler()
 
 	this.CLI = function(compiler, out, target, option)
 	{
-		return `${compiler} ${target} -Wl,--gc-sections -ffunction-sections -fdata-sections -fpermissive -w -s -o ${out} ${option}`;
+		return `${compiler} ${target} ${option} -Wl,--gc-sections -ffunction-sections -fdata-sections -fpermissive -w -s -o ${out}`;
 	}
 	  
 	this.Compile = function(_folder, _file)
