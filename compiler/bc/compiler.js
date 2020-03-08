@@ -43,6 +43,7 @@ function Compiler()
 	this.Out = function(_name)
 	{
 		if(path.extname(_name) != ".bin") _handler.OUT = _name + ".bin";
+		else _handler.OUT = _name;
 		return _handler.OUT;
 	}
 	  
