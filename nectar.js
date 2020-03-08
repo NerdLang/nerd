@@ -23,7 +23,7 @@
  *
  */
 
-var VERSION = "0.2.12";
+var VERSION = "0.2.13";
 var VALID_COMPILER = ["native", "bc", "qjs"];
 
 
