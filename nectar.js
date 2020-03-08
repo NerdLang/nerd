@@ -322,10 +322,7 @@ function Build(prepare)
 		{
 			COMPILER.OPTION += " -Os";
 		}
-		else 
-		{
-			COMPILER.OPTION += " -O1";
-		}
+		
 		if(!QUIET) console.log("[*] Compiling");
 		try 
 		{
