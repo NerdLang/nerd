@@ -26,6 +26,7 @@
  *
  */
 var genRequire = require("./lib/genRequire.js");
+var parseObj = require("./lib/parseObj.js");
 
 function Compiler()
 {
@@ -92,6 +93,7 @@ function Compiler()
 				}
 			}
 		}
+		console.log(_code);
 		return _code;
 	}
 
@@ -102,7 +104,7 @@ function Compiler()
 
 	function parseObject(_code)
 	{
-		var _search = new RegExp(/(?:var|) ([a-zA-Z0-9_\-]+) *= *\{/);
+		var _search = new RegExp(/(?:var|) ([a-zA-Z0-9_\-]+) *=[ \t\n\=]*\{/g);
 		var _index = _code.search(_search);
 		while(_index > -1)
 		{
@@ -135,12 +137,12 @@ function Compiler()
 			{
 				var _obj = _code.substring(_openIndex-1, _closeIndex+1);
 				var _ret = "Object();";
-				_ret += forgeObject(parseObject(_obj), _match[1]);
+				_ret += forgeObject(parseObj(_obj), _match[1]);
 				_code = [_code.slice(0, _openIndex-1), _ret, _code.slice(_closeIndex+1)].join('');
 			}
-			_index = _code.search(_search);
+			_index = _code.slice(_closeIndex).search(_search);
 		}
-		return _code;
+		return _code + ";";
 	}
 	
 	function varParam(_var)
@@ -251,7 +253,7 @@ function Compiler()
 	function selfCall(_code, _match, _reg, _index)
 	{
 		var _NJS = "__NJS_";
-		var _noCall = ["var", "if", "else if", "else", "catch", "while", "for", "do"];
+		var _noCall = ["var", "Object", "if", "else if", "else", "catch", "while", "for", "do"];
 		if(_match[1].indexOf(_NJS) < 0 && _noCall.indexOf(_match[1]) < 0)
 		{
 			return _code.replace(_reg, "$1.__NJS_Self_Call($2)");
@@ -262,9 +264,9 @@ function Compiler()
 	var _parser = 
 	[
 		[/var +([a-zA-Z0-9_\-]+)? *$/g, "var $1 = Object()"], //var
-		[/\. *\b((?!__NJS_)(.*?))\(( *)\) */g, '.__NJS_Call((char*)"$1")'],
-		[/\. *\b((?!__NJS_)(.*?))\((.+)\) */g, '.__NJS_Call((char*)"$1", $3)'],
-		[/\. *((?!__NJS_)[a-zA-Z0-9_\-]+) *(?:\=) *(.)/g, '.__NJS_Set((char*)"$1", $2)'],
+		[/\. *\b(?!__NJS_)(.*?)\((.+)\) */g, '.__NJS_Call((char*)"$1", $2)'],
+		[/\. *\b((?!__NJS_)(.*?))\(( *?)\) */g, '.__NJS_Call((char*)"$1")'],
+		[/\. *((?!__NJS_)[a-zA-Z0-9_\-]+) *(?:\=) *(.*?)(;|\n)/g, '.__NJS_Set((char*)"$1", $2);'],
 		[/\b((?!__NJS_)[a-zA-Z0-9_\-]+|\)|\]) *(?:\.) *((?!__NJS_)[a-zA-Z0-9_\-]+)/g, '$1.__NJS_Get((char*)"$2")'],
 		[/{[ \t\n]+}/g, "Object()"], // replace {} by Object(),
 		[/typeof +([a-zA-Z0-9_\-]+)/g, "__NJS_Typeof($1)"], // typeof,
@@ -273,7 +275,7 @@ function Compiler()
 		[/\b(?!__NJS_)[ \t\n\=](?:\(|)(true|false)(?=[ &\n\;])/g, "__NJS_Create_Boolean($1)"],
 		[/\b(?!__NJS_)[ \t\n\=](?:\(|)(true|false)[\)]/g, "__NJS_Create_Boolean($1)"],
 	];
-
+	
 	var _match;
 	for(var i = 0; i < _parser.length; i++)
 	{
@@ -289,11 +291,9 @@ function Compiler()
 				else if(typeof _parser[i][1] == "string")
 				{
 					_code[j] = _code[j].replace(_reg, _parser[i][1]);
-					
 				}
-			}			
+			}	
 		}
-		
 		_handler.INIT = _handler.INIT.join("\n").split("\n");
 		
 		for(var j = 0; j < _handler.INIT.length; j++)
@@ -301,17 +301,21 @@ function Compiler()
 			while(_match = _reg.exec(_handler.INIT[j]))
 			{
 				if(typeof _parser[i][1] == "function")
+				{
 					_handler.INIT[j] = _parser[i][1](_handler.INIT[j], _match, _reg);
+				}
 				else if(typeof _parser[i][1] == "string")
+				{
 					_handler.INIT[j] = _handler.INIT[j].replace(_reg, _parser[i][1]);
+				}
 			}
-			
 		}
+		
 	}
 
 	_code = _code.filter(function (el) {return el.length > 0;}); // remove null lines
 	_handler.CODE = _code.join("") + ";";
-	_handler.INIT = _handler.INIT.join(";");
+	_handler.INIT = _handler.INIT.join("\n");
 	_handler.MAIN = _handler.MAIN.replace("{CODE}", _handler.CODE);
 	_handler.MAIN = _handler.MAIN.replace("{INIT}", _handler.INIT);
 	_handler.MAIN = _handler.MAIN.replace("{DECL}", _handler.DECL);

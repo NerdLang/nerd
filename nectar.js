@@ -52,6 +52,7 @@ var PLATFORM = os.platform();
 var ARCH = os.arch();
 
 global.COMPILER = {};
+global.NECTAR_PATH = __dirname;
 var DEFAULT_COMPILER = "native";
 
 global.CLI = parseCLI(process.argv);

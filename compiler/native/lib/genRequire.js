@@ -69,7 +69,7 @@ function genRequire(from, src)
             {
               modSource = path.join(from + addSource);
             }
-            var trySource = [modSource, /*modSource + ".js",*/ modSource + "/" + "index.js", from + "nectar_modules/" + addSource + "/index.js", COMPILER.PATH + "/nectar_modules/" + addSource + "/index.js", from + "node_modules/" + addSource + "/index.js", COMPILER.PATH + "/node_modules/" + modSource + "/index.js" ];
+            var trySource = [modSource, /*modSource + ".js",*/ modSource + "/" + "index.js", from + "nectar_modules/" + addSource + "/index.js", NECTAR_PATH + "/nectar_modules/" + addSource + "/index.js", from + "node_modules/" + addSource + "/index.js", NECTAR_PATH + "/node_modules/" + modSource + "/index.js" ];
             var newSrc = "";
             for(var i = 0; i < trySource.length; i++)
             {
@@ -123,10 +123,14 @@ function genRequire(from, src)
                 }
                 break;
               }
-              catch (e) {console.log(e);}
+              catch (e) {}
             }
 
-            if(newSrc.length == 0) console.log("[!] Require error : " + addSource);
+            if(newSrc.length == 0)
+			{
+				console.log("[!] Require error : " + addSource);
+				process.exit();
+			}
             //genTarget(addSource, from, newSrc);
             //genInclude(path.resolve(modSource) + "/", newSrc);
 
@@ -139,15 +143,14 @@ function genRequire(from, src)
 
               var resultSource = src.substring(0, index) + reqFN + "()";
 
-              newSrc = "function " + reqFN + "(){\nvar MODULE;\n" + newSrc;
+              newSrc = "function " + reqFN + "(){\nvar module = Object();\n" + newSrc;
 
               //resultSource += "\n" + newSrc + "\n";
 
-              newSrc = newSrc.replace(/module\.exports/g, "MODULE");
+              newSrc = newSrc.replace(/(module\.exports *= *.*)$/g, "$1;");
 
               resultSource += src.substring(index + seek[s].length + addSource.length + 2);
-
-              newSrc += "return MODULE;}";
+              newSrc += "return module.exports;\n}";
               newSrc = genRequire(modSource, newSrc);
               src = resultSource;
 
@@ -171,6 +174,5 @@ function genRequire(from, src)
     }
     while(index > -1)
   }
-
   return src;
 }
