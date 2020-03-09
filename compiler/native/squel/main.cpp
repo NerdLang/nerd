@@ -40,17 +40,22 @@
  using namespace std;
 
  #include "njs.h"
-
- {INIT}
  
-static var console = Object();
+ static var console = Object();
+ static std::function<var (var _str)> __CONSOLE_LOG = [&](var _str){ cout << _str << "\n"; return var(UNDEFINED, 0); };
+ {DECL}
+ 
+ void __NJS_INIT()
+ {
+	console.__NJS_Set((char*)"log", var(FUNCTION, &__CONSOLE_LOG));
+	{INIT}
+ }
+ 
 
-int main(){
 
-	
-	std::function<var (var _str)> __TEST_LOG = [&](var _str){ cout << _str << "\n"; return var(UNDEFINED, 0); };
-	console.__NJS_Set((char*)"log", var(FUNCTION, &__TEST_LOG));
-
+int main()
+{
+	__NJS_INIT();
 	{CODE}
 	
 	return 0;

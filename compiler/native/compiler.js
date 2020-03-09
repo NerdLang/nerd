@@ -25,6 +25,7 @@
  * and feel free to contact us.
  *
  */
+var genRequire = require("./lib/genRequire.js");
 
 function Compiler()
 {
@@ -32,15 +33,19 @@ function Compiler()
 	this.COMPILER = "g++";
 	
 	this.GEN = "";
+	this.PATH = "";
+	if(CLI.stack[0]) this.PATH = path.dirname(CLI.stack[0]) + path.sep;
 	this.ENV = fs.readFileSync(path.join(__dirname, "src", "env.js")).toString();
 	this.MAIN = fs.readFileSync(path.join(__dirname, "squel", "main.cpp")).toString();
 	
 	this.OUT = "";
 	this.OPTION = "";
 	
-	this.HEADER = [];
+	this.DECL = "";
 	
 	this.INIT = [];
+	
+	this.REQUIRE = "";
 	
 	this.CODE = "";
 	
@@ -50,11 +55,23 @@ function Compiler()
 	this.Parse = function(_code)
 	{
 	_code = _code.replace(/(\)[ \r\t\n]+\{)/g, "){");
+	_code = genRequire(_handler.PATH, _code);
+	
+	COMPILER.REQUIRE = COMPILER.REQUIRE.replace(/(\)[ \r\t\n]+\{)/g, "){");
+	COMPILER.REQUIRE = parseObject(COMPILER.REQUIRE);
+	COMPILER.REQUIRE = createFunction(COMPILER.REQUIRE);
+	COMPILER.REQUIRE = createAnon(COMPILER.REQUIRE);
+	COMPILER.REQUIRE = formatCatch(COMPILER.REQUIRE);
+	
 	_code = parseObject(_code);
 	_code = createFunction(_code);
 	_code = createAnon(_code);
 	_code = formatCatch(_code);
-	_code = _code.split(os.EOL);
+	
+	_code = _code.split("\n");
+	COMPILER.REQUIRE = COMPILER.REQUIRE.split("\n");
+	
+	COMPILER.INIT = COMPILER.INIT.concat(COMPILER.REQUIRE);
 
 	function forgeObject(_arr, _var)
 	{
@@ -166,7 +183,7 @@ function Compiler()
 						if(_count == 0)
 						{
 							var _fn = _code.substring(_start, _end);
-							_handler.INIT.push("static var " + _match[1] +";");
+							_handler.DECL += "static var " + _match[1] +";";
 							var _formated = "static __NJS_FUNCTION_MACRO<var (" + _var + ")> " + _genFN +" = [&](" + _var + ") -> var" + _fn + _return;
 							_formated += _match[1] + "=var(FUNCTION, &" + _genFN + ");";
 							_code = [_code.slice(0, _index), _formated, _code.slice(_end + 1)].join('');				
@@ -277,16 +294,16 @@ function Compiler()
 			}			
 		}
 		
-		_handler.INIT = _handler.INIT.join(os.EOL).split(os.EOL);
+		_handler.INIT = _handler.INIT.join("\n").split("\n");
 		
 		for(var j = 0; j < _handler.INIT.length; j++)
 		{
-			while(_match = _reg.exec(_code[j]))
+			while(_match = _reg.exec(_handler.INIT[j]))
 			{
 				if(typeof _parser[i][1] == "function")
 					_handler.INIT[j] = _parser[i][1](_handler.INIT[j], _match, _reg);
 				else if(typeof _parser[i][1] == "string")
-					_handler.INIT[j] = _code[j].replace(_reg, _parser[i][1]);
+					_handler.INIT[j] = _handler.INIT[j].replace(_reg, _parser[i][1]);
 			}
 			
 		}
@@ -297,6 +314,7 @@ function Compiler()
 	_handler.INIT = _handler.INIT.join(";");
 	_handler.MAIN = _handler.MAIN.replace("{CODE}", _handler.CODE);
 	_handler.MAIN = _handler.MAIN.replace("{INIT}", _handler.INIT);
+	_handler.MAIN = _handler.MAIN.replace("{DECL}", _handler.DECL);
 	}
 	  
 	this.Prepare = function(_folder)

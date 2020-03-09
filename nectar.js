@@ -23,7 +23,7 @@
  *
  */
 
-var VERSION = "0.2.13";
+
 var VALID_COMPILER = ["native", "bc", "qjs"];
 
 
@@ -34,6 +34,11 @@ global.process = require('process');
 global.querystring = require('querystring');
 global.child_process = require('child_process');
 global.execSync = child_process.execSync;
+
+global.PACKAGE = require(path.join(__dirname, "package.json"));
+global.VERSION = PACKAGE.version;
+
+global.NJS_ENV = {};
 
 var parseCLI = require('./base/cli/cliParser.js');
 var coreHttp = require('./base/util/httpUtils.js');
@@ -46,10 +51,10 @@ var TARGET = require('./base/compiler/target.js');
 var PLATFORM = os.platform();
 var ARCH = os.arch();
 
-var COMPILER;
+global.COMPILER = {};
 var DEFAULT_COMPILER = "native";
 
-var CLI = parseCLI(process.argv);
+global.CLI = parseCLI(process.argv);
 
 if(CLI.error)
 {
@@ -206,6 +211,7 @@ function Build(prepare)
   COMPILER = require(path.join(__dirname, "compiler", DEFAULT_COMPILER, "compiler.js"));
   
   if(CLI.cli["--compiler"] && CLI.cli["--compiler"].argument) COMPILER.COMPILER = CLI.cli["--compiler"].argument;
+  else if(CLI.cli["-c"] && CLI.cli["-c"].argument) COMPILER.COMPILER = CLI.cli["-c"].argument;
 
   var preset;
   if(CLI.cli["--preset"] && CLI.cli["--preset"].argument) preset = CLI.cli["--preset"].argument;
@@ -367,6 +373,8 @@ function Build(prepare)
 		
 		if(CLI.cli["--run"])
 		{
+			console.log();
+			console.log("[*] Executing " + _binoutput);
 			var _binexec = child_process.spawnSync(_binoutput, 
 			[],
 			{

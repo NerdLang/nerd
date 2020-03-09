@@ -1,9 +1,9 @@
 /*
  * This file is part of NectarJS
- * Copyright (c) 2019 Adrien THIERRY
+ * Copyright (c) 2020 Adrien THIERRY
  * http://nectarjs.com - http://seraum.com
  *
- * sources : https://github.com/seraum/nectarjs
+ * sources : https://github.com/nectarjs/nectarjs
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -30,7 +30,7 @@ function parseCLI(args)
 {
   var result = {error: false, msg: "", cli:{}, stack: [], useless: []};
   var useless = [0, 1];
-  var withArgs = ["--target", "--env", "-o", "--preset", "--flash", "--compiler", "--build", "-b"];
+  var withArgs = ["--target", "--env", "-o", "--preset", "--flash", "--compiler", "-c", "--build", "-b"];
   var noArgs = ["--debug", "--conserve", "--example", "--examples" , "--prepare", "--project", "--run", "--clean", "--purge", "--check", "--verbose", "-v", "--tips", "--version", "--help", "-h", "--release"];
 
 
