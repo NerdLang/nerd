@@ -13,16 +13,16 @@ using namespace std;
  
 enum
 {
-	OBJECT = 1,
-	NUMBER,
+	__NJS_OBJECT = 1,
+	__NJS_NUMBER,
 	BIGNUMBER,
-	BOOLEAN,
-	STRING,
+	__NJS_BOOLEAN,
+	__NJS_STRING,
 	//NATIVE,
-	FUNCTION,
-	ARRAY,
+	__NJS_FUNCTION,
+	__NJS_ARRAY,
 	//NAN,
-	UNDEFINED
+	__NJS_UNDEFINED
 };
 
 struct var;
@@ -32,9 +32,9 @@ var __create_String(char* _value);
 var __create_Array(vector<var>*  _value);
 var __NJS_Log_Console(var _var);
 
-#define __NJS_Create_Boolean(_value) var(BOOLEAN, _value)
-#define __NJS_Create_Number(_value) var(NUMBER, _value)
-#define __NJS_Create_Undefined() var(UNDEFINED, 0)
+#define __NJS_Create_Boolean(_value) var(__NJS_BOOLEAN, _value)
+#define __NJS_Create_Number(_value) var(__NJS_NUMBER, _value)
+#define __NJS_Create_Undefined() var(__NJS_UNDEFINED, 0)
 
 var __NJS_Create_String(char* _str);
 
@@ -106,15 +106,15 @@ struct var
 
     var()
     {
-      type = UNDEFINED;
+      type = __NJS_UNDEFINED;
       value = (val){.i = 0};
     }
 
 	var (int _type, int _value): type(_type), value((val){.i=_value}){}
-	var (int _value): type(NUMBER), value((val){.i=_value}){}
-	var (char* _value): type(STRING), value((val){.s=new __NJS_Class_String(_value)}){}
+	var (int _value): type(__NJS_NUMBER), value((val){.i=_value}){}
+	var (char* _value): type(__NJS_STRING), value((val){.s=new __NJS_Class_String(_value)}){}
 	var (int _type, __NJS_Class_String* _value): type(_type), value((val){.s=_value}){}
-	var (__NJS_Class_String* _value): type(STRING), value((val){.s=_value}){}
+	var (__NJS_Class_String* _value): type(__NJS_STRING), value((val){.s=_value}){}
 
     var (int _type, vector<var>* _value): type(_type)
     {
@@ -122,14 +122,14 @@ struct var
       value = (val){.a = _a };
     }
 	
-	var (vector<var>* _value): type(ARRAY)
+	var (vector<var>* _value): type(__NJS_ARRAY)
     {
       __NJS_Class_Array* _a = new __NJS_Class_Array(_value);
       value = (val){.a = _a };
     }
 
     var (int _type, vector<shared_ptr<pair<char*, var>>>* _value): type(_type), value((val){.o=_value}){}
-		var (vector<shared_ptr<pair<char*, var>>>* _value): type(OBJECT), value((val){.o=_value}){}
+		var (vector<shared_ptr<pair<char*, var>>>* _value): type(__NJS_OBJECT), value((val){.o=_value}){}
 
     var (int _type, void* _value): type(_type), value((val){.f=_value}){}
 
@@ -137,19 +137,19 @@ struct var
 		/*** OPERATOR ***/
 		var operator+(const var& _v1)
 		{
-			if(type == NUMBER && _v1.type == NUMBER)
+			if(type == __NJS_NUMBER && _v1.type == __NJS_NUMBER)
 			{
-				return var(NUMBER, value.i + _v1.value.i);
+				return var(__NJS_NUMBER, value.i + _v1.value.i);
 			}
-			else if(type == NUMBER && _v1.type == STRING)
+			else if(type == __NJS_NUMBER && _v1.type == __NJS_STRING)
 			{
 				return __create_String(__NJS_Concat_Str_To_Int(value.i, _v1.value.s->__NJS_VALUE));
 			}
-			else if(type == STRING && _v1.type == NUMBER)
+			else if(type == __NJS_STRING && _v1.type == __NJS_NUMBER)
 			{
 				return __create_String(__NJS_Concat_Int_To_Str(value.s->__NJS_VALUE, _v1.value.i));
 			}
-			else if(type == STRING && _v1.type == BOOLEAN)
+			else if(type == __NJS_STRING && _v1.type == __NJS_BOOLEAN)
 			{
 				if(_v1.value.b)
 				{
@@ -157,35 +157,35 @@ struct var
 				}
 				return __create_String(__NJS_Concat_Str_To_Str(value.s->__NJS_VALUE, (char*)"false"));
 			}
-			else if(type == STRING && _v1.type == STRING)
+			else if(type == __NJS_STRING && _v1.type == __NJS_STRING)
 			{
 				return __create_String(__NJS_Concat_Str_To_Str(value.s->__NJS_VALUE, _v1.value.s->__NJS_VALUE));
 			}
 			else
 			{
-				return var(NUMBER,0);
+				return var(__NJS_NUMBER,0);
 			}
 		}
 		var operator-(const var& _v1)
 		{
-			return var(NUMBER, value.i - _v1.value.i );
+			return var(__NJS_NUMBER, value.i - _v1.value.i );
 		}
     var operator*(const var& _v1)
 		{
-			return var(NUMBER, value.i * _v1.value.i );
+			return var(__NJS_NUMBER, value.i * _v1.value.i );
 		}
     var operator/(const var& _v1)
 		{
-			return var(NUMBER, value.i / _v1.value.i );
+			return var(__NJS_NUMBER, value.i / _v1.value.i );
 		}
     var operator%(const var& _v1)
 		{
-			return var(NUMBER, value.i % _v1.value.i );
+			return var(__NJS_NUMBER, value.i % _v1.value.i );
 		}
 		
     var const operator! () const
     {
-      if(type == NUMBER)
+      if(type == __NJS_NUMBER)
       {
         return __NJS_Create_Number(!value.i);
       }
@@ -194,64 +194,64 @@ struct var
 	
     var operator++(const int _v1)
 		{
-			return var(NUMBER, value.i++ );
+			return var(__NJS_NUMBER, value.i++ );
 		}
     var operator--(const int _v1)
 		{
-			return var(NUMBER, value.i-- );
+			return var(__NJS_NUMBER, value.i-- );
 		}
 		
     var operator==(const var& _v1)
 		{
-			return var(BOOLEAN, value.i == _v1.value.i);
+			return var(__NJS_BOOLEAN, value.i == _v1.value.i);
 		}
 		
 		var operator<(const var& _v1)
 		{
-			return var(BOOLEAN, value.i < _v1.value.i);
+			return var(__NJS_BOOLEAN, value.i < _v1.value.i);
 		}
 		
     var operator<=(const var& _v1)
 		{
-			return var(BOOLEAN, value.i <= _v1.value.i);
+			return var(__NJS_BOOLEAN, value.i <= _v1.value.i);
 		}
 
 		var operator>(const var& _v1)
 		{
-			return var(BOOLEAN, value.i > _v1.value.i);
+			return var(__NJS_BOOLEAN, value.i > _v1.value.i);
 		}
 		
     var operator>=(const var& _v1)
 		{
-			return var(BOOLEAN, value.i >= _v1.value.i);
+			return var(__NJS_BOOLEAN, value.i >= _v1.value.i);
 		}
     var operator>>(const var& _v1)
 		{
-			return var(NUMBER, value.i >> _v1.value.i);
+			return var(__NJS_NUMBER, value.i >> _v1.value.i);
 		}
     var operator<<(const var& _v1)
 		{
-			return var(NUMBER, value.i << _v1.value.i);
+			return var(__NJS_NUMBER, value.i << _v1.value.i);
 		}
     var operator[] (const int index)
     {
-      if(type == ARRAY)
+      if(type == __NJS_ARRAY)
       {
         if(index > (*value.a->__NJS_VALUE).size() - 1)
         {
-          return var(UNDEFINED, 0);
+          return var(__NJS_UNDEFINED, 0);
         }
         return (*value.a->__NJS_VALUE)[index];
       }
-      else if(type == STRING)
+      else if(type == __NJS_STRING)
       {
         return var(value.s+index);
       }
-      else if(type == OBJECT)
+      else if(type == __NJS_OBJECT)
       {
-        return var(UNDEFINED, 0);
+        return var(__NJS_UNDEFINED, 0);
       }
-      return var(UNDEFINED, 0);
+      return var(__NJS_UNDEFINED, 0);
     }
 	explicit operator bool() const 
 	{ 
@@ -328,13 +328,13 @@ struct var
 inline var __create_String(char* _value)
 {
   __NJS_Class_String* _s = new __NJS_Class_String(_value);
-  return var(STRING, _s);
+  return var(__NJS_STRING, _s);
 }
 
 inline var __create_Array(vector<var>* _value)
 {
   __NJS_Class_Array* _a = new __NJS_Class_Array(_value);
-  return var(ARRAY, _a);
+  return var(__NJS_ARRAY, _a);
 }
 
 inline int __NJS_Get_Int(var _v)
@@ -357,9 +357,9 @@ inline var __NJS_Typeof(var _var)
 inline var __NJS_Object_Set(char* _index, var _value, var _array)
 {
   vector<shared_ptr<pair<char*, var>>>* _obj;
-  if(_array.type == OBJECT) _obj = _array.value.o;
-  else if(_array.type == STRING) _obj = _array.value.s->__OBJECT;
-  else return var(UNDEFINED, 0);
+  if(_array.type == __NJS_OBJECT) _obj = _array.value.o;
+  else if(_array.type == __NJS_STRING) _obj = _array.value.s->__OBJECT;
+  else return var(__NJS_UNDEFINED, 0);
 
   int _j = (*_obj).size();
 
@@ -369,18 +369,18 @@ inline var __NJS_Object_Set(char* _index, var _value, var _array)
     {
       (*_obj)[_i]->second.type = _value.type;
       (*_obj)[_i]->second.value = _value.value;
-      return var(UNDEFINED, 0);
+      return var(__NJS_UNDEFINED, 0);
     }
   }
   (*_obj).push_back(shared_ptr<pair<char*, var>>(new pair<char*, var>( _index, _value)));
-  return var(UNDEFINED, 0);
+  return var(__NJS_UNDEFINED, 0);
 }
 
 inline var __NJS_Object_Set(var _index, var _value, var _array)
 {
-  if(_array.type == ARRAY)
+  if(_array.type == __NJS_ARRAY)
   {
-    if(_index.type != NUMBER) return var (UNDEFINED, 0);
+    if(_index.type != __NJS_NUMBER) return var (__NJS_UNDEFINED, 0);
     vector<var>* _obj = _array.value.a->__NJS_VALUE;
     if(_obj->size() <= _index.value.i) _obj->resize(_index.value.i + 1);
 
@@ -389,12 +389,12 @@ inline var __NJS_Object_Set(var _index, var _value, var _array)
 
     __NJS_Object_Set(__create_String((char*)"length"), __NJS_Create_Number(_obj->size()), _array.value.a->__OBJECT);
   }
-  else if(_array.type == OBJECT || _array.type == STRING)
+  else if(_array.type == __NJS_OBJECT || _array.type == __NJS_STRING)
   {
     vector<shared_ptr<pair<char*, var>>>* _obj;
-    if(_array.type == OBJECT) _obj = _array.value.o;
-    else if(_array.type == STRING) _obj = _array.value.s->__OBJECT;
-    else return var(UNDEFINED, 0);
+    if(_array.type == __NJS_OBJECT) _obj = _array.value.o;
+    else if(_array.type == __NJS_STRING) _obj = _array.value.s->__OBJECT;
+    else return var(__NJS_UNDEFINED, 0);
 
     int _j = (*_obj).size();
 
@@ -404,12 +404,12 @@ inline var __NJS_Object_Set(var _index, var _value, var _array)
       {
         (*_obj)[_i]->second.type = _value.type;
         (*_obj)[_i]->second.value = _value.value;
-        return var(UNDEFINED, 0);
+        return var(__NJS_UNDEFINED, 0);
       }
     }
     (*_obj).push_back(shared_ptr<pair<char*, var>>(new pair<char*, var>( _index.value.s->__NJS_VALUE, _value)));
   }
-  return var(UNDEFINED, 0);
+  return var(__NJS_UNDEFINED, 0);
 }
 
 inline var __NJS_Object_Set(char* _index, var _value, vector<shared_ptr<pair<char*, var>>>* _obj)
@@ -421,11 +421,11 @@ inline var __NJS_Object_Set(char* _index, var _value, vector<shared_ptr<pair<cha
     {
       (*_obj)[_i]->second.type = _value.type;
       (*_obj)[_i]->second.value = _value.value;
-      return var(UNDEFINED, 0);
+      return var(__NJS_UNDEFINED, 0);
     }
   }
   (*_obj).push_back(shared_ptr<pair<char*, var>>(new pair<char*, var>( _index, _value)));
-  return var(UNDEFINED, 0);
+  return var(__NJS_UNDEFINED, 0);
 }
 
 inline var __NJS_Object_Set(var _index, var _value, vector<shared_ptr<pair<char*, var>>>* _obj)
@@ -437,35 +437,35 @@ inline var __NJS_Object_Set(var _index, var _value, vector<shared_ptr<pair<char*
     {
       (*_obj)[_i]->second.type = _value.type;
       (*_obj)[_i]->second.value = _value.value;
-      return var(UNDEFINED, 0);
+      return var(__NJS_UNDEFINED, 0);
     }
   }
   (*_obj).push_back(shared_ptr<pair<char*, var>>(new pair<char*, var>( _index.value.s->__NJS_VALUE, _value)));
-  return var(UNDEFINED, 0);
+  return var(__NJS_UNDEFINED, 0);
 }
 
 inline var __NJS_Object_Get(var _index, var _array)
 {
-  if(_array.type != ARRAY && _array.type != OBJECT && _array.type != STRING) return var(UNDEFINED, 0);
-  if(_array.type == ARRAY)
+  if(_array.type != __NJS_ARRAY && _array.type != __NJS_OBJECT && _array.type != __NJS_STRING) return var(__NJS_UNDEFINED, 0);
+  if(_array.type == __NJS_ARRAY)
   {
-    if(_index.type == STRING)
+    if(_index.type == __NJS_STRING)
     {
       return _array.value.a->Get(__NJS_Get_String(_index));
     }
-    else if(_index.type != NUMBER || _index.value.i > _array.value.a->__NJS_VALUE->size())
+    else if(_index.type != __NJS_NUMBER || _index.value.i > _array.value.a->__NJS_VALUE->size())
     {
-      return var(UNDEFINED, 0);
+      return var(__NJS_UNDEFINED, 0);
     }
     return (*_array.value.a->__NJS_VALUE)[_index.value.i];
   }
   else
   {
-    if(_index.type != STRING) return var(UNDEFINED, 0);
+    if(_index.type != __NJS_STRING) return var(__NJS_UNDEFINED, 0);
     vector<shared_ptr<pair<char*, var>>>* _obj;
-    if(_array.type == OBJECT) _obj = _array.value.o;
-    else if(_array.type == STRING) _obj = _array.value.s->__OBJECT;
-    else return var(UNDEFINED, 0);
+    if(_array.type == __NJS_OBJECT) _obj = _array.value.o;
+    else if(_array.type == __NJS_STRING) _obj = _array.value.s->__OBJECT;
+    else return var(__NJS_UNDEFINED, 0);
     int _j = (*_obj).size();
     for(int _i = 0; _i < _j; _i++)
     {
@@ -475,29 +475,29 @@ inline var __NJS_Object_Get(var _index, var _array)
       }
     }
   }
-  return var(UNDEFINED, 0);
+  return var(__NJS_UNDEFINED, 0);
 }
 
 inline var __NJS_Object_Get(int _index, var _array)
 {
-  if(_array.type != ARRAY && _array.type != OBJECT) return var(UNDEFINED, 0);
-  if(_array.type == ARRAY)
+  if(_array.type != __NJS_ARRAY && _array.type != __NJS_OBJECT) return var(__NJS_UNDEFINED, 0);
+  if(_array.type == __NJS_ARRAY)
   {
     if(_index > _array.value.a->__NJS_VALUE->size())
     {
-      return var(UNDEFINED, 0);
+      return var(__NJS_UNDEFINED, 0);
     }
     return (*_array.value.a->__NJS_VALUE)[_index];
   }
-  return var(UNDEFINED, 0);
+  return var(__NJS_UNDEFINED, 0);
 }
 
 inline var __NJS_Object_Get(char* _index, var _array)
 {
   vector<shared_ptr<pair<char*, var>>>* _obj;
-  if(_array.type == OBJECT) _obj = _array.value.o;
-  else if(_array.type == STRING) _obj = _array.value.s->__OBJECT;
-  else return var(UNDEFINED, 0);
+  if(_array.type == __NJS_OBJECT) _obj = _array.value.o;
+  else if(_array.type == __NJS_STRING) _obj = _array.value.s->__OBJECT;
+  else return var(__NJS_UNDEFINED, 0);
   int _j = (*_obj).size();
   for(int _i = 0; _i < _j; _i++)
   {
@@ -506,13 +506,13 @@ inline var __NJS_Object_Get(char* _index, var _array)
       return (*_obj)[_i]->second;
     }
   }
-  return var(UNDEFINED, 0);
+  return var(__NJS_UNDEFINED, 0);
 }
 
 __NJS_Class_String::__NJS_Class_String(char* _value)
 {
-  std::function<var ()> __OBJ_TO_STRING = [&](){ return __NJS_Create_String(this->__NJS_VALUE); };
-  var toString = var(FUNCTION, &__OBJ_TO_STRING);
+  std::function<var ()> __OBJ_TO___NJS_STRING = [&](){ return __NJS_Create_String(this->__NJS_VALUE); };
+  var toString = var(__NJS_FUNCTION, &__OBJ_TO___NJS_STRING);
   __NJS_Object_Set((char*)"toString", toString, this->__OBJECT);
 
   __NJS_Object_Set((char*)"length", var(strlen(_value)), this->__OBJECT);
@@ -527,8 +527,8 @@ var __NJS_Class_String::Get(char* _index)
 
 __NJS_Class_Array::__NJS_Class_Array(vector<var>* _value)
 {
-  std::function<var ()> __OBJ_TO_STRING = [&](){ return __NJS_Create_String((char*)"Array"); };
-  var toString = var(FUNCTION, &__OBJ_TO_STRING);
+  std::function<var ()> __OBJ_TO___NJS_STRING = [&](){ return __NJS_Create_String((char*)"Array"); };
+  var toString = var(__NJS_FUNCTION, &__OBJ_TO___NJS_STRING);
   __NJS_Object_Set((char*)"toString", toString, this->__OBJECT);
 
   __NJS_Object_Set((char*)"length", __NJS_Create_Number(_value->size()), this->__OBJECT);
@@ -545,19 +545,19 @@ var __NJS_Class_Array::Get(char* _index)
 inline var Array()
 {
   vector<var>* _arr = new vector<var>();
-  return var(ARRAY, _arr);
+  return var(__NJS_ARRAY, _arr);
 }
 
 inline var __NJS_Boolean_Result(var _v)
 {
-  if(_v.type == NUMBER) return _v.value.i;
-  else if(_v.type == BOOLEAN) return _v.value.b;
-  else if(_v.type == STRING)
+  if(_v.type == __NJS_NUMBER) return _v.value.i;
+  else if(_v.type == __NJS_BOOLEAN) return _v.value.b;
+  else if(_v.type == __NJS_STRING)
   {
     if(strlen(_v.value.s->__NJS_VALUE) > 0) return true;
     else return false;
   }
-  else if(_v.type == ARRAY) return true;
+  else if(_v.type == __NJS_ARRAY) return true;
   else return false;
 }
 
@@ -565,17 +565,17 @@ ostream& operator << (ostream& os, const var& _v)
 {
   switch(_v.type)
 	{
-    case UNDEFINED:
+    case __NJS_UNDEFINED:
       os << "undefined";
       break;
-    case BOOLEAN:
+    case __NJS_BOOLEAN:
       if(_v.value.b) os << (char*)"true";
       else os << (char*)"false";
       break;
-		case NUMBER:
+		case __NJS_NUMBER:
 			os << _v.value.i;
 			break;
-		case STRING:
+		case __NJS_STRING:
 			os << _v.value.s->__NJS_VALUE;
 			break;
 		default:
@@ -586,7 +586,7 @@ ostream& operator << (ostream& os, const var& _v)
 
 inline var parseInt(var _str)
 {
-  if(_str.type == STRING)
+  if(_str.type == __NJS_STRING)
   {
     return __NJS_Create_Number(stoi(_str.value.s->__NJS_VALUE));
   }
@@ -598,36 +598,36 @@ inline var  __NJS_Log_Console(var _var)
 {
 	cout << _var;
 	cout << endl;
-  return var(UNDEFINED, 0);
+  return var(__NJS_UNDEFINED, 0);
 }
 
 
 inline var __NJS_Create_String(char* _str)
 {
   __NJS_Class_String* _s = new __NJS_Class_String(_str);
-  return var(STRING, _s);
+  return var(__NJS_STRING, _s);
 }
 
 inline var __NJS_Create_Object()
 {
   vector<shared_ptr<pair<char*, var>>>* __obj = new vector<shared_ptr<pair<char*, var>>>();
-  return var(OBJECT, __obj);
+  return var(__NJS_OBJECT, __obj);
 }
 
 inline var Object()
 {
   vector<shared_ptr<pair<char*, var>>>* __obj = new vector<shared_ptr<pair<char*, var>>>();
-  return var(OBJECT, __obj);
+  return var(__NJS_OBJECT, __obj);
 }
 
 inline var __NJS_Create_Function(void* _fn)
 {
-  return var(FUNCTION, _fn);
+  return var(__NJS_FUNCTION, _fn);
 }
 
 inline var __NJS_Create_Native(void* _native)
 {
-  return var(UNDEFINED, _native);
+  return var(__NJS_UNDEFINED, _native);
 }
 
 inline void* __NJS_Get_Function(var _fn)

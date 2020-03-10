@@ -189,7 +189,7 @@ function Compiler()
 							var _fn = _code.substring(_start, _end);
 							_handler.DECL += "static var " + _match[1] +";";
 							var _formated = "static __NJS_FUNCTION_MACRO<var (" + _var + ")> " + _genFN +" = [&](" + _var + ") -> var" + _fn + _return;
-							_formated += _match[1] + "=var(FUNCTION, &" + _genFN + ");";
+							_formated += _match[1] + "=var(__NJS_FUNCTION, &" + _genFN + ");";
 							_code = [_code.slice(0, _index), _formated, _code.slice(_end + 1)].join('');				
 							break;
 						}
@@ -241,7 +241,7 @@ function Compiler()
 							var _fn = _code.substring(_start, _end);
 							_handler.INIT.push("static __NJS_FUNCTION_MACRO<var (" + _var + ")> " + _genFN +" = [&](" + _var + ") -> var" + _fn + os.EOL + _return);
 							//var _formated = "var " + _genVAR + "=var(&" + _genFN + ");";
-							var _formated = "var(FUNCTION, &" + _genFN + ")";
+							var _formated = "var(__NJS_FUNCTION, &" + _genFN + ")";
 							_code = [_code.slice(0, _index), _formated, _code.slice(_end + 1)].join('');				
 							break;
 						}
