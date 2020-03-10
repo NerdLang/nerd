@@ -25,7 +25,7 @@
  * and feel free to contact us.
  *
  */
-
+var genInclude = require("./genInclude.js");
 module.exports = genRequire;
 var fs = require("fs");
 
@@ -132,7 +132,7 @@ function genRequire(from, src)
 				process.exit();
 			}
             //genTarget(addSource, from, newSrc);
-            //genInclude(path.resolve(modSource) + "/", newSrc);
+            newSrc = genInclude(path.resolve(modSource) + "/", newSrc);
 
             if(NJS_ENV.name != "arduino")
             {

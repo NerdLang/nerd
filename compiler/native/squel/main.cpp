@@ -41,6 +41,8 @@
 
  #include "njs.h"
  
+ {INCLUDE}
+ 
  static var console = Object();
  static std::function<var (var _str)> __NJS_STD_CONSOLE_LOG;
  {DECL}

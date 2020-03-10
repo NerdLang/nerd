@@ -1,1 +1,5 @@
-module.exports = "ok"
+//!_ffi_include "lib/test.cpp"
+
+console.log(__FFI_TEST());
+
+module.exports = "ok";

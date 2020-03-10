@@ -44,6 +44,8 @@ function Compiler()
 	
 	this.DECL = "";
 	
+	this.FFI = [];
+	
 	this.INIT = [];
 	
 	this.REQUIRE = "";
@@ -264,16 +266,16 @@ function Compiler()
 	var _parser = 
 	[
 		[/var +([a-zA-Z0-9_\-]+)? *$/g, "var $1 = Object()"], //var
-		[/\. *\b(?!__NJS_)(.*?)\((.+)\) */g, '.__NJS_Call((char*)"$1", $2)'],
-		[/\. *\b((?!__NJS_)(.*?))\(( *?)\) */g, '.__NJS_Call((char*)"$1")'],
-		[/\. *((?!__NJS_)[a-zA-Z0-9_\-]+) *(?:\=) *(.*?)(;|\n)/g, '.__NJS_Set((char*)"$1", $2);'],
-		[/\b((?!__NJS_)[a-zA-Z0-9_\-]+|\)|\]) *(?:\.) *((?!__NJS_)[a-zA-Z0-9_\-]+)/g, '$1.__NJS_Get((char*)"$2")'],
+		[/\. *\b(?!__NJS_|__FFI_)(.*?)\((.+)\) */g, '.__NJS_Call((char*)"$1", $2)'],
+		[/\. *\b((?!__NJS_|__FFI_)(.*?))\(( *?)\) */g, '.__NJS_Call((char*)"$1")'],
+		[/\. *((?!__NJS_|__FFI_)[a-zA-Z0-9_\-]+) *(?:\=) *(.*?)(;|\n)/g, '.__NJS_Set((char*)"$1", $2);'],
+		[/\b((?!__NJS_|__FFI_)[a-zA-Z0-9_\-]+|\)|\]) *(?:\.) *((?!__NJS_)[a-zA-Z0-9_\-]+)/g, '$1.__NJS_Get((char*)"$2")'],
 		[/{[ \t\n]+}/g, "Object()"], // replace {} by Object(),
 		[/typeof +([a-zA-Z0-9_\-]+)/g, "__NJS_Typeof($1)"], // typeof,
-		[/\b((?!__NJS_)[a-zA-Z0-9_\-]+) *\((.*?)\)/g, selfCall], // typeof,
+		[/\b((?!__NJS_|__FFI_)[a-zA-Z0-9_\-]+) *\((.*?)\)/g, selfCall], // typeof,
 		[/catch *\(e\)/g, "catch(var)"], // typeof,
-		[/\b(?!__NJS_)[ \t\n\=](?:\(|)(true|false)(?=[ &\n\;])/g, "__NJS_Create_Boolean($1)"],
-		[/\b(?!__NJS_)[ \t\n\=](?:\(|)(true|false)[\)]/g, "__NJS_Create_Boolean($1)"],
+		[/\b(?!__NJS_|__FFI_)[ \t\n\=](?:\(|)(true|false)(?=[ &\n\;])/g, "__NJS_Create_Boolean($1)"],
+		[/\b(?!__NJS_|__FFI_)[ \t\n\=](?:\(|)(true|false)[\)]/g, "__NJS_Create_Boolean($1)"],
 	];
 	
 	var _match;
@@ -319,6 +321,7 @@ function Compiler()
 	_handler.MAIN = _handler.MAIN.replace("{CODE}", _handler.CODE);
 	_handler.MAIN = _handler.MAIN.replace("{INIT}", _handler.INIT);
 	_handler.MAIN = _handler.MAIN.replace("{DECL}", _handler.DECL);
+	_handler.MAIN = _handler.MAIN.replace("{INCLUDE}", _handler.FFI.join(os.EOL));
 	}
 	  
 	this.Prepare = function(_folder)
