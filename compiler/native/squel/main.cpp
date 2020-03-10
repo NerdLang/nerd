@@ -42,12 +42,13 @@
  #include "njs.h"
  
  static var console = Object();
- static std::function<var (var _str)> __CONSOLE_LOG = [&](var _str){ cout << _str << "\n"; return var(UNDEFINED, 0); };
+ static std::function<var (var _str)> __NJS_STD_CONSOLE_LOG;
  {DECL}
  
  void __NJS_INIT()
  {
-	console.__NJS_Set((char*)"log", var(FUNCTION, &__CONSOLE_LOG));
+	 __NJS_STD_CONSOLE_LOG  = [&](var _str){ cout << _str << "\n"; return var(UNDEFINED, 0); };
+	console.__NJS_Set((char*)"log", var(FUNCTION, &__NJS_STD_CONSOLE_LOG));
 	{INIT}
  }
  
