@@ -95,7 +95,6 @@ function Compiler()
 				}
 			}
 		}
-		console.log(_code);
 		return _code;
 	}
 

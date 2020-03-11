@@ -1,5 +1,7 @@
 //!_ffi_include "lib/test.cpp"
 
-console.log(__FFI_TEST());
+var ffi = {
+	msgBox: ffiMsgBox,
+}
 
-module.exports = "ok";
+module.exports = ffi;

@@ -61,6 +61,20 @@ class __NJS_Class_Array : public __NJS_Class_Object
     vector<var>* __NJS_VALUE;
 };
 
+/*** STRDUP ***/
+char* strdup (const char* s)
+{
+  size_t slen = strlen(s);
+  char* result = malloc(slen + 1);
+  if(result == NULL)
+  {
+    return NULL;
+  }
+
+  memcpy(result, s, slen+1);
+  return result;
+}
+
 inline char* __NJS_Concat_Str_To_Int(int _left, char* _right)
 {
 	std::stringstream output;
@@ -620,7 +634,7 @@ inline var Object()
   return var(__NJS_OBJECT, __obj);
 }
 
-inline var __NJS_Create_Function(void* _fn)
+inline var __NJS_CREATE_FUNCTION(void* _fn)
 {
   return var(__NJS_FUNCTION, _fn);
 }
@@ -653,3 +667,8 @@ var operator+(int _left, const var& _right)
 {
 	return var(_left) + _right;
 }
+
+/*** HELPERS ***/
+
+#define __NJS_GET_STRING(_var) _var.value.s->__NJS_VALUE
+
