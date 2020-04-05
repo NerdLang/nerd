@@ -26,6 +26,7 @@ enum
 };
 
 struct var;
+#define let var
 union val;
 
 var __create_String(char* _value);

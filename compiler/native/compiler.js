@@ -105,7 +105,7 @@ function Compiler()
 
 	function parseObject(_code)
 	{
-		var _search = new RegExp(/(?:var|) ([a-zA-Z0-9_\-]+) *=[ \t\n\=]*\{/g);
+		var _search = new RegExp(/(?:var|let|) ([a-zA-Z0-9_\-]+) *=[ \t\n\=]*\{/g);
 		var _index = _code.search(_search);
 		while(_index > -1)
 		{
@@ -265,6 +265,7 @@ function Compiler()
 	var _parser = 
 	[
 		[/var +([a-zA-Z0-9_\-]+)? *$/g, "var $1 = Object()"], //var
+		[/let +([a-zA-Z0-9_\-]+)? *$/g, "let $1 = Object()"], //let
 		[/\. *\b(?!__NJS_|__FFI_)(.*?)\((.+)\) */g, '.__NJS_Call((char*)"$1", $2)'],
 		[/\. *\b((?!__NJS_|__FFI_)(.*?))\(( *?)\) */g, '.__NJS_Call((char*)"$1")'],
 		[/\. *((?!__NJS_|__FFI_)[a-zA-Z0-9_\-]+) *(?:\=) *(.*?)(;|\n)/g, '.__NJS_Set((char*)"$1", $2);'],
