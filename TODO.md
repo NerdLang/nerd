@@ -1,5 +1,5 @@
 * Add env (node, std, arduino, stm32 ...)
 
-* Add require & import
+* Add import
 
-* Add eslint
+* Add babel visitors for missing
