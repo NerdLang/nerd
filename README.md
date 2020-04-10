@@ -20,7 +20,7 @@ Full documentation is here : [NetcarJS Doc](https://doc.nectarjs.com/)
 
 npm install -g nectarjs
 
-# Basic bytecode compilation
+# Starting with compilation
 
 The simplest way to use NectarJS is :
 
@@ -63,19 +63,19 @@ nectar file.js
 You can select a preset (speed or size):
 
 ```
-nectar -b bc file.js --preset [size|size]
+nectar file.js --preset [size|size]
 ```
 
 You can also run the compiled executable just after compilation using --run:
 
 ```
-nectar -b bc file.js --run
+nectar file.js --run
 ```
 
 You can enable the quiet mode with --quiet:
 
 ```
-nectar -b bc file.js --quiet
+nectar file.js --quiet
 ```
 
 # Tested on this targets/platforms :
