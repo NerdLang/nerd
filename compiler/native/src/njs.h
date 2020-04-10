@@ -27,6 +27,7 @@ enum
 
 struct var;
 #define let var
+#define __NJS_VAR var
 union val;
 
 var __create_String(char* _value);
@@ -207,6 +208,12 @@ struct var
       else return(__NJS_Create_Boolean(false));
     };
 	
+	var operator+=(const var _v1)
+		{
+			value.i += _v1.value.i;
+			return var();
+		}
+	
     var operator++(const int _v1)
 		{
 			return var(__NJS_NUMBER, value.i++ );
@@ -248,23 +255,21 @@ struct var
 		{
 			return var(__NJS_NUMBER, value.i << _v1.value.i);
 		}
-    var operator[] (const int index)
+	
+    var operator[] (var index)
     {
       if(type == __NJS_ARRAY)
       {
-        if(index > (*value.a->__NJS_VALUE).size() - 1)
-        {
-          return var(__NJS_UNDEFINED, 0);
-        }
-        return (*value.a->__NJS_VALUE)[index];
+		__NJS_Object_Set(index.value.i, var(), *this);
+		return &__NJS_Object_Get(index.value.i, *this);
       }
       else if(type == __NJS_STRING)
       {
-        return var(value.s+index);
+        return var(value.s+index.value.i);
       }
       else if(type == __NJS_OBJECT)
       {
-        return var(__NJS_UNDEFINED, 0);
+        return __NJS_Object_Get(index.value.i, *this);
       }
       return var(__NJS_UNDEFINED, 0);
     }
@@ -340,6 +345,21 @@ struct var
 	
 };
 
+inline var __NJS_Call_Function(var _obj)
+{
+	return (*static_cast<function<var ()>*>(_obj.value.f))();
+}
+
+inline var __NJS_Call_Function(var _obj, var _arg)
+{
+	return (*static_cast<function<var (var __arg)>*>(_obj.value.f))(_arg);
+}
+
+inline var __NJS_Call_Function(var _obj, var _arg, var _arg2)
+{
+	return (*static_cast<function<var (var _arg, var _arg2)>*>(_obj.value.f))(_arg, _arg2);
+}
+
 inline var __create_String(char* _value)
 {
   __NJS_Class_String* _s = new __NJS_Class_String(_value);
@@ -348,6 +368,13 @@ inline var __create_String(char* _value)
 
 inline var __create_Array(vector<var>* _value)
 {
+  __NJS_Class_Array* _a = new __NJS_Class_Array(_value);
+  return var(__NJS_ARRAY, _a);
+}
+
+inline var __NJS_Create_Array()
+{
+	vector<var>* _value = new vector<var>;
   __NJS_Class_Array* _a = new __NJS_Class_Array(_value);
   return var(__NJS_ARRAY, _a);
 }
@@ -426,6 +453,22 @@ inline var __NJS_Object_Set(var _index, var _value, var _array)
   }
   return var(__NJS_UNDEFINED, 0);
 }
+
+inline var __NJS_Object_Set(int _index, var _value, var _array)
+{
+  if(_array.type == __NJS_ARRAY)
+  {
+    vector<var>* _obj = _array.value.a->__NJS_VALUE;
+    if(_obj->size() <= _index) _obj->resize(_index);
+
+    _obj->at(_index).type = _value.type;
+    _obj->at(_index).value = _value.value;
+
+    __NJS_Object_Set(__create_String((char*)"length"), __NJS_Create_Number(_obj->size()), _array.value.a->__OBJECT);
+  }
+  return var(__NJS_UNDEFINED, 0);
+}
+
 
 inline var __NJS_Object_Set(char* _index, var _value, vector<shared_ptr<pair<char*, var>>>* _obj)
 {
@@ -672,4 +715,5 @@ var operator+(int _left, const var& _right)
 /*** HELPERS ***/
 
 #define __NJS_GET_STRING(_var) _var.value.s->__NJS_VALUE
-
+#define true __NJS_Create_Boolean(true)
+#define false __NJS_Create_Boolean(false)

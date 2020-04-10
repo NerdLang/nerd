@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-// TODO : Verifier Self Call functions sans console.log sur linux pb ^M 
-// TODO : rajouter var() pour les param de type string ou number
+// TODO : add babel visitors for missing parts
+
 /*
  * This file is part of NectarJS
  * Copyright (c) 2017 - 2020 Adrien THIERRY

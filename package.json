@@ -1,16 +1,13 @@
 {
   "name": "nectarjs",
-  "version": "0.2.19",
+  "version": "0.3.0",
   "description": "Javascript's God Mod",
   "main": "nectar",
   "bin": {
     "nectar": "./nectar.js",
     "njs": "./nectar.js"
   },
-  "scripts": 
-  {
-  
-  },
+  "scripts": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/nectarjs/nectarjs.git"
@@ -35,14 +32,14 @@
     "raspberry",
     "stm32",
     "nucleo",
-	"express",
-	"uwebsocket",
-	"http",
-	"https",
-	"bytcode",
-	"wasm",
-	"arm",
-	"arm64"
+    "express",
+    "uwebsocket",
+    "http",
+    "https",
+    "bytcode",
+    "wasm",
+    "arm",
+    "arm64"
   ],
   "author": "Adrien THIERRY <adrien.thierryfr@gmail.com> (https://seraum.com)",
   "license": "MIT",
@@ -55,5 +52,9 @@
   "bugs": {
     "url": "https://github.com/nectarjs/nectarjs/issues"
   },
-  "homepage": "https://nectarjs.com"
+  "homepage": "https://nectarjs.com",
+  "dependencies": {
+    "@babel/core": "^7.9.0",
+    "@babel/generator": "^7.9.5"
+  }
 }

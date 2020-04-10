@@ -25,8 +25,15 @@
  * and feel free to contact us.
  *
  */
+global.babel = require( '@babel/core' );
+babel.generate = require( '@babel/generator' ).default;
+
+ var visitor = require("./visitor/visitor.js");
+ 
 var genRequire = require("./lib/genRequire.js");
 var parseObj = require("./lib/parseObj.js");
+
+global.RND = function() { return "__" + Math.random().toString(36).substring(7); };
 
 function Compiler()
 {
@@ -46,7 +53,7 @@ function Compiler()
 	
 	this.FFI = [];
 	
-	this.INIT = [];
+	this.INIT = "";
 	
 	this.REQUIRE = "";
 	
@@ -57,100 +64,19 @@ function Compiler()
 	/*** METHODS ***/
 	this.Parse = function(_code)
 	{
-	_code = _code.replace(/(\)[ \r\t\n]+\{)/g, "){");
 	_code = genRequire(_handler.PATH, _code);
 	
-	COMPILER.REQUIRE = COMPILER.REQUIRE.replace(/(\)[ \r\t\n]+\{)/g, "){");
-	COMPILER.REQUIRE = parseObject(COMPILER.REQUIRE);
+	COMPILER.REQUIRE = babel.transformSync(COMPILER.REQUIRE, visitor).code;
 	COMPILER.REQUIRE = createFunction(COMPILER.REQUIRE);
 	COMPILER.REQUIRE = createAnon(COMPILER.REQUIRE);
-	COMPILER.REQUIRE = formatCatch(COMPILER.REQUIRE);
-	
-	_code = parseObject(_code);
-	_code = createFunction(_code);
-	_code = createAnon(_code);
-	_code = formatCatch(_code);
-	
-	_code = _code.split("\n");
-	COMPILER.REQUIRE = COMPILER.REQUIRE.split("\n");
-	
-	COMPILER.INIT = COMPILER.INIT.concat(COMPILER.REQUIRE);
 
-	function forgeObject(_arr, _var)
-	{
-		var _code = "";
-		for(var i = 0; i < _arr.length; i++)
-		{
-			if(_arr[i][1] && _arr[i][1][0] == "{")
-			{
-				var _next = _var + ".__NJS_Get(\"" + _arr[i][0] + "\")";
-				_code += _var + ".__NJS_Set(\"" + _arr[i][0] + "\", Object());";
-				_code += forgeObject(parseObj(_arr[i][1]), _next);
-			}
-			else 
-			{
-				if(_arr[i][0])
-				{
-					_code += _var + ".__NJS_Set(\"" + _arr[i][0] + "\"," + _arr[i][1] + ");";
-				}
-			}
-		}
-		return _code;
-	}
-
-	function formatCatch(_code)
-	{
-		return _code.replace(/(;catch\([a-zA-Z0-9_\-]*\))/, "catch(var)"); // catch
-	}
-
-	function parseObject(_code)
-	{
-		var _search = new RegExp(/(?:var|let|) ([a-zA-Z0-9_\-]+) *=[ \t\n\=]*\{/g);
-		var _index = _code.search(_search);
-		while(_index > -1)
-		{
-			var _match = _search.exec(_code.slice(_index));
-			var _open = 0;
-			var _openIndex = -1;
-			var _closeIndex = -1;
-			
-			for(var i = _index; i < _code.length; i++)
-			{
-				if(_code[i] == "{")
-				{
-					_open++;
-					if(_open == 1)
-					{
-						_openIndex = i+1;
-					}
-				}
-				if(_code[i] == "}")
-				{
-					_open--;
-					if(_open == 0)
-					{
-						_closeIndex = i;
-						break;
-					}
-				}
-			}
-			if(_closeIndex > _openIndex + 1)
-			{
-				var _obj = _code.substring(_openIndex-1, _closeIndex+1);
-				var _ret = "Object();";
-				_ret += forgeObject(parseObj(_obj), _match[1]);
-				_code = [_code.slice(0, _openIndex-1), _ret, _code.slice(_closeIndex+1)].join('');
-			}
-			_index = _code.slice(_closeIndex).search(_search);
-		}
-		return _code + ";";
-	}
+	_handler.CODE = babel.transformSync(_code, visitor).code;
+	_handler.CODE = createFunction(_handler.CODE);
+	_handler.CODE = createAnon(_handler.CODE);
 	
-	function varParam(_var)
-	{
-		return _var.replace(/^ *([0-9]+|"[.]")/, "var($a)");
-	}
-
+	COMPILER.INIT = babel.transformSync(COMPILER.INIT, visitor).code;
+	COMPILER.INIT += COMPILER.REQUIRE;
+	
 	function createFunction(_code)
 	{	
 		var _return = ";return __NJS_Create_Undefined();};";
@@ -158,7 +84,7 @@ function Compiler()
 		var _index = _code.search(_searchFN);
 		while(_index > -1)
 		{
-			var _genFN = "__NJS_FN_" + Math.random().toString(36).substr(2, 10);
+			var _genFN = "__NJS_FN_" + RND();
 			var _var = "";
 			var _count = 0;
 			var _start = -1;
@@ -168,8 +94,11 @@ function Compiler()
 			_match[2] = _match[2].split(",");
 			for(var i = 0; i < _match[2].length; i++)
 			{
-				if(i != 0) _var += ",";
-				_var += "var " + _match[2][i];
+				if(_match[2][i].length > 0)
+				{
+					if(i != 0) _var += ",";
+					_var += "var " + _match[2][i];
+				}
 			}
 			
 			for(var i = _index; i < _code.length; i++)
@@ -210,8 +139,8 @@ function Compiler()
 			var _count = 0;
 			var _start = -1;
 			var _end = -1;
-			var _genFN = "__NJS_FN_" + Math.random().toString(36).substr(2, 10);
-			var _genVAR = "__NJS_VAR_" + Math.random().toString(36).substr(2, 10);
+			var _genFN = "__NJS_FN_" + RND();
+			var _genVAR = "__NJS_VAR_" + RND();
 			
 			var _match = _searchAnonFN.exec(_code);
 			_match[1] = _match[1].split(",");
@@ -223,7 +152,6 @@ function Compiler()
 					_var += "var " + _match[1][i];
 				}
 			}
-
 			for(var i = _index; i < _code.length; i++)
 			{
 					if(_code[i] == "{")
@@ -238,7 +166,7 @@ function Compiler()
 						if(_count == 0)
 						{
 							var _fn = _code.substring(_start, _end);
-							_handler.INIT.push("static __NJS_FUNCTION_MACRO<var (" + _var + ")> " + _genFN +" = [&](" + _var + ") -> var" + _fn + os.EOL + _return);
+							_handler.INIT += "static __NJS_FUNCTION_MACRO<var (" + _var + ")> " + _genFN +" = [&](" + _var + ") -> var" + _fn + os.EOL + _return;
 							//var _formated = "var " + _genVAR + "=var(&" + _genFN + ");";
 							var _formated = "var(__NJS_FUNCTION, &" + _genFN + ")";
 							_code = [_code.slice(0, _index), _formated, _code.slice(_end + 1)].join('');				
@@ -251,73 +179,6 @@ function Compiler()
 		return _code;
 	}
 	
-	function selfCall(_code, _match, _reg, _index)
-	{
-		var _NJS = "__NJS_";
-		var _noCall = ["var", "Object", "if", "else if", "else", "catch", "while", "for", "do"];
-		if(_match[1].indexOf(_NJS) < 0 && _noCall.indexOf(_match[1]) < 0)
-		{
-			return _code.replace(_reg, "$1.__NJS_Self_Call($2)");
-		}
-		else return _code;		
-	}
-	
-	var _parser = 
-	[
-		[/var +([a-zA-Z0-9_\-]+)? *$/g, "var $1 = Object()"], //var
-		[/let +([a-zA-Z0-9_\-]+)? *$/g, "let $1 = Object()"], //let
-		[/\. *\b(?!__NJS_|__FFI_)(.*?)\((.+)\) */g, '.__NJS_Call((char*)"$1", $2)'],
-		[/\. *\b((?!__NJS_|__FFI_)(.*?))\(( *?)\) */g, '.__NJS_Call((char*)"$1")'],
-		[/\. *((?!__NJS_|__FFI_)[a-zA-Z0-9_\-]+) *(?:\=) *(.*?)(;|\n)/g, '.__NJS_Set((char*)"$1", $2);'],
-		[/\b((?!__NJS_|__FFI_)[a-zA-Z0-9_\-]+|\)|\]) *(?:\.) *((?!__NJS_)[a-zA-Z0-9_\-]+)/g, '$1.__NJS_Get((char*)"$2")'],
-		[/{[ \t\n]+}/g, "Object()"], // replace {} by Object(),
-		[/typeof +([a-zA-Z0-9_\-]+)/g, "__NJS_Typeof($1)"], // typeof,
-		[/\b((?!__NJS_|__FFI_)[a-zA-Z0-9_\-]+) *\((.*?)\)/g, selfCall], // typeof,
-		[/catch *\(e\)/g, "catch(var)"], // typeof,
-		[/\b(?!__NJS_|__FFI_)[ \t\n\=](?:\(|)(true|false)(?=[ &\n\;])/g, "__NJS_Create_Boolean($1)"],
-		[/\b(?!__NJS_|__FFI_)[ \t\n\=](?:\(|)(true|false)[\)]/g, "__NJS_Create_Boolean($1)"],
-	];
-	
-	var _match;
-	for(var i = 0; i < _parser.length; i++)
-	{
-		var _reg = new RegExp(_parser[i][0]);
-		for(var j = 0; j < _code.length; j++)
-		{
-			while(_match = _reg.exec(_code[j]))
-			{
-				if(typeof _parser[i][1] == "function")
-				{
-					_code[j] = _parser[i][1](_code[j], _match, _reg);
-				}
-				else if(typeof _parser[i][1] == "string")
-				{
-					_code[j] = _code[j].replace(_reg, _parser[i][1]);
-				}
-			}	
-		}
-		_handler.INIT = _handler.INIT.join("\n").split("\n");
-		
-		for(var j = 0; j < _handler.INIT.length; j++)
-		{
-			while(_match = _reg.exec(_handler.INIT[j]))
-			{
-				if(typeof _parser[i][1] == "function")
-				{
-					_handler.INIT[j] = _parser[i][1](_handler.INIT[j], _match, _reg);
-				}
-				else if(typeof _parser[i][1] == "string")
-				{
-					_handler.INIT[j] = _handler.INIT[j].replace(_reg, _parser[i][1]);
-				}
-			}
-		}
-		
-	}
-
-	_code = _code.filter(function (el) {return el.length > 0;}); // remove null lines
-	_handler.CODE = _code.join("") + ";";
-	_handler.INIT = _handler.INIT.join("\n");
 	_handler.MAIN = _handler.MAIN.replace("{CODE}", _handler.CODE);
 	_handler.MAIN = _handler.MAIN.replace("{INIT}", _handler.INIT);
 	_handler.MAIN = _handler.MAIN.replace("{DECL}", _handler.DECL);

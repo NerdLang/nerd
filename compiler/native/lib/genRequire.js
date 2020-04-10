@@ -143,7 +143,7 @@ function genRequire(from, src)
 
               var resultSource = src.substring(0, index) + reqFN + "()";
 
-              newSrc = "function " + reqFN + "(){\nvar module = Object();\n" + newSrc;
+              newSrc = "function " + reqFN + "(){\nvar module = __NJS_Create_Object();\n" + newSrc;
 
               //resultSource += "\n" + newSrc + "\n";
 
