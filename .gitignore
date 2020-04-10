@@ -1,5 +1,6 @@
 # Compilations
 .nectar
+*.exe
 
 # Logs
 logs
