@@ -199,7 +199,12 @@ var visitor =
 					  {
 						_value = _el[i].value.name;
 					  }
-					  else _value = _el[i].value.extra.raw;
+					  else if(_el[i].value.extra) _value = _el[i].value.extra.raw;
+					  else
+					  {
+						  console.log("Visitor VariableDeclarator not implemented yet for " + _el[i].type);
+						  console.dir(_el[i]);
+					  }
 					  
 					  _code += "__NJS_Object_Set(\"" + _key + "\"," + _value + "," + _name + ");"
 				  }

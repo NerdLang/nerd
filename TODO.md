@@ -6,4 +6,6 @@
 
 * function templates with varargs
 
-* add visitor for property function :  a.fn = function() {}
+* add visitor for property function :  { fn: function() {} }
+
+* Memory cleaning (destructor)
