@@ -1,5 +1,5 @@
-<p align="center" style="margin:auto";>
-  
+<p>
+ 
 <img height="64" src="https://i.imgur.com/oXRdycNl.png">
 
 <br>
@@ -8,7 +8,7 @@ Javascript's God Mode : one language to rule them all. Code everything, everywhe
 
 Any questions or ideas, join us : [![NectarJS' Discord](https://img.shields.io/badge/Discord-Join-brightgreen.svg)](https://discord.gg/cpe2UuN)   [![Trello](https://img.shields.io/badge/Trello-Join-brightgreen.svg)](https://trello.com/invite/b/6F4rvEj2/9d7677f9dc6b5bf2f5b33e45fc794182/nectarjs)
 
-<hr></hr>
+<hr>
 
 [![NPM](https://nodei.co/npm/nectarjs.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/nectarjs/)
 
@@ -20,7 +20,7 @@ Full documentation is here : [NetcarJS Doc](https://doc.nectarjs.com/)
 
 npm install -g nectarjs
 
-# Basic bytecode compilation
+# Starting with compilation
 
 The simplest way to use NectarJS is :
 
@@ -63,19 +63,19 @@ nectar file.js
 You can select a preset (speed or size):
 
 ```
-nectar -b bc file.js --preset [size|size]
+nectar file.js --preset [size|size]
 ```
 
 You can also run the compiled executable just after compilation using --run:
 
 ```
-nectar -b bc file.js --run
+nectar file.js --run
 ```
 
 You can enable the quiet mode with --quiet:
 
 ```
-nectar -b bc file.js --quiet
+nectar file.js --quiet
 ```
 
 # Tested on this targets/platforms :
