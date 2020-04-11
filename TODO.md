@@ -5,3 +5,5 @@
 * Add babel visitors for missing
 
 * function templates with varargs
+
+* functions lambdas scope 

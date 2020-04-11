@@ -1,5 +1,4 @@
-// use with --env node
-// or var process = require("process");
+var process = require("process");
 
 for(var i = 0; i < process.argv.length; i++)
 {

@@ -18,15 +18,15 @@ enum
 	__NJS_BIGNUMBER,
 	__NJS_BOOLEAN,
 	__NJS_STRING,
-	__NJS_NATIVE,
+	//__NJS_NATIVE,
 	__NJS_FUNCTION,
 	__NJS_ARRAY,
-	__NJS_NAN,
+	//__NJS_NAN,
 	__NJS_UNDEFINED
 };
 
 /*** HELPERS ***/
-#define __NJS_FUNCTION_MACRO static std::function
+#define __NJS_FUNCTION_MACRO std::function
 #define __NJS_GET_STRING(_var) _var.value.s->__NJS_VALUE
 #define let var
 #define __NJS_VAR var
@@ -315,7 +315,7 @@ inline var __create_Array(vector<var>* _value)
 
 inline var __NJS_Create_Array()
 {
-	vector<var>* _value = new vector<var>;
+  vector<var>* _value = new vector<var>;
   return __create_Array(_value);
 }
 
@@ -368,7 +368,6 @@ inline var __NJS_Object_Set(var _index, var _value, var _array)
 
     _obj->at(_index.value.i).type = _value.type;
     _obj->at(_index.value.i).value = _value.value;
-
     __NJS_Object_Set(__create_String((char*)"length"), __NJS_Create_Number(_obj->size()), _array.value.a->__OBJECT);
   }
   else if(_array.type == __NJS_OBJECT || _array.type == __NJS_STRING)
@@ -402,8 +401,9 @@ var __NJS_Object_Set(int _index, var _value, var _array)
     if(_obj->size() <= _index) _obj->resize(_index + 1);
     _obj->at(_index).type = _value.type;
     _obj->at(_index).value = _value.value;
-
-    __NJS_Object_Set(__create_String((char*)"length"), __NJS_Create_Number(_obj->size()), _array.value.a->__OBJECT);
+    
+	__NJS_Object_Set(__create_String((char*)"length"), __NJS_Create_Number(_obj->size()), _array.value.a->__OBJECT);
+  
   }
   return var(__NJS_UNDEFINED, 0);
 }
@@ -489,27 +489,16 @@ inline var __NJS_Object_Get(int _index, var _array)
   return var(__NJS_UNDEFINED, 0);
 }
 
+
 inline var __NJS_Object_Get(char* _index, var _array)
 {
-  vector<shared_ptr<pair<char*, var>>>* _obj;
-  if(_array.type == __NJS_OBJECT) _obj = _array.value.o;
-  else if(_array.type == __NJS_STRING) _obj = _array.value.s->__OBJECT;
-  else return var(__NJS_UNDEFINED, 0);
-  int _j = (*_obj).size();
-  for(int _i = 0; _i < _j; _i++)
-  {
-    if(strcmp(_index, (*_obj)[_i]->first) == 0)
-    {
-      return (*_obj)[_i]->second;
-    }
-  }
-  return var(__NJS_UNDEFINED, 0);
+	return __NJS_Object_Get(var(_index), _array);
 }
 
 __NJS_Class_String::__NJS_Class_String(char* _value)
 {
 	/*** toString ***/
-  __NJS_FUNCTION_MACRO<var ()> __OBJ_TO___NJS_STRING = [&](){ cout << this->__NJS_VALUE << "\n"; return __NJS_Create_String(this->__NJS_VALUE); };
+  __NJS_FUNCTION_MACRO<var ()> __OBJ_TO___NJS_STRING = [&](){ return __NJS_Create_String(this->__NJS_VALUE); };
   var toString = var(__NJS_FUNCTION, &__OBJ_TO___NJS_STRING);
   __NJS_Object_Set((char*)"toString", toString, this->__OBJECT);
 	/*** end to string ***/
@@ -539,6 +528,7 @@ __NJS_Class_String::__NJS_Class_String(char* _value)
 		ptr = strtok(NULL, delim);
 		i++;
 	}
+	
 	return _arr; 
   };
   

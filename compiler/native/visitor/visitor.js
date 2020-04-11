@@ -266,9 +266,19 @@ var visitor =
 				{
 					_path.replaceWithSourceString("__NJS_Typeof(" + _path.node.argument.name + ")");
 				}
-				else 
+				else if(_path.node.argument.extra)
 				{
 					_path.replaceWithSourceString("__NJS_Typeof(" + _path.node.argument.extra.raw + ")");
+				}
+				else if (_path.node.argument.type == "MemberExpression")
+				{
+					console.dir(_path.node.argument);
+					_path.replaceWithSourceString("__NJS_Typeof(" + memberExpression(_path.node.argument) + ")");
+				}
+				else if (_path.node.argument.type == "CallExpression")
+				{
+					console.dir(_path.node.argument);
+					_path.replaceWithSourceString("__NJS_Typeof(" + callExpression(_path.node.argument) + ")");
 				}
 				_path.skip();
 			}

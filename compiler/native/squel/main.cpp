@@ -43,22 +43,23 @@
  
  {INCLUDE}
  
- static var console = Object();
- static std::function<var (var _str)> __NJS_STD_CONSOLE_LOG;
  {DECL}
- 
- void __NJS_INIT()
- {
+
+int main(int argc, char* argv[])
+{
+	var __NJS_ARGS = __NJS_Create_Array();
+	for( int i = 0; i < argc; i++)
+	{
+		__NJS_Object_Set(i, var(argv[i]), __NJS_ARGS);
+	}
+	
+	var console = Object();
+	std::function<var (var _str)> __NJS_STD_CONSOLE_LOG;
 	__NJS_STD_CONSOLE_LOG  = [&](var _str){ cout << _str << "\n"; return var(__NJS_UNDEFINED, 0); };
 	__NJS_Object_Set((char*)"log", var(__NJS_FUNCTION, &__NJS_STD_CONSOLE_LOG), console);
+	
 	{INIT}
- }
- 
-
-
-int main()
-{
-	__NJS_INIT();
+	
 	{CODE}
 	
 	return 0;
