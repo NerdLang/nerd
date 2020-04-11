@@ -15,29 +15,35 @@ enum
 {
 	__NJS_OBJECT = 1,
 	__NJS_NUMBER,
-	BIGNUMBER,
+	__NJS_BIGNUMBER,
 	__NJS_BOOLEAN,
 	__NJS_STRING,
-	//NATIVE,
+	__NJS_NATIVE,
 	__NJS_FUNCTION,
 	__NJS_ARRAY,
-	//NAN,
+	__NJS_NAN,
 	__NJS_UNDEFINED
 };
 
-struct var;
+/*** HELPERS ***/
+#define __NJS_FUNCTION_MACRO static std::function
+#define __NJS_GET_STRING(_var) _var.value.s->__NJS_VALUE
 #define let var
 #define __NJS_VAR var
+#define __NJS_Create_Boolean(_value) var(__NJS_BOOLEAN, _value)
+#define __NJS_Create_Number(_value) var(__NJS_NUMBER, _value)
+#define true __NJS_Create_Boolean(true)
+#define false __NJS_Create_Boolean(false)
+#define __NJS_Create_Undefined() var(__NJS_UNDEFINED, 0)
+#define let var
+#define __NJS_VAR var
+
+struct var;
 union val;
 
 var __create_String(char* _value);
 var __create_Array(vector<var>*  _value);
 var __NJS_Log_Console(var _var);
-
-#define __NJS_Create_Boolean(_value) var(__NJS_BOOLEAN, _value)
-#define __NJS_Create_Number(_value) var(__NJS_NUMBER, _value)
-#define __NJS_Create_Undefined() var(__NJS_UNDEFINED, 0)
-
 var __NJS_Create_String(char* _str);
 
 class __NJS_Class_Object
@@ -205,7 +211,7 @@ struct var
       {
         return __NJS_Create_Number(!value.i);
       }
-      else return(__NJS_Create_Boolean(false));
+      else return(false);
     };
 	
 	var operator+=(const var _v1)
@@ -278,71 +284,6 @@ struct var
 		return this->value.i; 
 	}
 	
-	var __NJS_Get(var _param)
-	{
-		return __NJS_Object_Get(_param, *this);
-	}
-	
-	var __NJS_Get(char* _param)
-	{
-		return __NJS_Object_Get(_param, *this);
-	}
-	
-	var __NJS_Set(char* _index, var _value)
-	{
-		return __NJS_Object_Set(_index, _value, *this);
-	}
-	
-	var __NJS_Set(var _index, var _value)
-	{
-		return __NJS_Object_Set(_index, _value, *this);
-	}
-	
-	var __NJS_Set(int _index, var _value)
-	{
-		return __NJS_Object_Set(_index, _value, *this);
-	}
-	
-	var __NJS_Self_Call()
-	{
-		return (*static_cast<function<var ()>*>(this->value.f))();
-	}
-	
-	var __NJS_Self_Call(var _a1)
-	{
-		return (*static_cast<function<var (var _a1)>*>(this->value.f))(_a1);
-	}
-	
-	var __NJS_Self_Call(var _a1, var _a2)
-	{
-		return (*static_cast<function<var (var _a1, var _a2)>*>(this->value.f))(_a1, _a2);
-	}
-	
-	var __NJS_Self_Call(var _a1, var _a2, var _a3)
-	{
-		return (*static_cast<function<var (var _a1, var _a2, var _a3)>*>(this->value.f))(_a1, _a2, _a3);
-	}
-
-	var __NJS_Call(char* _fn)
-	{
-		return (*static_cast<function<var ()>*>((this->__NJS_Get(_fn)).value.f))();
-	}
-	
-	var __NJS_Call(char* _fn, var _arg)
-	{
-		return (*static_cast<function<var (var _arg)>*>((this->__NJS_Get(_fn)).value.f))(_arg);
-	}
-	
-	var __NJS_Call(char* _fn, var _arg, var _arg2)
-	{
-		return (*static_cast<function<var (var __arg, var __arg2)>*>((this->__NJS_Get(_fn)).value.f))(_arg, _arg2);
-	}
-	
-	var __NJS_Call(char* _fn, var _arg, var _arg2, var _arg3)
-	{
-		return (*static_cast<function<var (var __arg, var __arg2, var __arg3)>*>((this->__NJS_Get(_fn)).value.f))(_arg, _arg2, _arg3);
-	}
-	
 };
 
 inline var __NJS_Call_Function(var _obj)
@@ -375,8 +316,7 @@ inline var __create_Array(vector<var>* _value)
 inline var __NJS_Create_Array()
 {
 	vector<var>* _value = new vector<var>;
-  __NJS_Class_Array* _a = new __NJS_Class_Array(_value);
-  return var(__NJS_ARRAY, _a);
+  return __create_Array(_value);
 }
 
 inline int __NJS_Get_Int(var _v)
@@ -454,13 +394,12 @@ inline var __NJS_Object_Set(var _index, var _value, var _array)
   return var(__NJS_UNDEFINED, 0);
 }
 
-inline var __NJS_Object_Set(int _index, var _value, var _array)
+var __NJS_Object_Set(int _index, var _value, var _array)
 {
   if(_array.type == __NJS_ARRAY)
   {
     vector<var>* _obj = _array.value.a->__NJS_VALUE;
-    if(_obj->size() <= _index) _obj->resize(_index);
-
+    if(_obj->size() <= _index) _obj->resize(_index + 1);
     _obj->at(_index).type = _value.type;
     _obj->at(_index).value = _value.value;
 
@@ -569,11 +508,44 @@ inline var __NJS_Object_Get(char* _index, var _array)
 
 __NJS_Class_String::__NJS_Class_String(char* _value)
 {
-  std::function<var ()> __OBJ_TO___NJS_STRING = [&](){ return __NJS_Create_String(this->__NJS_VALUE); };
+	/*** toString ***/
+  __NJS_FUNCTION_MACRO<var ()> __OBJ_TO___NJS_STRING = [&](){ cout << this->__NJS_VALUE << "\n"; return __NJS_Create_String(this->__NJS_VALUE); };
   var toString = var(__NJS_FUNCTION, &__OBJ_TO___NJS_STRING);
   __NJS_Object_Set((char*)"toString", toString, this->__OBJECT);
-
+	/*** end to string ***/
+	
+	/*** length ***/
   __NJS_Object_Set((char*)"length", var(strlen(_value)), this->__OBJECT);
+	/*** end length ***/
+	
+  /*** split ***/
+  __NJS_FUNCTION_MACRO<var (var)> __OBJ_TO___NJS_SPLIT = [&](var _needle)
+  { 
+	var _arr = __NJS_Create_Array();
+    char* _v = malloc(strlen(this->__NJS_VALUE) + 1);
+	strcpy(_v, this->__NJS_VALUE);	
+	char* delim = malloc(strlen(_needle.value.s->__NJS_VALUE) + 1);
+	strcpy(delim, _needle.value.s->__NJS_VALUE);
+
+	char *ptr = strtok(_v, delim);
+	int i = 0;
+	char* _new;
+	while (ptr != NULL)
+	{
+		char* _new = malloc(strlen(ptr));
+		strcpy(_new, ptr);
+		__NJS_Object_Set(i, _new, _arr);
+		
+		ptr = strtok(NULL, delim);
+		i++;
+	}
+	return _arr; 
+  };
+  
+  var __split = var(__NJS_FUNCTION, &__OBJ_TO___NJS_SPLIT);
+  __NJS_Object_Set((char*)"split", __split, this->__OBJECT);
+	/*** end split ***/
+
 
   __NJS_VALUE = _value;
 }
@@ -585,7 +557,7 @@ var __NJS_Class_String::Get(char* _index)
 
 __NJS_Class_Array::__NJS_Class_Array(vector<var>* _value)
 {
-  std::function<var ()> __OBJ_TO___NJS_STRING = [&](){ return __NJS_Create_String((char*)"Array"); };
+  __NJS_FUNCTION_MACRO<var ()> __OBJ_TO___NJS_STRING = [&](){ return __NJS_Create_String((char*)"Array"); };
   var toString = var(__NJS_FUNCTION, &__OBJ_TO___NJS_STRING);
   __NJS_Object_Set((char*)"toString", toString, this->__OBJECT);
 
@@ -698,8 +670,6 @@ inline void* __NJS_Get_Native(var _native)
   return _native.value.f;
 }
 
-#define __NJS_FUNCTION_MACRO std::function
-
 /*** REDIFINING STD OPERATORS ***/
 
 var operator+(char* _left, const var& _right)
@@ -711,9 +681,4 @@ var operator+(int _left, const var& _right)
 {
 	return var(_left) + _right;
 }
-
-/*** HELPERS ***/
-
-#define __NJS_GET_STRING(_var) _var.value.s->__NJS_VALUE
-#define true __NJS_Create_Boolean(true)
-#define false __NJS_Create_Boolean(false)
+/*** END REDIFINING STD OPERATORS ***/

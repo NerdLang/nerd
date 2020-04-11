@@ -49,8 +49,8 @@
  
  void __NJS_INIT()
  {
-	 __NJS_STD_CONSOLE_LOG  = [&](var _str){ cout << _str << "\n"; return var(__NJS_UNDEFINED, 0); };
-	console.__NJS_Set((char*)"log", var(__NJS_FUNCTION, &__NJS_STD_CONSOLE_LOG));
+	__NJS_STD_CONSOLE_LOG  = [&](var _str){ cout << _str << "\n"; return var(__NJS_UNDEFINED, 0); };
+	__NJS_Object_Set((char*)"log", var(__NJS_FUNCTION, &__NJS_STD_CONSOLE_LOG), console);
 	{INIT}
  }
  

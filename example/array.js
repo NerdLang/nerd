@@ -1,5 +1,5 @@
 var _loop = 1000;
-var _arr = __NJS_Create_Array();
+var _arr = [];
 
 var _res = 0;
 
