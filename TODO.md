@@ -6,4 +6,4 @@
 
 * function templates with varargs
 
-* functions lambdas scope 
+* add visitor for property function :  a.fn = function() {}

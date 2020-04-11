@@ -498,8 +498,8 @@ inline var __NJS_Object_Get(char* _index, var _array)
 __NJS_Class_String::__NJS_Class_String(char* _value)
 {
 	/*** toString ***/
-  __NJS_FUNCTION_MACRO<var ()> __OBJ_TO___NJS_STRING = [&](){ return __NJS_Create_String(this->__NJS_VALUE); };
-  var toString = var(__NJS_FUNCTION, &__OBJ_TO___NJS_STRING);
+  __NJS_FUNCTION_MACRO<var ()>* __OBJ_TO___NJS_STRING = new __NJS_FUNCTION_MACRO<var ()>([&](){ return __NJS_Create_String(this->__NJS_VALUE); });
+  var toString = var(__NJS_FUNCTION, __OBJ_TO___NJS_STRING);
   __NJS_Object_Set((char*)"toString", toString, this->__OBJECT);
 	/*** end to string ***/
 	
@@ -508,7 +508,7 @@ __NJS_Class_String::__NJS_Class_String(char* _value)
 	/*** end length ***/
 	
   /*** split ***/
-  __NJS_FUNCTION_MACRO<var (var)> __OBJ_TO___NJS_SPLIT = [&](var _needle)
+  __NJS_FUNCTION_MACRO<var (var)>* __OBJ_TO___NJS_SPLIT = new __NJS_FUNCTION_MACRO<var (var)>([&](var _needle)
   { 
 	var _arr = __NJS_Create_Array();
     char* _v = malloc(strlen(this->__NJS_VALUE) + 1);
@@ -530,9 +530,9 @@ __NJS_Class_String::__NJS_Class_String(char* _value)
 	}
 	
 	return _arr; 
-  };
+  });
   
-  var __split = var(__NJS_FUNCTION, &__OBJ_TO___NJS_SPLIT);
+  var __split = var(__NJS_FUNCTION, __OBJ_TO___NJS_SPLIT);
   __NJS_Object_Set((char*)"split", __split, this->__OBJECT);
 	/*** end split ***/
 
@@ -547,8 +547,8 @@ var __NJS_Class_String::Get(char* _index)
 
 __NJS_Class_Array::__NJS_Class_Array(vector<var>* _value)
 {
-  __NJS_FUNCTION_MACRO<var ()> __OBJ_TO___NJS_STRING = [&](){ return __NJS_Create_String((char*)"Array"); };
-  var toString = var(__NJS_FUNCTION, &__OBJ_TO___NJS_STRING);
+  __NJS_FUNCTION_MACRO<var ()>* __OBJ_TO___NJS_STRING = new __NJS_FUNCTION_MACRO<var ()>([&](){ return __NJS_Create_String((char*)"Array"); });
+  var toString = var(__NJS_FUNCTION, __OBJ_TO___NJS_STRING);
   __NJS_Object_Set((char*)"toString", toString, this->__OBJECT);
 
   __NJS_Object_Set((char*)"length", __NJS_Create_Number(_value->size()), this->__OBJECT);
