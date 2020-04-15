@@ -79,7 +79,7 @@ function Compiler()
 	function createFunction(_code)
 	{	
 		var _return = ";return __NJS_Create_Undefined();}";
-		var _searchFN = new RegExp(/function (.[a-zA-Z0-9_\-]*). *\((.*)\)/);
+		var _searchFN = new RegExp(/function (.[a-zA-Z0-9_\-]*) *\((.*)\)/);
 		var _index = _code.search(_searchFN);
 		while(_index > -1)
 		{
