@@ -1,7 +1,11 @@
-#CURRENT
-* Add --install
-* Add win-x64
-* Add linux-x64
+#VERSION 0.4.0
+* Adding a new memory manager
+* Improving some bug 
+* Using std::string for string management
+
+#VERSION 0.3.X
+* Adding Babel for generating code
+* Fixing some bugs
 
 #VERSION 0.2.1
 * Starting new arch

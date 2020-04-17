@@ -4,4 +4,4 @@ var c = a + b;
 console.log(c);
 console.log("Typeof c: " + typeof c);
 console.log("Length: " + c.length);
-console.log(c.split(",")[0]);
+//console.log(c.split(",")[0]);

@@ -79,11 +79,12 @@ function Compiler()
 	function createFunction(_code)
 	{	
 		var _return = ";return __NJS_Create_Undefined();}";
-		var _searchFN = new RegExp(/function (.[a-zA-Z0-9_\-]*). *\((.*)\)/);
+		var _searchFN = new RegExp(/function (.[a-zA-Z0-9_\-]*) *\((.*)\)/);
 		var _index = _code.search(_searchFN);
 		while(_index > -1)
 		{
 			var _genFN = "__NJS_FN_" + RND();
+			var _genVAR = "__NJS_VAR_" + RND();
 			var _var = "";
 			var _count = 0;
 			var _start = -1;
@@ -197,7 +198,7 @@ function Compiler()
 
 	this.CLI = function(compiler, out, target, option)
 	{
-		return `${compiler} ${target} ${option} -Wl,--gc-sections -ffunction-sections -fdata-sections -fpermissive -w -s -o ${out}`;
+		return `${compiler} ${target} ${option} -fpermissive -w -s  -o ${out}`;
 	}
 	  
 	this.Compile = function(_folder, _file)

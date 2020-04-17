@@ -319,8 +319,6 @@ function Build(prepare)
 	
 		var _args = [_in, "-o", _cout];
 
-		//process.chdir(_tmp);
-
 		if(CLI.cli["--preset"] && CLI.cli["--preset"].argument == "speed")
 		{
 			COMPILER.OPTION += " -Ofast";
