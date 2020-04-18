@@ -13,7 +13,7 @@ var __FFI_SIMPLE_MSGBOX()
 	return var();
 };
 
-__NJS_FUNCTION_MACRO<var (var _message, var _title)> __WIN_MESSAGE_BOX   = [&](var _message, var _title) -> var
+__NJS_FFI_FUNCTION(__WIN_MESSAGE_BOX, var _message, var _title)
 {
 	#ifdef _WIN32
 		int msgboxID = MessageBox(NULL, __NJS_GET_STRING(_message), __NJS_GET_STRING(_title), MB_ICONWARNING | MB_YESNOCANCEL);

@@ -26,7 +26,7 @@ enum __NJS_TYPE
 };
 
 /*** HELPERS ***/
-#define __NJS_FUNCTION_MACRO std::function
+#define __NJS_FFI_FUNCTION(_name, ...) function<var (__VA_ARGS__)> _name   = [&](__VA_ARGS__) -> var
 #define __NJS_GET_STRING(_var) _var.get().s->__NJS_VALUE.c_str()
 #define let var
 #define __NJS_VAR var
@@ -581,7 +581,7 @@ inline var __NJS_Object_Get(char* _index, var _array)
 __NJS_Class_String::__NJS_Class_String(char* _value)
 {
 	/*** toString ***/
-  __NJS_FUNCTION_MACRO<var ()>* __OBJ_TO___NJS_STRING = new __NJS_FUNCTION_MACRO<var ()>([&](){ return __NJS_Create_String(this->__NJS_VALUE.c_str()); });
+  function<var ()>* __OBJ_TO___NJS_STRING = new function<var ()>([&](){ return __NJS_Create_String(this->__NJS_VALUE.c_str()); });
   var toString = var(__NJS_FUNCTION, __OBJ_TO___NJS_STRING);
   __NJS_Object_Set((char*)"toString", toString, this->__OBJECT);
 	/*** end to string ***/
@@ -591,7 +591,7 @@ __NJS_Class_String::__NJS_Class_String(char* _value)
 	/*** end length ***/
 	
   /*** split ***/
-  __NJS_FUNCTION_MACRO<var (var)>* __OBJ_TO___NJS_SPLIT = new __NJS_FUNCTION_MACRO<var (var)>([&](var _needle)
+  function<var (var)>* __OBJ_TO___NJS_SPLIT = new function<var (var)>([&](var _needle)
   { 
 	var _arr = __NJS_Create_Array();
     char* _v = (char*)malloc(strlen(this->__NJS_VALUE.c_str()) + 1);
@@ -631,7 +631,7 @@ inline var __NJS_Class_String::Get(char* _index)
 __NJS_Class_Array::__NJS_Class_Array()
 {
 
-  __NJS_FUNCTION_MACRO<var ()>* __OBJ_TO___NJS_STRING = new __NJS_FUNCTION_MACRO<var ()>([&](){ return __NJS_Create_String((char*)"Array"); });
+  function<var ()>* __OBJ_TO___NJS_STRING = new function<var ()>([&](){ return __NJS_Create_String((char*)"Array"); });
   var toString = var(__NJS_FUNCTION, __OBJ_TO___NJS_STRING);
   __NJS_Object_Set((char*)"toString", toString, this->__OBJECT);
 

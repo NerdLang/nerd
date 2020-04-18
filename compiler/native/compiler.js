@@ -116,7 +116,7 @@ function Compiler()
 						{
 							var _fn = _code.substring(_start, _end);
 							_handler.DECL += "var " + _match[1] +";";
-							var _formated = "__NJS_FUNCTION_MACRO<var (" + _var + ")>* " + _genFN +" = new __NJS_FUNCTION_MACRO<var (" + _var + ")>([&](" + _var + ") -> var" + _fn + _return + ");";
+							var _formated = "std::function<var (" + _var + ")>* " + _genFN +" = new std::function<var (" + _var + ")>([&](" + _var + ") -> var" + _fn + _return + ");";
 							_formated += _match[1] + "=var(__NJS_FUNCTION, " + _genFN + ");";
 							_code = [_code.slice(0, _index), _formated, _code.slice(_end + 1)].join('');				
 							break;
@@ -166,7 +166,7 @@ function Compiler()
 						if(_count == 0)
 						{
 							var _fn = _code.substring(_start, _end);
-							_handler.INIT += "__NJS_FUNCTION_MACRO<var (" + _var + ")>* " + _genFN +" = new __NJS_FUNCTION_MACRO<var (" + _var + ")> ([&](" + _var + ") -> var" + _fn + os.EOL + _return + ");";
+							_handler.INIT += "std::function<var (" + _var + ")>* " + _genFN +" = new std::function<var (" + _var + ")> ([&](" + _var + ") -> var" + _fn + os.EOL + _return + ");";
 							var _formated = "var(__NJS_FUNCTION, " + _genFN + ")";
 							_code = [_code.slice(0, _index), _formated, _code.slice(_end + 1)].join('');				
 							break;
