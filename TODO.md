@@ -10,3 +10,10 @@
 * remove bytecode compilation
 
 * Memory cleaning for array properties and object properties
+
+* Add Date Object
+
+* Add RegExp Object
+
+* Add NectarJS REPL
+
