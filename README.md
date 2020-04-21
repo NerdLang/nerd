@@ -6,7 +6,7 @@
 
 Javascript's God Mode : one language to rule them all. Code everything, everywhere, for everything, in JavaScript.
 
-No VM. No Bytecode. Full Compiled and Native.
+No VM. No Bytecode. No Garbage Collector. Full Compiled and Native binaries.
 
 Any questions or ideas, join us : [![NectarJS' Discord](https://img.shields.io/badge/Discord-Join-brightgreen.svg)](https://discord.gg/cpe2UuN)   [![Trello](https://img.shields.io/badge/Trello-Join-brightgreen.svg)](https://trello.com/invite/b/6F4rvEj2/9d7677f9dc6b5bf2f5b33e45fc794182/nectarjs)
 
