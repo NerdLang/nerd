@@ -17,3 +17,5 @@
 
 * Add NectarJS REPL
 
+* Add ESLint to check syntax
+
