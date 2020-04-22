@@ -20,7 +20,9 @@ Full documentation is here (WIP) : [NetcarJS Doc](https://doc.nectarjs.com/)
 
 # Install
 
+```
 npm install -g nectarjs
+```
 
 # Starting with compilation
 
