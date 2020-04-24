@@ -40,12 +40,6 @@ To show more compilation infos :
 nectar --verbose file.js
 ```
 
-You can run any JS or BIN file like this :
-
-```
-nectar --exec file[.js|.bin|.exe]
-```
-
 For more informations about compilation output, use `--verbose`
 
 For help, use `--help`
