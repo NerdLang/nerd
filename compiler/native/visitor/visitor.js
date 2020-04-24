@@ -27,6 +27,44 @@
  */
 var NO_MODIFY_CALL = ["require", "Object"];
 var NJS_START = ["__NJS", "__FFI"];
+
+function objectExpression(_path, _name)
+{
+	var _code = "";
+				  
+	var _key;
+	var _value;
+
+	if(_path.key.name)
+	{
+	_key = _path.key.name;
+	}
+	else _key = _path.key.value;
+
+	if(_path.value.name)
+	{
+	_value = _path.value.name;
+	}
+	else if(_path.value.extra) _value = _path.value.extra.raw;
+	else if(_path.value.type == "ObjectProperty")
+	{
+		_code += objectExpression(_path.value, _key);
+	}
+	else if(_path.value.type == "FunctionExpression")
+	{
+		var _value = RND();
+		_code += "var " + _value + " = " + babel.generate(_path.value).code + ";";		
+	}
+	else
+	{
+	  console.log("Visitor VariableDeclarator not implemented yet for " + _path.value.type);
+	}
+	
+	if(_value) _code += "__NJS_Object_Set(\"" + _key + "\"," + _value + "," + _name + ");"
+
+	return _code;
+}
+
 function memberExpression(_path)
 {
 	var prop = [];
@@ -200,13 +238,16 @@ var visitor =
 						_value = _el[i].value.name;
 					  }
 					  else if(_el[i].value.extra) _value = _el[i].value.extra.raw;
+					  else if(_el[i].type == "ObjectProperty")
+					  {
+						  _code += objectExpression(_el[i], _name);
+					  }
 					  else
 					  {
 						  console.log("Visitor VariableDeclarator not implemented yet for " + _el[i].type);
-						  console.dir(_el[i]);
 					  }
 					  
-					  _code += "__NJS_Object_Set(\"" + _key + "\"," + _value + "," + _name + ");"
+					  if(_value) _code += "__NJS_Object_Set(\"" + _key + "\"," + _value + "," + _name + ");"
 				  }
 				  
 				   _path.replaceWith(babel.parse(_code));
@@ -277,12 +318,10 @@ var visitor =
 				}
 				else if (_path.node.argument.type == "MemberExpression")
 				{
-					console.dir(_path.node.argument);
 					_path.replaceWithSourceString("__NJS_Typeof(" + memberExpression(_path.node.argument) + ")");
 				}
 				else if (_path.node.argument.type == "CallExpression")
 				{
-					console.dir(_path.node.argument);
 					_path.replaceWithSourceString("__NJS_Typeof(" + callExpression(_path.node.argument) + ")");
 				}
 				_path.skip();

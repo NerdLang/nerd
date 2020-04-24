@@ -23,11 +23,22 @@
 var NODE =
 {
   name: "node",
-  base: "std.cpp",
-  cli: "__COMPILER__ -I extern/libuv/include/ -I extern/nodeuv-uri/ -I extern/http-parser/ -I extern/nodeuv-uri/ -luv extern/http-parser/http_parser.c __OPTION__ __IN__ -o __OUT__",
-  compiler: "g++-8.1",
+  main: "std.cpp",
+  compiler: "g++",
   stdlib: ["console", "process"],
   check: "node.json",
+  cli: function(compiler, preset, out, target, option)
+  {
+	  if(preset == "none")
+	  {
+		  return `${compiler} ${target} -O1 ${option} -fpermissive -w -s  -o ${out}`;
+	  }
+	  else if(preset == "size")
+	  {
+		  return `${compiler} ${target} -Os -fno-exceptions -fno-rtti -fno-stack-protector -fomit-frame-pointer ${option} -fpermissive -w -s  -o ${out}`;
+	  }
+	  else return `${compiler} ${target} -Ofast ${option} -fpermissive -w -s  -o ${out}`;
+  }
 }
 
 module.exports = NODE;

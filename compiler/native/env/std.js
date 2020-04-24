@@ -22,14 +22,11 @@
 
 var os = require("os");
 
-var optim = "-Wl,--gc-sections";
-if(os.type() == "Darwin") optim = "-Wl,-dead_strip"
 var STD =
 {
   name: "std",
-  base: "std.cpp",
-  cli: "__COMPILER__ __OPTION__ __IN__ -lpthread -ffunction-sections -fdata-sections " + optim + " -o __OUT__",
-  compiler: "g++-8.1",
+  main: "std.cpp",
+  compiler: "g++",
   stdlib: ["console"],
   check: "std.json",
 }

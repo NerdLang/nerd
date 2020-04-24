@@ -35,16 +35,48 @@ var parseObj = require("./lib/parseObj.js");
 
 global.RND = function() { return "__" + Math.random().toString(36).substring(7); };
 
+global.ENV = loadEnv();
+function loadEnv()
+{
+	var _res = {};
+	var _folder = path.join(__dirname, "/env/");
+	var _list = fs.readdirSync(_folder);
+	for(var _el in _list)
+	{
+		var _name = _list[_el].substring(0, _list[_el].length-3);
+		var _e = require(path.join(_folder, _list[_el]));
+		_res[_name] = _e;
+	}
+	return _res;
+}
+
 function Compiler()
 {
 	var _handler = this;
-	this.COMPILER = "g++";
-	
+
+	this.STD = "";
 	this.GEN = "";
 	this.PATH = "";
 	if(CLI.stack[0]) this.PATH = path.dirname(CLI.stack[0]) + path.sep;
-	this.ENV = fs.readFileSync(path.join(__dirname, "src", "env.js")).toString();
-	this.MAIN = fs.readFileSync(path.join(__dirname, "squel", "main.cpp")).toString();
+	
+	this.ENV = ENV["std"];
+	if(CLI.cli["--env"]) 
+	{
+		var _env = CLI.cli["--env"].argument;
+		if(ENV[_env])
+		{
+			this.ENV = ENV[_env];
+		}
+		else 
+		{
+			console.log("[!] ENV: " + _env + " does not exist, please select one of [" + Object.keys(ENV).toString() + "]");
+			process.exit(1);
+		}
+	}
+	this.COMPILER = this.ENV.compiler;
+	this.PRESET = "none";
+	
+	this.MAIN = fs.readFileSync(path.join(__dirname, "squel", this.ENV.main)).toString();
 	
 	this.OUT = "";
 	this.OPTION = "";
@@ -57,6 +89,14 @@ function Compiler()
 	
 	this.REQUIRE = "";
 	
+	if(this.ENV.stdlib)
+	{
+		for(var _s in this.ENV.stdlib)
+		{
+			this.STD += "var " + this.ENV.stdlib[_s] +  " = require(\"" + this.ENV.stdlib[_s] + "\");";
+		}
+	}
+	
 	this.CODE = "";
 	
 	this.FOOTER = "";
@@ -64,124 +104,124 @@ function Compiler()
 	/*** METHODS ***/
 	this.Parse = function(_code)
 	{
-	_code = genRequire(_handler.PATH, _code);
-	
-	COMPILER.REQUIRE = babel.transformSync(COMPILER.REQUIRE, visitor).code;
-	COMPILER.REQUIRE = createFunction(COMPILER.REQUIRE);
-	COMPILER.REQUIRE = createAnon(COMPILER.REQUIRE);
+		_code = genRequire(_handler.PATH, COMPILER.STD) + genRequire(_handler.PATH, _code);
+		
+		COMPILER.REQUIRE = babel.transformSync(COMPILER.REQUIRE, visitor).code;
+		COMPILER.REQUIRE = createFunction(COMPILER.REQUIRE);
+		COMPILER.REQUIRE = createAnon(COMPILER.REQUIRE);
 
-	_handler.CODE = babel.transformSync(_code, visitor).code;
-	_handler.CODE = createFunction(_handler.CODE);
-	_handler.CODE = createAnon(_handler.CODE);
-
-	COMPILER.INIT += COMPILER.REQUIRE;
-	
-	function createFunction(_code)
-	{	
-		var _return = ";return __NJS_Create_Undefined();}";
-		var _searchFN = new RegExp(/function (.[a-zA-Z0-9_\-]*) *\((.*)\)/);
-		var _index = _code.search(_searchFN);
-		while(_index > -1)
-		{
-			var _genFN = "__NJS_FN_" + RND();
-			var _genVAR = "__NJS_VAR_" + RND();
-			var _var = "";
-			var _count = 0;
-			var _start = -1;
-			var _end = -1;
-			
-			var _match = _searchFN.exec(_code);
-			_match[2] = _match[2].split(",");
-			for(var i = 0; i < _match[2].length; i++)
+		_handler.CODE = babel.transformSync(_code, visitor).code;
+		_handler.CODE = createFunction(_handler.CODE);
+		_handler.CODE = createAnon(_handler.CODE);
+		
+		COMPILER.INIT += COMPILER.REQUIRE;
+		
+		function createFunction(_code)
+		{	
+			var _return = ";return __NJS_Create_Undefined();}";
+			var _searchFN = new RegExp(/function (.[a-zA-Z0-9_\-]*) *\((.*)\)/);
+			var _index = _code.search(_searchFN);
+			while(_index > -1)
 			{
-				if(_match[2][i].length > 0)
+				var _genFN = "__NJS_FN_" + RND();
+				var _genVAR = "__NJS_VAR_" + RND();
+				var _var = "";
+				var _count = 0;
+				var _start = -1;
+				var _end = -1;
+				
+				var _match = _searchFN.exec(_code);
+				_match[2] = _match[2].split(",");
+				for(var i = 0; i < _match[2].length; i++)
 				{
-					if(i != 0) _var += ",";
-					_var += "var " + _match[2][i];
+					if(_match[2][i].length > 0)
+					{
+						if(i != 0) _var += ",";
+						_var += "var " + _match[2][i];
+					}
 				}
-			}
-			
-			for(var i = _index; i < _code.length; i++)
-			{
-					if(_code[i] == "{")
-					{
-							if(_start == -1) _start = i;
-							_count++;
-					}
-					else if(_code[i] == "}")
-					{
-						_end = i;
-						_count--;
-						if(_count == 0)
-						{
-							var _fn = _code.substring(_start, _end);
-							_handler.DECL += "var " + _match[1] +";";
-							var _formated = "std::function<var (" + _var + ")>* " + _genFN +" = new std::function<var (" + _var + ")>([&](" + _var + ") -> var" + _fn + _return + ");";
-							_formated += _match[1] + "=var(__NJS_FUNCTION, " + _genFN + ");";
-							_code = [_code.slice(0, _index), _formated, _code.slice(_end + 1)].join('');				
-							break;
-						}
-					}
-			}
-			_index = _code.search(_searchFN);
-		}
-		return _code;
-	}
-
-	function createAnon(_code)
-	{	
-		var _return = "return __NJS_Create_Undefined();}";
-		var _searchAnonFN = new RegExp(/function *\(([a-zA-Z0-9_\-]*)\)/);
-		var _index = _code.search(_searchAnonFN);
-		while(_index > -1)
-		{
-			var _var = "";
-			var _count = 0;
-			var _start = -1;
-			var _end = -1;
-			var _genFN = "__NJS_FN_" + RND();
-			var _genVAR = "__NJS_VAR_" + RND();
-			
-			var _match = _searchAnonFN.exec(_code);
-			_match[1] = _match[1].split(",");
-			for(var i = 0; i < _match[1].length; i++)
-			{
-				if(_match[1][i].length > 0)
+				
+				for(var i = _index; i < _code.length; i++)
 				{
-					if(i != 0) _var += ",";
-					_var += "var " + _match[1][i];
-				}
-			}
-			for(var i = _index; i < _code.length; i++)
-			{
-					if(_code[i] == "{")
-					{
-							if(_start == -1) _start = i;
-							_count++;
-					}
-					else if(_code[i] == "}")
-					{
-						_end = i;
-						_count--;
-						if(_count == 0)
+						if(_code[i] == "{")
 						{
-							var _fn = _code.substring(_start, _end);
-							_handler.INIT += "std::function<var (" + _var + ")>* " + _genFN +" = new std::function<var (" + _var + ")> ([&](" + _var + ") -> var" + _fn + os.EOL + _return + ");";
-							var _formated = "var(__NJS_FUNCTION, " + _genFN + ")";
-							_code = [_code.slice(0, _index), _formated, _code.slice(_end + 1)].join('');				
-							break;
+								if(_start == -1) _start = i;
+								_count++;
 						}
-					}
+						else if(_code[i] == "}")
+						{
+							_end = i;
+							_count--;
+							if(_count == 0)
+							{
+								var _fn = _code.substring(_start, _end);
+								_handler.DECL += "var " + _match[1] +";";
+								var _formated = "std::function<var (" + _var + ")>* " + _genFN +" = new std::function<var (" + _var + ")>([&](" + _var + ") -> var" + _fn + _return + ");";
+								_formated += _match[1] + "=var(__NJS_FUNCTION, " + _genFN + ");";
+								_code = [_code.slice(0, _index), _formated, _code.slice(_end + 1)].join('');				
+								break;
+							}
+						}
+				}
+				_index = _code.search(_searchFN);
 			}
-			_index = _code.search(_searchAnonFN);
+			return _code;
 		}
-		return _code;
-	}
-	
-	_handler.MAIN = _handler.MAIN.replace("{CODE}", _handler.CODE);
-	_handler.MAIN = _handler.MAIN.replace("{INIT}", _handler.INIT);
-	_handler.MAIN = _handler.MAIN.replace("{DECL}", _handler.DECL);
-	_handler.MAIN = _handler.MAIN.replace("{INCLUDE}", _handler.FFI.join(os.EOL));
+
+		function createAnon(_code)
+		{	
+			var _return = "return __NJS_Create_Undefined();}";
+			var _searchAnonFN = new RegExp(/function *\(([a-zA-Z0-9_\-]*)\)/);
+			var _index = _code.search(_searchAnonFN);
+			while(_index > -1)
+			{
+				var _var = "";
+				var _count = 0;
+				var _start = -1;
+				var _end = -1;
+				var _genFN = "__NJS_FN_" + RND();
+				var _genVAR = "__NJS_VAR_" + RND();
+				
+				var _match = _searchAnonFN.exec(_code);
+				_match[1] = _match[1].split(",");
+				for(var i = 0; i < _match[1].length; i++)
+				{
+					if(_match[1][i].length > 0)
+					{
+						if(i != 0) _var += ",";
+						_var += "var " + _match[1][i];
+					}
+				}
+				for(var i = _index; i < _code.length; i++)
+				{
+						if(_code[i] == "{")
+						{
+								if(_start == -1) _start = i;
+								_count++;
+						}
+						else if(_code[i] == "}")
+						{
+							_end = i;
+							_count--;
+							if(_count == 0)
+							{
+								var _fn = _code.substring(_start, _end);
+								_handler.INIT += "std::function<var (" + _var + ")>* " + _genFN +" = new std::function<var (" + _var + ")> ([&](" + _var + ") -> var" + _fn + os.EOL + _return + ");";
+								var _formated = "var(__NJS_FUNCTION, " + _genFN + ")";
+								_code = [_code.slice(0, _index), _formated, _code.slice(_end + 1)].join('');				
+								break;
+							}
+						}
+				}
+				_index = _code.search(_searchAnonFN);
+			}
+			return _code;
+		}
+		
+		_handler.MAIN = _handler.MAIN.replace("{CODE}", _handler.CODE);
+		_handler.MAIN = _handler.MAIN.replace("{INIT}", _handler.INIT);
+		_handler.MAIN = _handler.MAIN.replace("{DECL}", _handler.DECL);
+		_handler.MAIN = _handler.MAIN.replace("{INCLUDE}", _handler.FFI.join(os.EOL));
 	}
 	  
 	this.Prepare = function(_folder)
@@ -198,7 +238,11 @@ function Compiler()
 
 	this.CLI = function(compiler, out, target, option)
 	{
-		return `${compiler} ${target} ${option} -fpermissive -w -s  -o ${out}`;
+		if(this.ENV.cli)
+		{
+			return this.ENV.cli(compiler, this.preset, out, target, option);
+		}
+		else return `${compiler} ${target} ${option} -fpermissive -w -s  -o ${out}`;
 	}
 	  
 	this.Compile = function(_folder, _file)

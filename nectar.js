@@ -220,7 +220,9 @@ function Build(prepare)
   var env;
   if(CLI.cli["--env"] && CLI.cli["--env"].argument) env = CLI.cli["--env"].argument;
 
-  if(!preset) preset = "speed";
+  if(!preset) preset = "none";
+  COMPILER.preset = preset;
+  
   if(!env) env = "std";
 
   if(!CLI.stack || CLI.stack.length < 1)
@@ -327,6 +329,7 @@ function Build(prepare)
 		{
 			COMPILER.OPTION += " -Os";
 		}
+		else COMPILER.OPTION += " -O1";
 		
 		if(!QUIET) console.log("[*] Compiling");
 		try 

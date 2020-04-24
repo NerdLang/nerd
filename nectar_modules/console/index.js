@@ -1,9 +1,9 @@
 var console =
 {
-  log: function(_var)
+  log: function(_str)
   {
-    __NJS_Log_Console(_var);
-  }
+	  __NJS_Log_Console(_str);
+  },
 }
 
 module.exports = console;

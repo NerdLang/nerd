@@ -23,10 +23,14 @@
 var ARDUINO =
 {
   name: "arduino",
-  base: "arduino.cpp",
-  cli: "__COMPILER__ -Os -fno-exceptions -fno-rtti -fno-stack-protector -fomit-frame-pointer -ffunction-sections -fdata-sections -Wl,--gc-sections \
-   -I extern/avr/ -I extern/arduino/avr/cores/arduino -I extern/avrlib/variants/__SPEC__/ extern/arduino/avr/cores/arduino/abi.cpp -lm -o __OUT__ __IN__ __OPTION__ && avr-objcopy -O ihex -R .eeprom __OUT__",
-  compiler: "/opt/tools/avr/bin/avr-g++ -DF_CPU=16000000UL -mmcu=atmega2560",
+  main: "arduino.cpp",
+  cli: function(compiler, preset, out, target, option)
+  {
+	  return `__COMPILER__ -Os -fno-exceptions -fno-rtti -fno-stack-protector -fomit-frame-pointer -ffunction-sections -fdata-sections -Wl,--gc-sections \
+   -I extern/avr/ -I extern/arduino/avr/cores/arduino -I extern/avrlib/variants/__SPEC__/ extern/arduino/avr/cores/arduino/abi.cpp -lm -o __OUT__ __IN__ __OPTION__ && avr-objcopy -O ihex -R .eeprom __OUT__`;
+
+  },
+  compiler: "avr-g++",
   stdlib:["arduino"],
   check: "arduino.json",
 }
