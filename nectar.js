@@ -24,7 +24,7 @@
  */
 
 
-var VALID_COMPILER = ["native", "bc", "qjs"];
+var VALID_COMPILER = ["native"];
 
 
 global.fs = require('fs');
