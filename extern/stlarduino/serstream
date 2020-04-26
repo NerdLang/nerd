@@ -1,0 +1,349 @@
+/*
+ * serstream
+ * Implementation of input/output streams for the Arduino serial classes
+ *
+ *  Created on: 2 Jan 2011
+ *      Author: Andy Brown
+ *      Modfied: Mike Matera
+ *
+ *  http://andybrown.me.uk/ws/terms-and-conditions
+ *  
+ * Captured from the URL above on June 30th, 2018
+ *
+ * License
+ *
+ * Copyright (c) 2011-2016 Andrew Brown. All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without 
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * Redistributions of source code must retain the above copyright notice, 
+ * this list of conditions and the following disclaimer.
+ *
+ * Redistributions in binary form must reproduce the above copyright notice, 
+ * this list of conditions and the following disclaimer in the documentation 
+ * and/or other materials provided with the distribution.
+ *
+ * The name of Andrew Brown may not be used to endorse or promote products 
+ * derived from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS “AS IS” 
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL ANDREW BROWN BE LIABLE FOR ANY DIRECT, 
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES 
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; 
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF 
+ * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * 
+ */
+
+#ifndef __810370EC_AD69_4ef7_91F5_B1AA16F14712
+#define __810370EC_AD69_4ef7_91F5_B1AA16F14712
+
+#include <basic_definitions>
+
+#include <iosfwd>
+#include <ios>
+#include <istream>
+#include <ostream>
+#include <iostream>
+#include <Stream.h>
+
+namespace std
+{
+
+/*
+ * basic_serialbuf implements an unbuffered basic_streambuf as a backing buffer
+ * for the IO classes
+ */
+ 
+	template <class charT, class traits, class Tserial>
+		class basic_serialbuf : public basic_streambuf<charT,traits>
+	{
+	public:
+
+	/*
+	 * Types used here
+	 */
+
+		typedef charT char_type;
+		typedef typename traits::int_type int_type;
+
+	/*
+	 * constructor - wraps an existing Tserial class instance
+	 */
+
+		explicit basic_serialbuf(Tserial& serial_,ios_base::openmode which_ = ios_base::in | ios_base::out)
+			: _serial(serial_)
+		{
+			basic_streambuf<charT,traits>::openedFor = which_;
+		}
+
+	/*
+	 * Required to maintain the chain
+	 */
+
+		virtual ~basic_serialbuf() { }
+
+	/*
+	 * Get a reference to the wrapped object
+	 */
+
+		Tserial& serial() { return _serial; }
+
+	protected:
+		
+	/*
+	 * Get how many bytes available
+	 */
+
+		virtual int showmanyc(){
+			return _serial.available();
+		}
+		
+	/*
+	 * Read up to n chars
+	 */
+
+		virtual streamsize xsgetn(char_type* c, streamsize n) {
+		
+			streamsize i = 0;
+			char_type data;
+			
+			while((data=_serial.read())!=-1 && i < n ) {
+				c[i] = data;
+				++i;
+			}
+			return i;
+		}
+
+	/*
+	 * Write up to n chars
+	 */
+
+		virtual streamsize xsputn(const char_type* s, streamsize n){
+			
+			//_serial.print("[PUT ");
+			//_serial.print(n);
+			//_serial.print("] ");
+			for(streamsize i=0;i<n;i++)
+			{
+				char_type c = s[i];
+				if ( c == '\n' )
+					_serial.print('\r');
+				_serial.print(c);
+			}
+
+			return n;
+		}
+
+	/*
+	 * write a single char
+	 */
+
+		virtual int_type overflow (int_type c = traits::eof()) {
+			if(!traits::eq_int_type(c,traits::eof()))
+			{
+				//_serial.print("[OF]");
+				if ( (char_type)c == '\n' )
+					_serial.print('\r');
+				_serial.print((char_type)c);
+
+			}
+			return traits::not_eof(c);
+		}
+
+		
+	/*
+	 * peek at a char where possible
+	 */
+
+		virtual int_type underflow(){
+			// There is no EOF condition on a serial stream.
+			// underflow() and uflow() should block, reproducing the 
+			// OS behavior when there are no charaters to read.
+			while (! _serial.available()) { /* wait */ }
+			return _serial.peek();
+		}
+
+	/*
+	 * Read a char where possible
+	 */
+
+		virtual int_type uflow(){
+			// See underflow() above
+			while (! _serial.available()) { /* wait */ }
+			return _serial.read();
+		}
+
+	/*
+	 * Our wrapped arduino class
+	 */
+
+		Tserial& _serial;
+	};
+
+
+/*
+ * Input stream
+ */
+
+	template <class charT, class traits, class Tserial> class basic_iserialstream
+		: public basic_istream<charT,traits>
+	{
+	public:
+
+	/*
+	 * Types used here
+	 */
+
+		typedef charT char_type;
+
+	/*
+	 * Constructor - default the serial object to #1
+	 * Mega users can explicity initialise with one of
+	 * the others
+	 */
+
+		explicit basic_iserialstream(Tserial& serial_)
+			: basic_ios<charT, traits>(&sb), basic_istream<charT,traits>(&sb), sb(serial_,ios_base::in)
+		{
+		}
+
+	/*
+	 * Required to maintain the chain
+	 */
+
+		virtual ~basic_iserialstream() {  }
+		
+	/*
+	 * Initialise the baud rate
+	 */
+
+		void begin(long speed_) {
+			sb.serial().begin(speed_);
+			sb.serial().println(__FUNCTION__);
+		}
+		
+	/*
+	 * The wrapped object
+	 */
+
+	private:
+		basic_serialbuf<charT,traits,Tserial> sb;
+	};
+
+
+/*
+ * Output stream
+ */
+
+	template <class charT, class traits, class Tserial> class basic_oserialstream
+		: public basic_ostream<charT,traits>
+	{
+	public:
+
+	/*
+	 * Types used here
+	 */
+
+		typedef charT char_type;
+
+		/*
+		 * Constructor - default the serial object to #1
+		 * Mega users can explicity initialise with one of
+		 * the others
+		 */
+
+		explicit basic_oserialstream(Tserial& serial_)
+			: basic_ios<charT, traits>(&sb), basic_ostream<charT,traits>(&sb), sb(serial_,ios_base::out)
+		{
+		}
+		
+		/*
+		 * Required to maintain the chain
+		 */
+
+		virtual ~basic_oserialstream() {  }
+
+		/*
+		 * Initialise the baud rate
+		 */
+
+		void begin(long speed_) {
+			sb.serial().begin(speed_);
+		}
+		
+	/*
+	 * The wrapped object
+	 */
+
+	private:
+		basic_serialbuf<charT,traits,Tserial> sb;
+	};
+
+
+/*
+ * Input/output stream
+ */
+
+	template <class charT, class traits, class Tserial> class basic_ioserialstream
+		 : public basic_iostream<charT,traits>
+	{
+	public:
+
+	/*
+	 * Types used here
+	 */
+
+		typedef charT char_type;
+
+		/*
+		 * Constructor - default the serial object to #1
+		 * Mega users can explicity initialise with one of
+		 * the others
+		 */
+
+		explicit basic_ioserialstream(Tserial& serial_)
+			: basic_ios<charT, traits>(&sb), basic_iostream<charT,traits>(&sb), sb(serial_,ios_base::in | ios_base::out)
+		{
+		}
+
+		/*
+		 * Required to maintain the chain
+		 */
+
+		virtual ~basic_ioserialstream(){  }
+
+		/*
+		 * Initialise the baud rate
+		 */
+
+		void begin(long speed_) {
+			sb.serial().begin(speed_);
+		}
+		
+	/*
+	 * The wrapped object
+	 */
+
+	private:
+		basic_serialbuf<charT, traits, Tserial> sb;
+	};
+
+
+using ::Stream;
+
+template <class charT, class traits = char_traits<charT>, class Tserial=Stream> class basic_serialbuf;
+template <class charT, class traits = char_traits<charT>, class Tserial=Stream> class basic_iserialstream;
+template <class charT, class traits = char_traits<charT>, class Tserial=Stream> class basic_oserialstream;
+
+typedef basic_iserialstream<char> ihserialstream;
+typedef basic_oserialstream<char> ohserialstream;
+
+}
+
+#endif

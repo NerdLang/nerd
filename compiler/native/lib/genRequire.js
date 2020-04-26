@@ -89,30 +89,30 @@ function genRequire(from, src)
                     {
                       if(pkg.nectar.env)
                       {
-                        if(pkg.nectar.env.indexOf(NJS_ENV.name) < 0)
+                        if(pkg.nectar.env.indexOf(COMPILER.ENV.name) < 0)
                         {
-                          console.error("NectarJS:\n\n[!] module " + addSource + " doesn't support env : " + NJS_ENV.name + " only these : " + pkg.nectar.env);
+                          console.error("NectarJS:\n\n[!] module " + addSource + " doesn't support env : " + COMPILER.ENV.name + " only these : " + pkg.nectar.env);
                           process.exit(1);
                         }
                       }
 
                       if(pkg.nectar.target)
                       {
-                        if(!NJS_TARGET)
+                        if(!COMPILER.TARGET)
                         {
                           console.error("NectarJS:\n\n[!] module " + addSource + " require one of these targets : " + pkg.nectar.target + ". None specified");
                           process.exit(1);
                         }
-                        else if(pkg.nectar.target.indexOf(NJS_TARGET) < 0)
+                        else if(pkg.nectar.target.indexOf(COMPILER.TARGET) < 0)
                         {
-                          console.error("NectarJS:\n\n[!] module " + addSource + " require one of these targets : " + pkg.nectar.target + ". " + NJS_TARGET + " specified");
+                          console.error("NectarJS:\n\n[!] module " + addSource + " require one of these targets : " + pkg.nectar.target + ". " + COMPILER.TARGET + " specified");
                           process.exit(1);
                         }
                       }
 
                       if(pkg.nectar.expose)
                       {
-                        EXPOSE = EXPOSE.concat(pkg.nectar.expose);
+                        COMPILER.EXPOSE = COMPILER.EXPOSE.concat(pkg.nectar.expose);
                       }
                     }
                   }

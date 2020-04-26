@@ -26,7 +26,6 @@
 
 var VALID_COMPILER = ["native"];
 
-
 global.fs = require('fs');
 global.os = require('os');
 global.path = require('path');
@@ -34,6 +33,8 @@ global.process = require('process');
 global.querystring = require('querystring');
 global.child_process = require('child_process');
 global.execSync = child_process.execSync;
+global.extern = path.join(__dirname, "extern");
+
 
 global.PACKAGE = require(path.join(__dirname, "package.json"));
 global.VERSION = PACKAGE.version;
@@ -224,6 +225,14 @@ function Build(prepare)
   COMPILER.preset = preset;
   
   if(!env) env = "std";
+
+	var target;
+  if(CLI.cli["--target"] && CLI.cli["--target"].argument) target = CLI.cli["--target"].argument;
+	COMPILER.TARGET = target;
+	
+	var spec;
+  if(CLI.cli["--spec"] && CLI.cli["--spec"].argument) spec = CLI.cli["--spec"].argument;
+	COMPILER.SPEC = spec;
 
   if(!CLI.stack || CLI.stack.length < 1)
   {

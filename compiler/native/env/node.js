@@ -27,17 +27,17 @@ var NODE =
   compiler: "g++",
   stdlib: ["console", "process"],
   check: "node.json",
-  cli: function(compiler, preset, out, target, option)
+  cli: function(compiler, preset, out, _in, option)
   {
 	  if(preset == "none")
 	  {
-		  return `${compiler} ${target} -O1 ${option} -fpermissive -w -s  -o ${out}`;
+		  return `${compiler} ${_in} -O1 ${option} -fpermissive -w -s  -o ${out}`;
 	  }
 	  else if(preset == "size")
 	  {
-		  return `${compiler} ${target} -Os -fno-exceptions -fno-rtti -fno-stack-protector -fomit-frame-pointer ${option} -fpermissive -w -s  -o ${out}`;
+		  return `${compiler} ${_in} -Os -fno-exceptions -fno-rtti -fno-stack-protector -fomit-frame-pointer ${option} -fpermissive -w -s  -o ${out}`;
 	  }
-	  else return `${compiler} ${target} -Ofast ${option} -fpermissive -w -s  -o ${out}`;
+	  else return `${compiler} ${_in} -Ofast ${option} -fpermissive -w -s  -o ${out}`;
   }
 }
 

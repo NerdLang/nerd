@@ -24,13 +24,15 @@ var ARDUINO =
 {
   name: "arduino",
   main: "arduino.cpp",
-  cli: function(compiler, preset, out, target, option)
+  cli: function(compiler, preset, out, _in, option, target, spec)
   {
-	  return `__COMPILER__ -Os -fno-exceptions -fno-rtti -fno-stack-protector -fomit-frame-pointer -ffunction-sections -fdata-sections -Wl,--gc-sections \
-   -I extern/avr/ -I extern/arduino/avr/cores/arduino -I extern/avrlib/variants/__SPEC__/ extern/arduino/avr/cores/arduino/abi.cpp -lm -o __OUT__ __IN__ __OPTION__ && avr-objcopy -O ihex -R .eeprom __OUT__`;
+	  if(!spec) spec = "mega";
+	  var _cli = `${compiler} -DF_CPU=16000000UL -mmcu=atmega2560 -w -fpermissive -Os -fno-exceptions -fno-rtti -fno-stack-protector -fomit-frame-pointer -ffunction-sections -fdata-sections -Wl,--gc-sections \
+   -I ${extern}/avr -I ${extern}/arduino/avr/variants/${spec}/ -I ${extern}/arduino/avr/cores/arduino  -I ${extern}/avr/include -I ${extern}/stlarduino  ${extern}/arduino/avr/cores/arduino/abi.cpp -fno-threadsafe-statics -lm -o ${out} ${_in} ${option} && avr-objcopy -O ihex -R .eeprom ${out}`;
 
+	return _cli;
   },
-  compiler: "avr-g++",
+  compiler: "avr-c++ -std=c++14",
   stdlib:["arduino"],
   check: "arduino.json",
 }

@@ -1,16 +1,27 @@
  #include <iostream>
- #include <functional>
  #include <string>
  #include <cstring>
  #include <stdio.h>
  #include <stdlib.h>
  #include <string.h>
  #include <sstream>
- #include <vector>
  #include <memory>
+ #include <vector>
 
-using namespace std;
+#ifdef __NJS_ARDUINO
+ #include <util/delay.h>
+ #include <string.h>
+ #include <WString.h>
+ #include <new.h>
+ #include <time.h>
+ #include <nonstd-function.h>
+	using namespace nonstd;
+#else
+	 #include <functional>
+#endif
  
+ using namespace std;
+
 enum __NJS_TYPE
 {
 	__NJS_OBJECT = 1,
@@ -26,7 +37,7 @@ enum __NJS_TYPE
 };
 
 /*** HELPERS ***/
-#define __NJS_FFI_FUNCTION(_name, ...) function<var (__VA_ARGS__)> _name   = [&](__VA_ARGS__) -> var
+#define __NJS_FFI_FUNCTION(_name, ...) void* _name   = [&](__VA_ARGS__) -> var
 #define __NJS_GET_STRING(_var) _var.get().s->__NJS_VALUE.c_str()
 #define let var
 #define __NJS_VAR var
@@ -79,8 +90,15 @@ union val
 
 int FREE_PTR = -1;
 int REGISTER_PTR = 0;
-val REGISTER[1000000]{(val){.i=0}};
-int FREE[1000000] = {0};
+
+#ifdef __NJS_ARDUINO
+	val REGISTER[1000]{(val){.i=0}};
+	int FREE[1000] = {0};
+#else
+	val REGISTER[1000000]{(val){.i=0}};
+	int FREE[1000000] = {0};
+#endif 
+
 
 /*** END REGISTER ***/
 
@@ -709,7 +727,8 @@ inline var parseInt(var _str)
 {
   if(_str.type == __NJS_STRING)
   {
-    return __NJS_Create_Number(stoi(_str.get().s->__NJS_VALUE));
+	  return var();
+    //return __NJS_Create_Number(stoi(_str.get().s->__NJS_VALUE));
   }
   else return __NJS_Create_Undefined();
 }
@@ -717,8 +736,13 @@ inline var parseInt(var _str)
 
 inline var  __NJS_Log_Console(var _var)
 {
-	cout << _var;
-	cout << endl;
+	#ifdef __NJS_ARDUINO
+	
+	#else
+		cout << _var;
+		cout << endl;
+	#endif
+	
   return var();
 }
 

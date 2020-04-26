@@ -53,7 +53,9 @@ function loadEnv()
 function Compiler()
 {
 	var _handler = this;
-
+	this.TARGET = "standard";
+	this.SPEC;
+	this.EXPOSE = "";
 	this.STD = "";
 	this.GEN = "";
 	this.PATH = "";
@@ -156,7 +158,7 @@ function Compiler()
 							{
 								var _fn = _code.substring(_start, _end);
 								_handler.DECL += "var " + _match[1] +";";
-								var _formated = "std::function<var (" + _var + ")>* " + _genFN +" = new std::function<var (" + _var + ")>([&](" + _var + ") -> var" + _fn + _return + ");";
+								var _formated = "function<var (" + _var + ")>* " + _genFN +" = new function<var (" + _var + ")>([&](" + _var + ") -> var" + _fn + _return + ");";
 								_formated += _match[1] + "=var(__NJS_FUNCTION, " + _genFN + ");";
 								_code = [_code.slice(0, _index), _formated, _code.slice(_end + 1)].join('');				
 								break;
@@ -206,7 +208,7 @@ function Compiler()
 							if(_count == 0)
 							{
 								var _fn = _code.substring(_start, _end);
-								_handler.INIT += "std::function<var (" + _var + ")>* " + _genFN +" = new std::function<var (" + _var + ")> ([&](" + _var + ") -> var" + _fn + os.EOL + _return + ");";
+								_handler.INIT += "function<var (" + _var + ")>* " + _genFN +" = new function<var (" + _var + ")> ([&](" + _var + ") -> var" + _fn + os.EOL + _return + ");";
 								var _formated = "var(__NJS_FUNCTION, " + _genFN + ")";
 								_code = [_code.slice(0, _index), _formated, _code.slice(_end + 1)].join('');				
 								break;
@@ -236,13 +238,13 @@ function Compiler()
 		return _handler.OUT;
 	}
 
-	this.CLI = function(compiler, out, target, option)
+	this.CLI = function(compiler, out, _in, option)
 	{
 		if(this.ENV.cli)
 		{
-			return this.ENV.cli(compiler, this.preset, out, target, option);
+			return this.ENV.cli(compiler, this.preset, out, _in, option, this.TARGET, this.SPEC);
 		}
-		else return `${compiler} ${target} ${option} -fpermissive -w -s  -o ${out}`;
+		else return `${compiler} ${_in} ${option} -fpermissive -w -s  -o ${out}`;
 	}
 	  
 	this.Compile = function(_folder, _file)
