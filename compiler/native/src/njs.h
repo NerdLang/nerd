@@ -226,6 +226,14 @@ struct var
 			type = __NJS_STRING;
 			REGISTER[_ptr].s = new __NJS_Class_String(_value);
 		}
+		
+		var (const char* _value)
+		{
+			setPtr();
+			type = __NJS_STRING;
+			REGISTER[_ptr].s = new __NJS_Class_String((char*)_value);
+		}
+		
 		var (__NJS_Class_String* _value)
 		{
 			setPtr();
@@ -250,34 +258,18 @@ struct var
 			type = _type;
 			REGISTER[_ptr].f = _value;
 		}
-		
-		var (function<var ()>& _value)
+
+		/*** VARIADIC LAMBDAS ***/
+		template<class... Args>
+		var::var (function<var (Args...)>& _value)
 		{
 			setPtr();
 			type = __NJS_FUNCTION;
 			REGISTER[_ptr].f = &_value;
 		}
+		/*** END VARIADIC LAMBDAS ***/
 		
-		var (function<var (var)>& _value)
-		{
-			setPtr();
-			type = __NJS_FUNCTION;
-			REGISTER[_ptr].f = &_value;
-		}
-		
-		var (function<var (var, var)>& _value)
-		{
-			setPtr();
-			type = __NJS_FUNCTION;
-			REGISTER[_ptr].f = &_value;
-		}
-		
-		var (function<var (var, var, var)>& _value)
-		{
-			setPtr();
-			type = __NJS_FUNCTION;
-			REGISTER[_ptr].f = &_value;
-		}
+
 		/*** END CONSTRUCTOR ***/
 
 		/*** OPERATOR ***/
@@ -403,20 +395,19 @@ struct var
 	}
 };
 
-inline var __NJS_Call_Function(var _obj)
+/*** VARIADIC CALLS ***/
+template<class... Args>
+inline var __NJS_Back_Var_Call_Function(var _obj, Args... args)
 {
-	return (*static_cast<function<var ()>*>(_obj.get().f))();
+	return (*static_cast<function<var ( Args... )>*>(_obj.get().f))( args... );
 }
 
-inline var __NJS_Call_Function(var _obj, var _arg)
+template<class... Args>
+inline var __NJS_Call_Function(var _obj, Args... args)
 {
-	return (*static_cast<function<var (var __arg)>*>(_obj.get().f))(_arg);
+	return __NJS_Back_Var_Call_Function(_obj, (var)(args)...);
 }
-
-inline var __NJS_Call_Function(var _obj, var _arg, var _arg2)
-{
-	return (*static_cast<function<var (var _arg, var _arg2)>*>(_obj.get().f))(_arg, _arg2);
-}
+/*** END VARIADIC CALLS ***/
 
 inline var __create_String(char* _value)
 {
@@ -452,6 +443,42 @@ inline var __NJS_Typeof(var _var)
   return __create_String(_array[_var.type]);
 }
 
+/*** ***/
+inline var __NJS_Object_Set(char* _index, var _value, vector<pair<char*, var>>* _obj)
+{
+  int _j = (*_obj).size();
+  for(int _i = 0; _i < _j; _i++)
+  {
+    if(strcmp(_index, (*_obj)[_i].first) == 0)
+    {
+      (*_obj)[_i].second.type = _value.type;
+	  
+      REGISTER[(*_obj)[_i].second._ptr] = REGISTER[_value._ptr];
+      
+	  return var();
+    }
+  }
+  (*_obj).push_back(pair<char*, var>( _index, _value));
+  return var();
+}
+
+inline var __NJS_Object_Set(var _index, var _value, vector<pair<char*, var>>* _obj)
+{
+  int _j = (*_obj).size();
+  for(int _i = 0; _i < _j; _i++)
+  {
+    if(strcmp(_index.get().s->__NJS_VALUE.c_str(), (*_obj)[_i].first) == 0)
+    {
+      (*_obj)[_i].second.type = _value.type;
+      
+	  REGISTER[(*_obj)[_i].second._ptr] = REGISTER[_value._ptr];
+      
+	  return var();
+    }
+  }
+  (*_obj).push_back(pair<char*, var>( (char*)_index.get().s->__NJS_VALUE.c_str(), _value));
+  return var();
+}
 
 inline var __NJS_Object_Set(char* _index, var _value, var _array)
 {
@@ -530,41 +557,26 @@ inline var __NJS_Object_Set(int _index, var _value, var _array)
   return var();
 }
 
-/*** ***/
-inline var __NJS_Object_Set(char* _index, var _value, vector<pair<char*, var>>* _obj)
+
+inline var __NJS_Object_Get(int _index, var _array)
 {
-  int _j = (*_obj).size();
-  for(int _i = 0; _i < _j; _i++)
+  if(_array.type != __NJS_ARRAY && _array.type != __NJS_OBJECT) return var();
+  if(_array.type == __NJS_ARRAY)
   {
-    if(strcmp(_index, (*_obj)[_i].first) == 0)
+    if(_index > _array.get().a->__NJS_VALUE.size())
     {
-      (*_obj)[_i].second.type = _value.type;
-	  
-      REGISTER[(*_obj)[_i].second._ptr] = REGISTER[_value._ptr];
-      
-	  return var();
+      return var();
     }
+	 
+    return _array.get().a->__NJS_VALUE[_index];
   }
-  (*_obj).push_back(pair<char*, var>( _index, _value));
   return var();
 }
 
-inline var __NJS_Object_Set(var _index, var _value, vector<pair<char*, var>>* _obj)
+
+inline var __NJS_Object_Get(char* _index, var _array)
 {
-  int _j = (*_obj).size();
-  for(int _i = 0; _i < _j; _i++)
-  {
-    if(strcmp(_index.get().s->__NJS_VALUE.c_str(), (*_obj)[_i].first) == 0)
-    {
-      (*_obj)[_i].second.type = _value.type;
-      
-	  REGISTER[(*_obj)[_i].second._ptr] = REGISTER[_value._ptr];
-      
-	  return var();
-    }
-  }
-  (*_obj).push_back(pair<char*, var>( (char*)_index.get().s->__NJS_VALUE.c_str(), _value));
-  return var();
+	return __NJS_Object_Get(var(_index), _array);
 }
 
 inline var __NJS_Object_Get(var _index, var _array)
@@ -601,26 +613,6 @@ inline var __NJS_Object_Get(var _index, var _array)
   return var();
 }
 
-inline var __NJS_Object_Get(int _index, var _array)
-{
-  if(_array.type != __NJS_ARRAY && _array.type != __NJS_OBJECT) return var();
-  if(_array.type == __NJS_ARRAY)
-  {
-    if(_index > _array.get().a->__NJS_VALUE.size())
-    {
-      return var();
-    }
-	 
-    return _array.get().a->__NJS_VALUE[_index];
-  }
-  return var();
-}
-
-
-inline var __NJS_Object_Get(char* _index, var _array)
-{
-	return __NJS_Object_Get(var(_index), _array);
-}
 
 __NJS_Class_String::__NJS_Class_String(char* _value)
 {
@@ -669,7 +661,7 @@ __NJS_Class_String::__NJS_Class_String(char* _value)
 
 inline var __NJS_Class_String::Get(char* _index)
 {
-  return __NJS_Object_Get(_index, &this->__OBJECT);
+  return __NJS_Object_Get(_index, this);
 }
 
 __NJS_Class_Array::__NJS_Class_Array()
@@ -679,7 +671,7 @@ __NJS_Class_Array::__NJS_Class_Array()
   var toString = var(__NJS_FUNCTION, __OBJ_TO___NJS_STRING);
   __NJS_Object_Set((char*)"toString", toString, &this->__OBJECT);
 
-  __NJS_Object_Set((char*)"length", var(0), &this->__OBJECT);
+  __NJS_Object_Set((char*)"length", var(0), this);
 
 }
 
@@ -709,7 +701,7 @@ __NJS_Class_Array::~__NJS_Class_Array()
 
 inline var __NJS_Class_Array::Get(char* _index)
 {
-  return __NJS_Object_Get(_index, &this->__OBJECT);
+  return __NJS_Object_Get(_index, this);
 }
 
 
@@ -759,8 +751,11 @@ inline var parseInt(var _str)
 {
   if(_str.type == __NJS_STRING)
   {
-	  return var();
-    //return __NJS_Create_Number(stoi(_str.get().s->__NJS_VALUE));
+	#ifdef __NJS_ARDUINO
+		return var();
+	#else
+		return __NJS_Create_Number(stoi(_str.get().s->__NJS_VALUE));
+	#endif
   }
   else return __NJS_Create_Undefined();
 }
@@ -787,10 +782,10 @@ inline var __NJS_Create_String(char* _str)
 
 inline var __NJS_Create_Object()
 {
-  //vector<shared_ptr<pair<char*, var>>>* __obj = new vector<shared_ptr<pair<char*, var>>>();
   __NJS_Class_Object* _obj = new __NJS_Class_Object();
   return var(_obj);
 }
+
 
 inline var Object()
 {

@@ -207,19 +207,20 @@ function Compiler()
 							_count--;
 							if(_count == 0)
 							{
+								
 								var _fn = _code.substring(_start, _end);
-								_handler.INIT += "function<var (" + _var + ")>* " + _genFN +" = new function<var (" + _var + ")> ([&](" + _var + ") -> var" + _fn + os.EOL + _return + ");";
-								var _formated = "var(__NJS_FUNCTION, " + _genFN + ")";
-								_code = [_code.slice(0, _index), _formated, _code.slice(_end + 1)].join('');				
+								var _formated = "var(__NJS_FUNCTION, new function<var (" + _var + ")> ([&](" + _var + ") -> var" + _fn + os.EOL + _return + "));";
+								_code = [_code.slice(0, _index), _formated, _code.slice(_end + 1)].join('');		
 								break;
 							}
 						}
 				}
 				_index = _code.search(_searchAnonFN);
 			}
+
 			return _code;
 		}
-		
+
 		_handler.MAIN = _handler.MAIN.replace("{CODE}", _handler.CODE);
 		_handler.MAIN = _handler.MAIN.replace("{INIT}", _handler.INIT);
 		_handler.MAIN = _handler.MAIN.replace("{DECL}", _handler.DECL);

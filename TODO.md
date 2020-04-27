@@ -1,8 +1,6 @@
 * Add import
 
-* Add babel visitors for missing
-
-* function templates with varargs ?
+* Add babel visitors for missing (list missing)
 
 * Memory cleaning for array properties and object properties
 

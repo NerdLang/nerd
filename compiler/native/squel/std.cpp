@@ -52,10 +52,9 @@ int main(int argc, char* argv[])
 	{
 		__NJS_Object_Set(i, var(argv[i]), __NJS_ARGS);
 	}
-	
+
 	{INIT}
-	
+
 	{CODE}
-	
 	return 0;
 }

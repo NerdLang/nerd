@@ -60,7 +60,7 @@ function objectExpression(_path, _name)
 	  console.log("Visitor VariableDeclarator not implemented yet for " + _path.value.type);
 	}
 	
-	if(_value) _code += "__NJS_Object_Set(\"" + _key + "\"," + _value + "," + _name + ");"
+	if(_value) _code += "__NJS_Object_Set(\"" + _key + "\",__NJS_VAR(" + _value + ")," + _name + ");"
 
 	return _code;
 }
@@ -205,7 +205,7 @@ var visitor =
 					  
 					   _obj.push(babel.parse(
 
-								";__NJS_Object_Set(" + i + "," + _el[i].value + "," + _name + ")"
+								";__NJS_Object_Set(" + i + ",__NJS_VAR(" + _el[i].value + ")," + _name + ")"
 								
 							));
 				  }
@@ -247,7 +247,7 @@ var visitor =
 						  console.log("Visitor VariableDeclarator not implemented yet for " + _el[i].type);
 					  }
 					  
-					  if(_value) _code += "__NJS_Object_Set(\"" + _key + "\"," + _value + "," + _name + ");"
+					  if(_value) _code += "__NJS_Object_Set(\"" + _key + "\",__NJS_VAR(" + _value + ")," + _name + ");"
 				  }
 				  
 				   _path.replaceWith(babel.parse(_code));
