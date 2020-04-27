@@ -20,20 +20,31 @@
  *
  */
 
+var OPTIONS = 
+{
+	"mega2560": { preset: "-DF_CPU=16000000UL -mmcu=atmega2560", variant: "mega"},
+	"mega1280": { preset: "-DF_CPU=16000000UL -mmcu=atmega1280", variant: "mega"},
+	"uno": { preset: "-DF_CPU=16000000UL -mmcu=atmega328p", variant: "standard"},
+}
+
 var ARDUINO =
 {
   name: "arduino",
   main: "arduino.cpp",
   cli: function(compiler, preset, out, _in, option, target, spec)
   {
-	  if(!spec) spec = "mega";
-	  var _cli = `${compiler} -DF_CPU=16000000UL -mmcu=atmega2560 -w -fpermissive -Os -fno-exceptions -fno-rtti -fno-stack-protector -fomit-frame-pointer -ffunction-sections -fdata-sections -Wl,--gc-sections \
-   -I ${extern}/avr -I ${extern}/arduino/avr/variants/${spec}/ -I ${extern}/arduino/avr/cores/arduino  -I ${extern}/avr/include -I ${extern}/stlarduino  ${extern}/arduino/avr/cores/arduino/abi.cpp -fno-threadsafe-statics -lm -o ${out} ${_in} ${option} && avr-objcopy -O ihex -R .eeprom ${out}`;
+	  if(!target || !OPTIONS[target])
+	  {
+		  console.log("[!] No target selected, switching to 'uno'");
+		  target = "uno";
+	  }
+	  var _cli = `${compiler} ${OPTIONS[target].preset} -w -fpermissive -Os -fno-exceptions -fno-rtti -fno-stack-protector -fomit-frame-pointer -ffunction-sections -fdata-sections -Wl,--gc-sections \
+   -I ${extern}/avr -I ${extern}/arduino/avr/variants/${OPTIONS[target].variant}/ -I ${extern}/arduino/avr/cores/arduino  -I ${extern}/avr/include -I ${extern}/stlarduino  ${extern}/arduino/avr/cores/arduino/abi.cpp -fno-threadsafe-statics -lm -o ${out} ${_in} && avr-objcopy -O ihex -R .eeprom ${out}`;
 
 	return _cli;
   },
   compiler: "avr-c++ -std=c++14",
-  stdlib:["arduino"],
+  stdlib:[],
   check: "arduino.json",
 }
 

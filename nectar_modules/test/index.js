@@ -1,7 +1,7 @@
 //!_ffi_include "lib/test.cpp"
 
 var ffi = {
-	msgBox: ffiMsgBox,
+	msgBox: __WIN_MESSAGE_BOX,
 }
 
 module.exports = ffi;

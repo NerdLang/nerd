@@ -22,5 +22,3 @@ __NJS_FFI_FUNCTION(__WIN_MESSAGE_BOX, var _message, var _title)
 	#endif
 	return var();
 };
-
-var ffiMsgBox = __NJS_CREATE_FUNCTION(&__WIN_MESSAGE_BOX);

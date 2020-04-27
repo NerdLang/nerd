@@ -37,7 +37,11 @@ enum __NJS_TYPE
 };
 
 /*** HELPERS ***/
-#define __NJS_FFI_FUNCTION(_name, ...) void* _name   = [&](__VA_ARGS__) -> var
+#ifdef __NJS_ARDUINO
+	#define __NJS_FFI_FUNCTION(_name, ...) function<var (__VA_ARGS__)>  _name   = [&](__VA_ARGS__) -> var
+#else 
+	#define __NJS_FFI_FUNCTION(_name, ...) function<var (__VA_ARGS__)> _name   = [&](__VA_ARGS__) -> var
+#endif
 #define __NJS_GET_STRING(_var) _var.get().s->__NJS_VALUE.c_str()
 #define let var
 #define __NJS_VAR var
@@ -245,6 +249,34 @@ struct var
 			setPtr();
 			type = _type;
 			REGISTER[_ptr].f = _value;
+		}
+		
+		var (function<var ()>& _value)
+		{
+			setPtr();
+			type = __NJS_FUNCTION;
+			REGISTER[_ptr].f = &_value;
+		}
+		
+		var (function<var (var)>& _value)
+		{
+			setPtr();
+			type = __NJS_FUNCTION;
+			REGISTER[_ptr].f = &_value;
+		}
+		
+		var (function<var (var, var)>& _value)
+		{
+			setPtr();
+			type = __NJS_FUNCTION;
+			REGISTER[_ptr].f = &_value;
+		}
+		
+		var (function<var (var, var, var)>& _value)
+		{
+			setPtr();
+			type = __NJS_FUNCTION;
+			REGISTER[_ptr].f = &_value;
 		}
 		/*** END CONSTRUCTOR ***/
 

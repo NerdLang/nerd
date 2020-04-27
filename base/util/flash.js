@@ -6,13 +6,13 @@ function Flash(from, to, target, verb)
 {
   switch(target)
   {
-    case "arduino-uno":
+    case "uno":
       execFlashArduino(from, to, "ATMEGA328P", "arduino", "19200", verb)
       break;
-    case "arduino-mega1280":
+    case "mega1280":
       execFlashArduino(from, to, "m1280", "arduino", "57600", verb)
       break;
-    case "arduino-mega2560":
+    case "mega2560":
       execFlashArduino(from, to, "m2560", "wiring", "115200", verb)
       break;
     case "nucleo-l152re":

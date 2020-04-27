@@ -13,3 +13,7 @@
 * Add NectarJS REPL
 
 * Add ESLint to check syntax
+
+* put back project management
+
+* use expose for eslint ?

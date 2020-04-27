@@ -25,19 +25,52 @@
  * and feel free to contact us.
  *
  */
+ 
+__NJS_FFI_FUNCTION(__NJS_DELAY_MS, var v)
+{ 
+	while(v.get().i--) 
+	{ 
+		_delay_ms(1); 
+	}
+	return var();
+};
 
-//#include "Arduino.h"
+__NJS_FFI_FUNCTION(__NJS_DELAY, var _value)
+{ 
+	__NJS_DELAY_MS(__NJS_Get_Int(_value));
+	return var();
+};
 
-static inline void __NJS_DELAY_MS(var v){ while(v.get().i--) { _delay_ms(1); }}
+__NJS_FFI_FUNCTION(__NJS_DELAY_SECOND, var _value)
+{ 
+	__NJS_DELAY_MS(__NJS_Get_Int(_value) * 1000);
+	return var();
+};
 
-#define arduino_delay(_value) __NJS_DELAY_MS(__NJS_Get_Int(_value))
-#define arduino_delay_second(_value) __NJS_DELAY_MS(__NJS_Get_Int(_value) * 1000)
-#define arduino_delay_ms(_value) __NJS_DELAY_MS(__NJS_Get_Int(_value))
-#define arduino_millis() var((unsigned int)millis())
-#define arduino_seconds() var(UINT, (unsigned int)((millis() / (unsigned int)1000)))
+__NJS_FFI_FUNCTION(__NJS_MILLIS)
+{ 
+	return var((unsigned int)millis());
+};
+
+__NJS_FFI_FUNCTION(__NJS_SECONDS)
+{ 
+	var((unsigned int)((millis() / (unsigned int)1000)));
+};
+
+__NJS_FFI_FUNCTION(__NJS_PIN_MODE, var _pin, var _mode)
+{ 
+	pinMode(__NJS_Get_Int(_pin), __NJS_Get_Int(_mode));
+	return var();
+};
+
+__NJS_FFI_FUNCTION(__NJS_DIGITAL_WRITE, var _pin, var _mode)
+{ 
+	digitalWrite(__NJS_Get_Int(_pin), __NJS_Get_Int(_mode));
+	return var();
+};
+
 #define arduino_HIGH var(HIGH)
 #define arduino_LOW var(LOW)
 #define arduino_INPUT var(INPUT)
 #define arduino_OUTPUT var(OUTPUT)
-#define arduino_pinMode(_pin, _mode) pinMode(__NJS_Get_Int(_pin), __NJS_Get_Int(_mode))
-#define arduino_digitalWrite(_pin, _mode)  digitalWrite(__NJS_Get_Int(_pin), __NJS_Get_Int(_mode))
+

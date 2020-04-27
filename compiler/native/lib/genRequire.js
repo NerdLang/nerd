@@ -79,12 +79,14 @@ function genRequire(from, src)
                 newSrc = fs.readFileSync(trySource[i]).toString();
 
                 var pkgPath = path.join(modSource, "package.json");
+
                 if(fs.existsSync(pkgPath))
                 {
                   var pkg = fs.readFileSync(pkgPath);
                   try
                   {
                     pkg = JSON.parse(pkg);
+
                     if(pkg.nectar)
                     {
                       if(pkg.nectar.env)

@@ -378,9 +378,9 @@ function Build(prepare)
 			console.log("Preset    : " + preset);
 		}
 		
-		//if(CLI.cli["--tips"] && tips && tips.length > 0) console.log("\n" + tips + "\n");
+		if(CLI.cli["--tips"] && tips && tips.length > 0) console.log("\n" + tips + "\n");
 
-		if(CLI.cli["--flash"]) Flash(to, CLI.cli["--flash"].argument, target, verb);
+		if(CLI.cli["--flash"]) Flash(projTo, CLI.cli["--flash"].argument, target, verb);
 		
 		if(CLI.cli["--run"])
 		{
@@ -398,21 +398,18 @@ function Build(prepare)
 				console.log(_binexec.error);
 			}
 		}	
-		/*
 		  if(!CLI.cli["--prepare"])
           {
 			  var _current = path.dirname(path.resolve(process.argv[1]));
 			  var _native = path.join(_current, "core", "nativejs");
-			  var _to = path.resolve(to);
-			  var _fullPathCompile = path.resolve(fName);
-			  console.log(child_process.execSync("cd " + _native + " && node njs " + _fullPathCompile + " --compiler " + DEFAULT_COMPILER + " -o " + _to));
+			  var _to = path.resolve(projTo);
+			  var _fullPathCompile = path.resolve(main);
 		  }
           else
           {
 	           var pObj = {main: main, out:projTo, target:target, preset:preset};
 	            printProject(pObj);
           }
-		*/
       }
     });
   }
