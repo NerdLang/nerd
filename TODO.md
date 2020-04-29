@@ -1,5 +1,7 @@
 * Add import
 
+* put back "new" with objects
+
 * Add babel visitors for missing (list missing)
 
 * Memory cleaning for array properties and object properties
