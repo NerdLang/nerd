@@ -33,7 +33,7 @@
   "nectar":
   {
     "env": ["arduino"],
-    "target": ["uno", "mega2560", "mega1280"],
+    "target": ["uno", "mega", "mega2560", "mega1280", "nano", "nano2", "nano3"],
     "expose": ["arduino_delay", "arduino_delay_second", "arduino_delay_ms", "arduino_millis", "arduino_seconds", "arduino_HIGH",
               "arduino_LOW", "arduino_INPUT", "arduino_OUTPUT", "arduino_pinMode", "arduino_digitalWrite"]
   }
