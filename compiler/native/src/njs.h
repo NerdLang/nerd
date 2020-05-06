@@ -94,22 +94,15 @@ union val
 
 int FREE_PTR = -1;
 int REGISTER_PTR = 0;
-
-#ifdef __NJS_ARDUINO
-	val REGISTER[1000]{(val){.i=0}};
-	int FREE[1000] = {0};
-#else
-	val REGISTER[1000000]{(val){.i=0}};
-	int FREE[1000000] = {0};
-#endif 
+val REGISTER[{{REGISTER}}]{(val){.i=0}};
+int FREE[{{REGISTER}}] = {0};
 
 
 /*** END REGISTER ***/
 
-var __create_String(char* _value);
 var __create_Array(vector<var>  _value);
 var __NJS_Log_Console(var _var);
-var __NJS_Create_String(char* _str);
+var __NJS_Create_String(char* _value);
 inline var __NJS_Object_Get(char* _index, var _array);
 inline var __NJS_Object_Get(int _index, var _array);
 inline var __NJS_Object_Get(var _index, var _array);
@@ -120,7 +113,7 @@ inline var __NJS_Object_Set(var _index, var _value, var _object);
 char* strdup (const char* s)
 {
   size_t slen = strlen(s);
-  char* result = malloc(slen + 1);
+  char* result = (char*)malloc(slen + 1);
   if(result == NULL)
   {
     return NULL;
@@ -291,23 +284,23 @@ struct var
 			}
 			else if(type == __NJS_NUMBER && _v1.type == __NJS_STRING)
 			{
-				return __create_String(__NJS_Concat_Str_To_Int(get().i, _v1.get().s->__NJS_VALUE.c_str()));
+				return __NJS_Create_String(__NJS_Concat_Str_To_Int(get().i, _v1.get().s->__NJS_VALUE.c_str()));
 			}
 			else if(type == __NJS_STRING && _v1.type == __NJS_NUMBER)
 			{
-				return __create_String(__NJS_Concat_Int_To_Str(get().s->__NJS_VALUE.c_str(), _v1.get().i));
+				return __NJS_Create_String(__NJS_Concat_Int_To_Str(get().s->__NJS_VALUE.c_str(), _v1.get().i));
 			}
 			else if(type == __NJS_STRING && _v1.type == __NJS_BOOLEAN)
 			{
 				if(_v1.get().b)
 				{
-				  return __create_String(__NJS_Concat_Str_To_Str(get().s->__NJS_VALUE.c_str(), (char*)"true"));
+				  return __NJS_Create_String(__NJS_Concat_Str_To_Str(get().s->__NJS_VALUE.c_str(), (char*)"true"));
 				}
-				return __create_String(__NJS_Concat_Str_To_Str(get().s->__NJS_VALUE.c_str(), (char*)"false"));
+				return __NJS_Create_String(__NJS_Concat_Str_To_Str(get().s->__NJS_VALUE.c_str(), (char*)"false"));
 			}
 			else if(type == __NJS_STRING && _v1.type == __NJS_STRING)
 			{
-				return __create_String(__NJS_Concat_Str_To_Str(get().s->__NJS_VALUE.c_str(), _v1.get().s->__NJS_VALUE.c_str()));
+				return __NJS_Create_String(__NJS_Concat_Str_To_Str(get().s->__NJS_VALUE.c_str(), _v1.get().s->__NJS_VALUE.c_str()));
 			}
 			else
 			{
@@ -409,11 +402,6 @@ inline var __NJS_Call_Function(var _obj, Args... args)
 }
 /*** END VARIADIC CALLS ***/
 
-inline var __create_String(char* _value)
-{
-  __NJS_Class_String* _s = new __NJS_Class_String(_value);
-  return var(_s);
-}
 
 inline var __create_Array()
 {
@@ -440,7 +428,7 @@ inline char* __NJS_Get_String(var _v)
 inline var __NJS_Typeof(var _var)
 {
   char* _array[] = {(char*)"", (char*)"object", (char*)"number", (char*)"number", (char*)"boolean", (char*)"string", (char*)"function", (char*)"array", (char*)"undefined"};
-  return __create_String(_array[_var.type]);
+  return __NJS_Create_String(_array[_var.type]);
 }
 
 /*** ***/
@@ -517,7 +505,7 @@ inline var __NJS_Object_Set(var _index, var _value, var _array)
     
 	REGISTER[_array.get().a->__NJS_VALUE[_index.get().i]._ptr] = REGISTER[_value._ptr];
 
-    __NJS_Object_Set(__create_String((char*)"length"), __NJS_Create_Number(_array.get().a->__NJS_VALUE.size()), &_array.get().a->__OBJECT);
+    __NJS_Object_Set(__NJS_Create_String((char*)"length"), __NJS_Create_Number(_array.get().a->__NJS_VALUE.size()), &_array.get().a->__OBJECT);
   }
   else if(_array.type == __NJS_OBJECT || _array.type == __NJS_STRING)
   {
@@ -552,7 +540,7 @@ inline var __NJS_Object_Set(int _index, var _value, var _array)
     if(_array.get().a->__NJS_VALUE.size() <= _index) _array.get().a->__NJS_VALUE.resize(_index + 1);
     _array.get().a->__NJS_VALUE[_index].type = _value.type;
 	REGISTER[_array.get().a->__NJS_VALUE[_index]._ptr] = REGISTER[_value._ptr];
-	__NJS_Object_Set(__create_String((char*)"length"), __NJS_Create_Number(_array.get().a->__NJS_VALUE.size()), &_array.get().a->__OBJECT);
+	__NJS_Object_Set(__NJS_Create_String((char*)"length"), __NJS_Create_Number(_array.get().a->__NJS_VALUE.size()), &_array.get().a->__OBJECT);
   }
   return var();
 }
@@ -774,10 +762,10 @@ inline var  __NJS_Log_Console(var _var)
 }
 
 
-inline var __NJS_Create_String(char* _str)
+inline var __NJS_Create_String(char* _value)
 {
-  __NJS_Class_String* _s = new __NJS_Class_String(_str);
-  return var(__NJS_STRING, _s);
+  __NJS_Class_String* _s = new __NJS_Class_String(_value);
+  return var(_s);
 }
 
 inline var __NJS_Create_Object()

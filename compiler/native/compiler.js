@@ -229,7 +229,15 @@ function Compiler()
 	  
 	this.Prepare = function(_folder)
 	{
-		fs.copyFileSync(__dirname + "/src/njs.h", path.join(_folder, "njs.h"));
+		var _reg = 1000000;
+		if(this.ENV.name == "arduino")
+		{
+			if(this.TARGET.substring(0, 3) == "uno") _reg = 100;
+			else _reg = 1000;
+		}
+		var _src = fs.readFileSync(__dirname + "/src/njs.h").toString();
+		_src = _src.replace(/{{REGISTER}}/g, _reg);
+		fs.writeFileSync(path.join(_folder, "njs.h"), _src);
 	};
 
 	this.Out = function(_name)
