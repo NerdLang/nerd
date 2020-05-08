@@ -59,9 +59,7 @@ function objectExpression(_path, _name)
 	{
 	  console.log("Visitor VariableDeclarator not implemented yet for " + _path.value.type);
 	}
-	
 	if(_value) _code += "__NJS_Object_Set(\"" + _key + "\",__NJS_VAR(" + _value + ")," + _name + ");"
-
 	return _code;
 }
 
@@ -89,8 +87,6 @@ function memberExpression(_path)
 			}
 		}
 		
-		
-		
 		if(_obj.name) prop.push(_obj.name);
 		if(_obj.object) _obj=_obj.object;
 		else { _obj = null; break; }
@@ -109,6 +105,7 @@ function memberExpression(_path)
 			_setter = _setter.replace("{{PROPERTY}}", _p);
 		}
 	}
+
 	return _setter;
 }
 
@@ -185,6 +182,13 @@ var visitor =
     function NectarJS() {
       return {
         visitor: {
+		  NewExpression(_path)
+		  {
+			_path.node.type = "CallExpression";
+			_path.node.callee.name = "__NEW_" + _path.node.callee.name;
+			var _new = callExpression(_path.node);
+			if(_new.length > 0) _path.replaceWithSourceString(_new);
+		  },
           VariableDeclarator(_path) 
 		  {
 			  // Creating Arrays
@@ -271,7 +275,7 @@ var visitor =
 						else if(_obj.property.extra) prop.push(_obj.property.extra.raw);
 					}
 					if(_obj.name) prop.push(_obj.name);
-					
+					else if(_obj.type == "ThisExpression") prop.push("__NJS_THIS");
 					if(_obj.object) _obj=_obj.object;
 					else { _obj = null; break; }
 				}
@@ -293,6 +297,7 @@ var visitor =
 						_setter = _setter.replace("{{PROPERTY}}", _p);
 					}
 				}
+
 				var _n = RND();
 				_path.insertBefore(babel.parse("var " + _n + ";"));
 				_path.node.left = babel.types.identifier(_n);

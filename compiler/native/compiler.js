@@ -121,6 +121,7 @@ function Compiler()
 		function createFunction(_code)
 		{	
 			var _return = ";return __NJS_Create_Undefined();}";
+			var _returnThis = ";return __NJS_THIS;}";
 			var _searchFN = new RegExp(/function (.[a-zA-Z0-9_\-]*) *\((.*)\)/);
 			var _index = _code.search(_searchFN);
 			while(_index > -1)
@@ -156,10 +157,16 @@ function Compiler()
 							_count--;
 							if(_count == 0)
 							{
-								var _fn = _code.substring(_start, _end);
+								var _fn = "{ var __NJS_THIS = __NJS_Create_Object();" + _code.substring(_start + 1, _end);
 								_handler.DECL += "var " + _match[1] +";";
 								var _formated = "function<var (" + _var + ")>* " + _genFN +" = new function<var (" + _var + ")>([&](" + _var + ") -> var" + _fn + _return + ");";
 								_formated += _match[1] + "=var(__NJS_FUNCTION, " + _genFN + ");";
+
+
+								var _genNew = "__NEW_" + _genFN;
+								_formated += "function<var (" + _var + ")>* " + _genNew +" = new function<var (" + _var + ")>([&](" + _var + ") -> var" + _fn + _returnThis + ");";
+								_formated += "var __NEW_" + _match[1] + "=var(__NJS_FUNCTION, " + _genNew + ");";
+								
 								_code = [_code.slice(0, _index), _formated, _code.slice(_end + 1)].join('');				
 								break;
 							}
