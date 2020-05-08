@@ -79,6 +79,14 @@ class __NJS_Class_Array : public __NJS_Class_Object
     vector<var> __NJS_VALUE;
 };
 
+class __NJS_Class_Function : public __NJS_Class_Object
+{
+  public:
+  __NJS_Class_Function(void* _f);
+    var Get(char* _index);
+    void* __NJS_VALUE;
+};
+
 union val
 {
 	int i;
@@ -87,15 +95,15 @@ union val
 	__NJS_Class_Array* a;
 	__NJS_Class_Object* o;
 	//vector<shared_ptr<pair<char*, var>>>* o;
-	void* f;
+	__NJS_Class_Function* f;
 };
 
 /*** REGISTER ***/
 
 int FREE_PTR = -1;
 int REGISTER_PTR = 0;
-val REGISTER[{{REGISTER}}]{(val){.i=0}};
-int FREE[{{REGISTER}}] = {0};
+val REGISTER[1000000]{(val){.i=0}};
+int FREE[1000000] = {0};
 
 
 /*** END REGISTER ***/
@@ -249,7 +257,7 @@ struct var
 		{
 			setPtr();
 			type = _type;
-			REGISTER[_ptr].f = _value;
+			REGISTER[_ptr].f = new __NJS_Class_Function(_value);
 		}
 
 		/*** VARIADIC LAMBDAS ***/
@@ -258,7 +266,7 @@ struct var
 		{
 			setPtr();
 			type = __NJS_FUNCTION;
-			REGISTER[_ptr].f = &_value;
+			REGISTER[_ptr].f = new __NJS_Class_Function(&_value);
 		}
 		/*** END VARIADIC LAMBDAS ***/
 		
@@ -392,7 +400,7 @@ struct var
 template<class... Args>
 inline var __NJS_Back_Var_Call_Function(var _obj, Args... args)
 {
-	return (*static_cast<function<var ( Args... )>*>(_obj.get().f))( args... );
+	return (*static_cast<function<var ( Args... )>*>(_obj.get().f->__NJS_VALUE))( args... );
 }
 
 template<class... Args>
@@ -470,9 +478,11 @@ inline var __NJS_Object_Set(var _index, var _value, vector<pair<char*, var>>* _o
 
 inline var __NJS_Object_Set(char* _index, var _value, var _array)
 {
+
   vector<pair<char*, var>>* _obj;
   if(_array.type == __NJS_OBJECT) _obj = &_array.get().o->__OBJECT;
   else if(_array.type == __NJS_STRING) _obj = &_array.get().s->__OBJECT;
+  else if(_array.type == __NJS_FUNCTION) _obj = &_array.get().f->__OBJECT;
   else return var();
 
   int _j = (*_obj).size();
@@ -507,11 +517,12 @@ inline var __NJS_Object_Set(var _index, var _value, var _array)
 
     __NJS_Object_Set(__NJS_Create_String((char*)"length"), __NJS_Create_Number(_array.get().a->__NJS_VALUE.size()), &_array.get().a->__OBJECT);
   }
-  else if(_array.type == __NJS_OBJECT || _array.type == __NJS_STRING)
+  else if(_array.type == __NJS_OBJECT || _array.type == __NJS_STRING || _array.type == __NJS_FUNCTION)
   {
     vector<pair<char*, var>>* _obj;
     if(_array.type == __NJS_OBJECT) _obj = &_array.get().o->__OBJECT;
     else if(_array.type == __NJS_STRING) _obj = &_array.get().s->__OBJECT;
+	else if(_array.type == __NJS_FUNCTION) _obj = &_array.get().f->__OBJECT;
     else return var();
 
     int _j = (*_obj).size();
@@ -548,7 +559,7 @@ inline var __NJS_Object_Set(int _index, var _value, var _array)
 
 inline var __NJS_Object_Get(int _index, var _array)
 {
-  if(_array.type != __NJS_ARRAY && _array.type != __NJS_OBJECT) return var();
+  if(_array.type != __NJS_ARRAY && _array.type != __NJS_OBJECT && _array.type != __NJS_FUNCTION) return var();
   if(_array.type == __NJS_ARRAY)
   {
     if(_index > _array.get().a->__NJS_VALUE.size())
@@ -569,7 +580,7 @@ inline var __NJS_Object_Get(char* _index, var _array)
 
 inline var __NJS_Object_Get(var _index, var _array)
 {
-  if(_array.type != __NJS_ARRAY && _array.type != __NJS_OBJECT && _array.type != __NJS_STRING) return var();
+  if(_array.type != __NJS_ARRAY && _array.type != __NJS_OBJECT && _array.type != __NJS_STRING && _array.type != __NJS_FUNCTION) return var();
   if(_array.type == __NJS_ARRAY)
   {
     if(_index.type == __NJS_STRING)
@@ -588,6 +599,7 @@ inline var __NJS_Object_Get(var _index, var _array)
     vector<pair<char*, var>>* _obj;
     if(_array.type == __NJS_OBJECT) _obj = &_array.get().o->__OBJECT;
     else if(_array.type == __NJS_STRING) _obj = &_array.get().s->__OBJECT;
+	else if(_array.type == __NJS_FUNCTION) _obj = &_array.get().f->__OBJECT;
     else return var();
     int _j = (*_obj).size();
     for(int _i = 0; _i < _j; _i++)
@@ -660,6 +672,13 @@ __NJS_Class_Array::__NJS_Class_Array()
   __NJS_Object_Set((char*)"toString", toString, &this->__OBJECT);
 
   __NJS_Object_Set((char*)"length", var(0), this);
+
+}
+
+__NJS_Class_Function::__NJS_Class_Function(void* _f)
+{
+
+  __NJS_VALUE = _f;
 
 }
 
