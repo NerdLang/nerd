@@ -80,6 +80,7 @@ function Compiler()
 	
 	this.MAIN = fs.readFileSync(path.join(__dirname, "squel", this.ENV.main)).toString();
 	
+	this.IN = "";
 	this.OUT = "";
 	this.OPTION = "";
 	
@@ -106,6 +107,7 @@ function Compiler()
 	/*** METHODS ***/
 	this.Parse = function(_code)
 	{
+		LINT(_code, this.IN);
 		_code = genRequire(_handler.PATH, COMPILER.STD) + genRequire(_handler.PATH, _code);
 		
 		COMPILER.REQUIRE = babel.transformSync(COMPILER.REQUIRE, visitor).code;
@@ -239,8 +241,12 @@ function Compiler()
 		var _reg = 1000000;
 		if(this.ENV.name == "arduino")
 		{
-			if(this.TARGET.substring(0, 3) == "uno") _reg = 100;
-			else _reg = 1000;
+			_reg = 1000;
+			if(!this.TARGET)
+			{
+				this.TARGET = "nano"
+			}
+			if(this.TARGET.substring(0, 4) == "nano") _reg = 100;
 		}
 		var _src = fs.readFileSync(__dirname + "/src/njs.h").toString();
 		_src = _src.replace(/{{REGISTER}}/g, _reg);

@@ -26,7 +26,33 @@ var NODE =
   main: "std.cpp",
   compiler: "g++",
   stdlib: ["console", "process"],
-  check: "node.json",
+  check: {
+		"env": {
+			"node": true,
+			"es6": true
+		},
+		"extends": "eslint:recommended",
+		"rules": {
+			"no-console": "off",
+			"indent": "off",
+			"linebreak-style": "off",
+			"quotes": [
+				"error",
+				"double"
+			],
+			"semi": [
+				"warn",
+				"always"
+			],
+			"no-unused-vars": ["warn", { "vars": "all", "args": "after-used", "ignoreRestSiblings": false }],
+			"no-use-before-define": ["error", { "functions": true, "classes": true, "variables": false }]
+		},
+		"globals":
+		{
+		"__njs_typeof":false,
+		"require":false
+		}
+	},
   cli: function(compiler, preset, out, _in, option)
   {
 	  if(preset == "none")

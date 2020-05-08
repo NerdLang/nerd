@@ -34,7 +34,33 @@ var STM32 =
   },
   compiler: "mbed",
   stdlib:["stm32"],
-  check: "mbed.json",
+  check: {
+      "env": {
+          "node": true
+      },
+      "extends": "eslint:recommended",
+      "rules": {
+          "no-console": "off",
+          "indent": "off",
+          "linebreak-style": "off",
+          "quotes": [
+              "error",
+              "double"
+          ],
+          "semi": [
+              "warn",
+              "always"
+          ],
+          "no-unused-vars": ["warn", { "vars": "all", "args": "after-used", "ignoreRestSiblings": false }],
+          "no-use-before-define": ["error", { "functions": true, "classes": true, "variables": false }],
+          "no-constant-condition": 1
+      },
+      "globals":
+      {
+        "__njs_typeof":false,
+        "stm32": false
+      }
+  }
 }
 
 module.exports = STM32;

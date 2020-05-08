@@ -49,7 +49,32 @@ var ARDUINO =
   },
   compiler: "avr-c++ -std=c++14",
   stdlib:[],
-  check: "arduino.json",
+  check: {
+		"env": {
+		"es6": true
+		},
+		"extends": "eslint:recommended",
+		"rules": {
+			"global-require": "error",
+			"no-console": "error",
+			"indent": "off",
+			"linebreak-style": "off",
+			"quotes": [
+				"error",
+				"double"
+			],
+			"semi": [
+				"warn",
+				"always"
+			],
+			"no-unused-vars": ["warn", { "vars": "all", "args": "after-used", "varsIgnorePattern": "setup|loop", "ignoreRestSiblings": false }],
+			"no-use-before-define": ["error", { "functions": true, "classes": true, "variables": false }]
+		},
+		"globals":
+		{
+		"require": false
+		}
+	}
 }
 
 module.exports = ARDUINO;

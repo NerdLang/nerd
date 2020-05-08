@@ -28,7 +28,32 @@ var STD =
   main: "std.cpp",
   compiler: "g++",
   stdlib: ["console", "process"],
-  check: "std.json",
+  check: {
+    "env": {
+        "es6": true
+    },
+    "extends": "eslint:recommended",
+    "rules": {
+        "strict": "global",
+        "no-console": "off",
+        "indent": "off",
+        "linebreak-style": "off",
+        "quotes": [
+            "error",
+            "double"
+        ],
+        "semi": [
+            "warn",
+            "always"
+        ],
+        "no-unused-vars": ["warn", { "vars": "all", "args": "after-used", "ignoreRestSiblings": false }],
+        "no-use-before-define": ["error", { "functions": true, "classes": true, "variables": false }]
+    },
+    "globals":
+    {
+
+    }
+}
 }
 
 module.exports = STD;

@@ -77,7 +77,8 @@ function genRequire(from, src)
               {
                 modSource = path.dirname(trySource[i]) + "/";
                 newSrc = fs.readFileSync(trySource[i]).toString();
-
+                LINT(newSrc, trySource[i]);
+                
                 var pkgPath = path.join(modSource, "package.json");
 
                 if(fs.existsSync(pkgPath))
@@ -129,25 +130,20 @@ function genRequire(from, src)
             }
 
             if(newSrc.length == 0)
-			{
-				console.log("[!] Require error : " + addSource);
-				process.exit();
-			}
-            //genTarget(addSource, from, newSrc);
+          {
+            console.log("[!] Require error : " + addSource);
+            process.exit();
+          }
             newSrc = genInclude(path.resolve(modSource) + "/", newSrc);
 
             if(NJS_ENV.name != "arduino")
             {
-              //newSrc += genRequire(from, newSrc);
-              //newSrc = genStdRequire(newSrc);
-              //VARIABLE["MODULE"] = {};
+
               var reqFN = "_" + Math.random().toString(36).substr(2, 10);
 
               var resultSource = src.substring(0, index) + reqFN + "()";
 
               newSrc = "function " + reqFN + "(){\nvar module = __NJS_Create_Object();\n" + newSrc;
-
-              //resultSource += "\n" + newSrc + "\n";
 
               newSrc = newSrc.replace(/(module\.exports *= *.*)$/g, "$1;");
 

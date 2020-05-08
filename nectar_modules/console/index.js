@@ -4,6 +4,6 @@ var console =
   {
 	  __NJS_Log_Console(_str);
   },
-}
+};
 
 module.exports = console;

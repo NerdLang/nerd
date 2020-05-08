@@ -102,8 +102,8 @@ union val
 
 int FREE_PTR = -1;
 int REGISTER_PTR = 0;
-val REGISTER[1000000]{(val){.i=0}};
-int FREE[1000000] = {0};
+val REGISTER[{{REGISTER}}]{(val){.i=0}};
+int FREE[{{REGISTER}}] = {0};
 
 
 /*** END REGISTER ***/

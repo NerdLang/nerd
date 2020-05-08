@@ -35,7 +35,6 @@ global.child_process = require('child_process');
 global.execSync = child_process.execSync;
 global.extern = path.join(__dirname, "extern");
 
-
 global.PACKAGE = require(path.join(__dirname, "package.json"));
 global.VERSION = PACKAGE.version;
 
@@ -49,6 +48,7 @@ var Flash = require('./base/util/flash.js');
 var rmdir = require("./base/util/rmdir.js");
 var CURRENT = process.cwd();
 var TARGET = require('./base/compiler/target.js');
+global.LINT = require("./base/util/lint.js");
 var PLATFORM = os.platform();
 var ARCH = os.arch();
 
@@ -243,7 +243,7 @@ function Build(prepare)
   {
 	var QUIET = false;
     var _in = CLI.stack[0];
-
+    COMPILER.IN = _in;
     fs.readFile(_in, function(err, fileData)
     {
       if(err)
