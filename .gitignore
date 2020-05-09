@@ -1,5 +1,6 @@
 # Compilations
 .nectar
+.vscode
 *.exe
 
 # Logs
