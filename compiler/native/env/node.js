@@ -25,7 +25,7 @@ var NODE =
   name: "node",
   main: "std.cpp",
   compiler: "g++",
-  stdlib: ["console", "process"],
+  stdlib: ["console"],
   check: {
 		"env": {
 			"node": true,
@@ -45,7 +45,9 @@ var NODE =
 				"always"
 			],
 			"no-unused-vars": ["warn", { "vars": "all", "args": "after-used", "ignoreRestSiblings": false }],
-			"no-use-before-define": ["error", { "functions": true, "classes": true, "variables": false }]
+			"no-use-before-define": ["error"],
+			//"no-undef": "error",
+			"no-redeclare": ["error", { "builtinGlobals": false }],
 		},
 		"globals":
 		{

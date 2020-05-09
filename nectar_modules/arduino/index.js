@@ -41,6 +41,6 @@ var _arduino =
 	low: LOW,
 	input: INPUT,
 	output: OUTPUT,
-}
+};
 
 module.exports = _arduino;

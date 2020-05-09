@@ -24,8 +24,9 @@
 
 enum __NJS_TYPE
 {
-	__NJS_OBJECT = 1,
+	__NJS_UNDEFINED = 1,
 	__NJS_NUMBER,
+	__NJS_OBJECT,
 	__NJS_BIGNUMBER,
 	__NJS_BOOLEAN,
 	__NJS_STRING,
@@ -33,7 +34,7 @@ enum __NJS_TYPE
 	__NJS_FUNCTION,
 	__NJS_ARRAY,
 	//__NJS_NAN,
-	__NJS_UNDEFINED
+	
 };
 
 /*** HELPERS ***/
@@ -57,8 +58,11 @@ struct var;
 class __NJS_Class_Object
 {
   public:
+	int cnt = 0;
+	__NJS_Class_Object();
     vector<pair<char*, var>> __OBJECT;
     var Get(char* _index);
+	void Delete();
 };
 
 class __NJS_Class_String : public __NJS_Class_Object
@@ -74,7 +78,6 @@ class __NJS_Class_Array : public __NJS_Class_Object
 {
   public:
     __NJS_Class_Array();
-	~__NJS_Class_Array();
     var Get(char* _index);
     vector<var> __NJS_VALUE;
 };
@@ -85,6 +88,7 @@ class __NJS_Class_Function : public __NJS_Class_Object
   __NJS_Class_Function(void* _f);
     var Get(char* _index);
     void* __NJS_VALUE;
+	//void Delete();
 };
 
 union val
@@ -94,7 +98,6 @@ union val
 	__NJS_Class_String* s;
 	__NJS_Class_Array* a;
 	__NJS_Class_Object* o;
-	//vector<shared_ptr<pair<char*, var>>>* o;
 	__NJS_Class_Function* f;
 };
 
@@ -191,7 +194,11 @@ struct var
 		}
 		
 		~var()
-		{		
+		{	
+			if(type ==  __NJS_OBJECT)
+			{
+				REGISTER[_ptr].o->Delete();
+			}
 			FREE[++FREE_PTR] = _ptr;
 		}
 		
@@ -201,6 +208,10 @@ struct var
 			setPtr();
 			type = _v.type;
 			REGISTER[_ptr] = REGISTER[_v._ptr];
+			if(_v.type == __NJS_OBJECT)
+			{
+				REGISTER[_ptr].o->cnt++;
+			}
 			return;
 		}
 		/**/
@@ -278,8 +289,13 @@ struct var
 		/*** EQUAL ***/
 		var& operator=(const var& _v)
 		{
+			if(type == __NJS_OBJECT) REGISTER[_ptr].o->Delete();
 			type = _v.type;;
 			REGISTER[_ptr] = REGISTER[_v._ptr];
+			if(_v.type == __NJS_OBJECT)
+			{
+				REGISTER[_ptr].o->cnt++;
+			}
 			return;
 		}
 		/*** END EQUAL ***/
@@ -347,13 +363,15 @@ struct var
 			return var();
 		}
 	
-    void operator++(const int _v1)
+    var operator++(const int _v1)
 		{
 			REGISTER[_ptr].i++;
+			return *this;
 		}
-    void operator--(const int _v1)
+    var operator--(const int _v1)
 		{
 			REGISTER[_ptr].i--;
+			return *this;
 		}
 		
     var operator==(const var& _v1)
@@ -435,7 +453,7 @@ inline char* __NJS_Get_String(var _v)
 
 inline var __NJS_Typeof(var _var)
 {
-  char* _array[] = {(char*)"", (char*)"object", (char*)"number", (char*)"number", (char*)"boolean", (char*)"string", (char*)"function", (char*)"array", (char*)"undefined"};
+  char* _array[] = {(char*)"", (char*)"undefined", (char*)"number", (char*)"object", (char*)"number", (char*)"boolean", (char*)"string", (char*)"function", (char*)"array"};
   return __NJS_Create_String(_array[_var.type]);
 }
 
@@ -675,35 +693,26 @@ __NJS_Class_Array::__NJS_Class_Array()
 
 }
 
+__NJS_Class_Object::__NJS_Class_Object()
+{
+  cnt++;
+}
+
+
 __NJS_Class_Function::__NJS_Class_Function(void* _f)
 {
-
+  cnt = 1;
   __NJS_VALUE = _f;
 
 }
 
-
-__NJS_Class_Array::~__NJS_Class_Array()
+void __NJS_Class_Object::Delete()
 {
-	
-	for(std::vector<var>::iterator it = this->__NJS_VALUE.begin(); it != this->__NJS_VALUE.end(); ++it)
+	this->cnt --;
+	if(this->cnt < 1)
 	{
-		switch(it->type)
-		{
-			case __NJS_ARRAY:
-				delete it->get().a;
-			break;
-				
-			case __NJS_OBJECT:
-				delete it->get().o;
-			break;
-			
-			case __NJS_FUNCTION:
-				delete it->get().f;
-			break;
-		}
-	}
-	
+		delete this;
+	}	
 }
 
 inline var __NJS_Class_Array::Get(char* _index)

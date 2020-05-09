@@ -27,7 +27,7 @@ var STD =
   name: "std",
   main: "std.cpp",
   compiler: "g++",
-  stdlib: ["console", "process"],
+  stdlib: ["console"],
   check: {
     "env": {
         "es6": true
@@ -47,11 +47,17 @@ var STD =
             "always"
         ],
         "no-unused-vars": ["warn", { "vars": "all", "args": "after-used", "ignoreRestSiblings": false }],
-        "no-use-before-define": ["error", { "functions": true, "classes": true, "variables": false }]
+        "no-use-before-define": ["error"],
+        //"no-undef": "error",
+        "no-redeclare": ["error", { "builtinGlobals": false }],
     },
     "globals":
     {
-
+        "console": false,
+        "module": false,
+        "require": false,
+        "__NJS_Log_Console": false,
+        "__NJS_ARGS": false,
     }
 }
 }

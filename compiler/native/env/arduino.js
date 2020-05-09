@@ -68,11 +68,13 @@ var ARDUINO =
 				"always"
 			],
 			"no-unused-vars": ["warn", { "vars": "all", "args": "after-used", "varsIgnorePattern": "setup|loop", "ignoreRestSiblings": false }],
-			"no-use-before-define": ["error", { "functions": true, "classes": true, "variables": false }]
+			"no-use-before-define": ["error"],
+			//"no-undef": "error",
+			"no-redeclare": ["error", { "builtinGlobals": false }],
 		},
 		"globals":
 		{
-		"require": false
+			"require": false,
 		}
 	}
 }
