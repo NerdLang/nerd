@@ -27,7 +27,7 @@ var STD =
   name: "std",
   main: "std.cpp",
   compiler: "g++",
-  stdlib: ["console"],
+  stdlib: ["console", "Math"],
   check: {
     "env": {
         "es6": true

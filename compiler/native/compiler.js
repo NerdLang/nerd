@@ -113,7 +113,7 @@ function Compiler()
 		COMPILER.REQUIRE = babel.transformSync(COMPILER.REQUIRE, visitor).code;
 		COMPILER.REQUIRE = createFunction(COMPILER.REQUIRE);
 		COMPILER.REQUIRE = createAnon(COMPILER.REQUIRE);
-
+		
 		_handler.CODE = babel.transformSync(_code, visitor).code;
 		_handler.CODE = createFunction(_handler.CODE);
 		_handler.CODE = createAnon(_handler.CODE);
@@ -122,6 +122,7 @@ function Compiler()
 		
 		function createFunction(_code)
 		{	
+			
 			var _return = ";return __NJS_Create_Undefined();}";
 			var _returnThis = ";return __NJS_THIS;}";
 			var _searchFN = new RegExp(/function (.[a-zA-Z0-9_\-]*) *\((.*)\)/);
@@ -134,8 +135,9 @@ function Compiler()
 				var _count = 0;
 				var _start = -1;
 				var _end = -1;
-				
-				var _match = _searchFN.exec(_code);
+			
+				let _match = _searchFN.exec(_code);
+
 				_match[2] = _match[2].split(",");
 				for(var i = 0; i < _match[2].length; i++)
 				{
@@ -145,7 +147,6 @@ function Compiler()
 						_var += "var " + _match[2][i];
 					}
 				}
-				
 				for(var i = _index; i < _code.length; i++)
 				{
 						if(_code[i] == "{")
@@ -159,31 +160,35 @@ function Compiler()
 							_count--;
 							if(_count == 0)
 							{
-								var _fn = _code.substring(_start, _end);
+								//var _fn = _code.substring(_start, _end);
 								var _fnThis = "{ var __NJS_THIS = __NJS_Create_Object();" + _code.substring(_start + 1, _end);
 								_handler.DECL += "var " + _match[1] +";";
-								var _formated = "function<var (" + _var + ")>* " + _genFN +" = new function<var (" + _var + ")>([&](" + _var + ") -> var" + _fn + _return + ");";
+
+								var _formated = "__NJS_DECL_FUNCTION<var (" + _var + ")>* " + _genFN +" = new __NJS_DECL_FUNCTION<var (" + _var + ")>([&](" + _var + ") -> var" + _fnThis + _return + ");";
 								_formated += _match[1] + "=var(__NJS_FUNCTION, " + _genFN + ");";
-
-
-								var _genNew = "__NEW_" + _genFN;
-								_formated += "function<var (" + _var + ")>* " + _genNew +" = new function<var (" + _var + ")>([&](" + _var + ") -> var" + _fnThis + _returnThis + ");";
-								_formated += "var __NEW_" + _match[1] + "=var(__NJS_FUNCTION, " + _genNew + ");";
 								
-								_code = [_code.slice(0, _index), _formated, _code.slice(_end + 1)].join('');				
+								var _genNew = "__NEW_" + _genFN;
+								var _addNew = "__NJS_DECL_FUNCTION<var (" + _var + ")>* " + _genNew +" = new __NJS_DECL_FUNCTION<var (" + _var + ")>([&](" + _var + ") -> var" + _fnThis + _returnThis + ");";
+								_addNew += "var __NEW_" + _match[1] + "=var(__NJS_FUNCTION, " + _genNew + ");";
+								
+								_formated += _addNew;
+
+								_code = [_code.slice(0, _index), _formated, _code.slice(_end + 1)].join('');
+
 								break;
 							}
 						}
 				}
 				_index = _code.search(_searchFN);
 			}
+
 			return _code;
 		}
 
 		function createAnon(_code)
 		{	
 			var _return = "return __NJS_Create_Undefined();}";
-			var _searchAnonFN = new RegExp(/function *\(([a-zA-Z0-9_\-]*)\)/);
+			var _searchAnonFN = new RegExp(/function *\(([a-zA-Z0-9_\-, ]*)\)/);
 			var _index = _code.search(_searchAnonFN);
 			while(_index > -1)
 			{

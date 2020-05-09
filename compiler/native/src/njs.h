@@ -52,6 +52,7 @@ enum __NJS_TYPE
 #define false __NJS_Create_Boolean(false)
 #define __NJS_Create_Undefined() var()
 #define __NJS_VAR var
+#define __NJS_DECL_FUNCTION function
 
 struct var;
 
@@ -335,9 +336,19 @@ struct var
 		{
 			return REGISTER[_ptr].i - REGISTER[_v1._ptr].i;
 		}
-    var operator*(const var& _v1)
+    	var operator*(const var& _v1)
 		{
 			return var( get().i * _v1.get().i );
+		}
+		var operator*= (const var& _v1)
+		{
+			REGISTER[_ptr].i *= _v1.get().i;
+			return var();
+		}
+		var operator/= (const var& _v1)
+		{
+			REGISTER[_ptr].i /= _v1.get().i;
+			return var();
 		}
     var operator/(const var& _v1)
 		{
