@@ -53,6 +53,7 @@ var STD =
     },
     "globals":
     {
+        "__njs_typeof": false,
         "console": false,
         "module": false,
         "require": false,

@@ -46,13 +46,15 @@ var NODE =
 			],
 			"no-unused-vars": ["warn", { "vars": "all", "args": "after-used", "ignoreRestSiblings": false }],
 			"no-use-before-define": ["error"],
-			//"no-undef": "error",
+			"no-undef": "error",
 			"no-redeclare": ["error", { "builtinGlobals": false }],
 		},
 		"globals":
 		{
 		"__njs_typeof":false,
-		"require":false
+		"require":false,
+		"module": false,
+		"console": false,
 		}
 	},
   cli: function(compiler, preset, out, _in, option)

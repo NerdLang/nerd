@@ -1,9 +1,19 @@
 var Linter = require("eslint").Linter;
 global.linter = new Linter();
 
-function nectarLint(_code, _file)
+function nectarLint(_code, _file, _expose)
 {
     var _fatal = false;
+    if(!COMPILER.ENV.check.globals) COMPILER.ENV.check.globals = {};
+
+    if(_expose)
+    {
+        for(var i = 0; i < _expose.length; i++)
+        {
+            COMPILER.ENV.check.globals[_expose[i]] = false;
+        }
+    }
+
     var _res = linter.verify(_code, COMPILER.ENV.check, { filename: _file });
     for(var i = 0; i < _res.length; i++)
     {

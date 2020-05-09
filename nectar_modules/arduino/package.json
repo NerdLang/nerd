@@ -19,22 +19,23 @@
     "arduino",
     "iot"
   ],
-  "license":
-  {
-    "type": "MIT",
-    "url": "https://github.com/NectarJS/nectar-modules/blob/master/LICENSE"
-  },
+  "license": "AGPL",
+  "licenses": [
+    {
+      "type": "AGPL",
+      "url": "https://github.com/nectarjs/nectarjs/blob/master/LICENSE"
+    }
+  ],
   "repository":
   {
     "type": "git",
     "url": "git+ssh://git@github.com/NectarJS/nectar-modules.git"
   },
-  "version": "0.0.1",
+  "version": "0.0.2",
   "nectar":
   {
     "env": ["arduino"],
     "target": ["uno", "mega", "mega2560", "mega1280", "nano", "nano2", "nano3"],
-    "expose": ["arduino_delay", "arduino_delay_second", "arduino_delay_ms", "arduino_millis", "arduino_seconds", "arduino_HIGH",
-              "arduino_LOW", "arduino_INPUT", "arduino_OUTPUT", "arduino_pinMode", "arduino_digitalWrite"]
+    "expose": ["__NJS_DELAY_MS", "__NJS_DELAY", "__NJS_DELAY_SECOND", "__NJS_MILLIS", "__NJS_SECONDS", "__NJS_PIN_MODE", "__NJS_DIGITAL_WRITE", "HIGH", "LOW", "INPUT", "OUTPUT"]
   }
 }

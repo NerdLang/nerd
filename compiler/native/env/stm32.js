@@ -59,7 +59,8 @@ var STM32 =
       "globals":
       {
         "__njs_typeof":false,
-        "stm32": false
+        "stm32": false,
+        "module": false,
       }
   }
 }

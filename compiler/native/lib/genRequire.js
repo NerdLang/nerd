@@ -77,17 +77,16 @@ function genRequire(from, src)
               {
                 modSource = path.dirname(trySource[i]) + "/";
                 newSrc = fs.readFileSync(trySource[i]).toString();
-                LINT(newSrc, trySource[i]);
                 
                 var pkgPath = path.join(modSource, "package.json");
-
+                var pkgObject;
                 if(fs.existsSync(pkgPath))
                 {
                   var pkg = fs.readFileSync(pkgPath);
                   try
                   {
                     pkg = JSON.parse(pkg);
-
+                    pkgObject = pkg;
                     if(pkg.nectar)
                     {
                       if(pkg.nectar.env)
@@ -124,6 +123,10 @@ function genRequire(from, src)
                     console.log("NectarJS:\n\n[!] " + e + " -> " + pkgPath.split("/").splice(-3).join("/"))
                   }
                 }
+                var _expose = {};
+                if(pkgObject && pkgObject.nectar && pkgObject.nectar.expose) _expose = pkgObject.nectar.expose;
+                LINT(newSrc, trySource[i], _expose);
+
                 break;
               }
               catch (e) {}

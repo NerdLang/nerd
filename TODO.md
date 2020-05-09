@@ -2,11 +2,11 @@
 
 * Add babel visitors for missing (list missing)
 
-* Memory cleaning for array properties and object properties
+* Add Math Obect with nectar module
 
-* Add Date Object with module
+* Add Date Object with nectar module
 
-* Add RegExp Object with module
+* Add RegExp Object with nectar module
 
 * Add NectarJS REPL
 
