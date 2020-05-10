@@ -1,3 +1,8 @@
+#VERSION 0.5.X
+* Adding memory management and cleaning without GC
+* Adding this and new
+* Adding Math, RegExp and Date module
+
 #VERSION 0.4.0
 * Adding a new memory manager
 * Improving some bug 
