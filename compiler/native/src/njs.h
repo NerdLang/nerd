@@ -722,7 +722,11 @@ void __NJS_Class_Object::Delete()
 	this->cnt --;
 	if(this->cnt < 1)
 	{
-		delete this;
+		#ifdef __NJS_ARDUINO
+			// quick fix to change
+		#else
+			delete this;
+		#endif
 	}	
 }
 

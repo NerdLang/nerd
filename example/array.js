@@ -8,9 +8,9 @@ for(var i = 0; i < _loop; i++)
 	_arr[i] = i;
 }
 
-for(var i = 0; i < _loop; i++)
+for(var j = 0; j < _loop; j++)
 {
-	_res += _arr[i];
+	_res += _arr[j];
 }
 
 console.log(_res);
