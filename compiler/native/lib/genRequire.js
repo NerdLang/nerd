@@ -142,7 +142,7 @@ function genRequire(from, src)
             if(NJS_ENV.name != "arduino")
             {
 
-              var reqFN = "_" + Math.random().toString(36).substr(2, 10);
+              var reqFN = "__MODULE_" + Math.random().toString(36).substr(2, 10);
 
               var resultSource = src.substring(0, index) + reqFN + "()";
 
