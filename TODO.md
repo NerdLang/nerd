@@ -17,3 +17,5 @@
 * put back project management
 
 * use expose for eslint ?
+
+* Add long and float for number management
