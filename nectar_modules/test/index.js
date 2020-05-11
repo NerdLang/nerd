@@ -2,6 +2,6 @@
 
 var ffi = {
 	msgBox: __WIN_MESSAGE_BOX,
-}
+};
 
 module.exports = ffi;

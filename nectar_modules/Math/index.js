@@ -1,27 +1,11 @@
 /* Math std module */
 
-function __POWER(i, j)
-{
-    j--;
-    while(j)
-    {
-        i*=i;
-        j--;
-    }
-    return i;
-}
-
-function __ABS(i)
-{
-    if(i < 0) return -i;
-    return i;
-}
-
 var _Math = 
 {
     abs: function(i)
     {
-        return __ABS(i);
+        if(i < 0) return -i;
+        return i;
     },
     pow: function(i, j)
     {
@@ -37,7 +21,7 @@ var _Math =
         }
         else if(j < 0)
         {
-            i = 1 / __POWER(i, __ABS(j));
+            i = 1 / _Math.pow(i, _Math.abs(j));
         }
         return i;
     },

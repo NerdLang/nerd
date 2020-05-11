@@ -40,30 +40,33 @@ enum __NJS_TYPE
 
 /*** HELPERS ***/
 #ifdef __NJS_ARDUINO
-	#define __NJS_FFI_FUNCTION(_name, ...) function<var (__VA_ARGS__)>  _name   = [&](__VA_ARGS__) -> var
+	#define __NJS_FFI_FUNCTION(_name, ...) function<__NJS_VAR (__VA_ARGS__)>  _name   = [&](__VA_ARGS__) -> __NJS_VAR
 #else 
-	#define __NJS_FFI_FUNCTION(_name, ...) function<var (__VA_ARGS__)> _name   = [&](__VA_ARGS__) -> var
+	#define __NJS_FFI_FUNCTION(_name, ...) function<__NJS_VAR (__VA_ARGS__)> _name   = [&](__VA_ARGS__) -> __NJS_VAR
 #endif
 #define __NJS_GET_STRING(_var) _var.get().s->__NJS_VALUE.c_str()
-#define let var
-#define __NJS_VAR var
-#define __NJS_Create_Boolean(_value) var(__NJS_BOOLEAN, _value)
-#define __NJS_Create_Number(_value) var( _value)
+#define var static __NJS_VAR
+#define let static __NJS_VAR
+
+
+#define __NJS_Create_Boolean(_value) __NJS_VAR(__NJS_BOOLEAN, _value)
+#define __NJS_Create_Number(_value) __NJS_VAR( _value)
 #define true __NJS_Create_Boolean(true)
 #define false __NJS_Create_Boolean(false)
-#define __NJS_Create_Undefined() var()
-#define __NJS_VAR var
+#define __NJS_Create_Undefined() __NJS_VAR()
 #define __NJS_DECL_FUNCTION function
 
-struct var;
+
+struct __NJS_VAR;
+
 
 class __NJS_Class_Object
 {
   public:
 	int cnt = 0;
 	__NJS_Class_Object();
-    vector<pair<char*, var>> __OBJECT;
-    var Get(char* _index);
+    vector<pair<char*, __NJS_VAR>> __OBJECT;
+    __NJS_VAR Get(char* _index);
 	void Delete();
 };
 
@@ -71,7 +74,7 @@ class __NJS_Class_String : public __NJS_Class_Object
 {
   public:
     __NJS_Class_String(char* _str);
-    var Get(char* _index);
+    __NJS_VAR Get(char* _index);
     string __NJS_VALUE;
 };
 
@@ -80,15 +83,15 @@ class __NJS_Class_Array : public __NJS_Class_Object
 {
   public:
     __NJS_Class_Array();
-    var Get(char* _index);
-    vector<var> __NJS_VALUE;
+    __NJS_VAR Get(char* _index);
+    vector<__NJS_VAR> __NJS_VALUE;
 };
 
 class __NJS_Class_Function : public __NJS_Class_Object
 {
   public:
   __NJS_Class_Function(void* _f);
-    var Get(char* _index);
+    __NJS_VAR Get(char* _index);
     void* __NJS_VALUE;
 	//void Delete();
 };
@@ -114,13 +117,13 @@ int FREE[{{REGISTER}}] = {0};
 
 /*** END REGISTER ***/
 
-var __create_Array(vector<var>  _value);
-var __NJS_Log_Console(var _var);
-var __NJS_Create_String(char* _value);
-inline var __NJS_Object_Get(char* _index, var _array);
-inline var __NJS_Object_Get(int _index, var _array);
-inline var __NJS_Object_Get(var _index, var _array);
-inline var __NJS_Object_Set(var _index, var _value, var _object);
+__NJS_VAR __create_Array(vector<__NJS_VAR>  _value);
+__NJS_VAR __NJS_Log_Console(__NJS_VAR _var);
+__NJS_VAR __NJS_Create_String(char* _value);
+inline __NJS_VAR __NJS_Object_Get(char* _index, __NJS_VAR _array);
+inline __NJS_VAR __NJS_Object_Get(int _index, __NJS_VAR _array);
+inline __NJS_VAR __NJS_Object_Get(__NJS_VAR _index, __NJS_VAR _array);
+inline __NJS_VAR __NJS_Object_Set(__NJS_VAR _index, __NJS_VAR _value, __NJS_VAR _object);
 
 
 /*** STRDUP ***/
@@ -176,7 +179,7 @@ inline char* __NJS_Concat_Str_To_Str(const char* _left, const char* _right)
 
 
 
-struct var
+struct __NJS_VAR
 {   	
 	private:
 	
@@ -203,14 +206,14 @@ struct var
 			return REGISTER[_ptr];
 		}
 	
-		inline var()
+		inline __NJS_VAR()
 		{
 		  setPtr();
 		  type = __NJS_UNDEFINED;
 		  REGISTER[_ptr].i = 0;
 		}
 		
-		~var()
+		~__NJS_VAR()
 		{	
 			if(type ==  __NJS_OBJECT)
 			{
@@ -220,7 +223,7 @@ struct var
 		}
 		
 		/**/
-		var(var const& _v) 
+		__NJS_VAR(__NJS_VAR const& _v) 
 		{ 
 			setPtr();
 			type = _v.type;
@@ -235,60 +238,60 @@ struct var
 		
 		/*** CONSTRUCTOR ***/
 		
-		inline var (__NJS_TYPE _type, int _value)
+		inline __NJS_VAR (__NJS_TYPE _type, int _value)
 		{
 			setPtr();
 			this->type = _type;
 			REGISTER[_ptr].i = _value;
 		}
 		
-		inline var (int _value)
+		inline __NJS_VAR (int _value)
 		{
 			setPtr();
 			this->type = __NJS_NUMBER;
 			REGISTER[_ptr].i = _value;
 		}
 
-		inline var (double _value)
+		inline __NJS_VAR (double _value)
 		{
 			setPtr();
 			this->type = __NJS_DOUBLE;
 			REGISTER[_ptr].d = _value;
 		}
 
-		var (char* _value)
+		__NJS_VAR (char* _value)
 		{
 			setPtr();
 			type = __NJS_STRING;
 			REGISTER[_ptr].s = new __NJS_Class_String(_value);
 		}
 		
-		var (const char* _value)
+		__NJS_VAR (const char* _value)
 		{
 			setPtr();
 			type = __NJS_STRING;
 			REGISTER[_ptr].s = new __NJS_Class_String((char*)_value);
 		}
 		
-		var (__NJS_Class_String* _value)
+		__NJS_VAR (__NJS_Class_String* _value)
 		{
 			setPtr();
 			type = __NJS_STRING;
 			REGISTER[_ptr].s = _value;
 		}
-		var (__NJS_Class_Array* _value)
+		__NJS_VAR (__NJS_Class_Array* _value)
 		{
 			setPtr();
 			type = __NJS_ARRAY;
 			REGISTER[_ptr].a = _value;
 		}
-		var (__NJS_Class_Object* _value)
+		__NJS_VAR (__NJS_Class_Object* _value)
 		{
 			setPtr();
 			type = __NJS_OBJECT;
 			REGISTER[_ptr].o = _value;
 		}
-		var (__NJS_TYPE _type, void* _value)
+		__NJS_VAR (__NJS_TYPE _type, void* _value)
 		{
 			setPtr();
 			type = _type;
@@ -297,7 +300,7 @@ struct var
 
 		/*** VARIADIC LAMBDAS ***/
 		template<class... Args>
-		var::var (function<var (Args...)>& _value)
+		__NJS_VAR::__NJS_VAR (function<__NJS_VAR (Args...)>& _value)
 		{
 			setPtr();
 			type = __NJS_FUNCTION;
@@ -311,7 +314,7 @@ struct var
 		/*** OPERATOR ***/
 
 		/*** EQUAL ***/
-		var& operator=(const var& _v)
+		__NJS_VAR& operator=(const __NJS_VAR& _v)
 		{
 			if(type == __NJS_OBJECT) REGISTER[_ptr].o->Delete();
 			type = _v.type;;
@@ -324,7 +327,7 @@ struct var
 		}
 		/*** END EQUAL ***/
 		
-		inline var operator+(const var& _v1)
+		inline __NJS_VAR operator+(const __NJS_VAR& _v1)
 		{
 			if(type == __NJS_NUMBER && _v1.type == __NJS_NUMBER)
 			{
@@ -372,93 +375,93 @@ struct var
 			}
 			else
 			{
-				return var(0);
+				return __NJS_VAR(0);
 			}
 		}
-		inline var operator-(const var& _v1)
+		inline __NJS_VAR operator-(const __NJS_VAR& _v1)
 		{
-			if(type == __NJS_NUMBER && _v1.type == __NJS_NUMBER) return var( get().i - _v1.get().i );
-			else if(type == __NJS_NUMBER && _v1.type == __NJS_DOUBLE) return var( get().i - _v1.get().d );
-			else if(type == __NJS_DOUBLE && _v1.type == __NJS_NUMBER) return var( get().d - _v1.get().i );
-			else if(type == __NJS_DOUBLE && _v1.type == __NJS_DOUBLE) return var( get().d - _v1.get().d );
-			return var();
+			if(type == __NJS_NUMBER && _v1.type == __NJS_NUMBER) return __NJS_VAR( get().i - _v1.get().i );
+			else if(type == __NJS_NUMBER && _v1.type == __NJS_DOUBLE) return __NJS_VAR( get().i - _v1.get().d );
+			else if(type == __NJS_DOUBLE && _v1.type == __NJS_NUMBER) return __NJS_VAR( get().d - _v1.get().i );
+			else if(type == __NJS_DOUBLE && _v1.type == __NJS_DOUBLE) return __NJS_VAR( get().d - _v1.get().d );
+			return __NJS_VAR();
 		}
 
-		inline var operator-()
+		inline __NJS_VAR operator-()
 		{
-			if(type == __NJS_NUMBER) return var( -get().i);
-			else if(type == __NJS_DOUBLE) return var( -get().d);
-			return var();
+			if(type == __NJS_NUMBER) return __NJS_VAR( -get().i);
+			else if(type == __NJS_DOUBLE) return __NJS_VAR( -get().d);
+			return __NJS_VAR();
 		}
 
-		inline var operator+()
+		inline __NJS_VAR operator+()
 		{
-			if(type == __NJS_NUMBER) return var( get().i);
-			else if(type == __NJS_DOUBLE) return var( get().d);
-			return var();
+			if(type == __NJS_NUMBER) return __NJS_VAR( get().i);
+			else if(type == __NJS_DOUBLE) return __NJS_VAR( get().d);
+			return __NJS_VAR();
 		}
 
 
-		var operator+=(const var _v1)
+		__NJS_VAR operator+=(const __NJS_VAR _v1)
 		{
 			if(type == __NJS_NUMBER && _v1.type == __NJS_NUMBER) REGISTER[_ptr].i += _v1.get().i;
 			else if(type == __NJS_NUMBER && _v1.type == __NJS_DOUBLE) REGISTER[_ptr].i += _v1.get().d;
 			else if(type == __NJS_DOUBLE && _v1.type == __NJS_NUMBER) REGISTER[_ptr].d += _v1.get().i;
 			else if(type == __NJS_DOUBLE && _v1.type == __NJS_DOUBLE) REGISTER[_ptr].d += _v1.get().d;
-			return var();
+			return __NJS_VAR();
 		}
 	
-   	 var operator++(const int _v1)
+   	 __NJS_VAR operator++(const int _v1)
 		{
 			if(type == __NJS_NUMBER) REGISTER[_ptr].i++;
 			else if(type == __NJS_DOUBLE) REGISTER[_ptr].d++;
 			return *this;
 		}
-    	var operator--(const int _v1)
+    	__NJS_VAR operator--(const int _v1)
 		{
 			if(type == __NJS_NUMBER) REGISTER[_ptr].i--;
 			else if(type == __NJS_DOUBLE) REGISTER[_ptr].d--;
 			return *this;
 		}
 
-    	var operator*(const var& _v1)
+    	__NJS_VAR operator*(const __NJS_VAR& _v1)
 		{
-			if(type == __NJS_NUMBER && _v1.type == __NJS_NUMBER) return var( get().i * _v1.get().i );
-			else if(type == __NJS_NUMBER && _v1.type == __NJS_DOUBLE) return var( get().i * _v1.get().d );
-			else if(type == __NJS_DOUBLE && _v1.type == __NJS_NUMBER) return var( get().d * _v1.get().i );
-			else if(type == __NJS_DOUBLE && _v1.type == __NJS_DOUBLE) return var( get().d * _v1.get().d );
-			return var();
+			if(type == __NJS_NUMBER && _v1.type == __NJS_NUMBER) return __NJS_VAR( get().i * _v1.get().i );
+			else if(type == __NJS_NUMBER && _v1.type == __NJS_DOUBLE) return __NJS_VAR( get().i * _v1.get().d );
+			else if(type == __NJS_DOUBLE && _v1.type == __NJS_NUMBER) return __NJS_VAR( get().d * _v1.get().i );
+			else if(type == __NJS_DOUBLE && _v1.type == __NJS_DOUBLE) return __NJS_VAR( get().d * _v1.get().d );
+			return __NJS_VAR();
 		}
-		var operator*= (const var& _v1)
+		__NJS_VAR operator*= (const __NJS_VAR& _v1)
 		{
 			if(type == __NJS_NUMBER && _v1.type == __NJS_NUMBER) REGISTER[_ptr].i *= _v1.get().i;
 			else if(type == __NJS_NUMBER && _v1.type == __NJS_DOUBLE) REGISTER[_ptr].i *= _v1.get().d;
 			else if(type == __NJS_DOUBLE && _v1.type == __NJS_NUMBER) REGISTER[_ptr].d *= _v1.get().i;
 			else if(type == __NJS_DOUBLE && _v1.type == __NJS_DOUBLE) REGISTER[_ptr].d *= _v1.get().d;
-			return var();
+			return __NJS_VAR();
 		}
-		var operator/= (const var& _v1)
+		__NJS_VAR operator/= (const __NJS_VAR& _v1)
 		{
 			if(type == __NJS_NUMBER && _v1.type == __NJS_NUMBER) REGISTER[_ptr].i /= _v1.get().i;
 			else if(type == __NJS_NUMBER && _v1.type == __NJS_DOUBLE) REGISTER[_ptr].i /= _v1.get().d;
 			else if(type == __NJS_DOUBLE && _v1.type == __NJS_NUMBER) REGISTER[_ptr].d /= _v1.get().i;
 			else if(type == __NJS_DOUBLE && _v1.type == __NJS_DOUBLE) REGISTER[_ptr].d /= _v1.get().d;
-			return var();
+			return __NJS_VAR();
 		}
-    var operator/(const var& _v1)
+    __NJS_VAR operator/(const __NJS_VAR& _v1)
 		{
-			if(type == __NJS_NUMBER && _v1.type == __NJS_NUMBER) return var( get().i / _v1.get().i );
-			else if(type == __NJS_NUMBER && _v1.type == __NJS_DOUBLE) return var( get().i / _v1.get().d );
-			else if(type == __NJS_DOUBLE && _v1.type == __NJS_NUMBER) return var( get().d / _v1.get().i );
-			else if(type == __NJS_DOUBLE && _v1.type == __NJS_DOUBLE) return var( get().d / _v1.get().d );
-			return var();
+			if(type == __NJS_NUMBER && _v1.type == __NJS_NUMBER) return __NJS_VAR( get().i / _v1.get().i );
+			else if(type == __NJS_NUMBER && _v1.type == __NJS_DOUBLE) return __NJS_VAR( get().i / _v1.get().d );
+			else if(type == __NJS_DOUBLE && _v1.type == __NJS_NUMBER) return __NJS_VAR( get().d / _v1.get().i );
+			else if(type == __NJS_DOUBLE && _v1.type == __NJS_DOUBLE) return __NJS_VAR( get().d / _v1.get().d );
+			return __NJS_VAR();
 		}
-    var operator%(const var& _v1)
+    __NJS_VAR operator%(const __NJS_VAR& _v1)
 		{
-			return var( get().i % _v1.get().i );
+			return __NJS_VAR( get().i % _v1.get().i );
 		}
 		
-    var const operator! () const
+    __NJS_VAR const operator! () const
     {
       if(type == __NJS_NUMBER)
       {
@@ -467,37 +470,37 @@ struct var
       else return(false);
     };
 		
-    var operator==(const var& _v1)
+    __NJS_VAR operator==(const __NJS_VAR& _v1)
 		{
-			return var(__NJS_BOOLEAN, get().i == _v1.get().i);
+			return __NJS_VAR(__NJS_BOOLEAN, get().i == _v1.get().i);
 		}
 		
-		var operator<(const var& _v1)
+		__NJS_VAR operator<(const __NJS_VAR& _v1)
 		{
-			return var(__NJS_BOOLEAN, get().i < _v1.get().i);
+			return __NJS_VAR(__NJS_BOOLEAN, get().i < _v1.get().i);
 		}
 		
-    var operator<=(const var& _v1)
+    __NJS_VAR operator<=(const __NJS_VAR& _v1)
 		{
-			return var(__NJS_BOOLEAN, get().i <= _v1.get().i);
+			return __NJS_VAR(__NJS_BOOLEAN, get().i <= _v1.get().i);
 		}
 
-		var operator>(const var& _v1)
+		__NJS_VAR operator>(const __NJS_VAR& _v1)
 		{
-			return var(__NJS_BOOLEAN, get().i > _v1.get().i);
+			return __NJS_VAR(__NJS_BOOLEAN, get().i > _v1.get().i);
 		}
 		
-    var operator>=(const var& _v1)
+    __NJS_VAR operator>=(const __NJS_VAR& _v1)
 		{
-			return var(__NJS_BOOLEAN, get().i >= _v1.get().i);
+			return __NJS_VAR(__NJS_BOOLEAN, get().i >= _v1.get().i);
 		}
-    var operator>>(const var& _v1)
+    __NJS_VAR operator>>(const __NJS_VAR& _v1)
 		{
-			return var( get().i >> _v1.get().i);
+			return __NJS_VAR( get().i >> _v1.get().i);
 		}
-    var operator<<(const var& _v1)
+    __NJS_VAR operator<<(const __NJS_VAR& _v1)
 		{
-			return var( get().i << _v1.get().i);
+			return __NJS_VAR( get().i << _v1.get().i);
 		}
 	
 
@@ -509,50 +512,51 @@ struct var
 
 /*** VARIADIC CALLS ***/
 template<class... Args>
-inline var __NJS_Back_Var_Call_Function(var _obj, Args... args)
+inline __NJS_VAR __NJS_Back_Var_Call_Function(__NJS_VAR _obj, Args... args)
 {
-	return (*static_cast<function<var ( Args... )>*>(_obj.get().f->__NJS_VALUE))( args... );
+	return (*static_cast<function<__NJS_VAR ( Args... )>*>(_obj.get().f->__NJS_VALUE))( args... );
 }
 
 template<class... Args>
-inline var __NJS_Call_Function(var _obj, Args... args)
+inline __NJS_VAR __NJS_Call_Function(__NJS_VAR _obj, Args... args)
 {
-	return __NJS_Back_Var_Call_Function(_obj, (var)(args)...);
+	return __NJS_Back_Var_Call_Function(_obj, (__NJS_VAR)(args)...);
 }
 /*** END VARIADIC CALLS ***/
 
 
-inline var __create_Array()
+inline __NJS_VAR __create_Array()
 {
   __NJS_Class_Array* _a = new __NJS_Class_Array();
-  return var(__NJS_ARRAY, _a);
+  return __NJS_VAR(__NJS_ARRAY, _a);
 }
 
-inline var __NJS_Create_Array()
+inline __NJS_VAR __NJS_Create_Array()
 {
   __NJS_Class_Array* _a = new __NJS_Class_Array();
-  return var(_a);
+  return __NJS_VAR(_a);
 }
 
-inline int __NJS_Get_Int(var _v)
+inline int __NJS_Get_Int(__NJS_VAR _v)
 {
   return _v.get().i;
 }
 
-inline char* __NJS_Get_String(var _v)
+inline char* __NJS_Get_String(__NJS_VAR _v)
 {
   return _v.get().s->__NJS_VALUE.c_str();
 }
 
-inline var __NJS_Typeof(var _var)
+inline __NJS_VAR __NJS_Typeof(__NJS_VAR _var)
 {
   char* _array[] = {(char*)"", (char*)"undefined", (char*)"number", (char*)"number", (char*)"object", (char*)"number", (char*)"boolean", (char*)"string", (char*)"function", (char*)"array"};
   return __NJS_Create_String(_array[_var.type]);
 }
 
 /*** ***/
-inline var __NJS_Object_Set(char* _index, var _value, vector<pair<char*, var>>* _obj)
+inline __NJS_VAR __NJS_Object_Set(char* _index, __NJS_VAR _value, vector<pair<char*, __NJS_VAR>>* _obj)
 {
+
   int _j = (*_obj).size();
   for(int _i = 0; _i < _j; _i++)
   {
@@ -562,14 +566,16 @@ inline var __NJS_Object_Set(char* _index, var _value, vector<pair<char*, var>>* 
 	  
       REGISTER[(*_obj)[_i].second._ptr] = REGISTER[_value._ptr];
       
-	  return var();
+	  return __NJS_VAR();
     }
   }
-  (*_obj).push_back(pair<char*, var>( _index, _value));
-  return var();
+
+  (*_obj).push_back(pair<char*, __NJS_VAR>( _index, _value));
+  return __NJS_VAR();
+
 }
 
-inline var __NJS_Object_Set(var _index, var _value, vector<pair<char*, var>>* _obj)
+inline __NJS_VAR __NJS_Object_Set(__NJS_VAR _index, __NJS_VAR _value, vector<pair<char*, __NJS_VAR>>* _obj)
 {
   int _j = (*_obj).size();
   for(int _i = 0; _i < _j; _i++)
@@ -580,21 +586,22 @@ inline var __NJS_Object_Set(var _index, var _value, vector<pair<char*, var>>* _o
       
 	  REGISTER[(*_obj)[_i].second._ptr] = REGISTER[_value._ptr];
       
-	  return var();
+	  return __NJS_VAR();
     }
   }
-  (*_obj).push_back(pair<char*, var>( (char*)_index.get().s->__NJS_VALUE.c_str(), _value));
-  return var();
+
+  (*_obj).push_back(pair<char*, __NJS_VAR>( (char*)_index.get().s->__NJS_VALUE.c_str(), _value));
+  return __NJS_VAR();
 }
 
-inline var __NJS_Object_Set(char* _index, var _value, var _array)
+inline __NJS_VAR __NJS_Object_Set(char* _index, __NJS_VAR _value, __NJS_VAR _array)
 {
-
-  vector<pair<char*, var>>* _obj;
+  vector<pair<char*, __NJS_VAR>>* _obj;
   if(_array.type == __NJS_OBJECT) _obj = &_array.get().o->__OBJECT;
+  else if(_array.type == __NJS_ARRAY) _obj = &_array.get().a->__OBJECT;
   else if(_array.type == __NJS_STRING) _obj = &_array.get().s->__OBJECT;
   else if(_array.type == __NJS_FUNCTION) _obj = &_array.get().f->__OBJECT;
-  else return var();
+  else return __NJS_VAR();
 
   int _j = (*_obj).size();
 
@@ -606,19 +613,19 @@ inline var __NJS_Object_Set(char* _index, var _value, var _array)
 	  
 	  REGISTER[(*_obj)[_i].second._ptr] = REGISTER[_value._ptr];
 	  
-      return var();
+      return __NJS_VAR();
     }
   }
-  (*_obj).push_back(pair<char*, var>( _index, _value));
-  return var();
+
+  (*_obj).push_back(pair<char*, __NJS_VAR>( _index, _value));
+  return __NJS_VAR();
 }
 
-inline var __NJS_Object_Set(var _index, var _value, var _array)
+inline __NJS_VAR __NJS_Object_Set(__NJS_VAR _index, __NJS_VAR _value, __NJS_VAR _array)
 {
-
-  if(_array.type == __NJS_ARRAY)
+  if(_array.type == __NJS_ARRAY && _index.type == __NJS_NUMBER)
   {
-    if(_index.type != __NJS_NUMBER) return var (__NJS_UNDEFINED, 0);
+    if(_index.type != __NJS_NUMBER) return __NJS_VAR (__NJS_UNDEFINED, 0);
 
     if(_array.get().a->__NJS_VALUE.size() <= _index.get().i) _array.get().a->__NJS_VALUE.resize(_index.get().i + 1);
 
@@ -630,11 +637,12 @@ inline var __NJS_Object_Set(var _index, var _value, var _array)
   }
   else if(_array.type == __NJS_OBJECT || _array.type == __NJS_STRING || _array.type == __NJS_FUNCTION)
   {
-    vector<pair<char*, var>>* _obj;
+    vector<pair<char*, __NJS_VAR>>* _obj;
     if(_array.type == __NJS_OBJECT) _obj = &_array.get().o->__OBJECT;
+	else if(_array.type == __NJS_ARRAY) _obj = &_array.get().a->__OBJECT;
     else if(_array.type == __NJS_STRING) _obj = &_array.get().s->__OBJECT;
 	else if(_array.type == __NJS_FUNCTION) _obj = &_array.get().f->__OBJECT;
-    else return var();
+    else return __NJS_VAR();
 
     int _j = (*_obj).size();
 
@@ -646,15 +654,16 @@ inline var __NJS_Object_Set(var _index, var _value, var _array)
 		
         REGISTER[(*_obj)[_i].second._ptr] = REGISTER[_value._ptr];
 		
-        return var();
+        return __NJS_VAR();
       }
     }
-    (*_obj).push_back(pair<char*, var>( (char*)_index.get().s->__NJS_VALUE.c_str(), _value));
+	
+    (*_obj).push_back(pair<char*, __NJS_VAR>( (char*)_index.get().s->__NJS_VALUE.c_str(), _value));
   }
-  return var();
+  return __NJS_VAR();
 }
 
-inline var __NJS_Object_Set(int _index, var _value, var _array)
+inline __NJS_VAR __NJS_Object_Set(int _index, __NJS_VAR _value, __NJS_VAR _array)
 {
 
   if(_array.type == __NJS_ARRAY)
@@ -664,54 +673,51 @@ inline var __NJS_Object_Set(int _index, var _value, var _array)
 	REGISTER[_array.get().a->__NJS_VALUE[_index]._ptr] = REGISTER[_value._ptr];
 	__NJS_Object_Set(__NJS_Create_String((char*)"length"), __NJS_Create_Number((int)_array.get().a->__NJS_VALUE.size()), &_array.get().a->__OBJECT);
   }
-  return var();
+  return __NJS_VAR();
 }
 
 
-inline var __NJS_Object_Get(int _index, var _array)
+inline __NJS_VAR __NJS_Object_Get(int _index, __NJS_VAR _array)
 {
-  if(_array.type != __NJS_ARRAY && _array.type != __NJS_OBJECT && _array.type != __NJS_FUNCTION) return var();
+  if(_array.type != __NJS_ARRAY && _array.type != __NJS_OBJECT && _array.type != __NJS_FUNCTION) return __NJS_VAR();
   if(_array.type == __NJS_ARRAY)
   {
     if(_index > _array.get().a->__NJS_VALUE.size())
     {
-      return var();
+      return __NJS_VAR();
     }
 	 
     return _array.get().a->__NJS_VALUE[_index];
   }
-  return var();
+  return __NJS_VAR();
 }
 
 
-inline var __NJS_Object_Get(char* _index, var _array)
+inline __NJS_VAR __NJS_Object_Get(char* _index, __NJS_VAR _array)
 {
-	return __NJS_Object_Get(var(_index), _array);
+	return __NJS_Object_Get (__NJS_VAR(_index), _array);
 }
 
-inline var __NJS_Object_Get(var _index, var _array)
+inline __NJS_VAR __NJS_Object_Get(__NJS_VAR _index, __NJS_VAR _array)
 {
-  if(_array.type != __NJS_ARRAY && _array.type != __NJS_OBJECT && _array.type != __NJS_STRING && _array.type != __NJS_FUNCTION) return var();
-  if(_array.type == __NJS_ARRAY)
+  if(_array.type != __NJS_ARRAY && _array.type != __NJS_OBJECT && _array.type != __NJS_STRING && _array.type != __NJS_FUNCTION) return __NJS_VAR();
+  if(_array.type == __NJS_ARRAY && _index.type == __NJS_NUMBER)
   {
-    if(_index.type == __NJS_STRING)
+    if(_index.get().i > _array.get().a->__NJS_VALUE.size())
     {
-      return _array.get().a->Get(__NJS_Get_String(_index));
-    }
-    else if(_index.type != __NJS_NUMBER || _index.get().i > _array.get().a->__NJS_VALUE.size())
-    {
-      return var();
+      return __NJS_VAR();
     }
     return _array.get().a->__NJS_VALUE[_index.get().i];
   }
   else
   {
-    if(_index.type != __NJS_STRING) return var();
-    vector<pair<char*, var>>* _obj;
+    if(_index.type != __NJS_STRING) return __NJS_VAR();
+    vector<pair<char*, __NJS_VAR>>* _obj;
     if(_array.type == __NJS_OBJECT) _obj = &_array.get().o->__OBJECT;
+	else if(_array.type == __NJS_ARRAY) _obj = &_array.get().a->__OBJECT;
     else if(_array.type == __NJS_STRING) _obj = &_array.get().s->__OBJECT;
 	else if(_array.type == __NJS_FUNCTION) _obj = &_array.get().f->__OBJECT;
-    else return var();
+    else return __NJS_VAR();
     int _j = (*_obj).size();
     for(int _i = 0; _i < _j; _i++)
     {
@@ -721,26 +727,26 @@ inline var __NJS_Object_Get(var _index, var _array)
       }
     }
   }
-  return var();
+  return __NJS_VAR();
 }
 
 
 __NJS_Class_String::__NJS_Class_String(char* _value)
 {
 	/*** toString ***/
-  function<var ()>* __OBJ_TO___NJS_STRING = new function<var ()>([&](){ return __NJS_Create_String(this->__NJS_VALUE.c_str()); });
-  var toString = var(__NJS_FUNCTION, __OBJ_TO___NJS_STRING);
+  function<__NJS_VAR ()>* __OBJ_TO___NJS_STRING = new function<__NJS_VAR ()>([&](){ return __NJS_Create_String(this->__NJS_VALUE.c_str()); });
+  __NJS_VAR toString = __NJS_VAR(__NJS_FUNCTION, __OBJ_TO___NJS_STRING);
   __NJS_Object_Set((char*)"toString", toString, &this->__OBJECT);
 	/*** end to string ***/
 	
 	/*** length ***/
-  __NJS_Object_Set((char*)"length", var((int)strlen(_value)), &this->__OBJECT);
+  __NJS_Object_Set((char*)"length", __NJS_VAR((int)strlen(_value)), &this->__OBJECT);
 	/*** end length ***/
 	
   /*** split ***/
-  function<var (var)>* __OBJ_TO___NJS_SPLIT = new function<var (var)>([&](var _needle)
+  function<__NJS_VAR (__NJS_VAR)>* __OBJ_TO___NJS_SPLIT = new function<__NJS_VAR (__NJS_VAR)>([&](__NJS_VAR _needle)
   { 
-	var _arr = __NJS_Create_Array();
+	__NJS_VAR _arr = __NJS_Create_Array();
     char* _v = (char*)malloc(strlen(this->__NJS_VALUE.c_str()) + 1);
 	strcpy(_v, this->__NJS_VALUE.c_str());	
 	char* delim = (char*)malloc(strlen(_needle.get().s->__NJS_VALUE.c_str()) + 1);
@@ -762,7 +768,7 @@ __NJS_Class_String::__NJS_Class_String(char* _value)
 	return _arr; 
   });
   
-  var __split = var(__NJS_FUNCTION, __OBJ_TO___NJS_SPLIT);
+  __NJS_VAR __split = __NJS_VAR(__NJS_FUNCTION, __OBJ_TO___NJS_SPLIT);
   __NJS_Object_Set((char*)"split", __split, &this->__OBJECT);
 	/*** end split ***/
 
@@ -770,20 +776,19 @@ __NJS_Class_String::__NJS_Class_String(char* _value)
   __NJS_VALUE = _value;
 }
 
-inline var __NJS_Class_String::Get(char* _index)
+inline __NJS_VAR __NJS_Class_String::Get(char* _index)
 {
   return __NJS_Object_Get(_index, this);
 }
 
 __NJS_Class_Array::__NJS_Class_Array()
 {
-
-  function<var ()>* __OBJ_TO___NJS_STRING = new function<var ()>([&](){ return __NJS_Create_String((char*)"Array"); });
-  var toString = var(__NJS_FUNCTION, __OBJ_TO___NJS_STRING);
+	
+  function<__NJS_VAR ()>* __OBJ_TO___NJS_STRING = new function<__NJS_VAR ()>([&](){ return __NJS_Create_String((char*)"Array"); });
+  __NJS_VAR toString = __NJS_VAR(__NJS_FUNCTION, __OBJ_TO___NJS_STRING);
   __NJS_Object_Set((char*)"toString", toString, &this->__OBJECT);
-
-  __NJS_Object_Set((char*)"length", var(0), this);
-
+  
+  __NJS_Object_Set((char*)"length", __NJS_VAR(0), &this->__OBJECT);
 }
 
 __NJS_Class_Object::__NJS_Class_Object()
@@ -812,19 +817,19 @@ void __NJS_Class_Object::Delete()
 	}	
 }
 
-inline var __NJS_Class_Array::Get(char* _index)
+inline __NJS_VAR __NJS_Class_Array::Get(char* _index)
 {
   return __NJS_Object_Get(_index, this);
 }
 
 
-inline var Array()
+inline __NJS_VAR Array()
 {
-  vector<var>* _arr = new vector<var>();
-  return var(__NJS_ARRAY, _arr);
+  vector<__NJS_VAR>* _arr = new vector<__NJS_VAR>();
+  return __NJS_VAR(__NJS_ARRAY, _arr);
 }
 
-inline var __NJS_Boolean_Result(var _v)
+inline __NJS_VAR __NJS_Boolean_Result(__NJS_VAR _v)
 {
   if(_v.type == __NJS_NUMBER) return _v.get().i;
   else if(_v.type == __NJS_BOOLEAN) return _v.get().b;
@@ -837,17 +842,17 @@ inline var __NJS_Boolean_Result(var _v)
   else return false;
 }
 
-ostream& operator << (ostream& os, const var& _v)
+ostream& operator << (ostream& os, const __NJS_VAR& _v)
 {
   switch(_v.type)
 	{
     case __NJS_UNDEFINED:
-      os << "undefined";
-      break;
+		os << "undefined";
+		break;
     case __NJS_BOOLEAN:
-      if(_v.get().b) os << (char*)"true";
-      else os << (char*)"false";
-      break;
+		if(_v.get().b) os << (char*)"true";
+		else os << (char*)"false";
+		break;
 	case __NJS_NUMBER:
 		os << _v.get().i;
 		break;
@@ -863,12 +868,12 @@ ostream& operator << (ostream& os, const var& _v)
 	return os;
 }
 
-inline var parseInt(var _str)
+inline __NJS_VAR parseInt(__NJS_VAR _str)
 {
   if(_str.type == __NJS_STRING)
   {
 	#ifdef __NJS_ARDUINO
-		return var();
+		return __NJS_VAR();
 	#else
 		return __NJS_Create_Number(stoi(_str.get().s->__NJS_VALUE));
 	#endif
@@ -877,7 +882,7 @@ inline var parseInt(var _str)
 }
 
 
-inline var  __NJS_Log_Console(var _var)
+inline __NJS_VAR  __NJS_Log_Console(__NJS_VAR _var)
 {
 	#ifdef __NJS_ARDUINO
 	
@@ -886,44 +891,44 @@ inline var  __NJS_Log_Console(var _var)
 		cout << endl;
 	#endif
 	
-  return var();
+  return __NJS_VAR();
 }
 
 
-inline var __NJS_Create_String(char* _value)
+inline __NJS_VAR __NJS_Create_String(char* _value)
 {
   __NJS_Class_String* _s = new __NJS_Class_String(_value);
-  return var(_s);
+  return __NJS_VAR(_s);
 }
 
-inline var __NJS_Create_Object()
+inline __NJS_VAR __NJS_Create_Object()
 {
   __NJS_Class_Object* _obj = new __NJS_Class_Object();
-  return var(_obj);
+  return __NJS_VAR(_obj);
 }
 
 
-inline var Object()
+inline __NJS_VAR Object()
 {
   return __NJS_Create_Object();
 }
 
-inline var __NJS_CREATE_FUNCTION(void* _fn)
+inline __NJS_VAR __NJS_CREATE_FUNCTION(void* _fn)
 {
-  return var(__NJS_FUNCTION, _fn);
+  return __NJS_VAR(__NJS_FUNCTION, _fn);
 }
 
-inline var __NJS_Create_Native(void* _native)
+inline __NJS_VAR __NJS_Create_Native(void* _native)
 {
-  return var(__NJS_UNDEFINED, _native);
+  return __NJS_VAR(__NJS_UNDEFINED, _native);
 }
 
-inline void* __NJS_Get_Function(var _fn)
+inline void* __NJS_Get_Function(__NJS_VAR _fn)
 {
   return _fn.get().f;
 }
 
-inline void* __NJS_Get_Native(var _native)
+inline void* __NJS_Get_Native(__NJS_VAR _native)
 {
   return _native.get().f;
 }
@@ -931,27 +936,27 @@ inline void* __NJS_Get_Native(var _native)
 /*** REDIFINING STD OPERATORS ***/
 
 template<typename t>
-inline var operator+(t _left, const var& _right)
+inline __NJS_VAR operator+(t _left, const __NJS_VAR& _right)
 {
-	return var(_left) + _right;
+	return __NJS_VAR(_left) + _right;
 }
 
 template<typename t>
-inline var operator-(t _left, const var& _right)
+inline __NJS_VAR operator-(t _left, const __NJS_VAR& _right)
 {
-	return var(_left) - _right;
+	return __NJS_VAR(_left) - _right;
 }
 
 template<typename t>
-inline var operator*(t _left, const var& _right)
+inline __NJS_VAR operator*(t _left, const __NJS_VAR& _right)
 {
-	return var(_left) * _right;
+	return __NJS_VAR(_left) * _right;
 }
 
 template<typename t>
-inline var operator/(t _left, const var& _right)
+inline __NJS_VAR operator/(t _left, const __NJS_VAR& _right)
 {
-	return var(_left) / _right;
+	return __NJS_VAR(_left) / _right;
 }
 
 /*** END REDIFINING STD OPERATORS ***/

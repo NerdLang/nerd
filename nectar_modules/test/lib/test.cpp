@@ -10,15 +10,15 @@ var __FFI_SIMPLE_MSGBOX()
 	#else 
 		cout << "this platform is not compatible with MessageBox" << "\n";
 	#endif
-	return var();
+	return __NJS_VAR();
 };
 
-__NJS_FFI_FUNCTION(__WIN_MESSAGE_BOX, var _message, var _title)
+__NJS_FFI_FUNCTION(__WIN_MESSAGE_BOX, __NJS_VAR _message, __NJS_VAR _title)
 {
 	#ifdef _WIN32
 		int msgboxID = MessageBox(NULL, __NJS_GET_STRING(_message), __NJS_GET_STRING(_title), MB_ICONWARNING | MB_YESNOCANCEL);
 	#else 
 		cout << "this platform is not compatible with MessageBox" << "\n";
 	#endif
-	return var();
+	return __NJS_VAR();
 };

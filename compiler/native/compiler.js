@@ -143,7 +143,7 @@ function Compiler()
 					if(_match[2][i].length > 0)
 					{
 						if(i != 0) _var += ",";
-						_var += "var " + _match[2][i];
+						_var += "__NJS_VAR " + _match[2][i];
 					}
 				}
 				for(var i = _index; i < _code.length; i++)
@@ -165,14 +165,14 @@ function Compiler()
 
 								_handler.DECL += "var " + _match[1] +";";
 
-								var _formated = "__NJS_DECL_FUNCTION<var (" + _var + ")>* " + _genFN +" = new __NJS_DECL_FUNCTION<var (" + _var + ")>([&](" + _var + ") -> var" + _fnThis + _return + ");";
-								_formated += _match[1] + "=var(__NJS_FUNCTION, " + _genFN + ");";
+								var _formated = "__NJS_DECL_FUNCTION<__NJS_VAR (" + _var + ")>* " + _genFN +" = new __NJS_DECL_FUNCTION<__NJS_VAR (" + _var + ")>([&](" + _var + ") -> __NJS_VAR" + _fnThis + _return + ");";
+								_formated += _match[1] + "=__NJS_VAR(__NJS_FUNCTION, " + _genFN + ");";
 								
 								if(_match[1].indexOf("__MODULE") != 0)
 								{
 									var _genNew = "__NEW_" + _genFN;
-									var _addNew = "__NJS_DECL_FUNCTION<var (" + _var + ")>* " + _genNew +" = new __NJS_DECL_FUNCTION<var (" + _var + ")>([&](" + _var + ") -> var" + _fnThis + _returnThis + ");";
-									_addNew += "var __NEW_" + _match[1] + "=var(__NJS_FUNCTION, " + _genNew + ");";
+									var _addNew = "__NJS_DECL_FUNCTION<__NJS_VAR (" + _var + ")>* " + _genNew +" = new __NJS_DECL_FUNCTION<__NJS_VAR (" + _var + ")>([&](" + _var + ") -> __NJS_VAR" + _fnThis + _returnThis + ");";
+									_addNew += "var __NEW_" + _match[1] + "=__NJS_VAR(__NJS_FUNCTION, " + _genNew + ");";
 
 									_formated += _addNew;
 								}
@@ -208,7 +208,7 @@ function Compiler()
 					if(_match[1][i].length > 0)
 					{
 						if(i != 0) _var += ",";
-						_var += "var " + _match[1][i];
+						_var += "__NJS_VAR " + _match[1][i];
 					}
 				}
 				for(var i = _index; i < _code.length; i++)
@@ -226,7 +226,7 @@ function Compiler()
 							{
 								
 								var _fn = _code.substring(_start, _end);
-								var _formated = "var(__NJS_FUNCTION, new function<var (" + _var + ")> ([&](" + _var + ") -> var" + _fn + os.EOL + _return + "));";
+								var _formated = "__NJS_VAR(__NJS_FUNCTION, new function<__NJS_VAR (" + _var + ")> ([&](" + _var + ") -> __NJS_VAR" + _fn + os.EOL + _return + "));";
 								_code = [_code.slice(0, _index), _formated, _code.slice(_end + 1)].join('');		
 								break;
 							}
