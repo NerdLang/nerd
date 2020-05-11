@@ -2,7 +2,11 @@
 
 var _Math = 
 {
-    abs: function(i){return i;},
+    abs: function(i)
+    {
+        if(i < 0) return -i;
+        return i;
+    },
     pow: function(i, j)
     {
         if(j == 0) return 1;
@@ -17,15 +21,11 @@ var _Math =
         }
         else if(j < 0)
         {
-            j--;
-            while(j)
-            {
-                i/=i;
-                j--;
-            }
+            return 0;   
         }
         return i;
     },
+    PI: 3.141592653589793,
 };
 
 
