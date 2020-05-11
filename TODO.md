@@ -11,5 +11,3 @@
 * Add NectarJS REPL
 
 * put back project management
-
-* Put std module in global space

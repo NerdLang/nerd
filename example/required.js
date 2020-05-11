@@ -1,3 +1,3 @@
-__NJS_Log_Console("Required");
+console.log("Required");
 
 module.exports = "ok";

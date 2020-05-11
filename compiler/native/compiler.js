@@ -95,7 +95,8 @@ function Compiler()
 	{
 		for(var _s in this.ENV.stdlib)
 		{
-			this.STD += "var " + this.ENV.stdlib[_s] +  " = require(\"" + this.ENV.stdlib[_s] + "\");";
+			this.DECL += "var " + this.ENV.stdlib[_s] + ";";
+			this.STD += this.ENV.stdlib[_s] +  " = require(\"" + this.ENV.stdlib[_s] + "\");";
 		}
 	}
 	
@@ -121,7 +122,7 @@ function Compiler()
 		
 		function createFunction(_code)
 		{	
-			
+			var _matchThis = new RegExp(/(| |{|,)__NJS_THIS([\.(";)]|$)/);
 			var _return = ";return __NJS_Create_Undefined();}";
 			var _returnThis = ";return __NJS_THIS;}";
 			var _searchFN = new RegExp(/function (.[a-zA-Z0-9_\-]*) *\((.*)\)/);
@@ -160,12 +161,14 @@ function Compiler()
 							_count--;
 							if(_count == 0)
 							{
-								//var _fn = _code.substring(_start, _end);
+								var _fn = _code.substring(_start, _end);
 								var _fnThis = "{ var __NJS_THIS = __NJS_Create_Object();" + _code.substring(_start + 1, _end);
+
+								if(_code.search(_matchThis) > -1) _fn = _fnThis;
 
 								_handler.DECL += "var " + _match[1] +";";
 
-								var _formated = "__NJS_DECL_FUNCTION<__NJS_VAR (" + _var + ")>* " + _genFN +" = new __NJS_DECL_FUNCTION<__NJS_VAR (" + _var + ")>([&](" + _var + ") -> __NJS_VAR" + _fnThis + _return + ");";
+								var _formated = "__NJS_DECL_FUNCTION<__NJS_VAR (" + _var + ")>* " + _genFN +" = new __NJS_DECL_FUNCTION<__NJS_VAR (" + _var + ")>([&](" + _var + ") -> __NJS_VAR" + _fn + _return + ");";
 								_formated += _match[1] + "=__NJS_VAR(__NJS_FUNCTION, " + _genFN + ");";
 								
 								if(_match[1].indexOf("__MODULE") != 0)
@@ -189,6 +192,7 @@ function Compiler()
 
 		function createAnon(_code)
 		{	
+			var _matchThis = new RegExp(/(| |{|,)__NJS_THIS([\.(";)]|$)/);
 			var _return = "return __NJS_Create_Undefined();}";
 			var _searchAnonFN = new RegExp(/function *\(([a-zA-Z0-9_\-, ]*)\)/);
 			var _index = _code.search(_searchAnonFN);
@@ -226,6 +230,10 @@ function Compiler()
 							{
 								
 								var _fn = _code.substring(_start, _end);
+								var _fnThis = "{ var __NJS_THIS = __NJS_Create_Object();" + _code.substring(_start + 1, _end);
+
+								if(_code.search(_matchThis) > -1) _fn = _fnThis;
+								
 								var _formated = "__NJS_VAR(__NJS_FUNCTION, new function<__NJS_VAR (" + _var + ")> ([&](" + _var + ") -> __NJS_VAR" + _fn + os.EOL + _return + "));";
 								_code = [_code.slice(0, _index), _formated, _code.slice(_end + 1)].join('');		
 								break;
