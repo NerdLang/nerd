@@ -31,7 +31,6 @@ babel.generate = require( '@babel/generator' ).default;
  var visitor = require("./visitor/visitor.js");
  
 var genRequire = require("./lib/genRequire.js");
-var parseObj = require("./lib/parseObj.js");
 
 global.RND = function() { return "__" + Math.random().toString(36).substring(7); };
 
