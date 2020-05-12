@@ -1,6 +1,6 @@
 var arduino = require("arduino");
 
-var PIN_LED = 10;
+var PIN_LED = arduino.led_builtin;
 
 function setup()
 {

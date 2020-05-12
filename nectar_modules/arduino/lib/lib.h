@@ -73,4 +73,4 @@ __NJS_FFI_FUNCTION(__NJS_DIGITAL_WRITE, __NJS_VAR _pin, __NJS_VAR _mode)
 #define arduino_LOW __NJS_VAR(LOW)
 #define arduino_INPUT __NJS_VAR(INPUT)
 #define arduino_OUTPUT __NJS_VAR(OUTPUT)
-
+#define arduino_LED_BUILTIN __NJS_VAR(LED_BUILTIN)

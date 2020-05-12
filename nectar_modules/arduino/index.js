@@ -37,10 +37,11 @@ var _arduino =
 	sconds: __NJS_SECONDS,
 	pinMode: __NJS_PIN_MODE,
 	digitalWrite: __NJS_DIGITAL_WRITE,
-	high: HIGH,
-	low: LOW,
-	input: INPUT,
-	output: OUTPUT,
+	high: arduino_HIGH,
+	low: arduino_LOW,
+	input: arduino_INPUT,
+	output: arduino_OUTPUT,
+	led_builtin: arduino_LED_BUILTIN
 };
 
 module.exports = _arduino;

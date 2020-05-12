@@ -36,6 +36,7 @@
   {
     "env": ["arduino"],
     "target": ["uno", "mega", "mega2560", "mega1280", "nano", "nano2", "nano3"],
-    "expose": ["__NJS_DELAY_MS", "__NJS_DELAY", "__NJS_DELAY_SECOND", "__NJS_MILLIS", "__NJS_SECONDS", "__NJS_PIN_MODE", "__NJS_DIGITAL_WRITE", "HIGH", "LOW", "INPUT", "OUTPUT"]
+    "expose": ["__NJS_DELAY_MS", "__NJS_DELAY", "__NJS_DELAY_SECOND", "__NJS_MILLIS", "__NJS_SECONDS", "__NJS_PIN_MODE", "__NJS_DIGITAL_WRITE", "HIGH", "LOW", "INPUT", "OUTPUT",
+                "arduino_HIGH", "arduino_LOW", "arduino_INPUT", "arduino_OUTPUT", "arduino_LED_BUILTIN"]
   }
 }
