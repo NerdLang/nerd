@@ -57,14 +57,21 @@ void initVariant() { }
 void setupUSB() __attribute__((weak));
 void setupUSB() { }
 
- 
+
  {INCLUDE}
  
  {DECL}
 
 int main(int argc, char* argv[])
 {
-	
+	init();
+	initVariant();
+
+
+	#if defined(USBCON)
+	USBDevice.attach();
+	#endif
+
 	{INIT}
 	
 	{CODE}

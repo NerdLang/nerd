@@ -811,6 +811,7 @@ void __NJS_Class_Object::Delete()
 	{
 		#ifdef __NJS_ARDUINO
 			// quick fix to change
+			//delete this;
 		#else
 			delete this;
 		#endif

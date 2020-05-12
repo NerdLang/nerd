@@ -28,10 +28,7 @@
  
 __NJS_FFI_FUNCTION(__NJS_DELAY_MS, __NJS_VAR v)
 { 
-	while(v.get().i--) 
-	{ 
-		_delay_ms(1); 
-	}
+	_delay_ms(1000); // to fix
 	return __NJS_VAR();
 };
 

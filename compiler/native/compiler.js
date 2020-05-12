@@ -117,7 +117,7 @@ function Compiler()
 		_handler.CODE = babel.transformSync(_code, visitor).code;
 		_handler.CODE = createFunction(_handler.CODE);
 		_handler.CODE = createAnon(_handler.CODE);
-		
+
 		COMPILER.INIT += COMPILER.REQUIRE;
 		
 		function createFunction(_code)
@@ -257,12 +257,12 @@ function Compiler()
 		var _reg = 1000000;
 		if(this.ENV.name == "arduino")
 		{
-			_reg = 1000;
+			_reg = 250;
 			if(!this.TARGET)
 			{
 				this.TARGET = "nano"
 			}
-			if(this.TARGET.substring(0, 4) == "nano") _reg = 100;
+			if(this.TARGET.substring(0, 4) == "nano") _reg = 25;
 		}
 		var _src = fs.readFileSync(__dirname + "/src/njs.h").toString();
 		_src = _src.replace(/{{REGISTER}}/g, _reg);

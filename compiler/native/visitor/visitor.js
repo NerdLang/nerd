@@ -182,7 +182,6 @@ var visitor =
     function NectarJS() {
       return {
         visitor: {
-
 		  NewExpression(_path)
 		  {
 			_path.node.type = "CallExpression";
@@ -192,13 +191,12 @@ var visitor =
 		  },
 		  StringLiteral(_path)
 		  {
-			  if(_path.node.start)
-			  {
-				  if(_path.node.extra.raw[0] && _path.node.extra.raw[0] == "'")
-				  {
-					_path.node.extra.raw = '"' + _path.node.value.replace(/\\/g, '\\\\').replace(/"/g, '\\\"') + '"';
-				  }
-			  }
+			  
+			if(_path.node.extra.raw[0] && _path.node.extra.raw[0] == "'")
+			{
+				_path.node.extra.raw = '"' + _path.node.value.replace(/\\/g, '\\\\').replace(/"/g, '\\\"') + '"';
+			}
+			  
 		  },
           VariableDeclarator(_path) 
 		  {

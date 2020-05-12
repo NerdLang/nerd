@@ -36,6 +36,7 @@ function getOptions()
 	var OPT = 
 	{
 		elf: false,
+		cli: false,
 	};
 
 	if(CLI.cli["--option"] && CLI.cli["--option"].argument)
@@ -65,7 +66,7 @@ var ARDUINO =
 	  var _cli = `${compiler} ${OPTIONS[target].preset} -w -fpermissive -Os -fno-exceptions -fno-rtti -fno-stack-protector -fomit-frame-pointer -ffunction-sections -fdata-sections -Wl,--gc-sections \
    -I ${extern}/avr -I ${extern}/arduino/avr/variants/${OPTIONS[target].variant}/ -I ${extern}/arduino/avr/cores/arduino  -I ${extern}/avr/include -I ${extern}/stlarduino  ${extern}/arduino/avr/cores/arduino/abi.cpp -fno-threadsafe-statics -lm -o ${out} ${_in}`;
 	  if(!OPT.elf) _cli += `&& avr-objcopy -O ihex -R .eeprom ${out}`;
-	  
+	if(OPT.cli) console.log("[*]" + _cli);
 	return _cli;
   },
   compiler: "avr-c++ -std=c++14",
