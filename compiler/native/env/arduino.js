@@ -31,24 +31,52 @@ var OPTIONS =
 	"nano3": { preset: "-DF_CPU=16000000UL -mmcu=atmega328p", variant: "standard"}
 }
 
+function getOptions()
+{
+	var OPT = 
+	{
+		elf: false,
+	};
+
+	if(CLI.cli["--option"] && CLI.cli["--option"].argument)
+	{
+		var _args = CLI.cli["--option"].argument.split(",");
+		for(var i = 0; i < _args.length; i++)
+		{
+			OPT[_args[i]] = true;
+		}
+	}
+	return OPT;
+}
+
 var ARDUINO =
 {
   name: "arduino",
   main: "arduino.cpp",
   cli: function(compiler, preset, out, _in, option, target, spec)
   {
+	  var OPT = getOptions();		
+	  
 	  if(!target || !OPTIONS[target])
 	  {
 		  console.log("[!] No target selected, switching to 'uno'");
 		  target = "uno";
 	  }
 	  var _cli = `${compiler} ${OPTIONS[target].preset} -w -fpermissive -Os -fno-exceptions -fno-rtti -fno-stack-protector -fomit-frame-pointer -ffunction-sections -fdata-sections -Wl,--gc-sections \
-   -I ${extern}/avr -I ${extern}/arduino/avr/variants/${OPTIONS[target].variant}/ -I ${extern}/arduino/avr/cores/arduino  -I ${extern}/avr/include -I ${extern}/stlarduino  ${extern}/arduino/avr/cores/arduino/abi.cpp -fno-threadsafe-statics -lm -o ${out} ${_in} && avr-objcopy -O ihex -R .eeprom ${out}`;
-
+   -I ${extern}/avr -I ${extern}/arduino/avr/variants/${OPTIONS[target].variant}/ -I ${extern}/arduino/avr/cores/arduino  -I ${extern}/avr/include -I ${extern}/stlarduino  ${extern}/arduino/avr/cores/arduino/abi.cpp -fno-threadsafe-statics -lm -o ${out} ${_in}`;
+	  if(!OPT.elf) _cli += `&& avr-objcopy -O ihex -R .eeprom ${out}`;
+	  
 	return _cli;
   },
   compiler: "avr-c++ -std=c++14",
   stdlib:[],
+  out: function(_name)
+  {
+	var OPT = getOptions();
+	if(OPT.elf) _name += ".elf";
+	else _name += ".hex";
+	return _name;
+  },
   check: {
 		"env": {
 		"es6": true

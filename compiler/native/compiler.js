@@ -273,6 +273,10 @@ function Compiler()
 	{
 		if(os.platform() == "win32" && path.extname(_name) != ".exe") _handler.OUT = _name + ".exe";
 		else _handler.OUT = _name;
+		if(COMPILER.ENV.out && typeof COMPILER.ENV.out == "function")
+		{
+			_handler.OUT = COMPILER.ENV.out(_name);
+		}
 		return _handler.OUT;
 	}
 
