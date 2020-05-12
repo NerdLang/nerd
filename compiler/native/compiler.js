@@ -107,7 +107,7 @@ function Compiler()
 	/*** METHODS ***/
 	this.Parse = function(_code)
 	{
-		if(!CLI.cli["--check"]) LINT(_code, this.IN);
+		if(!CLI.cli["--no-check"]) LINT(_code, this.IN);
 		_code = genRequire(_handler.PATH, COMPILER.STD) + genRequire(_handler.PATH, _code);
 		
 		COMPILER.REQUIRE = babel.transformSync(COMPILER.REQUIRE, visitor).code;
