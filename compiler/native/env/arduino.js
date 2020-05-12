@@ -59,10 +59,6 @@ var ARDUINO =
 			"no-console": "error",
 			"indent": "off",
 			"linebreak-style": "off",
-			"quotes": [
-				"error",
-				"double"
-			],
 			"semi": [
 				"warn",
 				"always"

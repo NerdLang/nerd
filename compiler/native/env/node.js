@@ -25,7 +25,7 @@ var NODE =
   name: "node",
   main: "std.cpp",
   compiler: "g++",
-  stdlib: ["console"],
+  stdlib: ["console", "Math"],
   check: {
 		"env": {
 			"node": true,
@@ -36,10 +36,6 @@ var NODE =
 			"no-console": "off",
 			"indent": "off",
 			"linebreak-style": "off",
-			"quotes": [
-				"error",
-				"double"
-			],
 			"semi": [
 				"warn",
 				"always"

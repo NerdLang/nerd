@@ -43,10 +43,6 @@ var STM32 =
           "no-console": "off",
           "indent": "off",
           "linebreak-style": "off",
-          "quotes": [
-              "error",
-              "double"
-          ],
           "semi": [
               "warn",
               "always"
