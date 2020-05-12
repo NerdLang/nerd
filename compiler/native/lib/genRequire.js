@@ -125,7 +125,7 @@ function genRequire(from, src)
                 }
                 var _expose = {};
                 if(pkgObject && pkgObject.nectar && pkgObject.nectar.expose) _expose = pkgObject.nectar.expose;
-                LINT(newSrc, trySource[i], _expose);
+                if(!CLI.cli["--check"]) LINT(newSrc, trySource[i], _expose);
 
                 break;
               }
