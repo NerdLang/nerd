@@ -67,7 +67,6 @@ int main(int argc, char* argv[])
 	init();
 	initVariant();
 
-
 	#if defined(USBCON)
 	USBDevice.attach();
 	#endif
@@ -78,7 +77,11 @@ int main(int argc, char* argv[])
 	
 	__NJS_Call_Function(setup);
 	
-	while(1) __NJS_Call_Function(loop);
+	while(true)
+	{
+		__NJS_Call_Function(loop);
+		delay(1);
+	}
 	
 	return 0;
 }

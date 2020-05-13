@@ -2,6 +2,7 @@
 * Adding memory management and cleaning without GC
 * Adding this and new
 * Adding Math, RegExp and Date module
+* Optimizing Arduino support
 
 ## VERSION 0.4.0
 * Adding a new memory manager

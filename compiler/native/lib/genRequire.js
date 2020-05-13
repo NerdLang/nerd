@@ -143,7 +143,7 @@ function genRequire(from, src)
             {
 
               var reqFN = "__MODULE_" + Math.random().toString(36).substr(2, 10);
-
+              COMPILER.ENV.check.globals[reqFN] = false;
               var resultSource = src.substring(0, index) + reqFN + "()";
 
               newSrc = "function " + reqFN + "(){\nvar module = __NJS_Create_Object();\n" + newSrc;

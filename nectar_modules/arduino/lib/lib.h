@@ -26,21 +26,21 @@
  *
  */
  
-__NJS_FFI_FUNCTION(__NJS_DELAY_MS, __NJS_VAR v)
+__NJS_FFI_FUNCTION(__NJS_DELAY_MS, __NJS_VAR _value)
 { 
-	_delay_ms(1000); // to fix
+	delay(__NJS_Get_Int(_value)); // to fix
 	return __NJS_VAR();
 };
 
 __NJS_FFI_FUNCTION(__NJS_DELAY, __NJS_VAR _value)
 { 
-	__NJS_DELAY_MS(__NJS_Get_Int(_value));
+	delay(__NJS_Get_Int(_value));
 	return __NJS_VAR();
 };
 
 __NJS_FFI_FUNCTION(__NJS_DELAY_SECOND, __NJS_VAR _value)
 { 
-	__NJS_DELAY_MS(__NJS_Get_Int(_value) * 1000);
+	delay(__NJS_Get_Int(_value) * 1000);
 	return __NJS_VAR();
 };
 

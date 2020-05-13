@@ -2,7 +2,8 @@
 .nectar
 .vscode
 *.exe
-
+*.elf
+*.hex
 # Logs
 logs
 *.log

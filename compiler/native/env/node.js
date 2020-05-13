@@ -47,10 +47,12 @@ var NODE =
 		},
 		"globals":
 		{
-		"__njs_typeof":false,
-		"require":false,
-		"module": false,
-		"console": false,
+			"__njs_typeof": false,
+			"console": false,
+			"module": false,
+			"require": false,
+			"__NJS_Log_Console": false,
+			"__NJS_ARGS": false,
 		}
 	},
   cli: function(compiler, preset, out, _in, option)

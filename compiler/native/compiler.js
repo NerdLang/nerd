@@ -107,9 +107,10 @@ function Compiler()
 	/*** METHODS ***/
 	this.Parse = function(_code)
 	{
-		if(!CLI.cli["--no-check"]) LINT(_code, this.IN);
-		_code = genRequire(_handler.PATH, COMPILER.STD) + genRequire(_handler.PATH, _code);
 		
+		_code = genRequire(_handler.PATH, COMPILER.STD) + genRequire(_handler.PATH, _code);
+		if(!CLI.cli["--no-check"]) LINT(_code, this.IN);
+
 		COMPILER.REQUIRE = babel.transformSync(COMPILER.REQUIRE, visitor).code;
 		COMPILER.REQUIRE = createFunction(COMPILER.REQUIRE);
 		COMPILER.REQUIRE = createAnon(COMPILER.REQUIRE);
@@ -262,7 +263,7 @@ function Compiler()
 			{
 				this.TARGET = "nano"
 			}
-			if(this.TARGET.substring(0, 4) == "nano") _reg = 25;
+			if(this.TARGET.substring(0, 4) == "nano") _reg = 50;
 		}
 		var _src = fs.readFileSync(__dirname + "/src/njs.h").toString();
 		_src = _src.replace(/{{REGISTER}}/g, _reg);
