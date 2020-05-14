@@ -49,6 +49,22 @@ function loadEnv()
 	return _res;
 }
 
+function setRegister(_value)
+{
+	var _reg;
+	try 
+	{
+		_reg = parseInt(_value)
+		console.log("[*] Set register at: " + _reg);
+	}
+	catch(e)
+	{
+		console.log("[!] Invalid register, integer needed");
+		process.exit(1);
+	}
+	return _reg;
+}
+
 function Compiler()
 {
 	var _handler = this;
@@ -265,6 +281,11 @@ function Compiler()
 			}
 			if(this.TARGET.substring(0, 4) == "nano") _reg = 50;
 		}
+
+
+		if(CLI.cli["--register"]) setRegister(CLI.cli["--register"].argument);
+		if(CLI.cli["-r"]) setRegister(CLI.cli["-r"].argument);
+
 		var _src = fs.readFileSync(__dirname + "/src/njs.h").toString();
 		_src = _src.replace(/{{REGISTER}}/g, _reg);
 		fs.writeFileSync(path.join(_folder, "njs.h"), _src);

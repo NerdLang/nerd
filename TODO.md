@@ -11,5 +11,3 @@
 * put back project management
 
 * add a flag to check all availables cli flags
-
-* Add a flag to control register size
