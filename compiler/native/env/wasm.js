@@ -73,15 +73,15 @@ var NODE =
   {
 	  if(preset == "none")
 	  {
-		  return `${compiler} ${_in} -O1 -fpermissive -w -s TOTAL_MEMORY=33554432 -o ${out}`;
+		  return `${compiler} ${_in} -O1 -fpermissive -w -s TOTAL_MEMORY=33554432 ${COMPILER.LIBS} -o ${out}`;
 	  }
 	  else if(preset == "size")
 	  {
-		  return `${compiler} ${_in} -Os -fno-exceptions -fno-rtti -fno-stack-protector -fomit-frame-pointer -fpermissive -w -s TOTAL_MEMORY=33554432 -o ${out}`;
+		  return `${compiler} ${_in} -Os -fno-exceptions -fno-rtti -fno-stack-protector -fomit-frame-pointer -fpermissive -w -s TOTAL_MEMORY=33554432 ${COMPILER.LIBS} -o ${out}`;
 	  }
 	  else
 	  {
-		  return `${compiler} ${_in} -O3 -fpermissive -w -s TOTAL_MEMORY=33554432 -o ${out}`;
+		  return `${compiler} ${_in} -O3 -fpermissive -w -s TOTAL_MEMORY=33554432 ${COMPILER.LIBS} -o ${out}`;
 	  }
   }
 }

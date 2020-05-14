@@ -59,13 +59,13 @@ var NODE =
   {
 	  if(preset == "none")
 	  {
-		  return `${compiler} ${_in} -O1 ${option} -fpermissive -w -s  -o ${out}`;
+		  return `${compiler} ${_in} -O1 -fpermissive -w -s ${COMPILER.LIBS}  -o ${out}`;
 	  }
 	  else if(preset == "size")
 	  {
-		  return `${compiler} ${_in} -Os -fno-exceptions -fno-rtti -fno-stack-protector -fomit-frame-pointer ${option} -fpermissive -w -s  -o ${out}`;
+		  return `${compiler} ${_in} -Os -fno-exceptions -fno-rtti -fno-stack-protector -fomit-frame-pointer -fpermissive -w -s ${COMPILER.LIBS}  -o ${out}`;
 	  }
-	  else return `${compiler} ${_in} -Ofast ${option} -fpermissive -w -s  -o ${out}`;
+	  else return `${compiler} ${_in} -Ofast -fpermissive -w -s ${COMPILER.LIBS}  -o ${out}`;
   }
 }
 

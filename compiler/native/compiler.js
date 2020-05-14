@@ -74,6 +74,8 @@ function Compiler()
 	this.STD = "";
 	this.GEN = "";
 	this.PATH = "";
+	this.LIBS = "";
+
 	if(CLI.stack[0]) this.PATH = path.dirname(CLI.stack[0]) + path.sep;
 	
 	this.ENV = ENV["std"];
@@ -308,7 +310,7 @@ function Compiler()
 		{
 			return this.ENV.cli(compiler, this.preset, out, _in, option, this.TARGET, this.SPEC);
 		}
-		else return `${compiler} ${_in} ${option} -fpermissive -w -s  -o ${out}`;
+		else return `${compiler} ${_in} ${option} -fpermissive -w -s ${COMPILER.LIBS} -o ${out}`;
 	}
 	  
 	this.Compile = function(_folder, _file)

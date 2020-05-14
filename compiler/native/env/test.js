@@ -32,13 +32,13 @@ var STD =
   {
 	  if(preset == "none")
 	  {
-		  return `${compiler} ${_in} ${option} -I ${extern}/lib/ -fpermissive -w -s  -o ${out}`;
+		  return `${compiler} ${_in} ${option} -I ${extern}/lib/ -fpermissive -w -s ${COMPILER.LIBS} -o ${out}`;
 	  }
 	  else if(preset == "size")
 	  {
-		  return `${compiler} ${_in} -Os -I ${extern}/lib/ -fno-exceptions -fno-rtti -fno-stack-protector -fomit-frame-pointer ${option} -fpermissive -w -s  -o ${out}`;
+		  return `${compiler} ${_in} ${option} -I ${extern}/lib/ -fno-exceptions -fno-rtti -fno-stack-protector -fomit-frame-pointer -fpermissive -w -s ${COMPILER.LIBS}  -o ${out}`;
 	  }
-	  else return `${compiler} ${_in} -I ${extern}/lib/ ${option} -fpermissive -w -s  -o ${out}`;
+	  else return `${compiler} ${_in} -I ${extern}/lib/ ${option} -fpermissive -w -s ${COMPILER.LIBS} -o ${out}`;
   },
   check: {
     "env": {

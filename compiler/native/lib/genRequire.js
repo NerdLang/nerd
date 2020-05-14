@@ -116,6 +116,15 @@ function genRequire(from, src)
                       {
                         COMPILER.EXPOSE = COMPILER.EXPOSE.concat(pkg.nectar.expose);
                       }
+
+                      if(pkg.nectar.lib)
+                      {
+                        for(var l = 0; l < pkg.nectar.lib.length; l++ )
+                        {
+                          COMPILER.LIBS += pkg.nectar.lib[l].replace("__MODULE__", modSource) + " ";
+                        }
+                      }
+
                     }
                   }
                   catch(e)
