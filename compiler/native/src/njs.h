@@ -42,7 +42,7 @@ enum __NJS_TYPE
 #ifdef __NJS_ARDUINO
 	#define __NJS_FFI_FUNCTION(_name, ...) function<__NJS_VAR (__VA_ARGS__)>  _name   = [](__VA_ARGS__) -> __NJS_VAR 
 #else 
-	#define __NJS_FFI_FUNCTION(_name, ...) function<__NJS_VAR (__VA_ARGS__)> _name   = [](__VA_ARGS__) -> __NJS_VAR
+	#define __NJS_FFI_FUNCTION(_name, ...) function<__NJS_VAR (__VA_ARGS__)> _name   = [&](__VA_ARGS__) -> __NJS_VAR
 #endif
 #define __NJS_GET_STRING(_var) _var.get().s->__NJS_VALUE.c_str()
 #define var static __NJS_VAR
@@ -250,7 +250,7 @@ struct __NJS_VAR
 			}
 			else if(_v.type == __NJS_STRING)
 			{
-				REGISTER[_ptr].s = new __NJS_Class_String(REGISTER[_v._ptr].s->__NJS_VALUE.c_str());
+				REGISTER[_ptr].s = new __NJS_Class_String((char*)REGISTER[_v._ptr].s->__NJS_VALUE.c_str());
 			}
 			else if(_v.type == __NJS_FUNCTION)
 			{
@@ -329,7 +329,7 @@ struct __NJS_VAR
 
 		/*** VARIADIC LAMBDAS ***/
 		template<class... Args>
-		__NJS_VAR::__NJS_VAR (function<__NJS_VAR (Args...)>& _value)
+		__NJS_VAR (function<__NJS_VAR (Args...)>& _value)
 		{
 			setPtr();
 			type = __NJS_FUNCTION;
@@ -376,7 +376,7 @@ struct __NJS_VAR
 			}
 			else REGISTER[_ptr] = REGISTER[_v._ptr];
 			
-			return;
+			return *this;
 		}
 		/*** END EQUAL ***/
 		
@@ -400,31 +400,31 @@ struct __NJS_VAR
 			}
 			else if(type == __NJS_NUMBER && _v1.type == __NJS_STRING)
 			{
-				return __NJS_Create_String(__NJS_Concat_Str_To_Int(get().i, _v1.get().s->__NJS_VALUE.c_str()));
+				return __NJS_Create_String(__NJS_Concat_Str_To_Int(get().i, (char*)_v1.get().s->__NJS_VALUE.c_str()));
 			}
 			else if(type == __NJS_DOUBLE && _v1.type == __NJS_STRING)
 			{
-				return __NJS_Create_String(__NJS_Concat_Str_To_Int(get().d, _v1.get().s->__NJS_VALUE.c_str()));
+				return __NJS_Create_String(__NJS_Concat_Str_To_Int(get().d, (char*)_v1.get().s->__NJS_VALUE.c_str()));
 			}
 			else if(type == __NJS_STRING && _v1.type == __NJS_NUMBER)
 			{
-				return __NJS_Create_String(__NJS_Concat_Int_To_Str(get().s->__NJS_VALUE.c_str(), _v1.get().i));
+				return __NJS_Create_String(__NJS_Concat_Int_To_Str((char*)get().s->__NJS_VALUE.c_str(), _v1.get().i));
 			}
 			else if(type == __NJS_STRING && _v1.type == __NJS_DOUBLE)
 			{
-				return __NJS_Create_String(__NJS_Concat_Int_To_Str(get().s->__NJS_VALUE.c_str(), _v1.get().d));
+				return __NJS_Create_String(__NJS_Concat_Int_To_Str((char*)get().s->__NJS_VALUE.c_str(), _v1.get().d));
 			}
 			else if(type == __NJS_STRING && _v1.type == __NJS_BOOLEAN)
 			{
 				if(_v1.get().b)
 				{
-				  return __NJS_Create_String(__NJS_Concat_Str_To_Str(get().s->__NJS_VALUE.c_str(), (char*)"true"));
+				  return __NJS_Create_String(__NJS_Concat_Str_To_Str((char*)get().s->__NJS_VALUE.c_str(), (char*)"true"));
 				}
-				return __NJS_Create_String(__NJS_Concat_Str_To_Str(get().s->__NJS_VALUE.c_str(), (char*)"false"));
+				return __NJS_Create_String(__NJS_Concat_Str_To_Str((char*)get().s->__NJS_VALUE.c_str(), (char*)"false"));
 			}
 			else if(type == __NJS_STRING && _v1.type == __NJS_STRING)
 			{
-				return __NJS_Create_String(__NJS_Concat_Str_To_Str(get().s->__NJS_VALUE.c_str(), _v1.get().s->__NJS_VALUE.c_str()));
+				return __NJS_Create_String(__NJS_Concat_Str_To_Str(get().s->__NJS_VALUE.c_str(), (char*)_v1.get().s->__NJS_VALUE.c_str()));
 			}
 			else
 			{
@@ -597,7 +597,7 @@ inline int __NJS_Get_Int(__NJS_VAR _v)
 
 inline char* __NJS_Get_String(__NJS_VAR _v)
 {
-  return _v.get().s->__NJS_VALUE.c_str();
+  return (char*)_v.get().s->__NJS_VALUE.c_str();
 }
 
 inline __NJS_VAR __NJS_Typeof(__NJS_VAR _var)
@@ -824,7 +824,7 @@ __NJS_Class_String::__NJS_Class_String(char* _value)
 {
 	cnt++;
 	/*** toString ***/
-  function<__NJS_VAR ()>* __OBJ_TO___NJS_STRING = new function<__NJS_VAR ()>([&](){ return __NJS_Create_String(this->__NJS_VALUE.c_str()); });
+  function<__NJS_VAR ()>* __OBJ_TO___NJS_STRING = new function<__NJS_VAR ()>([&](){ return __NJS_Create_String((char*)this->__NJS_VALUE.c_str()); });
   __NJS_VAR toString = __NJS_VAR(__NJS_FUNCTION, __OBJ_TO___NJS_STRING);
   __NJS_Object_Set((char*)"toString", toString, &this->__OBJECT);
 	/*** end to string ***/

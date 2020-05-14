@@ -4,6 +4,9 @@
 *.exe
 *.elf
 *.hex
+*.wasm
+*.asm.js
+
 # Logs
 logs
 *.log
