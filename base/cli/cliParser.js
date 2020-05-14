@@ -31,7 +31,7 @@ function parseCLI(args)
   var result = {error: false, msg: "", cli:{}, stack: [], useless: []};
   var useless = [0, 1];
   var withArgs = ["--target", "--spec", "--env", "-o", "--preset", "--flash", "--compiler", "-c", "--build", "-b", "--option", "--register", "-r"];
-  var noArgs = ["--debug", "--conserve", "--example", "--examples" , "--prepare", "--project", "--run", "--clean", "--purge", "--check", "--no-check", "--verbose", "-v", "--tips", "--version", "--help", "-h", "--release"];
+  var noArgs = ["--debug", "--installEMSDK", "--conserve", "--example", "--examples" , "--prepare", "--project", "--run", "--clean", "--purge", "--check", "--no-check", "--verbose", "-v", "--tips", "--version", "--help", "-h", "--release"];
 
 
   for(var i = 0; i < args.length; i++)

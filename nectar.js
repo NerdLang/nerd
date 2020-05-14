@@ -70,6 +70,7 @@ else if(CLI.cli["--example"] || CLI.cli["--examples"]) ACTION = "example";
 else if(CLI.cli["--version"] || CLI.cli["-v"]) ACTION = "version";
 else if(CLI.cli["--project"]) ACTION = "showproject";
 else if(CLI.cli["--clean"] || CLI.cli["--purge"]) ACTION = "clean";
+else if(CLI.cli["--installEMSDK"]) ACTION = "installEMSDK";
 
 switch(ACTION)
 {
@@ -95,6 +96,10 @@ switch(ACTION)
 
   case "clean":
     Clean();
+    break;
+  
+  case "installEMSDK":
+    require(path.join(NECTAR_PATH, "base", "util", "installEmsdk.js"))();
     break;
 
   default:

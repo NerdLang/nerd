@@ -71,18 +71,36 @@ var NODE =
   },
   cli: function(compiler, preset, out, _in, option)
   {
-	  if(preset == "none")
-	  {
-		  return `${compiler} ${_in} -O1 -fpermissive -w -s TOTAL_MEMORY=33554432 ${COMPILER.LIBS} -o ${out}`;
-	  }
-	  else if(preset == "size")
-	  {
-		  return `${compiler} ${_in} -Os -fno-exceptions -fno-rtti -fno-stack-protector -fomit-frame-pointer -fpermissive -w -s TOTAL_MEMORY=33554432 ${COMPILER.LIBS} -o ${out}`;
-	  }
-	  else
-	  {
-		  return `${compiler} ${_in} -O3 -fpermissive -w -s TOTAL_MEMORY=33554432 ${COMPILER.LIBS} -o ${out}`;
-	  }
+		var _prefix = "./";
+		var _source = "source ";
+		var _script = path.join(NECTAR_PATH, "tools", "emsdk", "emsdk_env");
+
+		if(os.platform() == "win32")
+		{
+			_prefix = "";
+			_source = "";
+			_script += ".bat";
+		}
+		else _script += ".sh";
+		
+		if(!fs.existsSync(_script))
+		{
+			console.log("[!] Please install EMSDK and compile again: nectar --installEMSDK");
+			process.exit();
+		}
+
+		if(preset == "none")
+		{
+			return `${_source} ${_script} && ${compiler} ${_in} -O1 -fpermissive -w -s TOTAL_MEMORY=33554432 ${COMPILER.LIBS} -o ${out}`;
+		}
+		else if(preset == "size")
+		{
+			return `${_source} ${_script} && ${compiler} ${_in} -Os -fno-exceptions -fno-rtti -fno-stack-protector -fomit-frame-pointer -fpermissive -w -s TOTAL_MEMORY=33554432 ${COMPILER.LIBS} -o ${out}`;
+		}
+		else
+		{
+			return `${_source} ${_script} && ${compiler} ${_in} -O3 -fpermissive -w -s TOTAL_MEMORY=33554432 ${COMPILER.LIBS} -o ${out}`;
+		}
   }
 }
 

@@ -6,6 +6,7 @@
 *.hex
 *.wasm
 *.asm.js
+tools/
 
 # Logs
 logs
