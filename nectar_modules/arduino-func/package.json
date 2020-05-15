@@ -1,6 +1,6 @@
 {
-  "name": "arduino",
-  "description": "NectarJS base Arduino module",
+  "name": "arduino-func",
+  "description": "NectarJS base Arduino functionnal module",
   "main": "index.js",
   "bugs":
   {
@@ -31,12 +31,12 @@
     "type": "git",
     "url": "git+ssh://git@github.com/NectarJS/nectarjs.git"
   },
-  "version": "0.0.2",
+  "version": "0.0.1",
   "nectar":
   {
     "env": ["arduino"],
     "target": ["uno", "mega", "mega2560", "mega1280", "nano", "nano2", "nano3"],
-    "expose": ["__NJS_DELAY_MS", "__NJS_DELAY", "__NJS_DELAY_SECOND", "__NJS_MILLIS", "__NJS_SECONDS", "__NJS_PIN_MODE", "__NJS_DIGITAL_WRITE", "HIGH", "LOW", "INPUT", "OUTPUT",
+    "expose": ["arduino_delayMS", "arduino_delay", "arduino_delaySeconds", "arduino_millis", "arduino_seconds", "arduino_pinMode", "arduino_digitalWrite", "HIGH", "LOW", "INPUT", "OUTPUT",
                 "arduino_HIGH", "arduino_LOW", "arduino_INPUT", "arduino_OUTPUT", "arduino_LED_BUILTIN", "INPUT", "OUTPUT", "HIGH", "LOW", "LED_BUILTIN"]
   }
 }
