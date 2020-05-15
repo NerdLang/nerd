@@ -1,4 +1,4 @@
-//!_ffi_include "lib/test.cpp"
+'!_ffi_include lib/test.cpp'
 
 var ffi = {
 	msgBox: __WIN_MESSAGE_BOX,

@@ -96,6 +96,8 @@ nectar file.js --quiet
 
 * win-x86-64
 
+* arduino-nano
+
 * arduino-uno
 
 * arduino-mega1280

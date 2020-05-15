@@ -196,7 +196,7 @@ var visitor =
 			{
 				_path.node.extra.raw = '"' + _path.node.value.replace(/\\/g, '\\\\').replace(/"/g, '\\\"') + '"';
 			}
-			  
+
 		  },
           VariableDeclarator(_path) 
 		  {

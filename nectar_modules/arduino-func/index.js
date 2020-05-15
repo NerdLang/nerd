@@ -26,4 +26,4 @@
  *
  */
 
-//!_ffi_include "lib/lib.h"
+'!_ffi_include lib/lib.h';

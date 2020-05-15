@@ -25,43 +25,19 @@
  * and feel free to contact us.
  *
  */
+var _SEARCH = new RegExp(/['"]!_ffi_include *(.*)['"]/);
 
 function genInclude(from, src, full)
 {
   if(full == undefined) full = false;
-  var removeStart = -1;
-  var removeEnd = -1;
-  var index = -1;
-  do
+  var _match = src.match(_SEARCH);
+  while(_match)
   {
-    index = src.indexOf("//!_ffi_include \"", index);
-    if(index > -1)
-    {
-      removeStart = index;
-      index += 17;
-      var target = index;
-      var search = true;
-      while(search)
-      {
-        if(src[target] == '"')
-        {
-          var startVar = index;
-          var endVar = target;
-          removeEnd = target + 1;
-          var _var = "#include \"" + path.resolve(path.join(from, src.substring(index, target))) + "\"";
-          src = src.replace(src.substring(removeStart, removeEnd), "");
-          COMPILER.FFI.push(_var);
-          search = false;
-          removeStart = -1;
-          removeEnd = -1;
-        }
-        target++;
-        if(target < 0) search = false;
-      }
-      index++;
-    }
+    var _var = "#include \"" + path.resolve(path.join(from, _match[1]) + "\"");
+    COMPILER.FFI.push(_var);
+    src = src.replace(/['"]!_ffi_include *(.*)['"]/, "");
+    _match = src.match(_SEARCH);
   }
-  while(index > -1)
   return src;
 }
 module.exports = genInclude;

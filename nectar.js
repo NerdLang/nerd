@@ -435,7 +435,7 @@ function Check(file)
 function Help()
 {
   showVersion();
-  console.log("\n[*] Compile :\nnectar [--env std|node|arduino|wasm] [--target the-target] [--run] [--preset speed|size] [-o output] [--tips] [--flash device] source.js|project.json\n");
+  console.log("\n[*] Compile :\nnectar [--env std|node|arduino|wasm] [--target the-target] [--run] [--reg 1000] [--preset speed|size] [-o output] [--tips] [--flash device] source.js|project.json\n");
   console.log("[*] Show project :\nnectar [--project] [project.json]\n");
   console.log("[*] Clean project :\nnectar [--clean] [--purge] [path_to_project.json]\n");
   console.log("[*] Copy example files :\nnectar --example\n");

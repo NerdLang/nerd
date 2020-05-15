@@ -42,7 +42,7 @@ enum __NJS_TYPE
 #ifdef __NJS_ARDUINO
 	#define __NJS_FFI_FUNCTION(_name, ...) function<__NJS_VAR (__VA_ARGS__)>  _name   = [](__VA_ARGS__) -> __NJS_VAR 
 #else 
-	#define __NJS_FFI_FUNCTION(_name, ...) function<__NJS_VAR (__VA_ARGS__)> _name   = [&](__VA_ARGS__) -> __NJS_VAR
+	#define __NJS_FFI_FUNCTION(_name, ...) function<__NJS_VAR (__VA_ARGS__)> _name   = [](__VA_ARGS__) -> __NJS_VAR
 #endif
 #define __NJS_GET_STRING(_var) _var.get().s->__NJS_VALUE.c_str()
 #define var static __NJS_VAR
@@ -256,6 +256,11 @@ struct __NJS_VAR
 			{
 				REGISTER[_ptr] = REGISTER[_v._ptr];
 				REGISTER[_ptr].o->cnt++;
+			}
+			else if(_v.type == __NJS_ARRAY)
+			{
+				REGISTER[_ptr] = REGISTER[_v._ptr];
+				REGISTER[_ptr].a->cnt++;
 			}
 			else
 			{
@@ -688,7 +693,7 @@ inline __NJS_VAR __NJS_Object_Set(__NJS_VAR _index, __NJS_VAR _value, __NJS_VAR 
 
     __NJS_Object_Set(__NJS_Create_String((char*)"length"), __NJS_Create_Number((int)_array.get().a->__NJS_VALUE.size()), &_array.get().a->__OBJECT);
   }
-  else if(_array.type == __NJS_OBJECT || _array.type == __NJS_STRING || _array.type == __NJS_FUNCTION)
+  else if(_array.type == __NJS_OBJECT || _array.type == __NJS_STRING || _array.type == __NJS_FUNCTION || _array.type == __NJS_ARRAY)
   {
     vector<pair<char*, __NJS_VAR>>* _obj;
     if(_array.type == __NJS_OBJECT) _obj = &_array.get().o->__OBJECT;
@@ -706,7 +711,6 @@ inline __NJS_VAR __NJS_Object_Set(__NJS_VAR _index, __NJS_VAR _value, __NJS_VAR 
         (*_obj)[_i].second.type = _value.type;
 		
         REGISTER[(*_obj)[_i].second._ptr] = REGISTER[_value._ptr];
-		
         return __NJS_VAR();
       }
     }
@@ -718,13 +722,12 @@ inline __NJS_VAR __NJS_Object_Set(__NJS_VAR _index, __NJS_VAR _value, __NJS_VAR 
 
 inline __NJS_VAR __NJS_Object_Set(int _index, __NJS_VAR _value, __NJS_VAR _array)
 {
-
   if(_array.type == __NJS_ARRAY)
   {
     if(_array.get().a->__NJS_VALUE.size() <= _index) _array.get().a->__NJS_VALUE.resize(_index + 1);
     _array.get().a->__NJS_VALUE[_index].type = _value.type;
 	REGISTER[_array.get().a->__NJS_VALUE[_index]._ptr] = REGISTER[_value._ptr];
-	__NJS_Object_Set(__NJS_Create_String((char*)"length"), __NJS_Create_Number((int)_array.get().a->__NJS_VALUE.size()), &_array.get().a->__OBJECT);
+	__NJS_Object_Set(__NJS_Create_String((char*)"length"), __NJS_VAR((int)_array.get().a->__NJS_VALUE.size()), _array);
   }
   return __NJS_VAR();
 }
@@ -751,7 +754,7 @@ inline __NJS_VAR& __NJS_Object_Get(int _index, __NJS_VAR _array)
 
 inline __NJS_VAR& __NJS_Object_Get(char* _index, __NJS_VAR _array)
 {
-	if(_array.type != __NJS_OBJECT && _array.type != __NJS_STRING && _array.type != __NJS_FUNCTION) 
+	if(_array.type != __NJS_OBJECT && _array.type != __NJS_STRING && _array.type != __NJS_FUNCTION && _array.type != __NJS_ARRAY) 
   {
 	  __NJS_RETURN_UNDEFINED;
   }

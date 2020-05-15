@@ -25,164 +25,136 @@
  * and feel free to contact us.
  *
  */
+
 var genInclude = require("./genInclude.js");
 module.exports = genRequire;
 var fs = require("fs");
 
 function genRequire(from, src)
 {
+  // strip comments
+  src = src.replace(/\/\*[\s\S]*?\*\/|\/\/.*/g,'');
 
+  var _SEARCH = new RegExp(/ *require\(['"](.*?)['"]\)/);
   var seek = ["require('", "require(\""];
 
-  for(var s in seek)
+  var _match = src.match(_SEARCH);
+
+  while(_match)
   {
-    var index = -1;
-    do
+    var addSource = _match[1];
+    var modSource = "";
+    if(addSource.indexOf(COMPILER.PATH) > -1)
     {
-      index = src.indexOf(seek[s], index);
-      if(index > -1)
-      {
-        var target = index + seek[s].length;
-        var search = true;
-        while(search)
-        {
-          if(src[target] == "'" || src[target] == "\"")
-          {
-            var startVar = index + seek[s].length;
-            var endVar = target;
-            var addSource = src.substring(startVar, endVar);
-
-            /*
-			if(LIBS[addSource])
-            {
-              OPTIONS += " " + LIBS[addSource].option;
-              INIT += LIBS[addSource].init;
-            }
-			*/
-
-            var modSource = "";
-            if(addSource.indexOf(COMPILER.PATH) > -1)
-            {
-              modSource = addSource;
-            }
-            else
-            {
-              modSource = path.join(from + addSource);
-            }
-            var trySource = [modSource, /*modSource + ".js",*/ modSource + "/" + "index.js", from + "nectar_modules/" + addSource + "/index.js", NECTAR_PATH + "/nectar_modules/" + addSource + "/index.js", from + "node_modules/" + addSource + "/index.js", NECTAR_PATH + "/node_modules/" + modSource + "/index.js" ];
-            var newSrc = "";
-            for(var i = 0; i < trySource.length; i++)
-            {
-              try
-              {
-                modSource = path.dirname(trySource[i]) + "/";
-                newSrc = fs.readFileSync(trySource[i]).toString();
-                
-                var pkgPath = path.join(modSource, "package.json");
-                var pkgObject;
-                if(fs.existsSync(pkgPath))
-                {
-                  var pkg = fs.readFileSync(pkgPath);
-                  try
-                  {
-                    pkg = JSON.parse(pkg);
-                    pkgObject = pkg;
-                    if(pkg.nectar)
-                    {
-                      if(pkg.nectar.env)
-                      {
-                        if(pkg.nectar.env.indexOf(COMPILER.ENV.name) < 0)
-                        {
-                          console.error("NectarJS:\n\n[!] module " + addSource + " doesn't support env : " + COMPILER.ENV.name + " only these : " + pkg.nectar.env);
-                          process.exit(1);
-                        }
-                      }
-
-                      if(pkg.nectar.target)
-                      {
-                        if(!COMPILER.TARGET)
-                        {
-                          console.error("NectarJS:\n\n[!] module " + addSource + " require one of these targets : " + pkg.nectar.target + ". None specified");
-                          process.exit(1);
-                        }
-                        else if(pkg.nectar.target.indexOf(COMPILER.TARGET) < 0)
-                        {
-                          console.error("NectarJS:\n\n[!] module " + addSource + " require one of these targets : " + pkg.nectar.target + ". " + COMPILER.TARGET + " specified");
-                          process.exit(1);
-                        }
-                      }
-
-                      if(pkg.nectar.expose)
-                      {
-                        COMPILER.EXPOSE = COMPILER.EXPOSE.concat(pkg.nectar.expose);
-                      }
-
-                      if(pkg.nectar.lib)
-                      {
-                        for(var l = 0; l < pkg.nectar.lib.length; l++ )
-                        {
-                          COMPILER.LIBS += pkg.nectar.lib[l].replace("__MODULE__", modSource) + " ";
-                        }
-                      }
-
-                    }
-                  }
-                  catch(e)
-                  {
-                    console.log("NectarJS:\n\n[!] " + e + " -> " + pkgPath.split("/").splice(-3).join("/"))
-                  }
-                }
-                var _expose = {};
-                if(pkgObject && pkgObject.nectar && pkgObject.nectar.expose) _expose = pkgObject.nectar.expose;
-                if(!CLI.cli["--no-check"]) LINT(newSrc, trySource[i], _expose);
-
-                break;
-              }
-              catch (e) {}
-            }
-
-            if(newSrc.length == 0)
-          {
-            console.log("[!] Require error : " + addSource);
-            process.exit();
-          }
-            newSrc = genInclude(path.resolve(modSource) + "/", newSrc);
-
-            if(NJS_ENV.name != "arduino")
-            {
-
-              var reqFN = "__MODULE_" + Math.random().toString(36).substr(2, 10);
-              COMPILER.ENV.check.globals[reqFN] = false;
-              var resultSource = src.substring(0, index) + reqFN + "()";
-
-              newSrc = "function " + reqFN + "(){\nvar module = __NJS_Create_Object();\n" + newSrc;
-
-              newSrc = newSrc.replace(/(module\.exports *= *.*)$/g, "$1;");
-
-              resultSource += src.substring(index + seek[s].length + addSource.length + 2);
-              newSrc += "return module.exports;\n}";
-              newSrc = genRequire(modSource, newSrc);
-              src = resultSource;
-
-
-            }
-            else
-            {
-              var resultSource = src.substring(0, index);
-              resultSource += src.substring(index + seek[s].length + addSource.length + 2);
-              src = resultSource;
-            }
-            COMPILER.REQUIRE += newSrc + ";";
-
-            search = false;
-          }
-          target++;
-          if(target > src.length) search = false;
-        }
-        index++;
-      }
+      modSource = addSource;
     }
-    while(index > -1)
+    else
+    {
+      modSource = path.join(from + addSource);
+    }
+    var trySource = [modSource, /*modSource + ".js",*/ modSource + "/" + "index.js", from + "nectar_modules/" + addSource + "/index.js", NECTAR_PATH + "/nectar_modules/" + addSource + "/index.js", from + "node_modules/" + addSource + "/index.js", NECTAR_PATH + "/node_modules/" + modSource + "/index.js" ];
+    var newSrc = "";
+    for(var i = 0; i < trySource.length; i++)
+    {
+      try
+      {
+        modSource = path.dirname(trySource[i]) + "/";
+        newSrc = fs.readFileSync(trySource[i]).toString();
+        
+        var pkgPath = path.join(modSource, "package.json");
+        var pkgObject;
+        if(fs.existsSync(pkgPath))
+        {
+          var pkg = fs.readFileSync(pkgPath);
+          try
+          {
+            pkg = JSON.parse(pkg);
+            pkgObject = pkg;
+            if(pkg.nectar)
+            {
+              if(pkg.nectar.env)
+              {
+                if(pkg.nectar.env.indexOf(COMPILER.ENV.name) < 0)
+                {
+                  console.error("NectarJS:\n\n[!] module " + addSource + " doesn't support env : " + COMPILER.ENV.name + " only these : " + pkg.nectar.env);
+                  process.exit(1);
+                }
+              }
+
+              if(pkg.nectar.target)
+              {
+                if(!COMPILER.TARGET)
+                {
+                  console.error("NectarJS:\n\n[!] module " + addSource + " require one of these targets : " + pkg.nectar.target + ". None specified");
+                  process.exit(1);
+                }
+                else if(pkg.nectar.target.indexOf(COMPILER.TARGET) < 0)
+                {
+                  console.error("NectarJS:\n\n[!] module " + addSource + " require one of these targets : " + pkg.nectar.target + ". " + COMPILER.TARGET + " specified");
+                  process.exit(1);
+                }
+              }
+
+              if(pkg.nectar.expose)
+              {
+                COMPILER.EXPOSE = COMPILER.EXPOSE.concat(pkg.nectar.expose);
+              }
+
+              if(pkg.nectar.lib)
+              {
+                for(var l = 0; l < pkg.nectar.lib.length; l++ )
+                {
+                  COMPILER.LIBS += pkg.nectar.lib[l].replace("__MODULE__", modSource) + " ";
+                }
+              }
+
+            }
+          }
+          catch(e)
+          {
+            console.log("NectarJS:\n\n[!] " + e + " -> " + pkgPath.split("/").splice(-3).join("/"))
+          }
+        }
+        var _expose = {};
+        if(pkgObject && pkgObject.nectar && pkgObject.nectar.expose) _expose = pkgObject.nectar.expose;
+        if(!CLI.cli["--no-check"]) LINT(newSrc, trySource[i], _expose);
+
+        break;
+      }
+      catch (e) {}
+    }
+
+    if(newSrc.length == 0)
+  {
+    console.log("[!] Require error : " + addSource);
+    process.exit();
+  }
+    newSrc = genInclude(path.resolve(modSource) + "/", newSrc);
+
+    if(NJS_ENV.name != "arduino")
+    {
+
+      var reqFN = "__MODULE_" + Math.random().toString(36).substr(2, 10);
+      COMPILER.ENV.check.globals[reqFN] = false;
+      
+      src = src.replace(_SEARCH, reqFN + "()");
+
+      newSrc = "function " + reqFN + "(){\nvar module = __NJS_Create_Object();\n" + newSrc;
+      newSrc = newSrc.replace(/(module\.exports *= *.*)$/g, "$1;");
+      newSrc += "return module.exports;\n}";
+      newSrc = genRequire(modSource, newSrc);
+      
+
+    }
+    else
+    {
+      console.log("ARDUINO");
+      var resultSource = src.substring(0, index);
+      resultSource += src.substring(index + seek[s].length + addSource.length + 2);
+      src = resultSource;
+    }
+    COMPILER.REQUIRE += newSrc + ";";
+    var _match = src.match(_SEARCH);
   }
   return src;
 }
