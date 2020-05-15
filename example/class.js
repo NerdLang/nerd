@@ -7,7 +7,7 @@ class Greeter
 	
 	Say()
 	{
-		console.log("In Method Say");
+		console.log("Hello " + this.name);
 	}
 }
 

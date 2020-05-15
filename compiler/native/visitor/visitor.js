@@ -223,7 +223,8 @@ var visitor =
 								_params += _path.node.body.body[o].params[p].name;
 							}
 							_method += _params + ")\n";
-							_method += babel.generate(_path.node.body.body[o].body).code;
+							_method += "{\n'__NJS_CLASS_ANON__';"
+							_method += babel.generate(_path.node.body.body[o].body).code.substring(1);
 							_body += _method + "\n";
 						} 
 					}

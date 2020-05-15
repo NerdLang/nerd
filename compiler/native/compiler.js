@@ -135,7 +135,6 @@ function Compiler()
 		
 		_handler.CODE = babel.transformSync(_code, visitor).code;
 		_handler.CODE = createClass(_handler.CODE);
-		_handler.CODE = createClassAnon(_handler.CODE);
 		_handler.CODE = createFunction(_handler.CODE);
 		_handler.CODE = createAnon(_handler.CODE);
 		
@@ -323,61 +322,12 @@ function Compiler()
 								var _fn = _code.substring(_start, _end);
 								var _fnThis = "{ var __NJS_THIS = __NJS_Create_Object();" + _code.substring(_start + 1, _end);
 
-								if(_code.search(_matchThis) > -1) _fn = _fnThis;
+								if(_code.indexOf("'__NJS_CLASS_ANON__';"))
+								{
+									_code.replace("'__NJS_CLASS_ANON__';", "");
+								}
+								else if(_code.search(_matchThis) > -1) _fn = _fnThis;
 								
-								var _formated = "__NJS_VAR(__NJS_FUNCTION, new function<__NJS_VAR (" + _var + ")> ([&](" + _var + ") -> __NJS_VAR" + _fn + os.EOL + _return + "));";
-								_code = [_code.slice(0, _index), _formated, _code.slice(_end + 1)].join('');		
-								break;
-							}
-						}
-				}
-				_index = _code.search(_searchAnonFN);
-			}
-
-			return _code;
-		}
-
-		// WIP
-		function createClassAnon(_code)
-		{	
-			var _matchThis = new RegExp(/(| |{|,)__NJS_THIS([\.(";)]|$)/);
-			var _return = "return __NJS_Create_Undefined();}";
-			var _searchAnonFN = new RegExp(/__NJS_ANON_CLASS *= function *\(([a-zA-Z0-9_\-, ]*)\)/);
-			var _index = _code.search(_searchAnonFN);
-			while(_index > -1)
-			{
-				var _var = "";
-				var _count = 0;
-				var _start = -1;
-				var _end = -1;
-				var _genFN = "__NJS_FN_" + RND();
-				var _genVAR = "__NJS_VAR_" + RND();
-				
-				var _match = _searchAnonFN.exec(_code);
-				_match[1] = _match[1].split(",");
-				for(var i = 0; i < _match[1].length; i++)
-				{
-					if(_match[1][i].length > 0)
-					{
-						if(i != 0) _var += ",";
-						_var += "__NJS_VAR " + _match[1][i];
-					}
-				}
-				for(var i = _index; i < _code.length; i++)
-				{
-						if(_code[i] == "{")
-						{
-								if(_start == -1) _start = i;
-								_count++;
-						}
-						else if(_code[i] == "}")
-						{
-							_end = i;
-							_count--;
-							if(_count == 0)
-							{
-								
-								var _fn = _code.substring(_start, _end);							
 								var _formated = "__NJS_VAR(__NJS_FUNCTION, new function<__NJS_VAR (" + _var + ")> ([&](" + _var + ") -> __NJS_VAR" + _fn + os.EOL + _return + "));";
 								_code = [_code.slice(0, _index), _formated, _code.slice(_end + 1)].join('');		
 								break;
