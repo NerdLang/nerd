@@ -115,8 +115,14 @@ function genRequire(from, src)
             console.log("NectarJS:\n\n[!] " + e + " -> " + pkgPath.split("/").splice(-3).join("/"))
           }
         }
+
+        // EXPOSE VAR
         var _expose = {};
         if(pkgObject && pkgObject.nectar && pkgObject.nectar.expose) _expose = pkgObject.nectar.expose;
+
+        // READ ONLY VAR
+        if(pkgObject && pkgObject.nectar && pkgObject.nectar.read_only) COMPILER.READ_ONLY = COMPILER.READ_ONLY.concat(pkgObject.nectar.read_only);
+        
         if(!CLI.cli["--no-check"]) LINT(newSrc, trySource[i], _expose);
 
         break;

@@ -9,6 +9,7 @@ function setup()
 
 function loop()
 {
+	//HIGH = 10; // Error: HIGH is read only in package.json of arduino
 	arduino.digitalWrite(PIN_LED, HIGH);
 	arduino.delay(1000);
 	arduino.digitalWrite(PIN_LED, LOW);

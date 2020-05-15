@@ -108,6 +108,8 @@ function Compiler()
 	this.INIT = "";
 	
 	this.REQUIRE = "";
+
+	this.READ_ONLY = [];
 	
 	if(this.ENV.stdlib)
 	{

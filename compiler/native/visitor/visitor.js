@@ -28,6 +28,15 @@
 var NO_MODIFY_CALL = ["require", "Object"];
 var NJS_START = ["__NJS", "__FFI"];
 
+function readOnlyVar(_name)
+{
+	if(COMPILER.READ_ONLY.indexOf(_name) > -1)
+	{
+		console.log("[!] Fatal error: " + _name + " is a read only variable");
+		process.exit(1);
+	}
+}
+
 function objectExpression(_path, _name)
 {
 	var _code = "";
@@ -286,7 +295,6 @@ var visitor =
 			  else if(_path.node.id && _path.node.id.name && _path.node.init && _path.node.init.type == "ObjectExpression")
 			  {
 				  var _name = _path.node.id.name;
-
 				  var _el = _path.node.init.properties;
 				  var _code = _path.node.id.name + " = __NJS_Create_Object();"
 
@@ -322,7 +330,18 @@ var visitor =
 				  
 				   _path.replaceWith(babel.parse(_code));
 			  }
-          },
+		  },
+		  VariableDeclaration(_path)
+		  {
+			  if(_path.node.declarations)
+			  {
+				  for(var d = 0; d < _path.node.declarations.length; d++)
+				  {
+					if(_path.node.declarations[d].id && _path.node.declarations[d].id.name) readOnlyVar(_path.node.declarations[d].id.name);
+				  }
+			  }
+			
+		  },
 		  AssignmentExpression(_path)
 		  {
 			 if(_path.node.left.type == "MemberExpression")
@@ -337,10 +356,15 @@ var visitor =
 						{
 							if(_obj.computed) prop.push(_obj.property.name);
 							else prop.push("\"" + _obj.property.name + "\"");
+							
 						}
 						else if(_obj.property.extra) prop.push(_obj.property.extra.raw);
 					}
-					if(_obj.name) prop.push(_obj.name);
+					if(_obj.name)
+					{
+						prop.push(_obj.name);
+						readOnlyVar(_obj.name);
+					}
 					else if(_obj.type == "ThisExpression") prop.push("__NJS_THIS");
 					if(_obj.object) _obj=_obj.object;
 					else { _obj = null; break; }
@@ -368,6 +392,10 @@ var visitor =
 				_path.insertBefore(babel.parse("var " + _n + ";"));
 				_path.node.left = babel.types.identifier(_n);
 				_path.insertAfter(babel.parse(_setter.replace("{{LEFT}}", _n)));
+			 }
+			 else if(_path.node.left.type == "Identifier")
+			 {
+				 readOnlyVar(_path.node.left.name)
 			 }
 		  },
 		  CallExpression(_path)
