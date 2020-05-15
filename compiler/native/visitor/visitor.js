@@ -163,7 +163,11 @@ function callExpression(_path)
 			}
 			else if(_path.arguments[i].type == "MemberExpression")
 			{
-				_args += "," + memberExpression(_path.arguments[i]);
+				if(_path.arguments[i].object && _path.arguments[i].object.type == "ThisExpression")
+				{
+				  _args += ", __NJS_Object_Get(" + memberExpression(_path.arguments[i]) + ", __NJS_THIS)";
+				}
+				else _args += "," + memberExpression(_path.arguments[i]);
 			}
 			else 
 			{
@@ -182,6 +186,58 @@ var visitor =
     function NectarJS() {
       return {
         visitor: {
+			ClassDeclaration(_path)
+			{
+				var _class = " function __NJS_CLASS_" + _path.node.id.name + "(";
+				var _constructor = false;
+				var _body = "";
+
+				if(_path.node.body && _path.node.body.body)
+				{
+					for(var o = 0; o < _path.node.body.body.length; o++)
+					{
+						if(_path.node.body.body[o].kind == "constructor")
+						{
+							_constructor = true;
+							_path.node.body.body[o].key == babel.parse(_path.node.id.name);
+							
+							var _params = "";
+							for(var p = 0; p < _path.node.body.body[o].params.length; p++)
+							{
+								if(p > 1) _params += ",";
+								_params += _path.node.body.body[o].params[p].name;
+							}
+							_class += _params + "){\nvar __NJS_THIS = __NJS_Create_Object();\n";
+							var _newBody = babel.generate(_path.node.body.body[o].body).code;
+							_newBody = _newBody.substring(1, _newBody.length -1);
+							 _class += _newBody;
+						}
+						else if(_path.node.body.body[o].kind == "method")
+						{
+							var _method = "__NJS_THIS." + _path.node.body.body[o].key.name + "= function(";
+							
+							var _params = "";
+							for(var p = 0; p < _path.node.body.body[o].params.length; p++)
+							{
+								if(p > 1) _params += ",";
+								_params += _path.node.body.body[o].params[p].name;
+							}
+							_method += _params + ")\n";
+							_method += babel.generate(_path.node.body.body[o].body).code;
+							_body += _method + "\n";
+						} 
+					}
+				}
+				if(!_constructor)
+				{
+					_class += "){\nvar __NJS_THIS = __NJS_Create_Object();\n";
+				}
+				_class += _body;
+				_class += "}";
+
+				var _n = babel.parse(_class);
+				_path.replaceWith(_n.program);
+			},
 		  NewExpression(_path)
 		  {
 			_path.node.type = "CallExpression";
@@ -191,7 +247,7 @@ var visitor =
 		  },
 		  StringLiteral(_path)
 		  {
-			  
+
 			if(_path.node.extra.raw[0] && _path.node.extra.raw[0] == "'")
 			{
 				_path.node.extra.raw = '"' + _path.node.value.replace(/\\/g, '\\\\').replace(/"/g, '\\\"') + '"';
@@ -354,9 +410,17 @@ var visitor =
 				_arg.replaceWithSourceString(memberExpression(_path.node.argument));
 			}
 		  },
-		  MemberExpression(_path)
+		  ThisExpression(_path)
 		  {
-			  _path.replaceWithSourceString(memberExpression(_path.node));
+			console.log("this");
+		  },
+		  MemberExpression(_path)
+		  {  
+			  if(_path.node.object && _path.node.object.type == "ThisExpression")
+			  {
+				_path.replaceWithSourceString( "__NJS_Object_Get(" + memberExpression(_path.node) + ", __NJS_THIS)");
+			  }
+			  else _path.replaceWithSourceString(memberExpression(_path.node));
 		  }
         },
       };
