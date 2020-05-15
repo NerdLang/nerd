@@ -306,11 +306,7 @@ function Compiler()
 
 	this.CLI = function(compiler, out, _in, option)
 	{
-		if(this.ENV.cli)
-		{
-			return this.ENV.cli(compiler, this.preset, out, _in, option, this.TARGET, this.SPEC);
-		}
-		else return `${compiler} ${_in} ${option} -fpermissive -w -s ${COMPILER.LIBS} -o ${out}`;
+		return this.ENV.cli(compiler, this.preset, out, _in, option, this.TARGET, this.SPEC);
 	}
 	  
 	this.Compile = function(_folder, _file)

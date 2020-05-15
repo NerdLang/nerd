@@ -24,39 +24,62 @@ var os = require("os");
 
 var STD =
 {
-  name: "std",
-  main: "std.cpp",
-  compiler: "g++",
-  stdlib: ["console", "Math"],
-  check: {
-    "env": {
-        "es6": true
-    },
-    "extends": "eslint:recommended",
-    "rules": {
-        "strict": "global",
-        "no-console": "off",
-        "indent": "off",
-        "linebreak-style": "off",
-        "semi": [
-            "warn",
-            "always"
-        ],
-        "no-unused-vars": ["warn", { "vars": "all", "args": "after-used", "ignoreRestSiblings": false }],
-        "no-use-before-define": ["error"],
-        "no-undef": "error",
-        "no-redeclare": ["error", { "builtinGlobals": false }],
-    },
-    "globals":
+    name: "std",
+    main: "std.cpp",
+    compiler: "g++",
+    stdlib: ["console", "Math"],
+    check: 
     {
-        "__njs_typeof": false,
-        "console": false,
-        "module": false,
-        "require": false,
-        "__NJS_Log_Console": false,
-        "__NJS_ARGS": false,
+        "env": 
+        {
+            "es6": true
+        },
+        "extends": "eslint:recommended",
+        "rules": 
+        {
+            "strict": "global",
+            "no-console": "off",
+            "indent": "off",
+            "linebreak-style": "off",
+            "semi": [
+                "warn",
+                "always"
+            ],
+            "no-unused-vars": ["warn", { "vars": "all", "args": "after-used", "ignoreRestSiblings": false }],
+            "no-use-before-define": ["error"],
+            "no-undef": "error",
+            "no-redeclare": ["error", { "builtinGlobals": false }],
+        },
+        "globals":
+        {
+            "__njs_typeof": false,
+            "console": false,
+            "module": false,
+            "require": false,
+            "__NJS_Log_Console": false,
+            "__NJS_ARGS": false,
+        },
+    },
+    cli: function(compiler, preset, out, _in, option)
+    {
+        if(preset == "none")
+        {
+            return `${compiler} -std=c++11 ${_in} -O1 -fpermissive -w -s ${COMPILER.LIBS}  -o ${out}`;
+        }
+        else if(preset == "size")
+        {
+            return `${compiler} -std=c++11 ${_in} -Os -fno-exceptions -fno-rtti -fno-stack-protector -fomit-frame-pointer -fpermissive -w -s ${COMPILER.LIBS}  -o ${out}`;
+        }
+        else
+        {   
+            var _opt = "-O";
+            if(os.platform() == "darwin" || compiler.indexOf("clang") > -1) _opt += "3";
+            else _opt += "fast";
+
+            return `${compiler} -std=c++11 ${_in} ${_opt} -fpermissive -w -s ${COMPILER.LIBS}  -o ${out}`;
+        }
     }
-}
+
 }
 
 module.exports = STD;

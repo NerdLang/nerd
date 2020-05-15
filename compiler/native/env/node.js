@@ -59,13 +59,20 @@ var NODE =
   {
 	  if(preset == "none")
 	  {
-		  return `${compiler} ${_in} -std=c++11 -O1 -fpermissive -w -s ${COMPILER.LIBS}  -o ${out}`;
+		  return `${compiler} -std=c++11 ${_in} -O1 -fpermissive -w -s ${COMPILER.LIBS}  -o ${out}`;
 	  }
 	  else if(preset == "size")
 	  {
-		  return `${compiler} ${_in} -std=c++11 -Os -fno-exceptions -fno-rtti -fno-stack-protector -fomit-frame-pointer -fpermissive -w -s ${COMPILER.LIBS}  -o ${out}`;
+		  return `${compiler} -std=c++11 ${_in} -Os -fno-exceptions -fno-rtti -fno-stack-protector -fomit-frame-pointer -fpermissive -w -s ${COMPILER.LIBS}  -o ${out}`;
 	  }
-	  else return `${compiler} ${_in} -std=c++11 -Ofast -fpermissive -w -s ${COMPILER.LIBS}  -o ${out}`;
+	  else
+	  {
+		var _opt = "-O";
+            if(os.platform() == "darwin" || compiler.indexOf("clang") > -1) _opt += "3";
+            else _opt += "fast";
+
+            return `${compiler} -std=c++11 ${_in} ${_opt} -fpermissive -w -s ${COMPILER.LIBS}  -o ${out}`;
+	  }
   }
 }
 

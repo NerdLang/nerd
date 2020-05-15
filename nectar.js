@@ -335,16 +335,6 @@ function Build(prepare)
 	
 		var _args = [_in, "-o", _cout];
 
-		if(CLI.cli["--preset"] && CLI.cli["--preset"].argument == "speed")
-		{
-			COMPILER.OPTION += " -Ofast";
-		}
-		else if(CLI.cli["--preset"] && CLI.cli["--preset"].argument == "size")
-		{
-			COMPILER.OPTION += " -Os";
-		}
-		else COMPILER.OPTION += " -O1";
-		
 		if(!QUIET) console.log("[*] Compiling");
 		try 
 		{
