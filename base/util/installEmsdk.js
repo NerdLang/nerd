@@ -3,6 +3,7 @@ function installEmsdk()
     var tools = path.join(NECTAR_PATH, "tools");
     try { fs.mkdirSync( tools );}catch(e){}
     process.chdir(tools);
+    try { fs.mkdirSync( path.join(tools, "emsdk") );}catch(e){}
     console.log("[+] Cloning EMSDK");
 
     try 
