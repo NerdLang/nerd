@@ -15,3 +15,5 @@
 * add all strings functions (split, substring ...)
 
 * add all Math functions
+
+* Add helpers flags to create modules
