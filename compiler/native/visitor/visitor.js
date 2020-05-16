@@ -66,7 +66,7 @@ function objectExpression(_path, _name)
 	}
 	else
 	{
-	  console.log("Visitor VariableDeclarator not implemented yet for " + _path.value.type);
+	  console.log("Visitor objectExpression not implemented yet for " + _path.value.type);
 	}
 	if(_value) _code += "__NJS_Object_Set(\"" + _key + "\",__NJS_VAR(" + _value + ")," + _name + ");"
 	return _code;
@@ -116,6 +116,23 @@ function memberExpression(_path)
 	}
 
 	return _setter;
+}
+
+function arrayExpression(_path)
+{
+	var prop = [];
+	var _rnd = RND();
+	var _set = "__NJS_" + RND();
+
+	var _setter = `inline var ${_set}() { var ${_rnd} = __NJS_Create_Array();`;
+	for(var i = 0; i < _path.elements.length; i++)
+	{
+		if(_path.elements[i] == "NumericLiteral") _setter += `__NJS_Object_Set(${i}, ${_path.elements[i].extra.raw}, ${_rnd});`;
+		else _setter += `__NJS_Object_Set(${i}, ${babel.generate(_path.elements[i]).code}, ${_rnd});`;
+	}
+	_setter += `return ${_rnd};}`;
+
+	return {setter: _setter, getter: _set};
 }
 
 function callExpression(_path)
@@ -177,6 +194,12 @@ function callExpression(_path)
 				  _args += ", __NJS_Object_Get(" + memberExpression(_path.arguments[i]) + ", __NJS_THIS)";
 				}
 				else _args += "," + memberExpression(_path.arguments[i]);
+			}
+			else if(_path.arguments[i].type == "ArrayExpression")
+			{
+				var _arr = arrayExpression(_path.arguments[i]);
+				_args += "," + _arr.getter + "()";
+				COMPILER.DECL += _arr.setter;
 			}
 			else 
 			{
@@ -298,26 +321,28 @@ var visitor =
 				  var _el = _path.node.init.properties;
 				  var _code = _path.node.id.name + " = __NJS_Create_Object();"
 
-				  var _obj = [];
+				  //var _obj = [];
 				  
 				  for(var i = 0; i < _el.length; i++)
 				  {
+					  var _o = false;
 					  var _key;
 					  var _value;
 					  
-					  if(_el[i].key.name)
+					  if(_el[i].key &&_el[i].key.name)
 					  {
 						_key = _el[i].key.name;
 					  }
 					  else _key = _el[i].key.value;
 					  
-					  if(_el[i].value.name)
+					  if(_el[i].value && _el[i].value.name)
 					  {
 						_value = _el[i].value.name;
 					  }
-					  else if(_el[i].value.extra) _value = _el[i].value.extra.raw;
+					  else if(_el[i].value &&_el[i].value.extra) _value = _el[i].value.extra.raw;
 					  else if(_el[i].type == "ObjectProperty")
 					  {
+						 _o = true;
 						  _code += objectExpression(_el[i], _name);
 					  }
 					  else
@@ -325,9 +350,9 @@ var visitor =
 						  console.log("Visitor VariableDeclarator not implemented yet for " + _el[i].type);
 					  }
 					  
-					  if(_value) _code += "__NJS_Object_Set(\"" + _key + "\",__NJS_VAR(" + _value + ")," + _name + ");"
+					  if(_value && !_o) _code += "__NJS_Object_Set(\"" + _key + "\",__NJS_VAR(" + _value + ")," + _name + ");"
 				  }
-				  
+
 				   _path.replaceWith(babel.parse(_code));
 			  }
 		  },
@@ -438,10 +463,6 @@ var visitor =
 				const _arg = _path.get("argument");
 				_arg.replaceWithSourceString(memberExpression(_path.node.argument));
 			}
-		  },
-		  ThisExpression(_path)
-		  {
-			console.log("this");
 		  },
 		  MemberExpression(_path)
 		  {  

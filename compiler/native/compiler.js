@@ -140,9 +140,8 @@ function Compiler()
 		_handler.CODE = createFunction(_handler.CODE);
 		_handler.CODE = createAnon(_handler.CODE);
 		
-
 		COMPILER.INIT += COMPILER.REQUIRE;
-		
+
 		function createFunction(_code)
 		{	
 			var _matchThis = new RegExp(/(| |{|,)__NJS_THIS([\.(";)]|$)/);

@@ -530,41 +530,96 @@ struct __NJS_VAR
 		
     __NJS_VAR operator==(const __NJS_VAR& _v1)
 		{
-			return __NJS_VAR(__NJS_BOOLEAN, get().i == _v1.get().i);
+			if(type == _v1.type )
+			{
+				if(type == __NJS_NUMBER) return __NJS_VAR(__NJS_BOOLEAN, get().i == _v1.get().i);
+				else if(type == __NJS_STRING)
+				{
+					if(strcmp(get().s->__NJS_VALUE.c_str(),_v1.get().s->__NJS_VALUE.c_str()) == 0) return true;
+					else return false;
+				}
+			}
+			return false;
 		}
 		
 		__NJS_VAR operator<(const __NJS_VAR& _v1)
 		{
-			return __NJS_VAR(__NJS_BOOLEAN, get().i < _v1.get().i);
+			if(type == _v1.type )
+			{
+				if(type == __NJS_NUMBER) return __NJS_VAR(__NJS_BOOLEAN, get().i < _v1.get().i);
+				else if(type == __NJS_STRING)
+				{
+					false;
+				}
+			}
+			return false;
+			
 		}
 		
     __NJS_VAR operator<=(const __NJS_VAR& _v1)
 		{
-			return __NJS_VAR(__NJS_BOOLEAN, get().i <= _v1.get().i);
+			if(type == _v1.type )
+			{
+				if(type == __NJS_NUMBER) return __NJS_VAR(__NJS_BOOLEAN, get().i <= _v1.get().i);
+				else if(type == __NJS_STRING)
+				{
+					false;
+				}
+			}
+			return false;
 		}
 
 		__NJS_VAR operator>(const __NJS_VAR& _v1)
 		{
-			return __NJS_VAR(__NJS_BOOLEAN, get().i > _v1.get().i);
+			if(type == _v1.type )
+			{
+				if(type == __NJS_NUMBER) return __NJS_VAR(__NJS_BOOLEAN, get().i > _v1.get().i);
+				else if(type == __NJS_STRING)
+				{
+					false;
+				}
+			}
+			return false;
 		}
 		
     __NJS_VAR operator>=(const __NJS_VAR& _v1)
 		{
-			return __NJS_VAR(__NJS_BOOLEAN, get().i >= _v1.get().i);
+			if(type == _v1.type )
+			{
+				if(type == __NJS_NUMBER) return __NJS_VAR(__NJS_BOOLEAN, get().i >= _v1.get().i);
+				else if(type == __NJS_STRING)
+				{
+					false;
+				}
+			}
+			return false;
 		}
     __NJS_VAR operator>>(const __NJS_VAR& _v1)
 		{
-			return __NJS_VAR( get().i >> _v1.get().i);
+			if(type == _v1.type )
+			{
+				if(type == __NJS_NUMBER) return __NJS_VAR( get().i >> _v1.get().i);
+			}
+			return 0;
+			
 		}
     __NJS_VAR operator<<(const __NJS_VAR& _v1)
 		{
-			return __NJS_VAR( get().i << _v1.get().i);
+			if(type == _v1.type )
+			{
+				if(type == __NJS_NUMBER) return __NJS_VAR( get().i << _v1.get().i);
+			}
+			return 0;
 		}
 	
 
 	explicit operator bool() const 
 	{ 
-		return this->get().i; 
+		if(type == __NJS_NUMBER || type == __NJS_BOOLEAN) return this->get().i; 
+		else if(type == __NJS_DOUBLE) return this->get().d;
+		else if(type == __NJS_UNDEFINED) return 0;
+		else return 0;
+		
 	}
 };
 
