@@ -363,9 +363,10 @@ var visitor =
 				  for(var d = 0; d < _path.node.declarations.length; d++)
 				  {
 					if(_path.node.declarations[d].id && _path.node.declarations[d].id.name) readOnlyVar(_path.node.declarations[d].id.name);
+
+					if(!(_path.node.declarations[d].init)) _path.node.declarations[d].init = babel.parse("__NJS_VAR()");
 				  }
 			  }
-			
 		  },
 		  AssignmentExpression(_path)
 		  {
