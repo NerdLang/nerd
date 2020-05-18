@@ -18,6 +18,11 @@ Full documentation is here (WIP) : [NectarJS Doc](https://doc.nectarjs.com/)
 
 </p>
 
+# Main objectives
+* Supporting EcmaScript standard
+* Supporting NodeJS and NPM ecosystem
+* Supporting a maximum of platforms (Windows, Mac, Linux, Android, Arduino, ...)
+
 # Install
 
 ```
