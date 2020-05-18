@@ -1,2 +1,2 @@
-var test = require("./required.js");
+var test = require("./required");
 console.log(test);

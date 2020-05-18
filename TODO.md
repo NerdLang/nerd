@@ -17,3 +17,6 @@
 * add all Math functions
 
 * Add helpers flags to create modules
+
+* Add async support
+

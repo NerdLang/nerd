@@ -52,7 +52,7 @@ function genRequire(from, src)
     {
       modSource = path.join(from + addSource);
     }
-    var trySource = [modSource, /*modSource + ".js",*/ modSource + "/" + "index.js", from + "nectar_modules/" + addSource + "/index.js", NECTAR_PATH + "/nectar_modules/" + addSource + "/index.js", from + "node_modules/" + addSource + "/index.js", NECTAR_PATH + "/node_modules/" + modSource + "/index.js" ];
+    var trySource = [modSource, modSource + "/" + "index.js", from + "nectar_modules/" + addSource + "/index.js", NECTAR_PATH + "/nectar_modules/" + addSource + "/index.js", from + "node_modules/" + addSource + "/index.js", NECTAR_PATH + "/node_modules/" + modSource + "/index.js", modSource + ".js" ];
     var newSrc = "";
     for(var i = 0; i < trySource.length; i++)
     {
