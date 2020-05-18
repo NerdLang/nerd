@@ -61,7 +61,7 @@ nectar file.js
 You can select a preset (speed or size):
 
 ```
-nectar file.js --preset [size|size]
+nectar file.js --preset [speed|size]
 ```
 
 You can also run the compiled executable just after compilation using --run:
