@@ -37,7 +37,7 @@ The simplest way to use NectarJS is :
 nectar file.js
 ```
 
-The output file name will be automatically choosen regarding the target. You can specify another output with `-o something.out`
+The output file name will be automatically chosen regarding the target. You can specify another output with `-o something.out`
 
 To show more compilation infos :
 
