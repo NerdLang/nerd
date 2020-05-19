@@ -73,7 +73,6 @@ class __NJS_Class_Object
 class __NJS_Class_String : public __NJS_Class_Object
 {
   public:
-  int cnt = 1;
     __NJS_Class_String(char* _str);
     __NJS_VAR Get(char* _index);
     string __NJS_VALUE;
@@ -251,13 +250,12 @@ struct __NJS_VAR
 			}
 			else if(_v.type == __NJS_STRING)
 			{
-				REGISTER[_v._ptr].s->cnt--;
 				REGISTER[_ptr].s = new __NJS_Class_String((char*)REGISTER[_v._ptr].s->__NJS_VALUE.c_str());
 			}
 			else if(_v.type == __NJS_FUNCTION)
 			{
 				REGISTER[_ptr] = REGISTER[_v._ptr];
-				REGISTER[_ptr].f->cnt++;
+				REGISTER[_ptr].o->cnt++;
 			}
 			else if(_v.type == __NJS_ARRAY)
 			{
@@ -368,6 +366,7 @@ struct __NJS_VAR
 			else if(_v.type == __NJS_STRING)
 			{
 				REGISTER[_ptr].s = new __NJS_Class_String(strdup(REGISTER[_v._ptr].s->__NJS_VALUE.c_str()));
+				REGISTER[_ptr].s->cnt++;
 				REGISTER[_v._ptr].s->cnt--;
 			}
 			else if(_v.type == __NJS_FUNCTION)
@@ -782,13 +781,7 @@ inline __NJS_VAR __NJS_Object_Set(int _index, __NJS_VAR _value, __NJS_VAR _array
   {
     if(_array.get().a->__NJS_VALUE.size() <= _index) _array.get().a->__NJS_VALUE.resize(_index + 1);
     _array.get().a->__NJS_VALUE[_index].type = _value.type;
-
-	if(_value.type == __NJS_STRING)
-	{
-		REGISTER[_array.get().a->__NJS_VALUE[_index]._ptr].s = new __NJS_Class_String(REGISTER[_value._ptr].s->__NJS_VALUE.c_str());
-	}
-	else REGISTER[_array.get().a->__NJS_VALUE[_index]._ptr] = REGISTER[_value._ptr];
-
+	REGISTER[_array.get().a->__NJS_VALUE[_index]._ptr] = REGISTER[_value._ptr];
 	__NJS_Object_Set(__NJS_Create_String((char*)"length"), __NJS_VAR((int)_array.get().a->__NJS_VALUE.size()), _array);
   }
   return __NJS_VAR();
@@ -887,7 +880,7 @@ inline __NJS_VAR& __NJS_Object_Get(__NJS_VAR& _index, __NJS_VAR _array)
 
 __NJS_Class_String::__NJS_Class_String(char* _value)
 {
-	//cnt++;
+	cnt++;
 	/*** toString ***/
   function<__NJS_VAR ()>* __OBJ_TO___NJS_STRING = new function<__NJS_VAR ()>([&](){ return __NJS_Create_String((char*)this->__NJS_VALUE.c_str()); });
   __NJS_VAR toString = __NJS_VAR(__NJS_FUNCTION, __OBJ_TO___NJS_STRING);
@@ -901,26 +894,25 @@ __NJS_Class_String::__NJS_Class_String(char* _value)
   /*** split ***/
   function<__NJS_VAR (__NJS_VAR)>* __OBJ_TO___NJS_SPLIT = new function<__NJS_VAR (__NJS_VAR)>([&](__NJS_VAR _needle)
   { 
-	  
 	__NJS_VAR _arr = __NJS_Create_Array();
     char* _v = (char*)malloc(strlen(this->__NJS_VALUE.c_str()) + 1);
 	strcpy(_v, this->__NJS_VALUE.c_str());	
-	
 	char* delim = (char*)malloc(strlen(_needle.get().s->__NJS_VALUE.c_str()) + 1);
 	strcpy(delim, _needle.get().s->__NJS_VALUE.c_str());
 
 	char *ptr = strtok(_v, delim);
 	int i = 0;
 	char* _new;
-
 	while (ptr != NULL)
 	{
 		char* _new = (char*)malloc(strlen(ptr));
 		strcpy(_new, ptr);
 		__NJS_Object_Set(i, _new, _arr);
+		
 		ptr = strtok(NULL, delim);
 		i++;
 	}
+	
 	return _arr; 
   });
   
