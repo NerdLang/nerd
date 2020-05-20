@@ -1,0 +1,39 @@
+{
+  "name": "fs-std",
+  "description": "NectarJS Standard FS module",
+  "main": "index.js",
+  "bugs":
+  {
+    "url": "https://github.com/NectarJS/nectarjs/issues"
+  },
+
+  "directories":
+  {
+    "root": ".",
+    "lib": "lib"
+  },
+  "homepage": "https://github.com/NectarJS/nectarjs#readme",
+  "keywords":
+  [
+    "nectarjs",
+    "fs",
+    "nodejs",
+    "node"
+  ],
+  "license":
+  {
+    "type": "MIT",
+    "url": "https://github.com/NectarJS/nectarjs/blob/master/LICENSE"
+  },
+  "repository":
+  {
+    "type": "git",
+    "url": "git+ssh://git@github.com/NectarJS/nectarjs.git"
+  },
+  "version": "0.0.1",
+  "nectar":
+  {
+    "env": ["std", "node"],
+	"expose": ["__NJS_fs_readFileSync", "__NJS_fs_writeFileSync", "__NJS_fs_appendFileSync", "__NJS_fs_unlinkSync", "__NJS_fs_rmdirSync", "__NJS_fs_removeSync"]
+  }
+}
