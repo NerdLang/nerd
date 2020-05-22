@@ -1,3 +1,8 @@
+## VERSION 0.6.X
+* Variadic function support
+* WASM support
+* Low memory support
+
 ## VERSION 0.5.X
 * Adding memory management and cleaning without GC
 * Adding this and new
