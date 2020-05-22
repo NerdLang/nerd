@@ -174,8 +174,6 @@ char* __NJS_Concat_Str_To_Str(const char* _left, const char* _right)
 	return _result;
 }
 
-
-
 struct __NJS_VAR
 {   	
 	private:
@@ -342,10 +340,10 @@ struct __NJS_VAR
 		/*** EQUAL ***/
 		__NJS_VAR operator=(const __NJS_VAR _v)
 		{
-			//if(type == __NJS_OBJECT) REGISTER[_ptr].o->Delete();
-			//else if(type == __NJS_STRING) REGISTER[_ptr].s->Delete();
-			//else if(type == __NJS_FUNCTION) REGISTER[_ptr].f->Delete();
-			//else if(type == __NJS_ARRAY) REGISTER[_ptr].a->Delete();
+			if(type == __NJS_OBJECT) REGISTER[_ptr].o->Delete();
+			else if(type == __NJS_STRING) REGISTER[_ptr].s->Delete();
+			else if(type == __NJS_FUNCTION) REGISTER[_ptr].f->Delete();
+			else if(type == __NJS_ARRAY) REGISTER[_ptr].a->Delete();
 
 			type = _v.type;;
 			if(_v.type == __NJS_OBJECT)
@@ -611,11 +609,6 @@ struct __NJS_VAR
 	}
 };
 
-__NJS_VAR __NJS_Call_Function(__NJS_VAR _obj, __NJS_VAR v1)
-{
-	return (*static_cast<function<__NJS_VAR ( var v1 )>*>(_obj.get().f->__NJS_VALUE))( v1 );
-}
-
 /*** VARIADIC CALLS ***/
 template<class... Args>
 __NJS_VAR __NJS_Back_Var_Call_Function(__NJS_VAR _obj, Args... args)
@@ -626,6 +619,11 @@ __NJS_VAR __NJS_Back_Var_Call_Function(__NJS_VAR _obj, Args... args)
 template<class... Args>
 __NJS_VAR __NJS_Call_Function(__NJS_VAR _obj, Args... args)
 {
+	if(_obj.type != __NJS_FUNCTION)
+	{
+		cout << "[!] Fatal error, object is not a function" << endl;
+		exit(1);
+	}
 	return __NJS_Back_Var_Call_Function(_obj, (__NJS_VAR)(args)...);
 }
 /*** END VARIADIC CALLS ***/

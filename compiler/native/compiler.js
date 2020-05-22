@@ -65,6 +65,48 @@ function setRegister(_value)
 	return _reg;
 }
 
+function replaceObjAddr(_code)
+{
+	var FUNCTION = [];
+
+	var _searchReg = / *__NJS_Object_Set *\( *([a-zA-Z0-9_\-" ]*) *, *([a-zA-Z0-9_\-\(\)" ]*) *, *([a-zA-Z0-9_\-" ]*) *\)/g;
+	var _searchFN = / *([a-zA-Z0-9_\-" ]*) * = __NJS_VAR\(__NJS_FUNCTION/g;
+	
+	var _allFN = _code.match(new RegExp(_searchFN));
+	if(_allFN)
+	{
+		for(var i = 0; i < _allFN.length; i++)
+		{
+			var _localSearch = new RegExp(_searchFN);
+			var _fn = _localSearch.exec(_allFN[i]);
+			if(_fn);
+			{
+				FUNCTION.push(_fn[1]);
+			}
+		}
+	}
+
+	var _searchObject = new RegExp(_searchReg);
+	var _match = _code.match(_searchObject);
+	if(_match)
+	{
+		for(var i = 0; i < _match.length; i++)
+		{
+			var _localSearch = new RegExp(_searchReg);
+			var _var = _localSearch.exec(_match[i]);
+			if(_var);
+			{
+				if(_var[1] != "\"exports\"" && FUNCTION.indexOf(_var[2]) > -1)
+				{	
+					var _getObject = new RegExp("__NJS_Object_Get\\\(" + _var[1]+ ", " + _var[3] + "\\\)", "gm");
+					_code = _code.replace(_getObject, _var[2]);
+				}
+			}
+		}
+	}
+	return _code;
+}
+
 function Compiler()
 {
 	var _handler = this;
@@ -132,6 +174,7 @@ function Compiler()
 		if(!CLI.cli["--no-check"]) LINT(_code, this.IN);
 
 		COMPILER.REQUIRE = babel.transformSync(COMPILER.REQUIRE, visitor).code;
+		COMPILER.REQUIRE = createClass(COMPILER.REQUIRE);
 		COMPILER.REQUIRE = createFunction(COMPILER.REQUIRE);
 		COMPILER.REQUIRE = createAnon(COMPILER.REQUIRE);
 		
@@ -209,6 +252,7 @@ function Compiler()
 				}
 				_index = _code.search(_searchFN);
 			}
+			_code = replaceObjAddr(_code);
 			return _code;
 		}
 
@@ -278,6 +322,7 @@ function Compiler()
 				}
 				_index = _code.search(_searchFN);
 			}
+			_code = replaceObjAddr(_code);
 			return _code;
 		}
 
@@ -285,8 +330,9 @@ function Compiler()
 		{	
 			var _matchThis = new RegExp(/(| |{|,)__NJS_THIS([\.(";)]|$)/);
 			var _return = "return __NJS_Create_Undefined();}";
-			var _searchAnonFN = new RegExp(/function *\(([a-zA-Z0-9_\-, ]*)\)/);
+			var _searchAnonFN = new RegExp(/(var)* *([a-zA-Z0-9_]*) *= *function *\(([a-zA-Z0-9_\-, ]*)\)/);
 			var _index = _code.search(_searchAnonFN);
+
 			while(_index > -1)
 			{
 				var _var = "";
@@ -297,15 +343,16 @@ function Compiler()
 				var _genVAR = "__NJS_VAR_" + RND();
 				
 				var _match = _searchAnonFN.exec(_code);
-				_match[1] = _match[1].split(",");
-				for(var i = 0; i < _match[1].length; i++)
+				_match[3] = _match[3].split(",");
+				for(var i = 0; i < _match[3].length; i++)
 				{
-					if(_match[1][i].length > 0)
+					if(_match[3][i].length > 0)
 					{
 						if(i != 0) _var += ",";
-						_var += "__NJS_VAR " + _match[1][i];
+						_var += "__NJS_VAR " + _match[3][i];
 					}
 				}
+
 				for(var i = _index; i < _code.length; i++)
 				{
 						if(_code[i] == "{")
@@ -329,7 +376,11 @@ function Compiler()
 								}
 								else if(_code.search(_matchThis) > -1) _fn = _fnThis;
 								
-								var _formated = "__NJS_VAR(__NJS_FUNCTION, new function<__NJS_VAR (" + _var + ")> ([&](" + _var + ") -> __NJS_VAR" + _fn + os.EOL + _return + "));";
+								var _formated = "";
+
+								if(_match[1]) COMPILER.DECL += `var ${_match[2]};`;
+								if(_match[2]) _formated += _match[2] + " = ";
+								_formated += "__NJS_VAR(__NJS_FUNCTION, new function<__NJS_VAR (" + _var + ")> ([&](" + _var + ") -> __NJS_VAR" + _fn + os.EOL + _return + "));";
 								_code = [_code.slice(0, _index), _formated, _code.slice(_end + 1)].join('');		
 								break;
 							}
@@ -337,7 +388,7 @@ function Compiler()
 				}
 				_index = _code.search(_searchAnonFN);
 			}
-
+			_code = replaceObjAddr(_code);
 			return _code;
 		}
 
