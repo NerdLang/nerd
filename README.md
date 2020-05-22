@@ -113,3 +113,13 @@ nectar file.js --quiet
 
 * nucleo-l432kc
 
+# String
+* .length
+* .toString()
+* .indexOf(needle)
+* .lastIndexOf(needle)
+* .search(needle)
+* .slice(start, end)
+* .substring(start, end)
+* .substr(start, end)
+* .replace(needle, str)

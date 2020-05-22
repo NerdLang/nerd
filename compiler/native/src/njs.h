@@ -913,8 +913,29 @@ __NJS_Class_String::__NJS_Class_String(char* _value)
   
   __NJS_VAR __substr = __NJS_VAR(__NJS_FUNCTION, __OBJ_TO___NJS_SUBSTR);
 
-  __NJS_Object_Set((char*)"substr", __slice, &this->__OBJECT);
+  __NJS_Object_Set((char*)"substr", __substr, &this->__OBJECT);
 	/*** end substr ***/
+
+	/*** replace ***/
+  function<__NJS_VAR (vector<var>)>* __OBJ_TO___NJS_REPLACE = new function<__NJS_VAR (vector<var>)>([&](vector<var> __NJS_VARARGS)
+  { 
+	var _search; var _replace;
+	if(__NJS_VARARGS.size() > 0) _search = __NJS_VARARGS[0];
+	else return  __NJS_VAR(this->__NJS_VALUE.c_str());
+	if(__NJS_VARARGS.size() > 1) _replace = __NJS_VARARGS[1];
+
+	size_t start_pos = this->__NJS_VALUE.find(_search.get().s->__NJS_VALUE);
+    if(start_pos == std::string::npos)
+	{
+        return var(this->__NJS_VALUE.c_str());
+	}
+    return var(this->__NJS_VALUE.replace(start_pos, _search.get().s->__NJS_VALUE.length(), _replace.get().s->__NJS_VALUE).c_str());
+  });
+  
+  __NJS_VAR __replace = __NJS_VAR(__NJS_FUNCTION, __OBJ_TO___NJS_REPLACE);
+
+  __NJS_Object_Set((char*)"replace", __replace, &this->__OBJECT);
+	/*** end replace ***/
 #endif
 
   __NJS_VALUE = _value;
