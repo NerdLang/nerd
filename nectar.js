@@ -266,7 +266,8 @@ function Build(prepare)
 		var _current = process.cwd();
 		var _npath = path.join(_current, ".nectar");
 		try { fs.mkdirSync(_npath); } catch(e){};
-		var _tmp = path.join(_npath, Math.random().toString(36).substr(2, 5));
+    var _tmp = path.join(_npath, Math.random().toString(36).substr(2, 5));
+    COMPILER.TMP_FOLDER = _tmp;
 		try { fs.mkdirSync(_tmp); } catch(e){};
 		
 		/*** PREPARE SRC ***/

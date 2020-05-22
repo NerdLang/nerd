@@ -27,14 +27,44 @@
  */
 var _SEARCH = new RegExp(/['"]!_ffi_include *(.*)['"]/);
 
+var copyRecursiveSync = function(src, dest) 
+{
+  var _path = [];
+  var _newDest = path.dirname(dest);
+  _path.push(_newDest);
+
+  while(path.dirname(_newDest) != _newDest)
+  {
+    _newDest = path.dirname(_newDest);
+    if(_newDest.indexOf(NECTAR_PATH) == 0)
+    {
+      _path.push(_newDest);
+    }
+  }
+
+  for(var i = _path.length; i > -1; i--)
+  {
+    try 
+    {
+      fs.mkdirSync(_path[i]);
+    }
+    catch(e){}
+  }
+  fs.copyFileSync(src, dest); 
+};
+
 function genInclude(from, src, full)
 {
   if(full == undefined) full = false;
   var _match = src.match(_SEARCH);
   while(_match)
   {
-    var _var = "#include \"" + path.resolve(path.join(from, _match[1]) + "\"");
+    var _var = "#include \"" + path.resolve(path.join(COMPILER.TMP_FOLDER, _match[1]) + "\"");
     COMPILER.FFI.push(_var);
+    copyRecursiveSync(path.resolve(path.join(from, _match[1])), path.join(COMPILER.TMP_FOLDER, _match[1]));
+    var _include = fs.readFileSync(path.resolve(path.join(COMPILER.TMP_FOLDER, _match[1]))).toString();
+    _include = genMetaFunction(_include);
+    fs.writeFileSync(path.resolve(path.join(COMPILER.TMP_FOLDER, _match[1])), _include);
     src = src.replace(/['"]!_ffi_include *(.*)['"]/, "");
     _match = src.match(_SEARCH);
   }

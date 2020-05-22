@@ -1,9 +1,9 @@
 /*
  * This file is part of NectarJS
- * Copyright (c) 2017-2018 Adrien THIERRY
+ * Copyright (c) 2017-2020 Adrien THIERRY
  * http://nectarjs.com - https://www.linkedin.com/in/adrien-thierry-fr/
  *
- * sources : https://github.com/nectarjs/nectar_modules/
+ * sources : https://github.com/nectarjs/nectarjs/
  *
  * this program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -25,49 +25,29 @@
  * and feel free to contact us.
  *
  */
- 
-__NJS_FFI_FUNCTION(arduino_delayMS, __NJS_VAR _value)
-{ 
-	delay(__NJS_Get_Int(_value)); // to fix
-	return __NJS_VAR();
-};
 
-__NJS_FFI_FUNCTION(arduino_delay, __NJS_VAR _value)
+function arduino_delay(_value)
 { 
 	delay(__NJS_Get_Int(_value));
-	return __NJS_VAR();
-};
+}
 
-__NJS_FFI_FUNCTION(arduino_delaySecond, __NJS_VAR _value)
+function arduino_delaySecond(_value)
 { 
 	delay(__NJS_Get_Int(_value) * 1000);
-	return __NJS_VAR();
-};
+}
 
-__NJS_FFI_FUNCTION(arduino_millis)
-{ 
-	return __NJS_VAR((int)millis());
-};
-
-__NJS_FFI_FUNCTION(arduino_seconds)
-{ 
-	__NJS_VAR((int)((millis() / (int)1000)));
-};
-
-__NJS_FFI_FUNCTION(arduino_pinMode, __NJS_VAR _pin, __NJS_VAR _mode)
+function arduino_pinMode(_pin, _mode)
 { 
 	pinMode(__NJS_Get_Int(_pin), __NJS_Get_Int(_mode));
-	return __NJS_VAR();
-};
+}
 
-__NJS_FFI_FUNCTION(arduino_digitalWrite, __NJS_VAR _pin, __NJS_VAR _mode)
+function arduino_digitalWrite(_pin, _mode)
 { 
 	digitalWrite(__NJS_Get_Int(_pin), __NJS_Get_Int(_mode));
-	return __NJS_VAR();
-};
+}
 
-#define arduino_HIGH __NJS_VAR(HIGH)
-#define arduino_LOW __NJS_VAR(LOW)
-#define arduino_INPUT __NJS_VAR(INPUT)
-#define arduino_OUTPUT __NJS_VAR(OUTPUT)
-#define arduino_LED_BUILTIN __NJS_VAR(LED_BUILTIN)
+#define arduino_HIGH var(HIGH)
+#define arduino_LOW var(LOW)
+#define arduino_INPUT var(INPUT)
+#define arduino_OUTPUT var(OUTPUT)
+#define arduino_LED_BUILTIN var(LED_BUILTIN)

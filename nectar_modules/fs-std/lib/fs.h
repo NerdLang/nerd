@@ -29,7 +29,7 @@
 #include <unistd.h>
 #include <stdio.h>
 
-__NJS_FFI_FUNCTION(__NJS_fs_readFileSync, var _name)
+function __NJS_fs_readFileSync(_name)
 { 
 	FILE* fp;
 
@@ -56,7 +56,7 @@ __NJS_FFI_FUNCTION(__NJS_fs_readFileSync, var _name)
 };
 
 
-__NJS_FFI_FUNCTION(__NJS_fs_writeFileSync, var _name, var _content)
+function __NJS_fs_writeFileSync(_name, _content)
 {
   FILE* fp = fopen(__NJS_Get_String(_name), "w");
 
@@ -78,7 +78,7 @@ __NJS_FFI_FUNCTION(__NJS_fs_writeFileSync, var _name, var _content)
   }
 };
 
-__NJS_FFI_FUNCTION(__NJS_fs_appendFileSync, var _name, var _content)
+function __NJS_fs_appendFileSync(_name, _content)
 {
   FILE* fp = fopen(__NJS_Get_String(_name), "a");
 
@@ -101,19 +101,19 @@ __NJS_FFI_FUNCTION(__NJS_fs_appendFileSync, var _name, var _content)
   }
 };
 
-__NJS_FFI_FUNCTION(__NJS_fs_unlinkSync, var _name)
+function __NJS_fs_unlinkSync(_name)
 {
   unlink(__NJS_Get_String(_name));
   return __NJS_Create_Boolean(1);
 };
 
-__NJS_FFI_FUNCTION(__NJS_fs_rmdirSync, var _name)
+function __NJS_fs_rmdirSync(_name)
 {
   rmdir(__NJS_Get_String(_name));
   return __NJS_Create_Boolean(1);
 };
 
-__NJS_FFI_FUNCTION(__NJS_fs_removeSync, var _name)
+function __NJS_fs_removeSync(_name)
 {
   remove(__NJS_Get_String(_name));
   return __NJS_Create_Boolean(1);

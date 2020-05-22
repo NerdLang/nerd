@@ -30,11 +30,7 @@
 
 var _arduino = 
 {
-	delay_ms: __NJS_DELAY_MS,
 	delay: __NJS_DELAY,
-	delay_second: __NJS_DELAY_SECOND,
-	millis: __NJS_MILLIS,
-	sconds: __NJS_SECONDS,
 	pinMode: __NJS_PIN_MODE,
 	digitalWrite: __NJS_DIGITAL_WRITE,
 	high: arduino_HIGH,
