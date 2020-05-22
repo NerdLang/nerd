@@ -61,9 +61,10 @@ var NODE =
 		{
 			if(CLI.cli["--target"].argument == "js")  return _name + ".asm.js";
 			else if(CLI.cli["--target"].argument == "wasm") return _name + ".wasm";
+			else if(CLI.cli["--target"].argument == "html") return _name + ".html";
 			else 
 			{
-				console.log("[!] Invalid target, expected js or wasm");
+				console.log("[!] Invalid target, expected js, wasm, html");
 				process.exit(1);
 			}
 		}
@@ -71,35 +72,17 @@ var NODE =
   },
   cli: function(compiler, preset, out, _in, option)
   {
-		var _prefix = "./";
-		var _source = "source ";
-		var _script = path.join(NECTAR_PATH, "tools", "emsdk", "emsdk_env");
-
-		if(os.platform() == "win32")
-		{
-			_prefix = "";
-			_source = "";
-			_script += ".bat";
-		}
-		else _script += ".sh";
-		
-		if(!fs.existsSync(_script))
-		{
-			console.log("[!] Please install EMSDK and compile again: nectar --installEMSDK");
-			process.exit();
-		}
-
 		if(preset == "none")
 		{
-			return `${_source} ${_script} && ${compiler} ${_in} -O1 -fpermissive -w -s TOTAL_MEMORY=33554432 ${COMPILER.LIBS} -o ${out}`;
+			return `${compiler} ${_in} -O1 -fpermissive -w -s TOTAL_MEMORY=33554432 ${COMPILER.LIBS} -o ${out}`;
 		}
 		else if(preset == "size")
 		{
-			return `${_source} ${_script} && ${compiler} ${_in} -Os -fno-exceptions -fno-rtti -fno-stack-protector -fomit-frame-pointer -fpermissive -w -s TOTAL_MEMORY=33554432 ${COMPILER.LIBS} -o ${out}`;
+			return `${compiler} ${_in} -Os -fno-exceptions -fno-rtti -fno-stack-protector -fomit-frame-pointer -fpermissive -w -s TOTAL_MEMORY=33554432 ${COMPILER.LIBS} -o ${out}`;
 		}
 		else
 		{
-			return `${_source} ${_script} && ${compiler} ${_in} -O3 -fpermissive -w -s TOTAL_MEMORY=33554432 ${COMPILER.LIBS} -o ${out}`;
+			return `${compiler} ${_in} -O3 -fpermissive -w -s TOTAL_MEMORY=33554432 ${COMPILER.LIBS} -o ${out}`;
 		}
   }
 }
