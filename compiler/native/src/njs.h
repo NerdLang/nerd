@@ -640,6 +640,28 @@ __NJS_VAR __NJS_Call_Function(__NJS_VAR _obj, Args... args)
 }
 /*** END VARIADIC CALLS ***/
 
+/*** FIXED CALLS ***/
+template<class... Args>
+__NJS_VAR __NJS_Back_Var_Call_Fixed_Function(__NJS_VAR _obj, Args... args)
+{
+	return (*static_cast<function<__NJS_VAR ( Args... )>*>(_obj.get().f->__NJS_VALUE))( args... );
+}
+
+
+template<class... Args>
+__NJS_VAR __NJS_Call_Fixed_Function(__NJS_VAR _obj, Args... args)
+{
+	if(_obj.type != __NJS_FUNCTION)
+	{
+		#ifndef __NJS_ARDUINO
+			cout << "[!] Fatal error, object is not a function" << endl;
+		#endif
+		exit(1);
+	}
+	return __NJS_Back_Var_Call_Fixed_Function(_obj, (__NJS_VAR)(args)...);
+}
+/*** END FIXED CALLS ***/
+
 
 __NJS_VAR __create_Array()
 {

@@ -52,7 +52,8 @@ function objectExpression(_path, _name)
 
 	if(_path.value.name)
 	{
-	_value = _path.value.name;
+		_value = _path.value.name;
+		COMPILER.INFO.VALUE.push(_value);
 	}
 	else if(_path.value.extra) _value = _path.value.extra.raw;
 	else if(_path.value.type == "ObjectProperty")
@@ -62,6 +63,7 @@ function objectExpression(_path, _name)
 	else if(_path.value.type == "FunctionExpression")
 	{
 		var _value = RND();
+		COMPILER.INFO.FUNCTION.push(_value);
 		_code += "var " + _value + " = " + babel.generate(_path.value).code + ";";		
 	}
 	else
@@ -172,41 +174,55 @@ function callExpression(_path)
 			_caller = _caller.replace("{{PROPERTY}}", _p);
 		}
 	}
-	_caller = "__NJS_Call_Function(" + _caller;
+	var _fName = _caller;
+	_caller = "__NJS_Call_Function(" + _caller + ",";
 
+	if(!COMPILER.INFO.CALL[_fName]) COMPILER.INFO.CALL[_fName] = [];
 	if(_path.arguments.length > 0)
 	{
+		if(COMPILER.INFO.CALL[_fName].indexOf(_path.arguments.length) < 0)
+		{
+			COMPILER.INFO.CALL[_fName].push(_path.arguments.length);
+		}
 		var _args = "";
 		for(var i = 0; i < _path.arguments.length; i++)
 		{
+			if(i > 0) _args += ",";
 			if(_path.arguments[i].type == "Identifier")	
 			{
-				_args += "," + _path.arguments[i].name;
+				_args += _path.arguments[i].name;
 			}
 			else if(_path.arguments[i].extra)
 			{
-				_args += "," + _path.arguments[i].extra.raw;
+				_args += _path.arguments[i].extra.raw;
 			}
 			else if(_path.arguments[i].type == "MemberExpression")
 			{
 				if(_path.arguments[i].object && _path.arguments[i].object.type == "ThisExpression")
 				{
-				  _args += ", __NJS_Object_Get(" + memberExpression(_path.arguments[i]) + ", __NJS_THIS)";
+				  _args += " __NJS_Object_Get(" + memberExpression(_path.arguments[i]) + ", __NJS_THIS)";
 				}
-				else _args += "," + memberExpression(_path.arguments[i]);
+				else _args += memberExpression(_path.arguments[i]);
 			}
 			else if(_path.arguments[i].type == "ArrayExpression")
 			{
 				var _arr = arrayExpression(_path.arguments[i]);
-				_args += "," + _arr.getter + "()";
+				_args += _arr.getter + "()";
 				COMPILER.DECL += _arr.setter;
 			}
 			else 
 			{
-				_args += "," + babel.generate(_path.arguments[i]).code;
+				_args += babel.generate(_path.arguments[i]).code;
 			}
 		}
 		_caller += _args;
+	}
+	else
+	{
+		if(COMPILER.INFO.CALL[_fName].indexOf(0) < 0)
+		{
+			COMPILER.INFO.CALL[_fName].push(0);
+		}
 	}
 	_caller += ")";
 	return _caller;
@@ -350,7 +366,11 @@ var visitor =
 						  console.log("Visitor VariableDeclarator not implemented yet for " + _el[i].type);
 					  }
 					  
-					  if(_value && !_o) _code += "__NJS_Object_Set(\"" + _key + "\"," + _value + "," + _name + ");"
+					  if(_value && !_o)
+					  {
+						  _code += "__NJS_Object_Set(\"" + _key + "\"," + _value + "," + _name + ");"
+						  COMPILER.INFO.VALUE.push(_value);
+					  }
 				  }
 
 				   _path.replaceWith(babel.parse(_code));
@@ -378,13 +398,32 @@ var visitor =
 				{
 					if(_obj.property) 
 					{
+						var _property;
 						if(_obj.property.type == "Identifier")
 						{
-							if(_obj.computed) prop.push(_obj.property.name);
-							else prop.push("\"" + _obj.property.name + "\"");
+							if(_obj.computed)
+							{
+								_property = _obj.property.name;
+								COMPILER.INFO.VALUE.push(_property);
+							}
+							else 
+							{
+								_property = "\"" + _obj.property.name + "\"";
+								COMPILER.INFO.VALUE.push(_obj.property.name);
+							}
 							
 						}
-						else if(_obj.property.extra) prop.push(_obj.property.extra.raw);
+						else if(_obj.property.extra)
+						{
+							_property = _obj.property.extra.raw;
+							COMPILER.INFO.VALUE.push(_property);
+						}
+						
+						if(_property)
+						{
+							prop.push(_property);
+						}
+						
 					}
 					if(_obj.name)
 					{
@@ -472,6 +511,24 @@ var visitor =
 				_path.replaceWithSourceString( "__NJS_Object_Get(" + memberExpression(_path.node) + ", __NJS_THIS)");
 			  }
 			  else _path.replaceWithSourceString(memberExpression(_path.node));
+		  },
+		  FunctionDeclaration:
+		  {
+			enter(_path)
+			{
+				if(_path.node.id)
+				{
+
+				}
+				
+			},
+			exit(_path)
+			{
+				if(_path.node.id)
+				{
+
+				}
+			},
 		  }
         },
       };
