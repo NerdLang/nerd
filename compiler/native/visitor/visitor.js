@@ -28,8 +28,43 @@
 var NO_MODIFY_CALL = ["require", "Object"];
 var NJS_START = ["__NJS", "__FFI"];
 
+var IGNORE = ["__NJS_Call_Function", "__NJS_Object_Set", "__NJS_Obejct_Get"];
+var FUNCTION_STATE = [];
+var CURRENT_FUNCTION = -1;
+
+function addFunctionVarInit(_name)
+{
+	if(CURRENT_FUNCTION > -1)
+	{
+		if(COMPILER.INFO.SCOPE[FUNCTION_STATE[CURRENT_FUNCTION]].init.indexOf(_name) < 0)
+		COMPILER.INFO.SCOPE[FUNCTION_STATE[CURRENT_FUNCTION]].init.push(_name);
+	}
+}
+
+function addFunctionVarUse(_value)
+{
+	if(CURRENT_FUNCTION > -1)
+	{
+		if(COMPILER.INFO.SCOPE[FUNCTION_STATE[CURRENT_FUNCTION]].use.indexOf(_value) < 0 && IGNORE.indexOf(_value) < 0)
+		COMPILER.INFO.SCOPE[FUNCTION_STATE[CURRENT_FUNCTION]].use.push(_value);
+	}
+}
+
+function addFunctionVarCall(_id, _type)
+{
+	if(COMPILER.INFO.SCOPE[_id] && COMPILER.INFO.SCOPE[_id].call.indexOf(_type) < 0)
+	COMPILER.INFO.SCOPE[_id].call.push(_type);
+}
+
+function addFunctionVarParam(_id, _number)
+{
+	if(COMPILER.INFO.SCOPE[_id] && COMPILER.INFO.SCOPE[_id].param.indexOf(_number) < 0)
+	COMPILER.INFO.SCOPE[_id].param.push(_number);
+}
+
 function readOnlyVar(_name)
 {
+	addFunctionVarInit(_name);
 	if(COMPILER.READ_ONLY.indexOf(_name) > -1)
 	{
 		console.log("[!] Fatal error: " + _name + " is a read only variable");
@@ -178,15 +213,18 @@ function callExpression(_path)
 	_caller = "__NJS_Call_Function(" + _caller + ",";
 
 	if(!COMPILER.INFO.CALL[_fName]) COMPILER.INFO.CALL[_fName] = [];
+	addFunctionVarParam(_fName, _path.arguments.length);
 	if(_path.arguments.length > 0)
 	{
 		if(COMPILER.INFO.CALL[_fName].indexOf(_path.arguments.length) < 0)
 		{
 			COMPILER.INFO.CALL[_fName].push(_path.arguments.length);
 		}
+		
 		var _args = "";
 		for(var i = 0; i < _path.arguments.length; i++)
 		{
+			addFunctionVarCall(_fName, _path.arguments[i].type);
 			if(i > 0) _args += ",";
 			if(_path.arguments[i].type == "Identifier")	
 			{
@@ -320,7 +358,6 @@ var visitor =
 				  var _obj = [];
 				  for(var i = 0; i < _el.length; i++)
 				  {
-					  
 					   _obj.push(babel.parse(
 
 								";__NJS_Object_Set(" + i + ",_" + _el[i].value + "," + _name + ")"
@@ -333,7 +370,7 @@ var visitor =
 			  // Creating Object
 			  else if(_path.node.id && _path.node.id.name && _path.node.init && _path.node.init.type == "ObjectExpression")
 			  {
-				  var _name = _path.node.id.name;
+				  var _name = _path.node.id.name;			  
 				  var _el = _path.node.init.properties;
 				  var _code = _path.node.id.name + " = __NJS_Create_Object();"
 
@@ -512,13 +549,28 @@ var visitor =
 			  }
 			  else _path.replaceWithSourceString(memberExpression(_path.node));
 		  },
+		  Identifier(_path)
+		  {
+			addFunctionVarUse(_path.node.name);
+		  },
 		  FunctionDeclaration:
 		  {
 			enter(_path)
 			{
 				if(_path.node.id)
 				{
-
+					CURRENT_FUNCTION++;
+					FUNCTION_STATE.push(_path.node.id.name);
+					
+					if(!COMPILER.INFO.SCOPE[_path.node.id.name]) COMPILER.INFO.SCOPE[_path.node.id.name] = {init:[], use:[], call:[], param: [], fast: true};
+					addFunctionVarInit(_path.node.id.name);
+					if(_path.node.params.length > 0)
+					{
+						for(var i = 0; i < _path.node.params.length; i++)
+						{
+							addFunctionVarInit(_path.node.params[i].name);
+						}
+					}
 				}
 				
 			},
@@ -526,7 +578,8 @@ var visitor =
 			{
 				if(_path.node.id)
 				{
-
+					CURRENT_FUNCTION--;
+					FUNCTION_STATE.pop();
 				}
 			},
 		  }

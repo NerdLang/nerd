@@ -108,6 +108,31 @@ function replaceObjAddr(_code)
 	return _code;
 }
 
+var FAST_CALL = ["BinaryExpression", "NumericLiteral"];
+function checkFastFunction()
+{
+	for(var i in COMPILER.INFO.SCOPE)
+	{
+		for(var j = 0; j < COMPILER.INFO.SCOPE[i].use.length; j++)
+		{
+			if(COMPILER.INFO.SCOPE[i].init.indexOf(COMPILER.INFO.SCOPE[i].use[j]) < 0)
+			{
+				COMPILER.INFO.SCOPE[i].fast = false;
+				break;
+			}
+		}
+
+		for(var j = 0; j < COMPILER.INFO.SCOPE[i].call.length; j++)
+		{
+			if(FAST_CALL.indexOf(COMPILER.INFO.SCOPE[i].call[j]) < 0)
+			{
+				COMPILER.INFO.SCOPE[i].fast = false;
+				break;
+			}
+		}
+	}
+}
+
 function Compiler()
 {
 	var _handler = this;
@@ -184,18 +209,20 @@ function Compiler()
 		if(!CLI.cli["--no-check"]) LINT(_code, this.IN);
 
 		COMPILER.REQUIRE = babel.transformSync(COMPILER.REQUIRE, visitor).code;
+		checkFastFunction();
 		COMPILER.REQUIRE = createClass(COMPILER.REQUIRE);
 		COMPILER.REQUIRE = createFunction(COMPILER.REQUIRE);
 		COMPILER.REQUIRE = createAnon(COMPILER.REQUIRE);
 		
 
 		_handler.CODE = babel.transformSync(_code, visitor).code;
+		checkFastFunction();
 		_handler.CODE = createClass(_handler.CODE);
 		_handler.CODE = createFunction(_handler.CODE);
 		_handler.CODE = createAnon(_handler.CODE);
 		
 		COMPILER.INIT += COMPILER.REQUIRE;
-
+		
 		function createFunction(_code)
 		{	
 			var _matchThis = new RegExp(/(| |{|,)__NJS_THIS([\.(";)]|$)/);
@@ -218,7 +245,26 @@ function Compiler()
 				var _getVar = "";
 				var _parameters = "";
 				var _variadic = false;
-				if(COMPILER.INFO.CALL[_match[1]] && (COMPILER.INFO.CALL[_match[1]].length > 1 || COMPILER.INFO.CALL[_match[1]].length != _match[2].length))
+
+				var _FAST = false;
+
+				if(COMPILER.INFO.SCOPE[_match[1]] && COMPILER.INFO.SCOPE[_match[1]].fast == true && COMPILER.INFO.SCOPE[_match[1]].param.length == 1 && COMPILER.INFO.SCOPE[_match[1]].param[0] == _match[2].length)
+				{
+					_FAST = true;
+					for(var i = 0; i < _match[2].length; i++)
+					{
+						if(_match[2][i].length > 0)
+						{
+							if(i != 0) _var += ",";
+							_var += "int " + _match[2][i];
+						}
+					}
+					_parameters = _var;
+					var _replaceCall = new RegExp(`__NJS_Call_Function\\\(${_match[1]}(?![a-zA-Z_])`, "g");
+					_code = _code.replace(_replaceCall, `__NJS_Call_Fast_Function(${_match[1]}`);
+				}
+
+				else if(COMPILER.INFO.CALL[_match[1]] && (COMPILER.INFO.CALL[_match[1]].length > 1 || COMPILER.INFO.CALL[_match[1]].length != _match[2].length))
 				{
 					_variadic = true;
 					_parameters = "vector<var> __NJS_VARARGS";
@@ -242,7 +288,7 @@ function Compiler()
 					}
 					_parameters = _var;
 					var _replaceCall = new RegExp(`__NJS_Call_Function\\\(${_match[1]}(?![a-zA-Z_])`, "g");
-					_code = _code.replace(_replaceCall, `__NJS_Call_Fixed_Function(${_match[1]}`)
+					_code = _code.replace(_replaceCall, `__NJS_Call_Fixed_Function(${_match[1]}`);
 				}
 
 
@@ -261,26 +307,36 @@ function Compiler()
 							if(_count == 0)
 							{
 
-								var _fn = "{" + _getVar + _code.substring(_start + 1, _end);
-								var _fnThis = "{" + _getVar + " var __NJS_THIS = __NJS_Create_Object();" + _code.substring(_start + 1, _end);
-
-								if(_code.search(_matchThis) > -1) _fn = _fnThis;
-
-								_handler.DECL += "var " + _match[1] +";";
-
-								var _formated = `__NJS_DECL_FUNCTION<__NJS_VAR (${_parameters})>* ${_genFN} = new __NJS_DECL_FUNCTION<__NJS_VAR (${_parameters})>([&]( ${_parameters} ) -> __NJS_VAR ${_fn} ${_return} );`;
-								_formated += _match[1] + "=__NJS_VAR(__NJS_FUNCTION, " + _genFN + ");";
-
-								if(_match[1].indexOf("__MODULE") != 0)
+								if(!_FAST)
 								{
-									var _genNew = "__NEW_" + _genFN;
-									var _addNew = `__NJS_DECL_FUNCTION<__NJS_VAR (${_parameters})>* ${_genNew} = new __NJS_DECL_FUNCTION<__NJS_VAR (${_parameters})>([&]( ${_parameters} ) -> __NJS_VAR ${_fnThis} ${_returnThis} );`;
-									_addNew += "var __NEW_" + _match[1] + "=__NJS_VAR(__NJS_FUNCTION, " + _genNew + ");";
+									var _fn = "{" + _getVar + _code.substring(_start + 1, _end);
+									var _fnThis = "{" + _getVar + " var __NJS_THIS = __NJS_Create_Object();" + _code.substring(_start + 1, _end);
 
-									_formated += _addNew;
+									if(_code.search(_matchThis) > -1) _fn = _fnThis;
+
+									_handler.DECL += "var " + _match[1] +";";
+
+									var _formated = `__NJS_DECL_FUNCTION<__NJS_VAR (${_parameters})>* ${_genFN} = new __NJS_DECL_FUNCTION<__NJS_VAR (${_parameters})>([&]( ${_parameters} ) -> __NJS_VAR ${_fn} ${_return} );`;
+									_formated += _match[1] + "=__NJS_VAR(__NJS_FUNCTION, " + _genFN + ");";
+
+									if(_match[1].indexOf("__MODULE") != 0)
+									{
+										var _genNew = "__NEW_" + _genFN;
+										var _addNew = `__NJS_DECL_FUNCTION<__NJS_VAR (${_parameters})>* ${_genNew} = new __NJS_DECL_FUNCTION<__NJS_VAR (${_parameters})>([&]( ${_parameters} ) -> __NJS_VAR ${_fnThis} ${_returnThis} );`;
+										_addNew += "var __NEW_" + _match[1] + "=__NJS_VAR(__NJS_FUNCTION, " + _genNew + ");";
+
+										_formated += _addNew;
+									}
+									
+									_code = [_code.slice(0, _index), _formated, _code.slice(_end + 1)].join('');
 								}
-								
-								_code = [_code.slice(0, _index), _formated, _code.slice(_end + 1)].join('');
+								else 
+								{
+									// FAST CALL HERE
+									var _fn = _code.substring(_start, _end);
+									_handler.DECL += `int ${_match[1]}(${_parameters})${_fn}; return 0;}`;
+									_code = [_code.slice(0, _index), _code.slice(_end + 1)].join('');
+								}
 
 								break;
 							}

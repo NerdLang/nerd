@@ -662,6 +662,10 @@ __NJS_VAR __NJS_Call_Fixed_Function(__NJS_VAR _obj, Args... args)
 }
 /*** END FIXED CALLS ***/
 
+/*** FAST CALLS ***/
+#define __NJS_Call_Fast_Function(_name, __VA_ARGS__) _name(__VA_ARGS__)
+/*** END FAST CALLS ***/
+
 
 __NJS_VAR __create_Array()
 {
