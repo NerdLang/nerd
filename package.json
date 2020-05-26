@@ -1,6 +1,6 @@
 {
   "name": "nectarjs",
-  "version": "0.6.4",
+  "version": "0.6.5",
   "description": "Javascript's God Mode. No VM. No Bytecode. No GC. Just native binaries.",
   "main": "nectar",
   "bin": {
@@ -26,6 +26,7 @@
     "io",
     "iot",
     "socket",
+    "android",
     "linux",
     "windows",
     "arduino",

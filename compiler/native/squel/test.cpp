@@ -27,7 +27,6 @@
  */
  
  #include <iostream>
- //#include <functional>
  #include <string>
  #include <cstring>
  #include <stdio.h>

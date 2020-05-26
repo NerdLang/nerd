@@ -80,7 +80,7 @@ var STD =
     {
         var _name = path.basename(COMPILER.IN).split(".")[0];
         fs.writeFileSync(path.join(_folder, "local.properties"), `ndk.dir=${CONFIG.ndk}\nsdk.dir=${CONFIG.sdk}\n`);
-        fs.writeFileSync(path.join(_folder, "settings.gradle"), `rootProject.name='nectarInterrop'\ninclude ':app'\n`);
+        fs.writeFileSync(path.join(_folder, "settings.gradle"), `rootProject.name='${_name}'\ninclude ':app'\n`);
         
         return path.join(_folder, "app", "src", "main", "cpp");
     },
