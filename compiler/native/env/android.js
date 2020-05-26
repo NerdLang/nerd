@@ -22,12 +22,12 @@
 
 var os = require("os");
 
-var STD =
+var ANDROID =
 {
     name: "android",
-    main: "android.hpp",
+    main: "android.cpp",
     compiler: "gradlew",
-    stdlib: ["console", "Math"],
+    stdlib: ["android", "Math"],
     check: 
     {
         "env": 
@@ -53,7 +53,7 @@ var STD =
         "globals":
         {
             "__njs_typeof": false,
-            "console": false,
+            "android": false,
             "module": false,
             "require": false,
             "__NJS_Log_Console": false,
@@ -86,9 +86,9 @@ var STD =
     },
     write: function(_content)
     {
-        fs.writeFileSync(path.join(COMPILER.TMP_FOLDER, "app", "src", "main", "cpp", "android.hpp"), _content);
+        fs.writeFileSync(path.join(COMPILER.TMP_FOLDER, "app", "src", "main", "cpp", "native-lib.cpp"), _content);
     }
 
 }
 
-module.exports = STD;
+module.exports = ANDROID;

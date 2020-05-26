@@ -25,29 +25,9 @@
  * and feel free to contact us.
  *
  */
- 
- #include <iostream>
- #include <string>
- #include <cstring>
- #include <stdio.h>
- #include <stdlib.h>
- #include <string.h>
- #include <sstream>
- #include <vector>
- #include <memory>
 
- using namespace std;
 
- #include "njs.h"
- 
- {INCLUDE}
- 
- {DECL}
-
-void mainAndroid()
-{
-	{INIT}
-
-	{CODE}
-	return;
+function __NJS_ANDROID_WRITE(_value)
+{ 
+	drawJNI(__NJS_Get_String(_value));
 }

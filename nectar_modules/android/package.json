@@ -1,0 +1,42 @@
+{
+  "name": "android",
+  "description": "NectarJS base Android module",
+  "main": "index.js",
+  "bugs":
+  {
+    "url": "https://github.com/NectarJS/nectarjs/issues"
+  },
+
+  "directories":
+  {
+    "root": ".",
+    "lib": "lib"
+  },
+  "homepage": "https://github.com/NectarJS/nectarjs#readme",
+  "keywords":
+  [
+    "nectarjs",
+    "android",
+    "smartphone",
+    "mobile"
+  ],
+  "license": "AGPL",
+  "licenses": [
+    {
+      "type": "AGPL",
+      "url": "https://github.com/nectarjs/nectarjs/blob/master/LICENSE"
+    }
+  ],
+  "repository":
+  {
+    "type": "git",
+    "url": "git+ssh://git@github.com/NectarJS/nectarjs.git"
+  },
+  "version": "0.0.2",
+  "nectar":
+  {
+    "env": ["android"],
+    "read_only": [],
+    "expose": ["__NJS_ANDROID_WRITE"]
+  }
+}
