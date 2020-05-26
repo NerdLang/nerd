@@ -539,7 +539,7 @@ struct __NJS_VAR
 				if(type == __NJS_NUMBER) return __NJS_VAR(__NJS_BOOLEAN, get().i < _v1.get().i);
 				else if(type == __NJS_STRING)
 				{
-					false;
+					return false;
 				}
 			}
 			return false;
@@ -553,7 +553,7 @@ struct __NJS_VAR
 				if(type == __NJS_NUMBER) return __NJS_VAR(__NJS_BOOLEAN, get().i <= _v1.get().i);
 				else if(type == __NJS_STRING)
 				{
-					false;
+					return false;
 				}
 			}
 			return false;
@@ -566,7 +566,7 @@ struct __NJS_VAR
 				if(type == __NJS_NUMBER) return __NJS_VAR(__NJS_BOOLEAN, get().i > _v1.get().i);
 				else if(type == __NJS_STRING)
 				{
-					false;
+					return false;
 				}
 			}
 			return false;
@@ -579,7 +579,7 @@ struct __NJS_VAR
 				if(type == __NJS_NUMBER) return __NJS_VAR(__NJS_BOOLEAN, get().i >= _v1.get().i);
 				else if(type == __NJS_STRING)
 				{
-					false;
+					return false;
 				}
 			}
 			return false;

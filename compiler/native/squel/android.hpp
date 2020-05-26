@@ -1,9 +1,9 @@
 /*
- * This file is part of NativeJS
+ * This file is part of NectarJS
  * Copyright (c) 2017-2020 Adrien THIERRY
  * http://nectarjs.com - https://www.linkedin.com/in/adrien-thierry-fr/
  *
- * sources : https://github.com/nectarjs/old_nativejs
+ * sources : https://github.com/nectarjs/nectarjs/
  *
  * this program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -20,28 +20,35 @@
  *
  * You can be released from the requirements of the license by purchasing
  * a commercial license. Buying such a license is mandatory as soon as you
- * develop commercial activities involving the FortressJS software without
+ * develop commercial activities involving the NectarJS software without
  * disclosing the source code of your own applications. Visit http://seraum.com/
  * and feel free to contact us.
  *
  */
-var _SEARCH = new RegExp(/['"]!_ffi_include *(.*)['"]/);
+ 
+ #include <iostream>
+ //#include <functional>
+ #include <string>
+ #include <cstring>
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
+ #include <sstream>
+ #include <vector>
+ #include <memory>
 
-function genInclude(from, src, full)
+ using namespace std;
+
+ #include "njs.h"
+ 
+ {INCLUDE}
+ 
+ {DECL}
+
+void mainAndroid()
 {
-  if(full == undefined) full = false;
-  var _match = src.match(_SEARCH);
-  while(_match)
-  {
-    var _var = "#include \"" + path.resolve(path.join(COMPILER.TMP_FOLDER, _match[1]) + "\"");
-    COMPILER.FFI.push(_var);
-    copyRecursiveSync(path.resolve(path.join(from, _match[1])), path.join(COMPILER.TMP_FOLDER, _match[1]));
-    var _include = fs.readFileSync(path.resolve(path.join(COMPILER.TMP_FOLDER, _match[1]))).toString();
-    _include = genMetaFunction(_include);
-    fs.writeFileSync(path.resolve(path.join(COMPILER.TMP_FOLDER, _match[1])), _include);
-    src = src.replace(/['"]!_ffi_include *(.*)['"]/, "");
-    _match = src.match(_SEARCH);
-  }
-  return src;
+	{INIT}
+
+	{CODE}
+	return;
 }
-module.exports = genInclude;

@@ -136,6 +136,7 @@ function checkFastFunction()
 function Compiler()
 {
 	var _handler = this;
+	this.MAIN_PATH = __dirname;
 	this.TARGET = "standard";
 	this.SPEC;
 	this.EXPOSE = "";

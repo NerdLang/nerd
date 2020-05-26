@@ -81,7 +81,52 @@ You can enable the quiet mode with --quiet:
 nectar file.js --quiet
 ```
 
-# Tested on this targets/platforms :
+# Using compiler environments
+
+NectarJS supports various compilation env:
+* std
+* node
+* arduino
+* wasm
+* android
+
+To compile a file using an env, you can use the --env switch :
+
+```
+nectar arduino-led.js --env arduino --target mega2560
+```
+
+# Android compilation
+
+First step, you have to install Android SDK and Android NDK.
+
+Second step, you need to setup NectarJS with the paths of the SDK and the NDK :
+
+```
+nectar --setsdk path_to_sdk --setndk path_to_ndk
+```
+
+You can show your configuration with: `nectar --config`
+
+Third step: compile your JS app for Android using :
+
+`nectar file.js --env android`
+
+The result file is an Android APK.
+
+
+# Compatibility targets/platforms :
+
+* All supported GCC platforms
+
+* All supported Clang platforms
+
+* All supported AVR-GCC platforms
+
+
+# Actively tested for :
+
+* android
 
 * wasm
 
@@ -114,6 +159,7 @@ nectar file.js --quiet
 * nucleo-l432kc
 
 # String
+
 * .length
 * .toString()
 * .indexOf(needle)

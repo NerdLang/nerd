@@ -34,11 +34,17 @@ global.querystring = require('querystring');
 global.child_process = require('child_process');
 global.execSync = child_process.execSync;
 global.extern = path.join(__dirname, "extern");
+global.NJS_ENV = {};
 
 global.PACKAGE = require(path.join(__dirname, "package.json"));
 global.VERSION = PACKAGE.version;
+var CONFIGPATH = os.homedir() + path.sep + ".nectar";
+var CONFIGFILE = CONFIGPATH + "/" + "nectar.json";
+global.CONFIG = {};
+Init();
+readConfig();
 
-global.NJS_ENV = {};
+
 
 var parseCLI = require('./base/cli/cliParser.js');
 var coreHttp = require('./base/util/httpUtils.js');
@@ -46,6 +52,8 @@ var getExt = require('./base/util/getExt.js');
 var getTips = require('./base/util/getTips.js');
 var Flash = require('./base/util/flash.js');
 global.rmdir = require("./base/util/rmdir.js");
+global.copyRecursiveSync = require("./base/util/copyRecursive.js");
+global.copyDirSync = require("./base/util/copyDirSync.js");
 var CURRENT = process.cwd();
 var TARGET = require('./base/compiler/target.js');
 global.LINT = require("./base/util/lint.js");
@@ -70,6 +78,9 @@ else if(CLI.cli["--example"] || CLI.cli["--examples"]) ACTION = "example";
 else if(CLI.cli["--version"] || CLI.cli["-v"]) ACTION = "version";
 else if(CLI.cli["--project"]) ACTION = "showproject";
 else if(CLI.cli["--clean"] || CLI.cli["--purge"]) ACTION = "clean";
+else if(CLI.cli["--setid"] || CLI.cli["--setkey"] || CLI.cli["--sethash"] || CLI.cli["--setsdk"] || CLI.cli["--setndk"] || CLI.cli["--setapi"] || CLI.cli["--setport"]) ACTION = "setconfig";
+else if(CLI.cli["--config"]) ACTION = "showconfig";
+else if(CLI.cli["--reinit"]) ACTION = "reinitconfig";
 
 switch(ACTION)
 {
@@ -87,6 +98,18 @@ switch(ACTION)
 
   case "showproject":
     showProject();
+    break;
+
+  case "setconfig":
+    setConfig();
+    break;
+
+  case "showconfig":
+    showConfig();
+    break;
+
+  case "reinitconfig":
+    reinitConfig();
     break;
 
   case "build":
@@ -140,6 +163,118 @@ function copyExample()
     var content = fs.readFileSync(list[l]);
     fs.writeFileSync(name, content);
     console.log("[+] Copy of " + name + " done");
+  }
+}
+
+function Init()
+{
+    if(!fs.existsSync(CONFIGPATH)) fs.mkdirSync(CONFIGPATH);
+  try
+  {
+      var writeConfig = false;
+      var config = "";
+      config = fs.readFileSync(CONFIGFILE);
+      config = JSON.parse(config)
+      if(!config.version)
+      {
+        config.version = VERSION;
+        config.port = 443;
+        fs.writeFileSync(CONFIGFILE, JSON.stringify(config));
+      }
+  }
+  catch (e)
+  {
+    writeConfig = true;
+  }
+
+  if(!config || writeConfig)
+  {
+    var defaultConfig = { author: os.userInfo().username, id: "", key:"", hash:"SHA256", api:"api.nectarjs.com", port:443, version: VERSION, sdk: "", ndk: ""};
+    fs.writeFileSync(CONFIGFILE, JSON.stringify(defaultConfig));
+  }
+}
+
+function readConfig()
+{
+  try
+  {
+    var tmp = fs.readFileSync(CONFIGFILE);
+    CONFIG = JSON.parse(tmp);
+  }
+  catch (e)
+  {
+    Init();
+    readConfig();
+  }
+}
+
+function showConfig(str)
+{
+  console.log();
+  if(str) console.log(str);
+  else console.log("[*] Current config :");
+  console.log("author   : " + CONFIG.author);
+  console.log("id   : " + CONFIG.id);
+  console.log("key  : " + CONFIG.key);
+  console.log("hash : " + CONFIG.hash);
+  console.log("api : " + CONFIG.api);
+  console.log("port : " + CONFIG.port);
+  console.log("version : " + VERSION);
+  console.log("Android SDK : " + CONFIG.sdk);
+  console.log("Android NDK : " + CONFIG.ndk);
+  console.log();
+}
+
+function setConfig()
+{
+  try
+  {
+    if(CLI.cli["--setauthor"]) CONFIG.author = CLI.cli["--setauthor"].argument;
+    if(CLI.cli["--setid"]) CONFIG.id = CLI.cli["--setid"].argument;
+    if(CLI.cli["--setkey"]) CONFIG.key = CLI.cli["--setkey"].argument;
+    if(CLI.cli["--setapi"]) CONFIG.api = CLI.cli["--setapi"].argument;
+    if(CLI.cli["--setport"]) CONFIG.port = parseInt(CLI.cli["--setport"].argument);
+    if(CLI.cli["--setsdk"]) CONFIG.sdk = CLI.cli["--setsdk"].argument.replace(/\\/g, "\\\\").replace(/:/g, "\\\:");
+    if(CLI.cli["--setndk"]) CONFIG.ndk = CLI.cli["--setndk"].argument.replace(/\\/g, "\\\\").replace(/:/g, "\\\:");
+
+    if(isNaN(CONFIG.port))
+    {
+      console.dir("[!] This port is not valid : '" + CLI.cli["--setport"].argument +"', please specify a number.");
+      return;
+    }
+
+    if(CLI.cli["--sethash"])
+    {
+      var hash = CLI.cli["--sethash"].argument.toUpperCase();
+      if(validHash.indexOf(hash) < 0)
+      {
+        console.dir("[!] Hash is not valid and won't be saved. Valid hash are : MD5, SHA256 ans SHA512");
+      }
+      else
+      {
+          CONFIG.hash = hash;
+      }
+    }
+
+    fs.writeFileSync(CONFIGFILE, JSON.stringify(CONFIG));
+  }
+  catch (e)
+  {
+    console.log(e);
+  }
+}
+
+function reinitConfig()
+{
+  try
+  {
+    var defaultConfig = { author: os.userInfo().username, id: "", key:"", hash:"SHA256", api:"api.nectarjs.com", "port":443, sdk: "", ndk: ""};
+    fs.writeFileSync(CONFIGFILE, JSON.stringify(defaultConfig));
+    readConfig();
+    showConfig("[*] Config reinitialized :");
+  } catch (e)
+  {
+      console.log(e);
   }
 }
 
@@ -268,10 +403,14 @@ function Build(prepare)
 		try { fs.mkdirSync(_npath); } catch(e){};
     var _tmp = path.join(_npath, Math.random().toString(36).substr(2, 5));
     COMPILER.TMP_FOLDER = _tmp;
-		try { fs.mkdirSync(_tmp); } catch(e){};
+    if(COMPILER.ENV.init) COMPILER.ENV.init(_tmp);
+		else try { fs.mkdirSync(_tmp); } catch(e){};
 		
-		/*** PREPARE SRC ***/
-		COMPILER.Prepare(_tmp);
+    /*** PREPARE SRC ***/
+    var _libOut = _tmp;
+    if(COMPILER.ENV.prepare) _libOut = COMPILER.ENV.prepare(_tmp);
+
+		COMPILER.Prepare(_libOut);
 
         var fProject = false;
         var prjectConf = {};
@@ -326,10 +465,10 @@ function Build(prepare)
 		if(!QUIET) console.log("[*] Generating source file");
 	
 		var _code = fs.readFileSync(path.resolve(_in)).toString();
-		COMPILER.Parse(_code);
-		fs.writeFileSync(_cout, COMPILER.MAIN);
-	
-		var _args = [_in, "-o", _cout];
+    COMPILER.Parse(_code);
+    
+    if(COMPILER.ENV.write) COMPILER.ENV.write(COMPILER.MAIN);
+		else fs.writeFileSync(_cout, COMPILER.MAIN);
 
 		if(!QUIET) console.log("[*] Compiling");
 		try 
