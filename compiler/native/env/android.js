@@ -73,7 +73,7 @@ var ANDROID =
             {
                 apkOut =  path.join(COMPILER.TMP_FOLDER, "app", "build", "outputs", "apk", "release", "app-release-unsigned.apk");
             }
-            else if(CLI.cli["--target"] != "debug")
+            else if(CLI.cli["--target"].argument != "debug")
             {
                 console.log("[!] Error: accepted target are: debug or release");
             }
