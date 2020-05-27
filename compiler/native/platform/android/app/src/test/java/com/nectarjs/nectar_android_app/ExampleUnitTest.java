@@ -1,4 +1,4 @@
-package com.nectarjs.nectarinterrop;
+package com.nectarjs.nectar_android_app;
 
 import org.junit.Test;
 

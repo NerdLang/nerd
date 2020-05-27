@@ -58,7 +58,7 @@ void drawJNI(char* _str)
  {DECL}
 
 extern "C" JNIEXPORT void JNICALL
-Java_com_nectarjs_myapplication_MainActivity_callbackFromJNI(
+Java_com_nectarjs_nectar_1android_1app_MainActivity_callbackFromJNI(
         JNIEnv* env,
         jobject thiz,
         jstring _str) {
@@ -73,7 +73,7 @@ Java_com_nectarjs_myapplication_MainActivity_callbackFromJNI(
 }
 
 extern "C" JNIEXPORT void JNICALL
-Java_com_nectarjs_myapplication_MainActivity_callFromJNI(
+Java_com_nectarjs_nectar_1android_1app_MainActivity_callFromJNI(
         JNIEnv* env,
         jobject thiz)
 {

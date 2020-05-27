@@ -62,9 +62,26 @@ var ANDROID =
     },
     cli: function(compiler, preset, out, _in, option)
     {
+
         var _pre = "./";
         if(os.platform() == "win32") _pre = "";
-        var apkOut = path.join(COMPILER.TMP_FOLDER, "app", "build", "outputs", "apk", "release", "app-release-unsigned.apk");
+        var apkOut = "";
+        
+        if(CLI.cli["--target"] && CLI.cli["--target"].argument)
+        {
+            if(CLI.cli["--target"].argument == "release")
+            {
+                apkOut =  path.join(COMPILER.TMP_FOLDER, "app", "build", "outputs", "apk", "release", "app-release-unsigned.apk");
+            }
+            else if(CLI.cli["--target"] != "debug")
+            {
+                console.log("[!] Error: accepted target are: debug or release");
+            }
+        }
+       else 
+       {
+        apkOut =  path.join(COMPILER.TMP_FOLDER, "app", "build", "outputs", "apk", "debug", "app-debug.apk");
+       }
 
         return `${_pre}${compiler} build && cp ${apkOut} ${out}`;
     },
@@ -79,8 +96,8 @@ var ANDROID =
     prepare: function(_folder)
     {
         var _name = path.basename(COMPILER.IN).split(".")[0];
-        fs.writeFileSync(path.join(_folder, "local.properties"), `ndk.dir=${CONFIG.ndk}\nsdk.dir=${CONFIG.sdk}\n`);
-        fs.writeFileSync(path.join(_folder, "settings.gradle"), `rootProject.name='${_name}'\ninclude ':app'\n`);
+        fs.writeFileSync(path.join(_folder, "local.properties"), `ndk.dir=${CONFIG.ndk}\nsdk.dir=${CONFIG.sdk}\ngradle=build -x lint -x lintVitalRelease\n`);
+        fs.writeFileSync(path.join(_folder, "settings.gradle"), `rootProject.name='nectar_android_app'\ninclude ':app'\n`);
         
         return path.join(_folder, "app", "src", "main", "cpp");
     },

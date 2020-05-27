@@ -1,6 +1,7 @@
-package com.nectarjs.nectarinterrop;
+package com.nectarjs.nectar_android_app;
 
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;

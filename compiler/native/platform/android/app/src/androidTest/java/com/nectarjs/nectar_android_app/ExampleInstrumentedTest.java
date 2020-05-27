@@ -1,4 +1,4 @@
-package com.nectarjs.nectarinterrop;
+package com.nectarjs.nectar_android_app;
 
 import android.content.Context;
 
@@ -22,6 +22,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
-        assertEquals("com.nectarjs.nectarinterrop", appContext.getPackageName());
+        assertEquals("com.nectarjs.nectar_android_app", appContext.getPackageName());
     }
 }
