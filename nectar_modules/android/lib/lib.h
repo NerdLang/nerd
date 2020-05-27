@@ -27,7 +27,7 @@
  */
 
 
-function __NJS_ANDROID_WRITE(_value)
+function __NJS_ANDROID_DRAW(_value)
 { 
 	drawJNI(__NJS_Get_String(_value));
 }

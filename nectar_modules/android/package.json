@@ -37,6 +37,6 @@
   {
     "env": ["android"],
     "read_only": [],
-    "expose": ["__NJS_ANDROID_WRITE"]
+    "expose": ["__NJS_ANDROID_DRAW"]
   }
 }

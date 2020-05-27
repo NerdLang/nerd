@@ -456,6 +456,9 @@ struct __NJS_VAR
 			else if(type == __NJS_NUMBER && _v1.type == __NJS_DOUBLE) REGISTER[_ptr].i += _v1.get().d;
 			else if(type == __NJS_DOUBLE && _v1.type == __NJS_NUMBER) REGISTER[_ptr].d += _v1.get().i;
 			else if(type == __NJS_DOUBLE && _v1.type == __NJS_DOUBLE) REGISTER[_ptr].d += _v1.get().d;
+			else if(type == __NJS_STRING && _v1.type == __NJS_STRING) REGISTER[_ptr].s->__NJS_VALUE += _v1.get().s->__NJS_VALUE;
+			else if(type == __NJS_STRING && _v1.type == __NJS_DOUBLE) REGISTER[_ptr].s->__NJS_VALUE += _v1.get().d;
+			else if(type == __NJS_STRING && _v1.type == __NJS_NUMBER) REGISTER[_ptr].s->__NJS_VALUE += _v1.get().i;
 			return __NJS_VAR();
 		}
 	

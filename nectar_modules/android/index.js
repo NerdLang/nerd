@@ -30,7 +30,7 @@
 
 var _android = 
 {
-	write: __NJS_ANDROID_WRITE
+	draw: __NJS_ANDROID_DRAW,
 };
 
 module.exports = _android;

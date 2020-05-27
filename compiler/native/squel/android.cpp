@@ -57,7 +57,20 @@ void drawJNI(char* _str)
  
  {DECL}
 
+extern "C" JNIEXPORT void JNICALL
+Java_com_nectarjs_myapplication_MainActivity_callbackFromJNI(
+        JNIEnv* env,
+        jobject thiz,
+        jstring _str) {
 
+    globalEnv = env;
+    mainObject = thiz;
+
+    const char *nString = env->GetStringUTFChars(_str, NULL);
+    __NJS_Call_Function(__NJS_Object_Get("onEvent", android), nString);
+    env->ReleaseStringUTFChars(_str, nString);
+    
+}
 
 extern "C" JNIEXPORT void JNICALL
 Java_com_nectarjs_myapplication_MainActivity_callFromJNI(

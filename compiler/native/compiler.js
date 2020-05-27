@@ -144,6 +144,7 @@ function Compiler()
 	this.GEN = "";
 	this.PATH = "";
 	this.LIBS = "";
+	this.STATE = "";
 
 	if(CLI.stack[0]) this.PATH = path.dirname(CLI.stack[0]) + path.sep;
 	
@@ -209,13 +210,14 @@ function Compiler()
 		_code = genRequire(_handler.PATH, COMPILER.STD) + genRequire(_handler.PATH, _code);
 		if(!CLI.cli["--no-check"]) LINT(_code, this.IN);
 
+		COMPILER.STATE = "REQUIRE";
 		COMPILER.REQUIRE = babel.transformSync(COMPILER.REQUIRE, visitor).code;
 		checkFastFunction();
 		COMPILER.REQUIRE = createClass(COMPILER.REQUIRE);
 		COMPILER.REQUIRE = createFunction(COMPILER.REQUIRE);
 		COMPILER.REQUIRE = createAnon(COMPILER.REQUIRE);
 		
-
+		COMPILER.STATE = "CODE";
 		_handler.CODE = babel.transformSync(_code, visitor).code;
 		checkFastFunction();
 		_handler.CODE = createClass(_handler.CODE);
