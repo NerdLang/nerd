@@ -78,7 +78,7 @@ else if(CLI.cli["--example"] || CLI.cli["--examples"]) ACTION = "example";
 else if(CLI.cli["--version"] || CLI.cli["-v"]) ACTION = "version";
 else if(CLI.cli["--project"]) ACTION = "showproject";
 else if(CLI.cli["--clean"] || CLI.cli["--purge"]) ACTION = "clean";
-else if(CLI.cli["--setid"] || CLI.cli["--setkey"] || CLI.cli["--sethash"] || CLI.cli["--setsdk"] || CLI.cli["--setndk"] || CLI.cli["--setapi"] || CLI.cli["--setport"]) ACTION = "setconfig";
+else if(CLI.cli["--setauthor"] || CLI.cli["--setid"] || CLI.cli["--setkey"] || CLI.cli["--sethash"] || CLI.cli["--setsdk"] || CLI.cli["--setndk"] || CLI.cli["--setapi"] || CLI.cli["--setport"]) ACTION = "setconfig";
 else if(CLI.cli["--config"]) ACTION = "showconfig";
 else if(CLI.cli["--reinit"]) ACTION = "reinitconfig";
 
