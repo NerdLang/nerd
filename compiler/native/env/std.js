@@ -62,9 +62,11 @@ var STD =
     },
     cli: function(compiler, preset, out, _in, option)
     {
-        if(compiler.indexOf("cl ") == 0)
+        if(compiler == "cl" || compiler.indexOf("cl ") == 0)
         {
-            return `${compiler} ${_in} /O2  ${COMPILER.LIBS} `;
+            if(preset == "none") return `${compiler} ${_in} /std:c++14 /D CL_WINDOWS=1 /I "${CONFIG.win_inc_ucrt}" "${CONFIG.win_lib_um}\\Uuid.Lib" "${CONFIG.win_lib_um}\\kernel32.Lib" "${CONFIG.win_lib_ucrt}\\libucrt.lib" /EHsc  ${COMPILER.LIBS} /o  ${out}`;
+            else if(preset == "size") return `${compiler} ${_in} /std:c++14 /D CL_WINDOWS=1 /O1 /I "${CONFIG.win_inc_ucrt}" "${CONFIG.win_lib_um}\\Uuid.Lib" "${CONFIG.win_lib_um}\\kernel32.Lib" "${CONFIG.win_lib_ucrt}\\libucrt.lib" /EHsc ${COMPILER.LIBS} /o  ${out}`;
+            else if(preset == "speed") return `${compiler} ${_in} /std:c++14 /D CL_WINDOWS=1 /Ox /I "${CONFIG.win_inc_ucrt}" "${CONFIG.win_lib_um}\\Uuid.Lib" "${CONFIG.win_lib_um}\\kernel32.Lib" "${CONFIG.win_lib_ucrt}\\libucrt.lib" /EHsc ${COMPILER.LIBS} /o  ${out}`;
         }
         if(preset == "none")
         {

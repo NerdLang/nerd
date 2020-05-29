@@ -1,6 +1,6 @@
 {
   "name": "nectarjs",
-  "version": "0.6.14",
+  "version": "0.6.15",
   "description": "Javascript's God Mode. No VM. No Bytecode. No GC. Just native binaries.",
   "main": "nectar",
   "bin": {
@@ -40,7 +40,9 @@
     "bytcode",
     "wasm",
     "arm",
-    "arm64"
+    "arm64",
+    "msbuild",
+    "cl"
   ],
   "author": "Adrien THIERRY <adrien.thierryfr@gmail.com> (https://seraum.com)",
   "license": "AGPL",

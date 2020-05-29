@@ -110,7 +110,11 @@ union val
 
 int FREE_PTR = -1;
 int REGISTER_PTR = 0;
-val REGISTER[{{REGISTER}}]{(val){.i=0}};
+#ifdef CL_WINDOWS
+	val REGISTER[{{REGISTER}}];
+#else
+	val REGISTER[{{REGISTER}}]{(val){.i=0}};
+#endif
 int FREE[{{REGISTER}}] = {0};
 
 
