@@ -114,7 +114,7 @@ Third step: compile your JS app for Android using :
 
 The result file is an Android APK.
 
-You can select your target with `--target release|build`.
+You can select your target with `--target release|debug`.
 
 Need: SDK Android-19 and Android-28
 NDK: tested with NDK 21
