@@ -62,7 +62,7 @@ var STD =
     },
     cli: function(compiler, preset, out, _in, option)
     {
-        if(compiler.indexOf("cl") == 0)
+        if(compiler.indexOf("cl ") == 0)
         {
             return `${compiler} ${_in} /O2  ${COMPILER.LIBS} `;
         }
