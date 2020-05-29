@@ -62,6 +62,10 @@ var STD =
     },
     cli: function(compiler, preset, out, _in, option)
     {
+        if(compiler.indexOf("cl") == 0)
+        {
+            return `${compiler} ${_in} /O2  ${COMPILER.LIBS} `;
+        }
         if(preset == "none")
         {
             return `${compiler} -std=c++11 ${_in} -O1 -fpermissive -w -s ${COMPILER.LIBS}  -o ${out}`;
