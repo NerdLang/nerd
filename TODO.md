@@ -23,3 +23,5 @@
 * Unit testing / Compiler testing
 
 * add wildcard for multiple compilation at the same time : nectar *.js
+
+* Add TypeScript support
