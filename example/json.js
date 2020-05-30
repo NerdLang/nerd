@@ -1,0 +1,2 @@
+var JSON = require("JSON");
+

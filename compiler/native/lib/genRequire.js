@@ -132,8 +132,7 @@ function genRequire(from, src)
 
     if(newSrc.length == 0)
   {
-    console.log("[!] Require error : " + addSource);
-    process.exit();
+    console.log("[!] Warning : index file of module " + addSource + " seems empty");
   }
     newSrc = genInclude(path.resolve(modSource) + "/", newSrc);
 
