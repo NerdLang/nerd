@@ -10,7 +10,7 @@ using namespace httplib;
 
 Server __NJS_HTTP_SRV;
 
-function __NJS_HTTP_GET(_uri, _cb)
+var __NJS_HTTP_GET(var _uri, var _cb)
 {
   static var __callback = _cb;
 
@@ -19,7 +19,7 @@ function __NJS_HTTP_GET(_uri, _cb)
     std::function<var (var _str)> __NJS_HTTP_RES_END = [&](var _str)
     {
       response.set_content(__NJS_Get_String(_str), "text/plain");
-      return var(UNDEFINED, 0);
+      return var();
     };
 
     var __f_NJS_HTTP_RES_END = __NJS_Create_Function(&__NJS_HTTP_RES_END);
@@ -31,11 +31,11 @@ function __NJS_HTTP_GET(_uri, _cb)
     __NJS_Call_Function(__callback, _req, _res);
 
   });
-  return __NJS_Create_Undefined();
+  return var();
 }
 
-function __NJS_HTTP_LISTEN(_host, _port)
+var __NJS_HTTP_LISTEN(var _host, var _port)
 {
   __NJS_HTTP_SRV.listen(__NJS_Get_String(_host), __NJS_Get_Int(_port));
-  return var(UNDEFINED, 0);
+  return var();
 }

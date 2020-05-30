@@ -46,6 +46,7 @@ enum __NJS_TYPE
 
 #define __NJS_Create_Boolean(_value) __NJS_VAR(__NJS_BOOLEAN, _value)
 #define __NJS_Create_Number(_value) __NJS_VAR( _value)
+#define __NJS_Create_Function(_value) __NJS_VAR(__NJS_FUNCTION, _value)
 #define __NJS_Create_Undefined() __NJS_VAR()
 #define __NJS_DECL_FUNCTION function
 #define __NJS_RETURN_UNDEFINED var __undef = __NJS_VAR(); return __undef;
