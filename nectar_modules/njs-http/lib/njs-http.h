@@ -8,34 +8,35 @@
 
 using namespace httplib;
 
-Server __NJS_HTTP_SRV;
 
-var __NJS_HTTP_GET(var _uri, var _cb)
+var __NJS_HTTP_LISTEN(var _host, var _port, var _cb)
 {
-  static var __callback = _cb;
-
-  __NJS_HTTP_SRV.Get(__NJS_Get_String(_uri), [&](const Request& request, Response& response)
+	Server __NJS_HTTP_SRV;
+	
+  __NJS_HTTP_SRV.Get(".*", [&](const Request& request, Response& response)
   {
-    std::function<var (var _str)> __NJS_HTTP_RES_END = [&](var _str)
-    {
-      response.set_content(__NJS_Get_String(_str), "text/plain");
-      return var();
-    };
-
-    var __f_NJS_HTTP_RES_END = __NJS_Create_Function(&__NJS_HTTP_RES_END);
+	function<var (vector<var>)>* __NJS_HTTP_RES_END = new function<var (vector<var>)>([&](vector<var> __args)
+	{
+		var _str = "";
+		if(__args.size() == 1) _str = __args[0];
+		response.set_content(__NJS_Get_String(_str), "text/plain");
+		return var();
+	});
+	var __f_NJS_HTTP_RES_END = __NJS_Create_Function(__NJS_HTTP_RES_END);
 
     var _req = __NJS_Create_Object();
+    __NJS_Object_Set((char*)"method", "GET", _req);
+    __NJS_Object_Set((char*)"url", request.path, _req);
+    
     var _res = __NJS_Create_Object();
 
     __NJS_Object_Set((char*)"end", __f_NJS_HTTP_RES_END, _res);
-    __NJS_Call_Function(__callback, _req, _res);
-
+    
+    __NJS_Call_Function(_cb, _req, _res);
+    return var();
   });
-  return var();
-}
-
-var __NJS_HTTP_LISTEN(var _host, var _port)
-{
+  
   __NJS_HTTP_SRV.listen(__NJS_Get_String(_host), __NJS_Get_Int(_port));
   return var();
 }
+

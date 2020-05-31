@@ -243,7 +243,6 @@ function Compiler()
 				var _end = -1;
 			
 				let _match = _searchFN.exec(_code);
-
 				_match[2] = _match[2].split(",");
 				var _getVar = "";
 				var _parameters = "";
@@ -266,7 +265,19 @@ function Compiler()
 					var _replaceCall = new RegExp(`__NJS_Call_Function\\\(${_match[1]}(?![a-zA-Z_])`, "g");
 					_code = _code.replace(_replaceCall, `__NJS_Call_Fast_Function(${_match[1]}`);
 				}
-
+				else
+				{
+					_variadic = true;
+					_parameters = "vector<var> __NJS_VARARGS";
+					for(var i = 0; i < _match[2].length; i++)
+					{
+						if(_match[2][i].length > 0)
+						{
+							_getVar += `var ${_match[2][i]}; if(__NJS_VARARGS.size() > ${i}) ${_match[2][i]} = __NJS_VARARGS[${i}];`;
+						}
+					}
+				}
+				/*
 				else if(COMPILER.INFO.CALL[_match[1]] && (COMPILER.INFO.CALL[_match[1]].length > 1 || COMPILER.INFO.CALL[_match[1]].length != _match[2].length))
 				{
 					_variadic = true;
@@ -293,6 +304,7 @@ function Compiler()
 					var _replaceCall = new RegExp(`__NJS_Call_Function\\\(${_match[1]}(?![a-zA-Z_])`, "g");
 					_code = _code.replace(_replaceCall, `__NJS_Call_Fixed_Function(${_match[1]}`);
 				}
+				*/
 
 
 				for(var i = _index; i < _code.length; i++)

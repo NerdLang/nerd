@@ -32,10 +32,10 @@ enum __NJS_TYPE
 	__NJS_BIGNUMBER,
 	__NJS_BOOLEAN,
 	__NJS_STRING,
-	//__NJS_NATIVE,
+	__NJS_NATIVE,
 	__NJS_FUNCTION,
 	__NJS_ARRAY,
-	//__NJS_NAN,
+	__NJS_NAN,
 	
 };
 
@@ -96,6 +96,15 @@ class __NJS_Class_Function
 	vector<pair<char*, __NJS_VAR>> __OBJECT;
 };
 
+class __NJS_Class_Native
+{
+  public:
+	int cnt = 0;
+	void Delete();
+  	__NJS_Class_Native(void* _n);
+	void* __NJS_VALUE;
+};
+
 union val
 {
 	int i;
@@ -105,6 +114,7 @@ union val
 	__NJS_Class_Array* a;
 	__NJS_Class_Object* o;
 	__NJS_Class_Function* f;
+	__NJS_Class_Native* n;
 };
 
 /*** REGISTER ***/
@@ -198,7 +208,7 @@ struct __NJS_VAR
 	public:
 		__NJS_TYPE type;
 		int _ptr = -1;
-	
+		
 		val get() const
 		{
 			return REGISTER[_ptr];
@@ -226,6 +236,10 @@ struct __NJS_VAR
 				REGISTER[_ptr].f->Delete();
 			}
 			else if(type ==  __NJS_ARRAY)
+			{
+				REGISTER[_ptr].a->Delete();
+			}
+			else if(type ==  __NJS_NATIVE)
 			{
 				REGISTER[_ptr].a->Delete();
 			}
@@ -258,6 +272,11 @@ struct __NJS_VAR
 			{
 				REGISTER[_ptr] = REGISTER[_v._ptr];
 				REGISTER[_ptr].a->cnt++;
+			}
+			else if(_v.type == __NJS_NATIVE)
+			{
+				REGISTER[_ptr] = REGISTER[_v._ptr];
+				REGISTER[_ptr].n->cnt++;
 			}
 			else
 			{
@@ -297,6 +316,13 @@ struct __NJS_VAR
 			REGISTER[_ptr].s = new __NJS_Class_String(_value);
 		}
 		
+		__NJS_VAR (string _value)
+		{
+			setPtr();
+			type = __NJS_STRING;
+			REGISTER[_ptr].s = new __NJS_Class_String(_value.c_str());
+		}
+		
 		__NJS_VAR (const char* _value)
 		{
 			setPtr();
@@ -315,6 +341,12 @@ struct __NJS_VAR
 			setPtr();
 			type = __NJS_OBJECT;
 			REGISTER[_ptr].o = _value;
+		}
+		__NJS_VAR (__NJS_Class_Native* _value)
+		{
+			setPtr();
+			type = __NJS_NATIVE;
+			REGISTER[_ptr].n = _value;
 		}
 		__NJS_VAR (__NJS_TYPE _type, void* _value)
 		{
@@ -353,6 +385,7 @@ struct __NJS_VAR
 			else if(type == __NJS_STRING) REGISTER[_ptr].s->Delete();
 			else if(type == __NJS_FUNCTION) REGISTER[_ptr].f->Delete();
 			else if(type == __NJS_ARRAY) REGISTER[_ptr].a->Delete();
+			else if(type == __NJS_NATIVE) REGISTER[_ptr].n->Delete();
 
 			type = _v.type;;
 			if(_v.type == __NJS_OBJECT)
@@ -373,6 +406,11 @@ struct __NJS_VAR
 			{
 				REGISTER[_ptr] = REGISTER[_v._ptr];
 				REGISTER[_ptr].a->cnt++;
+			}
+			else if(_v.type == __NJS_NATIVE)
+			{
+				REGISTER[_ptr] = REGISTER[_v._ptr];
+				REGISTER[_ptr].n->cnt++;
 			}
 			else REGISTER[_ptr] = REGISTER[_v._ptr];
 			
@@ -699,7 +737,7 @@ char* __NJS_Get_String(__NJS_VAR _v)
 
 __NJS_VAR __NJS_Typeof(__NJS_VAR _var)
 {
-  char* _array[] = {(char*)"", (char*)"undefined", (char*)"number", (char*)"number", (char*)"object", (char*)"number", (char*)"boolean", (char*)"string", (char*)"function", (char*)"array"};
+  char* _array[] = {(char*)"", (char*)"undefined", (char*)"number", (char*)"number", (char*)"object", (char*)"number", (char*)"boolean", (char*)"string", (char*)"native", (char*)"function", (char*)"array", (char*) "NaN"};
   return __NJS_Create_String(_array[_var.type]);
 }
 
@@ -998,6 +1036,13 @@ __NJS_Class_Function::__NJS_Class_Function(void* _f)
 
 }
 
+__NJS_Class_Native::__NJS_Class_Native(void* _n)
+{
+	cnt++;
+  __NJS_VALUE = _n;
+
+}
+
 
 void __NJS_Class_String::Delete()
 {
@@ -1027,6 +1072,15 @@ void __NJS_Class_Object::Delete()
 }
 
 void __NJS_Class_Function::Delete()
+{
+	this->cnt --;
+	if(this->cnt < 1)
+	{
+		delete this;
+	}	
+}
+
+void __NJS_Class_Native::Delete()
 {
 	this->cnt --;
 	if(this->cnt < 1)

@@ -35,6 +35,7 @@
   "nectar":
   {
     "env": ["std", "node"],
-    "expose": ["__NJS_HTTP_GET", "__NJS_HTTP_LISTEN"]
+    "expose": ["__NJS_HTTP_GET", "__NJS_HTTP_LISTEN"],
+    "lib": ["-lpthread"]
   }
 }
