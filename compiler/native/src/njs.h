@@ -103,6 +103,7 @@ class __NJS_Class_Native
 	void Delete();
   	__NJS_Class_Native(void* _n);
 	void* __NJS_VALUE;
+	vector<pair<char*, __NJS_VAR>> __OBJECT;
 };
 
 union val
@@ -320,7 +321,7 @@ struct __NJS_VAR
 		{
 			setPtr();
 			type = __NJS_STRING;
-			REGISTER[_ptr].s = new __NJS_Class_String(_value.c_str());
+			REGISTER[_ptr].s = new __NJS_Class_String((char*)_value.c_str());
 		}
 		
 		__NJS_VAR (const char* _value)
@@ -785,7 +786,7 @@ __NJS_VAR __NJS_Object_Set(__NJS_VAR _index, __NJS_VAR _value, __NJS_VAR _array)
 	return __NJS_VAR();
     
   }
-  else if(_array.type == __NJS_OBJECT || _array.type == __NJS_STRING || _array.type == __NJS_FUNCTION || _array.type == __NJS_ARRAY)
+  else if(_array.type == __NJS_OBJECT || _array.type == __NJS_STRING || _array.type == __NJS_FUNCTION || _array.type == __NJS_ARRAY || _array.type == __NJS_NATIVE)
   {
     vector<pair<char*, __NJS_VAR>>* _obj;
     if(_array.type == __NJS_OBJECT) _obj = &_array.get().o->__OBJECT;
@@ -805,7 +806,7 @@ __NJS_VAR __NJS_Object_Set(__NJS_VAR _index, __NJS_VAR _value, __NJS_VAR _array)
 
 __NJS_VAR __NJS_Object_Get(__NJS_VAR _index, __NJS_VAR _array)
 {
-  if(_array.type != __NJS_ARRAY && _array.type != __NJS_OBJECT && _array.type != __NJS_STRING && _array.type != __NJS_FUNCTION) 
+  if(_array.type != __NJS_ARRAY && _array.type != __NJS_OBJECT && _array.type != __NJS_STRING && _array.type != __NJS_FUNCTION && _array.type != __NJS_NATIVE) 
   {
 	  __NJS_RETURN_UNDEFINED;
   }
@@ -1127,6 +1128,21 @@ ostream& operator << (ostream& os, const __NJS_VAR& _v)
 		break;
 	case __NJS_STRING:
 		os << _v.get().s->__NJS_VALUE;
+		break;
+	case __NJS_OBJECT:
+		os << "[Object]";
+		break;
+	case __NJS_ARRAY:
+		os << "[Array]";
+		break;
+	case __NJS_NATIVE:
+		os << "[Native]";
+		break;
+	case __NJS_NAN:
+		os << "NaN";
+		break;
+	case __NJS_FUNCTION:
+		os << "[Function]";
 		break;
 	default:
 		os << "undefined";

@@ -8,5 +8,10 @@ function cb (req, res)
 	res.end("Hello NectarJS !");
 };
 
+var options =
+{
+		static: "./",
+};
+
 console.log("Listening on " + host + ":" + port);
-http.listen(host, port, cb);
+http.listen(host, port, cb, options);
