@@ -27,7 +27,7 @@ var STD =
     name: "std",
     main: "std.cpp",
     compiler: "g++",
-    stdlib: ["console", "Math"],
+    stdlib: ["console", "Math", "JSON"],
     check: 
     {
         "env": 
@@ -58,6 +58,7 @@ var STD =
             "require": false,
             "__NJS_Log_Console": false,
             "__NJS_ARGS": false,
+            "JSON": false,
         },
     },
     cli: function(compiler, preset, out, _in, option)

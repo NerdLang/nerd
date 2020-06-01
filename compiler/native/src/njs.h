@@ -1112,10 +1112,7 @@ __NJS_VAR __NJS_Boolean_Result(__NJS_VAR _v)
 ostream& operator << (ostream& os, const __NJS_VAR& _v)
 {
   switch(_v.type)
-	{
-    case __NJS_UNDEFINED:
-		os << "undefined";
-		break;
+  {
     case __NJS_BOOLEAN:
 		if(_v.get().b) os << (char*)"true";
 		else os << (char*)"false";
@@ -1146,8 +1143,9 @@ ostream& operator << (ostream& os, const __NJS_VAR& _v)
 		break;
 	default:
 		os << "undefined";
-	}
-	return os;
+		break;
+  }
+  return os;
 }
 
 __NJS_VAR parseInt(__NJS_VAR _str)
@@ -1176,19 +1174,11 @@ __NJS_VAR  __NJS_Log_Console(__NJS_VAR _var)
   return __NJS_VAR();
 }
 
-/*
-__NJS_VAR __NJS_Create_String(char* _value)
-{
-  __NJS_Class_String* _s = new __NJS_Class_String(_value);
-  return __NJS_VAR(_s);
-}
-*/
 __NJS_VAR __NJS_Create_Object()
 {
   __NJS_Class_Object* _obj = new __NJS_Class_Object();
   return __NJS_VAR(_obj);
 }
-
 
 __NJS_VAR Object()
 {

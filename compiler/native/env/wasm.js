@@ -25,7 +25,7 @@ var NODE =
   name: "wasm",
   main: "std.cpp",
   compiler: "em++",
-  stdlib: ["console", "Math"],
+  stdlib: ["console", "Math", "JSON"],
   check: {
 		"env": {
 			"node": true,
@@ -53,6 +53,7 @@ var NODE =
 			"require": false,
 			"__NJS_Log_Console": false,
 			"__NJS_ARGS": false,
+			"JSON": false,
 		}
 	},
 	out: function(_name)

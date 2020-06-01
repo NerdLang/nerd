@@ -25,7 +25,7 @@ var NODE =
   name: "node",
   main: "std.cpp",
   compiler: "g++",
-  stdlib: ["console", "Math"],
+  stdlib: ["console", "Math", "JSON"],
   check: {
 		"env": {
 			"node": true,
@@ -53,6 +53,7 @@ var NODE =
 			"require": false,
 			"__NJS_Log_Console": false,
 			"__NJS_ARGS": false,
+			"JSON": false,
 		}
 	},
   cli: function(compiler, preset, out, _in, option)

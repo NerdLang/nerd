@@ -36,6 +36,6 @@
   {
     "env": ["std", "android", "node", "arduino"],
     "read_only": [],
-    "expose": []
+    "expose": ["__NJS_JSON_PARSE", "__NJS_JSON_STRINGIFY"]
   }
 }

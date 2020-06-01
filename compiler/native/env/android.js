@@ -27,7 +27,7 @@ var ANDROID =
     name: "android",
     main: "android.cpp",
     compiler: "gradlew",
-    stdlib: ["android", "Math"],
+    stdlib: ["android", "Math", "JSON"],
     check: 
     {
         "env": 
@@ -58,6 +58,7 @@ var ANDROID =
             "require": false,
             "__NJS_Log_Console": false,
             "__NJS_ARGS": false,
+            "JSON": false,
         },
     },
     cli: function(compiler, preset, out, _in, option)
