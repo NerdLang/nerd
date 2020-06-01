@@ -1,0 +1,42 @@
+{
+  "name": "webview",
+  "description": "NectarJS webview module",
+  "main": "index.js",
+  "bugs":
+  {
+    "url": "https://github.com/NectarJS/nectarjs/issues"
+  },
+
+  "directories":
+  {
+    "root": ".",
+    "lib": "lib"
+  },
+  "homepage": "https://github.com/NectarJS/nectarjs#readme",
+  "keywords":
+  [
+    "nectarjs",
+    "JSON",
+	"javascript"
+  ],
+  "license": "AGPL",
+  "licenses": [
+    {
+      "type": "AGPL",
+      "url": "https://github.com/nectarjs/nectarjs/blob/master/LICENSE"
+    }
+  ],
+  "repository":
+  {
+    "type": "git",
+    "url": "git+ssh://git@github.com/NectarJS/nectarjs.git"
+  },
+  "version": "0.0.1",
+  "nectar":
+  {
+    "env": ["std", "android", "node"],
+    "read_only": [],
+    "expose": ["__NJS_LAUNCH_WEBVIEW"],
+    "lib": ["`pkg-config --cflags --libs gtk+-3.0 webkit2gtk-4.0`"]
+  }
+}

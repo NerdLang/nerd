@@ -39,6 +39,8 @@ enum __NJS_TYPE
 	
 };
 
+// TODO: var == undefined 
+
 /*** HELPERS ***/
 #define __NJS_GET_STRING(_var) _var.get().s->__NJS_VALUE.c_str()
 #define var __NJS_VAR
