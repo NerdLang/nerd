@@ -1,6 +1,6 @@
 {
   "name": "nectarjs",
-  "version": "0.6.26",
+  "version": "0.6.27",
   "description": "Javascript's God Mode. No VM. No Bytecode. No GC. Just native binaries.",
   "main": "nectar",
   "bin": {
@@ -45,7 +45,10 @@
     "cl",
     "http",
     "webserver",
-    "webview"
+    "webview",
+    "typescript",
+    "ts",
+    "tsc"
   ],
   "author": "Adrien THIERRY <adrien.thierryfr@gmail.com> (https://seraum.com)",
   "license": "AGPL",
@@ -62,6 +65,7 @@
   "dependencies": {
     "@babel/core": "^7.9.6",
     "@babel/generator": "^7.9.6",
-    "eslint": "^6.8.0"
+    "eslint": "^6.8.0",
+    "typescript": "^3.9.3"
   }
 }

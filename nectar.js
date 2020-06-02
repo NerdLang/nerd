@@ -57,6 +57,7 @@ global.copyDirSync = require("./base/util/copyDirSync.js");
 var CURRENT = process.cwd();
 var TARGET = require('./base/compiler/target.js');
 global.LINT = require("./base/util/lint.js");
+global.compileTS = require("./base/compiler/ts.js");
 global.PLATFORM = os.platform();
 global.ARCH = os.arch();
 
@@ -472,7 +473,8 @@ function Build(prepare)
 		if(!QUIET) console.log("[*] Generating source file");
 	
 		var _code = fs.readFileSync(path.resolve(_in)).toString();
-    COMPILER.Parse(_code);
+		if(ext == "ts") _code = compileTS(_code, _in);
+		COMPILER.Parse(_code);
     
     if(COMPILER.ENV.write) COMPILER.ENV.write(COMPILER.MAIN);
 		else fs.writeFileSync(_cout, COMPILER.MAIN);

@@ -1,5 +1,5 @@
 var Linter = require("eslint").Linter;
-global.linter = new Linter();
+var linter = new Linter();
 
 function nectarLint(_code, _file, _expose)
 {

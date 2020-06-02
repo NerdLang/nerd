@@ -75,6 +75,7 @@ function genRequire(from, src)
   {
     var addSource = _match[1];
     var modSource = "";
+    var fileSource;
     if(addSource.indexOf(COMPILER.PATH) > -1)
     {
       modSource = addSource;
@@ -83,7 +84,8 @@ function genRequire(from, src)
     {
       modSource = path.join(from + addSource);
     }
-    var trySource = [modSource, modSource + "/" + "index.js", from + "nectar_modules/" + addSource + "/index.js", NECTAR_PATH + "/nectar_modules/" + addSource + "/index.js", from + "node_modules/" + addSource + "/index.js", NECTAR_PATH + "/node_modules/" + modSource + "/index.js", modSource + ".js" ];
+    var trySource = [modSource, modSource + "/" + "index.js", from + "nectar_modules/" + addSource + "/index.js", NECTAR_PATH + "/nectar_modules/" + addSource + "/index.js", from + "node_modules/" + addSource + "/index.js", NECTAR_PATH + "/node_modules/" + modSource + "/index.js", modSource + ".js",
+					modSource, modSource + "/" + "index.ts", from + "nectar_modules/" + addSource + "/index.ts", NECTAR_PATH + "/nectar_modules/" + addSource + "/index.ts", from + "node_modules/" + addSource + "/index.ts", NECTAR_PATH + "/node_modules/" + modSource + "/index.ts", modSource + ".ts"];
     var newSrc = "";
     for(var i = 0; i < trySource.length; i++)
     {
@@ -91,6 +93,7 @@ function genRequire(from, src)
       {
         modSource = path.dirname(trySource[i]) + "/";
         newSrc = fs.readFileSync(trySource[i]).toString();
+        fileSource = trySource[i];
         
         var pkgPath = path.join(modSource, "package.json");
         var pkgObject;
@@ -162,8 +165,17 @@ function genRequire(from, src)
   {
     console.log("[!] Warning : index file of module " + addSource + " seems empty");
   }
+    
+    var ext = "js";
+	var _Ext = fileSource.split(".");
+	if(_Ext.length > 1) ext = _Ext[_Ext.length - 1];
+	
+	if(ext == "ts") newSrc = compileTS(newSrc, fileSource);
+    
     newSrc = genInclude(path.resolve(modSource) + "/", newSrc);
 
+	
+	
     if(NJS_ENV.name != "arduino")
     {
 
