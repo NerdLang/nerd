@@ -30,6 +30,37 @@ var genInclude = require("./genInclude.js");
 module.exports = genRequire;
 var fs = require("fs");
 
+function addModuleLib(_lib, modSource)
+{
+	if(Array.isArray(_lib))
+	{
+		for(var l = 0; l < _lib.length; l++ )
+		{
+		  COMPILER.LIBS += _lib[l].replace("__MODULE__", modSource) + " ";
+		}
+	}
+	else if(typeof _lib == "string")
+	{
+	  COMPILER.LIBS += _lib.replace("__MODULE__", modSource) + " ";
+	}
+	else if(typeof _lib == "object")
+	{
+		var _platform;
+		if(_lib[PLATFORM]) _platform = PLATFORM;
+		else if(_lib["default"]) _platform = "default";
+		
+		if(_lib[_platform] && typeof _lib[_platform] == "object")
+		{
+			var currentCompiler =  COMPILER.COMPILER.split(" ")[0];
+			var _compiler;
+			if(_lib[_platform][currentCompiler]) _compiler = currentCompiler;
+			else if(_lib[_platform]["default"]) _compiler = "default";
+			
+			if(_lib[PLATFORM][_compiler]) addModuleLib(_lib[PLATFORM][_compiler]);
+		}
+		else if(_lib[_platform]) addModuleLib(_lib[_platform]);
+	}
+}
 function genRequire(from, src)
 {
   // strip comments
@@ -102,10 +133,7 @@ function genRequire(from, src)
 
               if(pkg.nectar.lib)
               {
-                for(var l = 0; l < pkg.nectar.lib.length; l++ )
-                {
-                  COMPILER.LIBS += pkg.nectar.lib[l].replace("__MODULE__", modSource) + " ";
-                }
+					addModuleLib(pkg.nectar.lib, modSource);
               }
 
             }

@@ -57,8 +57,8 @@ global.copyDirSync = require("./base/util/copyDirSync.js");
 var CURRENT = process.cwd();
 var TARGET = require('./base/compiler/target.js');
 global.LINT = require("./base/util/lint.js");
-var PLATFORM = os.platform();
-var ARCH = os.arch();
+global.PLATFORM = os.platform();
+global.ARCH = os.arch();
 
 global.COMPILER = {};
 global.NECTAR_PATH = __dirname;
