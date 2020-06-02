@@ -34,9 +34,20 @@
   "version": "0.0.1",
   "nectar":
   {
+	"comment":
+	{
+		"linux": "This module requires gtk+-3.0 and webkit2gtk-4.0",
+		"darwin": ""
+	},
     "env": ["std", "android", "node"],
     "read_only": [],
     "expose": ["__NJS_LAUNCH_WEBVIEW"],
-    "lib": ["`pkg-config --cflags --libs gtk+-3.0 webkit2gtk-4.0`"]
+    "lib": 
+    {
+		"linux": "`pkg-config --cflags --libs gtk+-3.0 webkit2gtk-4.0`",
+		"win32": "",
+		"darwin": "",
+		"default": ""
+	}
   }
 }

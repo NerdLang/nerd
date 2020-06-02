@@ -30,6 +30,38 @@ var genInclude = require("./genInclude.js");
 module.exports = genRequire;
 var fs = require("fs");
 
+function showModuleComment(_obj, _name)
+{
+	if(Array.isArray(_obj))
+	{
+		for(var l = 0; l < _obj.length; l++ )
+		{
+		  console.log("[*] " + _name + ": " + _obj[l]);
+		}
+	}
+	else if(typeof _obj == "string")
+	{
+	   console.log("[*] " + _name + ": " + _obj);
+	}
+	else if(typeof _obj == "object")
+	{
+		var _platform;
+		if(_obj[PLATFORM]) _platform = PLATFORM;
+		else if(_obj["default"]) _platform = "default";
+		
+		if(_obj[_platform] && typeof _obj[_platform] == "object")
+		{
+			var currentCompiler =  COMPILER.COMPILER.split(" ")[0];
+			var _compiler;
+			if(_obj[_platform][currentCompiler]) _compiler = currentCompiler;
+			else if(_obj[_platform]["default"]) _compiler = "default";
+			
+			if(_obj[_platform][_compiler]) showModuleComment(_obj[_platform][_compiler], _name);
+		}
+		else if(_obj[_platform]) showModuleComment(_obj[_platform], _name);
+	}
+}
+
 function addModuleLib(_lib, modSource)
 {
 	if(Array.isArray(_lib))
@@ -56,11 +88,12 @@ function addModuleLib(_lib, modSource)
 			if(_lib[_platform][currentCompiler]) _compiler = currentCompiler;
 			else if(_lib[_platform]["default"]) _compiler = "default";
 			
-			if(_lib[PLATFORM][_compiler]) addModuleLib(_lib[PLATFORM][_compiler]);
+			if(_lib[_platform][_compiler]) addModuleLib(_lib[_platform][_compiler], modSource);
 		}
-		else if(_lib[_platform]) addModuleLib(_lib[_platform]);
+		else if(_lib[_platform]) addModuleLib(_lib[_platform], modSource);
 	}
 }
+
 function genRequire(from, src)
 {
   // strip comments
@@ -106,6 +139,10 @@ function genRequire(from, src)
             pkgObject = pkg;
             if(pkg.nectar)
             {
+				if(pkg.nectar.comment)
+              {
+				  showModuleComment(pkg.nectar.comment, pkg.name);
+			  }
               if(pkg.nectar.env)
               {
                 if(pkg.nectar.env.indexOf(COMPILER.ENV.name) < 0)
