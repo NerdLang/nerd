@@ -86,13 +86,13 @@ int dump(const char *js, jsmntok_t *t, size_t count, int indent, var& _res)
 
 function __NJS_JSON_PARSE(__json)
 {
-	size_t tokcount = 128;
+	int tokcount = 128;
 	int r;
 	int j = 0;
 	var __RESULT;
 	char* JSON_STRING = (char*)__json.get().s->__NJS_VALUE.c_str();
 	jsmn_parser p;
-	jsmntok_t tok[tokcount];
+	jsmntok_t *tok = (jsmntok_t*)malloc(tokcount);
 
 	jsmn_init(&p);
 	
@@ -104,8 +104,9 @@ function __NJS_JSON_PARSE(__json)
 		{
 			if (r == JSMN_ERROR_NOMEM) 
 			{
-				__NJS_Log_Console("No memory");
+				free(tok);
 				tokcount = tokcount * 2;
+        tok = (jsmntok_t*)malloc(tokcount);
 			}
 			else
 			{
