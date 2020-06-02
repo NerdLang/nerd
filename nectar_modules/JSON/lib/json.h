@@ -36,7 +36,7 @@ int dump(const char *js, jsmntok_t *t, size_t count, int indent, var& _res)
   }
   if (t->type == JSMN_PRIMITIVE) 
   {
-	  char* substr = malloc(t->end - t->start);
+	  char* substr = (char*)malloc(t->end - t->start);
 	strncpy(substr, js + t->start, t->end - t->start);
 	if(substr[0] == 't') _res = true;
 	else if(substr[0] == 'f') _res = false;
@@ -46,7 +46,7 @@ int dump(const char *js, jsmntok_t *t, size_t count, int indent, var& _res)
   } 
   else if (t->type == JSMN_STRING) 
   {
-	char* substr = malloc(t->end - t->start);
+	char* substr = (char*)malloc(t->end - t->start);
 	strncpy(substr, js + t->start, t->end - t->start);
 	_res = substr;
     return 1;
@@ -90,7 +90,7 @@ function __NJS_JSON_PARSE(__json)
 	int r;
 	int j = 0;
 	var __RESULT;
-	char* JSON_STRING = __json.get().s->__NJS_VALUE.c_str();
+	char* JSON_STRING = (char*)__json.get().s->__NJS_VALUE.c_str();
 	jsmn_parser p;
 	jsmntok_t tok[tokcount];
 
