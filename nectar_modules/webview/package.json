@@ -45,7 +45,7 @@
     "lib": 
     {
 		"linux": "`pkg-config --cflags --libs gtk+-3.0 webkit2gtk-4.0`",
-		"win32": "",
+		"win32": ["-l./lib/dll/{__ARCH__}/webview.dll", "-l./lib/dll/{__ARCH__}/WebView2Loader.dll"],
 		"darwin": "",
 		"default": ""
 	}

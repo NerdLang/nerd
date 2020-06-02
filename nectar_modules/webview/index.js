@@ -1,3 +1,4 @@
+"!_package lib/dll/{__ARCH__}/";
 "!_ffi_include lib/wv.h";
 
 var _WEBVIEW = 

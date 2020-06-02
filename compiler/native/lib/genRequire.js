@@ -68,12 +68,12 @@ function addModuleLib(_lib, modSource)
 	{
 		for(var l = 0; l < _lib.length; l++ )
 		{
-		  COMPILER.LIBS += _lib[l].replace("__MODULE__", modSource) + " ";
+		  COMPILER.LIBS += _lib[l].replace("__MODULE__", modSource).replace(/{__ARCH__}/g, os.arch()) + " ";
 		}
 	}
 	else if(typeof _lib == "string")
 	{
-	  COMPILER.LIBS += _lib.replace("__MODULE__", modSource) + " ";
+	  COMPILER.LIBS += _lib.replace("__MODULE__", modSource).replace(/{__ARCH__}/g, os.arch()) + " ";
 	}
 	else if(typeof _lib == "object")
 	{

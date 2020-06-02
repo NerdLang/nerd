@@ -34,6 +34,13 @@
   "version": "0.0.1",
   "nectar":
   {
+    "message":
+    {
+      "win32":
+      {
+        "g++": "This library needs GCC without CYGWIN or clang++ to be compiled on Windows"
+      }
+    },
     "env": ["std", "node"],
     "expose": ["__NJS_HTTP_GET", "__NJS_HTTP_LISTEN"],
     "lib":
@@ -41,8 +48,7 @@
 		"default": "-lpthread",
 		"win32":
 		{
-			"default": "-lpthread",
-			"cl": ""
+			"default": ["-lWsock32", "-lws2_32"]
 		}
 	}
   }

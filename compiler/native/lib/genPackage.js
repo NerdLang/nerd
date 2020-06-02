@@ -33,8 +33,9 @@ function genPackage(from, src)
   var _match = src.match(_SEARCH);
   while(_match)
   {
-    copyRecursiveSync(path.resolve(path.join(from, _match[1])), path.join(COMPILER.TMP_FOLDER, _match[1]));
-    COMPILER.PACK.push(path.join(COMPILER.TMP_FOLDER, _match[1]));
+    var _target = _match[1].replace(/{__ARCH__}/g, os.arch());
+    copyRecursiveSync(path.resolve(path.join(from, _target)), path.join(COMPILER.TMP_FOLDER, _target));
+    COMPILER.PACK.push(path.join(COMPILER.TMP_FOLDER, _target));
     src = src.replace(/['"]!_package *(.*)['"]/, "");	
     _match = src.match(_SEARCH);
   }

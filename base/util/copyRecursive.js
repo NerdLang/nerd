@@ -8,7 +8,7 @@ var copyRecursiveSync = function(src, dest)
 	if(fs.lstatSync( src ).isDirectory())
 	{
 		var _newDest = path.dirname(dest);
-		copyDirSync(src, _newDest);
+		copyDirSync(src, _newDest, true);
 	}
 	else 
 	{
