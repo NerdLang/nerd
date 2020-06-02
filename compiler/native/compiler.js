@@ -32,6 +32,7 @@ babel.generate = require( '@babel/generator' ).default;
  
 var genRequire = require("./lib/genRequire.js");
 global.genMetaFunction = require("./lib/genMetaFunction.js");
+global.genPackage = require("./lib/genPackage.js");
 
 global.RND = function() { return "__" + Math.random().toString(36).substring(7); };
 
@@ -145,6 +146,7 @@ function Compiler()
 	this.PATH = "";
 	this.LIBS = "";
 	this.STATE = "";
+	this.PACK = [];
 
 	if(CLI.stack[0]) this.PATH = path.dirname(CLI.stack[0]) + path.sep;
 	
@@ -550,6 +552,17 @@ function Compiler()
 		var _exec = _handler.CLI(_handler.COMPILER, _handler.OUT, _file, _handler.OPTION);
 		execSync(_exec);
 		
+	}
+	
+	this.Package = function()
+	{
+		if(this.PACK && this.PACK.length)
+		{
+			for(var i = 0; i < this.PACK.length; i++)
+			{
+				copyRecursiveSync(this.PACK[i], this.OUT);
+			}
+		}
 	}
 	/*** END METHODS ***/
 	

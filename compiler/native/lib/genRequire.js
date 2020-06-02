@@ -65,7 +65,7 @@ function genRequire(from, src)
 {
   // strip comments
   src = src.replace(/\/\*[\s\S]*?\*\/|\/\/.*/g,'');
-
+  src = genPackage(from, src);
   var _SEARCH = new RegExp(/ *require\(['"](.*?)['"]\)/);
   var seek = ["require('", "require(\""];
 
@@ -174,30 +174,17 @@ function genRequire(from, src)
     
     newSrc = genInclude(path.resolve(modSource) + "/", newSrc);
 
-	
-	
-    if(NJS_ENV.name != "arduino")
-    {
 
-      var reqFN = "__MODULE_" + Math.random().toString(36).substr(2, 10);
-      COMPILER.ENV.check.globals[reqFN] = false;
-      
-      src = src.replace(_SEARCH, reqFN + "()");
+	var reqFN = "__MODULE_" + Math.random().toString(36).substr(2, 10);
+	COMPILER.ENV.check.globals[reqFN] = false;
 
-      newSrc = "function " + reqFN + "(){\nvar module = __NJS_Create_Object();\n" + newSrc;
-      newSrc = newSrc.replace(/(module\.exports *= *.*)$/g, "$1;");
-      newSrc += "return module.exports;\n}";
-      newSrc = genRequire(modSource, newSrc);
-      
+	src = src.replace(_SEARCH, reqFN + "()");
 
-    }
-    else
-    {
-      console.log("ARDUINO");
-      var resultSource = src.substring(0, index);
-      resultSource += src.substring(index + seek[s].length + addSource.length + 2);
-      src = resultSource;
-    }
+	newSrc = "function " + reqFN + "(){\nvar module = __NJS_Create_Object();\n" + newSrc;
+	newSrc = newSrc.replace(/(module\.exports *= *.*)$/g, "$1;");
+	newSrc += "return module.exports;\n}";
+	newSrc = genRequire(modSource, newSrc);
+
     COMPILER.REQUIRE += newSrc + ";";
     var _match = src.match(_SEARCH);
   }

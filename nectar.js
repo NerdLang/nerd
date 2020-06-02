@@ -492,6 +492,8 @@ function Build(prepare)
 			process.exit(1);
 		}
 		
+		if(COMPILER.Package) COMPILER.Package();
+		
 		if(!CLI.cli["--conserve"])
 		{
 			process.chdir(_current);

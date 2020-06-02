@@ -39,8 +39,6 @@ enum __NJS_TYPE
 	
 };
 
-// TODO: var == undefined 
-
 /*** HELPERS ***/
 #define __NJS_GET_STRING(_var) _var.get().s->__NJS_VALUE.c_str()
 #define var __NJS_VAR
@@ -676,7 +674,7 @@ struct __NJS_VAR
 template<class... Args>
 __NJS_VAR __NJS_Back_Var_Call_Function(__NJS_VAR _obj, Args... args)
 {
-	vector<var> _args = {args...};
+	vector<var> _args = vector<var>{(var)args...};
 	return (*static_cast<function<__NJS_VAR ( vector<var> )>*>(_obj.get().f->__NJS_VALUE))( _args );
 }
 
