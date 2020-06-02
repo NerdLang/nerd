@@ -45,7 +45,7 @@ enum __NJS_TYPE
 #define __NJS_GET_STRING(_var) _var.get().s->__NJS_VALUE.c_str()
 #define var __NJS_VAR
 #define let __NJS_VAR
-
+#define undefined __NJS_VAR()
 #define __NJS_Create_Boolean(_value) __NJS_VAR(__NJS_BOOLEAN, _value)
 #define __NJS_Create_Number(_value) __NJS_VAR( _value)
 #define __NJS_Create_Function(_value) __NJS_VAR(__NJS_FUNCTION, _value)
@@ -564,7 +564,11 @@ struct __NJS_VAR
       {
         return __NJS_Create_Number(!get().i);
       }
-      else return(false);
+      else if(type == __NJS_UNDEFINED)
+      {
+			return true;
+	  }
+      else return false;
     };
 		
     __NJS_VAR operator==(const __NJS_VAR& _v1)
@@ -577,6 +581,7 @@ struct __NJS_VAR
 					if(strcmp(get().s->__NJS_VALUE.c_str(),_v1.get().s->__NJS_VALUE.c_str()) == 0) return true;
 					else return false;
 				}
+				else if(type == __NJS_UNDEFINED) return true;
 			}
 			return false;
 		}
@@ -661,7 +666,8 @@ struct __NJS_VAR
 		else if(type == __NJS_FUNCTION) return 1;
 		else if(type == __NJS_OBJECT) return 1;
 		else if(type == __NJS_ARRAY) return 1;
-		else if(type == __NJS_UNDEFINED) return 0;
+		else if(type == __NJS_NATIVE) return 1;
+		else if(type == __NJS_NAN) return 0;
 		return 0;
 	}
 };
