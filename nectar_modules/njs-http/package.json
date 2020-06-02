@@ -39,7 +39,7 @@
     "lib":
     {
 		"default": "-lpthread",
-		"windows":
+		"win32":
 		{
 			"default": "-lpthread",
 			"cl": ""
