@@ -106,6 +106,7 @@ int dump(const char *js, jsmntok_t *t, size_t count, int indent, var& _res)
 
 function __NJS_JSON_PARSE(__json)
 {
+	if(!__json) return undefined;
 	size_t tokcount = 32;
 	int r;
 	int j = 0;
@@ -146,5 +147,5 @@ function __NJS_JSON_PARSE(__json)
 
 function __NJS_JSON_STRINGIFY(__object)
 {
-	return "Not implemented yet";
+	return __NJS_Object_Stringify(__object);
 };

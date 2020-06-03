@@ -58,6 +58,7 @@ var STD =
             "require": false,
             "__NJS_Log_Console": false,
             "__NJS_Object_Keys": false,
+            "__NJS_Object_Stringify": false,
             "__NJS_ARGS": false,
             "JSON": false,
             "Object": false,

@@ -1,4 +1,4 @@
-var _loop = 100;
+var _loop = 10;
 var _arr = [];
 var _res = 0;
 
@@ -13,3 +13,4 @@ for(var j = 0; j < _loop; j++)
 }
 
 console.log(_res);
+console.log(_arr);

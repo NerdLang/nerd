@@ -365,26 +365,34 @@ var visitor =
 			  // Creating Arrays
 			  if(_path.node.id && _path.node.id.name && _path.node.init && _path.node.init.type == "ArrayExpression")
 			  {
+				  var _newArray = "";
 				  var _name = _path.node.id.name;
 				  var _el = _path.node.init.elements;
-				  _path.node.init.type = "CallExpression";
-				  _path.node.init.argument = [];
-				  _path.node.init.callee = 
-				  {
-					  type:"Identifier",
-					  name:"__NJS_Create_Array"
-				  };
-				  var _obj = [];
+				  var _code = _name + " = __NJS_Create_Array();"
+				  
 				  for(var i = 0; i < _el.length; i++)
 				  {
-					   _obj.push(babel.parse(
+					  var _value;
+					  if(_el[i].name)
+					  {
+						_value = _el[i].name;
+					  }
+					  else if(_el[i].extra) _value = _el[i].extra.raw;
+					  else if(_el[i].type == "ObjectProperty")
+					  {
+						 _o = true;
+						  _code += objectExpression(_el[i], _name);
+					  }
+					  else
+					  {
+						  console.log("Visitor VariableDeclarator not implemented yet for " + _el[i].type);
+						  process.exit(0);
+					  }
 
-								";__NJS_Object_Set(" + i + ",_" + _el[i].value + "," + _name + ")"
-								
-							));
+					_code += "__NJS_Object_Set(" + i + ", " + _value + "," + _name + ");";
+
 				  }
-				   _path.insertAfter(_obj);
-				  
+				   _path.replaceWith(babel.parse(_code));
 			  }
 			  // Creating Object
 			  else if(_path.node.id && _path.node.id.name && _path.node.init && _path.node.init.type == "ObjectExpression")
@@ -392,8 +400,6 @@ var visitor =
 				  var _name = _path.node.id.name;			  
 				  var _el = _path.node.init.properties;
 				  var _code = _path.node.id.name + " = __NJS_Create_Object();"
-
-				  //var _obj = [];
 				  
 				  for(var i = 0; i < _el.length; i++)
 				  {

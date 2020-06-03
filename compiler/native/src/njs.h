@@ -134,6 +134,7 @@ int FREE[{{REGISTER}}] = {0};
 
 __NJS_VAR __NJS_Log_Console(__NJS_VAR _var);
 __NJS_VAR __NJS_Object_Keys(__NJS_VAR _var);
+__NJS_VAR __NJS_Object_Stringify(__NJS_VAR _var);
 
 /*** STRDUP ***/
 char* strdup (const char* s)
@@ -1133,10 +1134,10 @@ ostream& operator << (ostream& os, const __NJS_VAR& _v)
 		os << _v.get().s->__NJS_VALUE;
 		break;
 	case __NJS_OBJECT:
-		os << "[Object]";
+		os << __NJS_Object_Stringify(_v);
 		break;
 	case __NJS_ARRAY:
-		os << "[Array]";
+		os << __NJS_Object_Stringify(_v);
 		break;
 	case __NJS_NATIVE:
 		os << "[Native]";
@@ -1194,6 +1195,50 @@ __NJS_VAR  __NJS_Object_Keys(__NJS_VAR _var)
 	return _res;
 }
 
+__NJS_VAR  __NJS_Object_Stringify(__NJS_VAR _var)
+{
+
+	__NJS_TYPE _t = _var.type;
+
+	if(_t == __NJS_UNDEFINED) return "undefined";
+	else if(_t == __NJS_NAN) return "NaN";
+	else if(_t ==  __NJS_NUMBER) return var("") + _var;
+	else if(_t == __NJS_DOUBLE) return _var;
+	else if(_t == __NJS_STRING) return var("\"") + _var + "\"";
+	else if(_t == __NJS_FUNCTION) return var("\"") + "[Function]" + "\"";
+	else if(_t == __NJS_ARRAY)
+	{
+		var _res = "";
+		vector<__NJS_VAR>* _arr = &_var.get().a->__NJS_VALUE;
+		_res += "[";
+		int j = (*_arr).size();
+		for(int i = 0; i < j; i++)
+		{
+			if(i > 0) _res += ", ";
+			_res += __NJS_Object_Stringify((*_arr)[i]);
+		}
+		_res += "]";
+		return _res;
+	}
+	else if(_t == __NJS_OBJECT)
+	{
+		var _res = "";
+		vector<pair<char*, __NJS_VAR>>* _obj = &_var.get().o->__OBJECT;
+		_res = "{";
+		int j = (*_obj).size();
+		for(int _i = 0; _i < j; _i++)
+		{
+			if(_i > 0) _res += ", ";
+			_res += var("\"") + (*_obj)[_i].first + "\"";
+			_res += ":";
+			_res += __NJS_Object_Stringify((*_obj)[_i].second);
+		}
+		_res += "}";
+		return _res;
+    }
+    else return "";
+}
+
 __NJS_VAR __NJS_Create_Object()
 {
   __NJS_Class_Object* _obj = new __NJS_Class_Object();
@@ -1221,6 +1266,7 @@ void* __NJS_Get_Native(__NJS_VAR _native)
 }
 
 /*** REDIFINING STD OPERATORS ***/
+
 
 template<typename t>
 __NJS_VAR operator+(t _left, const __NJS_VAR& _right)
