@@ -5,6 +5,8 @@
 //  MIT License
 //
 
+// Removed Regexp search path for NectarJS integration
+
 #ifndef CPPHTTPLIB_HTTPLIB_H
 #define CPPHTTPLIB_HTTPLIB_H
 
@@ -512,16 +514,16 @@ public:
 
   virtual bool is_valid() const;
 
-  Server &Get(const char *pattern, Handler handler);
-  Server &Post(const char *pattern, Handler handler);
-  Server &Post(const char *pattern, HandlerWithContentReader handler);
-  Server &Put(const char *pattern, Handler handler);
-  Server &Put(const char *pattern, HandlerWithContentReader handler);
-  Server &Patch(const char *pattern, Handler handler);
-  Server &Patch(const char *pattern, HandlerWithContentReader handler);
-  Server &Delete(const char *pattern, Handler handler);
-  Server &Delete(const char *pattern, HandlerWithContentReader handler);
-  Server &Options(const char *pattern, Handler handler);
+  Server &Get(Handler handler);
+  Server &Post(Handler handler);
+  Server &Post(HandlerWithContentReader handler);
+  Server &Put(Handler handler);
+  Server &Put(HandlerWithContentReader handler);
+  Server &Patch(Handler handler);
+  Server &Patch(HandlerWithContentReader handler);
+  Server &Delete(Handler handler);
+  Server &Delete(HandlerWithContentReader handler);
+  Server &Options(Handler handler);
 
   [[deprecated]] bool set_base_dir(const char *dir,
                                    const char *mount_point = nullptr);
@@ -569,9 +571,8 @@ protected:
   size_t payload_max_length_ = CPPHTTPLIB_PAYLOAD_MAX_LENGTH;
 
 private:
-  using Handlers = std::vector<std::pair<std::regex, Handler>>;
-  using HandlersForContentReader =
-      std::vector<std::pair<std::regex, HandlerWithContentReader>>;
+  using Handlers = Handler ;
+  using HandlersForContentReader = HandlerWithContentReader;
 
   socket_t create_server_socket(const char *host, int port,
                                 int socket_flags) const;
@@ -3519,61 +3520,61 @@ inline Server::Server() : is_running_(false), svr_sock_(INVALID_SOCKET) {
 
 inline Server::~Server() {}
 
-inline Server &Server::Get(const char *pattern, Handler handler) {
-  get_handlers_.push_back(std::make_pair(std::regex(pattern), handler));
+inline Server &Server::Get(Handler handler) 
+{
+  get_handlers_ = handler;
   return *this;
 }
 
-inline Server &Server::Post(const char *pattern, Handler handler) {
-  post_handlers_.push_back(std::make_pair(std::regex(pattern), handler));
+inline Server &Server::Post(Handler handler) 
+{
+  post_handlers_ = handler;
   return *this;
 }
 
-inline Server &Server::Post(const char *pattern,
-                            HandlerWithContentReader handler) {
-  post_handlers_for_content_reader_.push_back(
-      std::make_pair(std::regex(pattern), handler));
+inline Server &Server::Post(HandlerWithContentReader handler) 
+{
+  post_handlers_for_content_reader_ = handler;
   return *this;
 }
 
-inline Server &Server::Put(const char *pattern, Handler handler) {
-  put_handlers_.push_back(std::make_pair(std::regex(pattern), handler));
+inline Server &Server::Put(Handler handler) 
+{
+  put_handlers_ = handler;
   return *this;
 }
 
-inline Server &Server::Put(const char *pattern,
-                           HandlerWithContentReader handler) {
-  put_handlers_for_content_reader_.push_back(
-      std::make_pair(std::regex(pattern), handler));
+inline Server &Server::Put(HandlerWithContentReader handler) 
+{
+  put_handlers_for_content_reader_ = handler;
   return *this;
 }
 
-inline Server &Server::Patch(const char *pattern, Handler handler) {
-  patch_handlers_.push_back(std::make_pair(std::regex(pattern), handler));
+inline Server &Server::Patch(Handler handler) {
+  patch_handlers_ = handler;
   return *this;
 }
 
-inline Server &Server::Patch(const char *pattern,
-                             HandlerWithContentReader handler) {
-  patch_handlers_for_content_reader_.push_back(
-      std::make_pair(std::regex(pattern), handler));
+inline Server &Server::Patch(HandlerWithContentReader handler) {
+  patch_handlers_for_content_reader_ = handler;
   return *this;
 }
 
-inline Server &Server::Delete(const char *pattern, Handler handler) {
-  delete_handlers_.push_back(std::make_pair(std::regex(pattern), handler));
+inline Server &Server::Delete(Handler handler) 
+{
+  delete_handlers_ = handler;
   return *this;
 }
 
-inline Server &Server::Delete(const char *pattern,
-                              HandlerWithContentReader handler) {
-  delete_handlers_for_content_reader_.push_back(
-      std::make_pair(std::regex(pattern), handler));
+inline Server &Server::Delete(HandlerWithContentReader handler) 
+{
+  delete_handlers_for_content_reader_ = handler;
   return *this;
 }
 
-inline Server &Server::Options(const char *pattern, Handler handler) {
-  options_handlers_.push_back(std::make_pair(std::regex(pattern), handler));
+inline Server &Server::Options(Handler handler) 
+{
+  options_handlers_ = handler;
   return *this;
 }
 
@@ -4126,41 +4127,21 @@ inline bool Server::routing(Request &req, Response &res, Stream &strm) {
 }
 
 inline bool Server::dispatch_request(Request &req, Response &res,
-                                     Handlers &handlers) {
+                                     Handlers &handler) 
+{
 
-  try {
-    for (const auto &x : handlers) {
-      const auto &pattern = x.first;
-      const auto &handler = x.second;
-
-      if (std::regex_match(req.path, req.matches, pattern)) {
-        handler(req, res);
+		handler(req, res);
         return true;
-      }
-    }
-  } catch (const std::exception &ex) {
-    res.status = 500;
-    res.set_header("EXCEPTION_WHAT", ex.what());
-  } catch (...) {
-    res.status = 500;
-    res.set_header("EXCEPTION_WHAT", "UNKNOWN");
-  }
-  return false;
 }
 
 inline bool Server::dispatch_request_for_content_reader(
     Request &req, Response &res, ContentReader content_reader,
-    HandlersForContentReader &handlers) {
-  for (const auto &x : handlers) {
-    const auto &pattern = x.first;
-    const auto &handler = x.second;
+    HandlersForContentReader &handler) 
+{
 
-    if (std::regex_match(req.path, req.matches, pattern)) {
       handler(req, res, content_reader);
       return true;
-    }
-  }
-  return false;
+
 }
 
 inline bool
