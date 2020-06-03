@@ -27,7 +27,7 @@ var __NJS_HTTP_LISTEN(var _host, var _port, var _cb, var _opt)
 		
 	}
   /*** LOAD GET ***/
-  __NJS_HTTP_SRV.Get([&](const Request& request, Response& response)
+  __NJS_HTTP_SRV.Get(".*", [&](const Request& request, Response& response)
   {
 	function<var (vector<var>)>* __NJS_HTTP_RES_END = new function<var (vector<var>)>([&](vector<var> __args)
 	{
@@ -51,7 +51,7 @@ var __NJS_HTTP_LISTEN(var _host, var _port, var _cb, var _opt)
   });
   
   /*** LOAD POST ***/
-  __NJS_HTTP_SRV.Post([&](const Request& request, Response& response, const ContentReader &content_reader)
+  __NJS_HTTP_SRV.Post(".*", [&](const Request& request, Response& response, const ContentReader &content_reader)
   {
 	function<var (vector<var>)>* __NJS_HTTP_RES_END = new function<var (vector<var>)>([&](vector<var> __args)
 	{
@@ -116,7 +116,7 @@ var __NJS_HTTP_LISTEN(var _host, var _port, var _cb, var _opt)
   });
   
   /*** LOAD PUT ***/
-  __NJS_HTTP_SRV.Put([&](const Request& request, Response& response, const ContentReader &content_reader)
+  __NJS_HTTP_SRV.Put(".*", [&](const Request& request, Response& response, const ContentReader &content_reader)
   {
 	function<var (vector<var>)>* __NJS_HTTP_RES_END = new function<var (vector<var>)>([&](vector<var> __args)
 	{
@@ -179,7 +179,7 @@ var __NJS_HTTP_LISTEN(var _host, var _port, var _cb, var _opt)
   });
   
   /*** LOAD DELETE ***/
-  __NJS_HTTP_SRV.Delete([&](const Request& request, Response& response)
+  __NJS_HTTP_SRV.Delete(".*", [&](const Request& request, Response& response)
   {
 	function<var (vector<var>)>* __NJS_HTTP_RES_END = new function<var (vector<var>)>([&](vector<var> __args)
 	{

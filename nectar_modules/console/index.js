@@ -1,9 +1,8 @@
+"!_ffi_include lib/console.h";
+
 var console =
 {
-  log: function(_str)
-  {
-	  __NJS_Log_Console(_str);
-  },
+  log: __NJS_NATIVE_LOG_CONSOLE,
 };
 
 module.exports = console;

@@ -57,6 +57,7 @@ var STM32 =
         "__njs_typeof":false,
         "stm32": false,
         "module": false,
+        "__NJS_Object_Keys": false,
       }
   }
 }

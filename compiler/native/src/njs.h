@@ -133,7 +133,7 @@ int FREE[{{REGISTER}}] = {0};
 /*** END REGISTER ***/
 
 __NJS_VAR __NJS_Log_Console(__NJS_VAR _var);
-
+__NJS_VAR __NJS_Object_Keys(__NJS_VAR _var);
 
 /*** STRDUP ***/
 char* strdup (const char* s)
@@ -1180,15 +1180,24 @@ __NJS_VAR  __NJS_Log_Console(__NJS_VAR _var)
   return __NJS_VAR();
 }
 
+__NJS_VAR  __NJS_Object_Keys(__NJS_VAR _var)
+{
+	if(_var.type != __NJS_OBJECT) return 0;
+	var _res = __NJS_Create_Array();
+	
+	vector<pair<char*, __NJS_VAR>>* _obj = &_var.get().o->__OBJECT;
+    int _j = (*_obj).size();
+    for(int _i = 0; _i < _j; _i++)
+    {
+		__NJS_Object_Set(_i, (*_obj)[_i].first, _res);
+    }
+	return _res;
+}
+
 __NJS_VAR __NJS_Create_Object()
 {
   __NJS_Class_Object* _obj = new __NJS_Class_Object();
   return __NJS_VAR(_obj);
-}
-
-__NJS_VAR Object()
-{
-  return __NJS_Create_Object();
 }
 
 __NJS_VAR __NJS_CREATE_FUNCTION(void* _fn)

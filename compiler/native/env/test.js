@@ -71,6 +71,7 @@ var STD =
         "module": false,
         "require": false,
         "__NJS_Log_Console": false,
+        "__NJS_Object_Keys": false,
         "__NJS_ARGS": false,
     }
 }

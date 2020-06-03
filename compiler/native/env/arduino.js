@@ -103,6 +103,7 @@ var ARDUINO =
 			"__njs_typeof": false,
 			"require": false,
 			"module": false,
+			"__NJS_Object_Keys": false,
 		}
 	}
 }
