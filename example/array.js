@@ -5,6 +5,8 @@ var _res = 0;
 for(var i = 0; i < _loop; i++)
 {
 	_arr[i] = i;
+	var a = 1;
+	var b;
 }
 
 for(var j = 0; j < _loop; j++)
