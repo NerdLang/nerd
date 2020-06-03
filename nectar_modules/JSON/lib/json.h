@@ -26,6 +26,27 @@ int to_int(char const *s)
      return negate ? result : -result;
 } 
 
+static inline void *realloc_it(void *ptrmem, size_t size) {
+  void *p = realloc(ptrmem, size);
+  if (!p) {
+    free(ptrmem);
+    fprintf(stderr, "realloc(): errno=%d\n", errno);
+  }
+  return p;
+}
+
+
+
+char* substr(const char* arr, int begin, int len)
+{
+    char* res = new char[len];
+    for (int i = 0; i < len; i++) res[i] = *(arr + begin + i);
+    res[len] = 0;
+    return res;
+}
+
+
+
 int dump(const char *js, jsmntok_t *t, size_t count, int indent, var& _res) 
 {
   int i, j, k;
@@ -36,19 +57,18 @@ int dump(const char *js, jsmntok_t *t, size_t count, int indent, var& _res)
   }
   if (t->type == JSMN_PRIMITIVE) 
   {
-	  char* substr = (char*)malloc(t->end - t->start);
-	strncpy(substr, js + t->start, t->end - t->start);
-	if(substr[0] == 't') _res = true;
-	else if(substr[0] == 'f') _res = false;
-	else if(substr[0] == 'n') _res = var();
-	else _res = to_int(substr);
+	  string _s = substr(js, t->start, t->end - t->start);
+	if(_s[0] == 't') _res = true;
+	else if(_s[0] == 'f') _res = false;
+	else if(_s[0] == 'n') _res = var();
+	else _res = to_int(_s.c_str());
+
     return 1;
   } 
   else if (t->type == JSMN_STRING) 
   {
-	char* substr = (char*)malloc(t->end - t->start);
-	strncpy(substr, js + t->start, t->end - t->start);
-	_res = substr;
+	_res = substr(js, t->start, t->end - t->start);
+
     return 1;
   } 
   else if (t->type == JSMN_OBJECT) 
@@ -86,13 +106,13 @@ int dump(const char *js, jsmntok_t *t, size_t count, int indent, var& _res)
 
 function __NJS_JSON_PARSE(__json)
 {
-	int tokcount = 128;
+	size_t tokcount = 32;
 	int r;
 	int j = 0;
 	var __RESULT;
 	char* JSON_STRING = (char*)__json.get().s->__NJS_VALUE.c_str();
 	jsmn_parser p;
-	jsmntok_t *tok = (jsmntok_t*)malloc(tokcount);
+	jsmntok_t *tok = (jsmntok_t*)malloc(sizeof(*tok) * tokcount);
 
 	jsmn_init(&p);
 	
@@ -104,9 +124,8 @@ function __NJS_JSON_PARSE(__json)
 		{
 			if (r == JSMN_ERROR_NOMEM) 
 			{
-				free(tok);
 				tokcount = tokcount * 2;
-        tok = (jsmntok_t*)malloc(tokcount);
+				tok = (jsmntok_t *)realloc_it(tok, sizeof(*tok) * tokcount);
 			}
 			else
 			{
@@ -114,10 +133,13 @@ function __NJS_JSON_PARSE(__json)
 				return __RESULT;
 			}
 		}
-		dump(JSON_STRING, tok, p.toknext, 0, __RESULT);
-		_again = 0;
+		else 
+		{
+			dump(JSON_STRING, tok, p.toknext, 0, __RESULT);
+			_again = 0;
+		}
 	}
-
+	free(tok);
 	return __RESULT;
 };
 
