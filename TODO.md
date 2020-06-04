@@ -12,7 +12,9 @@
 
 * add a flag to check all availables cli flags
 
-* add all strings functions (split, substring ...)
+* add strings functions
+- startWith 
+- endWith
 
 * add all Math functions
 
@@ -23,5 +25,3 @@
 * Unit testing / Compiler testing
 
 * add wildcard for multiple compilation at the same time : nectar *.js
-
-* Add TypeScript support
