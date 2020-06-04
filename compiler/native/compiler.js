@@ -507,6 +507,13 @@ function Compiler()
 			return _code;
 		}
 
+		var _clean = _handler.DECL.split(";");
+		_clean = _clean.filter(function(v,i)
+		{
+			return _clean.indexOf(v) === i;
+		}).join(";");
+		_handler.DECL = _clean;
+		
 		_handler.MAIN = _handler.MAIN.replace("{CODE}", _handler.CODE);
 		_handler.MAIN = _handler.MAIN.replace("{INIT}", _handler.INIT);
 		_handler.MAIN = _handler.MAIN.replace("{DECL}", _handler.DECL);
