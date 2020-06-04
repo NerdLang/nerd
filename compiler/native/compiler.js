@@ -214,7 +214,7 @@ function Compiler()
 		{
 			_code = babel.transformSync(_code, 
 			{
-			  plugins: ["remove-unused-vars", "minify-dead-code-elimination", "minify-guarded-expressions"],
+			  plugins: [path.join(NECTAR_PATH, "node_modules", "babel-plugin-remove-unused-vars"), path.join(NECTAR_PATH, "node_modules", "babel-plugin-minify-dead-code-elimination"),path.join(NECTAR_PATH, "node_modules",  "babel-plugin-minify-guarded-expressions")],
 			}).code;
 		}
 		_code = genRequire(_handler.PATH, COMPILER.STD) + genRequire(_handler.PATH, _code);
