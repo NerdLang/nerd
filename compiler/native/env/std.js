@@ -66,19 +66,39 @@ var STD =
     },
     cli: function(compiler, preset, out, _in, option)
     {
+        var _stack = 0;
+        if(CLI.cli["--stack"])
+        {
+            try 
+            {
+                _stack = parseInt(CLI.cli["--stack"].argument);
+            }
+            catch(e)
+            {
+                console.log("[!] Error: --stack flags required a number, received -> " + CLI.cli["--stack"].argument);
+                process.exit(1);
+            }
+        }
         if(compiler == "cl" || compiler.indexOf("cl ") == 0)
         {
-            if(preset == "none") return `${compiler} ${_in} /std:c++14 /D CL_WINDOWS=1 /I "${CONFIG.win_inc_ucrt}" "${CONFIG.win_lib_um}\\Uuid.Lib" "${CONFIG.win_lib_um}\\kernel32.Lib" "${CONFIG.win_lib_ucrt}\\libucrt.lib" /EHsc  ${COMPILER.LIBS} /o  ${out}`;
-            else if(preset == "size") return `${compiler} ${_in} /std:c++14 /D CL_WINDOWS=1 /O1 /I "${CONFIG.win_inc_ucrt}" "${CONFIG.win_lib_um}\\Uuid.Lib" "${CONFIG.win_lib_um}\\kernel32.Lib" "${CONFIG.win_lib_ucrt}\\libucrt.lib" /EHsc ${COMPILER.LIBS} /o  ${out}`;
-            else if(preset == "speed") return `${compiler} ${_in} /std:c++14 /D CL_WINDOWS=1 /Ox /I "${CONFIG.win_inc_ucrt}" "${CONFIG.win_lib_um}\\Uuid.Lib" "${CONFIG.win_lib_um}\\kernel32.Lib" "${CONFIG.win_lib_ucrt}\\libucrt.lib" /EHsc ${COMPILER.LIBS} /o  ${out}`;
+            if(_stack) _stack = "/F " + _stack;
+            else _stack = "";
+
+            if(preset == "none") return `${compiler} ${_stack} ${_in} /std:c++14 /D CL_WINDOWS=1 /I "${CONFIG.win_inc_ucrt}" "${CONFIG.win_lib_um}\\Uuid.Lib" "${CONFIG.win_lib_um}\\kernel32.Lib" "${CONFIG.win_lib_ucrt}\\libucrt.lib" /EHsc  ${COMPILER.LIBS} /o  ${out}`;
+            else if(preset == "size") return `${compiler}  ${_stack} ${_in} /std:c++14 /D CL_WINDOWS=1 /O1 /I "${CONFIG.win_inc_ucrt}" "${CONFIG.win_lib_um}\\Uuid.Lib" "${CONFIG.win_lib_um}\\kernel32.Lib" "${CONFIG.win_lib_ucrt}\\libucrt.lib" /EHsc ${COMPILER.LIBS} /o  ${out}`;
+            else if(preset == "speed") return `${compiler}  ${_stack} ${_in} /std:c++14 /D CL_WINDOWS=1 /Ox /I "${CONFIG.win_inc_ucrt}" "${CONFIG.win_lib_um}\\Uuid.Lib" "${CONFIG.win_lib_um}\\kernel32.Lib" "${CONFIG.win_lib_ucrt}\\libucrt.lib" /EHsc ${COMPILER.LIBS} /o  ${out}`;
         }
+
+        if(_stack) _stack = "-Wl,--stack," + _stack;
+        else _stack = "";
+
         if(preset == "none")
         {
-            return `${compiler} -std=c++11 ${_in} -O1 -fpermissive -w -s ${COMPILER.LIBS}  -o ${out}`;
+            return `${compiler} ${_stack} -std=c++11 ${_in} -O1 -fpermissive -w -s ${COMPILER.LIBS}  -o ${out}`;
         }
         else if(preset == "size")
         {
-            return `${compiler} -std=c++11 ${_in} -Os -fno-exceptions -fno-rtti -fno-stack-protector -fomit-frame-pointer -fpermissive -w -s ${COMPILER.LIBS}  -o ${out}`;
+            return `${compiler} ${_stack} -std=c++11 ${_in} -Os -fno-exceptions -fno-rtti -fno-stack-protector -fomit-frame-pointer -fpermissive -w -s ${COMPILER.LIBS}  -o ${out}`;
         }
         else
         {   
@@ -86,7 +106,7 @@ var STD =
             if(os.platform() == "darwin" || compiler.indexOf("clang") > -1) _opt += "3";
             else _opt += "fast";
 
-            return `${compiler} -std=c++11 ${_in} ${_opt} -fpermissive -w -s ${COMPILER.LIBS}  -o ${out}`;
+            return `${compiler} ${_stack} -std=c++11 ${_in} ${_opt} -fpermissive -w -s ${COMPILER.LIBS}  -o ${out}`;
         }
     }
 

@@ -45,6 +45,12 @@ To show more compilation infos :
 nectar --verbose file.js
 ```
 
+Changing the stack size (usefull on Windows) :
+
+```
+nectar --stack 10000000 flood.js
+```
+
 For more informations about compilation output, use `--verbose`
 
 For help, use `--help`
