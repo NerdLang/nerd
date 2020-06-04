@@ -37,6 +37,7 @@ enum __NJS_TYPE
 	__NJS_ARRAY,
 	__NJS_NAN,
 	__NJS_INFINITY,
+	__NJS_NULL
 	
 };
 
@@ -54,6 +55,8 @@ enum __NJS_TYPE
 #define __NJS_Create_String(_value) __NJS_VAR(_value)
 #define __NJS_Create_Infinity() __NJS_VAR(__NJS_INFINITY, 0)
 #define Infinity __NJS_Create_Infinity()
+#define __NJS_Create_Null() __NJS_VAR(__NJS_NULL, 0)
+#define null __NJS_Create_Null()
 #define __NJS_Create_Lambda(name) function<__NJS_VAR (vector<var>)>* name = new function<__NJS_VAR (vector<var>)>([](vector<var> __NJS_VARARGS)
 /*** END HELPERS ***/
 
@@ -215,7 +218,7 @@ struct __NJS_VAR
 		__NJS_TYPE type;
 		int _ptr = -1;
 		
-		val get() const
+		inline val get() const
 		{
 			return REGISTER[_ptr];
 		}
@@ -749,7 +752,7 @@ char* __NJS_Get_String(__NJS_VAR _v)
 
 __NJS_VAR __NJS_Typeof(__NJS_VAR _var)
 {
-  char* _array[] = {(char*)"", (char*)"undefined", (char*)"number", (char*)"number", (char*)"object", (char*)"number", (char*)"boolean", (char*)"string", (char*)"native", (char*)"function", (char*)"array", (char*) "NaN"};
+  char* _array[] = {(char*)"", (char*)"undefined", (char*)"number", (char*)"number", (char*)"object", (char*)"number", (char*)"boolean", (char*)"string", (char*)"native", (char*)"function", (char*)"array", (char*) "NaN", (char*) "number", (char*) "object"};
   return __NJS_Create_String(_array[_var.type]);
 }
 
@@ -1154,6 +1157,9 @@ ostream& operator << (ostream& os, const __NJS_VAR& _v)
 		break;
 	case __NJS_INFINITY:
 		os << "Infinity";
+		break;
+	case __NJS_NULL:
+		os << "null";
 		break;
 	default:
 		os << "undefined";
