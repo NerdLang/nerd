@@ -36,6 +36,7 @@ enum __NJS_TYPE
 	__NJS_FUNCTION,
 	__NJS_ARRAY,
 	__NJS_NAN,
+	__NJS_INFINITY,
 	
 };
 
@@ -51,6 +52,8 @@ enum __NJS_TYPE
 #define __NJS_DECL_FUNCTION function
 #define __NJS_RETURN_UNDEFINED var __undef = __NJS_VAR(); return __undef;
 #define __NJS_Create_String(_value) __NJS_VAR(_value)
+#define __NJS_Create_Infinity() __NJS_VAR(__NJS_INFINITY, 0)
+#define Infinity __NJS_Create_Infinity()
 /*** END HELPERS ***/
 
 struct __NJS_VAR;
@@ -1147,6 +1150,9 @@ ostream& operator << (ostream& os, const __NJS_VAR& _v)
 		break;
 	case __NJS_FUNCTION:
 		os << "[Function]";
+		break;
+	case __NJS_INFINITY:
+		os << "Infinity";
 		break;
 	default:
 		os << "undefined";
