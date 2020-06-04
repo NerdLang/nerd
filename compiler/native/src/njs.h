@@ -54,6 +54,7 @@ enum __NJS_TYPE
 #define __NJS_Create_String(_value) __NJS_VAR(_value)
 #define __NJS_Create_Infinity() __NJS_VAR(__NJS_INFINITY, 0)
 #define Infinity __NJS_Create_Infinity()
+#define __NJS_Create_Lambda(name) function<__NJS_VAR (vector<var>)>* name = new function<__NJS_VAR (vector<var>)>([](vector<var> __NJS_VARARGS)
 /*** END HELPERS ***/
 
 struct __NJS_VAR;
@@ -1299,3 +1300,10 @@ __NJS_VAR operator/(t _left, const __NJS_VAR& _right)
 }
 
 /*** END REDIFINING STD OPERATORS ***/
+
+__NJS_Create_Lambda(__IMPL_EVAL)
+{ 
+	__NJS_Log_Console("eval not implemented, return undefined");
+	return var();
+});
+var eval = __NJS_Create_Function(__IMPL_EVAL);
