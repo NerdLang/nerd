@@ -34,7 +34,7 @@
   "version": "0.0.2",
   "nectar":
   {
-    "env": ["std", "android", "node", "arduino"],
+    "env": ["std", "android", "node", "arduino", "wasm"],
     "read_only": [],
     "expose": ["__NJS_JSON_PARSE", "__NJS_JSON_STRINGIFY"]
   }
