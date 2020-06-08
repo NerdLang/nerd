@@ -31,12 +31,10 @@
 
 #include "uv.h"
 #include "internal.h"
+#include "queue.h"
 #include "handle-inl.h"
+#include "heap-inl.h"
 #include "req-inl.h"
-
-
-static uv_loop_t default_loop_struct;
-static uv_loop_t* default_loop_ptr;
 
 /* uv_once initialization guards */
 static uv_once_t uv_init_guard_ = UV_ONCE_INIT;
@@ -80,6 +78,100 @@ static void uv__crt_invalid_parameter_handler(const wchar_t* expression,
 }
 #endif
 
+static uv_loop_t** uv__loops;
+static int uv__loops_size;
+static int uv__loops_capacity;
+#define UV__LOOPS_CHUNK_SIZE 8
+static uv_mutex_t uv__loops_lock;
+
+static void uv__loops_init(void) {
+  uv_mutex_init(&uv__loops_lock);
+}
+
+static int uv__loops_add(uv_loop_t* loop) {
+  uv_loop_t** new_loops;
+  int new_capacity, i;
+
+  uv_mutex_lock(&uv__loops_lock);
+
+  if (uv__loops_size == uv__loops_capacity) {
+    new_capacity = uv__loops_capacity + UV__LOOPS_CHUNK_SIZE;
+    new_loops = (uv_loop_t **)uv__realloc(uv__loops, sizeof(uv_loop_t*) * new_capacity);
+    if (!new_loops)
+      goto failed_loops_realloc;
+    uv__loops = new_loops;
+    for (i = uv__loops_capacity; i < new_capacity; ++i)
+      uv__loops[i] = NULL;
+    uv__loops_capacity = new_capacity;
+  }
+  uv__loops[uv__loops_size] = loop;
+  ++uv__loops_size;
+
+  uv_mutex_unlock(&uv__loops_lock);
+  return 0;
+
+failed_loops_realloc:
+  uv_mutex_unlock(&uv__loops_lock);
+  return ERROR_OUTOFMEMORY;
+}
+
+static void uv__loops_remove(uv_loop_t* loop) {
+  int loop_index;
+  int smaller_capacity;
+  uv_loop_t** new_loops;
+
+  uv_mutex_lock(&uv__loops_lock);
+
+  for (loop_index = 0; loop_index < uv__loops_size; ++loop_index) {
+    if (uv__loops[loop_index] == loop)
+      break;
+  }
+  /* If loop was not found, ignore */
+  if (loop_index == uv__loops_size)
+    goto loop_removed;
+
+  uv__loops[loop_index] = uv__loops[uv__loops_size - 1];
+  uv__loops[uv__loops_size - 1] = NULL;
+  --uv__loops_size;
+
+  if (uv__loops_size == 0) {
+    uv__loops_capacity = 0;
+    uv__free(uv__loops);
+    uv__loops = NULL;
+    goto loop_removed;
+  }
+
+  /* If we didn't grow to big skip downsizing */
+  if (uv__loops_capacity < 4 * UV__LOOPS_CHUNK_SIZE)
+    goto loop_removed;
+
+  /* Downsize only if more than half of buffer is free */
+  smaller_capacity = uv__loops_capacity / 2;
+  if (uv__loops_size >= smaller_capacity)
+    goto loop_removed;
+  new_loops = (uv_loop_t **)uv__realloc(uv__loops, sizeof(uv_loop_t*) * smaller_capacity);
+  if (!new_loops)
+    goto loop_removed;
+  uv__loops = new_loops;
+  uv__loops_capacity = smaller_capacity;
+
+loop_removed:
+  uv_mutex_unlock(&uv__loops_lock);
+}
+
+void uv__wake_all_loops(void) {
+  int i;
+  uv_loop_t* loop;
+
+  uv_mutex_lock(&uv__loops_lock);
+  for (i = 0; i < uv__loops_size; ++i) {
+    loop = uv__loops[i];
+    assert(loop);
+    if (loop->iocp != INVALID_HANDLE_VALUE)
+      PostQueuedCompletionStatus(loop->iocp, 0, 0, NULL);
+  }
+  uv_mutex_unlock(&uv__loops_lock);
+}
 
 static void uv_init(void) {
   /* Tell Windows that we will handle critical errors. */
@@ -101,6 +193,9 @@ static void uv_init(void) {
   _CrtSetReportHook(uv__crt_dbg_report_handler);
 #endif
 
+  /* Initialize tracking of all uv loops */
+  uv__loops_init();
+
   /* Fetch winapi function pointers. This must be done first because other
    * initialization code might need these function pointers to be loaded.
    */
@@ -120,10 +215,14 @@ static void uv_init(void) {
 
   /* Initialize utilities */
   uv__util_init();
+
+  /* Initialize system wakeup detection */
+  uv__init_detect_system_wakeup();
 }
 
 
 int uv_loop_init(uv_loop_t* loop) {
+  struct heap* timer_heap;
   int err;
 
   /* Initialize libuv itself first */
@@ -142,14 +241,20 @@ int uv_loop_init(uv_loop_t* loop) {
 
   QUEUE_INIT(&loop->wq);
   QUEUE_INIT(&loop->handle_queue);
-  QUEUE_INIT(&loop->active_reqs);
+  loop->active_reqs.count = 0;
   loop->active_handles = 0;
 
   loop->pending_reqs_tail = NULL;
 
   loop->endgame_handles = NULL;
 
-  RB_INIT(&loop->timers);
+  loop->timer_heap = timer_heap = (struct heap *)uv__malloc(sizeof(*timer_heap));
+  if (timer_heap == NULL) {
+    err = UV_ENOMEM;
+    goto fail_timers_alloc;
+  }
+
+  heap_init(timer_heap);
 
   loop->check_handles = NULL;
   loop->prepare_handles = NULL;
@@ -176,7 +281,11 @@ int uv_loop_init(uv_loop_t* loop) {
     goto fail_async_init;
 
   uv__handle_unref(&loop->wq_async);
-  loop->wq_async.flags |= UV__HANDLE_INTERNAL;
+  loop->wq_async.flags |= UV_HANDLE_INTERNAL;
+
+  err = uv__loops_add(loop);
+  if (err)
+    goto fail_async_init;
 
   return 0;
 
@@ -184,10 +293,21 @@ fail_async_init:
   uv_mutex_destroy(&loop->wq_mutex);
 
 fail_mutex_init:
+  uv__free(timer_heap);
+  loop->timer_heap = NULL;
+
+fail_timers_alloc:
   CloseHandle(loop->iocp);
   loop->iocp = INVALID_HANDLE_VALUE;
 
   return err;
+}
+
+
+void uv_update_time(uv_loop_t* loop) {
+  uint64_t new_time = uv__hrtime(1000);
+  assert(new_time >= loop->time);
+  loop->time = new_time;
 }
 
 
@@ -199,8 +319,15 @@ void uv__once_init(void) {
 void uv__loop_close(uv_loop_t* loop) {
   size_t i;
 
-  /* close the async handle without needing an extra loop iteration */
-  assert(!loop->wq_async.async_sent);
+  uv__loops_remove(loop);
+
+  /* Close the async handle without needing an extra loop iteration.
+   * We might have a pending message, but we're just going to destroy the IOCP
+   * soon, so we can just discard it now without the usual risk of a getting
+   * another notification from GetQueuedCompletionStatusEx after calling the
+   * close_cb (which we also skip defining). We'll assert later that queue was
+   * actually empty and all reqs handled. */
+  loop->wq_async.async_sent = 0;
   loop->wq_async.close_cb = NULL;
   uv__handle_closing(&loop->wq_async);
   uv__handle_close(&loop->wq_async);
@@ -217,6 +344,9 @@ void uv__loop_close(uv_loop_t* loop) {
   uv_mutex_unlock(&loop->wq_mutex);
   uv_mutex_destroy(&loop->wq_mutex);
 
+  uv__free(loop->timer_heap);
+  loop->timer_heap = NULL;
+
   CloseHandle(loop->iocp);
 }
 
@@ -228,6 +358,11 @@ int uv__loop_configure(uv_loop_t* loop, uv_loop_option option, va_list ap) {
 
 int uv_backend_fd(const uv_loop_t* loop) {
   return -1;
+}
+
+
+int uv_loop_fork(uv_loop_t* loop) {
+  return UV_ENOSYS;
 }
 
 
@@ -251,7 +386,7 @@ int uv_backend_timeout(const uv_loop_t* loop) {
 }
 
 
-static void uv_poll(uv_loop_t* loop, DWORD timeout) {
+static void uv__poll_wine(uv_loop_t* loop, DWORD timeout) {
   DWORD bytes;
   ULONG_PTR key;
   OVERLAPPED* overlapped;
@@ -302,7 +437,7 @@ static void uv_poll(uv_loop_t* loop, DWORD timeout) {
 }
 
 
-static void uv_poll_ex(uv_loop_t* loop, DWORD timeout) {
+static void uv__poll(uv_loop_t* loop, DWORD timeout) {
   BOOL success;
   uv_req_t* req;
   OVERLAPPED_ENTRY overlappeds[128];
@@ -323,9 +458,13 @@ static void uv_poll_ex(uv_loop_t* loop, DWORD timeout) {
 
     if (success) {
       for (i = 0; i < count; i++) {
-        /* Package was dequeued */
-        req = uv_overlapped_to_req(overlappeds[i].lpOverlapped);
-        uv_insert_pending_req(loop, req);
+        /* Package was dequeued, but see if it is not a empty package
+         * meant only to wake us up.
+         */
+        if (overlappeds[i].lpOverlapped) {
+          req = uv_overlapped_to_req(overlappeds[i].lpOverlapped);
+          uv_insert_pending_req(loop, req);
+        }
       }
 
       /* Some time might have passed waiting for I/O,
@@ -358,8 +497,8 @@ static void uv_poll_ex(uv_loop_t* loop, DWORD timeout) {
 
 
 static int uv__loop_alive(const uv_loop_t* loop) {
-  return loop->active_handles > 0 ||
-         !QUEUE_EMPTY(&loop->active_reqs) ||
+  return uv__has_active_handles(loop) ||
+         uv__has_active_reqs(loop) ||
          loop->endgame_handles != NULL;
 }
 
@@ -373,12 +512,6 @@ int uv_run(uv_loop_t *loop, uv_run_mode mode) {
   DWORD timeout;
   int r;
   int ran_pending;
-  void (*poll)(uv_loop_t* loop, DWORD timeout);
-
-  if (pGetQueuedCompletionStatusEx)
-    poll = &uv_poll_ex;
-  else
-    poll = &uv_poll;
 
   r = uv__loop_alive(loop);
   if (!r)
@@ -386,7 +519,7 @@ int uv_run(uv_loop_t *loop, uv_run_mode mode) {
 
   while (r != 0 && loop->stop_flag == 0) {
     uv_update_time(loop);
-    uv_process_timers(loop);
+    uv__run_timers(loop);
 
     ran_pending = uv_process_reqs(loop);
     uv_idle_invoke(loop);
@@ -396,7 +529,11 @@ int uv_run(uv_loop_t *loop, uv_run_mode mode) {
     if ((mode == UV_RUN_ONCE && !ran_pending) || mode == UV_RUN_DEFAULT)
       timeout = uv_backend_timeout(loop);
 
-    (*poll)(loop, timeout);
+    if (pGetQueuedCompletionStatusEx)
+      uv__poll(loop, timeout);
+    else
+      uv__poll_wine(loop, timeout);
+
 
     uv_check_invoke(loop);
     uv_process_endgames(loop);
@@ -410,7 +547,7 @@ int uv_run(uv_loop_t *loop, uv_run_mode mode) {
        * UV_RUN_NOWAIT makes no guarantees about progress so it's omitted from
        * the check.
        */
-      uv_process_timers(loop);
+      uv__run_timers(loop);
     }
 
     r = uv__loop_alive(loop);
@@ -487,6 +624,33 @@ int uv__socket_sockopt(uv_handle_t* handle, int optname, int* value) {
     r = setsockopt(socket, SOL_SOCKET, optname, (const char*) value, len);
 
   if (r == SOCKET_ERROR)
+    return uv_translate_sys_error(WSAGetLastError());
+
+  return 0;
+}
+
+int uv_cpumask_size(void) {
+  return (int)(sizeof(DWORD_PTR) * 8);
+}
+
+int uv__getsockpeername(const uv_handle_t* handle,
+                        uv__peersockfunc func,
+                        struct sockaddr* name,
+                        int* namelen,
+                        int delayed_error) {
+
+  int result;
+  uv_os_fd_t fd;
+
+  result = uv_fileno(handle, &fd);
+  if (result != 0)
+    return result;
+
+  if (delayed_error)
+    return uv_translate_sys_error(delayed_error);
+
+  result = func((SOCKET) fd, name, namelen);
+  if (result != 0)
     return uv_translate_sys_error(WSAGetLastError());
 
   return 0;

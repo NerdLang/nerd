@@ -286,7 +286,7 @@ function Compiler()
 						}
 					}
 				}
-				/*
+				/* TODO: more check to switch from call to fixed_call
 				else if(COMPILER.INFO.CALL[_match[1]] && (COMPILER.INFO.CALL[_match[1]].length > 1 || COMPILER.INFO.CALL[_match[1]].length != _match[2].length))
 				{
 					_variadic = true;
@@ -518,6 +518,7 @@ function Compiler()
 		_handler.MAIN = _handler.MAIN.replace("{INIT}", _handler.INIT);
 		_handler.MAIN = _handler.MAIN.replace("{DECL}", _handler.DECL);
 		_handler.MAIN = _handler.MAIN.replace("{INCLUDE}", _handler.FFI.join(os.EOL));
+		_handler.MAIN = _handler.MAIN.replace("{{__PLATFORM__}}", os.platform());
 	}
 	  
 	this.Prepare = function(_folder)

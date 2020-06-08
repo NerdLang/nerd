@@ -19,7 +19,7 @@
 #include <string.h>
 
 #if defined(_MSC_VER) && _MSC_VER < 1600
-# include "stdint-msvc2008.h"
+# include "uv/stdint-msvc2008.h"
 #else
 # include <stdint.h>
 #endif
@@ -59,8 +59,7 @@ static int inet_ntop4(const unsigned char *src, char *dst, size_t size) {
   if (l <= 0 || (size_t) l >= size) {
     return UV_ENOSPC;
   }
-  strncpy(dst, tmp, size);
-  dst[size - 1] = '\0';
+  uv__strscpy(dst, tmp, size);
   return 0;
 }
 
@@ -142,14 +141,8 @@ static int inet_ntop6(const unsigned char *src, char *dst, size_t size) {
   if (best.base != -1 && (best.base + best.len) == ARRAY_SIZE(words))
     *tp++ = ':';
   *tp++ = '\0';
-
-  /*
-   * Check for overflow, copy, and we're done.
-   */
-  if ((size_t)(tp - tmp) > size) {
+  if (UV_E2BIG == uv__strscpy(dst, tmp, size))
     return UV_ENOSPC;
-  }
-  strcpy(dst, tmp);
   return 0;
 }
 
@@ -160,7 +153,7 @@ int uv_inet_pton(int af, const char* src, void* dst) {
 
   switch (af) {
   case AF_INET:
-    return (inet_pton4((const char *)src, (unsigned char *)dst));
+    return (inet_pton4(src, (unsigned char *)dst));
   case AF_INET6: {
     int len;
     char tmp[UV__INET6_ADDRSTRLEN], *s, *p;
@@ -174,7 +167,7 @@ int uv_inet_pton(int af, const char* src, void* dst) {
       memcpy(s, src, len);
       s[len] = '\0';
     }
-    return inet_pton6((const char *)s, (unsigned char *)dst);
+    return inet_pton6(s, (unsigned char *)dst);
   }
   default:
     return UV_EAFNOSUPPORT;

@@ -60,6 +60,8 @@ var STD =
             "__NJS_Object_Keys": false,
             "__NJS_Object_Stringify": false,
             "__NJS_ARGS": false,
+            "__NJS_ENV": false,
+            "__NJS_PLATFORM": false,
             "JSON": false,
             "Object": false,
         },
