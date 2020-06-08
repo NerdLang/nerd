@@ -46,6 +46,7 @@
  #define __NJS_ARDUINO 1
 
  #include "njs.h"
+ using namespace NECTAR;
  
  // Declared weak in Arduino.h to allow user redefinitions.
 int atexit(void (* /*func*/ )()) { return 0; }

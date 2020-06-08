@@ -45,7 +45,6 @@ enum __NJS_TYPE
 #define __NJS_GET_STRING(_var) _var.get().s->__NJS_VALUE.c_str()
 #define var __NJS_VAR
 #define let __NJS_VAR
-#define undefined __NJS_VAR()
 #define __NJS_Create_Boolean(_value) __NJS_VAR(__NJS_BOOLEAN, _value)
 #define __NJS_Create_Number(_value) __NJS_VAR( _value)
 #define __NJS_Create_Function(_value) __NJS_VAR(__NJS_FUNCTION, _value)
@@ -56,9 +55,12 @@ enum __NJS_TYPE
 #define __NJS_Create_Infinity() __NJS_VAR(__NJS_INFINITY, 0)
 #define Infinity __NJS_Create_Infinity()
 #define __NJS_Create_Null() __NJS_VAR(__NJS_NULL, 0)
-#define null __NJS_Create_Null()
+//#define __NJS_Init_Null __NJS_VAR(__NJS_NULL, 0)
+//#define null __NJS_Create_Null()
 #define __NJS_Create_Lambda(name) function<__NJS_VAR (vector<var>)>* name = new function<__NJS_VAR (vector<var>)>([](vector<var> __NJS_VARARGS)
 /*** END HELPERS ***/
+
+
 
 struct __NJS_VAR;
 
@@ -113,7 +115,7 @@ class __NJS_Class_Native
 	vector<pair<char*, __NJS_VAR>> __OBJECT;
 };
 
-union val
+union __NJS_VAL
 {
 	int i;
 	double d;
@@ -130,9 +132,9 @@ union val
 int FREE_PTR = -1;
 int REGISTER_PTR = 0;
 #ifdef CL_WINDOWS
-	val REGISTER[{{REGISTER}}];
+	__NJS_VAL REGISTER[{{REGISTER}}];
 #else
-	val REGISTER[{{REGISTER}}]{(val){.i=0}};
+	__NJS_VAL REGISTER[{{REGISTER}}]{(__NJS_VAL){.i=0}};
 #endif
 int FREE[{{REGISTER}}] = {0};
 
@@ -218,7 +220,7 @@ struct __NJS_VAR
 		__NJS_TYPE type;
 		int _ptr = -1;
 		
-		inline val get() const
+		inline __NJS_VAL get() const
 		{
 			return REGISTER[_ptr];
 		}
@@ -677,6 +679,13 @@ struct __NJS_VAR
 		return 0;
 	}
 };
+
+
+namespace NECTAR
+{
+	__NJS_VAR null = __NJS_Create_Null();
+	__NJS_VAR undefined = __NJS_VAR();
+}
 
 /*** VARIADIC CALLS ***/
 template<class... Args>
@@ -1268,9 +1277,16 @@ __NJS_VAR __NJS_Create_Native(void* _native)
   return __NJS_VAR(__NJS_UNDEFINED, _native);
 }
 
+/*
 void* __NJS_Get_Function(__NJS_VAR _fn)
 {
   return _fn.get().f;
+}
+*/
+
+function<var (vector<var>)>* __NJS_Get_Function(__NJS_VAR _v)
+{
+  return (function<var (vector<var>)>*)_v.get().f->__NJS_VALUE;
 }
 
 void* __NJS_Get_Native(__NJS_VAR _native)

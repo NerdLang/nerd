@@ -40,6 +40,7 @@
  using namespace std;
 
  #include "njs.h"
+ using namespace NECTAR;
  
 JNIEnv* globalEnv;
 jobject mainObject;

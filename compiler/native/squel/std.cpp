@@ -38,7 +38,9 @@
 
  using namespace std;
 
+
  #include "njs.h"
+ using namespace NECTAR;
  
  {INCLUDE}
  

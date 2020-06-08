@@ -1,0 +1,12 @@
+<!doctype html>
+<html>
+  <script>
+    var Module = {};
+	
+	function WasmLoaded()
+	{
+		console.log(Module.callNectar("callFromJS", "Hello From NectarJS !"));	
+	}
+  </script>
+  <script src="wasm_export.asm.js"></script>
+</html>
