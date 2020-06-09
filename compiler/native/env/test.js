@@ -22,7 +22,7 @@
 
 var os = require("os");
 
-var STD =
+var TEST =
 {
   name: "std",
   main: "test.cpp",
@@ -77,4 +77,4 @@ var STD =
 }
 }
 
-module.exports = STD;
+module.exports = TEST;

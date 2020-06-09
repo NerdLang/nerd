@@ -20,7 +20,7 @@
  *
  */
 
-var NODE =
+var WASM =
 {
   name: "wasm",
   main: "std.cpp",
@@ -89,4 +89,4 @@ var NODE =
   }
 }
 
-module.exports = NODE;
+module.exports = WASM;
