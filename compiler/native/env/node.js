@@ -98,7 +98,7 @@ var NODE =
 	  }
 	  else if(preset == "size")
 	  {
-		  return `${compiler} ${_stack} -std=c++11 ${_uvParam} ${_in} -Os -fno-exceptions -fno-rtti -fno-stack-protector -fomit-frame-pointer -fpermissive -w -s ${COMPILER.LIBS}  ${_uvLib} && mv a.exe ${out}`;
+		  return `${compiler} ${_stack} -std=c++11 ${_uvParam} ${_in} -Os -fno-rtti -fno-stack-protector -fomit-frame-pointer -fpermissive -w -s ${COMPILER.LIBS}  ${_uvLib} && mv a.exe ${out}`;
 	  }
 	  else
 	  {

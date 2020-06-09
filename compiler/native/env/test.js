@@ -42,7 +42,7 @@ var STD =
 	  }
 	  else if(preset == "size")
 	  {
-		  return `${compiler} -std=c++11 ${_in} ${option} -I ${extern}/lib/ -fno-exceptions -fno-rtti -fno-stack-protector -fomit-frame-pointer -fpermissive -w -s ${COMPILER.LIBS}  -o ${out}`;
+		  return `${compiler} -std=c++11 ${_in} ${option} -I ${extern}/lib/ -fno-rtti -fno-stack-protector -fomit-frame-pointer -fpermissive -w -s ${COMPILER.LIBS}  -o ${out}`;
 	  }
 	  else return `${compiler} -std=c++11 ${_in} -I ${extern}/lib/ ${option} -fpermissive -w -s ${COMPILER.LIBS} -o ${out}`;
   },

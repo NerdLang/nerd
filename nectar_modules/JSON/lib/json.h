@@ -3,14 +3,22 @@
 int to_int(char const *s)
 {
      if ( s == NULL || *s == '\0' )
+     {
+       #ifndef __NJS_ARDUINO
         throw std::invalid_argument("null or empty JSON argument");
+       #endif
+     }
 
      bool negate = (s[0] == '-');
      if ( *s == '+' || *s == '-' ) 
          ++s;
 
      if ( *s == '\0')
+     {
+       #ifndef __NJS_ARDUINO
         throw std::invalid_argument("sign character only.");
+        #endif
+     }
 
      int result = 0;
      while(*s)
@@ -20,7 +28,11 @@ int to_int(char const *s)
               result = result * 10  - (*s - '0'); 
           }
           else
+          {
+            #ifndef __NJS_ARDUINO
               throw std::invalid_argument("invalid JSON input string");
+              #endif
+          }
           ++s;
      }
      return negate ? result : -result;
