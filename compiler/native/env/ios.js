@@ -25,9 +25,9 @@ var os = require("os");
 var IOS =
 {
     name: "ios",
-    main: "ios.cpp",
+    main: "ios.hpp",
     compiler: "clang++",
-    stdlib: ["console", "Object", "Math", "JSON"],
+    stdlib: ["iOS", "console", "Object", "Math", "JSON" ],
     check: 
     {
         "env": 
@@ -53,6 +53,7 @@ var IOS =
         "globals":
         {
             "__njs_typeof": false,
+            "iOS": false,
             "console": false,
             "module": false,
             "require": false,

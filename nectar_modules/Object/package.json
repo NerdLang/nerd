@@ -34,7 +34,7 @@
   "version": "0.0.2",
   "nectar":
   {
-    "env": ["std", "android", "node", "arduino", "stm32"],
+    "env": ["std", "android", "ios", "node", "arduino", "stm32"],
     "read_only": [],
     "expose": ["__NJS_NATIVE_OBJECT_KEYS"]
   }

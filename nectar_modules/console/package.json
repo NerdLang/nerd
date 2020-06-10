@@ -34,7 +34,7 @@
   "version": "0.0.2",
   "nectar":
   {
-    "env": ["std", "android", "node", "wasm"],
+    "env": ["std", "android", "ios", "node", "wasm"],
     "read_only": [],
     "expose": ["__NJS_NATIVE_LOG_CONSOLE"]
   }

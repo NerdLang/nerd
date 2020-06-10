@@ -1,6 +1,6 @@
 {
-  "name": "JSON",
-  "description": "NectarJS base JSON module",
+  "name": "iOS",
+  "description": "NectarJS base iOS module",
   "main": "index.js",
   "bugs":
   {
@@ -16,8 +16,10 @@
   "keywords":
   [
     "nectarjs",
-    "JSON",
-	"javascript"
+    "iOS",
+    "Apple",
+    "smartphone",
+    "mobile"
   ],
   "license": "AGPL",
   "licenses": [
@@ -31,11 +33,11 @@
     "type": "git",
     "url": "git+ssh://git@github.com/NectarJS/nectarjs.git"
   },
-  "version": "0.0.2",
+  "version": "0.0.1",
   "nectar":
   {
-    "env": ["std", "android", "ios", "node", "arduino", "wasm"],
+    "env": ["ios"],
     "read_only": [],
-    "expose": ["__NJS_JSON_PARSE", "__NJS_JSON_STRINGIFY"]
+    "expose": ["__NJS_IOS_DRAW"]
   }
 }

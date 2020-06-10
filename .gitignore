@@ -105,6 +105,9 @@ dist
 # Serverless directories
 .serverless/
 
+# Apple
+.DS_Store
+
 # FuseBox cache
 .fusebox/
 
