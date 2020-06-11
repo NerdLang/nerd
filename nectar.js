@@ -79,7 +79,7 @@ else if(CLI.cli["--example"] || CLI.cli["--examples"]) ACTION = "example";
 else if(CLI.cli["--version"] || CLI.cli["-v"]) ACTION = "version";
 else if(CLI.cli["--project"]) ACTION = "showproject";
 else if(CLI.cli["--clean"] || CLI.cli["--purge"]) ACTION = "clean";
-else if(CLI.cli["--setauthor"] || CLI.cli["--setid"] || CLI.cli["--setkey"] || CLI.cli["--sethash"] || CLI.cli["--setsdk"] || CLI.cli["--setndk"] || CLI.cli["--setwin_inc_ucrt"] || CLI.cli["--setwin_lib_ucrt"] || CLI.cli["--setwin_lib_um"] || CLI.cli["--setapi"] || CLI.cli["--setport"]) ACTION = "setconfig";
+else if(CLI.cli["--setauthor"] || CLI.cli["--setid"] || CLI.cli["--setkey"] || CLI.cli["--sethash"] || CLI.cli["--setsdk"] || CLI.cli["--setndk"] || CLI.cli["--setwin_inc_ucrt"] || CLI.cli["--setwin_lib_ucrt"] || CLI.cli["--setwin_lib_um"] || CLI.cli["--setapi"] || CLI.cli["--setport"] || CLI.cli["--setxcode"]) ACTION = "setconfig";
 else if(CLI.cli["--config"]) ACTION = "showconfig";
 else if(CLI.cli["--reinit"]) ACTION = "reinitconfig";
 
@@ -190,7 +190,7 @@ function Init()
 
   if(!config || writeConfig)
   {
-    var defaultConfig = { author: os.userInfo().username, id: "", key:"", hash:"SHA256", api:"api.nectarjs.com", port:443, version: VERSION, sdk: "", ndk: "", win_inc_ucrt: "", win_lib_ucrt: "", win_lib_um: ""};
+    var defaultConfig = { author: os.userInfo().username, id: "", key:"", hash:"SHA256", api:"api.nectarjs.com", port:443, version: VERSION, sdk: "", ndk: "", win_inc_ucrt: "", win_lib_ucrt: "", win_lib_um: "", xcode: "/Applications/Xcode.app"};
     fs.writeFileSync(CONFIGFILE, JSON.stringify(defaultConfig));
   }
 }
@@ -226,6 +226,7 @@ function showConfig(str)
   console.log("Windows Include UCRT : " + CONFIG.win_inc_ucrt);
   console.log("Android Lib UCRT : " + CONFIG.win_lib_ucrt);
   console.log("Android Lib UM : " + CONFIG.win_lib_um);
+  console.log("iOS xCode : " + CONFIG.xcode);
   console.log();
 }
 
@@ -244,6 +245,7 @@ function setConfig()
     if(CLI.cli["--setwin_inc_ucrt"]) CONFIG.win_inc_ucrt = CLI.cli["--setwin_inc_ucrt"].argument;
     if(CLI.cli["--setwin_lib_ucrt"]) CONFIG.win_lib_ucrt = CLI.cli["--setwin_lib_ucrt"].argument;
     if(CLI.cli["--setwin_lib_um"]) CONFIG.win_lib_um = CLI.cli["--setwin_lib_um"].argument;
+    if(CLI.cli["--setxcode"]) CONFIG.xcode = CLI.cli["--setxcode"].argument;
 
     if(isNaN(CONFIG.port))
     {
@@ -276,7 +278,7 @@ function reinitConfig()
 {
   try
   {
-    var defaultConfig = { author: os.userInfo().username, id: "", key:"", hash:"SHA256", api:"api.nectarjs.com", "port":443, sdk: "", ndk: "", win_inc_ucrt: "", win_lib_ucrt: "", win_lib_um: ""};
+    var defaultConfig = { author: os.userInfo().username, id: "", key:"", hash:"SHA256", api:"api.nectarjs.com", "port":443, sdk: "", ndk: "", win_inc_ucrt: "", win_lib_ucrt: "", win_lib_um: "", xcode: "/Applications/Xcode.app"};
     fs.writeFileSync(CONFIGFILE, JSON.stringify(defaultConfig));
     readConfig();
     showConfig("[*] Config reinitialized :");

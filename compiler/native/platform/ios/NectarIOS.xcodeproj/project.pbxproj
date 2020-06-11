@@ -329,7 +329,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				"LIBRARY_SEARCH_PATHS[arch=*]" = "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1";
+				"LIBRARY_SEARCH_PATHS[arch=*]" = "${_xcode}/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1";
 				LLVM_LTO = YES_THIN;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nectarjs.NectarIOS;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -359,7 +359,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				"LIBRARY_SEARCH_PATHS[arch=*]" = "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1";
+				"LIBRARY_SEARCH_PATHS[arch=*]" = "${_xcode}/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1";
 				LLVM_LTO = YES_THIN;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nectarjs.NectarIOS;
 				PRODUCT_NAME = "$(TARGET_NAME)";
