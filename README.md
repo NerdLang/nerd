@@ -125,6 +125,21 @@ You can select your target with `--target release|debug`.
 Need: SDK Android-19 and Android-28
 NDK: tested with NDK 21
 
+# iOS compilation
+
+You need Xcode to be able to compiler applications with NectarJS.
+
+To compile a iOS app, select the iOS env with the flag --env ios :
+
+`nectar app.js --env ios`
+
+You can also target a plateform for running simulation :
+
+`nectar app.js --env ios --target 'iPhone-8, 13.5' --run`
+
+NectarJS will then compile your app and launch it with the simulator.
+
+To test your configuration, you can compile example/ios.js app.
 
 # Compatibility targets/platforms :
 
