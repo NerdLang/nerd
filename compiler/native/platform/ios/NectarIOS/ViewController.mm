@@ -7,7 +7,7 @@
 //
 
 #import "ViewController.h"
-#import "ios.hpp"
+#import "../ios.hpp"
 
 @interface ViewController ()
 
@@ -38,10 +38,7 @@
 }
 - (void)userContentController:(WKUserContentController*)userContentController didReceiveScriptMessage:(WKScriptMessage*)message
 {
-
-    njsCallback(self.webView, message.body);
-
+        njsCallback(self.webView, message.body);
 }
-
     
 @end

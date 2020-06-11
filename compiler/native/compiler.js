@@ -495,7 +495,7 @@ function Compiler()
 
 								if(_match[1]) COMPILER.DECL += `var ${_match[2]};`;
 								if(_match[2]) _formated += _match[2] + " = ";
-								_formated += "__NJS_VAR(__NJS_FUNCTION, new function<__NJS_VAR (vector<var>)> ([&](vector<var> __NJS_VARARGS) -> __NJS_VAR" + _fn + os.EOL + _return + "));";
+								_formated += "__NJS_VAR(__NJS_FUNCTION, new function<__NJS_VAR (vector<var>)> ([=](vector<var> __NJS_VARARGS) -> __NJS_VAR" + _fn + os.EOL + _return + "));";
 								_code = [_code.slice(0, _index), _formated, _code.slice(_end + 1)].join('');		
 								break;
 							}

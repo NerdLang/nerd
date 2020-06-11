@@ -459,7 +459,7 @@ function Build(prepare)
 		_binoutput = path.join(process.cwd(), _binoutput)
 		
 		var _cout = path.join(_tmp, path.basename(_in).slice(0, path.basename(_in).length - path.extname(_in).length) + ".cpp");
-		
+
 		_binoutput = COMPILER.Out(_binoutput);
 	
 		var projTo = "";
@@ -485,14 +485,21 @@ function Build(prepare)
 		try 
 		{
 			COMPILER.Compile(_tmp, _cout);
-			fs.chmodSync(_binoutput, "755");
 		}
 		catch(e)
 		{
 			console.log("[!] Compilation error");
 			console.log(e);
 			process.exit(1);
+    }
+    
+    if(COMPILER.ENV.post) COMPILER.ENV.post();
+
+    try 
+		{
+			fs.chmodSync(_binoutput, "755");
 		}
+		catch(e){}
 		
 		if(COMPILER.Package) COMPILER.Package();
 		
@@ -505,9 +512,14 @@ function Build(prepare)
 		var verb = false;
 		if(CLI.cli["--verbose"]) verb = true;
 		
-		var bin = fs.statSync(_binoutput);
-		
-		if(verb)
+    var bin;
+    try 
+		{
+      bin = fs.statSync(_binoutput);
+		}
+    catch(e){}
+    
+		if(verb && bin)
 		{
 			console.log("[+] Compilation done\n");
 			console.log("[*] Informations :\n");
@@ -528,18 +540,22 @@ function Build(prepare)
 		if(CLI.cli["--run"])
 		{
 			console.log();
-			console.log("[*] Executing " + _binoutput);
-			var _binexec = child_process.spawnSync(_binoutput, 
-			[],
-			{
-				stdio: [process.stdin, process.stdout, process.stderr],
-				cwd: process.cwd(),
-				env: process.env
-			});
-			if(_binexec.error)
-			{
-				console.log(_binexec.error);
-			}
+      console.log("[*] Executing " + _binoutput);
+      if(!COMPILER.ENV.run)
+      {
+        var _binexec = child_process.spawnSync(_binoutput, 
+        [],
+        {
+          stdio: [process.stdin, process.stdout, process.stderr],
+          cwd: process.cwd(),
+          env: process.env
+        });
+        if(_binexec.error)
+        {
+          console.log(_binexec.error);
+        }
+      }
+      else COMPILER.ENV.run();
 		}	
 		  if(!CLI.cli["--prepare"])
           {
