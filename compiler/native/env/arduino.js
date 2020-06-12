@@ -104,6 +104,7 @@ var ARDUINO =
 			"require": false,
 			"module": false,
 			"__NJS_Object_Keys": false,
+            "__NJS_Call_Function": false,
 		}
 	}
 }

@@ -55,6 +55,7 @@ var WASM =
 			"__NJS_Log_Console": false,
 			"__NJS_Object_Keys": false,
 			"__NJS_ARGS": false,
+            "__NJS_Call_Function": false,
 			"JSON": false,
 		}
 	},

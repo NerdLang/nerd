@@ -1,6 +1,6 @@
 {
-  "name": "Object",
-  "description": "NectarJS base Object module",
+  "name": "Date",
+  "description": "NectarJS base Date module",
   "main": "index.js",
   "bugs":
   {
@@ -10,13 +10,13 @@
   "directories":
   {
     "root": ".",
-    "lib": "lib"
+    "lib": "libdate"
   },
   "homepage": "https://github.com/NectarJS/nectarjs#readme",
   "keywords":
   [
     "nectarjs",
-    "JSON",
+    "Date",
 	"javascript"
   ],
   "license": "AGPL",
@@ -31,11 +31,11 @@
     "type": "git",
     "url": "git+ssh://git@github.com/NectarJS/nectarjs.git"
   },
-  "version": "0.0.2",
+  "version": "0.0.1",
   "nectar":
   {
     "env": ["std", "android", "ios", "node", "arduino", "stm32", "wasm"],
     "read_only": [],
-    "expose": ["__NJS_NATIVE_OBJECT_KEYS"]
+    "expose": ["__NJS_NATIVE_DATE_NOW"]
   }
 }

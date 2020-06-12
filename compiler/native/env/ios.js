@@ -60,6 +60,7 @@ var IOS =
             "__NJS_Log_Console": false,
             "__NJS_Object_Keys": false,
             "__NJS_Object_Stringify": false,
+            "__NJS_Call_Function": false,
             "__NJS_ARGS": false,
             "__NJS_ENV": false,
             "__NJS_PLATFORM": false,

@@ -58,6 +58,7 @@ var STM32 =
         "stm32": false,
         "module": false,
         "__NJS_Object_Keys": false,
+        "__NJS_Call_Function": false,
       }
   }
 }
