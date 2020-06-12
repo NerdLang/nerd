@@ -27,7 +27,7 @@ var IOS =
     name: "ios",
     main: "ios.hpp",
     compiler: "xcodebuild",
-    stdlib: ["iOS", "console", "Object", "Math", "JSON" ],
+    stdlib: [{bind: "Nectar", module: "iOS"}, "console", "Object", "Math", "JSON" ],
     check: 
     {
         "env": 
@@ -53,7 +53,7 @@ var IOS =
         "globals":
         {
             "__njs_typeof": false,
-            "iOS": false,
+            "Nectar": false,
             "console": false,
             "module": false,
             "require": false,

@@ -196,8 +196,16 @@ function Compiler()
 	{
 		for(var _s in this.ENV.stdlib)
 		{
-			this.DECL += "var " + this.ENV.stdlib[_s] + ";";
-			this.STD += this.ENV.stdlib[_s] +  " = require(\"" + this.ENV.stdlib[_s] + "\");";
+			if(typeof this.ENV.stdlib[_s] == "string")
+			{
+				this.DECL += "var " + this.ENV.stdlib[_s] + ";";
+				this.STD += this.ENV.stdlib[_s] +  " = require(\"" + this.ENV.stdlib[_s] + "\");";
+			}
+			else if(typeof this.ENV.stdlib[_s] == "object")
+			{
+				this.DECL += "var " + this.ENV.stdlib[_s].bind + ";";
+				this.STD += this.ENV.stdlib[_s].bind +  " = require(\"" + this.ENV.stdlib[_s].module + "\");";
+			}
 		}
 	}
 	

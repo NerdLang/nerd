@@ -25,7 +25,7 @@ var WASM =
   name: "wasm",
   main: "std.cpp",
   compiler: "em++",
-  stdlib: ["console", "Math", "JSON"],
+  stdlib: [{bind: "Nectar", module: "WASM"},"console", "Math", "JSON"],
   check: {
 		"env": {
 			"node": true,
@@ -47,6 +47,7 @@ var WASM =
 		},
 		"globals":
 		{
+			"Nectar": false,
 			"__njs_typeof": false,
 			"console": false,
 			"module": false,

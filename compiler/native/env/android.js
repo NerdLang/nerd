@@ -27,7 +27,7 @@ var ANDROID =
     name: "android",
     main: "android.cpp",
     compiler: "gradlew",
-    stdlib: ["android", "Object", "Math", "JSON"],
+    stdlib: [{bind: "Nectar", module: "android"}, "Object", "Math", "JSON"],
     check: 
     {
         "env": 
@@ -53,7 +53,7 @@ var ANDROID =
         "globals":
         {
             "__njs_typeof": false,
-            "android": false,
+            "Nectar": false,
             "module": false,
             "require": false,
             "__NJS_Log_Console": false,
