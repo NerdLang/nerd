@@ -101,6 +101,16 @@ function objectExpression(_path, _name)
 		COMPILER.INFO.FUNCTION.push(_value);
 		_code += "var " + _value + " = " + babel.generate(_path.value).code + ";";		
 	}
+	else if(_path.value.type == "ObjectExpression")
+	{
+		var _subRND = RND();
+		_code += "var " + _subRND + " = __NJS_Create_Object();";
+		for(var i = 0; i < _path.value.properties.length; i++)
+		{
+			_code += objectExpression(_path.value.properties[0], _subRND); 
+		}
+		_code += "__NJS_Object_Set(\"" + _path.key.value + "\"," + _subRND + "," + _name + ");"
+	}
 	else
 	{
 	  console.log("Visitor objectExpression not implemented yet for " + _path.value.type);
