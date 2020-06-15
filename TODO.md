@@ -27,3 +27,5 @@
 * add wildcard for multiple compilation at the same time : nectar *.js
 
 * add std NodeJS module for node env
+
+* Anonymous lambda
