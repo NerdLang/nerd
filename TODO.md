@@ -28,4 +28,3 @@
 
 * add std NodeJS module for node env
 
-* Anonymous lambda
