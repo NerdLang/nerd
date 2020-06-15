@@ -1,1 +1,1 @@
-(function(){ console.log("in Lambda")})()
+(function(){ console.log("in Lambda");})();
