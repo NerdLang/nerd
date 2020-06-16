@@ -1,4 +1,4 @@
-"!_ffi_include mysql/njs-mysql.h";
+"!_ffi_include mysqlx/njs-mysqlx.h";
 
 var _mysql = 
 {

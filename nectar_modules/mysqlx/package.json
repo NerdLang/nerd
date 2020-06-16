@@ -1,6 +1,6 @@
 {
-  "name": "example",
-  "description": "NectarJS example module",
+  "name": "mysqlx",
+  "description": "NectarJS mysqlx module",
   "main": "index.js",
   "bugs":
   {
@@ -17,7 +17,8 @@
   [
     "nectarjs",
   "javascript",
-  "example"
+  "mysql",
+  "mysqlx"
   ],
   "license": "AGPL",
   "licenses": [
@@ -34,7 +35,7 @@
   "version": "0.0.1",
   "nectar":
   {
-    "env": ["std", "android", "ios", "node", "arduino", "wasm", "test"],
+    "env": ["std", "android", "ios", "node", "wasm", "test"],
     "read_only": [],
     "expose": ["__NJS_NATIVE_CONNECT_MYSQL"],
     "lib": ["-I/usr/include/mysql-cppconn-8", "-lmysqlcppconn8"]

@@ -1,6 +1,6 @@
-var mysql = require("mysql");
+var mysqlx = require("mysqlx");
 
-var _db = mysql.connect("test:password@localhost");
+var _db = mysqlx.connect("test:password@localhost");
 
 _db.add('{"language":"JS","compiler":"NectarJS"}');
 
