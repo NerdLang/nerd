@@ -7,7 +7,28 @@ function __NJS_NATIVE_CONNECT_MYSQL(_auth, _schema, _coll)
   try 
   {
     if(!_auth) _auth = "mysqlx://root@localhost";
-    else _auth = "mysqlx://" + _auth;
+    else
+    {
+      if(_auth.type == __NJS_STRING) _auth = "mysqlx://" + _auth;
+      else if(_auth.type == __NJS_OBJECT)
+      {
+        var _strauth = "mysqlx://";
+
+        var _user = __NJS_Object_Get("user", _auth);
+        if(_user.type == __NJS_STRING) _strauth += _user;
+        else _strauth += "root";
+
+        var _pass = __NJS_Object_Get("pass", _auth);
+        if(_pass.type == __NJS_STRING) _strauth += ":" + _pass;
+
+        var _host = __NJS_Object_Get("host", _auth);
+        if(_host.type == __NJS_STRING) _strauth += "@" + _host;
+        else _strauth += "localhost";
+
+        _auth = _strauth;  
+      }
+    }
+
     if(!_schema) _schema = "nectarSchema";
     if(!_coll) _coll = "nectar";
 
@@ -50,9 +71,15 @@ function __NJS_NATIVE_CONNECT_MYSQL(_auth, _schema, _coll)
       return _data;
     }
     
+    function _mysql_remove(_request)
+    {
+      coll.remove(__NJS_Get_String(_request)).execute();
+    }
+
     __NJS_Object_Set("version", "8", _mysqlObject);
     __NJS_Object_Set("add", _mysql_add, _mysqlObject);
     __NJS_Object_Set("find", _mysql_find, _mysqlObject);
+    __NJS_Object_Set("remove", _mysql_remove, _mysqlObject);
     __NJS_Object_Set("close", _mysql_close, _mysqlObject);
 
     return _mysqlObject;
