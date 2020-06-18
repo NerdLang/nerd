@@ -28,4 +28,4 @@
 
 * add std NodeJS module for node env
 
-* Check JSON.parse with mysqlx module
+* Correct JSON.parse with objects or arrays in an array
