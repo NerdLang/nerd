@@ -169,16 +169,21 @@ function arrayExpression(_path)
 {
 	var prop = [];
 	var _rnd = RND();
-	var _set = "__NJS_" + RND();
+	var _set = "__NJS_$" + RND();
 
-	var _setter = `inline var ${_set}() { var ${_rnd} = __NJS_Create_Array();`;
+	var _setter = `inline __NJS_VAR ${_set}() { __NJS_VAR ${_rnd} = __NJS_Create_Array();`;
 	for(var i = 0; i < _path.elements.length; i++)
 	{
-		if(_path.elements[i] == "NumericLiteral") _setter += `__NJS_Object_Set(${i}, ${_path.elements[i].extra.raw}, ${_rnd});`;
+		if(_path.elements[i].type == "NumericLiteral") _setter += `__NJS_Object_Set(${i}, ${_path.elements[i].extra.raw}, ${_rnd});`;
+		else if(_path.elements[i].type == "ArrayExpression")
+		{
+			var _a = arrayExpression(_path.elements[i]);
+			COMPILER.DECL.push(_a.setter);
+			_setter += `__NJS_Object_Set(${i}, ${_a.getter}(), ${_rnd});`;
+		}
 		else _setter += `__NJS_Object_Set(${i}, ${babel.generate(_path.elements[i]).code}, ${_rnd});`;
 	}
 	_setter += `return ${_rnd};}`;
-
 	return {setter: _setter, getter: _set};
 }
 
@@ -256,7 +261,7 @@ function callExpression(_path)
 			{
 				var _arr = arrayExpression(_path.arguments[i]);
 				_args += _arr.getter + "()";
-				COMPILER.DECL += _arr.setter;
+				COMPILER.DECL.push(_arr.setter);
 			}
 			else 
 			{
@@ -406,6 +411,12 @@ var visitor =
 						 _o = true;
 						  _code += objectExpression(_el[i], _name);
 					  }
+					  else if(_el[i].type == "ArrayExpression")
+					  {
+						var _a = arrayExpression(_el[i]);
+						COMPILER.DECL.push(_a.setter + ";");
+						_value = _a.getter + "()";
+					  }
 					  else
 					  {
 						  console.log("Visitor VariableDeclarator not implemented yet for " + _el[i].type);
@@ -473,7 +484,7 @@ var visitor =
 						if(COMPILER.ENV.name == "android" && COMPILER.STATE == "CODE")
 						{
 							_path.node.kind = "";
-							COMPILER.DECL += " var " + _path.node.declarations[d].id.name + ";";
+							COMPILER.DECL.push(" var " + _path.node.declarations[d].id.name + ";");
 						}
 					}
 					if(!(_path.node.declarations[d].init)) _path.node.declarations[d].init = babel.parse("__NJS_VAR()");
@@ -544,16 +555,23 @@ var visitor =
 						_setter = _setter.replace("{{PROPERTY}}", _p);
 					}
 				}
-
+				
 				var _n = RND();
 				_path.insertBefore(babel.parse("var " + _n + ";"));
 				_path.node.left = babel.types.identifier(_n);
 				_path.insertAfter(babel.parse(_setter.replace("{{LEFT}}", _n)));
+
+				if(_path.node.right && _path.node.right.type == "ArrayExpression")
+				{
+					var _a = arrayExpression(_path.node.right);
+					COMPILER.DECL.push(_a.setter);
+					_path.node.right = babel.parse(_a.getter + "();");
+				}
 			 }
 			 else if(_path.node.left.type == "Identifier")
 			 {
-				 readOnlyVar(_path.node.left.name)
-			 }
+				 readOnlyVar(_path.node.left.name);
+			}
 		  },
 		  CallExpression(_path)
 		  {

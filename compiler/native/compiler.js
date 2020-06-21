@@ -174,7 +174,7 @@ function Compiler()
 	this.TMP_FOLDER = "";
 	this.OPTION = "";
 	
-	this.DECL = "";
+	this.DECL = [];
 	
 	this.FFI = [];
 	
@@ -198,12 +198,12 @@ function Compiler()
 		{
 			if(typeof this.ENV.stdlib[_s] == "string")
 			{
-				this.DECL += "var " + this.ENV.stdlib[_s] + ";";
+				this.DECL.push("var " + this.ENV.stdlib[_s] + ";");
 				this.STD += this.ENV.stdlib[_s] +  " = require(\"" + this.ENV.stdlib[_s] + "\");";
 			}
 			else if(typeof this.ENV.stdlib[_s] == "object")
 			{
-				this.DECL += "var " + this.ENV.stdlib[_s].bind + ";";
+				this.DECL.push("var " + this.ENV.stdlib[_s].bind + ";");
 				this.STD += this.ENV.stdlib[_s].bind +  " = require(\"" + this.ENV.stdlib[_s].module + "\");";
 			}
 		}
@@ -346,7 +346,7 @@ function Compiler()
 
 									if(_code.search(_matchThis) > -1) _fn = _fnThis;
 
-									_handler.DECL += "var " + _match[1] +";";
+									_handler.DECL.push("var " + _match[1] +";");
 
 									var _formated = `__NJS_DECL_FUNCTION<__NJS_VAR (${_parameters})>* ${_genFN} = new __NJS_DECL_FUNCTION<__NJS_VAR (${_parameters})>([=]( ${_parameters} ) -> __NJS_VAR ${_fn} ${_return} );`;
 									_formated += _match[1] + "=__NJS_VAR(__NJS_FUNCTION, " + _genFN + ");";
@@ -366,7 +366,7 @@ function Compiler()
 								{
 									// FAST CALL HERE
 									var _fn = _code.substring(_start, _end);
-									_handler.DECL += `int ${_match[1]}(${_parameters})${_fn}; return 0;}`;
+									_handler.DECL.push(`int ${_match[1]}(${_parameters})${_fn}; return 0;}`);
 									_code = [_code.slice(0, _index), _code.slice(_end + 1)].join('');
 								}
 
@@ -423,7 +423,7 @@ function Compiler()
 							{
 								var _fn = "{" + _getVar + _code.substring(_start + 1, _end);
 
-								_handler.DECL += "var " + _match[1] +";";
+								_handler.DECL.push("var " + _match[1] +";");
 
 								var _formated = "__NJS_DECL_FUNCTION<__NJS_VAR (vector<var>)>* " + _genFN +" = new __NJS_DECL_FUNCTION<__NJS_VAR (vector<var>)>([=]( vector<var> __NJS_VARARGS) -> __NJS_VAR" + _fn + _return + ");";
 								_formated += _match[1] + "=__NJS_VAR(__NJS_FUNCTION, " + _genFN + ");";
@@ -501,7 +501,7 @@ function Compiler()
 								
 								var _formated = "";
 
-								if(_match[1]) COMPILER.DECL += `var ${_match[2]};`;
+								if(_match[1]) COMPILER.DECL.push(`var ${_match[2]};`);
 								if(_match[2]) _formated += _match[2] + " = ";
 								_formated += "__NJS_VAR(__NJS_FUNCTION, new function<__NJS_VAR (vector<var>)> ([=](vector<var> __NJS_VARARGS) -> __NJS_VAR" + _fn + os.EOL + _return + "));";
 								_code = [_code.slice(0, _index), _formated, _code.slice(_end + 1)].join('');		
@@ -515,12 +515,10 @@ function Compiler()
 			return _code;
 		}
 
-		var _clean = _handler.DECL.split(";");
-		_clean = _clean.filter(function(v,i)
+		_handler.DECL = _handler.DECL.filter(function(v,i)
 		{
-			return _clean.indexOf(v) === i;
+			return _handler.DECL.indexOf(v) === i;
 		}).join(";");
-		_handler.DECL = _clean;
 		
 		_handler.MAIN = _handler.MAIN.replace("{CODE}", _handler.CODE);
 		_handler.MAIN = _handler.MAIN.replace("{INIT}", _handler.INIT);

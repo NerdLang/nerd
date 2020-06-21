@@ -16,3 +16,10 @@ for(var j = 0; j < _loop; j++)
 
 console.log(_res);
 console.log(_arr);
+
+
+var ArrInArr = [["Inception"]];
+console.log(ArrInArr[0][0]);
+
+ArrInArr[1] = [["Double Inception"]];
+console.log(ArrInArr[1][0][0]);
