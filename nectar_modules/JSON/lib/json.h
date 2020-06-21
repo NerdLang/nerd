@@ -1,5 +1,7 @@
-//#define JSMN_STRICT
-//#define JSMN_PARENT_LINK
+#define JSMN_STRICT
+#ifndef __NJS_ARDUINO
+  #define JSMN_PARENT_LINK
+#endif
 
 #include "jsmn.h"
 
