@@ -39,7 +39,7 @@ extern "C" {
 /**
  * JSON type identifier. Basic types are:
  * 	o Object
- * 	o Array
+ * 	o Arraya
  * 	o String
  * 	o Other primitive: number, boolean (true/false) or null
  */

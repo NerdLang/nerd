@@ -28,6 +28,6 @@
 
 * add std NodeJS module for node env
 
-* Correct JSON.parse with objects or arrays in an array
-
 * Put back API compilation switch
+
+* ECMASCRIPT 3 : https://github.com/kangax/sputniktests-webrunner

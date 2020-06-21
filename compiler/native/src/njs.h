@@ -796,16 +796,15 @@ __NJS_VAR __NJS_Object_Set(__NJS_VAR _index, __NJS_VAR _value, __NJS_VAR _array)
 {
   if(_array.type == __NJS_ARRAY && _index.type == __NJS_NUMBER)
   {
-	 if(_array.get().a->__NJS_VALUE.size() <= _index.get().i) _array.get().a->__NJS_VALUE.resize(_index.get().i + 1);
-    _array.get().a->__NJS_VALUE[_index.get().i].type = _value.type;
-
-	if(_value.type == __NJS_STRING)
+	  
+	if(_array.get().a->__NJS_VALUE.size() <= _index.get().i) 
 	{
-		REGISTER[_array.get().a->__NJS_VALUE[_index.get().i]._ptr].s = new __NJS_Class_String(strdup(REGISTER[_value._ptr].s->__NJS_VALUE.c_str()));
+		_array.get().a->__NJS_VALUE.reserve(_index.get().i + 1);
+		_array.get().a->__NJS_VALUE.resize(_index.get().i + 1);
 	}
-	else REGISTER[_array.get().a->__NJS_VALUE[_index.get().i]._ptr] = REGISTER[_value._ptr];
-	
-	__NJS_Object_Set((char*)"length", __NJS_VAR((int)_array.get().a->__NJS_VALUE.size()), _array);
+
+	_array.get().a->__NJS_VALUE.at(_index.get().i) = _value;
+
 	return __NJS_VAR();
     
   }

@@ -1,3 +1,6 @@
+//#define JSMN_STRICT
+//#define JSMN_PARENT_LINK
+
 #include "jsmn.h"
 
 int to_int(char const *s)
@@ -105,9 +108,12 @@ int dump(const char *js, jsmntok_t *t, size_t count, int indent, var& _res)
   {
     j = 0;
     _res = __NJS_Create_Array();
+    vector<var> _arr;
+
+    
     for (i = 0; i < t->size; i++) 
     {
-      var _value;
+      var _value;  
       j += dump(js, t + 1 + j, count - j, indent + 1, _value);
       __NJS_Object_Set(i, _value, _res);
     }
