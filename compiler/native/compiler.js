@@ -237,13 +237,13 @@ function Compiler()
 		COMPILER.STATE = "CODE";
 		_handler.CODE = babel.transformSync(_code, visitor).code;
 		checkFastFunction();
-		_handler.CODE = createClass(_handler.CODE);
-		_handler.CODE = createFunction(_handler.CODE);
-		_handler.CODE = createAnon(_handler.CODE);
+		_handler.CODE = createClass(_handler.CODE, true);
+		_handler.CODE = createFunction(_handler.CODE, true);
+		_handler.CODE = createAnon(_handler.CODE, true);
 		
 		COMPILER.INIT += COMPILER.REQUIRE;
 		
-		function createFunction(_code)
+		function createFunction(_code, _scope)
 		{	
 			var _matchThis = new RegExp(/(| |{|,)__NJS_THIS([\.(";)]|$)/);
 			var _return = ";return __NJS_Create_Undefined();}";
@@ -341,6 +341,8 @@ function Compiler()
 
 								if(!_FAST)
 								{
+									var _catch = "";
+									if(_scope) _catch = "=";
 									var _fn = "{" + _getVar + _code.substring(_start + 1, _end);
 									var _fnThis = "{" + _getVar + " var __NJS_THIS = __NJS_Create_Object();" + _code.substring(_start + 1, _end);
 
@@ -348,13 +350,13 @@ function Compiler()
 
 									_handler.DECL.push("var " + _match[1] +";");
 
-									var _formated = `__NJS_DECL_FUNCTION<__NJS_VAR (${_parameters})>* ${_genFN} = new __NJS_DECL_FUNCTION<__NJS_VAR (${_parameters})>([=]( ${_parameters} ) -> __NJS_VAR ${_fn} ${_return} );`;
+									var _formated = `__NJS_DECL_FUNCTION<__NJS_VAR (${_parameters})>* ${_genFN} = new __NJS_DECL_FUNCTION<__NJS_VAR (${_parameters})>([${_catch}]( ${_parameters} ) -> __NJS_VAR ${_fn} ${_return} );`;
 									_formated += _match[1] + "=__NJS_VAR(__NJS_FUNCTION, " + _genFN + ");";
 
 									if(_match[1].indexOf("__MODULE") != 0)
 									{
 										var _genNew = "__NEW_" + _genFN;
-										var _addNew = `__NJS_DECL_FUNCTION<__NJS_VAR (${_parameters})>* ${_genNew} = new __NJS_DECL_FUNCTION<__NJS_VAR (${_parameters})>([=]( ${_parameters} ) -> __NJS_VAR ${_fnThis} ${_returnThis} );`;
+										var _addNew = `__NJS_DECL_FUNCTION<__NJS_VAR (${_parameters})>* ${_genNew} = new __NJS_DECL_FUNCTION<__NJS_VAR (${_parameters})>([${_catch}]( ${_parameters} ) -> __NJS_VAR ${_fnThis} ${_returnThis} );`;
 										_addNew += "var __NEW_" + _match[1] + "=__NJS_VAR(__NJS_FUNCTION, " + _genNew + ");";
 
 										_formated += _addNew;
@@ -380,7 +382,7 @@ function Compiler()
 			return _code;
 		}
 
-		function createClass(_code)
+		function createClass(_code, _scope)
 		{	
 			var _matchThis = new RegExp(/(| |{|,)__NJS_THIS([\.(";)]|$)/);
 			var _return = ";return __NJS_Create_Undefined();}";
@@ -416,7 +418,8 @@ function Compiler()
 						}
 						else if(_code[i] == "}")
 						{
-							
+							var _catch = "";
+							if(_scope) _catch = "=";
 							_end = i;
 							_count--;
 							if(_count == 0)
@@ -425,14 +428,14 @@ function Compiler()
 
 								_handler.DECL.push("var " + _match[1] +";");
 
-								var _formated = "__NJS_DECL_FUNCTION<__NJS_VAR (vector<var>)>* " + _genFN +" = new __NJS_DECL_FUNCTION<__NJS_VAR (vector<var>)>([=]( vector<var> __NJS_VARARGS) -> __NJS_VAR" + _fn + _return + ");";
+								var _formated = "__NJS_DECL_FUNCTION<__NJS_VAR (vector<var>)>* " + _genFN +" = new __NJS_DECL_FUNCTION<__NJS_VAR (vector<var>)>([" + _catch + "]( vector<var> __NJS_VARARGS) -> __NJS_VAR" + _fn + _return + ");";
 								_formated += _match[1] + "=__NJS_VAR(__NJS_FUNCTION, " + _genFN + ");";
 
 								if(_match[1].indexOf("__MODULE") != 0)
 								{
 									
 									var _genNew = "__NEW_" + _genFN;
-									var _addNew = "__NJS_DECL_FUNCTION<__NJS_VAR (vector<var>)>* " + _genNew +" = new __NJS_DECL_FUNCTION<__NJS_VAR (vector<var>)>([=](vector<var> __NJS_VARARGS) -> __NJS_VAR" + _fn + _returnThis + ");";
+									var _addNew = "__NJS_DECL_FUNCTION<__NJS_VAR (vector<var>)>* " + _genNew +" = new __NJS_DECL_FUNCTION<__NJS_VAR (vector<var>)>([" + _catch + "](vector<var> __NJS_VARARGS) -> __NJS_VAR" + _fn + _returnThis + ");";
 									_addNew += "var __NEW_" + _match[1] + "=__NJS_VAR(__NJS_FUNCTION, " + _genNew + ");";
 
 									_formated += _addNew;
@@ -449,7 +452,7 @@ function Compiler()
 			return _code;
 		}
 
-		function createAnon(_code)
+		function createAnon(_code, _scope)
 		{	
 			var _matchThis = new RegExp(/(| |{|,)__NJS_THIS([\.(";)]|$)/);
 			var _return = "return __NJS_Create_Undefined();}";
@@ -485,6 +488,8 @@ function Compiler()
 						}
 						else if(_code[i] == "}")
 						{
+							var _catch = "";
+							if(_scope) _catch = "=";
 							_end = i;
 							_count--;
 							if(_count == 0)
@@ -503,7 +508,7 @@ function Compiler()
 
 								if(_match[1]) COMPILER.DECL.push(`var ${_match[2]};`);
 								if(_match[2]) _formated += _match[2] + " = ";
-								_formated += "__NJS_VAR(__NJS_FUNCTION, new function<__NJS_VAR (vector<var>)> ([=](vector<var> __NJS_VARARGS) -> __NJS_VAR" + _fn + os.EOL + _return + "));";
+								_formated += "__NJS_VAR(__NJS_FUNCTION, new function<__NJS_VAR (vector<var>)> ([" + _catch + "](vector<var> __NJS_VARARGS) -> __NJS_VAR" + _fn + os.EOL + _return + "));";
 								_code = [_code.slice(0, _index), _formated, _code.slice(_end + 1)].join('');		
 								break;
 							}

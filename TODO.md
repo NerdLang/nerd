@@ -1,6 +1,6 @@
 * Add import
 
-* Add babel visitors for missing (list missing)
+* Add babel visitors for missing
 
 * Add Date Object with nectar module
 
