@@ -31,3 +31,5 @@
 * Put back API compilation switch
 
 * ECMASCRIPT 3 : https://github.com/kangax/sputniktests-webrunner
+
+* Use functions before definition
