@@ -49,6 +49,17 @@ function __NJS_NATIVE_CONNECT_MYSQL(_auth, _schema, _coll)
       var _result = __NJS_Create_Boolean(1);
       return _result;
     };
+    
+   function _mysql_modify(_obj)
+   {
+        auto _cm = coll.modify(__NJS_Get_String(__NJS_Object_Get("search",_obj)));
+        var _set = __NJS_Object_Get("set", _obj);
+        if(_set) _cm.set(__NJS_Get_String(__NJS_Object_Get(0, _set)), __NJS_Get_String(__NJS_Object_Get(1, _set)));
+        _cm.execute();
+
+        var _result = __NJS_Create_Boolean(1);
+        return _result;
+   }
 
     function _mysql_find(_request)
     {
@@ -78,6 +89,7 @@ function __NJS_NATIVE_CONNECT_MYSQL(_auth, _schema, _coll)
 
     __NJS_Object_Set("version", "8", _mysqlObject);
     __NJS_Object_Set("add", _mysql_add, _mysqlObject);
+    __NJS_Object_Set("modify", _mysql_modify, _mysqlObject);
     __NJS_Object_Set("find", _mysql_find, _mysqlObject);
     __NJS_Object_Set("remove", _mysql_remove, _mysqlObject);
     __NJS_Object_Set("close", _mysql_close, _mysqlObject);
