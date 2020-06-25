@@ -45,6 +45,7 @@ function __NJS_NATIVE_CONNECT_MYSQL(_auth, _schema, _coll)
 
     function _mysql_add(_json)
     {
+      "SCOPED_FUNCTION";
       coll.add(__NJS_Get_String(_json)).execute();
       var _result = __NJS_Create_Boolean(1);
       return _result;
@@ -52,9 +53,20 @@ function __NJS_NATIVE_CONNECT_MYSQL(_auth, _schema, _coll)
     
    function _mysql_modify(_obj)
    {
-        auto _cm = coll.modify(__NJS_Get_String(__NJS_Object_Get("search",_obj)));
+     "SCOPED_FUNCTION";
+     var _search = __NJS_Object_Get("search",_obj);
+     if(_search.type != __NJS_STRING) return __NJS_Create_Boolean(0);
+
+        auto _cm = coll.modify(__NJS_Get_String(_search));
+
         var _set = __NJS_Object_Get("set", _obj);
-        if(_set) _cm.set(__NJS_Get_String(__NJS_Object_Get(0, _set)), __NJS_Get_String(__NJS_Object_Get(1, _set)));
+        if(_set && _set.type == __NJS_ARRAY)
+        {
+          var _left = __NJS_Object_Get(0, _set);
+          var _right = __NJS_Object_Get(1, _set);
+          if(_left.type == __NJS_STRING && _right.type == __NJS_STRING)
+          _cm.set(__NJS_Get_String(_left), __NJS_Get_String(_right));
+        }
         _cm.execute();
 
         var _result = __NJS_Create_Boolean(1);
@@ -63,6 +75,7 @@ function __NJS_NATIVE_CONNECT_MYSQL(_auth, _schema, _coll)
 
     function _mysql_find(_request)
     {
+      "SCOPED_FUNCTION";
       var _result = __NJS_Create_Array();
       std::list<DbDoc> dbList = coll.find(__NJS_Get_String(_request)).execute().fetchAll();
 
@@ -84,6 +97,7 @@ function __NJS_NATIVE_CONNECT_MYSQL(_auth, _schema, _coll)
     
     function _mysql_remove(_request)
     {
+      "SCOPED_FUNCTION";
       coll.remove(__NJS_Get_String(_request)).execute();
     }
 

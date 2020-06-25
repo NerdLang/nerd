@@ -38,8 +38,11 @@ function genMetaFunction(_code)
                     if(_count == 0)
                     {
                         var _fn = "{" + _getVar + _code.substring(_start + 1, _end);
+                        var _catch = "";
+                        if(_code.indexOf("'SCOPED_FUNCTION';") > -1) _catch = "=";
+                        else if(_code.indexOf("\"SCOPED_FUNCTION\";") > -1) _catch = "=";
 
-                        var _formated = "__NJS_DECL_FUNCTION<__NJS_VAR (vector<var>)>* " + _genFN +" = new __NJS_DECL_FUNCTION<__NJS_VAR (vector<var>)>([]( vector<var> __NJS_VARARGS ) -> __NJS_VAR" + _fn + _return + ");";
+                        var _formated = "__NJS_DECL_FUNCTION<__NJS_VAR (vector<var>)>* " + _genFN +" = new __NJS_DECL_FUNCTION<__NJS_VAR (vector<var>)>([" + _catch + "]( vector<var> __NJS_VARARGS ) -> __NJS_VAR" + _fn + _return + ");";
                         _formated += "var " + _match[1] + "=__NJS_VAR(__NJS_FUNCTION, " + _genFN + ");";                        
                         _code = [_code.slice(0, _index), _formated, _code.slice(_end + 1)].join('');
                         break;

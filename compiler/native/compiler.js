@@ -343,6 +343,8 @@ function Compiler()
 								{
 									var _catch = "";
 									if(_scope) _catch = "=";
+									else if(_code.indexOf("'SCOPED_FUNCTION';") > -1) _catch = "=";
+									
 									var _fn = "{" + _getVar + _code.substring(_start + 1, _end);
 									var _fnThis = "{" + _getVar + " var __NJS_THIS = __NJS_Create_Object();" + _code.substring(_start + 1, _end);
 
@@ -420,6 +422,8 @@ function Compiler()
 						{
 							var _catch = "";
 							if(_scope) _catch = "=";
+							else if(_code.indexOf("'SCOPED_FUNCTION';") > -1) _catch = "=";
+
 							_end = i;
 							_count--;
 							if(_count == 0)
@@ -490,6 +494,8 @@ function Compiler()
 						{
 							var _catch = "";
 							if(_scope) _catch = "=";
+							else if(_code.indexOf("'SCOPED_FUNCTION';") > -1) _catch = "=";
+							
 							_end = i;
 							_count--;
 							if(_count == 0)

@@ -471,6 +471,14 @@ var visitor =
 
 				   _path.replaceWith(babel.parse(_code));
 			  }
+			  else if(_path.node.init.type == "FunctionExpression")
+			  {
+				if(CURRENT_FUNCTION > -1)
+				{
+					var _directive = "'SCOPED_FUNCTION';";
+					_path.node.init.body.body.splice(0, 0, babel.parse(_directive));
+				}
+			  }
 		  },
 		  VariableDeclaration(_path)
 		  {
@@ -643,6 +651,10 @@ var visitor =
 						{
 							addFunctionVarInit(_path.node.params[i].name);
 						}
+					}
+					if(CURRENT_FUNCTION > 0)
+					{
+					
 					}
 				}
 				
