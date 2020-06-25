@@ -587,7 +587,8 @@ var visitor =
 			  {
 				  if(COMPILER.INFO.CACHE[_path.node.callee.name])
 				  {
-					  _path.insertBefore(babel.parse(COMPILER.INFO.CACHE[_path.node.callee.name]));
+					var _p = _path.getStatementParent();
+					_p.insertBefore(babel.parse(COMPILER.INFO.CACHE[_path.node.callee.name]));
 				  }
 			  }
 			  var _new = callExpression(_path.node);
@@ -623,11 +624,12 @@ var visitor =
 		  },
 		  ReturnStatement(_path)
 		  {
-			if(_path.node.argument.type == "MemberExpression")
+			if(_path.node && _path.node.argument && _path.node.argument.type == "MemberExpression")
 			{
 				const _arg = _path.get("argument");
 				_arg.replaceWithSourceString(memberExpression(_path.node.argument));
 			}
+			
 		  },
 		  MemberExpression(_path)
 		  {  

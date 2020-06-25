@@ -267,7 +267,6 @@ function Compiler()
 						}
 						else if(_code[i] == "}")
 						{
-							
 							_end = i;
 							_count--;
 							if(_count == 0)
