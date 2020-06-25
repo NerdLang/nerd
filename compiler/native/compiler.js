@@ -249,7 +249,7 @@ function Compiler()
 		
 		function preloadFunction(_code)
 		{	
-			var _searchFN = new RegExp(/function (.[a-zA-Z0-9_\-]*) *\((.*)\)/);
+			var _searchFN = new RegExp(/function *(.[a-zA-Z0-9_\-]*) *\((.*)\)/);
 			var _index = _code.search(_searchFN);
 			while(_index > -1)
 			{
@@ -289,7 +289,7 @@ function Compiler()
 			var _matchThis = new RegExp(/(| |{|,)__NJS_THIS([\.(";)]|$)/);
 			var _return = ";return __NJS_Create_Undefined();}";
 			var _returnThis = ";return __NJS_THIS;}";
-			var _searchFN = new RegExp(/function (.[a-zA-Z0-9_\-]*) *\((.*)\)/);
+			var _searchFN = new RegExp(/function *(.[a-zA-Z0-9_\-]*) *\((.*)\)/);
 			var _index = _code.search(_searchFN);
 			while(_index > -1)
 			{
