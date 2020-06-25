@@ -46,7 +46,6 @@ var IOS =
                 "always"
             ],
             "no-unused-vars": ["warn", { "vars": "all", "args": "after-used", "ignoreRestSiblings": false }],
-            "no-use-before-define": ["error"],
             "no-undef": "error",
             "no-redeclare": ["error", { "builtinGlobals": false }],
         },

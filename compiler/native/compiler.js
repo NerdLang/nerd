@@ -187,6 +187,7 @@ function Compiler()
 	this.INFO = 
 	{
 		FUNCTION: [],
+		CACHE: {},
 		VALUE: [],
 		CALL: {},
 		SCOPE: {},
@@ -216,7 +217,7 @@ function Compiler()
 	/*** METHODS ***/
 	this.Parse = function(_code)
 	{
-		if(!CLI.cli["--no-check"]) LINT(_code, this.IN);
+		
 		
 		if(CLI.cli["--preset"] && CLI.cli["--preset"].argument == "speed") 
 		{
@@ -235,6 +236,9 @@ function Compiler()
 		COMPILER.REQUIRE = createAnon(COMPILER.REQUIRE);
 		
 		COMPILER.STATE = "CODE";
+		_code = preloadFunction(_code);
+		if(!CLI.cli["--no-check"]) LINT(_code, this.IN);
+
 		_handler.CODE = babel.transformSync(_code, visitor).code;
 		checkFastFunction();
 		_handler.CODE = createClass(_handler.CODE, true);
@@ -242,6 +246,44 @@ function Compiler()
 		_handler.CODE = createAnon(_handler.CODE, true);
 		
 		COMPILER.INIT += COMPILER.REQUIRE;
+		
+		function preloadFunction(_code)
+		{	
+			var _searchFN = new RegExp(/function (.[a-zA-Z0-9_\-]*) *\((.*)\)/);
+			var _index = _code.search(_searchFN);
+			while(_index > -1)
+			{
+				var _count = 0;
+				var _start = -1;
+				var _end = -1;
+				let _match = _searchFN.exec(_code);
+
+				for(var i = _index; i < _code.length; i++)
+				{
+						if(_code[i] == "{")
+						{
+								if(_start == -1) _start = i;
+								_count++;
+						}
+						else if(_code[i] == "}")
+						{
+							
+							_end = i;
+							_count--;
+							if(_count == 0)
+							{
+								var _func = _code.substring(_index, _end + 1);
+								COMPILER.INFO.CACHE[_match[1]] = _func;
+								COMPILER.ENV.check.globals[_match[1]] = false;
+								_code = _code.slice(0, _index) + _code.slice(_end + 1);
+								break;
+							}
+						}
+				}
+				_index = _code.search(_searchFN);
+			}
+			return _code;
+		}
 		
 		function createFunction(_code, _scope)
 		{	

@@ -583,6 +583,13 @@ var visitor =
 		  },
 		  CallExpression(_path)
 		  {
+			  if(_path.node.callee && _path.node.callee.name)
+			  {
+				  if(COMPILER.INFO.CACHE[_path.node.callee.name])
+				  {
+					  _path.insertBefore(babel.parse(COMPILER.INFO.CACHE[_path.node.callee.name]));
+				  }
+			  }
 			  var _new = callExpression(_path.node);
 			  if(_new.length > 0) _path.replaceWithSourceString(_new);
 		  },
