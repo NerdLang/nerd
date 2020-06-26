@@ -293,26 +293,6 @@ function Compiler()
 			
 			return _hoisting + _code;
 		}
-
-		function hoistingVar(_code)
-		{
-			var _hoisting = "";
-			var _name = [];
-			var _searchFN = new RegExp(/(var) +(.[a-zA-Z0-9_\-]*)( +=|;|$)/);
-			var _index = _code.search(_searchFN);
-			while(_index > -1)
-			{
-				let _match = _searchFN.exec(_code);
-				if(_name.indexOf(_match[2]) < 0)
-				{
-					_name.push(_match[2]);
-					_hoisting += _match[1] + " " + _match[2] + ";\n";
-				}
-				_code = _code.slice(0, _index) + _code.slice(_index + _match[1].length);
-				_index = _code.search(_searchFN);
-			}
-			return _hoisting + _code;
-		}
 		
 		function createFunction(_code, _scope)
 		{	
