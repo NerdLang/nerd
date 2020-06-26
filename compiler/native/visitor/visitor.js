@@ -494,6 +494,14 @@ var visitor =
 							_path.node.kind = "";
 							COMPILER.DECL.push(" var " + _path.node.declarations[d].id.name + ";");
 						}
+						else if(CURRENT_FUNCTION < 0)
+						{
+							_path.node.kind = "";
+							if(COMPILER.INFO.HOISTING.indexOf(_path.node.declarations[d].id.name) < 0)
+							{
+								COMPILER.INFO.HOISTING.push(_path.node.declarations[d].id.name);
+							}
+						}	
 					}
 					if(!(_path.node.declarations[d].init)) _path.node.declarations[d].init = babel.parse("__NJS_VAR()");
 				  }
@@ -578,19 +586,29 @@ var visitor =
 			 }
 			 else if(_path.node.left.type == "Identifier")
 			 {
-				 readOnlyVar(_path.node.left.name);
-			}
+				readOnlyVar(_path.node.left.name);
+				if(_path.node.right.type == "ArrayExpression")
+				{
+					var _a = arrayExpression(_path.node.right);
+					_path.node.right = babel.parse(_a.getter + "();");
+				}
+				else if(_path.node.right.type == "ObjectExpression")
+				{
+					var _objAssign = "";
+					for(var i = 0; i < _path.node.right.properties.length; i++)
+					{
+						_objAssign += objectExpression(_path.node.right.properties[i], _path.node.left.name);
+					}
+					
+					_path.insertAfter(babel.parse(_objAssign));
+					_path.node.right = babel.parse("__NJS_Create_Object()");
+				}
+			 }
+
+			 
 		  },
 		  CallExpression(_path)
 		  {
-			  if(_path.node.callee && _path.node.callee.name)
-			  {
-				  if(COMPILER.INFO.CACHE[_path.node.callee.name])
-				  {
-					var _p = _path.getStatementParent();
-					_p.insertBefore(babel.parse(COMPILER.INFO.CACHE[_path.node.callee.name]));
-				  }
-			  }
 			  var _new = callExpression(_path.node);
 			  if(_new.length > 0) _path.replaceWithSourceString(_new);
 		  },

@@ -1,3 +1,4 @@
+
 function a(_str)
 {
 	function _twice()

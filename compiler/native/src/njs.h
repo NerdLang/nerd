@@ -805,6 +805,7 @@ __NJS_VAR __NJS_Object_Set(__NJS_VAR _index, __NJS_VAR _value, __NJS_VAR _array)
 
 	_array.get().a->__NJS_VALUE.at(_index.get().i) = _value;
 
+	__NJS_Object_Set((char*)"length", (int)_array.get().a->__NJS_VALUE.size(), &_array.get().a->__OBJECT);
 	return __NJS_VAR();
     
   }
@@ -1043,7 +1044,7 @@ __NJS_Class_Array::__NJS_Class_Array()
   __NJS_VAR toString = __NJS_VAR(__NJS_FUNCTION, __OBJ_TO___NJS_STRING);
   __NJS_Object_Set((char*)"toString", toString, &this->__OBJECT);
   
-  __NJS_Object_Set((char*)"length", __NJS_VAR(0), &this->__OBJECT);
+  __NJS_Object_Set((char*)"length", 0, &this->__OBJECT);
 }
 
 __NJS_Class_Object::__NJS_Class_Object()

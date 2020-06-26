@@ -191,6 +191,7 @@ function Compiler()
 		VALUE: [],
 		CALL: {},
 		SCOPE: {},
+		HOISTING: [],
 	};
 
 	if(this.ENV.stdlib)
@@ -218,7 +219,6 @@ function Compiler()
 	this.Parse = function(_code)
 	{
 		
-		
 		if(CLI.cli["--preset"] && CLI.cli["--preset"].argument == "speed") 
 		{
 			_code = babel.transformSync(_code, 
@@ -226,6 +226,11 @@ function Compiler()
 			  plugins: [path.join(NECTAR_PATH, "node_modules", "babel-plugin-remove-unused-vars"), path.join(NECTAR_PATH, "node_modules", "babel-plugin-minify-dead-code-elimination"),path.join(NECTAR_PATH, "node_modules",  "babel-plugin-minify-guarded-expressions")],
 			}).code;
 		}
+
+		if(!CLI.cli["--no-check"]) LINT(_code, this.IN);
+
+		_code = hoistingFunction(_code);
+
 		_code = genRequire(_handler.PATH, COMPILER.STD) + genRequire(_handler.PATH, _code);
 
 		COMPILER.STATE = "REQUIRE";
@@ -236,20 +241,26 @@ function Compiler()
 		COMPILER.REQUIRE = createAnon(COMPILER.REQUIRE);
 		
 		COMPILER.STATE = "CODE";
-		_code = preloadFunction(_code);
-		if(!CLI.cli["--no-check"]) LINT(_code, this.IN);
-
+		
 		_handler.CODE = babel.transformSync(_code, visitor).code;
 		checkFastFunction();
 		_handler.CODE = createClass(_handler.CODE, true);
 		_handler.CODE = createFunction(_handler.CODE, true);
 		_handler.CODE = createAnon(_handler.CODE, true);
 		
+		var _hoisting = "";
+		for(var i = 0; i < COMPILER.INFO.HOISTING.length; i++)
+		{
+			_hoisting += "var " + COMPILER.INFO.HOISTING[i] + ";";
+		}
+		_handler.CODE = _hoisting + _handler.CODE;
+
 		COMPILER.INIT += COMPILER.REQUIRE;
 		
-		function preloadFunction(_code)
+		function hoistingFunction(_code)
 		{	
-			var _searchFN = new RegExp(/function *(.[a-zA-Z0-9_\-]*) *\((.*)\)/);
+			var _hoisting = "";
+			var _searchFN = new RegExp(/function +(.[a-zA-Z0-9_\-]*) *\((.*)\)/);
 			var _index = _code.search(_searchFN);
 			while(_index > -1)
 			{
@@ -271,9 +282,7 @@ function Compiler()
 							_count--;
 							if(_count == 0)
 							{
-								var _func = _code.substring(_index, _end + 1);
-								COMPILER.INFO.CACHE[_match[1]] = _func;
-								COMPILER.ENV.check.globals[_match[1]] = false;
+								_hoisting += _code.substring(_index, _end + 1) + "\n";
 								_code = _code.slice(0, _index) + _code.slice(_end + 1);
 								break;
 							}
@@ -281,7 +290,28 @@ function Compiler()
 				}
 				_index = _code.search(_searchFN);
 			}
-			return _code;
+			
+			return _hoisting + _code;
+		}
+
+		function hoistingVar(_code)
+		{
+			var _hoisting = "";
+			var _name = [];
+			var _searchFN = new RegExp(/(var) +(.[a-zA-Z0-9_\-]*)( +=|;|$)/);
+			var _index = _code.search(_searchFN);
+			while(_index > -1)
+			{
+				let _match = _searchFN.exec(_code);
+				if(_name.indexOf(_match[2]) < 0)
+				{
+					_name.push(_match[2]);
+					_hoisting += _match[1] + " " + _match[2] + ";\n";
+				}
+				_code = _code.slice(0, _index) + _code.slice(_index + _match[1].length);
+				_index = _code.search(_searchFN);
+			}
+			return _hoisting + _code;
 		}
 		
 		function createFunction(_code, _scope)
@@ -289,7 +319,7 @@ function Compiler()
 			var _matchThis = new RegExp(/(| |{|,)__NJS_THIS([\.(";)]|$)/);
 			var _return = ";return __NJS_Create_Undefined();}";
 			var _returnThis = ";return __NJS_THIS;}";
-			var _searchFN = new RegExp(/function *(.[a-zA-Z0-9_\-]*) *\((.*)\)/);
+			var _searchFN = new RegExp(/function +(.[a-zA-Z0-9_\-]*) *\((.*)\)/);
 			var _index = _code.search(_searchFN);
 			while(_index > -1)
 			{
@@ -383,7 +413,7 @@ function Compiler()
 								if(!_FAST)
 								{
 									var _catch = "";
-									if(_scope) _catch = "=";
+									if(_scope) _catch = "&";
 									else if(_code.indexOf("'SCOPED_FUNCTION';") > -1) _catch = "=";
 									
 									var _fn = "{" + _getVar + _code.substring(_start + 1, _end);
@@ -430,7 +460,7 @@ function Compiler()
 			var _matchThis = new RegExp(/(| |{|,)__NJS_THIS([\.(";)]|$)/);
 			var _return = ";return __NJS_Create_Undefined();}";
 			var _returnThis = ";return __NJS_THIS;}";
-			var _searchFN = new RegExp(/function *__NJS_CLASS_(.[a-zA-Z0-9_\-]*) *\((.*)\)/);
+			var _searchFN = new RegExp(/function +__NJS_CLASS_(.[a-zA-Z0-9_\-]*) *\((.*)\)/);
 			var _index = _code.search(_searchFN);
 
 			while(_index > -1)
@@ -462,7 +492,7 @@ function Compiler()
 						else if(_code[i] == "}")
 						{
 							var _catch = "";
-							if(_scope) _catch = "=";
+							if(_scope) _catch = "&";
 							else if(_code.indexOf("'SCOPED_FUNCTION';") > -1) _catch = "=";
 
 							_end = i;
@@ -501,7 +531,7 @@ function Compiler()
 		{	
 			var _matchThis = new RegExp(/(| |{|,)__NJS_THIS([\.(";)]|$)/);
 			var _return = "return __NJS_Create_Undefined();}";
-			var _searchAnonFN = new RegExp(/(var)* *([a-zA-Z0-9_]*) *= *function *\(([a-zA-Z0-9_\-, ]*)\)/);
+			var _searchAnonFN = new RegExp(/(var)* *([a-zA-Z0-9_]*) *= *function +\(([a-zA-Z0-9_\-, ]*)\)/);
 			var _index = _code.search(_searchAnonFN);
 
 			while(_index > -1)
