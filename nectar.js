@@ -418,7 +418,11 @@ function Build(prepare)
 		
     /*** PREPARE SRC ***/
     var _libOut = _tmp;
-    if(COMPILER.ENV.prepare) _libOut = COMPILER.ENV.prepare(_tmp);
+    if(COMPILER.ENV.prepare)
+    {
+      var _tmpLibOut = COMPILER.ENV.prepare(_tmp);
+      if(_tmpLibOut) _libOut = _tmpLibOut;
+    }
 
 		COMPILER.Prepare(_libOut);
 

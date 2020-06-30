@@ -19,19 +19,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-
+https://api.github.com/repos/ARMmbed/mbed-os/zipball/mbed-os-6.1.0
 var STM32 =
 {
   name: "stm32",
   main: "stm32.cpp",
-  cli: function(compiler, preset, out, target, option)
+  cli: function(compiler, preset, out, _in, option)
   {
-	  return `cp -r $(pwd)/extern/mbos/mbed-os $(dirname __IN__)/mbed-os\ && cp $(pwd)/extern/mbos/mbed-os.lib $(dirname __IN__)/mbed-os.lib && \
-      cp $(pwd)/extern/mbos/mbed_settings.py $(dirname __IN__)/mbed_settings.py && \
-      cp $(pwd)/profile/stm32.json $(dirname __IN__)/stm32.json  \
-      && cd $(dirname __IN__) && __COMPILER__ compile --target __TARGET__ --toolchain GCC_ARM --profile stm32.json > res.txt && mv $(dirname __IN__)/BUILD/__TARGET__/GCC_ARM/$(basename $(dirname __IN__)).bin  __OUT__`;
+    if(!COMPILER.TARGET) 
+    {
+      console.log("[!] Error: please specify a target with --target");
+      process.exit(1);
+    }
 
+	  return `${compiler} compile -t ${COMPILER.TARGET} --toolchain GCC_ARM --profile profile/stm32.json > res.txt && mv ./BUILD/${COMPILER.TARGET}/GCC_ARM/${COMPILER.TARGET}.bin  ${out}`;
   },
+  prepare: function(_folder)
+    {
+        copyDirSync(path.join(NECTAR_PATH, "extern", "stm32"), _folder, true);
+    },
   compiler: "mbed",
   stdlib:["stm32"],
   check: {
