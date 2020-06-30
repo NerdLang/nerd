@@ -111,9 +111,18 @@ function objectExpression(_path, _name)
 		}
 		_code += "__NJS_Object_Set(\"" + _path.key.value + "\"," + _subRND + "," + _name + ");"
 	}
+	else if(_path.value.type == "MemberExpression")
+	{
+		_value = memberExpression(_path.value);
+	}
+	else if(_path.value.type == "BooleanLiteral")
+	{
+		_value = _path.value.value;
+	}
 	else
 	{
 	  console.log("Visitor objectExpression not implemented yet for " + _path.value.type);
+	  process.exit(0);
 	}
 	if(_value) _code += "__NJS_Object_Set(\"" + _key + "\"," + _value + "," + _name + ");"
 	return _code;

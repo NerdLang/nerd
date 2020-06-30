@@ -593,6 +593,17 @@ struct __NJS_VAR
 			}
 			return false;
 		}
+
+	__NJS_VAR operator!=(const char* _v1)
+	{
+		if(type != __NJS_STRING) return false;
+		else
+		{
+			if(strcmp(get().s->__NJS_VALUE.c_str(), _v1) == 0) return false;
+			else return true;
+		}
+
+	}
 		
 		__NJS_VAR operator<(const __NJS_VAR& _v1)
 		{
