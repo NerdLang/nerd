@@ -55,7 +55,7 @@ void drawNative(char* str)
 void njsCallback(WKWebView *wkWV, NSString* nString)
 {
     globalWK = wkWV;
-    __NJS_Call_Function(__NJS_Object_Get("onEvent", iOS), [nString UTF8String]);
+    __NJS_Call_Function(__NJS_Object_Get("onEvent", Nectar), [nString UTF8String]);
 }
 
 void loadedCallback(WKWebView *wkWV)
