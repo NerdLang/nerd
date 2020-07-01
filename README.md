@@ -211,3 +211,8 @@ You can select a preset (speed or size) with:
 * .substring(start, end)
 * .substr(start, end)
 * .replace(needle, str)
+
+# Array
+
+* .length
+* .push(value)
