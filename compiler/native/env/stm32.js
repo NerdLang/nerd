@@ -46,7 +46,7 @@ var STM32 =
     rmdir(_mbosSrc);
   },
   compiler: "mbed",
-  stdlib:["stm32"],
+  stdlib:[{bind: "Nectar", module: "stm32"}],
   check: {
       "env": {
           "node": true
@@ -67,10 +67,11 @@ var STM32 =
       "globals":
       {
         "__njs_typeof":false,
-        "stm32": false,
+        "Nectar": false,
         "module": false,
         "__NJS_Object_Keys": false,
         "__NJS_Call_Function": false,
+        "__NJS_Log_Console": false,
       }
   }
 }

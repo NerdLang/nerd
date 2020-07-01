@@ -485,7 +485,7 @@ function Build(prepare)
     if(COMPILER.ENV.write) COMPILER.ENV.write(COMPILER.MAIN);
 		else fs.writeFileSync(_cout, COMPILER.MAIN);
 
-		if(!QUIET) console.log("[*] Compiling with preset " + COMPILER.preset);
+		if(!QUIET) console.log("[*] Compiling with preset: " + COMPILER.preset);
 		try 
 		{
 			COMPILER.Compile(_tmp, _cout);
