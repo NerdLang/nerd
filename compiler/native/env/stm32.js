@@ -1,10 +1,10 @@
 /*
  * This file is part of NectarJS
- * Copyright (c) 2020 Adrien THIERRY
- * http://nectarjs.com - https://nectrium.com
+ * Copyright (c) 2017 - 2020 Adrien THIERRY
+ * http://nectarjs.com - https://seraum.com/
  *
  * sources : https://github.com/nectarjs/nectarjs
- *
+ * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
