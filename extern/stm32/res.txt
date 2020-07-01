@@ -1,0 +1,45 @@
+Building project stm32 (NUCLEO_F446RE, GCC_ARM)
+Scan: stm32
+Compile [100.0%]: stm32.cpp
+[Warning] njs.h@747,41: __VA_ARGS__ can only appear in the expansion of a C++11 variadic macro
+[Warning] njs.h@747,60: __VA_ARGS__ can only appear in the expansion of a C++11 variadic macro
+[Warning] stm32.cpp@63,5: character constant too long for its type
+[Warning] stm32.cpp@94,5: character constant too long for its type
+[Warning] stm32.cpp@103,5: character constant too long for its type
+[Warning] njs.h@811,40: comparison of integer expressions of different signedness: 'std::vector<__NJS_VAR>::size_type' {aka 'unsigned int'} and 'int' [-Wsign-compare]
+[Warning] njs.h@849,23: comparison of integer expressions of different signedness: 'int' and 'std::vector<__NJS_VAR>::size_type' {aka 'unsigned int'} [-Wsign-compare]
+[Warning] njs.h@911,8: unused variable '_new' [-Wunused-variable]
+[Warning] stm32.h@5,28: 'void wait(float)' is deprecated: 'wait' is deprecated in favor of explicit sleep functions. To sleep, 'wait' should be replaced by 'ThisThread::sleep_for' (C++) or 'thread_sleep_for' (C). If you wish to wait (without sleeping), call 'wait_us'. 'wait_us' is safe to call from ISR context. [since mbed-os-5.14] [-Wdeprecated-declarations]
+[Warning] stm32.h@5,28: 'void wait(float)' is deprecated: 'wait' is deprecated in favor of explicit sleep functions. To sleep, 'wait' should be replaced by 'ThisThread::sleep_for' (C++) or 'thread_sleep_for' (C). If you wish to wait (without sleeping), call 'wait_us'. 'wait_us' is safe to call from ISR context. [since mbed-os-5.14] [-Wdeprecated-declarations]
+[Warning] stm32.cpp@63,5: statement has no effect [-Wunused-value]
+[Warning] stm32.cpp@94,5: statement has no effect [-Wunused-value]
+[Warning] stm32.cpp@103,5: statement has no effect [-Wunused-value]
+Link: stm32
+Elf2Bin: stm32
+| Module                          |      .text |    .data |      .bss |
+|---------------------------------|------------|----------|-----------|
+| [fill]                          |     46(+0) |   13(+0) |    29(+0) |
+| [lib]/c.a                       |  71192(+0) | 2574(+0) |   127(+0) |
+| [lib]/gcc.a                     |   7196(+0) |    0(+0) |     0(+0) |
+| [lib]/misc                      |    188(+0) |    4(+0) |    28(+0) |
+| [lib]/nosys.a                   |     32(+0) |    0(+0) |     0(+0) |
+| [lib]/stdc++.a                  | 179892(+0) |  145(+0) |  5724(+0) |
+| drivers/source                  |    128(+0) |    0(+0) |     0(+0) |
+| hal/mbed_critical_section_api.o |     60(+0) |    0(+0) |     2(+0) |
+| hal/mbed_gpio.o                 |     44(+0) |    0(+0) |     0(+0) |
+| hal/mbed_pinmap_common.o        |    136(+0) |    0(+0) |     0(+0) |
+| hal/mbed_ticker_api.o           |   1796(+0) |    0(+0) |     0(+0) |
+| hal/mbed_us_ticker_api.o        |     32(+0) |    4(+0) |    64(+0) |
+| hal/mpu                         |    112(+0) |    0(+0) |     0(+0) |
+| hal/static_pinmap.o             |     12(+0) |    0(+0) |     0(+0) |
+| nectar/stm32.o                  |  40436(+0) |    4(+0) | 12153(+0) |
+| platform/source                 |   2988(+0) |  260(+0) |   220(+0) |
+| rtos/source                     |   7700(+0) |  168(+0) |  5973(+0) |
+| targets/TARGET_STM              |   9086(+0) |    4(+0) |   552(+0) |
+| Subtotals                       | 321076(+0) | 3176(+0) | 24872(+0) |
+Total Static RAM memory (data + bss): 28048(+0) bytes
+Total Flash memory (text + data): 324252(+0) bytes
+
+Image: ./BUILD/NUCLEO_F446RE/GCC_ARM-SPEED/stm32.bin
+[mbed] Working path "/home/vsonline/workspace/nectarjs/extern/stm32" (library)
+[mbed] Program path "/home/vsonline/workspace/nectarjs/extern/stm32"

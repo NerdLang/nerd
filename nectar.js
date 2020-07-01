@@ -485,7 +485,7 @@ function Build(prepare)
     if(COMPILER.ENV.write) COMPILER.ENV.write(COMPILER.MAIN);
 		else fs.writeFileSync(_cout, COMPILER.MAIN);
 
-		if(!QUIET) console.log("[*] Compiling");
+		if(!QUIET) console.log("[*] Compiling with preset " + COMPILER.preset);
 		try 
 		{
 			COMPILER.Compile(_tmp, _cout);
@@ -523,6 +523,11 @@ function Build(prepare)
 		}
     catch(e){}
     
+    if(COMPILER.ENV.clean && typeof COMPILER.ENV.clean == "function")
+    {
+      COMPILER.ENV.clean();
+    }
+
 		if(verb && bin)
 		{
 			console.log("[+] Compilation done\n");

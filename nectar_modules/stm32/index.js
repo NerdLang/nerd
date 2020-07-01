@@ -1,4 +1,4 @@
-//!_ffi_include "lib/stm32.h"
+"!_ffi_include lib/stm32.h";
 
 var STM32 =
 {

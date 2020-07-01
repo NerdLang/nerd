@@ -25,7 +25,7 @@
  * and feel free to contact us.
  *
  */
- 
+
  #include <iostream>
  #include <string>
  #include <cstring>

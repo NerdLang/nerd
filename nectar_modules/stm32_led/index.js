@@ -1,4 +1,4 @@
-//!_ffi_include "lib/stm32_led.h"
+"!_ffi_include lib/stm32_led.h";
 
 var STM32_LED =
 {

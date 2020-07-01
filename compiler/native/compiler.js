@@ -601,6 +601,10 @@ function Compiler()
 			}
 			if(this.TARGET.substring(0, 4) == "nano") _reg = 50;
 		}
+		else if(this.ENV.name == "stm32")
+		{
+			_reg = 1000;
+		}
 
 
 		if(CLI.cli["--register"]) setRegister(CLI.cli["--register"].argument);

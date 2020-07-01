@@ -6,7 +6,6 @@
 *.hex
 *.wasm
 *.asm.js
-tools/
 
 # Logs
 logs
@@ -126,3 +125,9 @@ dist
 .yarn/unplugged
 .yarn/build-state.yml
 .pnp.*
+
+
+# MBEDOS
+
+extern/stm32/BUILD/
+__pycache__

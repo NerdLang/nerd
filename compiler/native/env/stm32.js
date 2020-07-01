@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-https://api.github.com/repos/ARMmbed/mbed-os/zipball/mbed-os-6.1.0
+
 var STM32 =
 {
   name: "stm32",
@@ -31,13 +31,20 @@ var STM32 =
       console.log("[!] Error: please specify a target with --target");
       process.exit(1);
     }
+    
+    var _mbosSrc = path.join(NECTAR_PATH, "extern", "stm32", "mbed-os", "nectar");
+    copyDirSync(COMPILER.TMP_FOLDER, _mbosSrc, true);
 
-	  return `${compiler} compile -t ${COMPILER.TARGET} --toolchain GCC_ARM --profile profile/stm32.json > res.txt && mv ./BUILD/${COMPILER.TARGET}/GCC_ARM/${COMPILER.TARGET}.bin  ${out}`;
+    var _profile = "SIZE";
+    if(COMPILER.preset == "speed") _profile = "SPEED";
+
+	  return `cd ${path.join(NECTAR_PATH, "extern", "stm32")} && ${compiler} compile -m ${COMPILER.TARGET} --profile ${path.join(NECTAR_PATH, "extern", "stm32", "profile", _profile + ".json")} -t GCC_ARM > res.txt && mv ${path.join(NECTAR_PATH, "extern", "stm32", "BUILD", COMPILER.TARGET, "GCC_ARM-" + _profile)}/stm32.bin ${out}`;
   },
-  prepare: function(_folder)
-    {
-        copyDirSync(path.join(NECTAR_PATH, "extern", "stm32"), _folder, true);
-    },
+  clean: function()
+  {
+    var _mbosSrc = path.join(NECTAR_PATH, "extern", "stm32", "mbed-os", "nectar");
+    rmdir(_mbosSrc);
+  },
   compiler: "mbed",
   stdlib:["stm32"],
   check: {

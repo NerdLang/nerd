@@ -1,0 +1,16 @@
+{
+    "macros": [
+        "NDEBUG=1",
+        "OS_TASKCNT=1",
+        "OS_IDLESTKSIZE=32",
+        "OS_STKSIZE=1",
+        "OS_TIMERS=0",
+        "OS_FIFOSZ=4",
+        "OS_MUTEXCNT=1"
+    ],
+    "target_overrides": {
+        "*": {
+            "platform.stdio-flush-at-exit": false
+        }
+    }
+}
