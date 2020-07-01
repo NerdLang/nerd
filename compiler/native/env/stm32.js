@@ -38,7 +38,7 @@ var STM32 =
     var _profile = "SIZE";
     if(COMPILER.preset == "speed") _profile = "SPEED";
 
-	  return `cd ${path.join(NECTAR_PATH, "extern", "stm32")} && ${compiler} compile -m ${COMPILER.TARGET} --profile ${path.join(NECTAR_PATH, "extern", "stm32", "profile", _profile + ".json")} -t GCC_ARM > res.txt && mv ${path.join(NECTAR_PATH, "extern", "stm32", "BUILD", COMPILER.TARGET, "GCC_ARM-" + _profile)}/stm32.bin ${out}`;
+	  return `cd ${path.join(NECTAR_PATH, "extern", "stm32")} && ${compiler} compile -m ${COMPILER.TARGET} --profile ${path.join(NECTAR_PATH, "extern", "stm32", "profile", _profile + ".json")} -t GCC_ARM > stm32_debug_res.txt && mv ${path.join(NECTAR_PATH, "extern", "stm32", "BUILD", COMPILER.TARGET, "GCC_ARM-" + _profile)}/stm32.bin ${out}`;
   },
   clean: function()
   {
