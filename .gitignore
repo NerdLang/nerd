@@ -131,3 +131,4 @@ dist
 
 extern/stm32/BUILD/
 __pycache__
+extern/stm32/res.txt
