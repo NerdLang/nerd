@@ -7,17 +7,12 @@ var fs = require("fs-std");
 var process = require("process");
 
 var inputFile = fs.readFileSync(process.argv[2]);
-var output = '{"items": [';
-var first = true;
-inputFile = inputFile.toString();
-inputFile = inputFile.split("\n");
+var output = {};
+output.items = [];
+inputFile = inputFile.toString().split("\n");
+
 for(var i = 0; i < inputFile.length; i++) {
   if(inputFile[i] != "") {
-    if(!first) {
-      output += ",";
-    } else {
-      first = false;
-    }
     var subitem = {
           uid: inputFile[i],
           type: "",
@@ -31,8 +26,8 @@ for(var i = 0; i < inputFile.length; i++) {
               path: "~/Desktop"
           }
       };
-    output += JSON.stringify(subitem);
+    output.items.push(subitem);
   }
 }
 
-console.log(output + "]}");
+console.log(JSON.stringify(output));

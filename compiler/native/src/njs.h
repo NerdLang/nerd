@@ -911,13 +911,16 @@ __NJS_Class_String::__NJS_Class_String(char* _value)
 	char* _new;
 	while (ptr != NULL)
 	{
-		char* _new = (char*)malloc(strlen(ptr));
+		_new = (char*)malloc(strlen(ptr) + 1);
 		strcpy(_new, ptr);
 		__NJS_Object_Set(i, _new, _arr);
-		
+		free(_new);
 		ptr = strtok(NULL, delim);
 		i++;
 	}
+
+	free(delim);
+	return _arr; 
 	
 	return _arr; 
   });

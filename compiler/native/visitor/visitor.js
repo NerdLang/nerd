@@ -107,7 +107,7 @@ function objectExpression(_path, _name)
 		_code += "var " + _subRND + " = __NJS_Create_Object();";
 		for(var i = 0; i < _path.value.properties.length; i++)
 		{
-			_code += objectExpression(_path.value.properties[0], _subRND); 
+			_code += objectExpression(_path.value.properties[i], _subRND); 
 		}
 		_code += "__NJS_Object_Set(\"" + _path.key.value + "\"," + _subRND + "," + _name + ");"
 	}
@@ -170,7 +170,6 @@ function memberExpression(_path)
 			_setter = _setter.replace("{{PROPERTY}}", _p);
 		}
 	}
-
 	return _setter;
 }
 
@@ -203,9 +202,10 @@ function callExpression(_path)
 	  return "";
 	}
 	var prop = [];
+
 	var _obj = _path.callee;
 
-	while(_obj)
+	function whileObj(_obj)
 	{
 		if(_obj.property) 
 		{
@@ -215,11 +215,20 @@ function callExpression(_path)
 				else prop.push("\"" + _obj.property.name + "\"");
 			}
 			else if(_obj.property && _obj.property.extra) prop.push(_obj.property.extra.raw);
+			
 		}
+		if(_obj.type == "CallExpression")
+		{
+			prop.push(callExpression(_obj));
+		}
+		
+		if(_obj.object) whileObj(_obj.object);
 		if(_obj.name) prop.push(_obj.name);
-		if(_obj.object) _obj=_obj.object;
-		else { _obj = null; break; }
+		
+		
 	}
+	whileObj(_obj);
+
 	var _caller = "{{PROPERTY}}";
 	for(var i = 0; i < prop.length; i++)
 	{
