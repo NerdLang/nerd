@@ -141,6 +141,20 @@ NectarJS will then compile your app and launch it with the simulator.
 
 To test your configuration, you can compile example/ios.js app.
 
+# STM32 compilation
+
+To compile SMT32 firmware with NectarJS, you need first to instal mbed-cli and to setup your environment:
+
+`https://os.mbed.com/docs/mbed-os/v6.0/build-tools/install-and-set-up.html`
+
+Once done, compile your code by selecting the stm32 env, and choosing a target: 
+
+`nectar example/stm32.js --env stm32 --target NUCLEO_F446RE`
+
+You can select a preset (speed or size) with:
+
+`--preset speed` or `--preset size`
+
 # Compatibility targets/platforms :
 
 * All supported GCC platforms
@@ -184,6 +198,8 @@ To test your configuration, you can compile example/ios.js app.
 
 * nucleo-l432kc
 
+* nucleo-f446re
+
 # String
 
 * .length
@@ -195,3 +211,8 @@ To test your configuration, you can compile example/ios.js app.
 * .substring(start, end)
 * .substr(start, end)
 * .replace(needle, str)
+
+# Array
+
+* .length
+* .push(value)
