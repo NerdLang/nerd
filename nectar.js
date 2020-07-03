@@ -33,7 +33,7 @@ global.process = require('process');
 global.querystring = require('querystring');
 global.child_process = require('child_process');
 global.execSync = child_process.execSync;
-global.extern = path.join(__dirname, "extern");
+global.extern = path.join(__dirname, "node_modules", "nectarjs_external");
 global.NJS_ENV = {};
 
 global.PACKAGE = require(path.join(__dirname, "package.json"));
@@ -43,8 +43,6 @@ var CONFIGFILE = CONFIGPATH + "/" + "nectar.json";
 global.CONFIG = {};
 Init();
 readConfig();
-
-
 
 var parseCLI = require('./base/cli/cliParser.js');
 var coreHttp = require('./base/util/httpUtils.js');
@@ -371,6 +369,24 @@ function Build(prepare)
   
   if(!env) env = "std";
 
+  if(env != "std")
+  {
+    var _external = false;
+    try 
+    {
+      var _external = require("nectarjs_extarnal")
+    }
+    catch(e)
+    {
+      
+    }
+    if(!_external)
+    {
+      console.log("You need to install the package nectarjs_external to use this environment: ");
+      console.log("npm i nectarjs_external");
+      process.exit(0);
+    }
+  }
 	var target;
   if(CLI.cli["--target"] && CLI.cli["--target"].argument) target = CLI.cli["--target"].argument;
 	COMPILER.TARGET = target;
