@@ -32,17 +32,17 @@ var STM32 =
       process.exit(1);
     }
     
-    var _mbosSrc = path.join(NECTAR_PATH, "extern", "stm32", "mbed-os", "nectar");
+    var _mbosSrc = path.join(extern, "stm32", "mbed-os", "nectar");
     copyDirSync(COMPILER.TMP_FOLDER, _mbosSrc, true);
 
     var _profile = "SIZE";
     if(COMPILER.preset == "speed") _profile = "SPEED";
 
-	  return `cd ${path.join(NECTAR_PATH, "extern", "stm32")} && ${compiler} compile -m ${COMPILER.TARGET} --profile ${path.join(NECTAR_PATH, "extern", "stm32", "profile", _profile + ".json")} -t GCC_ARM > stm32_debug_res.txt && mv ${path.join(NECTAR_PATH, "extern", "stm32", "BUILD", COMPILER.TARGET, "GCC_ARM-" + _profile)}/stm32.bin ${out}`;
+	  return `cd ${path.join(extern, "stm32")} && ${compiler} compile -m ${COMPILER.TARGET} --profile ${path.join(extern, "stm32", "profile", _profile + ".json")} -t GCC_ARM > stm32_debug_res.txt && mv ${path.join(extern, "stm32", "BUILD", COMPILER.TARGET, "GCC_ARM-" + _profile)}/stm32.bin ${out}`;
   },
   clean: function()
   {
-    var _mbosSrc = path.join(NECTAR_PATH, "extern", "stm32", "mbed-os", "nectar");
+    var _mbosSrc = path.join(extern, "stm32", "mbed-os", "nectar");
     rmdir(_mbosSrc);
   },
   compiler: "mbed",

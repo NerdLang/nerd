@@ -72,7 +72,8 @@ if(CLI.error)
 }
 
 var ACTION = "build";
-if(CLI.cli["--help"] || CLI.cli["-h"]) ACTION = "help";
+if(CLI.cli["--install_external"]) ACTION = "installExternal";
+else if(CLI.cli["--help"] || CLI.cli["-h"]) ACTION = "help";
 else if(CLI.cli["--example"] || CLI.cli["--examples"]) ACTION = "example";
 else if(CLI.cli["--version"] || CLI.cli["-v"]) ACTION = "version";
 else if(CLI.cli["--project"]) ACTION = "showproject";
@@ -83,6 +84,9 @@ else if(CLI.cli["--reinit"]) ACTION = "reinitconfig";
 
 switch(ACTION)
 {
+  case "installExternal":
+    installExternal();
+  break;
   case "version":
     showVersion();
     break;
@@ -122,6 +126,15 @@ switch(ACTION)
   default:
     Help();
     break;
+}
+
+function installExternal()
+{
+  console.log("[*] Installing external dependencies...")
+  process.chdir(NECTAR_PATH);
+  execSync("npm r nectarjs_external");
+  execSync("npm i nectarjs_external");
+  console.log("[+] External dependencies installed")
 }
 
 function getExampleFiles (dir, list)
@@ -374,7 +387,7 @@ function Build(prepare)
     var _external = false;
     try 
     {
-      var _external = require("nectarjs_extarnal")
+      var _external = require("nectarjs_external")
     }
     catch(e)
     {
@@ -383,7 +396,7 @@ function Build(prepare)
     if(!_external)
     {
       console.log("You need to install the package nectarjs_external to use this environment: ");
-      console.log("npm i nectarjs_external");
+      console.log("nectar --install_external");
       process.exit(0);
     }
   }

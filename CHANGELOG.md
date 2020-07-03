@@ -2,6 +2,9 @@
 * Variadic function support
 * WASM support
 * Low memory support
+* Add STM32 supports
+* Move extern to nectarjs_external module
+* Add chaining functions
 
 ## VERSION 0.5.X
 * Adding memory management and cleaning without GC
