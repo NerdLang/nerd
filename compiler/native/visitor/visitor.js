@@ -109,7 +109,7 @@ function objectExpression(_path, _name)
 		{
 			_code += objectExpression(_path.value.properties[i], _subRND); 
 		}
-		_code += "__NJS_Object_Set(\"" + _path.key.value + "\"," + _subRND + "," + _name + ");"
+		_code += "__NJS_Object_Set(\"" + _key + "\"," + _subRND + "," + _name + ");"
 	}
 	else if(_path.value.type == "MemberExpression")
 	{
