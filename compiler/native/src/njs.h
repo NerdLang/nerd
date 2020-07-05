@@ -765,10 +765,10 @@ int __NJS_Get_Int(__NJS_VAR _v)
   return _v.get().i;
 }
 
-string __NJS_Get_String(__NJS_VAR _v)
+char* __NJS_Get_String(__NJS_VAR _v)
 {
-  if(_v.type != __NJS_STRING) return "";
-  return _v.get().s->__NJS_VALUE;
+  if(_v.type != __NJS_STRING) return (char*)"";
+  return _v.get().s->__NJS_VALUE.c_str();
 }
 
 __NJS_VAR __NJS_Typeof(__NJS_VAR _var)
