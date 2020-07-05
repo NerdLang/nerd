@@ -79,7 +79,7 @@ class __NJS_Class_String
   public:
 	int cnt = 0;
 	void Delete();
-    __NJS_Class_String(char* _str);
+    __NJS_Class_String(string _str);
     string __NJS_VALUE;
 	vector<pair<char*, __NJS_VAR>> __OBJECT;
 };
@@ -331,14 +331,14 @@ struct __NJS_VAR
 		{
 			setPtr();
 			type = __NJS_STRING;
-			REGISTER[_ptr].s = new __NJS_Class_String((char*)_value.c_str());
+			REGISTER[_ptr].s = new __NJS_Class_String(_value);
 		}
 		
 		__NJS_VAR (const char* _value)
 		{
 			setPtr();
 			type = __NJS_STRING;
-			REGISTER[_ptr].s = new __NJS_Class_String((char*)_value);
+			REGISTER[_ptr].s = new __NJS_Class_String(_value);
 		}
 		
 		__NJS_VAR (__NJS_Class_Array* _value)
@@ -880,7 +880,7 @@ __NJS_VAR __NJS_Object_Get(__NJS_VAR _index, __NJS_VAR _array)
   __NJS_RETURN_UNDEFINED;
 }
 
-__NJS_Class_String::__NJS_Class_String(char* _value)
+__NJS_Class_String::__NJS_Class_String(string _value)
 {
 	cnt++;
 	/*** toString ***/
@@ -890,7 +890,7 @@ __NJS_Class_String::__NJS_Class_String(char* _value)
 	/*** end to string ***/
 	
 	/*** length ***/
-  __NJS_Object_Set((char*)"length", __NJS_VAR((int)strlen(_value)), &this->__OBJECT);
+  __NJS_Object_Set((char*)"length", __NJS_VAR((int)_value.size()), &this->__OBJECT);
 	/*** end length ***/
 	
   /*** split ***/
@@ -898,7 +898,7 @@ __NJS_Class_String::__NJS_Class_String(char* _value)
   { 
 	  var _needle;
 	  if(__NJS_VARARGS.size() > 0) _needle = __NJS_VARARGS[0];
-	  else return __NJS_VAR(this->__NJS_VALUE.c_str());
+	  else return __NJS_VAR(this->__NJS_VALUE);
 
 	__NJS_VAR _arr = __NJS_Create_Array();
     char* _v = (char*)malloc(strlen(this->__NJS_VALUE.c_str()) + 1);
@@ -995,7 +995,7 @@ __NJS_Class_String::__NJS_Class_String(char* _value)
   { 
 	var _start; var _end;
 	if(__NJS_VARARGS.size() > 0) _start = __NJS_VARARGS[0];
-	else return  __NJS_VAR(this->__NJS_VALUE.c_str());
+	else return  __NJS_VAR(this->__NJS_VALUE);
 	if(__NJS_VARARGS.size() > 1) _end = __NJS_VARARGS[1];
 
 	if(_end.type == __NJS_UNDEFINED) return __NJS_VAR(this->__NJS_VALUE.substr( _start.get().i, string::npos).c_str());
@@ -1014,11 +1014,11 @@ __NJS_Class_String::__NJS_Class_String(char* _value)
   { 
 	var _start; var _end;
 	if(__NJS_VARARGS.size() > 0) _start = __NJS_VARARGS[0];
-	else return  __NJS_VAR(this->__NJS_VALUE.c_str());
+	else return  __NJS_VAR(this->__NJS_VALUE);
 	if(__NJS_VARARGS.size() > 1) _end = __NJS_VARARGS[1];
 
-	if(_end.type == __NJS_UNDEFINED) return __NJS_VAR(this->__NJS_VALUE.substr( _start.get().i, string::npos).c_str());
-	return __NJS_VAR(this->__NJS_VALUE.substr( _start.get().i, _end.get().i ).c_str());
+	if(_end.type == __NJS_UNDEFINED) return __NJS_VAR(this->__NJS_VALUE.substr( _start.get().i, string::npos));
+	return __NJS_VAR(this->__NJS_VALUE.substr( _start.get().i, _end.get().i ));
   });
   
   __NJS_VAR __substr = __NJS_VAR(__NJS_FUNCTION, __OBJ_TO___NJS_SUBSTR);
@@ -1031,7 +1031,7 @@ __NJS_Class_String::__NJS_Class_String(char* _value)
   { 
 	var _search; var _replace;
 	if(__NJS_VARARGS.size() > 0) _search = __NJS_VARARGS[0];
-	else return  __NJS_VAR(this->__NJS_VALUE.c_str());
+	else return  __NJS_VAR(this->__NJS_VALUE);
 	if(__NJS_VARARGS.size() > 1) _replace = __NJS_VARARGS[1];
 
 	size_t start_pos = this->__NJS_VALUE.find(_search.get().s->__NJS_VALUE);
@@ -1039,7 +1039,7 @@ __NJS_Class_String::__NJS_Class_String(char* _value)
 	{
         return var(this->__NJS_VALUE.c_str());
 	}
-    return var(this->__NJS_VALUE.replace(start_pos, _search.get().s->__NJS_VALUE.length(), _replace.get().s->__NJS_VALUE).c_str());
+    return var(this->__NJS_VALUE.replace(start_pos, _search.get().s->__NJS_VALUE.length(), _replace.get().s->__NJS_VALUE));
   });
   
   __NJS_VAR __replace = __NJS_VAR(__NJS_FUNCTION, __OBJ_TO___NJS_REPLACE);

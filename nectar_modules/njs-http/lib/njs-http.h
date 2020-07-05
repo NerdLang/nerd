@@ -70,30 +70,32 @@ var __NJS_HTTP_LISTEN(var _host, var _port, var _cb, var _opt)
     // GET DATA
     if (request.is_multipart_form_data()) 
     {
-		__NJS_Object_Set((char*)"isMultipart", true, _req);
-		var _multi = __NJS_Create_Object();
-		
+      __NJS_Object_Set((char*)"isMultipart", true, _req);
+      var _multi = __NJS_Create_Object();
+
       MultipartFormDataItems files;
       content_reader(
-        [&](const MultipartFormData &file) 
-        {
-          files.push_back(file);
-          return true;
-        },
-        [&](const char *data, size_t data_length) 
-        {
-          files.back().content.append(data, data_length);
-          MultipartFormData _f = files.back();
-          var _file = __NJS_Create_Object();
-          
-          __NJS_Object_Set((char*)"data", _f.content, _file);
-          __NJS_Object_Set((char*)"mime", _f.content_type, _file);
-          
-          __NJS_Object_Set((char*)_f.filename.c_str(), _file, _multi);
-          
-          return true;
-        });
-        __NJS_Object_Set((char*)"data", _multi, _req);
+              [&](const MultipartFormData &file)
+              {
+                      files.push_back(file);
+                      return true;
+              },
+              [&](const char *data, size_t data_length)
+              {
+                      files.back().content.append(data, data_length);
+                      return true;
+              }
+      );
+
+      for (const auto &file : files)
+      {
+        var _file = __NJS_Create_Object();
+        __NJS_Object_Set((char*)"body", __NJS_Create_String(file.content), _file);
+        __NJS_Object_Set((char*)"mime", file.content_type, _file);
+        
+        __NJS_Object_Set(file.name, _file, _multi);
+      }
+      __NJS_Object_Set((char*)"data", _multi, _req);
     } 
     else 
     {
@@ -134,30 +136,32 @@ var __NJS_HTTP_LISTEN(var _host, var _port, var _cb, var _opt)
     // GET DATA
     if (request.is_multipart_form_data()) 
     {
-		__NJS_Object_Set((char*)"isMultipart", true, _req);
-		var _multi = __NJS_Create_Object();
-		
+      __NJS_Object_Set((char*)"isMultipart", true, _req);
+      var _multi = __NJS_Create_Object();
+
       MultipartFormDataItems files;
       content_reader(
-        [&](const MultipartFormData &file) 
-        {
-          files.push_back(file);
-          return true;
-        },
-        [&](const char *data, size_t data_length) 
-        {
-          files.back().content.append(data, data_length);
-          MultipartFormData _f = files.back();
-          var _file = __NJS_Create_Object();
-          
-          __NJS_Object_Set((char*)"data", _f.content, _file);
-          __NJS_Object_Set((char*)"mime", _f.content_type, _file);
-          
-          __NJS_Object_Set((char*)_f.filename.c_str(), _file, _multi);
-          
-          return true;
-        });
-        __NJS_Object_Set((char*)"data", _multi, _req);
+              [&](const MultipartFormData &file)
+              {
+                      files.push_back(file);
+                      return true;
+              },
+              [&](const char *data, size_t data_length)
+              {
+                      files.back().content.append(data, data_length);
+                      return true;
+              }
+      );
+
+      for (const auto &file : files)
+      {
+        var _file = __NJS_Create_Object();
+        __NJS_Object_Set((char*)"body", __NJS_Create_String(file.content), _file);
+        __NJS_Object_Set((char*)"mime", file.content_type, _file);
+        
+        __NJS_Object_Set(file.name, _file, _multi);
+      }
+      __NJS_Object_Set((char*)"data", _multi, _req);
     } 
     else 
     {
