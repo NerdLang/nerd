@@ -42,7 +42,7 @@ enum __NJS_TYPE
 };
 
 /*** HELPERS ***/
-#define __NJS_GET_STRING(_var) _var.get().s->__NJS_VALUE.c_str()
+#define __NJS_GET_STRING(_var) _var.get().s->__NJS_VALUE
 #define var __NJS_VAR
 #define let __NJS_VAR
 #define __NJS_Create_Boolean(_value) __NJS_VAR(__NJS_BOOLEAN, _value)
@@ -252,7 +252,7 @@ struct __NJS_VAR
 			}
 			else if(type ==  __NJS_NATIVE)
 			{
-				REGISTER[_ptr].a->Delete();
+				REGISTER[_ptr].n->Delete();
 			}
 			FREE[++FREE_PTR] = _ptr;
 		}

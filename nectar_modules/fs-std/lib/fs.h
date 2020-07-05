@@ -28,6 +28,7 @@
 
 #include <unistd.h>
 #include <stdio.h>
+#include <fstream>
 
 function __NJS_fs_readFileSync(_name)
 { 
@@ -39,7 +40,7 @@ function __NJS_fs_readFileSync(_name)
 
   if(fp == NULL)
   {
-    return __NJS_Create_String((char*)"");
+    return __NJS_Create_String("");
   }
 
   fseek(fp, 0L, SEEK_END);
@@ -58,47 +59,34 @@ function __NJS_fs_readFileSync(_name)
 
 function __NJS_fs_writeFileSync(_name, _content)
 {
-  FILE* fp = fopen(__NJS_Get_String(_name), "w");
-
-  if(fp == NULL)
+  std::ofstream myfile;
+  myfile.open (__NJS_Get_String(_name), ios::out | ios::trunc | ios::binary);
+  if(!myfile.is_open())
   {
-    return __NJS_Create_String((char*)"");
-  }
-  int resultat = fwrite(__NJS_Get_String(_content), 1, strlen(__NJS_Get_String(_content)), fp);
-
-  fclose(fp);
-
-  if(resultat != strlen(__NJS_Get_String(_content)))
-  {
+    myfile.close();
     return __NJS_Create_Boolean(0);
   }
-  else
-  {
-    return __NJS_Create_Boolean(1);
-  }
+
+  myfile << __NJS_Get_String(_content);
+  myfile.close();
+
+  return __NJS_Create_Boolean(1);
 };
 
 function __NJS_fs_appendFileSync(_name, _content)
 {
-  FILE* fp = fopen(__NJS_Get_String(_name), "a");
-
-  if(fp == NULL)
+  std::ofstream myfile;
+  myfile.open (__NJS_Get_String(_name), ios::out | ios::app | ios::binary);
+  if(!myfile.is_open())
   {
-    return __NJS_Create_String((char*)"");
-  }
-
-  int resultat = fwrite(__NJS_Get_String(_content), 1, strlen(__NJS_Get_String(_content)), fp);
-
-  fclose(fp);
-
-  if(resultat != strlen(__NJS_Get_String(_content)))
-  {
+    myfile.close();
     return __NJS_Create_Boolean(0);
   }
-  else
-  {
-    return __NJS_Create_Boolean(1);
-  }
+
+  myfile << __NJS_Get_String(_content);
+  myfile.close();
+
+  return __NJS_Create_Boolean(1);
 };
 
 function __NJS_fs_unlinkSync(_name)

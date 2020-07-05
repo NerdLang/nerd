@@ -86,7 +86,6 @@ var __NJS_HTTP_LISTEN(var _host, var _port, var _cb, var _opt)
                       return true;
               }
       );
-
       for (const auto &file : files)
       {
         var _file = __NJS_Create_Object();

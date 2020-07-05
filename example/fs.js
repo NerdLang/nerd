@@ -3,7 +3,8 @@ var fs = require("fs-std");
 var file = "fs.txt";
 
 var write = fs.writeFileSync(file, "Some content");
-if(write)
+var append = fs.appendFileSync(file, "\nContent added");
+if(write && append)
 {
 	console.log("[+] File '" + file + "' written.");
 	var content = fs.readFileSync(file);
@@ -11,6 +12,7 @@ if(write)
 	console.log("[+] File content: ");
 	console.log(content);
 	
+
 	console.log("[*] Removing file");
 	fs.unlinkSync(file);
 }
