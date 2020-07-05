@@ -271,7 +271,7 @@ struct __NJS_VAR
 			else if(_v.type == __NJS_STRING)
 			{
 				
-				REGISTER[_ptr].s = new __NJS_Class_String(strdup(REGISTER[_v._ptr].s->__NJS_VALUE.c_str()));
+				REGISTER[_ptr].s = new __NJS_Class_String(REGISTER[_v._ptr].s->__NJS_VALUE);
 
 			}
 			else if(_v.type == __NJS_FUNCTION)
@@ -406,7 +406,7 @@ struct __NJS_VAR
 			}
 			else if(_v.type == __NJS_STRING)
 			{
-				REGISTER[_ptr].s = new __NJS_Class_String(strdup(REGISTER[_v._ptr].s->__NJS_VALUE.c_str()));
+				REGISTER[_ptr].s = new __NJS_Class_String(REGISTER[_v._ptr].s->__NJS_VALUE);
 			}
 			else if(_v.type == __NJS_FUNCTION)
 			{

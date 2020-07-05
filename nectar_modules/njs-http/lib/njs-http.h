@@ -90,7 +90,7 @@ var __NJS_HTTP_LISTEN(var _host, var _port, var _cb, var _opt)
       for (const auto &file : files)
       {
         var _file = __NJS_Create_Object();
-        __NJS_Object_Set((char*)"body", __NJS_Create_String(file.content), _file);
+        __NJS_Object_Set((char*)"body", file.content, _file);
         __NJS_Object_Set((char*)"mime", file.content_type, _file);
         
         __NJS_Object_Set(file.name, _file, _multi);
@@ -156,7 +156,7 @@ var __NJS_HTTP_LISTEN(var _host, var _port, var _cb, var _opt)
       for (const auto &file : files)
       {
         var _file = __NJS_Create_Object();
-        __NJS_Object_Set((char*)"body", __NJS_Create_String(file.content), _file);
+        __NJS_Object_Set((char*)"body", file.content, _file);
         __NJS_Object_Set((char*)"mime", file.content_type, _file);
         
         __NJS_Object_Set(file.name, _file, _multi);
