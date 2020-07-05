@@ -36,7 +36,7 @@ function __NJS_fs_readFileSync(_name)
 
   int resultat = 1;
 
-  fp = fopen(__NJS_Get_String(_name), "r");
+  fp = fopen(__NJS_Get_String(_name).c_str(), "r");
 
   if(fp == NULL)
   {
@@ -59,15 +59,12 @@ function __NJS_fs_readFileSync(_name)
 
 function __NJS_fs_writeFileSync(_name, _content)
 {
-  std::ofstream myfile;
-  myfile.open (__NJS_Get_String(_name), ios::out | ios::trunc);
-  if(!myfile.is_open())
+  std::ofstream myfile(__NJS_Get_String(_name).c_str(), ios::out | ios::trunc | ios::binary);
+  if(!myfile)
   {
-    myfile.close();
     return __NJS_Create_Boolean(0);
   }
-
-  myfile << __NJS_Get_String(_content);
+  myfile.write(_content.get().s->__NJS_VALUE.c_str(), _content.get().s->__NJS_VALUE.size());
   myfile.close();
 
   return __NJS_Create_Boolean(1);
@@ -75,15 +72,12 @@ function __NJS_fs_writeFileSync(_name, _content)
 
 function __NJS_fs_appendFileSync(_name, _content)
 {
-  std::ofstream myfile;
-  myfile.open (__NJS_Get_String(_name), ios::out | ios::app);
-  if(!myfile.is_open())
+  std::ofstream myfile(__NJS_Get_String(_name).c_str(), ios::out | ios::app | ios::binary);
+  if(!myfile)
   {
-    myfile.close();
     return __NJS_Create_Boolean(0);
   }
-
-  myfile << __NJS_Get_String(_content);
+  myfile.write(_content.get().s->__NJS_VALUE.c_str(), _content.get().s->__NJS_VALUE.size());
   myfile.close();
 
   return __NJS_Create_Boolean(1);
@@ -91,18 +85,18 @@ function __NJS_fs_appendFileSync(_name, _content)
 
 function __NJS_fs_unlinkSync(_name)
 {
-  unlink(__NJS_Get_String(_name));
+  unlink(__NJS_Get_String(_name).c_str());
   return __NJS_Create_Boolean(1);
 };
 
 function __NJS_fs_rmdirSync(_name)
 {
-  rmdir(__NJS_Get_String(_name));
+  rmdir(__NJS_Get_String(_name).c_str());
   return __NJS_Create_Boolean(1);
 };
 
 function __NJS_fs_removeSync(_name)
 {
-  remove(__NJS_Get_String(_name));
+  remove(__NJS_Get_String(_name).c_str());
   return __NJS_Create_Boolean(1);
 };
