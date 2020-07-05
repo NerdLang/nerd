@@ -60,7 +60,7 @@ function __NJS_fs_readFileSync(_name)
 function __NJS_fs_writeFileSync(_name, _content)
 {
   std::ofstream myfile;
-  myfile.open (__NJS_Get_String(_name), ios::out | ios::trunc | ios::binary);
+  myfile.open (__NJS_Get_String(_name), ios::out | ios::trunc);
   if(!myfile.is_open())
   {
     myfile.close();
@@ -76,7 +76,7 @@ function __NJS_fs_writeFileSync(_name, _content)
 function __NJS_fs_appendFileSync(_name, _content)
 {
   std::ofstream myfile;
-  myfile.open (__NJS_Get_String(_name), ios::out | ios::app | ios::binary);
+  myfile.open (__NJS_Get_String(_name), ios::out | ios::app);
   if(!myfile.is_open())
   {
     myfile.close();
