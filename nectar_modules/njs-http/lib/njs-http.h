@@ -38,16 +38,23 @@ var __NJS_HTTP_LISTEN(var _host, var _port, var _cb, var _opt)
 	});
 	var __f_NJS_HTTP_RES_END = __NJS_Create_Function(__NJS_HTTP_RES_END);
 
-    var _req = __NJS_Create_Object();
-    __NJS_Object_Set((char*)"method", "GET", _req);
-    __NJS_Object_Set((char*)"url", request.path, _req);
+	var _req = __NJS_Create_Object();
+	__NJS_Object_Set((char*)"method", "GET", _req);
+	__NJS_Object_Set((char*)"url", request.path, _req);
     
-    var _res = __NJS_Create_Object();
+	var _query = __NJS_Create_Object();
+	for (auto it = request.params.begin(); it != request.params.end(); ++it)
+	{
+	  __NJS_Object_Set(it->first, it->second, _query);
+	}
+	__NJS_Object_Set((char*)"get", _query, _req);
+	  
+	var _res = __NJS_Create_Object();
 
-    __NJS_Object_Set((char*)"end", __f_NJS_HTTP_RES_END, _res);
-    
-    __NJS_Call_Function(_cb, _req, _res);
-    return var();
+	__NJS_Object_Set((char*)"end", __f_NJS_HTTP_RES_END, _res);
+
+	__NJS_Call_Function(_cb, _req, _res);
+	return var();
   });
   
   /*** LOAD POST ***/
