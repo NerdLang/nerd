@@ -45,10 +45,17 @@ function __NJS_NATIVE_CONNECT_MYSQL(_auth, _schema, _coll)
 
     function _mysql_add(_json)
     {
-      "SCOPED_FUNCTION";
-      coll.add(__NJS_Get_String(_json)).execute();
-      var _result = __NJS_Create_Boolean(1);
-      return _result;
+      "SCOPED_FUNCTION";                                                                                                    
+      try
+      {                                                                                                                       
+        coll.add(__NJS_Get_String(_json)).execute();
+        var _result = __NJS_Create_Boolean(1);
+        return _result;
+      }
+      catch(const std::exception& e)
+      {
+        return __NJS_Create_Boolean(0);
+      }
     };
     
    function _mysql_modify(_obj)
@@ -77,8 +84,10 @@ function __NJS_NATIVE_CONNECT_MYSQL(_auth, _schema, _coll)
     {
       "SCOPED_FUNCTION";
       var _result = __NJS_Create_Array();
-      std::list<DbDoc> dbList = coll.find(__NJS_Get_String(_request)).execute().fetchAll();
-
+      std::list<DbDoc> dbList;
+      if(_request) dbList = coll.find(__NJS_Get_String(_request)).execute().fetchAll();
+      else dbList = coll.find().execute().fetchAll();
+      
       int i = 0;
       std::list<DbDoc>::iterator it;
       stringstream s;
