@@ -59,9 +59,21 @@ For help, use `--help`
 
 * You need to have GCC installed on your machine and registered in your path to compile.
 
+## Windows
+
 You can install Mingw for Windows here : https://osdn.net/projects/mingw/downloads/68260/mingw-get-setup.exe/
 
+You can also install Linux for Windows and use a linux system on Windows
+
+## Linux
+
 On linux, you can install it with your distro (apt install gcc, yum install gcc, ...)
+
+## Apple iOS
+
+You can install xCode and you are ready.
+
+## First compilation
 
 ```
 nectar -b native file.js
