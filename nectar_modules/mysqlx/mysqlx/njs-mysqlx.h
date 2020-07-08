@@ -98,7 +98,7 @@ function __NJS_NATIVE_CONNECT_MYSQL(_auth, _schema, _coll)
         it->print(s);
         i++;
       }
-      s << "], \"code\":0}";
+      s << "], \"code\":0, \"length\":" << dbList.size() << "}";
       std::string _str = std::string(s.str());
       var _data = _str.c_str();
       return _data;
