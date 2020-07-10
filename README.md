@@ -65,9 +65,9 @@ You can install Mingw for Windows here : https://osdn.net/projects/mingw/downloa
 
 You can also install Linux for Windows and use a linux system on Windows
 
-## Linux
+## Linux / FreeBSD
 
-On linux, you can install it with your distro (apt install gcc, yum install gcc, ...)
+On Linux or FreeBSD, you can install it with your distro (apt install gcc, yum install gcc, ...). You can use GCC, CLANG, or any derivative of those compilers (arm-gcc ...)
 
 ## Apple iOS
 
