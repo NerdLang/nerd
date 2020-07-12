@@ -2,6 +2,7 @@ package com.nectarjs.nectar_android_app;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.os.Bundle;
@@ -11,10 +12,12 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 
 public class MainActivity extends AppCompatActivity
@@ -28,11 +31,11 @@ public class MainActivity extends AppCompatActivity
         System.loadLibrary("native-lib");
     }
 
-    private boolean isFirstLaunch() {
+    private String checkVersion() {
         // Restore preferences
         SharedPreferences settings = getSharedPreferences("NECTAR_APP_PREF", 0);
-        boolean isFirstLaunch = settings.getBoolean("isFirstLaunch", true);
-        return isFirstLaunch;
+        String version = settings.getString("version", "");
+        return version;
     }
 
     class NectarInterface {
@@ -48,11 +51,12 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private void copyAssets() {
+    private void copyAssets(String base) {
+        Log.d("Copying:", base);
         AssetManager assetManager = getAssets();
         String[] files = null;
         try {
-            files = assetManager.list("raw");
+            files = assetManager.list(base);
         } catch (IOException e) {
             Log.e("tag", "Failed to get asset file list.", e);
         }
@@ -61,45 +65,67 @@ public class MainActivity extends AppCompatActivity
 
         }catch (Exception e){}
 
-        final File newFile = new File(getFilesDir() + "/raw");
+        final File newFile = new File(getFilesDir() + "/" + base);
         newFile.mkdir();
 
-        if (files != null) for (String filename : files) {
-            InputStream in = null;
-            OutputStream out = null;
-            try {
-                in = assetManager.open("raw/" + filename);
-                File outFile = new File(getFilesDir() + "/raw/", filename);
-                Log.d("file:", getFilesDir() + "/raw/" + filename);
-                out = new FileOutputStream(outFile);
-                copyFile(in, out);
-            } catch(IOException e) {
-                Log.e("tag", "Failed to copy asset file: " + filename, e);
+        if (files != null) for (String filename : files)
+        {
+            File isDir = new File(base + "/" + filename);
+            if (!isDir.exists()) {
+                copyAssets(base + "/" + filename);
             }
-            finally {
-                if (in != null) {
-                    try {
-                        in.close();
-                    } catch (IOException e) {
-                        // NOOP
+            else {
+                InputStream in = null;
+                OutputStream out = null;
+                try {
+                    in = assetManager.open(base + "/" + filename);
+                    File outFile = new File(getFilesDir() + "/" + base + "/", filename);
+                    Log.d("file:", getFilesDir() + "/" + base + "/" + filename);
+                    out = new FileOutputStream(outFile);
+                    copyFile(in, out);
+                } catch(Exception e) {
+                    Log.e("tag", "Failed to copy asset file: " + filename, e);
+                } finally {
+                    if (in != null) {
+                        try {
+                            in.close();
+                        } catch (IOException e) {
+                            // NOOP
+                        }
                     }
-                }
-                if (out != null) {
-                    try {
-                        out.close();
-                    } catch (IOException e) {
-                        // NOOP
+                    if (out != null) {
+                        try {
+                            out.close();
+                        } catch (IOException e) {
+                            // NOOP
+                        }
                     }
                 }
             }
         }
     }
-    private void copyFile(InputStream in, OutputStream out) throws IOException {
+    private synchronized void copyFile(InputStream in, OutputStream out) throws IOException {
         byte[] buffer = new byte[1024];
         int read;
         while((read = in.read(buffer)) != -1){
             out.write(buffer, 0, read);
         }
+    }
+
+    public static String loadAssetFile(Context context, String fileName) {
+        try {
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(context.getAssets().open(fileName)));
+            StringBuilder out= new StringBuilder();
+            String eachline = bufferedReader.readLine();
+            while (eachline != null) {
+                out.append(eachline);
+                eachline = bufferedReader.readLine();
+            }
+            return out.toString();
+        } catch (IOException e) {
+            Log.e("Load Asset File",e.toString());
+        }
+        return null;
     }
 
     @Override
@@ -112,15 +138,16 @@ public class MainActivity extends AppCompatActivity
         mainWebView.setWebViewClient(new WebViewClient());
         WebSettings webSettings = mainWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
-		webSettings.setDomStorageEnabled(true);
-		webSettings.setDatabaseEnabled(true);
+        webSettings.setDomStorageEnabled(true);
         mainWebView.addJavascriptInterface(new NectarInterface(), "Nectar");
 
-        if (isFirstLaunch()) {
-            copyAssets();
+        String _version = loadAssetFile(this, "raw/version.txt");
+        Log.d("Version", checkVersion() + " : " + _version);
+        if (!checkVersion().equals(_version)) {
+            copyAssets("raw");
             SharedPreferences settings = getSharedPreferences("NECTAR_APP_PREF", 0);
             SharedPreferences.Editor editor = settings.edit();
-            editor.putBoolean("isFirstLaunch", false);
+            editor.putString("version", _version);
             editor.commit();
         }
 
