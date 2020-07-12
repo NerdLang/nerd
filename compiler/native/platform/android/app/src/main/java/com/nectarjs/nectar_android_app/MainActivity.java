@@ -112,6 +112,8 @@ public class MainActivity extends AppCompatActivity
         mainWebView.setWebViewClient(new WebViewClient());
         WebSettings webSettings = mainWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
+		webSettings.setDomStorageEnabled(true);
+		webSettings.setDatabaseEnabled(true);
         mainWebView.addJavascriptInterface(new NectarInterface(), "Nectar");
 
         if (isFirstLaunch()) {
