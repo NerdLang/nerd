@@ -40,6 +40,8 @@
  using namespace std;
 
  #include "njs.h"
+ #include "httplib.h"
+ 
  using namespace NECTAR;
  
 JNIEnv* globalEnv;
@@ -49,6 +51,15 @@ void drawJNI(char* _str)
 {
     jclass mainClass = globalEnv->GetObjectClass(mainObject);
     jmethodID _draw        = globalEnv->GetMethodID(mainClass, "drawNectar",
+                                                    "(Ljava/lang/String;)V");
+    jstring _html = globalEnv->NewStringUTF(_str);
+    globalEnv->CallVoidMethod(mainObject, _draw, _html);
+}
+
+void navigateJNI(char* _str)
+{
+    jclass mainClass = globalEnv->GetObjectClass(mainObject);
+    jmethodID _draw        = globalEnv->GetMethodID(mainClass, "navigateNectar",
                                                     "(Ljava/lang/String;)V");
     jstring _html = globalEnv->NewStringUTF(_str);
     globalEnv->CallVoidMethod(mainObject, _draw, _html);
@@ -71,6 +82,22 @@ Java_com_nectarjs_nectar_1android_1app_MainActivity_callbackFromJNI(
     __NJS_Call_Function(__NJS_Object_Get("onEvent", Nectar), nString);
     env->ReleaseStringUTFChars(_str, nString);
     
+}
+
+extern "C" JNIEXPORT void JNICALL
+Java_com_nectarjs_nectar_1android_1app_MainActivity_serveFromJNI(
+        JNIEnv* env,
+        jobject thiz) {
+
+    globalEnv = env;
+    mainObject = thiz;
+
+    using namespace httplib;
+
+    Server svr;
+    svr.set_mount_point("/", "/data/user/0/com.nectarjs.nectar_android_app/files/raw/");
+    svr.listen("localhost", 12001);
+
 }
 
 extern "C" JNIEXPORT void JNICALL

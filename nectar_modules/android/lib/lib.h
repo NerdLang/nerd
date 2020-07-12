@@ -31,3 +31,8 @@ function __NJS_ANDROID_DRAW(_value)
 { 
 	drawJNI(__NJS_Get_String(_value));
 }
+
+function __NJS_ANDROID_NAVIGATE(_value)
+{ 
+	navigateJNI(__NJS_Get_String(_value));
+}

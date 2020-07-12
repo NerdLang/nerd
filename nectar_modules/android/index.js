@@ -31,6 +31,8 @@
 var _android = 
 {
 	draw: __NJS_ANDROID_DRAW,
+	navigate: __NJS_ANDROID_NAVIGATE,
+	app_path: "http://localhost:12001/",
 };
 
 module.exports = _android;

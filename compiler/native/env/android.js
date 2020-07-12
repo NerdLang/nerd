@@ -103,6 +103,11 @@ var ANDROID =
     },
     prepare: function(_folder)
     {
+		var _www = path.join(path.resolve(path.dirname(COMPILER.IN)), "www");
+		if(fs.existsSync(_www))
+		{
+			copyDirSync(_www, path.join(_folder, "app", "src", "main", "assets", "raw"), true);
+		}
         var _name = path.basename(COMPILER.IN).split(".")[0];
         fs.writeFileSync(path.join(_folder, "local.properties"), `ndk.dir=${CONFIG.ndk}\nsdk.dir=${CONFIG.sdk}\ngradle=build -x lint -x lintVitalRelease\n`);
         fs.writeFileSync(path.join(_folder, "settings.gradle"), `rootProject.name='nectar_android_app'\ninclude ':app'\n`);

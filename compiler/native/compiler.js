@@ -230,7 +230,7 @@ function Compiler()
 		if(!CLI.cli["--no-check"]) LINT(_code, this.IN);
 
 		_code = hoistingFunction(_code);
-
+		
 		_code = genRequire(_handler.PATH, COMPILER.STD) + genRequire(_handler.PATH, _code);
 
 		COMPILER.STATE = "REQUIRE";

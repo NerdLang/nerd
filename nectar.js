@@ -508,11 +508,18 @@ function Build(prepare)
 		if(!QUIET) console.log("[*] Generating source file");
 	
 		var _code = fs.readFileSync(path.resolve(_in)).toString();
+
 		if(ext == "ts") _code = compileTS(_code, _in);
 		COMPILER.Parse(_code);
     
     if(COMPILER.ENV.write) COMPILER.ENV.write(COMPILER.MAIN);
 		else fs.writeFileSync(_cout, COMPILER.MAIN);
+
+		if(CLI.cli["--generate"])
+		{
+			if(!QUIET) console.log("[*] Source generated in " + path.dirname(_cout));
+			process.exit(0);
+		}
 
 		if(!QUIET) console.log("[*] Compiling with preset: " + COMPILER.preset);
 		try 

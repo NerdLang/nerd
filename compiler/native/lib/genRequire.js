@@ -27,6 +27,7 @@
  */
 
 var genInclude = require("./genInclude.js");
+var strip = require("strip-comments");
 module.exports = genRequire;
 var fs = require("fs");
 
@@ -97,7 +98,7 @@ function addModuleLib(_lib, modSource)
 function genRequire(from, src)
 {
   // strip comments
-  src = src.replace(/\/\*[\s\S]*?\*\/|\/\/.*/g,'');
+  src = strip(src);
   src = genPackage(from, src);
   var _SEARCH = new RegExp(/ *require\(['"](.*?)['"]\)/);
   var seek = ["require('", "require(\""];
