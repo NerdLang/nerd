@@ -2,8 +2,11 @@ package com.nectarjs.nectar_android_app;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -52,7 +55,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void copyAssets(String base) {
-        Log.d("Copying:", base);
         AssetManager assetManager = getAssets();
         String[] files = null;
         try {
@@ -60,56 +62,61 @@ public class MainActivity extends AppCompatActivity
         } catch (IOException e) {
             Log.e("tag", "Failed to get asset file list.", e);
         }
-        try
-        {
-
-        }catch (Exception e){}
 
         final File newFile = new File(getFilesDir() + "/" + base);
         newFile.mkdir();
 
-        if (files != null) for (String filename : files)
-        {
-            File isDir = new File(base + "/" + filename);
-            if (!isDir.exists()) {
+        if (files != null) for (String filename : files) {
+            InputStream in = null;
+            OutputStream out = null;
+            try {
+                Log.d("File", base + "/" + filename);
+                in = assetManager.open(base + "/" + filename);
+
+                File outFile = new File(getFilesDir() + "/" + base + "/", filename);
+                out = new FileOutputStream(outFile);
+                copyFile(in, out);
+            } catch(IOException e) {
+                Log.e("tag", "Failed to copy asset file: " + base + "/" + filename, e);
                 copyAssets(base + "/" + filename);
             }
-            else {
-                InputStream in = null;
-                OutputStream out = null;
-                try {
-                    in = assetManager.open(base + "/" + filename);
-                    File outFile = new File(getFilesDir() + "/" + base + "/", filename);
-                    Log.d("file:", getFilesDir() + "/" + base + "/" + filename);
-                    out = new FileOutputStream(outFile);
-                    copyFile(in, out);
-                } catch(Exception e) {
-                    Log.e("tag", "Failed to copy asset file: " + filename, e);
-                } finally {
-                    if (in != null) {
-                        try {
-                            in.close();
-                        } catch (IOException e) {
-                            // NOOP
-                        }
+            finally {
+                if (in != null) {
+                    try {
+                        in.close();
+                    } catch (IOException e) {
+                        // NOOP
                     }
-                    if (out != null) {
-                        try {
-                            out.close();
-                        } catch (IOException e) {
-                            // NOOP
-                        }
+                }
+                if (out != null) {
+                    try {
+                        out.close();
+                    } catch (IOException e) {
+                        // NOOP
                     }
                 }
             }
         }
     }
-    private synchronized void copyFile(InputStream in, OutputStream out) throws IOException {
-        byte[] buffer = new byte[1024];
-        int read;
-        while((read = in.read(buffer)) != -1){
-            out.write(buffer, 0, read);
+    private void copyFile(InputStream in, OutputStream out) throws IOException {
+        try {
+            byte[] buffer = new byte[1024];
+            int read;
+            while ((read = in.read(buffer)) != -1) {
+                out.write(buffer, 0, read);
+            }
         }
+        catch(Exception e){}
+    }
+
+    boolean deleteDirectory(File directoryToBeDeleted) {
+        File[] allContents = directoryToBeDeleted.listFiles();
+        if (allContents != null) {
+            for (File file : allContents) {
+                deleteDirectory(file);
+            }
+        }
+        return directoryToBeDeleted.delete();
     }
 
     public static String loadAssetFile(Context context, String fileName) {
@@ -128,6 +135,15 @@ public class MainActivity extends AppCompatActivity
         return null;
     }
 
+    public static void triggerRebirth(Context context) {
+        PackageManager packageManager = context.getPackageManager();
+        Intent intent = packageManager.getLaunchIntentForPackage(context.getPackageName());
+        ComponentName componentName = intent.getComponent();
+        Intent mainIntent = Intent.makeRestartActivityTask(componentName);
+        context.startActivity(mainIntent);
+        Runtime.getRuntime().exit(0);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -144,22 +160,26 @@ public class MainActivity extends AppCompatActivity
         String _version = loadAssetFile(this, "raw/version.txt");
         Log.d("Version", checkVersion() + " : " + _version);
         if (!checkVersion().equals(_version)) {
+
+            deleteDirectory(new File(getFilesDir() + "/raw/"));
             copyAssets("raw");
             SharedPreferences settings = getSharedPreferences("NECTAR_APP_PREF", 0);
             SharedPreferences.Editor editor = settings.edit();
             editor.putString("version", _version);
             editor.commit();
+            triggerRebirth(this);
         }
+        else {
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    serveFromJNI();
+                }
+            });
+            thread.start();
 
-        Thread thread = new Thread(new Runnable(){
-            @Override
-            public void run(){
-                serveFromJNI();
-            }
-        });
-        thread.start();
-
-        callFromJNI();
+            callFromJNI();
+        }
     }
 
     public void drawNectar(final String _str)
@@ -177,7 +197,6 @@ public class MainActivity extends AppCompatActivity
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Log.d("navigate", _str);
                 mainWebView.loadUrl(_str);
             }
         });

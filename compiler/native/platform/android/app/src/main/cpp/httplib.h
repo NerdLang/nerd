@@ -78,7 +78,6 @@
 #define CPPHTTPLIB_RECV_BUFSIZ size_t(4096u)
 #endif
 
-#define CPPHTTPLIB_THREAD_POOL_COUNT 4
 #ifndef CPPHTTPLIB_THREAD_POOL_COUNT
 #define CPPHTTPLIB_THREAD_POOL_COUNT                                           \
   ((std::max)(8u, std::thread::hardware_concurrency() > 0                      \
