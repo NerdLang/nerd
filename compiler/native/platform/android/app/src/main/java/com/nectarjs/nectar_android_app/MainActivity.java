@@ -155,6 +155,9 @@ public class MainActivity extends AppCompatActivity
         WebSettings webSettings = mainWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webSettings.setDomStorageEnabled(true);
+		webSettings.setSupportZoom(false);
+		webSettings.setAllowFileAccess(true);
+		webSettings.setAllowContentAccess(true);
         mainWebView.addJavascriptInterface(new NectarInterface(), "Nectar");
 
         String _version = loadAssetFile(this, "raw/version.txt");
