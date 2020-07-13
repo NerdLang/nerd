@@ -27,6 +27,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
+import 	android.webkit.GeolocationPermissions;
 
 import java.io.BufferedReader;
 import java.io.File;
