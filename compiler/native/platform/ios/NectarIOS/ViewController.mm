@@ -7,13 +7,14 @@
 //
 
 #import "ViewController.h"
-#import "../ios.hpp"
+#import "ios.hpp"
 
-@interface ViewController ()
+@interface ViewController () <WKUIDelegate, WKNavigationDelegate>
 
 @end
 
 @implementation ViewController
+
 @synthesize webView;
 -(void) viewDidLoad {
     [super viewDidLoad];
@@ -32,7 +33,8 @@
 
     self.webView.backgroundColor = [UIColor whiteColor];
     self.webView.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
-
+    webView.UIDelegate = self;
+    webView.navigationDelegate = self;
     [self performSelectorInBackground:@selector(selLaunchServer) withObject:nil];
 
     [self.view addSubview:self.webView];
