@@ -32,6 +32,7 @@ var _ios =
 {
 	draw: __NJS_IOS_DRAW,
 	navigate: __NJS_IOS_NAVIGATE,
+	app_path: "http://localhost:12001/",
 };
 
 module.exports = _ios;
