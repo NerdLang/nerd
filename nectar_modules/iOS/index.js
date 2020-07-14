@@ -31,6 +31,7 @@
 var _ios = 
 {
 	draw: __NJS_IOS_DRAW,
+	navigate: __NJS_IOS_NAVIGATE,
 };
 
 module.exports = _ios;

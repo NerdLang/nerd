@@ -105,6 +105,16 @@ var IOS =
         }
         catch(e){}
     },
+	prepare: function(_folder)
+	{
+		var _www = path.join(path.resolve(path.dirname(COMPILER.IN)), "www");
+		if(fs.existsSync(_www))
+		{
+			copyDirSync(_www, path.join(_folder, "NectarIOS", "raw"), true);
+		}
+		
+		return path.join(_folder, "NectarIOS");
+	},
     cli: function(compiler, preset, out, _in, option)
     {
         var device = '';

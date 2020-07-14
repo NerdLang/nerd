@@ -31,3 +31,8 @@ function __NJS_IOS_DRAW(_value)
 { 
 	drawNative(__NJS_Get_String(_value));
 }
+
+function __NJS_IOS_NAVIGATE(_value)
+{ 
+	navigateNative(__NJS_Get_String(_value));
+}
