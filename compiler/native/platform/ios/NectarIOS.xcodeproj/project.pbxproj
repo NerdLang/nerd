@@ -18,6 +18,7 @@
 		8006A208248FA9110061160C /* njs.h in Sources */ = {isa = PBXBuildFile; fileRef = 8006A207248FA86E0061160C /* njs.h */; };
 		80CA7E3C248FF12000C4714E /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 80CA7E37248FF0CA00C4714E /* WebKit.framework */; };
 		80CA7E40248FF16000C4714E /* ios.hpp in Sources */ = {isa = PBXBuildFile; fileRef = 80CA7E3F248FF16000C4714E /* ios.hpp */; };
+		80E994AF24BDA9B1000E25D4 /* raw in Resources */ = {isa = PBXBuildFile; fileRef = 80E994AE24BDA9B1000E25D4 /* raw */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,6 +38,8 @@
 		8006A207248FA86E0061160C /* njs.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = njs.h; sourceTree = "<group>"; };
 		80CA7E37248FF0CA00C4714E /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		80CA7E3F248FF16000C4714E /* ios.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ios.hpp; sourceTree = "<group>"; };
+		80E994AE24BDA9B1000E25D4 /* raw */ = {isa = PBXFileReference; lastKnownFileType = folder; path = raw; sourceTree = "<group>"; };
+		80E994B024BDAA34000E25D4 /* httplib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = httplib.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,8 +77,10 @@
 			children = (
 				8006A207248FA86E0061160C /* njs.h */,
 				8006A1E4248F88600061160C /* AppDelegate.h */,
+				80E994B024BDAA34000E25D4 /* httplib.h */,
 				8006A1E5248F88600061160C /* AppDelegate.m */,
 				8006A1E7248F88600061160C /* SceneDelegate.h */,
+				80E994AE24BDA9B1000E25D4 /* raw */,
 				8006A1E8248F88610061160C /* SceneDelegate.m */,
 				8006A1EA248F88610061160C /* ViewController.h */,
 				8006A1EB248F88610061160C /* ViewController.mm */,
@@ -156,6 +161,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8006A1F4248F88610061160C /* LaunchScreen.storyboard in Resources */,
+				80E994AF24BDA9B1000E25D4 /* raw in Resources */,
 				8006A1F1248F88610061160C /* Assets.xcassets in Resources */,
 				8006A1EF248F88610061160C /* Main.storyboard in Resources */,
 			);
@@ -317,8 +323,10 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_CPP_STATIC_DESTRUCTORS = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				COMPILER_INDEX_STORE_ENABLE = Default;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = YES;
 				GCC_DYNAMIC_NO_PIC = YES;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
@@ -333,6 +341,7 @@
 				LLVM_LTO = YES_THIN;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nectarjs.NectarIOS;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SYSTEM_HEADER_SEARCH_PATHS = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -346,9 +355,11 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_CPP_STATIC_DESTRUCTORS = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				COMPILER_INDEX_STORE_ENABLE = Default;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = YES;
 				GCC_DYNAMIC_NO_PIC = YES;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
@@ -363,6 +374,7 @@
 				LLVM_LTO = YES_THIN;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nectarjs.NectarIOS;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SYSTEM_HEADER_SEARCH_PATHS = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

@@ -39,13 +39,39 @@
  using namespace std;
 
  #include "njs.h"
+ #include "httplib.h"
+ 
  using namespace NECTAR;
 
  WKWebView * globalWK;
 
+void launchServer()
+{
+    using namespace httplib;
+    CFBundleRef mainBundle = CFBundleGetMainBundle();
+    CFStringEncoding encodingMethod = CFStringGetSystemEncoding();
+    CFURLRef rawURL = CFBundleCopyResourceURL(mainBundle, CFSTR("raw"), NULL, NULL);
+    CFStringRef rawPath = CFURLCopyFileSystemPath(rawURL, kCFURLPOSIXPathStyle);
+
+    const char *path = CFStringGetCStringPtr(rawPath, encodingMethod);
+    var _path = path;
+    _path += "/";
+    Server svr;
+    svr.set_mount_point("/", __NJS_Get_String(_path));
+    svr.listen("localhost", 12001);
+}
+
 void drawNative(char* str)
 {
     [globalWK loadHTMLString:[NSString stringWithCString:str    encoding:[NSString defaultCStringEncoding]]  baseURL:nil];
+}
+
+void navigateNative(char* str)
+{
+    NSString *urlString = [NSString stringWithCString:str   encoding:[NSString defaultCStringEncoding]];
+    NSURL *url = [NSURL URLWithString:urlString];
+    NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url];
+    [globalWK loadRequest:urlRequest];
 }
 
  {INCLUDE}

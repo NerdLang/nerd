@@ -7,7 +7,7 @@
 //
 
 #import "ViewController.h"
-#import "../ios.hpp"
+#import "ios.hpp"
 
 @interface ViewController ()
 
@@ -33,6 +33,8 @@
     self.webView.backgroundColor = [UIColor whiteColor];
     self.webView.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
 
+    [self performSelectorInBackground:@selector(selLaunchServer) withObject:nil];
+
     [self.view addSubview:self.webView];
     loadedCallback(self.webView);
 }
@@ -41,4 +43,9 @@
         njsCallback(self.webView, message.body);
 }
     
+- (void) selLaunchServer
+{
+    launchServer();
+}
+
 @end
