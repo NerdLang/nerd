@@ -31,7 +31,7 @@
     "type": "git",
     "url": "git+ssh://git@github.com/NectarJS/nectar-modules.git"
   },
-  "version": "0.0.1",
+  "version": "0.0.2",
   "nectar":
   {
     "message":
