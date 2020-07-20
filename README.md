@@ -175,6 +175,11 @@ You can select a preset (speed or size) with:
 
 * All supported AVR-GCC platforms
 
+# Store 
+
+NectarJS compiled apps are tested to be publishable on :
+
+* Apple Store
 
 # Actively tested for :
 
