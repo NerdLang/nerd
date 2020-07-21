@@ -94,6 +94,7 @@ var STD =
         if(_stack) _stack = "-Wl,--stack," + _stack;
         else _stack = "";
         
+        var _sysVNetLibs = "";
         if(os.platform() == "sunos") _sysVNetLibs = "-lsocket -lnsl";
 
         if(preset == "none")
