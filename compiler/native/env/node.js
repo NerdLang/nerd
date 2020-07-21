@@ -86,8 +86,9 @@ var NODE =
 	var _uvParam = "";
 	if(os.platform() == "win32") _uvParam = `-D_WIN32_WINNT=0x0600 -Wno-narrowing  -D_GNU_SOURCE -I${extern}/libuv/include/ -I${extern}/libuv/src/ -D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE ${extern}/libuv/src/*.h ${extern}/libuv/src/*.c ${extern}/libuv/src/win/*.h ${extern}/libuv/src/win/*.c`;
 	
-	var _uvLib = "";
-	if(os.platform() == "win32") _uvLib = "-lm  -ladvapi32 -liphlpapi -lpsapi -lshell32 -luser32  -luserenv -lwsock32 -lws2_32";
+	var _uvLib = "-luv";
+	if(os.platform() == "win32") _uvLib += "-lm  -ladvapi32 -liphlpapi -lpsapi -lshell32 -luser32  -luserenv -lwsock32 -lws2_32";
+	if(os.platform() == "sunos") _uvLib += "-lkstat -lsendfile -lsocket -lnsl";
 	
 	if(_stack) _stack = "-Wl,--stack," + _stack;
     else _stack = "";
