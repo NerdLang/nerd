@@ -36,6 +36,17 @@ global.execSync = child_process.execSync;
 global.extern = path.join(__dirname, "node_modules", "nectarjs_external");
 global.NJS_ENV = {};
 
+try 
+ {
+    require("strip-comments");
+ }
+ catch(e)
+ {
+   process.chdir(__dirname);
+  child_process.execSync("npm i");
+ }
+
+
 global.PACKAGE = require(path.join(__dirname, "package.json"));
 global.VERSION = PACKAGE.version;
 var CONFIGPATH = os.homedir() + path.sep + ".nectar";
