@@ -42,8 +42,11 @@ try
  }
  catch(e)
  {
+   console.log("[*] First execution, installing core dependencies");
    process.chdir(__dirname);
   child_process.execSync("npm i");
+  console.log("[+] Core dependencies installed, please launch your command again");
+  process.exit(0);
  }
 
 
