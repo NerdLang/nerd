@@ -180,6 +180,7 @@ You can select a preset (speed or size) with:
 NectarJS compiled apps are tested to be publishable on :
 
 * Apple Store
+    * https://apps.apple.com/fr/app/hiphen-plant/id1523867733
 
 # Actively tested for :
 
