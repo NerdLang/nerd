@@ -204,6 +204,8 @@ NectarJS compiled apps are tested to be publishable on :
 
 * win-x86-64
 
+* Sun OS
+
 * arduino-nano
 
 * arduino-uno
