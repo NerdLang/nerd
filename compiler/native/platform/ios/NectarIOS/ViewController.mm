@@ -2,11 +2,11 @@
 //  ViewController.m
 //  NectarIOS
 //
-//  Created by user175602 on 6/9/20.
 //  Copyright © 2020 NectarJS. All rights reserved.
 //
 
 #import "ViewController.h"
+#include <sys/sysctl.h>
 #import "../ios.hpp"
 
 @interface ViewController () <WKUIDelegate, WKNavigationDelegate>
@@ -19,8 +19,14 @@
 -(void) viewDidLoad {
     [super viewDidLoad];
     
-    WKWebViewConfiguration *configuration = [[WKWebViewConfiguration alloc] init];
-    NSString *scriptString = @"function __NJS_fireiOSEvent(str){window.webkit.messageHandlers.notification.postMessage(str);}; window.Nectar = {fireEvent:__NJS_fireiOSEvent };";
+WKWebViewConfiguration *configuration = [[WKWebViewConfiguration alloc] init];
+    size_t size;
+    sysctlbyname("hw.machine", NULL, &size, NULL, 0);
+    char *model = (char*)malloc(size);
+    sysctlbyname("hw.machine", model, &size, NULL, 0);
+    NSString *deviceModel = [NSString stringWithCString:model encoding:NSUTF8StringEncoding];
+    free(model);
+    NSString *scriptString = [NSString stringWithFormat:@"%@%@/%@", @"function __NJS_fireiOSEvent(str){window.webkit.messageHandlers.notification.postMessage(str);}; window.Nectar = {fireEvent:__NJS_fireiOSEvent, model:\"", deviceModel, @"\" };"];
     
     WKUserScript *script = [[WKUserScript alloc] initWithSource:scriptString injectionTime:WKUserScriptInjectionTimeAtDocumentEnd forMainFrameOnly:YES];
     WKUserContentController* userController = [[WKUserContentController alloc] init];
