@@ -20,6 +20,19 @@
 	<string>1</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>Needed to take picture</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Your location is required</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Your location is required</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Your location is required</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
@@ -65,11 +78,5 @@
         <key>NSAllowsArbitraryLoads</key>
         <true/>
     </dict>
-    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-    <string>Your location is required</string>
-    <key>NSLocationAlwaysUsageDescription</key>
-    <string>Your location is required</string>
-    <key>NSLocationWhenInUseUsageDescription</key>
-    <string>Your location is required</string>
 </dict>
 </plist>
