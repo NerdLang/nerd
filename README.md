@@ -24,9 +24,9 @@ Some benchmarks with the file example/fibo.js and differents fibos arguments:
 
 |          | NodeJS v12.8.1 | QuickJS 2020-07-05 | NectarJS v0.6.104     |
 |----------|----------------|--------------------|-----------------------|
-| fibo(30) | 0.15s          | 0.20s              | **0.07s**             |
-| fibo(40) | 1.80s          | 21.06s             | **0.50s**             |
-| fibo(45) | 19.44s         | 238.85s            | **4.82s**             |
+| fibo(30) | 0.15s / 7.0Mb  | 0.20s / 1.1Mb      | **0.07s / 1.1Mb**     |
+| fibo(40) | 1.80s / 7.0Mb  | 21.06s / 1.1Mb     | **0.50s / 1.0Mb**     |
+| fibo(45) | 19.44s / 7.0Mb | 238.85s / 1.1Mb    | **4.82s / 1.0Mb**     |
 
 # Main objectives
 * Supporting EcmaScript 3 standard (then 5, 6 ...)
