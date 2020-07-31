@@ -8,7 +8,7 @@ Javascript's God Mode : one language to rule them all. Code everything, everywhe
 
 No VM. No Bytecode. No Garbage Collector. Full Compiled and Native binaries.
 
-Any questions or ideas, join us : [![NectarJS' IRC](https://img.shields.io/badge/chat-on%20freenode-brightgreen.svg)](https://kiwiirc.com/client/irc.freenode.net/#nectarjs)[![NectarJS' Discord](https://img.shields.io/badge/Discord-Join-brightgreen.svg)](https://discord.gg/cpe2UuN)   [![Trello](https://img.shields.io/badge/Trello-Join-brightgreen.svg)](https://trello.com/invite/b/6F4rvEj2/9d7677f9dc6b5bf2f5b33e45fc794182/nectarjs)
+Any questions or ideas, join us : [![NectarJS' IRC](https://img.shields.io/badge/chat-on%20freenode-brightgreen.svg)](https://kiwiirc.com/client/irc.freenode.net/#nectarjs)  [![NectarJS' Discord](https://img.shields.io/badge/Discord-Join-brightgreen.svg)](https://discord.gg/cpe2UuN) [![Trello](https://img.shields.io/badge/Trello-Join-brightgreen.svg)](https://trello.com/invite/b/6F4rvEj2/9d7677f9dc6b5bf2f5b33e45fc794182/nectarjs)  [![Quick Start](https://img.shields.io/badge/Doc-Quick%20Start-brightgreen.svg)](https://nectarjs.com/docs/nectarjs/quick-start/) [![Quick Hack](https://img.shields.io/badge/Doc-Quick%20Hack-orange.svg)](https://nectarjs.com/docs/nectarjs-for-developers/quick-hack/)
 
 <hr>
 
