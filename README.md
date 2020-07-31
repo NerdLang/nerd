@@ -18,10 +18,22 @@ Full documentation is here (WIP) : [NectarJS Doc](https://doc.nectarjs.com/)
 
 </p>
 
+# Efficiency
+
+Some benchmarks with the file example/fibo.js and differents fibos arguments:
+
+|          | NodeJS v12.8.1 | QuickJS 2020-07-05 | NectarJS v0.6.104     |
+|----------|----------------|--------------------|-----------------------|
+| fibo(30) | 0.15s          | 0.20s              | **0.07s**             |
+| fibo(40) | 1.80s          | 21.06s             | **0.50s**             |
+| fibo(45) | 19.44s         | 238.85s            | **4.82s**             |
+
 # Main objectives
-* Supporting EcmaScript standard
+* Supporting EcmaScript 3 standard (then 5, 6 ...)
 * Supporting NodeJS and NPM ecosystem
 * Supporting a maximum of platforms (Windows, Mac, Linux, Android, Arduino, ...)
+* Being secure
+* Embeding debuging tools
 
 # Install
 
