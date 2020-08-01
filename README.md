@@ -34,6 +34,7 @@ Some benchmarks with the file example/fibo.js and differents fibos arguments:
 * Supporting a maximum of platforms (Windows, Mac, Linux, Android, Arduino, ...)
 * Being secure
 * Embeding debuging tools
+* Compile everything that can be transpiled in JS : Ruby (Opal), Python (Transcript, Brython, JavaScrypthon), TypeScript ...
 
 # Install
 
