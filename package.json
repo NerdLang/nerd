@@ -1,13 +1,16 @@
 {
   "name": "nectarjs",
-  "version": "0.6.106",
+  "version": "0.6.107",
   "description": "Javascript's God Mode. No VM. No Bytecode. No GC. Just native binaries.",
   "main": "nectar",
   "bin": {
     "nectar": "./nectar.js",
     "njs": "./nectar.js"
   },
-  "scripts": {},
+  "scripts": 
+  {
+	"njs_test": "node script/njs_tests.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/nectarjs/nectarjs.git"

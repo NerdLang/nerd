@@ -72,6 +72,10 @@ For help, use `--help`
 
 * You need to have GCC installed on your machine and registered in your path to compile.
 
+## Testing your installation
+
+You can test your installation by running `npm run njs_test`
+
 ## Windows
 
 You can install Mingw for Windows here : https://osdn.net/projects/mingw/downloads/68260/mingw-get-setup.exe/
