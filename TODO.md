@@ -22,14 +22,9 @@
 
 * Add async support
 
-* Unit testing / Compiler testing
-
 * add wildcard for multiple compilation at the same time : nectar *.js
 
 * add std NodeJS module for node env
 
 * Put back API compilation switch
 
-* ECMASCRIPT 3 : https://github.com/kangax/sputniktests-webrunner
-
-* Use functions before definition
