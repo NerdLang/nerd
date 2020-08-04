@@ -1,6 +1,8 @@
 var a = 'Hi, it\'s ';
 var b = "NectarJS !";
 var c = a + b;
+console.log("a = Hi, it's ");
+console.log("b = NectarJS !");
 console.log("c = a + b: " + c);
 console.log('Typeof c: ' + typeof c);
 console.log("Length: " + c.length);

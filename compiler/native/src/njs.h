@@ -146,15 +146,8 @@ __NJS_VAR __NJS_Object_Keys(__NJS_VAR _var);
 __NJS_VAR __NJS_Object_Stringify(__NJS_VAR _var);
 
 /*** STRING MANIPULATION ***/
-template<typename t>
-string __NJS_Concat_Str_To_Type(t _left, string _right)
-{
-	std::stringstream output;
-	output << _left << _right;
-	return output.str();
-}
-template<typename t>
-string __NJS_Concat_Type_To_Str(string _left, t _right)
+template<typename m, typename n>
+string __NJS_Concat_To_Str(m _left, n _right)
 {
 	std::stringstream output;
 	output << _left << _right;
@@ -416,19 +409,19 @@ struct __NJS_VAR
 			}
 			else if(type == __NJS_NUMBER && _v1.type == __NJS_STRING)
 			{
-				return __NJS_Create_String(__NJS_Concat_Str_To_Type(get().i, _v1.get().s->__NJS_VALUE));
+				return __NJS_Create_String(__NJS_Concat_To_Str(get().i, _v1.get().s->__NJS_VALUE));
 			}
 			else if(type == __NJS_DOUBLE && _v1.type == __NJS_STRING)
 			{
-				return __NJS_Create_String(__NJS_Concat_Str_To_Type(get().d, _v1.get().s->__NJS_VALUE));
+				return __NJS_Create_String(__NJS_Concat_To_Str(get().d, _v1.get().s->__NJS_VALUE));
 			}
 			else if(type == __NJS_STRING && _v1.type == __NJS_NUMBER)
 			{
-				return __NJS_Create_String(__NJS_Concat_Type_To_Str(get().s->__NJS_VALUE, _v1.get().i));
+				return __NJS_Create_String(__NJS_Concat_To_Str(get().s->__NJS_VALUE, _v1.get().i));
 			}
 			else if(type == __NJS_STRING && _v1.type == __NJS_DOUBLE)
 			{
-				return __NJS_Create_String(__NJS_Concat_Type_To_Str(get().s->__NJS_VALUE, _v1.get().d));
+				return __NJS_Create_String(__NJS_Concat_To_Str(get().s->__NJS_VALUE, _v1.get().d));
 			}
 			else if(type == __NJS_STRING && _v1.type == __NJS_BOOLEAN)
 			{
@@ -1221,7 +1214,7 @@ __NJS_VAR  __NJS_Object_Stringify(__NJS_VAR _var)
 	if(_t == __NJS_UNDEFINED) return "undefined";
 	else if(_t == __NJS_NAN) return "NaN";
 	else if(_t ==  __NJS_NUMBER) return var("") + _var;
-	else if(_t == __NJS_DOUBLE) return _var;
+	else if(_t == __NJS_DOUBLE) return var("") + _var;
 	else if(_t == __NJS_STRING) return var("\"") + _var + "\"";
 	else if(_t == __NJS_FUNCTION) return var("\"") + "[Function]" + "\"";
 	else if(_t == __NJS_ARRAY)
@@ -1325,3 +1318,19 @@ __NJS_Create_Lambda(__IMPL_EVAL)
 	return var();
 });
 var eval = __NJS_Create_Function(__IMPL_EVAL);
+
+function<__NJS_VAR (vector<var>)>* __NJS_IS_NAN = new function<__NJS_VAR (vector<var>)>([](vector<var> __NJS_VARARGS)
+{ 
+	var _test;
+	if(__NJS_VARARGS.size() > 0) _test = __NJS_VARARGS[0];
+	else return __NJS_Create_Boolean(0);
+
+	if(_test.type == __NJS_NUMBER || _test.type == __NJS_DOUBLE) 
+	{
+		return __NJS_Create_Boolean(1);
+	}
+
+	return __NJS_Create_Boolean(0);
+});
+
+__NJS_VAR isNaN = __NJS_VAR(__NJS_FUNCTION, __NJS_IS_NAN);
