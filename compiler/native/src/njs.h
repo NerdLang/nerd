@@ -145,47 +145,23 @@ __NJS_VAR __NJS_Log_Console(__NJS_VAR _var);
 __NJS_VAR __NJS_Object_Keys(__NJS_VAR _var);
 __NJS_VAR __NJS_Object_Stringify(__NJS_VAR _var);
 
-/*** STRDUP ***/
-char* strdup (const char* s)
+/*** STRING MANIPULATION ***/
+template<typename t>
+string __NJS_Concat_Str_To_Type(t _left, string _right)
 {
-  size_t slen = strlen(s);
-  char* result = (char*)malloc(slen + 1);
-  if(result == NULL)
-  {
-    return NULL;
-  }
-
-  memcpy(result, s, slen+1);
-  return result;
+	std::stringstream output;
+	output << _left << _right;
+	return output.str();
 }
-
-string __NJS_Concat_Str_To_Int(int _left, string _right)
+template<typename t>
+string __NJS_Concat_Type_To_Str(string _left, t _right)
 {
 	std::stringstream output;
 	output << _left << _right;
 	return output.str();
 }
 
-string __NJS_Concat_Str_To_Int(double _left, string _right)
-{
-	std::stringstream output;
-	output << _left << _right;
-	return output.str();
-}
-
-string __NJS_Concat_Int_To_Str(string _left, int _right)
-{
-	std::stringstream output;
-	output << _left << _right;
-	return output.str();
-}
-
-string __NJS_Concat_Int_To_Str(string _left, double _right)
-{
-	std::stringstream output;
-	output << _left << _right;
-	return output.str();
-}
+/* END STRING MANIPULATION */
 
 struct __NJS_VAR
 {   	
@@ -440,19 +416,19 @@ struct __NJS_VAR
 			}
 			else if(type == __NJS_NUMBER && _v1.type == __NJS_STRING)
 			{
-				return __NJS_Create_String(__NJS_Concat_Str_To_Int(get().i, _v1.get().s->__NJS_VALUE));
+				return __NJS_Create_String(__NJS_Concat_Str_To_Type(get().i, _v1.get().s->__NJS_VALUE));
 			}
 			else if(type == __NJS_DOUBLE && _v1.type == __NJS_STRING)
 			{
-				return __NJS_Create_String(__NJS_Concat_Str_To_Int(get().d, _v1.get().s->__NJS_VALUE));
+				return __NJS_Create_String(__NJS_Concat_Str_To_Type(get().d, _v1.get().s->__NJS_VALUE));
 			}
 			else if(type == __NJS_STRING && _v1.type == __NJS_NUMBER)
 			{
-				return __NJS_Create_String(__NJS_Concat_Int_To_Str(get().s->__NJS_VALUE, _v1.get().i));
+				return __NJS_Create_String(__NJS_Concat_Type_To_Str(get().s->__NJS_VALUE, _v1.get().i));
 			}
 			else if(type == __NJS_STRING && _v1.type == __NJS_DOUBLE)
 			{
-				return __NJS_Create_String(__NJS_Concat_Int_To_Str(get().s->__NJS_VALUE, _v1.get().d));
+				return __NJS_Create_String(__NJS_Concat_Type_To_Str(get().s->__NJS_VALUE, _v1.get().d));
 			}
 			else if(type == __NJS_STRING && _v1.type == __NJS_BOOLEAN)
 			{
@@ -758,7 +734,7 @@ int __NJS_Get_Int(__NJS_VAR _v)
 
 const char* __NJS_Get_String(__NJS_VAR _v)
 {
-  if(_v.type != __NJS_STRING) return (char*)"";
+  if(_v.type != __NJS_STRING) return "";
   return _v.get().s->__NJS_VALUE.c_str();
 }
 
@@ -822,7 +798,7 @@ __NJS_VAR __NJS_Object_Set(__NJS_VAR _index, __NJS_VAR _value, __NJS_VAR _array)
     else return __NJS_VAR();
 	
 	_index.get().s->cnt++;
-	return __NJS_Object_Set((char*)_index.get().s->__NJS_VALUE.c_str(), _value, _obj);
+	return __NJS_Object_Set(_index.get().s->__NJS_VALUE.c_str(), _value, _obj);
 
   }
 
@@ -876,7 +852,7 @@ __NJS_Class_String::__NJS_Class_String(string _value)
 {
 	cnt++;
 	/*** toString ***/
-  function<__NJS_VAR ()>* __OBJ_TO___NJS_STRING = new function<__NJS_VAR ()>([&](){ return __NJS_Create_String((char*)this->__NJS_VALUE.c_str()); });
+  function<__NJS_VAR ()>* __OBJ_TO___NJS_STRING = new function<__NJS_VAR ()>([&](){ return __NJS_Create_String(this->__NJS_VALUE); });
   __NJS_VAR toString = __NJS_VAR(__NJS_FUNCTION, __OBJ_TO___NJS_STRING);
   __NJS_Object_Set("toString", toString, &this->__OBJECT);
 	/*** end to string ***/
@@ -989,9 +965,9 @@ __NJS_Class_String::__NJS_Class_String(string _value)
 	else return  __NJS_VAR(this->__NJS_VALUE);
 	if(__NJS_VARARGS.size() > 1) _end = __NJS_VARARGS[1];
 
-	if(_end.type == __NJS_UNDEFINED) return __NJS_VAR(this->__NJS_VALUE.substr( _start.get().i, string::npos).c_str());
+	if(_end.type == __NJS_UNDEFINED) return __NJS_VAR(this->__NJS_VALUE.substr( _start.get().i, string::npos));
 	int _endIndex = _end.get().i - _start.get().i;
-	return __NJS_VAR(this->__NJS_VALUE.substr( _start.get().i, _endIndex).c_str());
+	return __NJS_VAR(this->__NJS_VALUE.substr( _start.get().i, _endIndex));
   });
   
   __NJS_VAR __slice = __NJS_VAR(__NJS_FUNCTION, __OBJ_TO___NJS_SLICE);
@@ -1028,7 +1004,7 @@ __NJS_Class_String::__NJS_Class_String(string _value)
 	size_t start_pos = this->__NJS_VALUE.find(_search.get().s->__NJS_VALUE);
     if(start_pos == std::string::npos)
 	{
-        return var(this->__NJS_VALUE.c_str());
+        return var(this->__NJS_VALUE);
 	}
     return var(this->__NJS_VALUE.replace(start_pos, _search.get().s->__NJS_VALUE.length(), _replace.get().s->__NJS_VALUE));
   });
@@ -1045,7 +1021,7 @@ __NJS_Class_String::__NJS_Class_String(string _value)
 __NJS_Class_Array::__NJS_Class_Array()
 {
 	cnt++;
-  function<__NJS_VAR ()>* __OBJ_TO___NJS_STRING = new function<__NJS_VAR ()>([&](){ return __NJS_Create_String((char*)"Array"); });
+  function<__NJS_VAR ()>* __OBJ_TO___NJS_STRING = new function<__NJS_VAR ()>([&](){ return __NJS_Create_String("Array"); });
   __NJS_VAR toString = __NJS_VAR(__NJS_FUNCTION, __OBJ_TO___NJS_STRING);
   __NJS_Object_Set("toString", toString, &this->__OBJECT);
   
@@ -1157,8 +1133,8 @@ ostream& operator << (ostream& os, const __NJS_VAR& _v)
   switch(_v.type)
   {
     case __NJS_BOOLEAN:
-		if(_v.get().b) os << (char*)"true";
-		else os << (char*)"false";
+		if(_v.get().b) os << "true";
+		else os << "false";
 		break;
 	case __NJS_NUMBER:
 		os << _v.get().i;
