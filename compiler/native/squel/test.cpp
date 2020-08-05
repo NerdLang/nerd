@@ -41,6 +41,11 @@
  #include "njs.h"
  using namespace NECTAR;
  
+/*** $ERROR ***/
+function<__NJS_VAR (__NJS_VAR _var)>* __DOLLAR_TEST_ERROR = new function<__NJS_VAR (__NJS_VAR _var)>([&](__NJS_VAR _var){ __NJS_Log_Console(_var); exit(1); return 0; });
+__NJS_VAR __NJS_DOLLAR_ERROR = __NJS_VAR(__NJS_FUNCTION, __DOLLAR_TEST_ERROR);
+/* end $ERROR */
+ 
  {INCLUDE}
  
  {DECL}

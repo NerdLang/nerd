@@ -305,6 +305,23 @@ var visitor =
     function NectarJS() {
       return {
         visitor: {
+			BinaryExpression(_path)
+			{
+				if(_path.node.operator == "===")
+				{
+					var _eq = "__NJS_EQUAL_VALUE_AND_TYPE(";
+					_eq += babel.generate(_path.node.left).code + ","
+					_eq += babel.generate(_path.node.right).code + ")";
+					_path.replaceWithSourceString(_eq);
+				}
+				else if(_path.node.operator == "!==")
+				{
+					var _not_eq = "__NJS_NOT_EQUAL_VALUE_AND_TYPE(";
+					_not_eq += babel.generate(_path.node.left).code + ","
+					_not_eq += babel.generate(_path.node.right).code + ")";
+					_path.replaceWithSourceString(_not_eq);
+				}
+			},
 			ExpressionStatement(_path)
 			{
 				if(_path.node.expression && _path.node.expression.type == "CallExpression" && !_path.node.expression.id 
@@ -677,7 +694,13 @@ var visitor =
 		  },
 		  Identifier(_path)
 		  {
-			addFunctionVarUse(_path.node.name);
+			if(_path.node.name.indexOf("$") > -1)
+			{
+				var _newId = _path.node.name.replace(/\$/, "__NJS_DOLLAR_");
+				addFunctionVarUse(_newId);
+				_path.replaceWith(babel.types.identifier(_newId))
+			}
+			else addFunctionVarUse(_path.node.name);
 		  },
 		  FunctionDeclaration:
 		  {

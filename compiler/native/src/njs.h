@@ -553,17 +553,22 @@ struct __NJS_VAR
 			}
 			return false;
 		}
-
-	__NJS_VAR operator!=(const char* _v1)
+	
+	__NJS_VAR operator!=(const __NJS_VAR& _v1)
 	{
-		if(type != __NJS_STRING) return false;
-		else
+		if(type != _v1.type )
 		{
-			if(strcmp(get().s->__NJS_VALUE.c_str(), _v1) == 0) return false;
-			else return true;
+			if(type == __NJS_NUMBER) return __NJS_VAR(__NJS_BOOLEAN, get().i != _v1.get().i);
+			else if(type == __NJS_STRING)
+			{
+				if(strcmp(get().s->__NJS_VALUE.c_str(),_v1.get().s->__NJS_VALUE.c_str()) == 0) return false;
+				else return true;
+			}
+			else if(type == __NJS_UNDEFINED) return false;
 		}
-
+		return true;
 	}
+	
 		
 		__NJS_VAR operator<(const __NJS_VAR& _v1)
 		{
@@ -1334,3 +1339,24 @@ function<__NJS_VAR (vector<var>)>* __NJS_IS_NAN = new function<__NJS_VAR (vector
 });
 
 __NJS_VAR isNaN = __NJS_VAR(__NJS_FUNCTION, __NJS_IS_NAN);
+
+__NJS_VAR __NJS_EQUAL_VALUE_AND_TYPE(__NJS_VAR _left, __NJS_VAR _right)
+{
+	if(_left.type == _right.type && _left == _right)
+	{
+		return __NJS_Create_Boolean(1);
+	}
+
+	return __NJS_Create_Boolean(0);
+}
+
+__NJS_VAR __NJS_NOT_EQUAL_VALUE_AND_TYPE(__NJS_VAR _left, __NJS_VAR _right)
+{
+	if(_left.type != _right.type || _left != _right) 
+	{
+		return __NJS_Create_Boolean(1);
+	}
+
+	return __NJS_Create_Boolean(0);
+}
+
