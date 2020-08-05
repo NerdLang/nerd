@@ -5,30 +5,48 @@ var MAIN_PATH = path.resolve(path.join(__dirname, ".."));
 
 var NODE = process.argv[0];
 
-var TEST_PATH = path.join(MAIN_PATH, "tests", "ES3", "Conformance", "07_Lexical_Conventions", "7.2_White_Space");
+var MAIN_TEST_PATH = path.join(MAIN_PATH, "tests", "ES3");
+
+var walkSync = function(dir, filelist) 
+{
+    files = fs.readdirSync(dir);
+	filelist = filelist || [];
+    files.forEach(function(file) 
+	{
+		if (fs.statSync(dir + file).isDirectory()) 
+		{
+		  filelist = walkSync(dir + file + '/', filelist);
+		}
+		else {
+		  filelist.push(dir + file);
+		}
+	});
+	return filelist;
+};
+
+var _LIST = walkSync(MAIN_TEST_PATH + "/");
 
 var error = false;
 var errList = [];
 
-var _list = fs.readdirSync(TEST_PATH);
+process.chdir(MAIN_PATH);
 
-for(var i = 0; i < _list.length; i++)
+for(var i = 0; i < _LIST.length; i++)
 {
 	try 
 	{
-		process.chdir(MAIN_PATH);
-		console.log("[*] Testing: " + _list[i]);
 
-		exec("\"" + NODE + "\" nectar.js --env test --run \"" + path.join(TEST_PATH, _list[i]) + "\"");
+		console.log("[*] Testing: " + path.basename(_LIST[i]));
+
+		exec("\"" + NODE + "\" nectar.js --env test --run \"" + _LIST[i] + "\"");
 		
-		console.log("[+] Test passed: " + _list[i]);
+		console.log("[+] Test passed: " + path.basename(_LIST[i]));
 	}
 	catch(e)
 	{
-		console.log(e.toString());
 		error = true;
-		errList.push(_list[i]);
-		console.log("[!] Test error: " + _list[i]);
+		errList.push(path.basename(_LIST[i]));
+		console.log("[!] Test error: " + path.basename(_LIST[i]));
 	}
 }
 

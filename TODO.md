@@ -28,3 +28,4 @@
 
 * Put back API compilation switch
 
+* Finish ES3
