@@ -21,7 +21,7 @@ jobs:
     # Runs a set of commands using the runners shell
     - name: Install clang
       run: | 
-        apt install clang
+        sudo apt install g++
         npm i
         npm run es3_test
   
