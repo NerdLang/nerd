@@ -153,8 +153,29 @@ string __NJS_Concat_To_Str(m _left, n _right)
 	output << _left << _right;
 	return output.str();
 }
-
 /* END STRING MANIPULATION */
+
+/*** NUMBER MANIPULATION ***/
+template<typename m>
+int __NJS_Str_To_Int(m _left)
+{
+	int out;
+	std::stringstream output;
+	output << _left;
+	output >> out;
+	return out;
+}
+template<typename m>
+double __NJS_Str_To_Double(m _left)
+{
+	double out;
+	std::stringstream output;
+	output << _left;
+	output >> out;
+	return out;
+}
+/* END NUMBER MANIPULATION */
+
 
 struct __NJS_VAR
 {   	

@@ -54,7 +54,8 @@ if(error)
 {
 	console.log("[!] tests exited with errors");
 	console.log("[ERRORS]");
-	console.dir(_list);
+	console.dir(errList);
+	console.log("" + errList.length + " / " + _LIST.length);
 	process.exit(1);
 }
 else 

@@ -177,7 +177,7 @@ function arrayExpression(_path)
 {
 	var prop = [];
 	var _rnd = RND();
-	var _set = "__NJS_$" + RND();
+	var _set = "__NJS_RND_" + RND();
 
 	var _setter = `inline __NJS_VAR ${_set}() { __NJS_VAR ${_rnd} = __NJS_Create_Array();`;
 	for(var i = 0; i < _path.elements.length; i++)
