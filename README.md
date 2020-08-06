@@ -74,7 +74,9 @@ For help, use `--help`
 
 ## Testing your installation
 
-You can test your installation by running `npm run njs_test`
+You can test your installation by running `npm run njs_test` 
+
+You can also test ES3 support with `npm run es3_test`
 
 ## Windows
 
