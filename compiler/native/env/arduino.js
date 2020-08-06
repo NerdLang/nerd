@@ -89,16 +89,12 @@ var ARDUINO =
 			"no-console": "error",
 			"indent": "off",
 			"linebreak-style": "off",
-			"semi": [
-				"warn",
-				"always"
-			],
 			"no-unused-vars": ["warn", { "vars": "all", "args": "after-used", "varsIgnorePattern": "setup|loop", "ignoreRestSiblings": false }],
-			"no-undef": "error",
 			"no-redeclare": ["error", { "builtinGlobals": false }],
 		},
 		"globals":
 		{
+			"eval": false,
 			"__njs_typeof": false,
 			"require": false,
 			"module": false,

@@ -35,7 +35,7 @@ if(error)
 {
 	console.log("[!] tests exited with errors");
 	console.log("[ERRORS]");
-	console.dir(_list);
+	console.dir(errList);
 	process.exit(1);
 }
 else 

@@ -1,4 +1,4 @@
-name: CI_ES3
+name: CI_NJS
 
 on:
   push:
@@ -25,5 +25,5 @@ jobs:
         wget -qO- https://deb.nodesource.com/setup_12.x | sudo -E bash
         sudo apt install -y nodejs
         npm i
-        npm run es3_test
+        npm run njs_test
   

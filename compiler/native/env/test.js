@@ -56,16 +56,12 @@ var TEST =
         "no-console": "off",
         "indent": "off",
         "linebreak-style": "off",
-        "semi": [
-            "warn",
-            "always"
-        ],
         "no-unused-vars": ["warn", { "vars": "all", "args": "after-used", "ignoreRestSiblings": false }],
-        "no-undef": "error",
         "no-redeclare": ["error", { "builtinGlobals": false }],
     },
     "globals":
     {
+		"eval": false,
         "__njs_typeof": false,
         "module": false,
         "require": false,

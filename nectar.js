@@ -543,7 +543,6 @@ function Build(prepare)
 		catch(e)
 		{
 			console.log("[!] Compilation error");
-			console.log(e);
 			process.exit(1);
     }
     

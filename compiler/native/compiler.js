@@ -193,6 +193,7 @@ function Compiler()
 		SCOPE: {},
 		HOISTING: [],
 	};
+	this.VAR_STATE = [[]];
 
 	if(this.ENV.stdlib)
 	{
@@ -208,6 +209,13 @@ function Compiler()
 				this.DECL.push("var " + this.ENV.stdlib[_s].bind + ";");
 				this.STD += this.ENV.stdlib[_s].bind +  " = require(\"" + this.ENV.stdlib[_s].module + "\");";
 			}
+		}
+	}
+	if(this.ENV.check && this.ENV.check.globals)
+	{
+		for(var g in this.ENV.check.globals)
+		{
+				this.VAR_STATE[0].push(g);
 		}
 	}
 	
@@ -305,6 +313,7 @@ function Compiler()
 			{
 				var _genFN = "__NJS_FN_" + RND();
 				var _genVAR = "__NJS_VAR_" + RND();
+
 				var _var = "";
 				var _count = 0;
 				var _start = -1;
@@ -446,6 +455,7 @@ function Compiler()
 			while(_index > -1)
 			{
 				var _genFN = "__NJS_FN_" + RND();
+
 				var _var = "";
 				var _count = 0;
 				var _start = -1;
