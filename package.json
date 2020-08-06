@@ -1,13 +1,17 @@
 {
   "name": "nectarjs",
-  "version": "0.6.104",
+  "version": "0.6.109",
   "description": "Javascript's God Mode. No VM. No Bytecode. No GC. Just native binaries.",
   "main": "nectar",
   "bin": {
     "nectar": "./nectar.js",
     "njs": "./nectar.js"
   },
-  "scripts": {},
+  "scripts": 
+  {
+	"njs_test": "node script/njs_tests.js",
+	"es3_test": "node script/es3_tests.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/nectarjs/nectarjs.git"
@@ -69,6 +73,7 @@
     "babel-plugin-minify-guarded-expressions": "^0.4.4",
     "babel-plugin-remove-unused-vars": "^2.2.0",
     "eslint": "^6.8.0",
+    "nectarjs_external": "^0.6.2",
     "strip-comments": "^2.0.1",
     "typescript": "^3.9.3"
   }

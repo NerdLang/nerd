@@ -5,42 +5,17 @@
 
 #include "jsmn.h"
 
-int to_int(char const *s)
+__NJS_VAR to_int(char const *s)
 {
-     if ( s == NULL || *s == '\0' )
-     {
-       #ifndef __NJS_ARDUINO
-        throw std::invalid_argument("null or empty JSON argument");
-       #endif
-     }
-
-     bool negate = (s[0] == '-');
-     if ( *s == '+' || *s == '-' ) 
-         ++s;
-
-     if ( *s == '\0')
-     {
-       #ifndef __NJS_ARDUINO
-        throw std::invalid_argument("sign character only.");
-        #endif
-     }
-
-     int result = 0;
-     while(*s)
-     {
-		 if ( *s >= '0' && *s <= '9' )
-          {
-              result = result * 10  - (*s - '0'); 
-          }
-          else
-          {
-            #ifndef __NJS_ARDUINO
-              throw std::invalid_argument("invalid JSON input string");
-              #endif
-          }
-          ++s;
-     }
-     return negate ? result : -result;
+	bool _float = false;
+	if(strchr(s, '.'))
+	{
+		return __NJS_VAR(stod(s));
+	}
+	else 
+	{
+		return __NJS_VAR(stoi(s));
+	}
 } 
 
 static inline void *realloc_it(void *ptrmem, size_t size) {
@@ -131,7 +106,7 @@ function __NJS_JSON_PARSE(__json)
 	int r;
 	int j = 0;
 	var __RESULT;
-	char* JSON_STRING = (char*)__json.get().s->__NJS_VALUE.c_str();
+	const char* JSON_STRING = __json.get().s->__NJS_VALUE.c_str();
 	jsmn_parser p;
 	jsmntok_t *tok = (jsmntok_t*)malloc(sizeof(*tok) * tokcount);
 

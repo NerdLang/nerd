@@ -73,6 +73,7 @@ var TEST =
         "__NJS_Object_Keys": false,
         "__NJS_ARGS": false,
         "__NJS_Call_Function": false,
+		"$ERROR": false,
     }
 }
 }

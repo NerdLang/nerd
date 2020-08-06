@@ -1,4 +1,4 @@
-var data = '{"one": 1, "two": "2"}';
+var data = '{"one": 1, "two": "2", "arr":[{"sub": -1}, "un", 2.3, "trois"]}';
 console.log("data: " + data);
 
 data = JSON.parse(data);
