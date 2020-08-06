@@ -1,16 +1,17 @@
+// #define JSMN_STRICT
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include <string>
 
 using namespace std;
 
-function __NJS_M_E() { return __NJS_VAR(M_E); };
-function __NJS_M_LN2() { return __NJS_VAR(M_LN2); };
-function __NJS_M_LOG2E() { return __NJS_VAR(M_LOG2E); };
-function __NJS_M_LOG10E() { return __NJS_VAR(M_LOG10E); };
-function __NJS_M_PI() { return __NJS_VAR(M_PI); };
-function __NJS_M_SQRT1_2() { return __NJS_VAR(M_SQRT1_2); };
-function __NJS_M_SQRT2() { return __NJS_VAR(M_SQRT2); };
+var __NJS_M_E = __NJS_VAR(M_E);
+var __NJS_M_LN2 = __NJS_VAR(M_LN2);
+var __NJS_M_LOG2E = __NJS_VAR(M_LOG2E);
+var __NJS_M_LOG10E = __NJS_VAR(M_LOG10E);
+var __NJS_M_PI = __NJS_VAR(M_PI);
+var __NJS_M_SQRT1_2 = __NJS_VAR(M_SQRT1_2);
+var __NJS_M_SQRT2 = __NJS_VAR(M_SQRT2);
 
 function __GET_VALUE (_var)
 {
@@ -19,9 +20,9 @@ function __GET_VALUE (_var)
 	} else if (_var.type == __NJS_DOUBLE) {
 		return _var.get().d;
 	} else if (_var.type == __NJS_STRING) {
-		return stod(_var.get().s);
+		return stod(_var.get().s->__NJS_VALUE);
 	}
-}
+};
 
 function __NJS_MATH_ABS(_var) { return __NJS_VAR(abs(__GET_VALUE(_var))); };
 function __NJS_MATH_ACOS(_var) { return __NJS_VAR(acos(__GET_VALUE(_var))); };
@@ -68,7 +69,7 @@ function __NJS_MATH_ROUND(_var) { return __NJS_VAR((int)round(__GET_VALUE(_var))
 function __NJS_MATH_SIGN(_var) {
 	auto x = __GET_VALUE(_var);
 	if (x == 0) { return __NJS_VAR(0); }
-	else { return __NJS_VAR(x > 0 ? 1 : -1); }
+	else { return __NJS_VAR(x > 0 ? 1 : -1); };
 };
 function __NJS_MATH_SIN(_var) { return __NJS_VAR(sin(__GET_VALUE(_var))); };
 function __NJS_MATH_SINH(_var) { return __NJS_VAR(sinh(__GET_VALUE(_var))); };

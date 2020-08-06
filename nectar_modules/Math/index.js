@@ -4,13 +4,13 @@ var _Math =
 {
     /*** PROPERTIES ***/
     
-    E: __NJS_M_E(),
-    LN2: __NJS_M_LN2(),
-    LOG2E: __NJS_M_LOG2E(),
-    LOG10E: __NJS_M_LOG10E(),
-    PI: __NJS_M_PI(),
-    SQRT1_2: __NJS_M_SQRT1_2(),
-    SQRT2: __NJS_M_SQRT2(),
+    E: __NJS_M_E,
+    LN2: __NJS_M_LN2,
+    LOG2E: __NJS_M_LOG2E,
+    LOG10E: __NJS_M_LOG10E,
+    PI: __NJS_M_PI,
+    SQRT1_2: __NJS_M_SQRT1_2,
+    SQRT2: __NJS_M_SQRT2,
 
     /*** END PROPERTIES ***/
 
