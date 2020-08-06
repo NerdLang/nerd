@@ -5,7 +5,7 @@ var MAIN_PATH = path.resolve(path.join(__dirname, ".."));
 
 var NODE = process.argv[0];
 
-var TEST_PATH = path.join(MAIN_PATH, "tests", "njs");
+var TEST_PATH = path.join(MAIN_PATH, "tests", "NJS");
 
 var error = false;
 var errList = [];
