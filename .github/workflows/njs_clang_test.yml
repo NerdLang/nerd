@@ -1,0 +1,24 @@
+name: CI_NJS_CLANG
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+
+jobs:
+
+  test:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install and run
+      run: | 
+        sudo apt install g++ clang
+        wget -qO- https://deb.nodesource.com/setup_12.x | sudo -E bash
+        sudo apt install -y nodejs
+        npm i
+        npm run njs_clang_test
