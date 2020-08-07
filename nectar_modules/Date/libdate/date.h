@@ -1,14 +1,10 @@
-#include <ctime>
+#include <chrono>
 
-function __NJS_NATIVE_DATE_NOW(_format)
+using namespace std::chrono;
+
+function __NJS_NATIVE_DATE_NOW()
 {
-
-   time_t now = time(0);
-   if(_format && _format == "UTC")
-   {
-      var _ret = ctime(&now);
-      return _ret;
-   }
-   var _ret = (int)now;
-   return _ret;
-}
+   return __NJS_VAR((int)duration_cast<milliseconds>(
+      system_clock::now().time_since_epoch()
+   ).count());
+};

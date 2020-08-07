@@ -1,0 +1,42 @@
+{
+	"name": "math",
+	"description": "NectarJS base Math module",
+	"main": "index.js",
+	"bugs":
+	{
+	  "url": "https://github.com/NectarJS/nectarjs/issues"
+	},
+  
+	"directories":
+	{
+	  "root": ".",
+	  "lib": "lib"
+	},
+	"homepage": "https://github.com/NectarJS/nectarjs#readme",
+	"keywords":
+	[
+	  "nectarjs",
+	  "JSON",
+	  "javascript"
+	],
+	"license": "AGPL",
+	"licenses": [
+	  {
+		"type": "AGPL",
+		"url": "https://github.com/nectarjs/nectarjs/blob/master/LICENSE"
+	  }
+	],
+	"repository":
+	{
+	  "type": "git",
+	  "url": "git+ssh://git@github.com/NectarJS/nectarjs.git"
+	},
+	"version": "0.0.2",
+	"nectar":
+	{
+	  "env": ["std", "android", "ios", "node", "arduino", "wasm"],
+	  "read_only": [],
+	  "expose": ["__NJS_MATH_E", "__NJS_MATH_LN2", "__NJS_MATH_LOG2E", "__NJS_MATH_LOG10E", "__NJS_MATH_PI", "__NJS_MATH_SQRT1_2", "__NJS_MATH_SQRT2", "__NJS_MATH_ABS", "__NJS_MATH_ACOS", "__NJS_MATH_ACOSH", "__NJS_MATH_ASIN", "__NJS_MATH_ASINH", "__NJS_MATH_ATAN", "__NJS_MATH_ATANH", "__NJS_MATH_ATAN2", "__NJS_MATH_CBRT", "__NJS_MATH_CEIL", "__NJS_MATH_CLZ32", "__NJS_MATH_COS", "__NJS_MATH_COSH", "__NJS_MATH_EXP", "__NJS_MATH_EXPM1", "__NJS_MATH_FLOOR", "__NJS_MATH_FROUND", "__NJS_MATH_HYPOT", "__NJS_MATH_IMUL", "__NJS_MATH_LOG", "__NJS_MATH_LOG1P", "__NJS_MATH_LOG10", "__NJS_MATH_LOG2", "__NJS_MATH_MAX", "__NJS_MATH_MIN", "__NJS_MATH_POW", "__NJS_MATH_RANDOM", "__NJS_MATH_ROUND", "__NJS_MATH_SIGN", "__NJS_MATH_SIN", "__NJS_MATH_SINH", "__NJS_MATH_SQRT", "__NJS_MATH_TAN", "__NJS_MATH_TANH", "__NJS_MATH_TRUNC"]
+	}
+  }
+  

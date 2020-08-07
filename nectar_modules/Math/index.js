@@ -1,81 +1,59 @@
-/* Math std module */
+"!_ffi_include lib/math.h";
 
 var _Math = 
 {
     /*** PROPERTIES ***/
     
-    E: 2.718,
-    LN2: 2.302,
-    LOG2E: 1.442,
-    LOG10E: 0.434,
-    PI: 3.141592653589793,
-    SQRT1_2: 0.707,
-    SQRT2: 1.414,
+    E: __NJS_MATH_E,
+    LN2: __NJS_MATH_LN2,
+    LOG2E: __NJS_MATH_LOG2E,
+    LOG10E: __NJS_MATH_LOG10E,
+    PI: __NJS_MATH_PI,
+    SQRT1_2: __NJS_MATH_SQRT1_2,
+    SQRT2: __NJS_MATH_SQRT2,
 
     /*** END PROPERTIES ***/
 
     /*** METHODS ***/
 
-    abs: function(i)
-    {
-        if(i < 0) return -i;
-        return i;
-    },
-    imul: function(x, y)
-    {
-        var _res = 0;
-        _res = (x * y);
-        return _res;
-    },
-    max: function(_array)
-    {
-        var _res;
-        for(var i = 0; i < _array.length; i++)
-        {
-            if(typeof _array[i] == "number")
-            {
-                if(typeof _res == "undefined") _res = _array[i];
-                if(_array[i] > _res) _res = _array[i];
-            } 
-        }
-        if(typeof _res == "undefined") _res = 0;
-        return _res;
-    },
-    min: function(_array)
-    {
-        var _res;
-        for(var i = 0; i < _array.length; i++)
-        {
-            if(typeof _array[i] == "number")
-            {
-                if(typeof _res == "undefined") _res = _array[i];
-                if(_array[i] < _res) _res = _array[i];
-            } 
-        }
-        if(typeof _res == "undefined") _res = 0;
-        return _res;
-    },
-    pow: function(i, j)
-    {
-        if(j == 0) return 1;
-        else if(j > 0)
-        {
-            j--;
-            while(j)
-            {
-                i*=i;
-                j--;
-            }
-        }
-        else if(j < 0)
-        {
-            i = 1 / _Math.pow(i, _Math.abs(j));
-        }
-        return i;
-    },
+    abs: __NJS_MATH_ABS,
+	acos: __NJS_MATH_ACOS,
+	acosh: __NJS_MATH_ACOSH,
+	asin: __NJS_MATH_ASIN,
+	asinh: __NJS_MATH_ASINH,
+	atan: __NJS_MATH_ATAN,
+	atanh: __NJS_MATH_ATANH,
+	atan2: __NJS_MATH_ATAN2,
+	cbrt: __NJS_MATH_CBRT,
+	ceil: __NJS_MATH_CEIL,
+	clz32: __NJS_MATH_CLZ32,
+	cos: __NJS_MATH_COS,
+	cosh: __NJS_MATH_COSH,
+	exp: __NJS_MATH_EXP,
+	expm1: __NJS_MATH_EXPM1,
+	floor: __NJS_MATH_FLOOR,
+	fround: __NJS_MATH_FROUND,
+    hypot: __NJS_MATH_HYPOT,
+    imul: __NJS_MATH_IMUL,
+	log: __NJS_MATH_LOG,
+	log1p: __NJS_MATH_LOG1P,
+	log10: __NJS_MATH_LOG10,
+	log2: __NJS_MATH_LOG2,
+	max: __NJS_MATH_MAX,
+    min: __NJS_MATH_MIN,
+    pow: __NJS_MATH_POW,
+	random: __NJS_MATH_RANDOM,
+	round: __NJS_MATH_ROUND,
+	sign: __NJS_MATH_SIGN,
+	sin: __NJS_MATH_SIN,
+	sinh: __NJS_MATH_SINH,
+	sqrt: __NJS_MATH_SQRT,
+	tan: __NJS_MATH_TAN,
+	tanh: __NJS_MATH_TANH,
+    trunc: __NJS_MATH_TRUNC,
     
     /*** END METHODS ***/
-
+    toString: function () { return "[object Math]"; }
 };
 
 
