@@ -243,8 +243,7 @@ function callExpression(_path)
 
 	var _obj = _path.callee;
 	if(_obj.name) checkUndefVar(_obj.name);
-	
-	
+
 	function whileObj(_obj)
 	{
 		if(_obj.property) 
@@ -720,7 +719,19 @@ var visitor =
 		  CatchClause(_path) 
 		  {
 			const paramPath = _path.get("param");
-			paramPath.replaceWithSourceString("__NJS_VAR");
+			if(!paramPath.node.name || paramPath.node.name != "e")
+			{
+				console.log("[Error] Catch clause needs an 'e' Exception argument.");
+				process.exit(1);
+			}
+
+			paramPath.replaceWithSourceString("__NJS_EXCEPTION_PARAMETER");
+		  },
+		  ThrowStatement(_path) 
+		  {
+			var _err = "__NJS_ERROR_" + RND();
+			_path.insertBefore(babel.parse("var " + _err + " = " + babel.generate(_path.node.argument).code));
+			_path.node.argument = babel.parse(_err);
 		  },
 		  ReturnStatement(_path)
 		  {

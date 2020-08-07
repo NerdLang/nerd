@@ -55,9 +55,9 @@ enum __NJS_TYPE
 #define __NJS_Create_Infinity() __NJS_VAR(__NJS_INFINITY, 0)
 #define Infinity __NJS_Create_Infinity()
 #define __NJS_Create_Null() __NJS_VAR(__NJS_NULL, 0)
-//#define __NJS_Init_Null __NJS_VAR(__NJS_NULL, 0)
-//#define null __NJS_Create_Null()
 #define __NJS_Create_Lambda(name) function<__NJS_VAR (vector<var>)>* name = new function<__NJS_VAR (vector<var>)>([](vector<var> __NJS_VARARGS)
+#define __NJS_EXCEPTION_PARAMETER __NJS_VAR &e
+#define finally ;
 /*** END HELPERS ***/
 
 

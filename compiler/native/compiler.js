@@ -240,27 +240,30 @@ function Compiler()
 		_code = hoistingFunction(_code);
 		
 		_code = genRequire(_handler.PATH, COMPILER.STD) + genRequire(_handler.PATH, _code);
-
+		
 		COMPILER.STATE = "REQUIRE";
 		COMPILER.REQUIRE = babel.transformSync(COMPILER.REQUIRE, visitor).code;
 		checkFastFunction();
 		COMPILER.REQUIRE = createClass(COMPILER.REQUIRE);
 		COMPILER.REQUIRE = createFunction(COMPILER.REQUIRE);
 		COMPILER.REQUIRE = createAnon(COMPILER.REQUIRE);
-		
+
 		COMPILER.STATE = "CODE";
 		
 		_handler.CODE = babel.transformSync(_code, visitor).code;
+
 		checkFastFunction();
 		_handler.CODE = createClass(_handler.CODE, true);
+		
 		_handler.CODE = createFunction(_handler.CODE, true);
 		_handler.CODE = createAnon(_handler.CODE, true);
-		
+
 		var _hoisting = "";
 		for(var i = 0; i < COMPILER.INFO.HOISTING.length; i++)
 		{
 			_hoisting += "var " + COMPILER.INFO.HOISTING[i] + ";";
 		}
+
 		_handler.CODE = _hoisting + _handler.CODE;
 
 		COMPILER.INIT += COMPILER.REQUIRE;
@@ -597,6 +600,7 @@ function Compiler()
 		_handler.MAIN = _handler.MAIN.replace("{DECL}", _handler.DECL);
 		_handler.MAIN = _handler.MAIN.replace("{INCLUDE}", _handler.FFI.join(os.EOL));
 		_handler.MAIN = _handler.MAIN.replace("{{__PLATFORM__}}", os.platform());
+
 	}
 	  
 	this.Prepare = function(_folder)
