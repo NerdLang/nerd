@@ -205,25 +205,30 @@ function genRequire(from, src)
   }
     
     var ext = "js";
-	var _Ext = fileSource.split(".");
-	if(_Ext.length > 1) ext = _Ext[_Ext.length - 1];
+	if(fileSource && fileSource.split)
+	{
+		var _Ext = fileSource.split(".");
+		if(_Ext.length > 1) ext = _Ext[_Ext.length - 1];
+		
+		if(ext == "ts") newSrc = compileTS(newSrc, fileSource);
+		
+		newSrc = genInclude(path.resolve(modSource) + "/", newSrc);
+
+
+		var reqFN = "__MODULE_" + Math.random().toString(36).substr(2, 10);
+		COMPILER.ENV.check.globals[reqFN] = false;
+
+		src = src.replace(_SEARCH, reqFN + "()");
+
+		newSrc = "function " + reqFN + "(){\nvar module = __NJS_Create_Object();\n" + newSrc;
+		newSrc = newSrc.replace(/(module\.exports *= *.*)$/g, "$1;");
+		newSrc += "return module.exports;\n}";
+		newSrc = genRequire(modSource, newSrc);
+
+		COMPILER.REQUIRE += newSrc + ";";
+	}
+	else src = src.replace(_SEARCH, "");
 	
-	if(ext == "ts") newSrc = compileTS(newSrc, fileSource);
-    
-    newSrc = genInclude(path.resolve(modSource) + "/", newSrc);
-
-
-	var reqFN = "__MODULE_" + Math.random().toString(36).substr(2, 10);
-	COMPILER.ENV.check.globals[reqFN] = false;
-
-	src = src.replace(_SEARCH, reqFN + "()");
-
-	newSrc = "function " + reqFN + "(){\nvar module = __NJS_Create_Object();\n" + newSrc;
-	newSrc = newSrc.replace(/(module\.exports *= *.*)$/g, "$1;");
-	newSrc += "return module.exports;\n}";
-	newSrc = genRequire(modSource, newSrc);
-
-    COMPILER.REQUIRE += newSrc + ";";
     var _match = src.match(_SEARCH);
   }
   return src;
