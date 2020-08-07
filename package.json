@@ -7,11 +7,10 @@
     "nectar": "./nectar.js",
     "njs": "./nectar.js"
   },
-  "scripts": 
-  {
-	"njs_test": "node script/njs_tests.js",
+  "scripts": {
+    "njs_test": "node script/njs_tests.js",
     "njs_clang_test": "node script/njs_clang_tests.js",
-	"es3_test": "node script/es3_tests.js"
+    "es3_test": "node script/es3_tests.js"
   },
   "repository": {
     "type": "git",
@@ -68,14 +67,14 @@
   },
   "homepage": "https://nectarjs.com",
   "dependencies": {
-    "@babel/core": "^7.9.6",
-    "@babel/generator": "^7.9.6",
+    "@babel/core": "^7.11.1",
+    "@babel/generator": "^7.11.0",
     "babel-plugin-minify-dead-code-elimination": "^0.5.1",
     "babel-plugin-minify-guarded-expressions": "^0.4.4",
     "babel-plugin-remove-unused-vars": "^2.2.0",
-    "eslint": "^6.8.0",
+    "eslint": "^7.6.0",
     "nectarjs_external": "^0.6.2",
     "strip-comments": "^2.0.1",
-    "typescript": "^3.9.3"
+    "typescript": "^3.9.7"
   }
 }
