@@ -496,8 +496,17 @@ struct __NJS_VAR
 			else if(type == __NJS_STRING && _v1.type == __NJS_NUMBER) REGISTER[_ptr].s->__NJS_VALUE += _v1.get().i;
 			return __NJS_VAR();
 		}
+
+		__NJS_VAR operator-=(const __NJS_VAR _v1)
+		{
+			if(type == __NJS_NUMBER && _v1.type == __NJS_NUMBER) REGISTER[_ptr].i -= _v1.get().i;
+			else if(type == __NJS_NUMBER && _v1.type == __NJS_DOUBLE) REGISTER[_ptr].i -= _v1.get().d;
+			else if(type == __NJS_DOUBLE && _v1.type == __NJS_NUMBER) REGISTER[_ptr].d -= _v1.get().i;
+			else if(type == __NJS_DOUBLE && _v1.type == __NJS_DOUBLE) REGISTER[_ptr].d -= _v1.get().d;
+			return __NJS_VAR();
+		}
 	
-   	 __NJS_VAR operator++(const int _v1)
+	   	__NJS_VAR operator++(const int _v1)
 		{
 			if(type == __NJS_NUMBER) REGISTER[_ptr].i++;
 			else if(type == __NJS_DOUBLE) REGISTER[_ptr].d++;
@@ -542,9 +551,22 @@ struct __NJS_VAR
 			else if(type == __NJS_DOUBLE && _v1.type == __NJS_DOUBLE) return __NJS_VAR( get().d / _v1.get().d );
 			return __NJS_VAR();
 		}
-    __NJS_VAR operator%(const __NJS_VAR& _v1)
+	    __NJS_VAR operator%(const __NJS_VAR& _v1)
 		{
-			return __NJS_VAR( get().i % _v1.get().i );
+			if(type == __NJS_NUMBER && _v1.type == __NJS_NUMBER) return __NJS_VAR( get().i % _v1.get().i );
+			else if(type == __NJS_NUMBER && _v1.type == __NJS_DOUBLE) return __NJS_VAR( get().i % (int)_v1.get().d );
+			else if(type == __NJS_DOUBLE && _v1.type == __NJS_NUMBER) return __NJS_VAR( (int)get().d % _v1.get().i );
+			else if(type == __NJS_DOUBLE && _v1.type == __NJS_DOUBLE) return __NJS_VAR( (int)get().d % (int)_v1.get().d );
+			return __NJS_VAR();
+		}
+
+		__NJS_VAR operator%=(const __NJS_VAR& _v1)
+		{
+			if(type == __NJS_NUMBER && _v1.type == __NJS_NUMBER) REGISTER[_ptr].i %= _v1.get().i;
+			else if(type == __NJS_NUMBER && _v1.type == __NJS_DOUBLE) REGISTER[_ptr].i %= (int)_v1.get().d;
+			else if(type == __NJS_DOUBLE && _v1.type == __NJS_NUMBER) REGISTER[_ptr].d = (int)REGISTER[_ptr].d % _v1.get().i;
+			else if(type == __NJS_DOUBLE && _v1.type == __NJS_DOUBLE) REGISTER[_ptr].d = (int)REGISTER[_ptr].d % (int)_v1.get().d;
+			return __NJS_VAR();
 		}
 		
     __NJS_VAR const operator! () const
