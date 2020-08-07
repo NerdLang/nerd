@@ -104,7 +104,7 @@ function __NJS_MATH_FLOOR(x)
 
 function __NJS_MATH_FROUND(x) 
 { 
-	return __NJS_VAR(static_cast<float>(__GET_VALUE(x))); 
+	return __NJS_VAR(static_cast<double>(__GET_VALUE(x))); 
 };
 
 __NJS_DECL_FUNCTION<__NJS_VAR (vector<var> __NJS_VARARGS)>* __NJS_MATH_NATIVE_HYPOT = new __NJS_DECL_FUNCTION<__NJS_VAR (vector<var> __NJS_VARARGS)>([]( vector<var> __NJS_VARARGS ) -> __NJS_VAR 
@@ -181,7 +181,7 @@ function __NJS_MATH_POW(x, x2)
 
 function __NJS_MATH_RANDOM() 
 { 
-	return __NJS_VAR(static_cast<float>(rand()) / static_cast<float>(RAND_MAX));
+	return __NJS_VAR(static_cast<double>(rand()) / static_cast<double>(RAND_MAX));
 };
 
 function __NJS_MATH_ROUND(x) 
