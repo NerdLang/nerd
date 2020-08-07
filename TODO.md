@@ -29,3 +29,5 @@
 * Put back API compilation switch
 
 * Finish ES3
+
+* Add --no-undef flag
