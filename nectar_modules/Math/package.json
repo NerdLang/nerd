@@ -36,7 +36,7 @@
 	{
 	  "env": ["std", "android", "ios", "node", "arduino", "wasm"],
 	  "read_only": [],
-	  "expose": ["__NJS_M_E", "__NJS_M_LN2", "__NJS_M_LOG2E", "__NJS_M_LOG10E", "__NJS_M_PI", "__NJS_M_SQRT1_2", "__NJS_M_SQRT2", "__NJS_M_ABS", "__NJS_M_ACOS", "__NJS_M_ACOSH", "__NJS_M_ASIN", "__NJS_M_ASINH", "__NJS_M_ATAN", "__NJS_M_ATANH", "__NJS_M_ATAN2", "__NJS_M_CBRT", "__NJS_M_CEIL", "__NJS_M_CLZ32", "__NJS_M_COS", "__NJS_M_COSH", "__NJS_M_EXP", "__NJS_M_EXPM1", "__NJS_M_FLOOR", "__NJS_M_FROUND", "__NJS_M_HYPOT", "__NJS_M_IMUL", "__NJS_M_LOG", "__NJS_M_LOG1P", "__NJS_M_LOG10", "__NJS_M_LOG2", "__NJS_M_MAX", "__NJS_M_MIN", "__NJS_M_POW", "__NJS_M_RANDOM", "__NJS_M_ROUND", "__NJS_M_SIGN", "__NJS_M_SIN", "__NJS_M_SINH", "__NJS_M_SQRT", "__NJS_M_TAN", "__NJS_M_TANH", "__NJS_M_TRUNC"]
+	  "expose": ["__NJS_MATH_E", "__NJS_MATH_LN2", "__NJS_MATH_LOG2E", "__NJS_MATH_LOG10E", "__NJS_MATH_PI", "__NJS_MATH_SQRT1_2", "__NJS_MATH_SQRT2", "__NJS_MATH_ABS", "__NJS_MATH_ACOS", "__NJS_MATH_ACOSH", "__NJS_MATH_ASIN", "__NJS_MATH_ASINH", "__NJS_MATH_ATAN", "__NJS_MATH_ATANH", "__NJS_MATH_ATAN2", "__NJS_MATH_CBRT", "__NJS_MATH_CEIL", "__NJS_MATH_CLZ32", "__NJS_MATH_COS", "__NJS_MATH_COSH", "__NJS_MATH_EXP", "__NJS_MATH_EXPM1", "__NJS_MATH_FLOOR", "__NJS_MATH_FROUND", "__NJS_MATH_HYPOT", "__NJS_MATH_IMUL", "__NJS_MATH_LOG", "__NJS_MATH_LOG1P", "__NJS_MATH_LOG10", "__NJS_MATH_LOG2", "__NJS_MATH_MAX", "__NJS_MATH_MIN", "__NJS_MATH_POW", "__NJS_MATH_RANDOM", "__NJS_MATH_ROUND", "__NJS_MATH_SIGN", "__NJS_MATH_SIN", "__NJS_MATH_SINH", "__NJS_MATH_SQRT", "__NJS_MATH_TAN", "__NJS_MATH_TANH", "__NJS_MATH_TRUNC"]
 	}
   }
   
