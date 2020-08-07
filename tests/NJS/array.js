@@ -18,8 +18,15 @@ console.log(_res);
 console.log(_arr);
 
 
-var ArrInArr = [["Inception"]];
+var ArrInArr = [["Inception - OK"]];
 console.log(ArrInArr[0][0]);
 
-ArrInArr[1] = [["Double Inception"]];
+ArrInArr[1] = [["Double Inception - OK"]];
 console.log(ArrInArr[1][0][0]);
+
+var arr = [];
+
+arr.push("Push - OK");
+arr.push(1);
+
+console.log(arr);
