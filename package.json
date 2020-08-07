@@ -10,6 +10,7 @@
   "scripts": 
   {
 	"njs_test": "node script/njs_tests.js",
+        "njs_clang_test": "node script/njs_clang_tests.js",
 	"es3_test": "node script/es3_tests.js"
   },
   "repository": {
