@@ -31,3 +31,5 @@
 * Finish ES3
 
 * Add --no-undef flag
+
+* Add try / catch / finally support 
