@@ -46,11 +46,12 @@ var STD =
                 "always"
             ],
             "no-unused-vars": ["warn", { "vars": "all", "args": "after-used", "ignoreRestSiblings": false }],
-            "no-undef": "error",
+            //"no-undef": "error",
             "no-redeclare": ["error", { "builtinGlobals": false }],
         },
         "globals":
         {
+			"eval": false,
             "__njs_typeof": false,
             "console": false,
             "module": false,

@@ -193,6 +193,7 @@ function Compiler()
 		SCOPE: {},
 		HOISTING: [],
 	};
+	this.VAR_STATE = [[]];
 
 	if(this.ENV.stdlib)
 	{
@@ -208,6 +209,13 @@ function Compiler()
 				this.DECL.push("var " + this.ENV.stdlib[_s].bind + ";");
 				this.STD += this.ENV.stdlib[_s].bind +  " = require(\"" + this.ENV.stdlib[_s].module + "\");";
 			}
+		}
+	}
+	if(this.ENV.check && this.ENV.check.globals)
+	{
+		for(var g in this.ENV.check.globals)
+		{
+				this.VAR_STATE[0].push(g);
 		}
 	}
 	
@@ -232,27 +240,30 @@ function Compiler()
 		_code = hoistingFunction(_code);
 		
 		_code = genRequire(_handler.PATH, COMPILER.STD) + genRequire(_handler.PATH, _code);
-
+		
 		COMPILER.STATE = "REQUIRE";
 		COMPILER.REQUIRE = babel.transformSync(COMPILER.REQUIRE, visitor).code;
 		checkFastFunction();
 		COMPILER.REQUIRE = createClass(COMPILER.REQUIRE);
 		COMPILER.REQUIRE = createFunction(COMPILER.REQUIRE);
 		COMPILER.REQUIRE = createAnon(COMPILER.REQUIRE);
-		
+
 		COMPILER.STATE = "CODE";
 		
 		_handler.CODE = babel.transformSync(_code, visitor).code;
+
 		checkFastFunction();
 		_handler.CODE = createClass(_handler.CODE, true);
+		
 		_handler.CODE = createFunction(_handler.CODE, true);
 		_handler.CODE = createAnon(_handler.CODE, true);
-		
+
 		var _hoisting = "";
 		for(var i = 0; i < COMPILER.INFO.HOISTING.length; i++)
 		{
 			_hoisting += "var " + COMPILER.INFO.HOISTING[i] + ";";
 		}
+
 		_handler.CODE = _hoisting + _handler.CODE;
 
 		COMPILER.INIT += COMPILER.REQUIRE;
@@ -305,6 +316,7 @@ function Compiler()
 			{
 				var _genFN = "__NJS_FN_" + RND();
 				var _genVAR = "__NJS_VAR_" + RND();
+
 				var _var = "";
 				var _count = 0;
 				var _start = -1;
@@ -446,6 +458,7 @@ function Compiler()
 			while(_index > -1)
 			{
 				var _genFN = "__NJS_FN_" + RND();
+
 				var _var = "";
 				var _count = 0;
 				var _start = -1;
@@ -587,6 +600,7 @@ function Compiler()
 		_handler.MAIN = _handler.MAIN.replace("{DECL}", _handler.DECL);
 		_handler.MAIN = _handler.MAIN.replace("{INCLUDE}", _handler.FFI.join(os.EOL));
 		_handler.MAIN = _handler.MAIN.replace("{{__PLATFORM__}}", os.platform());
+
 	}
 	  
 	this.Prepare = function(_folder)

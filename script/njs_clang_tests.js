@@ -19,7 +19,7 @@ for(var i = 0; i < _list.length; i++)
 		process.chdir(MAIN_PATH);
 		console.log("[*] Testing: " + _list[i]);
 
-		exec("\"" + NODE + "\" nectar.js --run \"" + path.join(TEST_PATH, _list[i]) + "\"");
+		exec("\"" + NODE + "\" nectar.js --compiler clang++ --run \"" + path.join(TEST_PATH, _list[i]) + "\"");
 		
 		console.log("[+] Test passed: " + _list[i]);
 	}

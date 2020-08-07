@@ -28,9 +28,43 @@
 var NO_MODIFY_CALL = ["require", "Object"];
 var NJS_START = ["__NJS", "__FFI"];
 
-var IGNORE = ["__NJS_Call_Function", "__NJS_Object_Set", "__NJS_Obejct_Get"];
+var IGNORE = ["__NJS_Call_Function", "__NJS_Object_Set", "__NJS_Obejct_Get", "__NJS_VAR"];
 var FUNCTION_STATE = [];
+
 var CURRENT_FUNCTION = -1;
+
+
+function pushDeclVar(_name, _index)
+{
+	if(_index == undefined)
+	{
+		var currentScope = CURRENT_FUNCTION + 1;
+		COMPILER.VAR_STATE[currentScope].push(_name);
+	}
+	else COMPILER.VAR_STATE[_index].push(_name);
+}
+
+function checkUndefVar(_name)
+{
+	var currentScope = CURRENT_FUNCTION + 1;
+	var _exists = false;
+	
+	for(var i = currentScope; i > -1; i--)
+	{
+		if(COMPILER.VAR_STATE[i].indexOf(_name) > -1)
+		{
+			_exists = true;
+			break;
+		}
+	}
+
+	if(!_exists)
+	{
+		COMPILER.VAR_STATE[currentScope].push(_name);
+		COMPILER.DECL.push( "var " + _name + ";");
+		
+	}
+}
 
 function addFunctionVarInit(_name)
 {
@@ -81,6 +115,7 @@ function objectExpression(_path, _name)
 
 	if(_path.key.name)
 	{
+		
 	_key = _path.key.name;
 	}
 	else _key = _path.key.value;
@@ -152,7 +187,10 @@ function memberExpression(_path)
 			}
 		}
 		
-		if(_obj.name) prop.push(_obj.name);
+		if(_obj.name)
+		{
+			prop.push(_obj.name);
+		}
 		if(_obj.object) _obj=_obj.object;
 		else { _obj = null; break; }
 	}
@@ -204,6 +242,7 @@ function callExpression(_path)
 	var prop = [];
 
 	var _obj = _path.callee;
+	if(_obj.name) checkUndefVar(_obj.name);
 
 	function whileObj(_obj)
 	{
@@ -223,8 +262,11 @@ function callExpression(_path)
 		}
 		
 		if(_obj.object) whileObj(_obj.object);
-		if(_obj.name) prop.push(_obj.name);
-		
+		if(_obj.name)
+		{
+			prop.push(_obj.name);
+			checkUndefVar(_obj.name);
+		}
 		
 	}
 	whileObj(_obj);
@@ -523,6 +565,7 @@ var visitor =
 				  {
 					if(_path.node.declarations[d].id && _path.node.declarations[d].id.name)
 					{
+						pushDeclVar(_path.node.declarations[d].id.name);
 						readOnlyVar(_path.node.declarations[d].id.name);
 						if(COMPILER.ENV.name == "android" && COMPILER.STATE == "CODE")
 						{
@@ -544,6 +587,7 @@ var visitor =
 		  },
 		  AssignmentExpression(_path)
 		  {
+			 
 			 if(_path.node.left.type == "MemberExpression")
 			 {
 				var prop = [];
@@ -581,6 +625,7 @@ var visitor =
 					}
 					if(_obj.name)
 					{
+						checkUndefVar(_obj.name);
 						prop.push(_obj.name);
 						readOnlyVar(_obj.name);
 					}
@@ -621,6 +666,7 @@ var visitor =
 			 }
 			 else if(_path.node.left.type == "Identifier")
 			 {
+				 checkUndefVar(_path.node.left.name);
 				readOnlyVar(_path.node.left.name);
 				if(_path.node.right.type == "ArrayExpression")
 				{
@@ -673,7 +719,19 @@ var visitor =
 		  CatchClause(_path) 
 		  {
 			const paramPath = _path.get("param");
-			paramPath.replaceWithSourceString("__NJS_VAR");
+			if(!paramPath.node.name || paramPath.node.name != "e")
+			{
+				console.log("[Error] Catch clause needs an 'e' Exception argument.");
+				process.exit(1);
+			}
+
+			paramPath.replaceWithSourceString("__NJS_EXCEPTION_PARAMETER");
+		  },
+		  ThrowStatement(_path) 
+		  {
+			var _err = "__NJS_ERROR_" + RND();
+			_path.insertBefore(babel.parse("var " + _err + " = " + babel.generate(_path.node.argument).code));
+			_path.node.argument = babel.parse(_err);
 		  },
 		  ReturnStatement(_path)
 		  {
@@ -708,6 +766,9 @@ var visitor =
 			{
 				if(_path.node.id)
 				{
+					COMPILER.VAR_STATE.push([]);
+					pushDeclVar(_path.node.id.name, 0);
+					
 					CURRENT_FUNCTION++;
 					FUNCTION_STATE.push(_path.node.id.name);
 					
@@ -733,6 +794,7 @@ var visitor =
 				{
 					CURRENT_FUNCTION--;
 					FUNCTION_STATE.pop();
+					COMPILER.VAR_STATE.pop();
 				}
 			},
 		  }

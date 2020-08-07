@@ -1,6 +1,6 @@
 {
   "name": "nectarjs",
-  "version": "0.6.109",
+  "version": "0.6.113",
   "description": "Javascript's God Mode. No VM. No Bytecode. No GC. Just native binaries.",
   "main": "nectar",
   "bin": {
@@ -10,6 +10,7 @@
   "scripts": 
   {
 	"njs_test": "node script/njs_tests.js",
+    "njs_clang_test": "node script/njs_clang_tests.js",
 	"es3_test": "node script/es3_tests.js"
   },
   "repository": {
