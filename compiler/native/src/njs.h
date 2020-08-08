@@ -781,7 +781,7 @@ const char* __NJS_Get_String(__NJS_VAR _v)
 
 __NJS_VAR __NJS_Typeof(__NJS_VAR _var)
 {
-  char* _array[] = {"", "undefined", "number", "number", "object", "number", "boolean", "string", "native", "function", "array", "NaN", "number", "object"};
+  const char* _array[] = {"", "undefined", "number", "number", "object", "number", "boolean", "string", "native", "function", "array", "NaN", "number", "object"};
   return __NJS_Create_String(_array[_var.type]);
 }
 
