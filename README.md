@@ -14,7 +14,7 @@ Any questions or ideas, join us : [![NectarJS' IRC](https://img.shields.io/badge
 
 [![NPM](https://nodei.co/npm/nectarjs.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/nectarjs/)
 
-Full documentation is here (WIP) : [NectarJS Doc](https://doc.nectarjs.com/)
+Full documentation is here (WIP) : [NectarJS Doc](https://nectarjs.com/documentation/)
 
 </p>
 
