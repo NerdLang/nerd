@@ -7,6 +7,8 @@
  #include <sstream>
  #include <memory>
  #include <vector>
+ #define _USE_MATH_DEFINES
+ #include <math.h>
  #include<stdarg.h>
 
 #ifdef __NJS_ARDUINO
@@ -38,7 +40,7 @@ enum __NJS_TYPE
 	__NJS_NAN,
 	__NJS_INFINITY,
 	__NJS_NULL
-	
+
 };
 
 /*** HELPERS ***/
@@ -175,7 +177,6 @@ double __NJS_Str_To_Double(m _left)
 	return out;
 }
 /* END NUMBER MANIPULATION */
-
 
 struct __NJS_VAR
 {   	
@@ -369,8 +370,6 @@ struct __NJS_VAR
 		/*** END CONSTRUCTOR ***/
 
 		/*** OPERATOR ***/
-
-		/*** EQUAL ***/
 		__NJS_VAR operator=(const __NJS_VAR _v)
 		{
 			if(type == __NJS_OBJECT) REGISTER[_ptr].o->Delete();
@@ -408,297 +407,265 @@ struct __NJS_VAR
 			
 			return *this;
 		}
-		/*** END EQUAL ***/
-		
-		__NJS_VAR operator+(const __NJS_VAR& _v1)
-		{
-			if(type == __NJS_NUMBER && _v1.type == __NJS_NUMBER)
-			{
-				return REGISTER[_ptr].i + REGISTER[_v1._ptr].i;
-			}
-			else if(type == __NJS_NUMBER && _v1.type == __NJS_DOUBLE)
-			{
-				return REGISTER[_ptr].i + REGISTER[_v1._ptr].d;
-			}
-			else if(type == __NJS_DOUBLE && _v1.type == __NJS_DOUBLE)
-			{
-				return REGISTER[_ptr].d + REGISTER[_v1._ptr].d;
-			}
-			else if(type == __NJS_DOUBLE && _v1.type == __NJS_NUMBER)
-			{
-				return REGISTER[_ptr].d + REGISTER[_v1._ptr].i;
-			}
-			else if(type == __NJS_NUMBER && _v1.type == __NJS_STRING)
-			{
-				return __NJS_Create_String(__NJS_Concat_To_Str(get().i, _v1.get().s->__NJS_VALUE));
-			}
-			else if(type == __NJS_DOUBLE && _v1.type == __NJS_STRING)
-			{
-				return __NJS_Create_String(__NJS_Concat_To_Str(get().d, _v1.get().s->__NJS_VALUE));
-			}
-			else if(type == __NJS_STRING && _v1.type == __NJS_NUMBER)
-			{
-				return __NJS_Create_String(__NJS_Concat_To_Str(get().s->__NJS_VALUE, _v1.get().i));
-			}
-			else if(type == __NJS_STRING && _v1.type == __NJS_DOUBLE)
-			{
-				return __NJS_Create_String(__NJS_Concat_To_Str(get().s->__NJS_VALUE, _v1.get().d));
-			}
-			else if(type == __NJS_STRING && _v1.type == __NJS_BOOLEAN)
-			{
-				if(_v1.get().b)
-				{
-				  return __NJS_Create_String( get().s->__NJS_VALUE + "true");
-				}
-				return __NJS_Create_String( get().s->__NJS_VALUE + "false");
-			}
-			else if(type == __NJS_STRING && _v1.type == __NJS_STRING)
-			{
-				return __NJS_Create_String( get().s->__NJS_VALUE + _v1.get().s->__NJS_VALUE);
-			}
-			else
-			{
-				return __NJS_VAR(0);
-			}
-		}
-		__NJS_VAR operator-(const __NJS_VAR& _v1)
-		{
-			if(type == __NJS_NUMBER && _v1.type == __NJS_NUMBER) return __NJS_VAR( get().i - _v1.get().i );
-			else if(type == __NJS_NUMBER && _v1.type == __NJS_DOUBLE) return __NJS_VAR( get().i - _v1.get().d );
-			else if(type == __NJS_DOUBLE && _v1.type == __NJS_NUMBER) return __NJS_VAR( get().d - _v1.get().i );
-			else if(type == __NJS_DOUBLE && _v1.type == __NJS_DOUBLE) return __NJS_VAR( get().d - _v1.get().d );
-			return __NJS_VAR();
-		}
 
-		__NJS_VAR operator-()
-		{
-			if(type == __NJS_NUMBER) return __NJS_VAR( -get().i);
-			else if(type == __NJS_DOUBLE) return __NJS_VAR( -get().d);
-			return __NJS_VAR();
-		}
-
-		__NJS_VAR operator+()
-		{
-			if(type == __NJS_NUMBER) return __NJS_VAR( get().i);
-			else if(type == __NJS_DOUBLE) return __NJS_VAR( get().d);
-			return __NJS_VAR();
-		}
-
-
-		__NJS_VAR operator+=(const __NJS_VAR _v1)
-		{
-			if(type == __NJS_NUMBER && _v1.type == __NJS_NUMBER) REGISTER[_ptr].i += _v1.get().i;
-			else if(type == __NJS_NUMBER && _v1.type == __NJS_DOUBLE) REGISTER[_ptr].i += _v1.get().d;
-			else if(type == __NJS_DOUBLE && _v1.type == __NJS_NUMBER) REGISTER[_ptr].d += _v1.get().i;
-			else if(type == __NJS_DOUBLE && _v1.type == __NJS_DOUBLE) REGISTER[_ptr].d += _v1.get().d;
-			else if(type == __NJS_STRING && _v1.type == __NJS_STRING) REGISTER[_ptr].s->__NJS_VALUE += _v1.get().s->__NJS_VALUE;
-			else if(type == __NJS_STRING && _v1.type == __NJS_DOUBLE) REGISTER[_ptr].s->__NJS_VALUE += _v1.get().d;
-			else if(type == __NJS_STRING && _v1.type == __NJS_NUMBER) REGISTER[_ptr].s->__NJS_VALUE += _v1.get().i;
-			return __NJS_VAR();
-		}
-
-		__NJS_VAR operator-=(const __NJS_VAR _v1)
-		{
-			if(type == __NJS_NUMBER && _v1.type == __NJS_NUMBER) REGISTER[_ptr].i -= _v1.get().i;
-			else if(type == __NJS_NUMBER && _v1.type == __NJS_DOUBLE) REGISTER[_ptr].i -= _v1.get().d;
-			else if(type == __NJS_DOUBLE && _v1.type == __NJS_NUMBER) REGISTER[_ptr].d -= _v1.get().i;
-			else if(type == __NJS_DOUBLE && _v1.type == __NJS_DOUBLE) REGISTER[_ptr].d -= _v1.get().d;
-			return __NJS_VAR();
-		}
-	
-	   	__NJS_VAR operator++(const int _v1)
-		{
-			if(type == __NJS_NUMBER) REGISTER[_ptr].i++;
-			else if(type == __NJS_DOUBLE) REGISTER[_ptr].d++;
-			return *this;
-		}
-    	__NJS_VAR operator--(const int _v1)
-		{
-			if(type == __NJS_NUMBER) REGISTER[_ptr].i--;
-			else if(type == __NJS_DOUBLE) REGISTER[_ptr].d--;
-			return *this;
-		}
-
-    	__NJS_VAR operator*(const __NJS_VAR& _v1)
-		{
-			if(type == __NJS_NUMBER && _v1.type == __NJS_NUMBER) return __NJS_VAR( get().i * _v1.get().i );
-			else if(type == __NJS_NUMBER && _v1.type == __NJS_DOUBLE) return __NJS_VAR( get().i * _v1.get().d );
-			else if(type == __NJS_DOUBLE && _v1.type == __NJS_NUMBER) return __NJS_VAR( get().d * _v1.get().i );
-			else if(type == __NJS_DOUBLE && _v1.type == __NJS_DOUBLE) return __NJS_VAR( get().d * _v1.get().d );
-			return __NJS_VAR();
-		}
-		__NJS_VAR operator*= (const __NJS_VAR& _v1)
-		{
-			if(type == __NJS_NUMBER && _v1.type == __NJS_NUMBER) REGISTER[_ptr].i *= _v1.get().i;
-			else if(type == __NJS_NUMBER && _v1.type == __NJS_DOUBLE) REGISTER[_ptr].i *= _v1.get().d;
-			else if(type == __NJS_DOUBLE && _v1.type == __NJS_NUMBER) REGISTER[_ptr].d *= _v1.get().i;
-			else if(type == __NJS_DOUBLE && _v1.type == __NJS_DOUBLE) REGISTER[_ptr].d *= _v1.get().d;
-			return __NJS_VAR();
-		}
-		__NJS_VAR operator/= (const __NJS_VAR& _v1)
-		{
-			if(type == __NJS_NUMBER && _v1.type == __NJS_NUMBER) REGISTER[_ptr].i /= _v1.get().i;
-			else if(type == __NJS_NUMBER && _v1.type == __NJS_DOUBLE) REGISTER[_ptr].i /= _v1.get().d;
-			else if(type == __NJS_DOUBLE && _v1.type == __NJS_NUMBER) REGISTER[_ptr].d /= _v1.get().i;
-			else if(type == __NJS_DOUBLE && _v1.type == __NJS_DOUBLE) REGISTER[_ptr].d /= _v1.get().d;
-			return __NJS_VAR();
-		}
-    __NJS_VAR operator/(const __NJS_VAR& _v1)
-		{
-			if(type == __NJS_NUMBER && _v1.type == __NJS_NUMBER) return __NJS_VAR( get().i / _v1.get().i );
-			else if(type == __NJS_NUMBER && _v1.type == __NJS_DOUBLE) return __NJS_VAR( get().i / _v1.get().d );
-			else if(type == __NJS_DOUBLE && _v1.type == __NJS_NUMBER) return __NJS_VAR( get().d / _v1.get().i );
-			else if(type == __NJS_DOUBLE && _v1.type == __NJS_DOUBLE) return __NJS_VAR( get().d / _v1.get().d );
-			return __NJS_VAR();
-		}
-	    __NJS_VAR operator%(const __NJS_VAR& _v1)
-		{
-			if(type == __NJS_NUMBER && _v1.type == __NJS_NUMBER) return __NJS_VAR( get().i % _v1.get().i );
-			else if(type == __NJS_NUMBER && _v1.type == __NJS_DOUBLE) return __NJS_VAR( get().i % (int)_v1.get().d );
-			else if(type == __NJS_DOUBLE && _v1.type == __NJS_NUMBER) return __NJS_VAR( (int)get().d % _v1.get().i );
-			else if(type == __NJS_DOUBLE && _v1.type == __NJS_DOUBLE) return __NJS_VAR( (int)get().d % (int)_v1.get().d );
-			return __NJS_VAR();
-		}
-
-		__NJS_VAR operator%=(const __NJS_VAR& _v1)
-		{
-			if(type == __NJS_NUMBER && _v1.type == __NJS_NUMBER) REGISTER[_ptr].i %= _v1.get().i;
-			else if(type == __NJS_NUMBER && _v1.type == __NJS_DOUBLE) REGISTER[_ptr].i %= (int)_v1.get().d;
-			else if(type == __NJS_DOUBLE && _v1.type == __NJS_NUMBER) REGISTER[_ptr].d = (int)REGISTER[_ptr].d % _v1.get().i;
-			else if(type == __NJS_DOUBLE && _v1.type == __NJS_DOUBLE) REGISTER[_ptr].d = (int)REGISTER[_ptr].d % (int)_v1.get().d;
-			return __NJS_VAR();
-		}
-		
-    __NJS_VAR const operator! () const
-    {
-      if(type == __NJS_NUMBER)
-      {
-        return __NJS_Create_Number(!get().i);
-      }
-      else if(type == __NJS_UNDEFINED)
-      {
-			return true;
-	  }
-      else return false;
-    };
-		
-    __NJS_VAR operator==(const __NJS_VAR& _v1)
-		{
-			if(type == _v1.type )
-			{
-				if(type == __NJS_NUMBER) return __NJS_VAR(__NJS_BOOLEAN, get().i == _v1.get().i);
-				else if(type == __NJS_STRING)
-				{
-					if(strcmp(get().s->__NJS_VALUE.c_str(),_v1.get().s->__NJS_VALUE.c_str()) == 0) return true;
-					else return false;
-				}
-				else if(type == __NJS_UNDEFINED) return true;
-			}
-			return false;
-		}
-	
-	__NJS_VAR operator!=(const __NJS_VAR& _v1)
-	{
-		if(type != _v1.type )
-		{
-			if(type == __NJS_NUMBER) return __NJS_VAR(__NJS_BOOLEAN, get().i != _v1.get().i);
-			else if(type == __NJS_STRING)
-			{
-				if(strcmp(get().s->__NJS_VALUE.c_str(),_v1.get().s->__NJS_VALUE.c_str()) == 0) return false;
-				else return true;
-			}
-			else if(type == __NJS_UNDEFINED) return false;
-		}
-		return true;
+	/// Unary operators
+	__NJS_VAR operator+() {
+		if (type == __NJS_NUMBER || type == __NJS_DOUBLE) return *this;
+		else return (double)*this;
 	}
-	
-		
-		__NJS_VAR operator<(const __NJS_VAR& _v1)
-		{
-			if(type == _v1.type )
-			{
-				if(type == __NJS_NUMBER) return __NJS_VAR(__NJS_BOOLEAN, get().i < _v1.get().i);
-				else if(type == __NJS_STRING)
-				{
-					return false;
-				}
-			}
-			return false;
-			
-		}
-		
-    __NJS_VAR operator<=(const __NJS_VAR& _v1)
-		{
-			if(type == _v1.type )
-			{
-				if(type == __NJS_NUMBER) return __NJS_VAR(__NJS_BOOLEAN, get().i <= _v1.get().i);
-				else if(type == __NJS_STRING)
-				{
-					return false;
-				}
-			}
-			return false;
-		}
+	__NJS_VAR operator-() {
+		if(type == __NJS_NUMBER) return __NJS_VAR(-(int)*this);
+		else return __NJS_VAR(-(double)*this);
+	}
+	__NJS_VAR operator! () { return !(bool)*this; };
 
-		__NJS_VAR operator>(const __NJS_VAR& _v1)
-		{
-			if(type == _v1.type )
-			{
-				if(type == __NJS_NUMBER) return __NJS_VAR(__NJS_BOOLEAN, get().i > _v1.get().i);
-				else if(type == __NJS_STRING)
-				{
-					return false;
-				}
-			}
-			return false;
-		}
-		
-    __NJS_VAR operator>=(const __NJS_VAR& _v1)
-		{
-			if(type == _v1.type )
-			{
-				if(type == __NJS_NUMBER) return __NJS_VAR(__NJS_BOOLEAN, get().i >= _v1.get().i);
-				else if(type == __NJS_STRING)
-				{
-					return false;
-				}
-			}
-			return false;
-		}
-    __NJS_VAR operator>>(const __NJS_VAR& _v1)
-		{
-			if(type == _v1.type )
-			{
-				if(type == __NJS_NUMBER) return __NJS_VAR( get().i >> _v1.get().i);
-			}
-			return 0;
-			
-		}
-    __NJS_VAR operator<<(const __NJS_VAR& _v1)
-		{
-			if(type == _v1.type )
-			{
-				if(type == __NJS_NUMBER) return __NJS_VAR( get().i << _v1.get().i);
-			}
-			return 0;
-		}
-	
+	/// Logical operators
+	__NJS_VAR operator&& (const __NJS_VAR _v1) { return (bool)*this && (bool)_v1; }
+	__NJS_VAR operator|| (const __NJS_VAR _v1) { return (bool)*this || (bool)_v1; }
 
-	explicit operator bool() const 
-	{ 
-		if(type == __NJS_UNDEFINED) return 0;
-		else if(type == __NJS_NUMBER || type == __NJS_BOOLEAN) return this->get().i; 
-		else if(type == __NJS_DOUBLE) return this->get().d;
-		else if(type == __NJS_STRING) return 1;
-		else if(type == __NJS_FUNCTION) return 1;
-		else if(type == __NJS_OBJECT) return 1;
-		else if(type == __NJS_ARRAY) return 1;
-		else if(type == __NJS_NATIVE) return 1;
-		else if(type == __NJS_NAN) return 0;
-		return 0;
+	/// Arithmetic operators
+	__NJS_VAR operator+(const __NJS_VAR _v1) {
+		if (type == __NJS_STRING || _v1.type == __NJS_STRING) return __NJS_Concat_To_Str((string)*this, (string)_v1);
+		else if(type == __NJS_NUMBER && _v1.type == __NJS_NUMBER) return __NJS_VAR((int)*this + (int)_v1);
+		else return __NJS_VAR((double)*this + (double)_v1);
+	}
+	__NJS_VAR operator+(const char _v1[]) {
+		return __NJS_VAR(__NJS_Concat_To_Str((string)*this, _v1));
+	}
+	__NJS_VAR operator+=(const __NJS_VAR _v1) {
+		if(type == __NJS_NUMBER && _v1.type == __NJS_NUMBER) REGISTER[_ptr].i += (int)_v1;
+		else {
+			type = __NJS_DOUBLE;
+			REGISTER[_ptr].d = (double)*this + (double)_v1;
+		}
+		return *this;
+	}
+	__NJS_VAR operator-(const __NJS_VAR _v1) {
+		if(type == __NJS_NUMBER && _v1.type == __NJS_NUMBER) return __NJS_VAR((int)*this - (int)_v1);
+		else return __NJS_VAR((double)*this - (double)_v1);
+	}
+	__NJS_VAR operator-=(const __NJS_VAR _v1) {
+		if(type == __NJS_NUMBER && _v1.type == __NJS_NUMBER) REGISTER[_ptr].i -= (int)_v1;
+		else {
+			type = __NJS_DOUBLE;
+			REGISTER[_ptr].d = (double)*this - (double)_v1;
+		}
+		return *this;
+	}
+    __NJS_VAR operator*(const __NJS_VAR _v1) {
+		if(type == __NJS_NUMBER && _v1.type == __NJS_NUMBER) return __NJS_VAR((int)*this * (int)_v1);
+		else return __NJS_VAR((double)*this * (double)_v1);
+	}
+	__NJS_VAR operator*= (const __NJS_VAR _v1) {
+		if(type == __NJS_NUMBER && _v1.type == __NJS_NUMBER) { REGISTER[_ptr].i *= (int)_v1; }
+		else {
+			type = __NJS_DOUBLE;
+			REGISTER[_ptr].d = (double)*this * (double)_v1;
+		}
+		return *this;
+	}
+    __NJS_VAR operator/(const __NJS_VAR _v1)
+	{
+		if(type == __NJS_NUMBER && _v1.type == __NJS_NUMBER) return __NJS_VAR((int)*this / (int)_v1);
+		else return __NJS_VAR((double)*this / (double)_v1);
+	}
+	__NJS_VAR operator/= (const __NJS_VAR _v1)
+	{
+		type = __NJS_DOUBLE;
+		REGISTER[_ptr].d = (double)*this / (double)_v1;
+		return *this;
+	}
+	__NJS_VAR operator%(const __NJS_VAR _v1)
+	{
+		if(type == __NJS_NUMBER && _v1.type == __NJS_NUMBER) return __NJS_VAR((int)*this % (int)_v1);
+		else return __NJS_VAR(remainder((double)*this, (double)_v1));
+	}
+	__NJS_VAR operator%=(const __NJS_VAR _v1) {
+		if(type == __NJS_NUMBER && _v1.type == __NJS_NUMBER) { REGISTER[_ptr].i %= (int)_v1; }
+		else {
+			type = __NJS_DOUBLE;
+			REGISTER[_ptr].d = remainder((double)*this, (double)_v1);
+		}
+		return *this;
+	}
+	// TODO: "**" and "**=" operators
+	__NJS_VAR operator++() {
+		if(type == __NJS_NUMBER) { REGISTER[_ptr].i++; }
+		else if(type == __NJS_DOUBLE) { REGISTER[_ptr].d++; }
+		else {
+			type = __NJS_DOUBLE;
+			REGISTER[_ptr].d = (double)*this;
+		}
+		return *this;
+	}
+    __NJS_VAR operator--() {
+		if(type == __NJS_NUMBER) REGISTER[_ptr].i--;
+		else if(type == __NJS_DOUBLE) REGISTER[_ptr].d--;
+		else {
+			type = __NJS_DOUBLE;
+			REGISTER[_ptr].d = (double)*this;
+		}
+		return *this;
+	}
+
+	/// Comparison operators
+	__NJS_VAR operator==(const __NJS_VAR _v1) {
+		if(type == _v1.type) {
+			switch (type) {
+				case __NJS_NUMBER: return __NJS_VAR((int)*this == (int)_v1);
+				case __NJS_DOUBLE: return __NJS_VAR((double)*this == (double)_v1);
+				//case __NJS_BIGNUMBER: return __NJS_VAR((long)*this == (long)_v1);
+				case __NJS_BOOLEAN: return __NJS_VAR((bool)*this == (bool)_v1);
+				case __NJS_STRING: return __NJS_VAR(((string)*this).compare((string)_v1) == 0);
+				case __NJS_INFINITY:
+				case __NJS_NULL:
+				case __NJS_UNDEFINED:
+					return __NJS_VAR(true);
+				case __NJS_ARRAY:
+				case __NJS_NATIVE:
+				case __NJS_FUNCTION:
+				case __NJS_OBJECT:
+				case __NJS_NAN:
+					return __NJS_VAR(false);
+			}
+		} else {
+			if (type == __NJS_STRING || _v1.type == __NJS_STRING) {
+				return __NJS_VAR((string)*this) == __NJS_VAR((string)_v1);
+			} else return __NJS_VAR((double)*this) == __NJS_VAR((double)_v1);
+		}
+	}
+	// TODO: "===" operator
+	__NJS_VAR operator!=(const __NJS_VAR _v1) {
+		return !(*this == _v1);
+	}
+	// TODO: "!==" operator
+	__NJS_VAR operator<(const __NJS_VAR _v1) {
+		if(type == _v1.type && type == __NJS_NUMBER) return __NJS_VAR((int)*this < (int)_v1);
+		else return (double)*this < (double)_v1;
+	}
+	__NJS_VAR operator<=(const __NJS_VAR _v1) {
+		if(type == _v1.type && type == __NJS_NUMBER) return __NJS_VAR((int)*this <= (int)_v1);
+		else return (double)*this <= (double)_v1;
+	}
+	__NJS_VAR operator>(const __NJS_VAR _v1) {
+		if(type == _v1.type && type == __NJS_NUMBER) return __NJS_VAR((int)*this > (int)_v1);
+		else return (double)*this > (double)_v1;
+	}
+	__NJS_VAR operator>=(const __NJS_VAR _v1) {
+		if(type == _v1.type && type == __NJS_NUMBER) return __NJS_VAR((int)*this >= (int)_v1);
+		else return (double)*this >= (double)_v1;
+	}
+
+	/// Bitwise operators
+	__NJS_VAR operator&(const __NJS_VAR _v1) { return __NJS_VAR((int)*this & (int)_v1); }
+	__NJS_VAR operator&=(const __NJS_VAR _v1) { type = __NJS_NUMBER; REGISTER[_ptr].i = (int)*this & (int)_v1; return *this; }
+	__NJS_VAR operator|(const __NJS_VAR _v1) { return __NJS_VAR((int)*this | (int)_v1); }
+	__NJS_VAR operator|=(const __NJS_VAR _v1) { type = __NJS_NUMBER; REGISTER[_ptr].i = (int)*this | (int)_v1; return *this; }
+	__NJS_VAR operator^(const __NJS_VAR _v1) { return __NJS_VAR((int)*this ^ (int)_v1); }
+	__NJS_VAR operator^=(const __NJS_VAR _v1) { type = __NJS_NUMBER; REGISTER[_ptr].i = (int)*this ^ (int)_v1; return *this; }
+	__NJS_VAR operator~() { return __NJS_VAR(~(int)*this); }
+	__NJS_VAR operator>>(const __NJS_VAR _v1) { return __NJS_VAR((int)*this >> (int)_v1); }
+	__NJS_VAR operator>>=(const __NJS_VAR _v1) { type = __NJS_NUMBER; REGISTER[_ptr].i = (int)*this >> (int)_v1; return *this; }
+	__NJS_VAR operator<<(const __NJS_VAR _v1) { return __NJS_VAR((int)*this << (int)_v1); }
+	__NJS_VAR operator<<=(const __NJS_VAR _v1) { type = __NJS_NUMBER; REGISTER[_ptr].i = (int)*this << (int)_v1; return *this; }
+	// TODO: ">>>" and ">>>=" operator support
+
+	operator int() const
+	{
+		switch(type) {
+			case __NJS_NUMBER: return this->get().i;
+			case __NJS_DOUBLE: return static_cast<int>(this->get().d);
+			//case __NJS_BIGNUMBER: return static_cast<int>(this->get().l);
+			case __NJS_BOOLEAN: return static_cast<int>(this->get().b);
+			case __NJS_STRING: return stoi(this->get().s->__NJS_VALUE);
+			case __NJS_ARRAY:
+				if (this->get().a->__NJS_VALUE.size() != 1) return 0;
+				return static_cast<int>(this->get().a->__NJS_VALUE[0]);
+			case __NJS_NATIVE:
+			case __NJS_FUNCTION:
+			case __NJS_OBJECT:
+			case __NJS_INFINITY:
+			case __NJS_NAN:
+			case __NJS_NULL:
+			case __NJS_UNDEFINED:
+				return 0;
+		}
+	}
+
+	operator double() const
+	{
+		switch(type) {
+			case __NJS_NUMBER:
+				return static_cast<double>(this->get().i);
+			case __NJS_DOUBLE:
+				return this->get().d;
+			//case __NJS_BIGNUMBER:
+			//	return static_cast<double>(this->get().l);
+			case __NJS_BOOLEAN:
+				return static_cast<double>(this->get().b);
+			case __NJS_STRING:
+				return stod(this->get().s->__NJS_VALUE);
+			case __NJS_ARRAY:
+				if (this->get().a->__NJS_VALUE.size() == 0) return 0;
+				if (this->get().a->__NJS_VALUE.size() > 1) return NAN;
+				return static_cast<double>(this->get().a->__NJS_VALUE[0]);
+			case __NJS_NATIVE:
+			case __NJS_FUNCTION:
+			case __NJS_OBJECT:
+			case __NJS_INFINITY:
+			case __NJS_NAN:
+			case __NJS_NULL:
+			case __NJS_UNDEFINED:
+				return 0;
+		}
+	}
+
+	operator bool() const 
+	{
+		switch(type) {
+			case __NJS_NUMBER:
+				return static_cast<bool>(this->get().i);
+			case __NJS_DOUBLE:
+				return static_cast<bool>(this->get().d);
+			//case __NJS_BIGNUMBER:
+			//	return static_cast<bool>(this->get().l);
+			case __NJS_BOOLEAN:
+				return this->get().b;
+			case __NJS_STRING:
+				return static_cast<bool>(this->get().s->__NJS_VALUE.size());
+			case __NJS_ARRAY:
+			case __NJS_NATIVE:
+			case __NJS_FUNCTION:
+			case __NJS_OBJECT:
+			case __NJS_INFINITY:
+				return true;
+			case __NJS_NAN:
+			case __NJS_NULL:
+			case __NJS_UNDEFINED:
+				return false;
+		}
+	}
+
+	operator string() const 
+	{
+		switch(type) {
+			case __NJS_NUMBER: return to_string(this->get().i);
+			case __NJS_DOUBLE: return to_string(this->get().d);
+			//case __NJS_BIGNUMBER: return to_string(this->get().l);
+			case __NJS_BOOLEAN: return this->get().b ? "true" : "false";
+			case __NJS_STRING: return this->get().s->__NJS_VALUE;
+			// TODO:
+			case __NJS_ARRAY: return "[Array]";
+			case __NJS_NATIVE: return "[native code]";
+			case __NJS_FUNCTION: return "[Function]";
+			case __NJS_OBJECT: return "[Object]";
+			case __NJS_INFINITY: return "Infinity";
+			case __NJS_NAN: return "NaN";
+			case __NJS_NULL: return "null";
+			case __NJS_UNDEFINED: return "undefined";
+		}
 	}
 };
-
 
 namespace NECTAR
 {
