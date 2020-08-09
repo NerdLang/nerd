@@ -63,7 +63,7 @@ enum __NJS_TYPE
 #define __NJS_EXCEPTION_PARAMETER __NJS_VAR &e
 #define finally ;
 #define __NJS_BOOLEAN_TRUE __NJS_Create_Boolean(true)
-#define __NJS_BOOLEAN_FASLE __NJS_Create_Boolean(false)
+#define __NJS_BOOLEAN_FALSE __NJS_Create_Boolean(false)
 /*** END HELPERS ***/
 
 struct __NJS_VAR;
