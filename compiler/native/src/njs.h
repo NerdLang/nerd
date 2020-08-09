@@ -1474,6 +1474,16 @@ __NJS_VAR operator/(t _left, const __NJS_VAR &_right)
 	return __NJS_VAR(_left) / _right;
 }
 
+__NJS_VAR operator++(const __NJS_VAR &_var)
+{
+	return _var++;
+}
+
+__NJS_VAR operator--(const __NJS_VAR &_var)
+{
+	return _var--;
+}
+
 /*** END REDIFINING STD OPERATORS ***/
 
 __NJS_Create_Lambda(__IMPL_EVAL)
