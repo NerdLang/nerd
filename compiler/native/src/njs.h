@@ -524,7 +524,7 @@ public:
 		return *this;
 	}
 	// TODO: "**" and "**=" operators
-	__NJS_VAR operator++()
+	__NJS_VAR operator++(const int _v1)
 	{
 		if (type == __NJS_NUMBER)
 		{
@@ -541,7 +541,7 @@ public:
 		}
 		return *this;
 	}
-	__NJS_VAR operator--()
+	__NJS_VAR operator--(const int _v1)
 	{
 		if (type == __NJS_NUMBER)
 			REGISTER[_ptr].i--;
@@ -593,12 +593,13 @@ public:
 				return __NJS_VAR((double)*this) == __NJS_VAR((double)_v1);
 		}
 	}
-	// TODO: "===" operator
+	// === emulated with __NJS_EQUAL_VALUE_AND_TYPE
 	__NJS_VAR operator!=(const __NJS_VAR &_v1)
 	{
 		return !(*this == _v1);
 	}
-	// TODO: "!==" operator
+	
+	// !== emulated with __NJS_NOT_EQUAL_VALUE_AND_TYPE
 	__NJS_VAR operator<(const __NJS_VAR &_v1)
 	{
 		if (type == _v1.type && type == __NJS_NUMBER)
@@ -1474,15 +1475,6 @@ __NJS_VAR operator/(t _left, const __NJS_VAR &_right)
 	return __NJS_VAR(_left) / _right;
 }
 
-__NJS_VAR operator++(const __NJS_VAR &_var)
-{
-	return _var++;
-}
-
-__NJS_VAR operator--(const __NJS_VAR &_var)
-{
-	return _var--;
-}
 
 /*** END REDIFINING STD OPERATORS ***/
 
