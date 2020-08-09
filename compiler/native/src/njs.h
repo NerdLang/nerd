@@ -62,6 +62,8 @@ enum __NJS_TYPE
 #define __NJS_Create_Lambda(name) function<__NJS_VAR (vector<var>)>* name = new function<__NJS_VAR (vector<var>)>([](vector<var> __NJS_VARARGS)
 #define __NJS_EXCEPTION_PARAMETER __NJS_VAR &e
 #define finally ;
+#define __NJS_BOOLEAN_TRUE __NJS_Create_Boolean(true)
+#define __NJS_BOOLEAN_FASLE __NJS_Create_Boolean(false)
 /*** END HELPERS ***/
 
 struct __NJS_VAR;
@@ -432,83 +434,87 @@ public:
 	{
 		if (type == __NJS_STRING || _v1.type == __NJS_STRING)
 			return __NJS_Concat_To_Str((string) * this, (string)_v1);
-		else if (type == __NJS_NUMBER && _v1.type == __NJS_NUMBER)
+		else if (type == __NJS_NUMBER)
 			return __NJS_VAR((int)*this + (int)_v1);
-		else
+		else if (type == __NJS_DOUBLE)
 			return __NJS_VAR((double)*this + (double)_v1);
+		else return __NJS_VAR();
 	}
 	__NJS_VAR operator+(const char _v1[])
 	{
-		return __NJS_VAR(__NJS_Concat_To_Str((string) * this, _v1));
+		return __NJS_VAR(__NJS_Concat_To_Str(REGISTER[_ptr].s->__NJS_VALUE, _v1));
 	}
 	__NJS_VAR operator+=(const __NJS_VAR &_v1)
 	{
-		if (type == __NJS_NUMBER && _v1.type == __NJS_NUMBER)
-			REGISTER[_ptr].i += (int)_v1;
-		else
-		{
-			type = __NJS_DOUBLE;
-			REGISTER[_ptr].d = (double)*this + (double)_v1;
-		}
-		return *this;
+		// TODO: add number = object, string + object ...
+		if(type == __NJS_NUMBER) REGISTER[_ptr].i += (int)_v1;
+		else if(type == __NJS_DOUBLE) REGISTER[_ptr].d += (double)_v1;
+		else if(type == __NJS_STRING && _v1.type == __NJS_STRING) 
+			REGISTER[_ptr].s->__NJS_VALUE += (string)_v1;
+		else if(type == __NJS_STRING && _v1.type == __NJS_DOUBLE) 
+			REGISTER[_ptr].s->__NJS_VALUE += (double)_v1;
+		else if(type == __NJS_STRING && _v1.type == __NJS_NUMBER) 
+			REGISTER[_ptr].s->__NJS_VALUE += (int)_v1;
+		return __NJS_VAR();
 	}
 	__NJS_VAR operator-(const __NJS_VAR &_v1)
 	{
-		if (type == __NJS_NUMBER && _v1.type == __NJS_NUMBER)
+		if (type == __NJS_NUMBER )
 			return __NJS_VAR((int)*this - (int)_v1);
-		else
+		else if (type == __NJS_DOUBLE )
 			return __NJS_VAR((double)*this - (double)_v1);
+		else return __NJS_VAR();
 	}
 	__NJS_VAR operator-=(const __NJS_VAR &_v1)
 	{
-		if (type == __NJS_NUMBER && _v1.type == __NJS_NUMBER)
+		if(type == __NJS_NUMBER && _v1.type == __NJS_NUMBER) 
 			REGISTER[_ptr].i -= (int)_v1;
-		else
-		{
-			type = __NJS_DOUBLE;
-			REGISTER[_ptr].d = (double)*this - (double)_v1;
-		}
-		return *this;
+		else if(type == __NJS_NUMBER && _v1.type == __NJS_DOUBLE) 
+			REGISTER[_ptr].i -= (double)_v1;
+		else if(type == __NJS_DOUBLE && _v1.type == __NJS_NUMBER) 
+			REGISTER[_ptr].d -= (int)_v1;
+		else if(type == __NJS_DOUBLE && _v1.type == __NJS_DOUBLE) 
+			REGISTER[_ptr].d -= (double)_v1;
+		return __NJS_VAR();
 	}
 	__NJS_VAR operator*(const __NJS_VAR &_v1)
 	{
-		if (type == __NJS_NUMBER && _v1.type == __NJS_NUMBER)
-			return __NJS_VAR((int)*this * (int)_v1);
-		else
-			return __NJS_VAR((double)*this * (double)_v1);
+		if(type == __NJS_NUMBER) 
+			return REGISTER[_ptr].i * (int)_v1;
+		else if(type == __NJS_DOUBLE) 
+			return REGISTER[_ptr].d * (double)_v1;
+		return __NJS_VAR();
 	}
 	__NJS_VAR operator*=(const __NJS_VAR &_v1)
 	{
-		if (type == __NJS_NUMBER && _v1.type == __NJS_NUMBER)
-		{
+		if(type == __NJS_NUMBER) 
 			REGISTER[_ptr].i *= (int)_v1;
-		}
-		else
-		{
-			type = __NJS_DOUBLE;
-			REGISTER[_ptr].d = (double)*this * (double)_v1;
-		}
-		return *this;
+		else if(type == __NJS_DOUBLE) 
+			REGISTER[_ptr].d *= (double)_v1;
+		return __NJS_VAR();
 	}
 	__NJS_VAR operator/(const __NJS_VAR &_v1)
 	{
-		if (type == __NJS_NUMBER && _v1.type == __NJS_NUMBER)
-			return __NJS_VAR((int)*this / (int)_v1);
-		else
-			return __NJS_VAR((double)*this / (double)_v1);
+		if (type == __NJS_NUMBER)
+			return REGISTER[_ptr].i / (int)_v1;
+		else if (type == __NJS_DOUBLE)
+			return REGISTER[_ptr].d / (double)_v1;
+		return __NJS_VAR();
 	}
 	__NJS_VAR operator/=(const __NJS_VAR &_v1)
 	{
-		type = __NJS_DOUBLE;
-		REGISTER[_ptr].d = (double)*this / (double)_v1;
-		return *this;
+		if(type == __NJS_NUMBER) 
+			REGISTER[_ptr].i /= (int)_v1;
+		else if(type == __NJS_DOUBLE) 
+			REGISTER[_ptr].d /= (double)_v1.get().d;
+		return __NJS_VAR();
 	}
 	__NJS_VAR operator%(const __NJS_VAR &_v1)
 	{
 		if (type == __NJS_NUMBER && _v1.type == __NJS_NUMBER)
-			return __NJS_VAR((int)*this % (int)_v1);
+			return REGISTER[_ptr].i % (int)_v1;
 		else
-			return __NJS_VAR(remainder((double)*this, (double)_v1));
+			return remainder(REGISTER[_ptr].d, (double)_v1);
 	}
 	__NJS_VAR operator%=(const __NJS_VAR &_v1)
 	{
@@ -563,18 +569,18 @@ public:
 			switch (type)
 			{
 			case __NJS_NUMBER:
-				return __NJS_VAR((int)*this == (int)_v1);
+				return __NJS_Create_Boolean(REGISTER[_ptr].i == (int)_v1);
 			case __NJS_DOUBLE:
-				return __NJS_VAR((double)*this == (double)_v1);
+				return __NJS_Create_Boolean(REGISTER[_ptr].d == (double)_v1);
 			//case __NJS_BIGNUMBER: return __NJS_VAR((long)*this == (long)_v1);
 			case __NJS_BOOLEAN:
-				return __NJS_VAR((bool)*this == (bool)_v1);
+				return __NJS_Create_Boolean(REGISTER[_ptr].b == (bool)_v1);
 			case __NJS_STRING:
-				return __NJS_VAR(((string) * this).compare((string)_v1) == 0);
+				return __NJS_Create_Boolean((REGISTER[_ptr].s->__NJS_VALUE).compare((string)_v1) == 0);
 			case __NJS_INFINITY:
 			case __NJS_NULL:
 			case __NJS_UNDEFINED:
-				return __NJS_VAR(true);
+				return __NJS_Create_Boolean(true);
 			case __NJS_ARRAY:
 			case __NJS_NATIVE:
 			case __NJS_FUNCTION:

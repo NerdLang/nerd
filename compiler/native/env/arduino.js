@@ -70,7 +70,7 @@ var ARDUINO =
 	if(OPT.cli) console.log("[*]" + _cli);
 	return _cli;
   },
-  compiler: "avr-c++ -std=c++11",
+  compiler: "avr-g++ -std=c++17",
   stdlib:[],
   out: function(_name)
   {

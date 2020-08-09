@@ -10,3 +10,14 @@ else
 {
   console.log("False ...");
 }
+
+
+var i = 1;
+var j = 1;
+var u = undefined;
+console.log("u is " + u);
+
+console.log(undefined == undefined)
+console.log( u == undefined);
+console.log(i == u);
+console.log(i == j);
