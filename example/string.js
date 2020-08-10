@@ -1,6 +1,10 @@
 var a = 'Hi, it\'s ';
 var b = "NectarJS !";
 var c = a + b;
+var arr = [0,1,2];
+var obj = {};
+var peq = {};
+peq += b;
 console.log("a = Hi, it's ");
 console.log("b = NectarJS !");
 console.log("c = a + b: " + c);
@@ -11,3 +15,7 @@ console.log("c.indexOf('NectarJS'): " + c.indexOf("NectarJS"));
 console.log("c.slice(3): " + c.slice(3));
 console.log("c.slice(9, 17): " + c.slice(9, 17));
 console.log("c.replace('Hi', 'Hello'): " + c.replace('Hi', 'Hello'));
+console.log("NectarJS + [0,1,2] : " + (b + arr));
+console.log("[0,1,2] + NectarJS : " + (arr + b));
+console.log("NectarJS + {} : " + (b + obj));
+console.log("{} += NectarJS : " + peq);
