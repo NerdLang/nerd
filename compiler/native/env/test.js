@@ -61,6 +61,7 @@ var TEST =
     },
     "globals":
     {
+		"undefined": false,
 		"eval": false,
         "__njs_typeof": false,
         "module": false,

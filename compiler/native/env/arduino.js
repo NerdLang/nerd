@@ -94,6 +94,7 @@ var ARDUINO =
 		},
 		"globals":
 		{
+			"undefined": false,
 			"eval": false,
 			"__njs_typeof": false,
 			"require": false,

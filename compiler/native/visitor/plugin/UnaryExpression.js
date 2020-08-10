@@ -48,5 +48,12 @@ function UnaryExpression(_path)
 		}
 		_path.skip();
 	}
+	else if(_path.node.operator == "void")
+	{
+		var _rnd = "__NJS_VOID_" + RND();
+		COMPILER.DECL.push(`__NJS_VAR ${_rnd}() { ${babel.generate(_path.node.arguments).code} return undefined;};`);
+		VISITOR.pushDeclVar(_rnd);
+		_path.replaceWithSourceString(`${_rnd}()`);
+	}
 }
 module.exports = UnaryExpression;

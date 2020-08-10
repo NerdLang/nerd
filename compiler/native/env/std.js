@@ -46,6 +46,7 @@ var STD =
         },
         "globals":
         {
+			"undefined": false,
 			"eval": false,
             "__njs_typeof": false,
             "console": false,

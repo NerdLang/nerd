@@ -41,6 +41,7 @@ var WASM =
 		},
 		"globals":
 		{
+			"undefined": false,
 			"eval": false,
 			"Nectar": false,
 			"__njs_typeof": false,
