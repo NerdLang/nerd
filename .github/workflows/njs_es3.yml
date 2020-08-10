@@ -1,4 +1,4 @@
-name: CI_NJS
+name: ES3_NJS
 
 on:
   workflow_dispatch:
@@ -29,5 +29,5 @@ jobs:
         wget -qO- https://deb.nodesource.com/setup_12.x | sudo -E bash
         sudo apt install -y nodejs
         npm i
-        npm run njs_test
+        npm run es3_test
   
