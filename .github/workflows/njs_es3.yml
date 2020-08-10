@@ -1,0 +1,33 @@
+name: CI_NJS
+
+on:
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Log level'     
+        required: true
+        default: 'warning'
+      tags:
+        description: 'Test scenario tags'  
+
+
+jobs:
+
+  test:
+
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - uses: actions/checkout@v2
+      
+    # Runs a set of commands using the runners shell
+    - name: Install and run
+      run: | 
+        sudo apt install g++
+        wget -qO- https://deb.nodesource.com/setup_12.x | sudo -E bash
+        sudo apt install -y nodejs
+        npm i
+        npm run njs_test
+  
