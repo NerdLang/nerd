@@ -61,7 +61,8 @@ var STM32 =
       },
       "globals":
       {
-		  "eval": false,
+		"undefined": false,
+		"eval": false,
         "__njs_typeof":false,
         "Nectar": false,
         "module": false,

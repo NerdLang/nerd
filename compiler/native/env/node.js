@@ -41,6 +41,7 @@ var NODE =
 		},
 		"globals":
 		{
+			"undefined": false,
 			"eval": false,
 			"__njs_typeof": false,
 			"console": false,

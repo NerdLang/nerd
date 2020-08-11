@@ -42,6 +42,7 @@ var njsVisitor =
 {
 	AssignmentExpression: require("./plugin/AssignmentExpression.js"),
 	BinaryExpression: require("./plugin/BinaryExpression.js"),
+	BooleanLiteral: require("./plugin/BooleanLiteral.js"),
 	CallExpression: require("./plugin/CallExpression.js"),
 	CatchClause: require("./plugin/CatchClause.js"),
 	ClassDeclaration: require("./plugin/ClassDeclaration.js"),

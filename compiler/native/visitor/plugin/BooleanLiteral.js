@@ -25,35 +25,10 @@
  * and feel free to contact us.
  *
  */
- 
-function UnaryExpression(_path) 
-{ 
-	if (_path.node.operator == "typeof")
-	{
-		if(_path.node.argument.type == "Identifier")	
-		{
-			_path.replaceWithSourceString("__NJS_Typeof(" + _path.node.argument.name + ")");
-		}
-		else if(_path.node.argument.extra)
-		{
-			_path.replaceWithSourceString("__NJS_Typeof(" + _path.node.argument.extra.raw + ")");
-		}
-		else if (_path.node.argument.type == "MemberExpression")
-		{
-			_path.replaceWithSourceString("__NJS_Typeof(" + VISITOR.memberExpression(_path.node.argument) + ")");
-		}
-		else if (_path.node.argument.type == "CallExpression")
-		{
-			_path.replaceWithSourceString("__NJS_Typeof(" + VISITOR.callExpression(_path.node.argument) + ")");
-		}
-		_path.skip();
-	}
-	else if(_path.node.operator == "void")
-	{
-		var _rnd = "__NJS_VOID_" + RND();
-		COMPILER.DECL.push(`__NJS_VAR ${_rnd}() { ${babel.generate(_path.node.arguments).code} return undefined;};`);
-		VISITOR.pushDeclVar(_rnd);
-		_path.replaceWithSourceString(`${_rnd}()`);
-	}
+const TRUE = "__NJS_BOOLEAN_TRUE";
+const FALSE = "__NJS_BOOLEAN_FALSE";
+function BooleanLiteral(_path)
+{
+	_path.replaceWithSourceString(_path.node.value ? TRUE : FALSE);
 }
-module.exports = UnaryExpression;
+module.exports = BooleanLiteral;
