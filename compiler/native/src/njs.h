@@ -145,6 +145,9 @@ __NJS_VAR __NJS_Log_Console(__NJS_VAR _var);
 __NJS_VAR __NJS_Object_Keys(__NJS_VAR _var);
 __NJS_VAR __NJS_Object_Stringify(__NJS_VAR _var);
 __NJS_VAR __NJS_Object_Stringify(__NJS_VAR _var, bool _bracket);
+__NJS_VAR __NJS_Create_Object();
+__NJS_VAR __NJS_Create_Array();
+__NJS_VAR __NJS_Object_Clone(__NJS_VAR _var);
 /*** STRING MANIPULATION ***/
 template <typename m, typename n>
 string __NJS_Concat_To_Str(m _left, n _right)
@@ -1210,6 +1213,8 @@ __NJS_Class_Object::__NJS_Class_Object()
 __NJS_Class_Function::__NJS_Class_Function(void *_f)
 {
 	cnt++;
+	__NJS_VAR __proto = __NJS_Create_Object();
+	__NJS_Object_Set("prototype", __proto, &this->__OBJECT);
 	__NJS_VALUE = _f;
 }
 
@@ -1433,6 +1438,64 @@ __NJS_VAR __NJS_Object_Stringify(__NJS_VAR _var, bool _bracket)
 	}
 	else
 		return "";
+}
+
+__NJS_VAR __NJS_Object_Clone(__NJS_VAR _var)
+{
+	__NJS_TYPE _t = _var.type;
+	switch(_t)
+	{
+		case __NJS_UNDEFINED:
+		case __NJS_NAN:
+		case __NJS_NUMBER:
+		case __NJS_DOUBLE:
+		case __NJS_STRING:
+		case __NJS_FUNCTION:
+			return _var;
+		case __NJS_ARRAY:
+		{
+			var _res = __NJS_Create_Array();
+			vector<__NJS_VAR> *_arr = &_var.get().a->__NJS_VALUE;
+
+			int j = (*_arr).size();
+			for (int i = 0; i < j; i++)
+			{
+				__NJS_Object_Set(i, __NJS_Object_Clone((*_arr)[i]), _res);
+			}
+			return _res;
+		}
+		case __NJS_OBJECT:
+		{
+			var _res = __NJS_Create_Object();
+			vector<pair<const char *, __NJS_VAR>> *_obj = &_var.get().o->__OBJECT;
+			int j = (*_obj).size();
+			for (int _i = 0; _i < j; _i++)
+			{
+				__NJS_Object_Set((*_obj)[_i].first, __NJS_Object_Clone((*_obj)[_i].second), _res);
+			}
+			return _res;
+		}
+		default:
+			return __NJS_VAR();
+	}
+}
+
+void __NJS_Object_Construct(__NJS_VAR _this, __NJS_VAR _prototype)
+{
+	if(_this.type == __NJS_OBJECT && _prototype.type == __NJS_OBJECT)
+	{
+		vector<pair<const char *, __NJS_VAR>> *_obj = &_prototype.get().o->__OBJECT;
+		int j = (*_obj).size();
+		for (int _i = 0; _i < j; _i++)
+		{
+			__NJS_VAR _tmp =  __NJS_Object_Get((*_obj)[_i].first, _this);
+			if(_tmp.type == __NJS_UNDEFINED)
+			{
+				__NJS_Object_Set((*_obj)[_i].first, (*_obj)[_i].second, _this);
+			}
+		}
+	}
+	
 }
 
 
