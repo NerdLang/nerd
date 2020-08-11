@@ -1,10 +1,13 @@
 ## VERSION 0.6.X
-* Variadic function support
-* WASM support
-* Low memory support
+* Add Variadic function support
+* Add WASM support
+* Add Low memory support
 * Add STM32 supports
 * Move extern to nectarjs_external module
 * Add chaining functions
+* Add try/catch/finally support 
+* Not necessary to declare variables
+* Math support enhancement, thanks to Saiv46
 
 ## VERSION 0.5.X
 * Adding memory management and cleaning without GC
