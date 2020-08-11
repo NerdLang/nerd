@@ -14,7 +14,7 @@ No VM. No Bytecode. No Garbage Collector. Full Compiled and Native binaries.
 
 **NectarJS** aims to make JavaScript universal.
 
-**NectarJS** is in active development, join us on [Discord](https://discord.gg/cpe2UuN) on [NectarJS' IRC](https://kiwiirc.com/client/irc.freenode.net/#nectarjs) if you need more information.
+**NectarJS** is in active development, join us on [Discord](https://discord.gg/cpe2UuN) on [IRC](https://kiwiirc.com/client/irc.freenode.net/#nectarjs) if you need more information.
 
 **NectarJS** roadmap is on [Trello](https://trello.com/invite/b/6F4rvEj2/9d7677f9dc6b5bf2f5b33e45fc794182/nectarjs)
 
