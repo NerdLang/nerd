@@ -8,13 +8,21 @@ Javascript's God Mode : one language to rule them all. Code everything, everywhe
 
 No VM. No Bytecode. No Garbage Collector. Full Compiled and Native binaries.
 
-Any questions or ideas, join us : [![NectarJS' IRC](https://img.shields.io/badge/chat-on%20freenode-brightgreen.svg)](https://kiwiirc.com/client/irc.freenode.net/#nectarjs)  [![NectarJS' Discord](https://img.shields.io/badge/Discord-Join-brightgreen.svg)](https://discord.gg/cpe2UuN) [![Trello](https://img.shields.io/badge/Trello-Join-brightgreen.svg)](https://trello.com/invite/b/6F4rvEj2/9d7677f9dc6b5bf2f5b33e45fc794182/nectarjs)  [![Quick Start](https://img.shields.io/badge/Doc-Quick%20Start-brightgreen.svg)](https://nectarjs.com/docs/nectarjs/quick-start/) [![Quick Hack](https://img.shields.io/badge/Doc-Quick%20Hack-orange.svg)](https://nectarjs.com/docs/contribute/quick-hack/)
+**NectarJS** is a **JavaScript native compiler**.
 
-<hr>
+**NectarJS** is able to compile native apps for: Windows, Mac, Linux, iOS, Android, Raspberry, STM32 and more.
 
-[![NPM](https://nodei.co/npm/nectarjs.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/nectarjs/)
+**NectarJS** aims to make JavaScript universal.
 
-Full documentation is here (WIP) : [NectarJS Doc](https://nectarjs.com/documentation/)
+**NectarJS** is in active development, join us on [Discord](https://discord.gg/cpe2UuN) on [IRC](https://kiwiirc.com/client/irc.freenode.net/#nectarjs) if you need more information.
+
+**NectarJS** roadmap is on [Trello](https://trello.com/invite/b/6F4rvEj2/9d7677f9dc6b5bf2f5b33e45fc794182/nectarjs)
+
+**NectarJS** [Quick Start](https://nectarjs.com/docs/nectarjs/quick-start/) documentation
+
+**NectarJS** [Quick Hack](https://nectarjs.com/docs/contribute/quick-hack/) documentation
+
+**NectarJS** Full documentation is here (WIP) : [NectarJS Doc](https://nectarjs.com/documentation/)
 
 </p>
 
@@ -37,7 +45,7 @@ Some benchmarks with the file example/fibo.js and differents fibos arguments:
 * Compile everything that can be transpiled in JS : Ruby (Opal), Python (Transcript, Brython, JavaScrypthon), TypeScript ...
 
 # Install
-
+ 
 ```
 npm install -g nectarjs
 ```
