@@ -103,5 +103,3 @@ VISITOR.objectExpression = require("./objectExpression");
 VISITOR.memberExpression = require("./memberExpression");
 
 VISITOR.arrayExpression = require("./arrayExpression");
-
-VISITOR.callExpression = require("./callExpression");

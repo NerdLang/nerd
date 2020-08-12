@@ -28,10 +28,6 @@
  
 function MemberExpression(_path)
 {  
-  if(_path.node.object && _path.node.object.type == "ThisExpression")
-  {
-	_path.replaceWithSourceString( "__NJS_Object_Get(" + VISITOR.memberExpression(_path.node) + ", __NJS_THIS)");
-  }
-  else _path.replaceWithSourceString(VISITOR.memberExpression(_path.node));
+  VISITOR.memberExpression(_path.node);
 }
 module.exports = MemberExpression;

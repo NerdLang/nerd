@@ -30,7 +30,5 @@ function NewExpression(_path)
 {
 	_path.node.type = "CallExpression";
 	_path.node.callee.name = "__NEW_" + _path.node.callee.name;
-	var _new = VISITOR.callExpression(_path.node);
-	if(_new.length > 0) _path.replaceWithSourceString(_new);
 }
 module.exports = NewExpression;

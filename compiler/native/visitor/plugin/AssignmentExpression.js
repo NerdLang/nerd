@@ -28,9 +28,10 @@
  
 function AssignmentExpression(_path)
 {
- 
+
  if(_path.node.left.type == "MemberExpression")
  {
+	
 	var prop = [];
 	var _obj = _path.node.left;
 	while(_obj)
@@ -74,7 +75,7 @@ function AssignmentExpression(_path)
 		if(_obj.object) _obj=_obj.object;
 		else { _obj = null; break; }
 	}
-
+/*
 	var _setter = "";
 	for(var i = 0; i < prop.length; i++)
 	{
@@ -97,7 +98,7 @@ function AssignmentExpression(_path)
 	_path.insertBefore(babel.parse("var " + _n + ";"));
 	_path.node.left = babel.types.identifier(_n);
 	_path.insertAfter(babel.parse(_setter.replace("{{LEFT}}", _n)));
-
+	*/
 	if(_path.node.right && _path.node.right.type == "ArrayExpression")
 	{
 		var _a = VISITOR.arrayExpression(_path.node.right);

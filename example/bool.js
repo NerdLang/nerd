@@ -21,3 +21,5 @@ console.log(undefined == undefined)
 console.log( u == undefined);
 console.log(i == u);
 console.log(i == j);
+
+console["log"](i);

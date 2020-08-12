@@ -12,6 +12,7 @@ output.items = [];
 inputFile = inputFile.toString().split("\n");
 
 for(var i = 0; i < inputFile.length; i++) {
+
   if(inputFile[i] != "") {
     var subitem = {
           uid: inputFile[i],

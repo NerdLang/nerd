@@ -40,11 +40,12 @@ function UnaryExpression(_path)
 		}
 		else if (_path.node.argument.type == "MemberExpression")
 		{
-			_path.replaceWithSourceString("__NJS_Typeof(" + VISITOR.memberExpression(_path.node.argument) + ")");
+			VISITOR.memberExpression(_path.node.argument);
+			_path.replaceWithSourceString("__NJS_Typeof(" + babel.generate(_path.node.argument).code + ")");
 		}
 		else if (_path.node.argument.type == "CallExpression")
 		{
-			_path.replaceWithSourceString("__NJS_Typeof(" + VISITOR.callExpression(_path.node.argument) + ")");
+			_path.replaceWithSourceString("__NJS_Typeof(" + babel.generate(_path.node.argument).code + ")");
 		}
 		_path.skip();
 	}

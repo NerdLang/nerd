@@ -28,49 +28,24 @@
  
 function memberExpression(_path)
 {
-	var prop = [];
 	var _obj = _path;
 
 	while(_obj)
 	{
-		if(_obj.property) 
+		if(_obj.property && !_obj.computed) 
 		{
+			
 			if(_obj.property.type == "Identifier")
 			{
-				if(_obj.computed) prop.push(_obj.property.name);
-				else prop.push("\"" + _obj.property.name + "\"");
-			}
-			else if(_obj.property && _obj.property.extra) prop.push(_obj.property.extra.raw);
-		}
-		if(_obj.object)
-		{
-			if(_obj.object.type == "CallExpression")
-			{
-				prop.push(VISITOR.callExpression(_obj.object));
+				_obj.property.type = "StringLiteral";
+				_obj.property.extra = { rawValue: _obj.property.name, raw: '"' + _obj.property.name +'"'};
+				_obj.property.value = _obj.property.name;
+				_obj.computed = true;
 			}
 		}
-		
-		if(_obj.name)
-		{
-			prop.push(_obj.name);
-		}
+
 		if(_obj.object) _obj=_obj.object;
 		else { _obj = null; break; }
 	}
-
-	var _setter = "{{PROPERTY}}";
-	for(var i = 0; i < prop.length; i++)
-	{
-		if(i == prop.length - 1)
-		{
-			_setter = _setter.replace("{{PROPERTY}}", prop[i]);
-		}
-		else 
-		{
-			var _p = "__NJS_Object_Get(" + prop[i] + ", {{PROPERTY}})"; 
-			_setter = _setter.replace("{{PROPERTY}}", _p);
-		}
-	}
-	return _setter;
 }
 module.exports = memberExpression;

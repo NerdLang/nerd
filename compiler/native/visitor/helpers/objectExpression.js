@@ -64,11 +64,12 @@ function objectExpression(_path, _name)
 		{
 			_code += VISITOR.objectExpression(_path.value.properties[i], _subRND); 
 		}
-		_code += "__NJS_Object_Set(\"" + _key + "\"," + _subRND + "," + _name + ");"
+		_code += _name + "['" + _key + "'] = " + _subRND + ";";
 	}
 	else if(_path.value.type == "MemberExpression")
 	{
-		_value = VISITOR.memberExpression(_path.value);
+		VISITOR.memberExpression(_path.value);
+
 	}
 	else if(_path.value.type == "BooleanLiteral")
 	{
@@ -79,7 +80,7 @@ function objectExpression(_path, _name)
 	  console.log("Visitor VISITOR.objectExpression not implemented yet for " + _path.value.type);
 	  process.exit(0);
 	}
-	if(_value) _code += "__NJS_Object_Set(\"" + _key + "\"," + _value + "," + _name + ");"
+	if(_value) _code += _name + "['" + _key + "'] = " + _value + ";";
 	return _code;
 }
 module.exports = objectExpression;

@@ -364,15 +364,64 @@ public:
 	}
 	/*** END VARIADIC LAMBDAS ***/
 	
-	/*** OVERLOAD ***/
-	// WIP
+	/*** CALL OVERLOAD ***/
 	
-	__NJS_VAR operator() ()
+	template <class... Args>
+	__NJS_VAR __NJS_Class_Back_Var_Call_Function(Args... args)
 	{
-		return __NJS_VAR();
+		vector<var> _args = vector<var>{(var)args...};
+		return (*static_cast<function<__NJS_VAR(vector<var>)> *>(this->get().f->__NJS_VALUE))(_args);
+	}
+
+	template <class... Args>
+	__NJS_VAR operator() (Args... args)
+	{
+		if (this->type != __NJS_FUNCTION)
+		{
+	#ifndef __NJS_ARDUINO
+			cout << "[!] Fatal error, object is not a function" << endl;
+	#endif
+			exit(1);
+		}
+		return __NJS_Class_Back_Var_Call_Function((__NJS_VAR)(args)...);
 	}
 	
+	/* END CALL OVERLOAD */
+	
+	/*** ACCESS OVERLOAD ***/
+	// WIP
+		
 	__NJS_VAR operator[] (__NJS_VAR _index) const
+	{
+		if (this->type == __NJS_ARRAY && _index.type == __NJS_NUMBER)
+		{
+			return this->get().a->__NJS_VALUE.at(_index.get().i);
+		}
+		else if (this->type == __NJS_OBJECT || this->type == __NJS_STRING || this->type == __NJS_FUNCTION || this->type == __NJS_ARRAY || this->type == __NJS_NATIVE)
+		{
+			vector<pair<const char *, __NJS_VAR>> *_obj;
+			if (this->type == __NJS_OBJECT)
+				_obj = &this->get().o->__OBJECT;
+			else if (this->type == __NJS_ARRAY)
+				_obj = &this->get().a->__OBJECT;
+			else if (this->type == __NJS_STRING)
+				_obj = &this->get().s->__OBJECT;
+			else if (this->type == __NJS_FUNCTION)
+				_obj = &this->get().f->__OBJECT;
+			else
+			{
+				__NJS_RETURN_UNDEFINED;
+			}
+
+			_index.get().s->cnt++;
+			__NJS_Object_Set(_index.get().s->__NJS_VALUE.c_str(), __NJS_VAR(), _obj);
+			return (*this)[_index];
+		}
+
+		__NJS_RETURN_UNDEFINED;
+	}
+	
+	__NJS_VAR & operator[] (__NJS_VAR _index)
 	{
 		if (this->type != __NJS_ARRAY && this->type != __NJS_OBJECT && this->type != __NJS_STRING && this->type != __NJS_FUNCTION && this->type != __NJS_NATIVE)
 		{
@@ -383,6 +432,16 @@ public:
 			if ((int)_index > this->get().a->__NJS_VALUE.size())
 			{
 				__NJS_RETURN_UNDEFINED;
+			}
+			else 
+			{
+				if (this->get().a->__NJS_VALUE.size() <= _index.get().i)
+				{
+					this->get().a->__NJS_VALUE.reserve(_index.get().i + 1);
+					this->get().a->__NJS_VALUE.resize(_index.get().i + 1);
+				}
+
+				__NJS_Object_Set("length", (int)this->get().a->__NJS_VALUE.size(), &this->get().a->__OBJECT);
 			}
 			return this->get().a->__NJS_VALUE[(int)_index];
 		}
@@ -413,50 +472,15 @@ public:
 					return (*_obj)[_i].second;
 				}
 			}
-		}
-		__NJS_RETURN_UNDEFINED;
-	}
-	
-	__NJS_VAR & operator[] (__NJS_VAR _index)
-	{
-		if (this->type == __NJS_ARRAY && _index.type == __NJS_NUMBER)
-		{
-
-			if (this->get().a->__NJS_VALUE.size() <= _index.get().i)
-			{
-				this->get().a->__NJS_VALUE.reserve(_index.get().i + 1);
-				this->get().a->__NJS_VALUE.resize(_index.get().i + 1);
-			}
-
-			return this->get().a->__NJS_VALUE.at(_index.get().i);
-
-			__NJS_Object_Set("length", (int)this->get().a->__NJS_VALUE.size(), &this->get().a->__OBJECT);
-		}
-		else if (this->type == __NJS_OBJECT || this->type == __NJS_STRING || this->type == __NJS_FUNCTION || this->type == __NJS_ARRAY || this->type == __NJS_NATIVE)
-		{
-			vector<pair<const char *, __NJS_VAR>> *_obj;
-			if (this->type == __NJS_OBJECT)
-				_obj = &this->get().o->__OBJECT;
-			else if (this->type == __NJS_ARRAY)
-				_obj = &this->get().a->__OBJECT;
-			else if (this->type == __NJS_STRING)
-				_obj = &this->get().s->__OBJECT;
-			else if (this->type == __NJS_FUNCTION)
-				_obj = &this->get().f->__OBJECT;
-			else
-			{
-				__NJS_RETURN_UNDEFINED;
-			}
-
+			
 			_index.get().s->cnt++;
 			__NJS_Object_Set(_index.get().s->__NJS_VALUE.c_str(), __NJS_VAR(), _obj);
 			return (*this)[_index];
 		}
-
 		__NJS_RETURN_UNDEFINED;
 	}
 	
-	/* END OVERLOAD */
+	/* END ACCESS OVERLOAD */
 
 	/*** END CONSTRUCTOR ***/
 
@@ -906,7 +930,8 @@ namespace NECTAR
 	__NJS_VAR undefined = __NJS_VAR();
 } // namespace NECTAR
 
-/*** VARIADIC CALLS ***/
+/*** VARIADIC CALLS ***
+// DEPRECATED
 template <class... Args>
 __NJS_VAR __NJS_Back_Var_Call_Function(__NJS_VAR _obj, Args... args)
 {

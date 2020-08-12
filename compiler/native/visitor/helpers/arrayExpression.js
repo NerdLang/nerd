@@ -35,14 +35,14 @@ function arrayExpression(_path)
 	var _setter = `inline __NJS_VAR ${_set}() { __NJS_VAR ${_rnd} = __NJS_Create_Array();`;
 	for(var i = 0; i < _path.elements.length; i++)
 	{
-		if(_path.elements[i].type == "NumericLiteral") _setter += `__NJS_Object_Set(${i}, ${_path.elements[i].extra.raw}, ${_rnd});`;
+		if(_path.elements[i].type == "NumericLiteral") _setter += `${_rnd}[${i}] =  ${_path.elements[i].extra.raw};`;
 		else if(_path.elements[i].type == "ArrayExpression")
 		{
 			var _a = VISITOR.arrayExpression(_path.elements[i]);
 			COMPILER.DECL.push(_a.setter);
-			_setter += `__NJS_Object_Set(${i}, ${_a.getter}(), ${_rnd});`;
+			_setter += `${_rnd}[${i}] =  ${_a.getter}();`;
 		}
-		else _setter += `__NJS_Object_Set(${i}, ${babel.generate(_path.elements[i]).code}, ${_rnd});`;
+		else _setter += `${_rnd}[${i}] = ${babel.generate(_path.elements[i]).code};`;
 	}
 	_setter += `return ${_rnd};}`;
 	return {setter: _setter, getter: _set};
