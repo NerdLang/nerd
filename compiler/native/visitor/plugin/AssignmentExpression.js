@@ -31,74 +31,8 @@ function AssignmentExpression(_path)
 
  if(_path.node.left.type == "MemberExpression")
  {
-	
-	var prop = [];
-	var _obj = _path.node.left;
-	while(_obj)
-	{
-		if(_obj.property) 
-		{
-			var _property;
-			if(_obj.property.type == "Identifier")
-			{
-				if(_obj.computed)
-				{
-					_property = _obj.property.name;
-					COMPILER.INFO.VALUE.push(_property);
-				}
-				else 
-				{
-					_property = "\"" + _obj.property.name + "\"";
-					COMPILER.INFO.VALUE.push(_obj.property.name);
-				}
-				
-			}
-			else if(_obj.property.extra)
-			{
-				_property = _obj.property.extra.raw;
-				COMPILER.INFO.VALUE.push(_property);
-			}
-			
-			if(_property)
-			{
-				prop.push(_property);
-			}
-			
-		}
-		if(_obj.name)
-		{
-			VISITOR.checkUndefVar(_obj.name);
-			prop.push(_obj.name);
-			VISITOR.readOnlyVar(_obj.name);
-		}
-		else if(_obj.type == "ThisExpression") prop.push("__NJS_THIS");
-		if(_obj.object) _obj=_obj.object;
-		else { _obj = null; break; }
-	}
-/*
-	var _setter = "";
-	for(var i = 0; i < prop.length; i++)
-	{
-		if(i == 0)
-		{
-			_setter = "__NJS_Object_Set(" + prop[i] + ", {{LEFT}}, {{PROPERTY}})"; 
-		}
-		else if(i == prop.length - 1)
-		{
-			_setter = _setter.replace("{{PROPERTY}}", prop[i]);
-		}
-		else 
-		{
-			var _p = "__NJS_Object_Get(" + prop[i] + ", {{PROPERTY}})"; 
-			_setter = _setter.replace("{{PROPERTY}}", _p);
-		}
-	}
-	
-	var _n = RND();
-	_path.insertBefore(babel.parse("var " + _n + ";"));
-	_path.node.left = babel.types.identifier(_n);
-	_path.insertAfter(babel.parse(_setter.replace("{{LEFT}}", _n)));
-	*/
+	VISITOR.memberExpression(_path.node.left);
+
 	if(_path.node.right && _path.node.right.type == "ArrayExpression")
 	{
 		var _a = VISITOR.arrayExpression(_path.node.right);
@@ -122,11 +56,10 @@ function AssignmentExpression(_path)
 		{
 			_objAssign += VISITOR.objectExpression(_path.node.right.properties[i], _path.node.left.name);
 		}
-		
 		_path.insertAfter(babel.parse(_objAssign));
 		_path.node.right = babel.parse("__NJS_Create_Object()");
 	}
  }
-
+console.log(babel.generate(_path.node).code);
 }
 module.exports = AssignmentExpression;

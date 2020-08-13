@@ -524,7 +524,7 @@ function Compiler()
 		{	
 			var _matchThis = new RegExp(/(| |{|,)__NJS_THIS([\.(";)]|$)/);
 			var _return = "return __NJS_Create_Undefined();}";
-			var _searchAnonFN = new RegExp(/(var)* *([a-zA-Z0-9_]*) *= *function +\(([a-zA-Z0-9_\-, ]*)\)/);
+			var _searchAnonFN = new RegExp(/(var)* *([\[\]a-zA-Z0-9_"]*) *= *function +\(([a-zA-Z0-9_\-, ]*)\)/);
 			var _index = _code.search(_searchAnonFN);
 
 			while(_index > -1)
