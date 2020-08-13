@@ -58,6 +58,7 @@ var njsVisitor =
 	UnaryExpression: require("./plugin/UnaryExpression.js"),
 	VariableDeclaration: require("./plugin/VariableDeclaration.js"),
 	VariableDeclarator: require("./plugin/VariableDeclarator.js"),
+	NumericLiteral: require("./plugin/NumericLiteral.js"),
 };
 
 var visitor = 
