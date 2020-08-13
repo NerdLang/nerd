@@ -7,6 +7,8 @@ var peq = {};
 peq += b;
 console.log("a = Hi, it's ");
 console.log("b = NectarJS !");
+console.log("a[0] = " + a[0]);
+console.log("b[1] = " + b[1]);
 console.log("c = a + b: " + c);
 console.log('Typeof c: ' + typeof c);
 console.log("Length: " + c.length);

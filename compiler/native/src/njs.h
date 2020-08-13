@@ -202,7 +202,7 @@ private:
 public:
 	__NJS_TYPE type;
 	int _ptr = -1;
-
+	
 	inline __NJS_VAL get() const
 	{
 		return REGISTER[_ptr];
@@ -444,6 +444,13 @@ public:
 				__NJS_Object_Set("length", (int)this->get().a->__NJS_VALUE.size(), &this->get().a->__OBJECT);
 			}
 			return this->get().a->__NJS_VALUE[(int)_index];
+		}
+		else if(this->type == __NJS_STRING && _index.type == __NJS_NUMBER)
+		{
+			static __NJS_VAR _ret = __NJS_Create_String("");
+			__NJS_VAR _tmp = (*this)["substr"](_index, 1);
+			REGISTER[_ret._ptr].s->__NJS_VALUE = _tmp.get().s->__NJS_VALUE;
+			return _ret;
 		}
 		else
 		{
