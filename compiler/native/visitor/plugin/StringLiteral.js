@@ -32,5 +32,7 @@ function StringLiteral(_path)
 	{
 		_path.node.extra.raw = '"' + _path.node.value.replace(/\\/g, '\\\\').replace(/"/g, '\\\"') + '"';
 	}
+	_path.replaceWithSourceString("__NJS_VAR(" + _path.node.extra.raw + ")");
+	_path.skip();
 }
 module.exports = StringLiteral;
