@@ -423,15 +423,47 @@ public:
 	
 	__NJS_VAR & operator[] (__NJS_VAR _index)
 	{
+		static __NJS_VAR _retFN = __NJS_VAR(__NJS_FUNCTION, new function<__NJS_VAR(vector<var>)>([&](vector<var> __NJS_VARARGS) { return __NJS_VAR();}));
+		
+		static __NJS_VAR _retUndefined;
+		
+		if(this->type == __NJS_UNDEFINED)
+		{
+			throw __NJS_VAR("Uncaught TypeError: Cannot read property '" + _index.get().s->__NJS_VALUE + "' of undefined");
+		}
+		// 1..toString()
+		if(this->type == __NJS_NUMBER || this->type == __NJS_DOUBLE)
+		{
+			if(_index == "toString")
+			{
+				if(this->type == __NJS_NUMBER)
+				{
+					REGISTER[_retFN._ptr].f->__NJS_VALUE = new function<__NJS_VAR(vector<var>)>([&](vector<var> __NJS_VARARGS) { return to_string((int)*this);});
+				}
+				else 
+				{
+					REGISTER[_retFN._ptr].f->__NJS_VALUE = new function<__NJS_VAR(vector<var>)>([&](vector<var> __NJS_VARARGS) { return to_string((double)*this);});
+				}
+				return _retFN;
+			}
+			else if(_index == "valueOf")
+			{
+
+				REGISTER[_retFN._ptr].f->__NJS_VALUE = new function<__NJS_VAR(vector<var>)>([&](vector<var> __NJS_VARARGS) { return *this;});
+				return _retFN;
+			}
+			return _retUndefined;
+		}
+		
 		if (this->type != __NJS_ARRAY && this->type != __NJS_OBJECT && this->type != __NJS_STRING && this->type != __NJS_FUNCTION && this->type != __NJS_NATIVE)
 		{
-			__NJS_RETURN_UNDEFINED;
+			return _retUndefined;
 		}
 		if (this->type == __NJS_ARRAY && _index.type == __NJS_NUMBER)
 		{
 			if ((int)_index > this->get().a->__NJS_VALUE.size())
 			{
-				__NJS_RETURN_UNDEFINED;
+				return _retUndefined;
 			}
 			else 
 			{
@@ -456,7 +488,7 @@ public:
 		{
 			if (_index.type != __NJS_STRING)
 			{
-				__NJS_RETURN_UNDEFINED;
+				return _retUndefined;
 			}
 			vector<pair<const char *, __NJS_VAR>> *_obj;
 			if (this->type == __NJS_OBJECT)
@@ -469,7 +501,7 @@ public:
 				_obj = &this->get().f->__OBJECT;
 			else
 			{
-				__NJS_RETURN_UNDEFINED;
+				return _retUndefined;
 			}
 			int _j = (*_obj).size();
 			for (int _i = 0; _i < _j; _i++)
@@ -484,7 +516,7 @@ public:
 			__NJS_Object_Set(_index.get().s->__NJS_VALUE.c_str(), __NJS_VAR(), _obj);
 			return (*this)[_index];
 		}
-		__NJS_RETURN_UNDEFINED;
+		return _retUndefined;
 	}
 	
 	/* END ACCESS OVERLOAD */
@@ -1127,7 +1159,7 @@ __NJS_Class_String::__NJS_Class_String(string _value)
 {
 	cnt++;
 	/*** toString ***/
-	function<__NJS_VAR()> *__OBJ_TO___NJS_STRING = new function<__NJS_VAR()>([&]() { return __NJS_Create_String(this->__NJS_VALUE); });
+	function<__NJS_VAR(vector<var>)> *__OBJ_TO___NJS_STRING = new function<__NJS_VAR(vector<var>)>([&](vector<var> __NJS_VARARGS) { return __NJS_Create_String(this->__NJS_VALUE); });
 	__NJS_VAR toString = __NJS_VAR(__NJS_FUNCTION, __OBJ_TO___NJS_STRING);
 	__NJS_Object_Set("toString", toString, &this->__OBJECT);
 	/*** end to string ***/
