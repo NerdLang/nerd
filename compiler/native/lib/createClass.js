@@ -73,7 +73,7 @@ function createClass(_code, _scope)
 					{
 						var _fn = "{" + _getVar + _code.substring(_start + 1, _end);
 
-						_handler.DECL.push("var " + _match[1] +";");
+						COMPILER.DECL.push("var " + _match[1] +";");
 
 						var _formated = "__NJS_DECL_FUNCTION<__NJS_VAR (vector<var>)>* " + _genFN +" = new __NJS_DECL_FUNCTION<__NJS_VAR (vector<var>)>([" + _catch + "]( vector<var> __NJS_VARARGS) -> __NJS_VAR" + _fn + _return + ");";
 						_formated += _match[1] + "=__NJS_VAR(__NJS_FUNCTION, " + _genFN + ");";
