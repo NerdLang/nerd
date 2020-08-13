@@ -145,6 +145,10 @@ __NJS_VAR __NJS_Log_Console(__NJS_VAR _var);
 __NJS_VAR __NJS_Object_Keys(__NJS_VAR _var);
 __NJS_VAR __NJS_Object_Stringify(__NJS_VAR _var);
 __NJS_VAR __NJS_Object_Stringify(__NJS_VAR _var, bool _bracket);
+__NJS_VAR __NJS_Create_Object();
+__NJS_VAR __NJS_Create_Array();
+__NJS_VAR __NJS_Object_Clone(__NJS_VAR _var);
+__NJS_VAR __NJS_Object_Set(const char *_index, __NJS_VAR _value, vector<pair<const char *, __NJS_VAR>> *_obj);
 /*** STRING MANIPULATION ***/
 template <typename m, typename n>
 string __NJS_Concat_To_Str(m _left, n _right)
@@ -359,6 +363,100 @@ public:
 		REGISTER[_ptr].f = new __NJS_Class_Function(&_value);
 	}
 	/*** END VARIADIC LAMBDAS ***/
+	
+	/*** OVERLOAD ***/
+	// WIP
+	
+	__NJS_VAR operator() ()
+	{
+		return __NJS_VAR();
+	}
+	
+	__NJS_VAR operator[] (__NJS_VAR _index) const
+	{
+		if (this->type != __NJS_ARRAY && this->type != __NJS_OBJECT && this->type != __NJS_STRING && this->type != __NJS_FUNCTION && this->type != __NJS_NATIVE)
+		{
+			__NJS_RETURN_UNDEFINED;
+		}
+		if (this->type == __NJS_ARRAY && _index.type == __NJS_NUMBER)
+		{
+			if ((int)_index > this->get().a->__NJS_VALUE.size())
+			{
+				__NJS_RETURN_UNDEFINED;
+			}
+			return this->get().a->__NJS_VALUE[(int)_index];
+		}
+		else
+		{
+			if (_index.type != __NJS_STRING)
+			{
+				__NJS_RETURN_UNDEFINED;
+			}
+			vector<pair<const char *, __NJS_VAR>> *_obj;
+			if (this->type == __NJS_OBJECT)
+				_obj = &this->get().o->__OBJECT;
+			else if (this->type == __NJS_ARRAY)
+				_obj = &this->get().a->__OBJECT;
+			else if (this->type == __NJS_STRING)
+				_obj = &this->get().s->__OBJECT;
+			else if (this->type == __NJS_FUNCTION)
+				_obj = &this->get().f->__OBJECT;
+			else
+			{
+				__NJS_RETURN_UNDEFINED;
+			}
+			int _j = (*_obj).size();
+			for (int _i = 0; _i < _j; _i++)
+			{
+				if (_index.get().s->__NJS_VALUE.compare((*_obj)[_i].first) == 0)
+				{
+					return (*_obj)[_i].second;
+				}
+			}
+		}
+		__NJS_RETURN_UNDEFINED;
+	}
+	
+	__NJS_VAR & operator[] (__NJS_VAR _index)
+	{
+		if (this->type == __NJS_ARRAY && _index.type == __NJS_NUMBER)
+		{
+
+			if (this->get().a->__NJS_VALUE.size() <= _index.get().i)
+			{
+				this->get().a->__NJS_VALUE.reserve(_index.get().i + 1);
+				this->get().a->__NJS_VALUE.resize(_index.get().i + 1);
+			}
+
+			return this->get().a->__NJS_VALUE.at(_index.get().i);
+
+			__NJS_Object_Set("length", (int)this->get().a->__NJS_VALUE.size(), &this->get().a->__OBJECT);
+		}
+		else if (this->type == __NJS_OBJECT || this->type == __NJS_STRING || this->type == __NJS_FUNCTION || this->type == __NJS_ARRAY || this->type == __NJS_NATIVE)
+		{
+			vector<pair<const char *, __NJS_VAR>> *_obj;
+			if (this->type == __NJS_OBJECT)
+				_obj = &this->get().o->__OBJECT;
+			else if (this->type == __NJS_ARRAY)
+				_obj = &this->get().a->__OBJECT;
+			else if (this->type == __NJS_STRING)
+				_obj = &this->get().s->__OBJECT;
+			else if (this->type == __NJS_FUNCTION)
+				_obj = &this->get().f->__OBJECT;
+			else
+			{
+				__NJS_RETURN_UNDEFINED;
+			}
+
+			_index.get().s->cnt++;
+			__NJS_Object_Set(_index.get().s->__NJS_VALUE.c_str(), __NJS_VAR(), _obj);
+			return (*this)[_index];
+		}
+
+		__NJS_RETURN_UNDEFINED;
+	}
+	
+	/* END OVERLOAD */
 
 	/*** END CONSTRUCTOR ***/
 
@@ -1210,6 +1308,8 @@ __NJS_Class_Object::__NJS_Class_Object()
 __NJS_Class_Function::__NJS_Class_Function(void *_f)
 {
 	cnt++;
+	__NJS_VAR __proto = __NJS_Create_Object();
+	__NJS_Object_Set("prototype", __proto, &this->__OBJECT);
 	__NJS_VALUE = _f;
 }
 
@@ -1433,6 +1533,64 @@ __NJS_VAR __NJS_Object_Stringify(__NJS_VAR _var, bool _bracket)
 	}
 	else
 		return "";
+}
+
+__NJS_VAR __NJS_Object_Clone(__NJS_VAR _var)
+{
+	__NJS_TYPE _t = _var.type;
+	switch(_t)
+	{
+		case __NJS_UNDEFINED:
+		case __NJS_NAN:
+		case __NJS_NUMBER:
+		case __NJS_DOUBLE:
+		case __NJS_STRING:
+		case __NJS_FUNCTION:
+			return _var;
+		case __NJS_ARRAY:
+		{
+			var _res = __NJS_Create_Array();
+			vector<__NJS_VAR> *_arr = &_var.get().a->__NJS_VALUE;
+
+			int j = (*_arr).size();
+			for (int i = 0; i < j; i++)
+			{
+				__NJS_Object_Set(i, __NJS_Object_Clone((*_arr)[i]), _res);
+			}
+			return _res;
+		}
+		case __NJS_OBJECT:
+		{
+			var _res = __NJS_Create_Object();
+			vector<pair<const char *, __NJS_VAR>> *_obj = &_var.get().o->__OBJECT;
+			int j = (*_obj).size();
+			for (int _i = 0; _i < j; _i++)
+			{
+				__NJS_Object_Set((*_obj)[_i].first, __NJS_Object_Clone((*_obj)[_i].second), _res);
+			}
+			return _res;
+		}
+		default:
+			return __NJS_VAR();
+	}
+}
+
+void __NJS_Object_Construct(__NJS_VAR _this, __NJS_VAR _prototype)
+{
+	if(_this.type == __NJS_OBJECT && _prototype.type == __NJS_OBJECT)
+	{
+		vector<pair<const char *, __NJS_VAR>> *_obj = &_prototype.get().o->__OBJECT;
+		int j = (*_obj).size();
+		for (int _i = 0; _i < j; _i++)
+		{
+			__NJS_VAR _tmp =  __NJS_Object_Get((*_obj)[_i].first, _this);
+			if(_tmp.type == __NJS_UNDEFINED)
+			{
+				__NJS_Object_Set((*_obj)[_i].first, (*_obj)[_i].second, _this);
+			}
+		}
+	}
+	
 }
 
 
