@@ -60,6 +60,10 @@ enum __NJS_TYPE
 #define Infinity __NJS_Create_Infinity()
 #define __NJS_Create_Null() __NJS_VAR(__NJS_NULL, 0)
 #define __NJS_Create_Lambda(name) function<__NJS_VAR (vector<var>)>* name = new function<__NJS_VAR (vector<var>)>([](vector<var> __NJS_VARARGS)
+#define __NJS_Create_Ptr_Scoped_Anon(__CONTENT__) new function<__NJS_VAR (vector<var>)>([&](vector<var> __NJS_VARARGS){ __CONTENT__ })
+#define __NJS_Create_Ptr_Unscoped_Anon(__CONTENT__) new function<__NJS_VAR (vector<var>)>([](vector<var> __NJS_VARARGS){ __CONTENT__ })
+#define __NJS_Create_Var_Scoped_Anon(__CONTENT__) __NJS_VAR(__NJS_FUNCTION, __NJS_Create_Ptr_Scoped_Anon(__CONTENT__))
+#define __NJS_Create_Var_Unscoped_Anon(__CONTENT__) __NJS_VAR(__NJS_FUNCTION, __NJS_Create_Ptr_Unscoped_Anon(__CONTENT__))
 #define __NJS_EXCEPTION_PARAMETER __NJS_VAR &e
 #define finally ;
 #define __NJS_BOOLEAN_TRUE __NJS_Create_Boolean(true)
@@ -423,7 +427,7 @@ public:
 	
 	__NJS_VAR & operator[] (__NJS_VAR _index)
 	{
-		static __NJS_VAR _retFN = __NJS_VAR(__NJS_FUNCTION, new function<__NJS_VAR(vector<var>)>([&](vector<var> __NJS_VARARGS) { return __NJS_VAR();}));
+		static __NJS_VAR _retFN = __NJS_Create_Var_Scoped_Anon({ return __NJS_VAR();});
 		
 		static __NJS_VAR _retUndefined;
 		
@@ -438,11 +442,11 @@ public:
 			{
 				if(this->type == __NJS_NUMBER)
 				{
-					REGISTER[_retFN._ptr].f->__NJS_VALUE = new function<__NJS_VAR(vector<var>)>([&](vector<var> __NJS_VARARGS) { return to_string((int)*this);});
+					REGISTER[_retFN._ptr].f->__NJS_VALUE = __NJS_Create_Ptr_Scoped_Anon({ return to_string((int)*this);});
 				}
 				else 
 				{
-					REGISTER[_retFN._ptr].f->__NJS_VALUE = new function<__NJS_VAR(vector<var>)>([&](vector<var> __NJS_VARARGS) { return to_string((double)*this);});
+					REGISTER[_retFN._ptr].f->__NJS_VALUE = __NJS_Create_Ptr_Scoped_Anon({ return to_string((double)*this);});
 				}
 				return _retFN;
 			}
