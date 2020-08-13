@@ -26,40 +26,45 @@
  *
  */
  
-function AssignmentExpression(_path)
+function replaceObjAddr(_code)
 {
+	var FUNCTION = [];
 
- if(_path.node.left.type == "MemberExpression")
- {
-	VISITOR.memberExpression(_path.node.left);
-
-	if(_path.node.right && _path.node.right.type == "ArrayExpression")
+	var _searchReg = / *__NJS_Object_Set *\( *([a-zA-Z0-9_\-" ]*) *, *([a-zA-Z0-9_\-\(\)" ]*) *, *([a-zA-Z0-9_\-" ]*) *\)/g;
+	var _searchFN = / *([a-zA-Z0-9_\-" ]*) * = __NJS_VAR\(__NJS_FUNCTION/g;
+	
+	var _allFN = _code.match(new RegExp(_searchFN));
+	if(_allFN)
 	{
-		var _a = VISITOR.arrayExpression(_path.node.right);
-		COMPILER.DECL.push(_a.setter);
-		_path.node.right = babel.parse(_a.getter + "();");
-	}
- }
- else if(_path.node.left.type == "Identifier")
- {
-	 VISITOR.checkUndefVar(_path.node.left.name);
-	VISITOR.readOnlyVar(_path.node.left.name);
-	if(_path.node.right.type == "ArrayExpression")
-	{
-		var _a = VISITOR.arrayExpression(_path.node.right);
-		_path.node.right = babel.parse(_a.getter + "();");
-	}
-	else if(_path.node.right.type == "ObjectExpression")
-	{
-		var _objAssign = "";
-		for(var i = 0; i < _path.node.right.properties.length; i++)
+		for(var i = 0; i < _allFN.length; i++)
 		{
-			_objAssign += VISITOR.objectExpression(_path.node.right.properties[i], _path.node.left.name);
+			var _localSearch = new RegExp(_searchFN);
+			var _fn = _localSearch.exec(_allFN[i]);
+			if(_fn);
+			{
+				FUNCTION.push(_fn[1]);
+			}
 		}
-		_path.insertAfter(babel.parse(_objAssign));
-		_path.node.right = babel.parse("__NJS_Create_Object()");
 	}
- }
 
+	var _searchObject = new RegExp(_searchReg);
+	var _match = _code.match(_searchObject);
+	if(_match)
+	{
+		for(var i = 0; i < _match.length; i++)
+		{
+			var _localSearch = new RegExp(_searchReg);
+			var _var = _localSearch.exec(_match[i]);
+			if(_var);
+			{
+				if(_var[1] != "\"exports\"" && FUNCTION.indexOf(_var[2]) > -1)
+				{	
+					var _getObject = new RegExp("__NJS_Object_Get\\\(" + _var[1]+ ", " + _var[3] + "\\\)", "gm");
+					_code = _code.replace(_getObject, _var[2]);
+				}
+			}
+		}
+	}
+	return _code;
 }
-module.exports = AssignmentExpression;
+module.exports = replaceObjAddr;

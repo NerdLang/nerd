@@ -26,40 +26,40 @@
  *
  */
  
-function AssignmentExpression(_path)
-{
+function hoistingFunction(_code)
+{	
+	var _hoisting = "";
+	var _searchFN = new RegExp(/function +(.[a-zA-Z0-9_\-]*) *\((.*)\)/);
+	var _index = _code.search(_searchFN);
+	while(_index > -1)
+	{
+		var _count = 0;
+		var _start = -1;
+		var _end = -1;
+		let _match = _searchFN.exec(_code);
 
- if(_path.node.left.type == "MemberExpression")
- {
-	VISITOR.memberExpression(_path.node.left);
-
-	if(_path.node.right && _path.node.right.type == "ArrayExpression")
-	{
-		var _a = VISITOR.arrayExpression(_path.node.right);
-		COMPILER.DECL.push(_a.setter);
-		_path.node.right = babel.parse(_a.getter + "();");
-	}
- }
- else if(_path.node.left.type == "Identifier")
- {
-	 VISITOR.checkUndefVar(_path.node.left.name);
-	VISITOR.readOnlyVar(_path.node.left.name);
-	if(_path.node.right.type == "ArrayExpression")
-	{
-		var _a = VISITOR.arrayExpression(_path.node.right);
-		_path.node.right = babel.parse(_a.getter + "();");
-	}
-	else if(_path.node.right.type == "ObjectExpression")
-	{
-		var _objAssign = "";
-		for(var i = 0; i < _path.node.right.properties.length; i++)
+		for(var i = _index; i < _code.length; i++)
 		{
-			_objAssign += VISITOR.objectExpression(_path.node.right.properties[i], _path.node.left.name);
+				if(_code[i] == "{")
+				{
+						if(_start == -1) _start = i;
+						_count++;
+				}
+				else if(_code[i] == "}")
+				{
+					_end = i;
+					_count--;
+					if(_count == 0)
+					{
+						_hoisting += _code.substring(_index, _end + 1) + "\n";
+						_code = _code.slice(0, _index) + _code.slice(_end + 1);
+						break;
+					}
+				}
 		}
-		_path.insertAfter(babel.parse(_objAssign));
-		_path.node.right = babel.parse("__NJS_Create_Object()");
+		_index = _code.search(_searchFN);
 	}
- }
-
+	
+	return _hoisting + _code;
 }
-module.exports = AssignmentExpression;
+module.exports = hoistingFunction;

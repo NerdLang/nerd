@@ -29,7 +29,13 @@
 function memberExpression(_path)
 {
 	var _obj = _path;
-
+	
+	if(_obj.object && _obj.object.type == "Identifier")
+	{
+		VISITOR.checkUndefVar(_obj.object.name);
+		VISITOR.readOnlyVar(_obj.object.name);
+	}
+	
 	while(_obj)
 	{
 		if(_obj.property && !_obj.computed) 

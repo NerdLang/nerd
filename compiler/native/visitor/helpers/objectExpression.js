@@ -69,7 +69,7 @@ function objectExpression(_path, _name)
 	else if(_path.value.type == "MemberExpression")
 	{
 		VISITOR.memberExpression(_path.value);
-
+		_code += _name + "['" + _key + "'] = " + babel.generate(_path.value).code + ";";
 	}
 	else if(_path.value.type == "BooleanLiteral")
 	{
