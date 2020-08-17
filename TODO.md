@@ -15,6 +15,7 @@
 * add strings functions
 - startWith 
 - endWith
+- ...
 
 * add all Math functions
 
@@ -30,6 +31,4 @@
 
 * Finish ES3
 
-* Add --no-undef flag
-
-* Add try / catch / finally support 
+* Add object.prototype.constructor to respect ES3 standard
