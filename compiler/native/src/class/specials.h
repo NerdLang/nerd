@@ -8,8 +8,25 @@ namespace NJS::Class::Value
 	{
 		undefined();
 		operator NJS::VAR() const;
+		explicit operator std::string() const;
 		NJS::VAR const &operator[](NJS::VAR _index) const;
 		NJS::VAR &operator[](NJS::VAR _index);
-		NJS::VAR operator()() const;
 	};
+	class null : undefined
+	{
+		null();
+		operator NJS::VAR() const;
+		explicit operator std::string() const;
+	};
+	class NaN : Number 
+	{
+		NaN();
+		operator NJS::VAR() const;
+		explicit operator std::string() const;
+	};
+	class Infinity : Number
+	{
+		Infinity();
+		explicit operator std::string() const;
+	}
 } // namespace NJS::Class::Value
