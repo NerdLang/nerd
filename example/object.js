@@ -6,7 +6,7 @@ var obj =
 	"b": 2,
 	"subobj":
 	{
-		in: "in obj"
+		in: "in obj",
 	},
 	"operation": this.a + this.b,
 	"str": _str,

@@ -45,7 +45,7 @@ function objectExpression(_path, _name)
 		_value = _path.value.name;
 		COMPILER.INFO.VALUE.push(_value);
 	}
-	else if(_path.value.extra) _value = _path.value.extra.raw;
+	
 	else if(_path.value.type == "ObjectProperty")
 	{
 		_code += VISITOR.objectExpression(_path.value, _key);
@@ -96,6 +96,7 @@ function objectExpression(_path, _name)
 		
 		_code += _name + "['" + _key + "'] = " + babel.generate(_path.value).code + ";";
 	}
+	else if(_path.value.extra) _value = _path.value.extra.raw;
 	else
 	{
 	  console.log("Visitor VISITOR.objectExpression not implemented yet for " + _path.value.type);

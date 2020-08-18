@@ -30,5 +30,3 @@
 * Put back API compilation switch
 
 * Finish ES3
-
-* Add object.prototype.constructor to respect ES3 standard
