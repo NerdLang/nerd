@@ -100,12 +100,6 @@ namespace NJS
 			String(string _str);
 			string __NJS_VALUE;
 		};
-		class Array : public BaseObject
-		{
-		public:
-			Array();
-			vector<VAR> __NJS_VALUE = vector<VAR>();
-		};
 		class Function : public BaseObject
 		{
 		public:
@@ -731,7 +725,8 @@ namespace NJS
 				return to_string(this->get().i);
 			case TYPE::_DOUBLE:
 				return to_string(this->get().d);
-			//case TYPE::_BIGNUMBER: return to_string(this->get().l);
+			case TYPE::_BIGINT:
+				return to_string(this->get().l);
 			case TYPE::_BOOLEAN:
 				return (bool)*this ? "true" : "false";
 			case TYPE::_STRING:

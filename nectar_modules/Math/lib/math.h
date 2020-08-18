@@ -94,7 +94,7 @@ function __NJS_MATH_FROUND(x)
 	return __NJS_VAR(static_cast<double>(static_cast<double>(x))); 
 };
 
-__NJS_DECL_FUNCTION<__NJS_VAR (vector<var> __NJS_VARARGS)>* __NJS_MATH_NATIVE_HYPOT = new __NJS_DECL_FUNCTION<__NJS_VAR (vector<var> __NJS_VARARGS)>([]( vector<var> __NJS_VARARGS ) -> __NJS_VAR 
+function<__NJS_VAR (vector<var> __NJS_VARARGS)>* __NJS_MATH_NATIVE_HYPOT = new __NJS_DECL_FUNCTION<__NJS_VAR (vector<var> __NJS_VARARGS)>([]( vector<var> __NJS_VARARGS ) -> __NJS_VAR 
 {
 	double max = 0;
 	double s = 0;
