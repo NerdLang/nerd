@@ -75,6 +75,27 @@ function objectExpression(_path, _name)
 	{
 		_value = _path.value.value;
 	}
+	else if(_path.value.type == "BinaryExpression")
+	{
+		if(_path.value.operator == "===")
+		{
+			var _eq = "__NJS_EQUAL_VALUE_AND_TYPE(";
+			_eq += babel.generate(_path.node.left).code + ","
+			_eq += babel.generate(_path.node.right).code + ")";
+			_path.replaceWithSourceString(_eq);
+		}
+		else if(_path.value.operator == "!==")
+		{
+			var _not_eq = "__NJS_NOT_EQUAL_VALUE_AND_TYPE(";
+			_not_eq += babel.generate(_path.node.left).code + ","
+			_not_eq += babel.generate(_path.node.right).code + ")";
+			_path.replaceWithSourceString(_not_eq);
+		}
+		if(_path.value.left.type == "MemberExpression") VISITOR.memberExpression(_path.value.left, _name);
+		if(_path.value.right.type == "MemberExpression") VISITOR.memberExpression(_path.value.right, _name);
+		
+		_code += _name + "['" + _key + "'] = " + babel.generate(_path.value).code + ";";
+	}
 	else
 	{
 	  console.log("Visitor VISITOR.objectExpression not implemented yet for " + _path.value.type);

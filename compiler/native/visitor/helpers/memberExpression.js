@@ -26,21 +26,26 @@
  *
  */
  
-function memberExpression(_path)
+function memberExpression(_path, _root)
 {
 	var _obj = _path;
-	
+
 	if(_obj.object && _obj.object.type == "Identifier")
 	{
 		VISITOR.checkUndefVar(_obj.object.name);
 		VISITOR.readOnlyVar(_obj.object.name);
 	}
+	else if(_obj.object && _obj.object.type == "ThisExpression" && _root)
+	{
+		_obj.object.type = "Identifier";
+		_obj.object.name = _root; 
+	}
+
 	
 	while(_obj)
 	{
 		if(_obj.property && !_obj.computed) 
 		{
-			
 			if(_obj.property.type == "Identifier")
 			{
 				_obj.property.type = "StringLiteral";
@@ -49,7 +54,7 @@ function memberExpression(_path)
 				_obj.computed = true;
 			}
 		}
-
+		
 		if(_obj.object) _obj=_obj.object;
 		else { _obj = null; break; }
 	}
