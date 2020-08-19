@@ -29,31 +29,31 @@ var __NJS_HTTP_LISTEN(var _host, var _port, var _cb, var _opt)
   /*** LOAD GET ***/
   __NJS_HTTP_SRV.Get(".*", [&](const Request& request, Response& response)
   {
-	function<var (vector<var>)>* __NJS_HTTP_RES_END = new function<var (vector<var>)>([&](vector<var> __args)
+
+	var __f_NJS_HTTP_RES_END = __NJS_Create_Var_Scoped_Anon(
 	{
 		var _str = "";
-		if(__args.size() == 1) _str = __args[0];
+		if(__NJS_VARARGS.size() == 1) _str = __NJS_VARARGS[0];
 		response.set_content(__NJS_Get_String(_str), "text/plain");
 		return var();
 	});
-	var __f_NJS_HTTP_RES_END = __NJS_Create_Function(__NJS_HTTP_RES_END);
+	
 
 	var _req = __NJS_Create_Object();
-	__NJS_Object_Set((char*)"method", "GET", _req);
-	__NJS_Object_Set((char*)"url", request.path, _req);
+	__NJS_Object_Set("method", "GET", _req);
+	__NJS_Object_Set("url", request.path, _req);
     
 	var _query = __NJS_Create_Object();
 	for (auto it = request.params.begin(); it != request.params.end(); ++it)
 	{
 	  __NJS_Object_Set(it->first, it->second, _query);
 	}
-	__NJS_Object_Set((char*)"get", _query, _req);
+	__NJS_Object_Set("get", _query, _req);
 	  
 	var _res = __NJS_Create_Object();
-
 	__NJS_Object_Set((char*)"end", __f_NJS_HTTP_RES_END, _res);
-
-	_req[_cb](_res);
+	
+	_cb(_req, _res);
 	return var();
   });
   
@@ -70,14 +70,14 @@ var __NJS_HTTP_LISTEN(var _host, var _port, var _cb, var _opt)
 	var __f_NJS_HTTP_RES_END = __NJS_Create_Function(__NJS_HTTP_RES_END);
 
     var _req = __NJS_Create_Object();
-    __NJS_Object_Set((char*)"method", "POST", _req);
-    __NJS_Object_Set((char*)"url", request.path, _req);
+    __NJS_Object_Set("method", "POST", _req);
+    __NJS_Object_Set("url", request.path, _req);
     
     
     // GET DATA
     if (request.is_multipart_form_data()) 
     {
-      __NJS_Object_Set((char*)"isMultipart", true, _req);
+      __NJS_Object_Set("isMultipart", true, _req);
       var _multi = __NJS_Create_Object();
 
       MultipartFormDataItems files;
@@ -96,30 +96,30 @@ var __NJS_HTTP_LISTEN(var _host, var _port, var _cb, var _opt)
       for (const auto &file : files)
       {
         var _file = __NJS_Create_Object();
-        __NJS_Object_Set((char*)"body", file.content, _file);
-        __NJS_Object_Set((char*)"mime", file.content_type, _file);
+        __NJS_Object_Set("body", file.content, _file);
+        __NJS_Object_Set("mime", file.content_type, _file);
         
         __NJS_Object_Set(file.name, _file, _multi);
       }
-      __NJS_Object_Set((char*)"data", _multi, _req);
+      __NJS_Object_Set("data", _multi, _req);
     } 
     else 
     {
-		__NJS_Object_Set((char*)"isMultipart", false, _req);
+		__NJS_Object_Set("isMultipart", false, _req);
       string body;
       content_reader([&](const char *data, size_t data_length) 
       {
         body.append(data, data_length);
         return true;
       });
-      __NJS_Object_Set((char*)"data", body, _req);
+      __NJS_Object_Set("data", body, _req);
     }
     
     
     var _res = __NJS_Create_Object();
-    __NJS_Object_Set((char*)"end", __f_NJS_HTTP_RES_END, _res);
+    __NJS_Object_Set("end", __f_NJS_HTTP_RES_END, _res);
     
-    _req[_cb](_res);
+    _cb(_req, _res);
     return var();
   });
   
@@ -136,13 +136,13 @@ var __NJS_HTTP_LISTEN(var _host, var _port, var _cb, var _opt)
 	var __f_NJS_HTTP_RES_END = __NJS_Create_Function(__NJS_HTTP_RES_END);
 
     var _req = __NJS_Create_Object();
-    __NJS_Object_Set((char*)"method", "PUT", _req);
-    __NJS_Object_Set((char*)"url", request.path, _req);
+    __NJS_Object_Set("method", "PUT", _req);
+    __NJS_Object_Set("url", request.path, _req);
     
     // GET DATA
     if (request.is_multipart_form_data()) 
     {
-      __NJS_Object_Set((char*)"isMultipart", true, _req);
+      __NJS_Object_Set("isMultipart", true, _req);
       var _multi = __NJS_Create_Object();
 
       MultipartFormDataItems files;
@@ -162,29 +162,29 @@ var __NJS_HTTP_LISTEN(var _host, var _port, var _cb, var _opt)
       for (const auto &file : files)
       {
         var _file = __NJS_Create_Object();
-        __NJS_Object_Set((char*)"body", file.content, _file);
-        __NJS_Object_Set((char*)"mime", file.content_type, _file);
+        __NJS_Object_Set("body", file.content, _file);
+        __NJS_Object_Set("mime", file.content_type, _file);
         
         __NJS_Object_Set(file.name, _file, _multi);
       }
-      __NJS_Object_Set((char*)"data", _multi, _req);
+      __NJS_Object_Set("data", _multi, _req);
     } 
     else 
     {
-		__NJS_Object_Set((char*)"isMultipart", false, _req);
+		__NJS_Object_Set("isMultipart", false, _req);
       string body;
       content_reader([&](const char *data, size_t data_length) 
       {
         body.append(data, data_length);
         return true;
       });
-      __NJS_Object_Set((char*)"data", body, _req);
+      __NJS_Object_Set("data", body, _req);
     }
     
     var _res = __NJS_Create_Object();
-    __NJS_Object_Set((char*)"end", __f_NJS_HTTP_RES_END, _res);
+    __NJS_Object_Set("end", __f_NJS_HTTP_RES_END, _res);
     
-    _req[_cb](_res);
+    _cb(_req, _res);
     return var();
   });
   
@@ -201,14 +201,14 @@ var __NJS_HTTP_LISTEN(var _host, var _port, var _cb, var _opt)
 	var __f_NJS_HTTP_RES_END = __NJS_Create_Function(__NJS_HTTP_RES_END);
 
     var _req = __NJS_Create_Object();
-    __NJS_Object_Set((char*)"method", "DELETE", _req);
-    __NJS_Object_Set((char*)"url", request.path, _req);
+    __NJS_Object_Set("method", "DELETE", _req);
+    __NJS_Object_Set("url", request.path, _req);
     
     var _res = __NJS_Create_Object();
 
-    __NJS_Object_Set((char*)"end", __f_NJS_HTTP_RES_END, _res);
+    __NJS_Object_Set("end", __f_NJS_HTTP_RES_END, _res);
     
-    _req[_cb](_res);
+    _cb(_req, _res);
     return var();
   });
   
