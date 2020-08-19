@@ -57,8 +57,8 @@ function createFunction(_code, _scope)
 				}
 			}
 			_parameters = _var;
-			var _replaceCall = new RegExp(`__NJS_Call_Function\\\(${_match[1]}(?![a-zA-Z_])`, "g");
-			_code = _code.replace(_replaceCall, `__NJS_Call_Fast_Function(${_match[1]}`);
+			//var _replaceCall = new RegExp(`${_match[1]}(?![a-zA-Z_])`, "g");
+			//_code = _code.replace(_replaceCall, `__NJS_Call_Fast_Function(${_match[1]}`);
 		}
 		else
 		{
@@ -149,7 +149,7 @@ function createFunction(_code, _scope)
 						{
 							// FAST CALL HERE
 							var _fn = _code.substring(_start, _end);
-							COMPILER.DECL.push(`int ${_match[1]}(${_parameters})${_fn}; return 0;}`);
+							COMPILER.DECL.push(`__NJS_FAST_INT ${_match[1]}(${_parameters})${_fn}; return 0;}`);
 							_code = [_code.slice(0, _index), _code.slice(_end + 1)].join('');
 						}
 

@@ -20,12 +20,8 @@
  *
  */
  
-function NumericLiteral(_path)
+function CallExpression(_path)
 {
-	if(_path.parent.type == "MemberExpression")
-	{
-		_path.replaceWithSourceString("__NJS_VAR(" + _path.node.extra.raw + ")");
-		_path.skip();
-	}
+  VISITOR.callExpression(_path.node);
 }
-module.exports = NumericLiteral;
+module.exports = CallExpression;

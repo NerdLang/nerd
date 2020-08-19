@@ -92,8 +92,10 @@ VISITOR.readOnlyVar = function(_name)
 	}
 }
 
-VISITOR.objectExpression = require("./objectExpression");
+VISITOR.objectExpression = require("./objectExpression.js");
 
-VISITOR.memberExpression = require("./memberExpression");
+VISITOR.memberExpression = require("./memberExpression.js");
 
-VISITOR.arrayExpression = require("./arrayExpression");
+VISITOR.callExpression = require("./callExpression.js");
+
+VISITOR.arrayExpression = require("./arrayExpression.js");

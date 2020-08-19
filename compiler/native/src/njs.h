@@ -90,6 +90,7 @@ enum __NJS_TYPE
 #define finally ;
 #define __NJS_BOOLEAN_TRUE __NJS_Create_Boolean(true)
 #define __NJS_BOOLEAN_FALSE __NJS_Create_Boolean(false)
+#define __NJS_FAST_INT constexpr int
 /*** END HELPERS ***/
 
 struct __NJS_VAR;
@@ -1743,27 +1744,39 @@ void *__NJS_Get_Native(__NJS_VAR _native)
 /*** REDIFINING STD OPERATORS ***/
 
 template <typename t>
-__NJS_VAR operator+(t _left, const __NJS_VAR &_right)
+t operator+(t _left, const __NJS_VAR &_right)
 {
-	return __NJS_VAR(_left) + _right;
+	return _left + (t)_right;
 }
 
 template <typename t>
-__NJS_VAR operator-(t _left, const __NJS_VAR &_right)
+t operator-(t _left, const __NJS_VAR &_right)
 {
-	return __NJS_VAR(_left) - _right;
+	return _left - (t)_right;
 }
 
 template <typename t>
-__NJS_VAR operator*(t _left, const __NJS_VAR &_right)
+t operator*(t _left, const __NJS_VAR &_right)
 {
-	return __NJS_VAR(_left) * _right;
+	return _left * (t)_right;
 }
 
 template <typename t>
-__NJS_VAR operator/(t _left, const __NJS_VAR &_right)
+t operator/(t _left, const __NJS_VAR &_right)
 {
-	return __NJS_VAR(_left) / _right;
+	return _left / (t)_right;
+}
+
+template <typename t>
+t operator<(t _left, const __NJS_VAR &_right)
+{
+	return _left / (t)_right;
+}
+
+template <typename t>
+t operator>(t _left, const __NJS_VAR &_right)
+{
+	return _left / (t)_right;
 }
 
 

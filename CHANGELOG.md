@@ -2,6 +2,7 @@
 * Use c++17
 * Add void 
 * Add prototype support
+* Update Fast Functions
 
 ## VERSION 0.6.X
 * Add Variadic function support
