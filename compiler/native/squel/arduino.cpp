@@ -25,6 +25,7 @@
  * and feel free to contact us.
  *
  */
+ 
  #include <avr/io.h>
  #include <wiring_digital.c>
  #include <Arduino.h>
@@ -34,8 +35,9 @@
  #include <string.h>
  #include <WString.h>
  #include <WString.cpp>
- #include <new.h>
- #include <new.cpp>
+
+ #include <new>
+
  #include <time.h>
  #include <vector>
  

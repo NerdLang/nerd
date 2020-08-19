@@ -154,6 +154,22 @@ __NJS_VAR __NJS_Create_Array();
 __NJS_VAR __NJS_Object_Clone(__NJS_VAR _var);
 __NJS_VAR __NJS_Object_Set(const char *_index, __NJS_VAR _value, vector<pair<const char *, __NJS_VAR>> *_obj);
 /*** STRING MANIPULATION ***/
+#ifdef __NJS_ARDUINO
+template <typename m>
+string to_string(m _var)
+{
+	std::stringstream output;
+	output << _var;
+	return output.str();
+}
+template <typename m, typename n>
+m remainder(m _dividend, n _divisor)
+{
+	m quotient = (int)_dividend / (int)_divisor;
+    m remainder = (int)_dividend % (int)_divisor;
+	return remainder;
+}
+#endif
 template <typename m, typename n>
 string __NJS_Concat_To_Str(m _left, n _right)
 {
@@ -433,7 +449,9 @@ public:
 		
 		if(this->type == __NJS_UNDEFINED)
 		{
+			#ifndef __NJS_ARDUINO
 			throw __NJS_VAR("Uncaught TypeError: Cannot read property '" + _index.get().s->__NJS_VALUE + "' of undefined");
+			#endif
 		}
 		// 1..toString()
 		if(this->type == __NJS_NUMBER || this->type == __NJS_DOUBLE)
@@ -688,7 +706,9 @@ public:
 		if (type == __NJS_NUMBER && _v1.type == __NJS_NUMBER)
 			return REGISTER[_ptr].i % (int)_v1;
 		else
+		{
 			return remainder(REGISTER[_ptr].d, (double)_v1);
+		}
 	}
 	__NJS_VAR operator%=(const __NJS_VAR &_v1)
 	{
@@ -839,7 +859,10 @@ public:
 		REGISTER[_ptr].i = (int)*this >> (int)_v1;
 		return *this;
 	}
-	__NJS_VAR operator<<(const __NJS_VAR &_v1) { return (int)*this << (int)_v1; }
+	__NJS_VAR operator<<(const __NJS_VAR &_v1) 
+	{ 
+		return (int)*this << (int)_v1; 
+	}
 	__NJS_VAR operator<<=(const __NJS_VAR &_v1)
 	{
 		type = __NJS_NUMBER;

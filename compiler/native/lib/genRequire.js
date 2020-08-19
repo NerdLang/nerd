@@ -69,7 +69,7 @@ function addModuleLib(_lib, modSource)
 	{
 		for(var l = 0; l < _lib.length; l++ )
 		{
-		  COMPILER.LIBS += _lib[l].replace("__MODULE__", modSource).replace(/{__ARCH__}/g, os.arch()) + " ";
+		  COMPILER.LIBS += _lib[l].replace("__MODULE__", modSource).replace(/{__ARCH__}/g, os.arch()).replace(/{__EXTERN__}/g, extern) + " ";
 		}
 	}
 	else if(typeof _lib == "string")

@@ -96,11 +96,11 @@ var STD =
 
         if(preset == "none")
         {
-            return `${compiler} ${_stack} -std=c++11 "${_in}" -O1 -fpermissive -w -s ${COMPILER.LIBS} -o "${out}" ${_sysVNetLibs}`;
+            return `${compiler} ${_stack} -std=c++17 "${_in}" -O1 -fpermissive -w -s ${COMPILER.LIBS} -o "${out}" ${_sysVNetLibs}`;
         }
         else if(preset == "size")
         {
-            return `${compiler} ${_stack} -std=c++11 "${_in}" -Os -fno-rtti -fno-stack-protector -fomit-frame-pointer -fpermissive -w -s ${COMPILER.LIBS} -o "${out}" ${_sysVNetLibs}`;
+            return `${compiler} ${_stack} -std=c++17 "${_in}" -Os -fno-rtti -fno-stack-protector -fomit-frame-pointer -fpermissive -w -s ${COMPILER.LIBS} -o "${out}" ${_sysVNetLibs}`;
         }
         else
         {   
@@ -108,7 +108,7 @@ var STD =
             if(os.platform() == "darwin" || compiler.indexOf("clang") > -1) _opt += "3";
             else _opt += "fast";
 
-            return `${compiler} ${_stack} -std=c++11 "${_in}" ${_opt} -fpermissive -w -s ${COMPILER.LIBS}  -o "${out}" ${_sysVNetLibs}`;
+            return `${compiler} ${_stack} -std=c++17 "${_in}" ${_opt} -fpermissive -w -s ${COMPILER.LIBS}  -o "${out}" ${_sysVNetLibs}`;
         }
     }
 
