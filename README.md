@@ -180,6 +180,22 @@ NectarJS will then compile your app and launch it with the simulator.
 
 To test your configuration, you can compile example/ios.js app.
 
+# Arduino compilation
+
+To compile an Arduino firmware, you need a recent avr-gcc compiler that supports c++17 (8 or 10 for example).
+
+You can download it here: https://blog.zakkemble.net/avr-gcc-builds/
+
+Once done, compile your code by selecting the arduino env, and choosing a target: 
+
+`nectar example/arduino-led.js --env arduino --target nano`
+
+You can select a preset (speed or size) with:
+
+`--preset speed` or `--preset size`
+
+You can then flash the new firmware to a connected board with `--flash`
+
 # STM32 compilation
 
 To compile SMT32 firmware with NectarJS, you need first to instal mbed-cli and to setup your environment:
