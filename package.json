@@ -1,6 +1,6 @@
 {
   "name": "nectarjs",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "description": "Javascript's God Mode. No VM. No Bytecode. No GC. Just native binaries.",
   "main": "nectar",
   "bin": {
@@ -55,10 +55,10 @@
     "tsc"
   ],
   "author": "Adrien THIERRY <adrien.thierryfr@gmail.com> (https://seraum.com)",
-  "license": "AGPL",
+  "license": "GPL-3.0-or-later",
   "licenses": [
     {
-      "type": "AGPL",
+      "type": "GPL",
       "url": "https://github.com/nectarjs/nectarjs/blob/master/LICENSE"
     }
   ],
