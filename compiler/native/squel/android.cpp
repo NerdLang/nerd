@@ -79,7 +79,7 @@ Java_com_nectarjs_nectar_1android_1app_MainActivity_callbackFromJNI(
     mainObject = thiz;
 
     const char *nString = env->GetStringUTFChars(_str, NULL);
-    __NJS_Call_Function(__NJS_Object_Get("onEvent", Nectar), nString);
+	Nectar["onEvent"](nString);
     env->ReleaseStringUTFChars(_str, nString);
     
 }

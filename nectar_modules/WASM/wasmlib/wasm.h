@@ -19,7 +19,7 @@ string __NJS_EM_BIND(string _name, string _data)
 	{
 		if(it->first.compare(_name) == 0)
 		{
-			return __NJS_Get_String(__NJS_Call_Function(it->second, _data));
+			return __NJS_Get_String(it->second(_data));
 			break;
 		}
 	}

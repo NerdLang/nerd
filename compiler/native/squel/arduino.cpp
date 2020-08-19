@@ -76,11 +76,11 @@ int main(int argc, char* argv[])
 	
 	{CODE}
 	
-	__NJS_Call_Function(setup);
+	setup();
 	
 	while(true)
 	{
-		__NJS_Call_Function(loop);
+		loop();
 		delay(1);
 	}
 	

@@ -53,7 +53,7 @@ var __NJS_HTTP_LISTEN(var _host, var _port, var _cb, var _opt)
 
 	__NJS_Object_Set((char*)"end", __f_NJS_HTTP_RES_END, _res);
 
-	__NJS_Call_Function(_cb, _req, _res);
+	_req[_cb](_res);
 	return var();
   });
   
@@ -119,7 +119,7 @@ var __NJS_HTTP_LISTEN(var _host, var _port, var _cb, var _opt)
     var _res = __NJS_Create_Object();
     __NJS_Object_Set((char*)"end", __f_NJS_HTTP_RES_END, _res);
     
-    __NJS_Call_Function(_cb, _req, _res);
+    _req[_cb](_res);
     return var();
   });
   
@@ -184,7 +184,7 @@ var __NJS_HTTP_LISTEN(var _host, var _port, var _cb, var _opt)
     var _res = __NJS_Create_Object();
     __NJS_Object_Set((char*)"end", __f_NJS_HTTP_RES_END, _res);
     
-    __NJS_Call_Function(_cb, _req, _res);
+    _req[_cb](_res);
     return var();
   });
   
@@ -208,7 +208,7 @@ var __NJS_HTTP_LISTEN(var _host, var _port, var _cb, var _opt)
 
     __NJS_Object_Set((char*)"end", __f_NJS_HTTP_RES_END, _res);
     
-    __NJS_Call_Function(_cb, _req, _res);
+    _req[_cb](_res);
     return var();
   });
   
