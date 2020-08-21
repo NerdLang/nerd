@@ -803,6 +803,7 @@ public:
 			case __NJS_FUNCTION:
 			case __NJS_OBJECT:
 			case __NJS_NAN:
+			default: // XXX: Is this correct???
 				return __NJS_Create_Boolean(false);
 			}
 		}
@@ -918,6 +919,7 @@ public:
 		case __NJS_NAN:
 		case __NJS_NULL:
 		case __NJS_UNDEFINED:
+		default:
 			return 0;
 		}
 	}
@@ -949,6 +951,7 @@ public:
 		case __NJS_NAN:
 		case __NJS_NULL:
 		case __NJS_UNDEFINED:
+		default:
 			return 0;
 		}
 	}
@@ -976,6 +979,7 @@ public:
 		case __NJS_NAN:
 		case __NJS_NULL:
 		case __NJS_UNDEFINED:
+		default:
 			return false;
 		}
 	}
@@ -1008,6 +1012,7 @@ public:
 		case __NJS_NULL:
 			return "null";
 		case __NJS_UNDEFINED:
+		default:
 			return "undefined";
 		}
 	}
