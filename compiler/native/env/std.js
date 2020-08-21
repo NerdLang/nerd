@@ -61,6 +61,7 @@ var STD =
             "__NJS_PLATFORM": false,
             "JSON": false,
             "Object": false,
+            "isNaN": false,
         },
     },
     cli: function(compiler, preset, out, _in, option)
