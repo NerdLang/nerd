@@ -1,36 +1,41 @@
 #pragma once
-#include "baseobject.h"
+#include "object.h"
+#include <string>
 
 namespace NJS::Class
 {
-	class Number : BaseObject
+	class Number : Object
 	{
+	private:
+		inline bool isHeap() const;
+		inline int getSmi() const;
+		inline void setSmi(int &v);
+		inline double getHeap() const;
+		inline void setHeap(double &d);
+
 	public:
+		const char *name = "number";
+		const unsigned int type = NJS::Enum::Type::NUMBER;
 		Number();
 		Number(int i);
 		Number(double d);
 		Number(long long i);
-		double *__NJS_VALUE;
-		operator NJS::VAR() const;
+		unsigned int __NJS_VALUE;
 		explicit operator bool() const;
 		explicit operator double() const;
 		explicit operator int() const;
 		explicit operator std::string() const;
 		explicit operator long long() const;
 		Number operator=(const Number &_v);
+		Number operator=(int &_v1);
+		Number operator=(double &_v1);
 		/// Unary operators
 
-		Number operator+();
 		Number operator-();
-		Number operator!();
-		/// Logical operators
 
-		Number operator&&(const Number &_v1);
-		Number operator||(const Number &_v1);
 		/// Arithmetic operators
 
 		Number operator+(const Number &_v1);
-		Number operator+(const char _v1[]);
 		Number operator+=(const Number &_v1);
 		Number operator-(const Number &_v1);
 		Number operator-=(const Number &_v1);
@@ -46,16 +51,16 @@ namespace NJS::Class
 		Number operator--(const int _v1);
 		// Comparison operators
 
-		Number operator==(const Number &_v1);
+		bool operator==(const Number &_v1);
 		// === emulated with __NJS_EQUAL_VALUE_AND_TYPE
 
-		Number operator!=(const Number &_v1);
+		bool operator!=(const Number &_v1);
 		// !== emulated with __NJS_NOT_EQUAL_VALUE_AND_TYPE
 
-		Number operator<(const Number &_v1);
-		Number operator<=(const Number &_v1);
-		Number operator>(const Number &_v1);
-		Number operator>=(const Number &_v1);
+		bool operator<(const Number &_v1);
+		bool operator<=(const Number &_v1);
+		bool operator>(const Number &_v1);
+		bool operator>=(const Number &_v1);
 		// Bitwise operators
 
 		Number operator&(const Number &_v1);

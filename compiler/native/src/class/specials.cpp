@@ -1,6 +1,6 @@
 #include "specials.h"
 #include "base.cpp"
-#include "../values.cpp"
+#include "../values.h"
 
 /** undefined **/
 NJS::Class::Value::undefined::undefined()
@@ -20,11 +20,11 @@ explicit NJS::Class::Value::undefined::operator std::string() const
 
 const NJS::VAR &NJS::Class::Value::undefined::operator[](NJS::VAR _index) const
 {
-	throw __NJS_VAR("TypeError: Cannot read property '" + (std::string)_index + "' of " + (std::string)*this);
+	throw NJS::VAR("TypeError: Cannot read property '" + (std::string)_index + "' of " + (std::string)*this);
 }
 NJS::VAR &NJS::Class::Value::undefined::operator[](NJS::VAR _index)
 {
-	throw __NJS_VAR("TypeError: Cannot read property '" + (std::string)_index + "' of " + (std::string)*this);
+	throw NJS::VAR("TypeError: Cannot read property '" + (std::string)_index + "' of " + (std::string)*this);
 }
 
 
@@ -61,19 +61,22 @@ explicit NJS::Class::Value::NaN::operator std::string() const
 	return "NaN";
 }
 
-
-/** Infinity **/
-NJS::Class::Value::Infinity::Infinity()
-{
-	Number();
-}
-
-NJS::Class::Value::Infinity::operator NJS::VAR() const
-{
-	return NJS::Value::Infinity * (*this);
-}
-
-explicit NJS::Class::Value::NaN::operator std::string() const
-{
-	return ((int)*this < 0 ? "-" : "") + "Infinity";
-}
+NJS::Class::Value::NaN NJS::Class::Value::NaN::operator-() { return *this; }
+NJS::Class::Value::NaN NJS::Class::Value::NaN::operator+(const NJS::Class::Value::NaN &_v1) { return *this; }
+NJS::Class::Value::NaN NJS::Class::Value::NaN::operator+=(const NJS::Class::Value::NaN &_v1) { return *this; }
+NJS::Class::Value::NaN NJS::Class::Value::NaN::operator-(const NJS::Class::Value::NaN &_v1) { return *this; }
+NJS::Class::Value::NaN NJS::Class::Value::NaN::operator-=(const NJS::Class::Value::NaN &_v1) { return *this; }
+NJS::Class::Value::NaN NJS::Class::Value::NaN::operator*(const NJS::Class::Value::NaN &_v1) { return *this; }
+NJS::Class::Value::NaN NJS::Class::Value::NaN::operator*=(const NJS::Class::Value::NaN &_v1) { return *this; }
+NJS::Class::Value::NaN NJS::Class::Value::NaN::operator/(const NJS::Class::Value::NaN &_v1) { return *this; }
+NJS::Class::Value::NaN NJS::Class::Value::NaN::operator/=(const NJS::Class::Value::NaN &_v1) { return *this; }
+NJS::Class::Value::NaN NJS::Class::Value::NaN::operator%(const NJS::Class::Value::NaN &_v1) { return *this; }
+NJS::Class::Value::NaN NJS::Class::Value::NaN::operator%=(const NJS::Class::Value::NaN &_v1) { return *this; }
+NJS::Class::Value::NaN NJS::Class::Value::NaN::operator++(const int _v1) { return *this; }
+NJS::Class::Value::NaN NJS::Class::Value::NaN::operator--(const int _v1) { return *this; }
+bool NJS::Class::Value::NaN::operator==(const NJS::Class::Value::NaN &_v1) { return false; }
+bool NJS::Class::Value::NaN::operator!=(const NJS::Class::Value::NaN &_v1) { return true; }
+bool NJS::Class::Value::NaN::operator<(const NJS::Class::Value::NaN &_v1) { return false; }
+bool NJS::Class::Value::NaN::operator<=(const NJS::Class::Value::NaN &_v1){ return false; }
+bool NJS::Class::Value::NaN::operator>(const NJS::Class::Value::NaN &_v1) { return false; }
+bool NJS::Class::Value::NaN::operator>=(const NJS::Class::Value::NaN &_v1) { return false; }

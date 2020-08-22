@@ -1,50 +1,53 @@
 #include "number.h"
-#include "baseobject.cpp"
-#include <string>
+#include "object.cpp"
 #include <cmath>
-
-#define __NJS_NUMBER_OPERATOR_TEMPLATE(method, op, func) \
-	Number NJS::Class::Number::method(const Number &_v1) \
-	{                                                    \
-		if (__NJS_VALUE & 1 && _v1.__NJS_VALUE & 1)      \
-		{                                                \
-			int a = (int)*this;                          \
-			int b = (int)_v1;                            \
-			int *c;                                      \
-			if (!func(a, b, c))                          \
-			{                                            \
-				return a op b;                           \
-			}                                            \
-		}                                                \
-		return (double)*this op(double) _v1;             \
-	}
 
 NJS::Class::Number::Number()
 {
-	BaseObject();
+	Object();
 	__NJS_VALUE = 0;
 }
 NJS::Class::Number::Number(int i)
 {
-	BaseObject();
+	Object();
 	__NJS_VALUE = i << 1;
 }
 
 NJS::Class::Number::Number(double d)
 {
-	BaseObject();
+	Object();
 	double dummy;
 	if (modf(d, &dummy) == 0.0 && d < INT32_MAX && d > INT32_MIN)
 	{
-		__NJS_VALUE = (int)d;
-		__NJS_VALUE <<= 1;
+		int i = static_cast<int>(d);
+		setSmi(i);
 	}
 	else
 	{
-		*__NJS_VALUE = d;
-		__NJS_VALUE <<= 1;
-		__NJS_VALUE |= 1;
+		setHeap(d);
 	}
+}
+
+inline bool NJS::Class::Number::isHeap() const
+{
+	return __NJS_VALUE & 1;
+}
+inline int NJS::Class::Number::getSmi() const
+{
+	return __NJS_VALUE >> 1;
+}
+inline void NJS::Class::Number::setSmi(int &v)
+{
+	__NJS_VALUE = v << 1;
+}
+inline double NJS::Class::Number::getHeap() const
+{
+	return *(reinterpret_cast<double *>(__NJS_VALUE >> 1));
+}
+inline void NJS::Class::Number::setHeap(double &d)
+{
+	*reinterpret_cast<double *>(__NJS_VALUE) = d;
+	__NJS_VALUE = (__NJS_VALUE << 1) | 1;
 }
 
 NJS::Class::Number::operator NJS::VAR() const
@@ -60,49 +63,45 @@ explicit NJS::Class::Number::operator bool() const
 }
 explicit NJS::Class::Number::operator double() const
 {
-	int p = __NJS_VALUE >> 1;
-	return __NJS_VALUE & 1 ? *p : (double)p;
+	return isHeap() ? getHeap() : (double)getSmi();
 }
 explicit NJS::Class::Number::operator int() const
 {
-	int p = __NJS_VALUE >> 1;
-	return __NJS_VALUE & 1 ? (int)*p : p;
+	return isHeap() ? (int)getHeap() : getSmi();
 }
 explicit NJS::Class::Number::operator std::string() const
 {
-	int p = __NJS_VALUE >> 1;
-	return to_string(__NJS_VALUE & 1 ? *p : p);
+	return std::to_string(isHeap() ? getHeap() : getSmi());
 }
 explicit NJS::Class::Number::operator long long() const
 {
-	int p = __NJS_VALUE >> 1;
-	return (long long)(__NJS_VALUE & 1 ? *p : p);
+	return (long long)(isHeap() ? getHeap() : getSmi());
 }
-Number NJS::Class::Number::operator=(const Number &_v)
+NJS::Class::Number NJS::Class::Number::operator=(const Number &_v)
 {
 	__NJS_VALUE = _v.__NJS_VALUE;
 	_v.Delete();
+	return *this;
 }
-Number NJS::Class::Number::operator=(const int &_v)
+NJS::Class::Number NJS::Class::Number::operator=(int &_v)
 {
-	__NJS_VALUE = _v << 1;
+	setSmi(_v);
+	return *this;
 }
-Number NJS::Class::Number::operator=(const double &_v)
+NJS::Class::Number NJS::Class::Number::operator=(double &_v)
 {
-	*__NJS_VALUE = _v;
-	__NJS_VALUE <<= 1;
-	__NJS_VALUE |= 1;
-}
-
-Number NJS::Class::Number::operator-()
-{
-	int p = __NJS_VALUE >> 1;
-	return -(__NJS_VALUE & 1 ? *p : p);
+	setHeap(_v);
+	return *this;
 }
 
-Number NJS::Class::Number::operator+(const Number &_v1)
+NJS::Class::Number NJS::Class::Number::operator-()
 {
-	if (__NJS_VALUE & 1 && _v1.__NJS_VALUE & 1)
+	return -(isHeap() ? getHeap() : getSmi());
+}
+
+NJS::Class::Number NJS::Class::Number::operator+(const Number &_v1)
+{
+	if (isHeap() && _v1.isHeap())
 	{
 		int a = (int)*this;
 		int b = (int)_v1;
@@ -115,9 +114,9 @@ Number NJS::Class::Number::operator+(const Number &_v1)
 	return (double)*this + (double)_v1;
 }
 
-Number NJS::Class::Number::operator-(const Number &_v1)
+NJS::Class::Number NJS::Class::Number::operator-(const Number &_v1)
 {
-	if (__NJS_VALUE & 1 && _v1.__NJS_VALUE & 1)
+	if (isHeap() && _v1.isHeap())
 	{
 		int a = (int)*this;
 		int b = (int)_v1;
@@ -130,9 +129,9 @@ Number NJS::Class::Number::operator-(const Number &_v1)
 	return (double)*this - (double)_v1;
 }
 
-Number NJS::Class::Number::operator*(const Number &_v1)
+NJS::Class::Number NJS::Class::Number::operator*(const Number &_v1)
 {
-	if (__NJS_VALUE & 1 && _v1.__NJS_VALUE & 1)
+	if (isHeap() && _v1.isHeap())
 	{
 		int a = (int)*this;
 		int b = (int)_v1;
@@ -145,9 +144,9 @@ Number NJS::Class::Number::operator*(const Number &_v1)
 	return (double)*this * (double)_v1;
 }
 
-Number NJS::Class::Number::operator/(const Number &_v1)
+NJS::Class::Number NJS::Class::Number::operator/(const Number &_v1)
 {
-	if ((__NJS_VALUE & 1) == 0 && (_v1.__NJS_VALUE & 1) == 0)
+	if (!isHeap() && !_v1.isHeap())
 	{
 		int a = (int)*this;
 		int b = (int)_v1;
@@ -158,89 +157,91 @@ Number NJS::Class::Number::operator/(const Number &_v1)
 	}
 	return (double)*this / (double)_v1;
 }
-Number NJS::Class::Number::operator%(const Number &_v1)
+NJS::Class::Number NJS::Class::Number::operator%(const Number &_v1)
 {
-	if ((__NJS_VALUE & 1) == 0 && (_v1.__NJS_VALUE & 1) == 0)
+	if (!isHeap() && !_v1.isHeap())
 	{
 		return (int)*this % (int)_v1;
 	}
 	return std::fmod((double)*this, (double)_v1);
 }
 
-Number NJS::Class::Number::operator+=(const Number &_v1) { return *this = *this + _v1; }
-Number NJS::Class::Number::operator-=(const Number &_v1) { return *this = *this - _v1; }
-Number NJS::Class::Number::operator*=(const Number &_v1) { return *this = *this * _v1; }
-Number NJS::Class::Number::operator/=(const Number &_v1) { return *this = *this / _v1; }
-Number NJS::Class::Number::operator%=(const Number &_v1) { return *this = *this % _v1; }
+NJS::Class::Number NJS::Class::Number::operator+=(const Number &_v1) { return *this = *this + _v1; }
+NJS::Class::Number NJS::Class::Number::operator-=(const Number &_v1) { return *this = *this - _v1; }
+NJS::Class::Number NJS::Class::Number::operator*=(const Number &_v1) { return *this = *this * _v1; }
+NJS::Class::Number NJS::Class::Number::operator/=(const Number &_v1) { return *this = *this / _v1; }
+NJS::Class::Number NJS::Class::Number::operator%=(const Number &_v1) { return *this = *this % _v1; }
 // TODO: "**" and "**=" operators
-Number NJS::Class::Number::operator++(const int _v1)
+NJS::Class::Number NJS::Class::Number::operator++(const int _v1)
 {
-	int p = __NJS_VALUE >> 1;
-	if (__NJS_VALUE & 1)
+	if (isHeap())
 	{
-		*p++;
+		double v = getHeap();
+		setHeap(++v);
 	}
 	else
 	{
-		*this = ++p;
+		int v = getSmi();
+		setSmi(++v);
 	}
 }
-Number NJS::Class::Number::operator--(const int _v1)
+NJS::Class::Number NJS::Class::Number::operator--(const int _v1)
 {
-	int p = __NJS_VALUE >> 1;
-	if (__NJS_VALUE & 1)
+	if (isHeap())
 	{
-		*p--;
+		double v = getHeap();
+		setHeap(--v);
 	}
 	else
 	{
-		*this = --p;
+		int v = getSmi();
+		setSmi(--v);
 	}
 }
 // Comparison operators
 
-Number operator<(const Number &_v1)
+bool NJS::Class::Number::operator<(const Number &_v1)
 {
-	if ((__NJS_VALUE & 1) == 0 && (_v1.__NJS_VALUE & 1) == 0)
+	if (!isHeap() && !_v1.isHeap())
 	{
 		return (int)*this < (int)_v1;
 	}
 	return (double)*this < (double)_v1;
 }
-Number operator<=(const Number &_v1)
+bool NJS::Class::Number::operator<=(const Number &_v1)
 {
-	if ((__NJS_VALUE & 1) == 0 && (_v1.__NJS_VALUE & 1) == 0)
+	if (!isHeap() && !_v1.isHeap())
 	{
 		return (int)*this <= (int)_v1;
 	}
 	return (double)*this <= (double)_v1;
 }
-Number operator>(const Number &_v1)
+bool NJS::Class::Number::operator>(const Number &_v1)
 {
-	if ((__NJS_VALUE & 1) == 0 && (_v1.__NJS_VALUE & 1) == 0)
+	if (!isHeap() && !_v1.isHeap())
 	{
 		return (int)*this > (int)_v1;
 	}
 	return (double)*this > (double)_v1;
 }
-Number operator>=(const Number &_v1)
+bool NJS::Class::Number::operator>=(const Number &_v1)
 {
-	if ((__NJS_VALUE & 1) == 0 && (_v1.__NJS_VALUE & 1) == 0)
+	if (!isHeap() && !_v1.isHeap())
 	{
 		return (int)*this >= (int)_v1;
 	}
 	return (double)*this >= (double)_v1;
 }
 
-Number NJS::Class::Number::operator&(const Number &_v1) { return (int)*this & (int)_v1; }
-Number NJS::Class::Number::operator|(const Number &_v1) { return (int)*this | (int)_v1; }
-Number NJS::Class::Number::operator^(const Number &_v1) { return (int)*this ^ (int)_v1; }
-Number NJS::Class::Number::operator>>(const Number &_v1) { return (int)*this >> (int)_v1; }
-Number NJS::Class::Number::operator<<(const Number &_v1) { return (int)*this << (int)_v1; }
+NJS::Class::Number NJS::Class::Number::operator&(const Number &_v1) { return (int)*this & (int)_v1; }
+NJS::Class::Number NJS::Class::Number::operator|(const Number &_v1) { return (int)*this | (int)_v1; }
+NJS::Class::Number NJS::Class::Number::operator^(const Number &_v1) { return (int)*this ^ (int)_v1; }
+NJS::Class::Number NJS::Class::Number::operator>>(const Number &_v1) { return (int)*this >> (int)_v1; }
+NJS::Class::Number NJS::Class::Number::operator<<(const Number &_v1) { return (int)*this << (int)_v1; }
 
-Number operator&=(const Number &_v1) { return *this = *this & _v1; }
-Number operator|=(const Number &_v1) { return *this = *this | _v1; }
-Number operator^=(const Number &_v1) { return *this = *this ^ _v1; }
-Number operator~() { return *this = ~(int)*this; }
-Number operator>>=(const Number &_v1) { return *this = *this >> _v1; }
-Number operator<<=(const Number &_v1) { return *this = *this << _v1; }
+NJS::Class::Number NJS::Class::Number::operator&=(const Number &_v1) { return *this = *this & _v1; }
+NJS::Class::Number NJS::Class::Number::operator|=(const Number &_v1) { return *this = *this | _v1; }
+NJS::Class::Number NJS::Class::Number::operator^=(const Number &_v1) { return *this = *this ^ _v1; }
+NJS::Class::Number NJS::Class::Number::operator~() { return ~(int)*this; }
+NJS::Class::Number NJS::Class::Number::operator>>=(const Number &_v1) { return *this = *this >> _v1; }
+NJS::Class::Number NJS::Class::Number::operator<<=(const Number &_v1) { return *this = *this << _v1; }

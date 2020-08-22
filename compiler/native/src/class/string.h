@@ -1,32 +1,33 @@
 #pragma once
-#include "baseobject.h"
+#include "object.h"
 
 namespace NJS::Class
 {
-	class String : BaseObject
+	class String : Object
 	{
 	public:
+		const char *name = "string";
+		const unsigned int type = NJS::Enum::Type::STRING;
 		String();
 		String(const char *str);
 		std::string __NJS_VALUE;
-		operator NJS::VAR() const;
 		explicit operator bool() const;
 		explicit operator double() const;
 		explicit operator int() const;
 		explicit operator std::string() const;
 		explicit operator long long() const;
-		String &operator[](NJS::VAR _index) const;
-		String &operator[](NJS::VAR _index);
+		NJS::VAR &operator[](NJS::VAR _index) const;
+		NJS::VAR &operator[](NJS::VAR _index);
 		NJS::VAR __iterator();
 		String charAt(std::vector<NJS::VAR> args);
-		Number charCodeAt();
-		String codePointAt();
-		String concat();
-		String endsWith();
+		int charCodeAt(std::vector<NJS::VAR> args);
+		int codePointAt(std::vector<NJS::VAR> args);
+		String concat(std::vector<NJS::VAR> args);
+		bool endsWith(std::vector<NJS::VAR> args);
 		String fixed();
-		String includes();
-		String indexOf();
-		String lastIndexOf();
+		bool includes(std::vector<NJS::VAR> args);
+		int indexOf(std::vector<NJS::VAR> args);
+		int lastIndexOf();
 		String localeCompare();
 		String match();
 		String normalize();
@@ -37,7 +38,7 @@ namespace NJS::Class
 		String search();
 		String slice();
 		String split();
-		String startsWith();
+		bool startsWith();
 		String substr();
 		String substring();
 		String toLocaleLowerCase();

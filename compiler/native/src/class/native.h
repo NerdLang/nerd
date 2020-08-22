@@ -3,17 +3,13 @@
 
 namespace NJS::Class
 {
-	class Native : Function
+	class Native : public Function
 	{
 	public:
+		const char *name = "function";
+		const unsigned int type = NJS::Enum::Type::NATIVE;
 		Native(void *_f);
 		void *__NJS_VALUE;
-		operator NJS::VAR() const;
-		explicit operator bool() const;
-		explicit operator double() const;
-		explicit operator int() const;
 		explicit operator std::string() const;
-		explicit operator long long() const;
-		NJS::VAR operator()() const;
 	};
 } // namespace NJS::Class

@@ -1,10 +1,12 @@
 #include "array.h"
-#include "baseobject.cpp"
+#include "object.cpp"
+#include <algorithm>
 #include <sstream>
+#include <limits>
 
 NJS::Class::Array::Array()
 {
-	BaseObject();
+	Object();
 	__NJS_CreateMethodToClass("@@iterator", this->__iterator);
 	__NJS_CreateMethodToClass("@@unscopables", this->__unscopables);
 	__NJS_CreateMethodToClass("concat", this->concat);
@@ -41,18 +43,6 @@ NJS::Class::Array::Array()
 	(*this)["length"] = 0;
 }
 
-NJS::Class::Array::operator NJS::VAR() const
-{
-	auto _var = NJS::VAR();
-	_var.type = NJS::Enum::Type::ARRAY;
-	REGISTER[_ptr].a = this;
-	return _var;
-}
-
-explicit NJS::Class::Array::operator bool() const
-{
-	return true;
-}
 explicit NJS::Class::Array::operator double() const
 {
 	auto size = this->__NJS_VALUE.size();
@@ -60,27 +50,17 @@ explicit NJS::Class::Array::operator double() const
 		return 0;
 	if (size == 1)
 		return (double)this->__NJS_VALUE[0];
-	return NJS::Value::NaN;
+	return std::numeric_limits<double>::quiet_NaN();
 }
 explicit NJS::Class::Array::operator int() const
 {
-	auto size = this->__NJS_VALUE.size();
-	return size == 1 ? (int)this->__NJS_VALUE[0] : 0;
+	return this->__NJS_VALUE.size() == 1
+		? (int)this->__NJS_VALUE[0]
+		: std::numeric_limits<int>::quiet_NaN();
 }
 explicit NJS::Class::Array::operator std::string() const
 {
-	auto &_arr = this->__NJS_VALUE;
-	int l = _arr.size();
-	if (l == 0)
-		return "";
-	std::stringstream stream;
-	stream << (std::string)_arr[0]["toLocaleString"]();
-	for (int i = 1; i < l; i++)
-	{
-		NJS::VAR val = _arr[i];
-		stream << "," << (std::string)val["toLocaleString"]();
-	}
-	return stream.str();
+	return (std::string)this->toString();
 }
 explicit NJS::Class::Array::operator long long() const
 {
@@ -92,7 +72,7 @@ NJS::VAR const &NJS::Class::Array::operator[](NJS::VAR _index) const
 {
 	if (_index.type != NJS::Enum::Type::NUMBER)
 	{
-		return BaseObject::operator[](_index);
+		return Object::operator[](_index);
 	}
 	int i = (int)_index;
 	return (i <= __NJS_VALUE.size() && i >= 0) ? __NJS_VALUE[i] : NJS::Value::undefined;
@@ -101,7 +81,7 @@ NJS::VAR &NJS::Class::Array::operator[](NJS::VAR _index)
 {
 	if (_index.type != NJS::Enum::Type::NUMBER)
 	{
-		return BaseObject::operator[](_index);
+		return Object::operator[](_index);
 	}
 	int i = (int)_index;
 	if (__NJS_VALUE.size() <= i)
@@ -189,7 +169,10 @@ NJS::VAR NJS::Class::Array::push(std::vector<NJS::VAR> args)
 };
 NJS::VAR NJS::Class::Array::reduce(std::vector<NJS::VAR> args) const {}
 NJS::VAR NJS::Class::Array::reduceRight(std::vector<NJS::VAR> args) const {}
-NJS::VAR NJS::Class::Array::reverse(std::vector<NJS::VAR> args) const {}
+NJS::VAR NJS::Class::Array::reverse(std::vector<NJS::VAR> args) {
+	std::reverse(__NJS_VALUE.begin(), __NJS_VALUE.end());
+	return *this;
+}
 NJS::VAR NJS::Class::Array::shift(std::vector<NJS::VAR> args) {}
 NJS::VAR NJS::Class::Array::slice(std::vector<NJS::VAR> args) const {}
 NJS::VAR NJS::Class::Array::some(std::vector<NJS::VAR> args) const {}

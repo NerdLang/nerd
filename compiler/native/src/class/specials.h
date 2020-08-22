@@ -6,6 +6,8 @@ namespace NJS::Class::Value
 {
 	class undefined : Base
 	{
+		const char *name = "undefined";
+		const unsigned int type = NJS::Enum::Type::UNDEFINED;
 		undefined();
 		operator NJS::VAR() const;
 		explicit operator std::string() const;
@@ -14,19 +16,44 @@ namespace NJS::Class::Value
 	};
 	class null : undefined
 	{
+		const char *name = "object";
+		const unsigned int type = NJS::Enum::Type::_NULL;
 		null();
 		operator NJS::VAR() const;
 		explicit operator std::string() const;
 	};
-	class NaN : Number 
+	class NaN : Number
 	{
+		const unsigned int type = NJS::Enum::Type::_NAN;
 		NaN();
 		operator NJS::VAR() const;
 		explicit operator std::string() const;
+		NaN operator=(const NaN &_v);
+		NaN operator=(int &_v1);
+		NaN operator=(double &_v1);
+		/// Unary operators
+
+		NaN operator-();
+		/// Arithmetic operators
+
+		NaN operator+(const NaN &_v1);
+		NaN operator+=(const NaN &_v1);
+		NaN operator-(const NaN &_v1);
+		NaN operator-=(const NaN &_v1);
+		NaN operator*(const NaN &_v1);
+		NaN operator*=(const NaN &_v1);
+		NaN operator/(const NaN &_v1);
+		NaN operator/=(const NaN &_v1);
+		NaN operator%(const NaN &_v1);
+		NaN operator%=(const NaN &_v1);
+		// TODO: "**" and "**=" operators
+		NaN operator++(const int _v1);
+		NaN operator--(const int _v1);
+		bool operator==(const NaN &_v1);
+		bool operator!=(const NaN &_v1);
+		bool operator<(const NaN &_v1);
+		bool operator<=(const NaN &_v1);
+		bool operator>(const NaN &_v1);
+		bool operator>=(const NaN &_v1);
 	};
-	class Infinity : Number
-	{
-		Infinity();
-		explicit operator std::string() const;
-	}
 } // namespace NJS::Class::Value

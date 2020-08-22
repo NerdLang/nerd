@@ -1,15 +1,16 @@
 #pragma once
-#include "baseobject.h"
+#include "../var.h"
+#include "object.h"
 
 namespace NJS::Class
 {
-	class Array : BaseObject
+	class Array : Object
 	{
 	public:
+		const char *name = "array";
+		const unsigned int type = NJS::Enum::Type::ARRAY;
 		Array();
 		std::vector<NJS::VAR> __NJS_VALUE = std::vector<NJS::VAR>();
-		operator NJS::VAR() const;
-		explicit operator bool() const;
 		explicit operator double() const;
 		explicit operator int() const;
 		explicit operator std::string() const;
@@ -39,7 +40,7 @@ namespace NJS::Class
 		NJS::VAR push(std::vector<NJS::VAR> args);
 		NJS::VAR reduce(std::vector<NJS::VAR> args) const;
 		NJS::VAR reduceRight(std::vector<NJS::VAR> args) const;
-		NJS::VAR reverse(std::vector<NJS::VAR> args) const;
+		NJS::VAR reverse(std::vector<NJS::VAR> args);
 		NJS::VAR shift(std::vector<NJS::VAR> args);
 		NJS::VAR slice(std::vector<NJS::VAR> args) const;
 		NJS::VAR some(std::vector<NJS::VAR> args) const;

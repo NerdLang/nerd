@@ -1,19 +1,17 @@
 #pragma once
-#include "baseobject.h"
+#include "object.h"
 
 namespace NJS::Class
 {
-	class Function : BaseObject
+	class Function : Object
 	{
 	public:
+		const char *name = "function";
+		const unsigned int type = NJS::Enum::Type::FUNCTION;
 		Function(void *_f);
 		void *__NJS_VALUE;
-		operator NJS::VAR() const;
-		explicit operator bool() const;
-		explicit operator double() const;
-		explicit operator int() const;
 		explicit operator std::string() const;
-		explicit operator long long() const;
-		NJS::VAR operator()() const;
+		template <class... Args>
+		NJS::VAR operator()(Args... args) const;
 	};
 } // namespace NJS::Class
