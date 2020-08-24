@@ -423,7 +423,7 @@ function Build(prepare)
 
 	var _tmp;
 	if(CLI.cli["--tmp"] && CLI.cli["--tmp"].argument)
-		_tmp = CLI.cli["--tmp"].argument;
+		_tmp = path.resolve(CLI.cli["--tmp"].argument);
 	else {
 		var _current = process.cwd();
 		var _npath = path.join(_current, ".nectar");
@@ -460,6 +460,9 @@ function Build(prepare)
         if(_Ext.length > 1) ext = _Ext[_Ext.length - 1];
 
 		/*** CREATE COMPIL ENV ***/
+		var _current = process.cwd();
+		var _npath = path.join(_current, ".nectar");
+		try { fs.mkdirSync(_npath); } catch(e){};
 		if(COMPILER.ENV.init) COMPILER.ENV.init(COMPILER.TMP_FOLDER);
 		else try { fs.mkdirSync(_tmp); } catch(e){};
 
