@@ -29,8 +29,12 @@ function StringLiteral(_path)
 
 	if(_path.parent.type == "MemberExpression" || _path.parent.type == "CallExpression")
 	{
-		//_path.replaceWithSourceString("__NJS_VAR(" + _path.node.extra.raw + ")");
-		//_path.skip();
+		//
+	}
+	else 
+	{
+		_path.replaceWithSourceString("__NJS_VAR(" + _path.node.extra.raw + ")");
+		_path.skip();
 	}
 }
 module.exports = StringLiteral;
