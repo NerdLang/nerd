@@ -19,18 +19,17 @@
  * along with NectarJS.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
- 
-function StringLiteral(_path)
-{
-	if(_path.node.extra.raw[0] && _path.node.extra.raw[0] == "'")
-	{
-		_path.node.extra.raw = '"' + _path.node.value.replace(/\\/g, '\\\\').replace(/"/g, '\\\"') + '"';
-	}
 
-	if(_path.parent.type == "MemberExpression" || _path.parent.type == "CallExpression")
+var _Array = 
+{
+	prototype:
 	{
-		//_path.replaceWithSourceString("__NJS_VAR(" + _path.node.extra.raw + ")");
-		//_path.skip();
-	}
-}
-module.exports = StringLiteral;
+		slice: function()
+		{
+			
+		},
+		test: "OK",
+	},
+};
+
+module.exports = _Array;

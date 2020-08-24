@@ -1,0 +1,20 @@
+namespace NJS
+{
+	enum __NJS_TYPE
+	{
+		__NJS_UNDEFINED = 1,
+		__NJS_NUMBER,
+		__NJS_DOUBLE,
+		__NJS_OBJECT,
+		__NJS_BIGNUMBER,
+		__NJS_BOOLEAN,
+		__NJS_STRING,
+		__NJS_NATIVE,
+		__NJS_FUNCTION,
+		__NJS_ARRAY,
+		__NJS_NAN,
+		__NJS_INFINITY,
+		__NJS_NULL
+
+	};
+}

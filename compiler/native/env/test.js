@@ -32,19 +32,19 @@ var TEST =
   {
     if(compiler == "cl" || compiler.indexOf("cl ") == 0)
     {
-        if(preset == "none") return `${compiler} ${_in} /std:c++14 /D CL_WINDOWS=1 /I "${CONFIG.win_inc_ucrt}" "${CONFIG.win_lib_um}\\Uuid.Lib" "${CONFIG.win_lib_um}\\kernel32.Lib" "${CONFIG.win_lib_ucrt}\\libucrt.lib" /EHsc  ${COMPILER.LIBS} /o  ${out}`;
-        else if(preset == "size") return `${compiler} ${_in} /std:c++14 /D CL_WINDOWS=1 /O1 /I "${CONFIG.win_inc_ucrt}" "${CONFIG.win_lib_um}\\Uuid.Lib" "${CONFIG.win_lib_um}\\kernel32.Lib" "${CONFIG.win_lib_ucrt}\\libucrt.lib" /EHsc ${COMPILER.LIBS} /o  ${out}`;
-        else if(preset == "speed") return `${compiler} ${_in} /std:c++14 /D CL_WINDOWS=1 /Ox /I "${CONFIG.win_inc_ucrt}" "${CONFIG.win_lib_um}\\Uuid.Lib" "${CONFIG.win_lib_um}\\kernel32.Lib" "${CONFIG.win_lib_ucrt}\\libucrt.lib" /EHsc ${COMPILER.LIBS} /o  ${out}`;
+        if(preset == "none") return `${compiler} ${_in} /D __NJS_REGISTER_SIZE=${COMPILER.REGISTER} /std:c++14 /D CL_WINDOWS=1 /I "${CONFIG.win_inc_ucrt}" "${CONFIG.win_lib_um}\\Uuid.Lib" "${CONFIG.win_lib_um}\\kernel32.Lib" "${CONFIG.win_lib_ucrt}\\libucrt.lib" /EHsc  ${COMPILER.LIBS} /o  ${out}`;
+        else if(preset == "size") return `${compiler} ${_in} /D __NJS_REGISTER_SIZE=${COMPILER.REGISTER} /std:c++14 /D CL_WINDOWS=1 /O1 /I "${CONFIG.win_inc_ucrt}" "${CONFIG.win_lib_um}\\Uuid.Lib" "${CONFIG.win_lib_um}\\kernel32.Lib" "${CONFIG.win_lib_ucrt}\\libucrt.lib" /EHsc ${COMPILER.LIBS} /o  ${out}`;
+        else if(preset == "speed") return `${compiler} ${_in} /D __NJS_REGISTER_SIZE=${COMPILER.REGISTER} /std:c++14 /D CL_WINDOWS=1 /Ox /I "${CONFIG.win_inc_ucrt}" "${CONFIG.win_lib_um}\\Uuid.Lib" "${CONFIG.win_lib_um}\\kernel32.Lib" "${CONFIG.win_lib_ucrt}\\libucrt.lib" /EHsc ${COMPILER.LIBS} /o  ${out}`;
     }
 	  if(preset == "none")
 	  {
-		  return `${compiler} -std=c++17 ${_in} ${option} -I ${extern}/lib/ -fpermissive -w -s ${COMPILER.LIBS} -o ${out}`;
+		  return `${compiler} -D__NJS_REGISTER_SIZE=${COMPILER.REGISTER} -std=c++17 ${_in} ${option} -I ${extern}/lib/ -fpermissive -w -s ${COMPILER.LIBS} -o ${out}`;
 	  }
 	  else if(preset == "size")
 	  {
-		  return `${compiler} -std=c++17 ${_in} ${option} -I ${extern}/lib/ -fno-rtti -fno-stack-protector -fomit-frame-pointer -fpermissive -w -s ${COMPILER.LIBS}  -o ${out}`;
+		  return `${compiler} -D__NJS_REGISTER_SIZE=${COMPILER.REGISTER} -std=c++17 ${_in} ${option} -I ${extern}/lib/ -fno-rtti -fno-stack-protector -fomit-frame-pointer -fpermissive -w -s ${COMPILER.LIBS}  -o ${out}`;
 	  }
-	  else return `${compiler} -std=c++17 ${_in} -I ${extern}/lib/ ${option} -fpermissive -w -s ${COMPILER.LIBS} -o ${out}`;
+	  else return `${compiler} -D__NJS_REGISTER_SIZE=${COMPILER.REGISTER} -std=c++17 ${_in} -I ${extern}/lib/ ${option} -fpermissive -w -s ${COMPILER.LIBS} -o ${out}`;
   },
   check: {
     "env": {

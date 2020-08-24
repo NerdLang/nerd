@@ -54,18 +54,16 @@ function loadEnv()
 
 function setRegister(_value)
 {
-	var _reg;
 	try 
 	{
-		_reg = parseInt(_value)
-		console.log("[*] Set register at: " + _reg);
+		COMPILER.REGISTER = parseInt(_value)
+		console.log("[*] Set register at: " + COMPILER.REGISTER);
 	}
 	catch(e)
 	{
 		console.log("[!] Invalid register, integer needed");
 		process.exit(1);
 	}
-	return _reg;
 }
 
 var FAST_CALL = ["BinaryExpression", "NumericLiteral"];
@@ -132,6 +130,7 @@ function Compiler()
 	this.OUT = "";
 	this.TMP_FOLDER = "";
 	this.OPTION = "";
+	this.REGISTER = 100000;
 	
 	this.DECL = [];
 	
@@ -242,28 +241,26 @@ function Compiler()
 	  
 	this.Prepare = function(_folder)
 	{
-		var _reg = 1000000;
+		COMPILER.REGISTER = 1000000;
 		if(this.ENV.name == "arduino")
 		{
-			_reg = 250;
+			COMPILER.REGISTER = 250;
 			if(!this.TARGET)
 			{
 				this.TARGET = "nano"
 			}
-			if(this.TARGET.substring(0, 4) == "nano") _reg = 50;
+			if(this.TARGET.substring(0, 4) == "nano") COMPILER.REGISTER = 50;
 		}
 		else if(this.ENV.name == "stm32")
 		{
-			_reg = 1000;
+			COMPILER.REGISTER = 1000;
 		}
 
 
 		if(CLI.cli["--register"]) setRegister(CLI.cli["--register"].argument);
 		if(CLI.cli["-r"]) setRegister(CLI.cli["-r"].argument);
 
-		var _src = fs.readFileSync(__dirname + "/src/njs.h").toString();
-		_src = _src.replace(/{{REGISTER}}/g, _reg);
-		fs.writeFileSync(path.join(_folder, "njs.h"), _src);
+		copyDirSync(path.join(__dirname, "src"), _folder, true);
 	};
 
 	this.Out = function(_name)

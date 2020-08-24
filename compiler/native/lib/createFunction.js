@@ -137,7 +137,7 @@ function createFunction(_code, _scope)
 							if(_match[1].indexOf("__MODULE") != 0)
 							{
 								var _genNew = "__NEW_" + _genFN;
-							var _addNew = `__NJS_DECL_FUNCTION<__NJS_VAR (${_parameters})>* ${_genNew} = new __NJS_DECL_FUNCTION<__NJS_VAR (${_parameters})>([${_catch}]( ${_parameters} ) -> __NJS_VAR ${_fnThis}; __NJS_Object_Construct(__NJS_THIS, __NJS_Object_Clone(__NJS_Object_Get("prototype", ${_match[1]}))); ${_constructor}; return ${_match[1]}["prototype"]["constructor"](); } );`;
+								var _addNew = `__NJS_DECL_FUNCTION<__NJS_VAR (${_parameters})>* ${_genNew} = new __NJS_DECL_FUNCTION<__NJS_VAR (${_parameters})>([${_catch}]( ${_parameters} ) -> __NJS_VAR ${_fnThis}; __NJS_Object_Construct(__NJS_THIS, __NJS_Object_Clone(__NJS_Object_Get("prototype", ${_match[1]}))); ${_constructor}; return ${_match[1]}["prototype"]["constructor"](); } );`;
 								_addNew += "var __NEW_" + _match[1] + "=__NJS_VAR(__NJS_FUNCTION, " + _genNew + ");";
 
 								_formated += _addNew;
