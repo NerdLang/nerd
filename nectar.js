@@ -416,10 +416,20 @@ function Build(prepare)
 	var target;
   if(CLI.cli["--target"] && CLI.cli["--target"].argument) target = CLI.cli["--target"].argument;
 	COMPILER.TARGET = target;
-	
+
 	var spec;
   if(CLI.cli["--spec"] && CLI.cli["--spec"].argument) spec = CLI.cli["--spec"].argument;
 	COMPILER.SPEC = spec;
+
+	var _tmp;
+	if(CLI.cli["--tmp"] && CLI.cli["--tmp"].argument)
+		_tmp = CLI.cli["--tmp"].argument;
+	else {
+		var _current = process.cwd();
+		var _npath = path.join(_current, ".nectar");
+		_tmp = path.join(_npath, Math.random().toString(36).substr(2, 5));
+	}
+	COMPILER.TMP_FOLDER = _tmp;
 
   if(!CLI.stack || CLI.stack.length < 1)
   {
@@ -450,21 +460,16 @@ function Build(prepare)
         if(_Ext.length > 1) ext = _Ext[_Ext.length - 1];
 
 		/*** CREATE COMPIL ENV ***/
-		var _current = process.cwd();
-		var _npath = path.join(_current, ".nectar");
-		try { fs.mkdirSync(_npath); } catch(e){};
-    var _tmp = path.join(_npath, Math.random().toString(36).substr(2, 5));
-    COMPILER.TMP_FOLDER = _tmp;
-    if(COMPILER.ENV.init) COMPILER.ENV.init(_tmp);
+		if(COMPILER.ENV.init) COMPILER.ENV.init(COMPILER.TMP_FOLDER);
 		else try { fs.mkdirSync(_tmp); } catch(e){};
-		
-    /*** PREPARE SRC ***/
-    var _libOut = _tmp;
-    if(COMPILER.ENV.prepare)
-    {
-      var _tmpLibOut = COMPILER.ENV.prepare(_tmp);
-      if(_tmpLibOut) _libOut = _tmpLibOut;
-    }
+
+		/*** PREPARE SRC ***/
+		var _libOut = COMPILER.TMP_FOLDER;
+		if(COMPILER.ENV.prepare)
+		{
+			var _tmpLibOut = COMPILER.ENV.prepare(COMPILER.TMP_FOLDER);
+			if(_tmpLibOut) _libOut = _tmpLibOut;
+		}
 
 		COMPILER.Prepare(_libOut);
 
@@ -557,6 +562,7 @@ function Build(prepare)
 		
 		if(!CLI.cli["--conserve"])
 		{
+			var _current = process.cwd();
 			process.chdir(_current);
 			rmdir(_tmp, function() {});
 		}
