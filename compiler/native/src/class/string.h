@@ -3,13 +3,14 @@
 
 namespace NJS::Class
 {
-	class String : Object
+	class String : public Object
 	{
 	public:
 		const char *name = "string";
-		const unsigned int type = NJS::Enum::Type::STRING;
+		const NJS::Enum::Type type = NJS::Enum::Type::STRING;
 		String();
 		String(const char *str);
+		String(std::string str);
 		std::string __NJS_VALUE;
 		explicit operator bool() const;
 		explicit operator double() const;

@@ -3,11 +3,11 @@
 
 namespace NJS::Class
 {
-	class Boolean : Object
+	class Boolean : public Object
 	{
 	public:
 		const char *name = "boolean";
-		const unsigned int type = NJS::Enum::Type::BOOLEAN;
+		const NJS::Enum::Type type = NJS::Enum::Type::BOOLEAN;
 		Boolean();
 		Boolean(bool b);
 		bool __NJS_VALUE;

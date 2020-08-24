@@ -4,12 +4,13 @@
 
 namespace NJS::Class
 {
-	class Array : Object
+	class Array : public Object
 	{
 	public:
 		const char *name = "array";
-		const unsigned int type = NJS::Enum::Type::ARRAY;
+		const NJS::Enum::Type type = NJS::Enum::Type::ARRAY;
 		Array();
+		Array(std::vector<NJS::VAR> vec);
 		std::vector<NJS::VAR> __NJS_VALUE = std::vector<NJS::VAR>();
 		explicit operator double() const;
 		explicit operator int() const;

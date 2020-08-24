@@ -6,16 +6,15 @@ namespace NJS
 	struct VAR
 	{
 	private:
-		void setPtr()
+		inline void setPtr()
 		{
 			if (_ptr > -1)
 				return;
 			_ptr = NJS::MEMORY::get();
 		}
 
-		void delPtr()
+		inline void delPtr()
 		{
-			Delete();
 			NJS::MEMORY::release(_ptr);
 		}
 
@@ -23,7 +22,7 @@ namespace NJS
 		NJS::Enum::Type type;
 		int _ptr = -1;
 
-		inline NJS::MEMORY::VAL get() const
+		NJS::MEMORY::VAL get() const
 		{
 			return NJS::MEMORY::REGISTER[_ptr];
 		}
@@ -37,26 +36,7 @@ namespace NJS
 
 		~__NJS_VAR()
 		{
-			if (type == __NJS_OBJECT)
-			{
-				get().o->Delete();
-			}
-			else if (type == __NJS_STRING)
-			{
-				get().s->Delete();
-			}
-			else if (type == __NJS_FUNCTION)
-			{
-				get().f->Delete();
-			}
-			else if (type == __NJS_ARRAY)
-			{
-				get().a->Delete();
-			}
-			else if (type == __NJS_NATIVE)
-			{
-				get().n->Delete();
-			}
+			get()->Delete();
 			delPtr();
 		}
 

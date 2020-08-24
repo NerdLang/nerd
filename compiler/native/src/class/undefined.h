@@ -8,7 +8,7 @@ namespace NJS::Class
 	{
 	public:
 		const char *name = "undefined";
-		const unsigned int type = NJS::Enum::Type::UNDEFINED;
+		const NJS::Enum::Type type = NJS::Enum::Type::UNDEFINED;
 		unsigned int cnt = 0;
 		Undefined();
 		void Delete();

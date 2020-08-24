@@ -2,11 +2,16 @@
 #include "object.cpp"
 #include <limits>
 
-NJS::Class::Function::Function(void *_f)
+NJS::Class::Function::Function()
 {
 	Object();
 	NJS::VAR proto = NJS::Class::Object();
 	(*this)["prototype"] = proto;
+}
+
+NJS::Class::Function::Function(void *_f)
+{
+	Function();
 	__NJS_VALUE = _f;
 }
 

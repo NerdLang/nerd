@@ -7,60 +7,67 @@
 NJS::Class::Array::Array()
 {
 	Object();
-	__NJS_CreateMethodToClass("@@iterator", this->__iterator);
-	__NJS_CreateMethodToClass("@@unscopables", this->__unscopables);
-	__NJS_CreateMethodToClass("concat", this->concat);
-	__NJS_CreateMethodToClass("copyWithin", this->copyWithin);
-	__NJS_CreateMethodToClass("entries", this->entries);
-	__NJS_CreateMethodToClass("every", this->every);
-	__NJS_CreateMethodToClass("fill", this->fill);
-	__NJS_CreateMethodToClass("filter", this->filter);
-	__NJS_CreateMethodToClass("find", this->find);
-	__NJS_CreateMethodToClass("findIndex", this->findIndex);
-	__NJS_CreateMethodToClass("flat", this->flat);
-	__NJS_CreateMethodToClass("flatMap", this->flatMap);
-	__NJS_CreateMethodToClass("forEach", this->forEach);
-	__NJS_CreateMethodToClass("includes", this->includes);
-	__NJS_CreateMethodToClass("indexOf", this->indexOf);
-	__NJS_CreateMethodToClass("join", this->join);
-	__NJS_CreateMethodToClass("keys", this->keys);
-	__NJS_CreateMethodToClass("lastIndexOf", this->lastIndexOf);
-	__NJS_CreateMethodToClass("map", this->map);
-	__NJS_CreateMethodToClass("pop", this->pop);
-	__NJS_CreateMethodToClass("push", this->push);
-	__NJS_CreateMethodToClass("reduce", this->reduce);
-	__NJS_CreateMethodToClass("reduceRight", this->reduceRight);
-	__NJS_CreateMethodToClass("reverse", this->reverse);
-	__NJS_CreateMethodToClass("shift", this->shift);
-	__NJS_CreateMethodToClass("slice", this->slice);
-	__NJS_CreateMethodToClass("some", this->some);
-	__NJS_CreateMethodToClass("sort", this->sort);
-	__NJS_CreateMethodToClass("splice", this->splice);
-	__NJS_CreateMethodToClass("toLocaleString", this->toLocaleString);
-	__NJS_CreateMethodToClass("toString", this->toString);
-	__NJS_CreateMethodToClass("unshift", this->unshift);
-	__NJS_CreateMethodToClass("values", this->values);
+	__NJS_CreateMethodToClass("@@iterator", __iterator);
+	__NJS_CreateMethodToClass("@@unscopables", __unscopables);
+	__NJS_CreateMethodToClass("concat", concat);
+	__NJS_CreateMethodToClass("copyWithin", copyWithin);
+	__NJS_CreateMethodToClass("entries", entries);
+	__NJS_CreateMethodToClass("every", every);
+	__NJS_CreateMethodToClass("fill", fill);
+	__NJS_CreateMethodToClass("filter", filter);
+	__NJS_CreateMethodToClass("find", find);
+	__NJS_CreateMethodToClass("findIndex", findIndex);
+	__NJS_CreateMethodToClass("flat", flat);
+	__NJS_CreateMethodToClass("flatMap", flatMap);
+	__NJS_CreateMethodToClass("forEach", forEach);
+	__NJS_CreateMethodToClass("includes", includes);
+	__NJS_CreateMethodToClass("indexOf", indexOf);
+	__NJS_CreateMethodToClass("join", join);
+	__NJS_CreateMethodToClass("keys", keys);
+	__NJS_CreateMethodToClass("lastIndexOf", lastIndexOf);
+	__NJS_CreateMethodToClass("map", map);
+	__NJS_CreateMethodToClass("pop", pop);
+	__NJS_CreateMethodToClass("push", push);
+	__NJS_CreateMethodToClass("reduce", reduce);
+	__NJS_CreateMethodToClass("reduceRight", reduceRight);
+	__NJS_CreateMethodToClass("reverse", reverse);
+	__NJS_CreateMethodToClass("shift", shift);
+	__NJS_CreateMethodToClass("slice", slice);
+	__NJS_CreateMethodToClass("some", some);
+	__NJS_CreateMethodToClass("sort", sort);
+	__NJS_CreateMethodToClass("splice", splice);
+	__NJS_CreateMethodToClass("toLocaleString", toLocaleString);
+	__NJS_CreateMethodToClass("toString", toString);
+	__NJS_CreateMethodToClass("unshift", unshift);
+	__NJS_CreateMethodToClass("values", values);
 	(*this)["length"] = 0;
+}
+
+NJS::Class::Array::Array(std::vector<NJS::VAR> vec)
+{
+	Array();
+	__NJS_VALUE = vec;
+	(*this)["length"] = vec.size();
 }
 
 explicit NJS::Class::Array::operator double() const
 {
-	auto size = this->__NJS_VALUE.size();
+	auto size = __NJS_VALUE.size();
 	if (size == 0)
 		return 0;
 	if (size == 1)
-		return (double)this->__NJS_VALUE[0];
+		return (double)__NJS_VALUE[0];
 	return std::numeric_limits<double>::quiet_NaN();
 }
 explicit NJS::Class::Array::operator int() const
 {
-	return this->__NJS_VALUE.size() == 1
-		? (int)this->__NJS_VALUE[0]
+	return __NJS_VALUE.size() == 1
+		? (int)__NJS_VALUE[0]
 		: std::numeric_limits<int>::quiet_NaN();
 }
 explicit NJS::Class::Array::operator std::string() const
 {
-	return (std::string)this->toString();
+	return (std::string)toString();
 }
 explicit NJS::Class::Array::operator long long() const
 {
@@ -194,7 +201,7 @@ NJS::VAR NJS::Class::Array::toLocaleString() const
 }
 NJS::VAR NJS::Class::Array::toString() const
 {
-	return this->join(std::vector<NJS::VAR>({","}));
+	return join(std::vector<NJS::VAR>({","}));
 }
 
 NJS::VAR NJS::Class::Array::unshift(std::vector<NJS::VAR> values)

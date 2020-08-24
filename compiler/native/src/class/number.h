@@ -4,18 +4,18 @@
 
 namespace NJS::Class
 {
-	class Number : Object
+	class Number : public Object
 	{
 	private:
 		inline bool isHeap() const;
 		inline int getSmi() const;
-		inline void setSmi(int &v);
+		inline void setSmi(int v);
 		inline double getHeap() const;
-		inline void setHeap(double &d);
+		inline void setHeap(double d);
 
 	public:
 		const char *name = "number";
-		const unsigned int type = NJS::Enum::Type::NUMBER;
+		const NJS::Enum::Type type = NJS::Enum::Type::NUMBER;
 		Number();
 		Number(int i);
 		Number(double d);
@@ -26,7 +26,7 @@ namespace NJS::Class
 		explicit operator int() const;
 		explicit operator std::string() const;
 		explicit operator long long() const;
-		Number operator=(const Number &_v);
+		Number operator=(Number &_v);
 		Number operator=(int &_v1);
 		Number operator=(double &_v1);
 		/// Unary operators
@@ -63,16 +63,20 @@ namespace NJS::Class
 		bool operator>=(const Number &_v1);
 		// Bitwise operators
 
-		Number operator&(const Number &_v1);
+		int operator&(const Number &_v1);
+		int operator|(const Number &_v1);
+		int operator^(const Number &_v1);
+		int operator~();
+		int operator>>(const Number &_v1);
+		int operator<<(const Number &_v1);
 		Number operator&=(const Number &_v1);
-		Number operator|(const Number &_v1);
 		Number operator|=(const Number &_v1);
-		Number operator^(const Number &_v1);
 		Number operator^=(const Number &_v1);
-		Number operator~();
-		Number operator>>(const Number &_v1);
 		Number operator>>=(const Number &_v1);
-		Number operator<<(const Number &_v1);
 		Number operator<<=(const Number &_v1);
+
+		inline bool _isNaN() const;
+		inline bool _isFinite() const;
+		inline bool _isNegative() const;
 	};
 } // namespace NJS::Class

@@ -7,14 +7,32 @@
 NJS::Class::Object::Object()
 {
 	Undefined();
+	(*this)["toString"] = (NJS::VAR)NJS::Class::Function(new std::function<__NJS_VAR(std::vector<NJS::VAR>)>([&](std::vector<NJS::VAR> __NJS_VARARGS) { return this->toString(__NJS_VARARGS); }));
 	__NJS_CreateMethodToClass("valueOf", this->valueOf);
 	__NJS_CreateMethodToClass("toString", this->toString);
 	__NJS_CreateMethodToClass("toLocaleString", this->toLocaleString);
 }
 
+NJS::Class::Object::Object(std::nullptr_t _ptr)
+{
+	Object();
+	__OBJECT = _ptr;
+}
+
+NJS::Class::Object::Object(std::vector<std::pair<const char *, NJS::VAR>> obj)
+{
+	Object();
+	__NJS_VALUE = obj;
+}
+
+inline bool NJS::Class::Object::isNull() const
+{
+	return __OBJECT == nullptr;
+}
+
 explicit NJS::Class::Object::operator bool() const
 {
-	return true;
+	return !isNull();
 }
 explicit NJS::Class::Object::operator double() const
 {
@@ -26,7 +44,7 @@ explicit NJS::Class::Object::operator int() const
 }
 explicit NJS::Class::Object::operator std::string() const
 {
-	return "[object Object]";
+	return isNull() ? "null" : "[object Object]";
 }
 explicit NJS::Class::Object::operator long long() const
 {
@@ -35,20 +53,28 @@ explicit NJS::Class::Object::operator long long() const
 
 NJS::VAR const &NJS::Class::Object::operator[](std::string _index) const
 {
-	auto _obj = &this->__OBJECT;
-	for (int _i = 0, _j = (*_obj).size(); _i < _j; _i++)
+	if (isNull())
 	{
-		if (_index.compare((*_obj)[_i].first) == 0)
+		return Undefined::operator[](_index);
+	}
+	auto &_obj = *this->__OBJECT;
+	for (int _i = 0, _j = _obj.size(); _i < _j; _i++)
+	{
+		if (_index.compare(_obj[_i].first) == 0)
 		{
-			return (*_obj)[_i].second;
+			return _obj[_i].second;
 		}
 	}
 	return NJS::Value::undefined;
 }
 
-NJS::VAR &NJS::Class::Object::operator[](NJS::VAR _index)
+NJS::VAR &NJS::Class::Object::operator[](std::string _index)
 {
-	auto &_obj = this->__OBJECT;
+	if (isNull())
+	{
+		return Undefined::operator[](_index);
+	}
+	auto &_obj = *this->__OBJECT;
 	auto _str = (std::string)_index;
 	auto _value = NJS::VAR();
 	for (int _i = 0, _j = _obj.size(); _i < _j; _i++)
@@ -66,7 +92,7 @@ NJS::VAR &NJS::Class::Object::operator[](NJS::VAR _index)
 
 NJS::VAR NJS::Class::Object::valueOf() const
 {
-	return (*this);
+	return *this;
 }
 
 NJS::VAR NJS::Class::Object::toLocaleString() const
