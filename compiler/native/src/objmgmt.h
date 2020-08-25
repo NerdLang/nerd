@@ -39,10 +39,10 @@ NJS::VAR __NJS_Object_Set(const char *_index, NJS::VAR _value, vector<pair<const
 
 			if (_value.type == NJS::Enum::Type::STRING)
 			{
-				REGISTER[(*_obj)[_i].second._ptr].s = new __NJS_Class_String((string)_value);
+				NJS::MEMORY::REGISTER[(*_obj)[_i].second._ptr].s = new __NJS_Class_String((string)_value);
 			}
 			else
-				REGISTER[(*_obj)[_i].second._ptr] = REGISTER[_value._ptr];
+				NJS::MEMORY::REGISTER[(*_obj)[_i].second._ptr] = NJS::MEMORY::REGISTER[_value._ptr];
 
 			return NJS::VAR();
 		}

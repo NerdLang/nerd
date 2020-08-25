@@ -10,13 +10,13 @@ namespace NJS
 			{
 				return;
 			}
-			if (FREE_PTR > -1)
+			if (NJS::MEMORY::FREE_PTR > -1)
 			{
-				_ptr = FREE[FREE_PTR--];
+				_ptr = NJS::MEMORY::FREE[NJS::MEMORY::FREE_PTR--];
 			}
 			else
 			{
-				_ptr = REGISTER_PTR++;
+				_ptr = NJS::MEMORY::REGISTER_PTR++;
 			}
 		}
 
@@ -26,39 +26,39 @@ namespace NJS
 		
 		inline __NJS_VAL get() const
 		{
-			return REGISTER[_ptr];
+			return NJS::MEMORY::REGISTER[_ptr];
 		}
 
 		VAR()
 		{
 			setPtr();
 			type = NJS::Enum::Type::UNDEFINED;
-			REGISTER[_ptr].i = 0;
+			NJS::MEMORY::REGISTER[_ptr].i = 0;
 		}
 
 		~VAR()
 		{
 			if (type == NJS::Enum::Type::OBJECT)
 			{
-				REGISTER[_ptr].o->Delete();
+				NJS::MEMORY::REGISTER[_ptr].o->Delete();
 			}
 			else if (type == NJS::Enum::Type::STRING)
 			{
-				REGISTER[_ptr].s->Delete();
+				NJS::MEMORY::REGISTER[_ptr].s->Delete();
 			}
 			else if (type == NJS::Enum::Type::FUNCTION)
 			{
-				REGISTER[_ptr].f->Delete();
+				NJS::MEMORY::REGISTER[_ptr].f->Delete();
 			}
 			else if (type == NJS::Enum::Type::ARRAY)
 			{
-				REGISTER[_ptr].a->Delete();
+				NJS::MEMORY::REGISTER[_ptr].a->Delete();
 			}
 			else if (type == NJS::Enum::Type::NATIVE)
 			{
-				REGISTER[_ptr].n->Delete();
+				NJS::MEMORY::REGISTER[_ptr].n->Delete();
 			}
-			FREE[++FREE_PTR] = _ptr;
+			NJS::MEMORY::FREE[++NJS::MEMORY::FREE_PTR] = _ptr;
 		}
 
 		/**/
@@ -69,32 +69,32 @@ namespace NJS
 
 			if (_v.type == NJS::Enum::Type::OBJECT)
 			{
-				REGISTER[_ptr] = REGISTER[_v._ptr];
-				REGISTER[_ptr].o->cnt++;
+				NJS::MEMORY::REGISTER[_ptr] = NJS::MEMORY::REGISTER[_v._ptr];
+				NJS::MEMORY::REGISTER[_ptr].o->cnt++;
 			}
 			else if (_v.type == NJS::Enum::Type::STRING)
 			{
 
-				REGISTER[_ptr].s = new __NJS_Class_String(REGISTER[_v._ptr].s->__NJS_VALUE);
+				NJS::MEMORY::REGISTER[_ptr].s = new __NJS_Class_String(NJS::MEMORY::REGISTER[_v._ptr].s->__NJS_VALUE);
 			}
 			else if (_v.type == NJS::Enum::Type::FUNCTION)
 			{
-				REGISTER[_ptr] = REGISTER[_v._ptr];
-				REGISTER[_ptr].f->cnt++;
+				NJS::MEMORY::REGISTER[_ptr] = NJS::MEMORY::REGISTER[_v._ptr];
+				NJS::MEMORY::REGISTER[_ptr].f->cnt++;
 			}
 			else if (_v.type == NJS::Enum::Type::ARRAY)
 			{
-				REGISTER[_ptr] = REGISTER[_v._ptr];
-				REGISTER[_ptr].a->cnt++;
+				NJS::MEMORY::REGISTER[_ptr] = NJS::MEMORY::REGISTER[_v._ptr];
+				NJS::MEMORY::REGISTER[_ptr].a->cnt++;
 			}
 			else if (_v.type == NJS::Enum::Type::NATIVE)
 			{
-				REGISTER[_ptr] = REGISTER[_v._ptr];
-				REGISTER[_ptr].n->cnt++;
+				NJS::MEMORY::REGISTER[_ptr] = NJS::MEMORY::REGISTER[_v._ptr];
+				NJS::MEMORY::REGISTER[_ptr].n->cnt++;
 			}
 			else
 			{
-				REGISTER[_ptr] = REGISTER[_v._ptr];
+				NJS::MEMORY::REGISTER[_ptr] = NJS::MEMORY::REGISTER[_v._ptr];
 			}
 		}
 		/**/
@@ -105,74 +105,74 @@ namespace NJS
 		{
 			setPtr();
 			this->type = _type;
-			REGISTER[_ptr].i = _value;
+			NJS::MEMORY::REGISTER[_ptr].i = _value;
 		}
 
 		VAR(int _value)
 		{
 			setPtr();
 			this->type = NJS::Enum::Type::NUMBER;
-			REGISTER[_ptr].i = _value;
+			NJS::MEMORY::REGISTER[_ptr].i = _value;
 		}
 
 		VAR(double _value)
 		{
 			setPtr();
 			this->type = NJS::Enum::Type::DOUBLE;
-			REGISTER[_ptr].d = _value;
+			NJS::MEMORY::REGISTER[_ptr].d = _value;
 		}
 
 		VAR(char *_value)
 		{
 			setPtr();
 			type = NJS::Enum::Type::STRING;
-			REGISTER[_ptr].s = new __NJS_Class_String(_value);
+			NJS::MEMORY::REGISTER[_ptr].s = new __NJS_Class_String(_value);
 		}
 
 		VAR(string _value)
 		{
 			setPtr();
 			type = NJS::Enum::Type::STRING;
-			REGISTER[_ptr].s = new __NJS_Class_String(_value);
+			NJS::MEMORY::REGISTER[_ptr].s = new __NJS_Class_String(_value);
 		}
 
 		VAR(const char *_value)
 		{
 			setPtr();
 			type = NJS::Enum::Type::STRING;
-			REGISTER[_ptr].s = new __NJS_Class_String(_value);
+			NJS::MEMORY::REGISTER[_ptr].s = new __NJS_Class_String(_value);
 		}
 
 		VAR(__NJS_Class_Array *_value)
 		{
 			setPtr();
 			type = NJS::Enum::Type::ARRAY;
-			REGISTER[_ptr].a = _value;
+			NJS::MEMORY::REGISTER[_ptr].a = _value;
 		}
 		VAR(__NJS_Class_Object *_value)
 		{
 			setPtr();
 			type = NJS::Enum::Type::OBJECT;
-			REGISTER[_ptr].o = _value;
+			NJS::MEMORY::REGISTER[_ptr].o = _value;
 		}
 		VAR(__NJS_Class_Native *_value)
 		{
 			setPtr();
 			type = NJS::Enum::Type::NATIVE;
-			REGISTER[_ptr].n = _value;
+			NJS::MEMORY::REGISTER[_ptr].n = _value;
 		}
 		VAR(NJS::Enum::Type _type, void *_value)
 		{
 			setPtr();
 			type = _type;
-			REGISTER[_ptr].f = new __NJS_Class_Function(_value);
+			NJS::MEMORY::REGISTER[_ptr].f = new __NJS_Class_Function(_value);
 		}
 
 		VAR(function<VAR(vector<var>)> &_value)
 		{
 			setPtr();
 			type = NJS::Enum::Type::FUNCTION;
-			REGISTER[_ptr].f = new __NJS_Class_Function(&_value);
+			NJS::MEMORY::REGISTER[_ptr].f = new __NJS_Class_Function(&_value);
 		}
 
 		/*** VARIADIC LAMBDAS ***/
@@ -181,7 +181,7 @@ namespace NJS
 		{
 			setPtr();
 			type = NJS::Enum::Type::FUNCTION;
-			REGISTER[_ptr].f = new __NJS_Class_Function(&_value);
+			NJS::MEMORY::REGISTER[_ptr].f = new __NJS_Class_Function(&_value);
 		}
 		/*** END VARIADIC LAMBDAS ***/
 		
@@ -261,18 +261,18 @@ namespace NJS
 				{
 					if(this->type == NJS::Enum::Type::NUMBER)
 					{
-						REGISTER[_retFN._ptr].f->__NJS_VALUE = __NJS_Create_Ptr_Scoped_Anon({ return to_string((int)*this);});
+						NJS::MEMORY::REGISTER[_retFN._ptr].f->__NJS_VALUE = __NJS_Create_Ptr_Scoped_Anon({ return to_string((int)*this);});
 					}
 					else 
 					{
-						REGISTER[_retFN._ptr].f->__NJS_VALUE = __NJS_Create_Ptr_Scoped_Anon({ return to_string((double)*this);});
+						NJS::MEMORY::REGISTER[_retFN._ptr].f->__NJS_VALUE = __NJS_Create_Ptr_Scoped_Anon({ return to_string((double)*this);});
 					}
 					return _retFN;
 				}
 				else if(_index == "valueOf")
 				{
 
-					REGISTER[_retFN._ptr].f->__NJS_VALUE = new function<VAR(vector<var>)>([&](vector<var> _NJS_VARARGS) { return *this;});
+					NJS::MEMORY::REGISTER[_retFN._ptr].f->__NJS_VALUE = new function<VAR(vector<var>)>([&](vector<var> _NJS_VARARGS) { return *this;});
 					return _retFN;
 				}
 				return _retUndefined;
@@ -304,7 +304,7 @@ namespace NJS
 			{
 				static VAR _ret = __NJS_Create_String("");
 				VAR _tmp = (*this)["substr"](_index, 1);
-				REGISTER[_ret._ptr].s->__NJS_VALUE = _tmp.get().s->__NJS_VALUE;
+				NJS::MEMORY::REGISTER[_ret._ptr].s->__NJS_VALUE = _tmp.get().s->__NJS_VALUE;
 				return _ret;
 			}
 			else
@@ -350,44 +350,44 @@ namespace NJS
 		VAR operator=(const VAR &_v)
 		{
 			if (type == NJS::Enum::Type::OBJECT)
-				REGISTER[_ptr].o->Delete();
+				NJS::MEMORY::REGISTER[_ptr].o->Delete();
 			else if (type == NJS::Enum::Type::STRING)
-				REGISTER[_ptr].s->Delete();
+				NJS::MEMORY::REGISTER[_ptr].s->Delete();
 			else if (type == NJS::Enum::Type::FUNCTION)
-				REGISTER[_ptr].f->Delete();
+				NJS::MEMORY::REGISTER[_ptr].f->Delete();
 			else if (type == NJS::Enum::Type::ARRAY)
-				REGISTER[_ptr].a->Delete();
+				NJS::MEMORY::REGISTER[_ptr].a->Delete();
 			else if (type == NJS::Enum::Type::NATIVE)
-				REGISTER[_ptr].n->Delete();
+				NJS::MEMORY::REGISTER[_ptr].n->Delete();
 
 			type = _v.type;
 			;
 			if (_v.type == NJS::Enum::Type::OBJECT)
 			{
-				REGISTER[_ptr] = REGISTER[_v._ptr];
-				REGISTER[_ptr].o->cnt++;
+				NJS::MEMORY::REGISTER[_ptr] = NJS::MEMORY::REGISTER[_v._ptr];
+				NJS::MEMORY::REGISTER[_ptr].o->cnt++;
 			}
 			else if (_v.type == NJS::Enum::Type::STRING)
 			{
-				REGISTER[_ptr].s = new __NJS_Class_String((string)_v);
+				NJS::MEMORY::REGISTER[_ptr].s = new __NJS_Class_String((string)_v);
 			}
 			else if (_v.type == NJS::Enum::Type::FUNCTION)
 			{
-				REGISTER[_ptr] = REGISTER[_v._ptr];
-				REGISTER[_ptr].f->cnt++;
+				NJS::MEMORY::REGISTER[_ptr] = NJS::MEMORY::REGISTER[_v._ptr];
+				NJS::MEMORY::REGISTER[_ptr].f->cnt++;
 			}
 			else if (_v.type == NJS::Enum::Type::ARRAY)
 			{
-				REGISTER[_ptr] = REGISTER[_v._ptr];
-				REGISTER[_ptr].a->cnt++;
+				NJS::MEMORY::REGISTER[_ptr] = NJS::MEMORY::REGISTER[_v._ptr];
+				NJS::MEMORY::REGISTER[_ptr].a->cnt++;
 			}
 			else if (_v.type == NJS::Enum::Type::NATIVE)
 			{
-				REGISTER[_ptr] = REGISTER[_v._ptr];
-				REGISTER[_ptr].n->cnt++;
+				NJS::MEMORY::REGISTER[_ptr] = NJS::MEMORY::REGISTER[_v._ptr];
+				NJS::MEMORY::REGISTER[_ptr].n->cnt++;
 			}
 			else
-				REGISTER[_ptr] = REGISTER[_v._ptr];
+				NJS::MEMORY::REGISTER[_ptr] = NJS::MEMORY::REGISTER[_v._ptr];
 
 			return *this;
 		}
@@ -431,17 +431,17 @@ namespace NJS
 		VAR operator+=(const VAR &_v1)
 		{
 			if(type == NJS::Enum::Type::NUMBER) 
-				REGISTER[_ptr].i += (int)_v1;
+				NJS::MEMORY::REGISTER[_ptr].i += (int)_v1;
 			else if(type == NJS::Enum::Type::DOUBLE) 
-				REGISTER[_ptr].d += (double)_v1;
+				NJS::MEMORY::REGISTER[_ptr].d += (double)_v1;
 			else if(type == NJS::Enum::Type::STRING) 
-				REGISTER[_ptr].s->__NJS_VALUE += (string)_v1;
+				NJS::MEMORY::REGISTER[_ptr].s->__NJS_VALUE += (string)_v1;
 			else 
 			{
 				string _s = (string)*this;
 				type = NJS::Enum::Type::STRING;
-				REGISTER[_ptr].s = new __NJS_Class_String("");
-				REGISTER[_ptr].s->__NJS_VALUE += _s + (string)_v1;
+				NJS::MEMORY::REGISTER[_ptr].s = new __NJS_Class_String("");
+				NJS::MEMORY::REGISTER[_ptr].s->__NJS_VALUE += _s + (string)_v1;
 			}
 			return *this;
 		}
@@ -456,71 +456,71 @@ namespace NJS
 		VAR operator-=(const VAR &_v1)
 		{
 			if(type == NJS::Enum::Type::NUMBER && _v1.type == NJS::Enum::Type::NUMBER) 
-				REGISTER[_ptr].i -= (int)_v1;
+				NJS::MEMORY::REGISTER[_ptr].i -= (int)_v1;
 			else if(type == NJS::Enum::Type::NUMBER && _v1.type == NJS::Enum::Type::DOUBLE) 
-				REGISTER[_ptr].i -= (double)_v1;
+				NJS::MEMORY::REGISTER[_ptr].i -= (double)_v1;
 			else if(type == NJS::Enum::Type::DOUBLE && _v1.type == NJS::Enum::Type::NUMBER) 
-				REGISTER[_ptr].d -= (int)_v1;
+				NJS::MEMORY::REGISTER[_ptr].d -= (int)_v1;
 			else if(type == NJS::Enum::Type::DOUBLE && _v1.type == NJS::Enum::Type::DOUBLE) 
-				REGISTER[_ptr].d -= (double)_v1;
+				NJS::MEMORY::REGISTER[_ptr].d -= (double)_v1;
 			else 
 			{
 				type = NJS::Enum::Type::ISNAN;
-				REGISTER[_ptr].s = new __NJS_Class_String("NaN");
+				NJS::MEMORY::REGISTER[_ptr].s = new __NJS_Class_String("NaN");
 			}
 			return *this;
 		}
 		VAR operator*(const VAR &_v1)
 		{
 			if(type == NJS::Enum::Type::NUMBER) 
-				return REGISTER[_ptr].i * (int)_v1;
+				return NJS::MEMORY::REGISTER[_ptr].i * (int)_v1;
 			else if(type == NJS::Enum::Type::DOUBLE) 
-				return REGISTER[_ptr].d * (double)_v1;
+				return NJS::MEMORY::REGISTER[_ptr].d * (double)_v1;
 			return VAR();
 		}
 		VAR operator*=(const VAR &_v1)
 		{
 			if(type == NJS::Enum::Type::NUMBER) 
-				REGISTER[_ptr].i *= (int)_v1;
+				NJS::MEMORY::REGISTER[_ptr].i *= (int)_v1;
 			else if(type == NJS::Enum::Type::DOUBLE) 
-				REGISTER[_ptr].d *= (double)_v1;
+				NJS::MEMORY::REGISTER[_ptr].d *= (double)_v1;
 			return VAR();
 		}
 		VAR operator/(const VAR &_v1)
 		{
 			if (type == NJS::Enum::Type::NUMBER)
-				return REGISTER[_ptr].i / (int)_v1;
+				return NJS::MEMORY::REGISTER[_ptr].i / (int)_v1;
 			else if (type == NJS::Enum::Type::DOUBLE)
-				return REGISTER[_ptr].d / (double)_v1;
+				return NJS::MEMORY::REGISTER[_ptr].d / (double)_v1;
 			return VAR();
 		}
 		VAR operator/=(const VAR &_v1)
 		{
 			if(type == NJS::Enum::Type::NUMBER) 
-				REGISTER[_ptr].i /= (int)_v1;
+				NJS::MEMORY::REGISTER[_ptr].i /= (int)_v1;
 			else if(type == NJS::Enum::Type::DOUBLE) 
-				REGISTER[_ptr].d /= (double)_v1.get().d;
+				NJS::MEMORY::REGISTER[_ptr].d /= (double)_v1.get().d;
 			return VAR();
 		}
 		VAR operator%(const VAR &_v1)
 		{
 			if (type == NJS::Enum::Type::NUMBER && _v1.type == NJS::Enum::Type::NUMBER)
-				return REGISTER[_ptr].i % (int)_v1;
+				return NJS::MEMORY::REGISTER[_ptr].i % (int)_v1;
 			else
 			{
-				return remainder(REGISTER[_ptr].d, (double)_v1);
+				return remainder(NJS::MEMORY::REGISTER[_ptr].d, (double)_v1);
 			}
 		}
 		VAR operator%=(const VAR &_v1)
 		{
 			if (type == NJS::Enum::Type::NUMBER && _v1.type == NJS::Enum::Type::NUMBER)
 			{
-				REGISTER[_ptr].i %= (int)_v1;
+				NJS::MEMORY::REGISTER[_ptr].i %= (int)_v1;
 			}
 			else
 			{
 				type = NJS::Enum::Type::DOUBLE;
-				REGISTER[_ptr].d = remainder((double)*this, (double)_v1);
+				NJS::MEMORY::REGISTER[_ptr].d = remainder((double)*this, (double)_v1);
 			}
 			return *this;
 		}
@@ -529,29 +529,29 @@ namespace NJS
 		{
 			if (type == NJS::Enum::Type::NUMBER)
 			{
-				REGISTER[_ptr].i++;
+				NJS::MEMORY::REGISTER[_ptr].i++;
 			}
 			else if (type == NJS::Enum::Type::DOUBLE)
 			{
-				REGISTER[_ptr].d++;
+				NJS::MEMORY::REGISTER[_ptr].d++;
 			}
 			else
 			{
 				type = NJS::Enum::Type::DOUBLE;
-				REGISTER[_ptr].d = (double)*this;
+				NJS::MEMORY::REGISTER[_ptr].d = (double)*this;
 			}
 			return *this;
 		}
 		VAR operator--(const int _v1)
 		{
 			if (type == NJS::Enum::Type::NUMBER)
-				REGISTER[_ptr].i--;
+				NJS::MEMORY::REGISTER[_ptr].i--;
 			else if (type == NJS::Enum::Type::DOUBLE)
-				REGISTER[_ptr].d--;
+				NJS::MEMORY::REGISTER[_ptr].d--;
 			else
 			{
 				type = NJS::Enum::Type::DOUBLE;
-				REGISTER[_ptr].d = (double)*this;
+				NJS::MEMORY::REGISTER[_ptr].d = (double)*this;
 			}
 			return *this;
 		}
@@ -564,14 +564,14 @@ namespace NJS
 				switch (type)
 				{
 				case NJS::Enum::Type::NUMBER:
-					return __NJS_Create_Boolean(REGISTER[_ptr].i == (int)_v1);
+					return __NJS_Create_Boolean(NJS::MEMORY::REGISTER[_ptr].i == (int)_v1);
 				case NJS::Enum::Type::DOUBLE:
-					return __NJS_Create_Boolean(REGISTER[_ptr].d == (double)_v1);
+					return __NJS_Create_Boolean(NJS::MEMORY::REGISTER[_ptr].d == (double)_v1);
 				//case NJS::Enum::Type::BIGNUMBER: return VAR((long)*this == (long)_v1);
 				case NJS::Enum::Type::BOOLEAN:
-					return __NJS_Create_Boolean(REGISTER[_ptr].b == (bool)_v1);
+					return __NJS_Create_Boolean(NJS::MEMORY::REGISTER[_ptr].b == (bool)_v1);
 				case NJS::Enum::Type::STRING:
-					return __NJS_Create_Boolean((REGISTER[_ptr].s->__NJS_VALUE).compare((string)_v1) == 0);
+					return __NJS_Create_Boolean((NJS::MEMORY::REGISTER[_ptr].s->__NJS_VALUE).compare((string)_v1) == 0);
 				case NJS::Enum::Type::ISINFINITY:
 				case NJS::Enum::Type::ISNULL:
 				case NJS::Enum::Type::UNDEFINED:
@@ -636,21 +636,21 @@ namespace NJS
 		VAR operator&=(const VAR &_v1)
 		{
 			type = NJS::Enum::Type::NUMBER;
-			REGISTER[_ptr].i = (int)*this & (int)_v1;
+			NJS::MEMORY::REGISTER[_ptr].i = (int)*this & (int)_v1;
 			return *this;
 		}
 		VAR operator|(const VAR &_v1) { return (int)*this | (int)_v1; }
 		VAR operator|=(const VAR &_v1)
 		{
 			type = NJS::Enum::Type::NUMBER;
-			REGISTER[_ptr].i = (int)*this | (int)_v1;
+			NJS::MEMORY::REGISTER[_ptr].i = (int)*this | (int)_v1;
 			return *this;
 		}
 		VAR operator^(const VAR &_v1) { return (int)*this ^ (int)_v1; }
 		VAR operator^=(const VAR &_v1)
 		{
 			type = NJS::Enum::Type::NUMBER;
-			REGISTER[_ptr].i = (int)*this ^ (int)_v1;
+			NJS::MEMORY::REGISTER[_ptr].i = (int)*this ^ (int)_v1;
 			return *this;
 		}
 		VAR operator~() { return ~(int)*this; }
@@ -658,7 +658,7 @@ namespace NJS
 		VAR operator>>=(const VAR &_v1)
 		{
 			type = NJS::Enum::Type::NUMBER;
-			REGISTER[_ptr].i = (int)*this >> (int)_v1;
+			NJS::MEMORY::REGISTER[_ptr].i = (int)*this >> (int)_v1;
 			return *this;
 		}
 		VAR operator<<(const VAR &_v1) 
@@ -668,7 +668,7 @@ namespace NJS
 		VAR operator<<=(const VAR &_v1)
 		{
 			type = NJS::Enum::Type::NUMBER;
-			REGISTER[_ptr].i = (int)*this << (int)_v1;
+			NJS::MEMORY::REGISTER[_ptr].i = (int)*this << (int)_v1;
 			return *this;
 		}
 		// TODO: ">>>" and ">>>=" operator support
