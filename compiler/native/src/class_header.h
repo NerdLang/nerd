@@ -1,3 +1,4 @@
+#include "class/undefined_header.h"
 #include "class/object_header.h"
 #include "class/string_header.h"
 #include "class/array_header.h"

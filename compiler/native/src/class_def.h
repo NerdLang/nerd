@@ -1,3 +1,4 @@
+#include "class/undefined.h"
 #include "class/object.h"
 #include "class/string.h"
 #include "class/array.h"
