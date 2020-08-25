@@ -116,7 +116,7 @@ class __NJS_Class_Native
 	vector<pair<char*, NJS::VAR>> __OBJECT;
 };
 
-union __NJS_VAL
+union NJS::VAL
 {
 	int i;
 	double d;
@@ -133,9 +133,9 @@ union __NJS_VAL
 int FREE_PTR = -1;
 int REGISTER_PTR = 0;
 #ifdef CL_WINDOWS
-	__NJS_VAL REGISTER[1000000];
+	NJS::VAL REGISTER[1000000];
 #else
-	__NJS_VAL REGISTER[1000000]{(__NJS_VAL){.i=0}};
+	NJS::VAL REGISTER[1000000]{(NJS::VAL){.i=0}};
 #endif
 int FREE[1000000] = {0};
 
@@ -221,7 +221,7 @@ struct NJS::VAR
 		NJS::Enum::Type type;
 		int _ptr = -1;
 		
-		inline __NJS_VAL get() const
+		inline NJS::VAL get() const
 		{
 			return REGISTER[_ptr];
 		}

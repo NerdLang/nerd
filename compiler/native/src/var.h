@@ -24,7 +24,7 @@ namespace NJS
 		NJS::Enum::Type type;
 		int _ptr = -1;
 		
-		inline __NJS_VAL get() const
+		inline NJS::VAL get() const
 		{
 			return NJS::MEMORY::REGISTER[_ptr];
 		}
