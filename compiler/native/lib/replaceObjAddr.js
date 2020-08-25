@@ -25,7 +25,7 @@ function replaceObjAddr(_code)
 	var FUNCTION = [];
 
 	var _searchReg = / *__NJS_Object_Set *\( *([a-zA-Z0-9_\-" ]*) *, *([a-zA-Z0-9_\-\(\)" ]*) *, *([a-zA-Z0-9_\-" ]*) *\)/g;
-	var _searchFN = / *([a-zA-Z0-9_\-" ]*) * = __NJS_VAR\(NJS::Enum::Type::FUNCTION/g;
+	var _searchFN = / *([a-zA-Z0-9_\-" ]*) * = NJS::VAR\(NJS::Enum::Type::FUNCTION/g;
 	
 	var _allFN = _code.match(new RegExp(_searchFN));
 	if(_allFN)

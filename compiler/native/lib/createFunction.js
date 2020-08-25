@@ -30,7 +30,7 @@ function createFunction(_code, _scope)
 	while(_index > -1)
 	{
 		var _genFN = "__NJS_FN_" + RND();
-		var _genVAR = "__NJS_VAR_" + RND();
+		var _genVAR = "NJS::VAR_" + RND();
 
 		var _var = "";
 		var _count = 0;
@@ -63,12 +63,12 @@ function createFunction(_code, _scope)
 		else
 		{
 			_variadic = true;
-			_parameters = "vector<var> __NJS_VARARGS";
+			_parameters = "vector<var> _NJS_VARARGS";
 			for(var i = 0; i < _match[2].length; i++)
 			{
 				if(_match[2][i].length > 0)
 				{
-					_getVar += `var ${_match[2][i]}; if(__NJS_VARARGS.size() > ${i}) ${_match[2][i]} = __NJS_VARARGS[${i}];`;
+					_getVar += `var ${_match[2][i]}; if(_NJS_VARARGS.size() > ${i}) ${_match[2][i]} = _NJS_VARARGS[${i}];`;
 				}
 			}
 		}
@@ -76,12 +76,12 @@ function createFunction(_code, _scope)
 		else if(COMPILER.INFO.CALL[_match[1]] && (COMPILER.INFO.CALL[_match[1]].length > 1 || COMPILER.INFO.CALL[_match[1]].length != _match[2].length))
 		{
 			_variadic = true;
-			_parameters = "vector<var> __NJS_VARARGS";
+			_parameters = "vector<var> _NJS_VARARGS";
 			for(var i = 0; i < _match[2].length; i++)
 			{
 				if(_match[2][i].length > 0)
 				{
-					_getVar += `var ${_match[2][i]}; if(__NJS_VARARGS.size() > ${i}) ${_match[2][i]} = __NJS_VARARGS[${i}];`;
+					_getVar += `var ${_match[2][i]}; if(_NJS_VARARGS.size() > ${i}) ${_match[2][i]} = _NJS_VARARGS[${i}];`;
 				}
 			}
 		}
@@ -92,7 +92,7 @@ function createFunction(_code, _scope)
 				if(_match[2][i].length > 0)
 				{
 					if(i != 0) _var += ",";
-					_var += "__NJS_VAR " + _match[2][i];
+					_var += "NJS::VAR " + _match[2][i];
 				}
 			}
 			_parameters = _var;
@@ -131,14 +131,14 @@ function createFunction(_code, _scope)
 
 							COMPILER.DECL.push("var " + _match[1] +";");
 
-							var _formated = `__NJS_DECL_FUNCTION<__NJS_VAR (${_parameters})>* ${_genFN} = new __NJS_DECL_FUNCTION<__NJS_VAR (${_parameters})>([${_catch}]( ${_parameters} ) -> __NJS_VAR ${_fn} ${_return} );`;
-							_formated += _match[1] + "=__NJS_VAR(NJS::Enum::Type::FUNCTION, " + _genFN + ");";
+							var _formated = `__NJS_DECL_FUNCTION<NJS::VAR (${_parameters})>* ${_genFN} = new __NJS_DECL_FUNCTION<NJS::VAR (${_parameters})>([${_catch}]( ${_parameters} ) -> NJS::VAR ${_fn} ${_return} );`;
+							_formated += _match[1] + "=NJS::VAR(NJS::Enum::Type::FUNCTION, " + _genFN + ");";
 
 							if(_match[1].indexOf("__MODULE") != 0)
 							{
 								var _genNew = "__NEW_" + _genFN;
-								var _addNew = `__NJS_DECL_FUNCTION<__NJS_VAR (${_parameters})>* ${_genNew} = new __NJS_DECL_FUNCTION<__NJS_VAR (${_parameters})>([${_catch}]( ${_parameters} ) -> __NJS_VAR ${_fnThis}; __NJS_Object_Construct(__NJS_THIS, __NJS_Object_Clone(__NJS_Object_Get("prototype", ${_match[1]}))); ${_constructor}; return ${_match[1]}["prototype"]["constructor"](); } );`;
-								_addNew += "var __NEW_" + _match[1] + "=__NJS_VAR(NJS::Enum::Type::FUNCTION, " + _genNew + ");";
+								var _addNew = `__NJS_DECL_FUNCTION<NJS::VAR (${_parameters})>* ${_genNew} = new __NJS_DECL_FUNCTION<NJS::VAR (${_parameters})>([${_catch}]( ${_parameters} ) -> NJS::VAR ${_fnThis}; __NJS_Object_Construct(__NJS_THIS, __NJS_Object_Clone(__NJS_Object_Get("prototype", ${_match[1]}))); ${_constructor}; return ${_match[1]}["prototype"]["constructor"](); } );`;
+								_addNew += "var __NEW_" + _match[1] + "=NJS::VAR(NJS::Enum::Type::FUNCTION, " + _genNew + ");";
 
 								_formated += _addNew;
 							}

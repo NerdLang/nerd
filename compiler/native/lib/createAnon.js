@@ -34,7 +34,7 @@ function createAnon(_code, _scope)
 		var _start = -1;
 		var _end = -1;
 		var _genFN = "__NJS_FN_" + RND();
-		var _genVAR = "__NJS_VAR_" + RND();
+		var _genVAR = "NJS::VAR_" + RND();
 		
 		var _match = _searchAnonFN.exec(_code);
 		_match[3] = _match[3].split(",");
@@ -43,7 +43,7 @@ function createAnon(_code, _scope)
 		{
 			if(_match[3][i].length > 0)
 			{
-				_getVar += `var ${_match[3][i]}; if(__NJS_VARARGS.size() > ${i}) ${_match[3][i]} = __NJS_VARARGS[${i}];`;
+				_getVar += `var ${_match[3][i]}; if(_NJS_VARARGS.size() > ${i}) ${_match[3][i]} = _NJS_VARARGS[${i}];`;
 			}
 		}
 
@@ -78,7 +78,7 @@ function createAnon(_code, _scope)
 
 						if(_match[1]) COMPILER.DECL.push(`var ${_match[2]};`);
 						if(_match[2]) _formated += _match[2] + " = ";
-						_formated += "__NJS_VAR(NJS::Enum::Type::FUNCTION, new function<__NJS_VAR (vector<var>)> ([" + _catch + "](vector<var> __NJS_VARARGS) -> __NJS_VAR" + _fn + os.EOL + _return + "));";
+						_formated += "NJS::VAR(NJS::Enum::Type::FUNCTION, new function<NJS::VAR (vector<var>)> ([" + _catch + "](vector<var> _NJS_VARARGS) -> NJS::VAR" + _fn + os.EOL + _return + "));";
 						_code = [_code.slice(0, _index), _formated, _code.slice(_end + 1)].join('');		
 						break;
 					}

@@ -1,4 +1,4 @@
-__NJS_VAR __NJS_Boolean_Result(__NJS_VAR _v)
+NJS::VAR __NJS_Boolean_Result(NJS::VAR _v)
 {
 	if (_v.type == NJS::Enum::Type::NUMBER)
 		return _v.get().i;
@@ -17,7 +17,7 @@ __NJS_VAR __NJS_Boolean_Result(__NJS_VAR _v)
 		return false;
 }
 
-ostream &operator<<(ostream &os, const __NJS_VAR &_v)
+ostream &operator<<(ostream &os, const NJS::VAR &_v)
 {
 	switch (_v.type)
 	{
@@ -64,12 +64,12 @@ ostream &operator<<(ostream &os, const __NJS_VAR &_v)
 	return os;
 }
 
-__NJS_VAR parseInt(__NJS_VAR _str)
+NJS::VAR parseInt(NJS::VAR _str)
 {
 	if (_str.type == NJS::Enum::Type::STRING)
 	{
 #ifdef __NJS_ARDUINO
-		return __NJS_VAR();
+		return NJS::VAR();
 #else
 		return __NJS_Create_Number(stoi(_str.get().s->__NJS_VALUE));
 #endif
@@ -78,7 +78,7 @@ __NJS_VAR parseInt(__NJS_VAR _str)
 		return __NJS_Create_Undefined();
 }
 
-__NJS_VAR __NJS_Log_Console(__NJS_VAR _var)
+NJS::VAR __NJS_Log_Console(NJS::VAR _var)
 {
 #ifdef __NJS_ARDUINO
 
@@ -87,16 +87,16 @@ __NJS_VAR __NJS_Log_Console(__NJS_VAR _var)
 	cout << endl;
 #endif
 
-	return __NJS_VAR();
+	return NJS::VAR();
 }
 
-__NJS_VAR __NJS_Object_Keys(__NJS_VAR _var)
+NJS::VAR __NJS_Object_Keys(NJS::VAR _var)
 {
 	if (_var.type != NJS::Enum::Type::OBJECT)
 		return 0;
 	var _res = __NJS_Create_Array();
 
-	vector<pair<const char *, __NJS_VAR>> *_obj = &_var.get().o->__OBJECT;
+	vector<pair<const char *, NJS::VAR>> *_obj = &_var.get().o->__OBJECT;
 	int _j = (*_obj).size();
 	for (int _i = 0; _i < _j; _i++)
 	{
@@ -105,11 +105,11 @@ __NJS_VAR __NJS_Object_Keys(__NJS_VAR _var)
 	return _res;
 }
 
-__NJS_VAR __NJS_Object_Stringify(__NJS_VAR _var)
+NJS::VAR __NJS_Object_Stringify(NJS::VAR _var)
 {
 	return __NJS_Object_Stringify(_var, true);
 }
-__NJS_VAR __NJS_Object_Stringify(__NJS_VAR _var, bool _bracket)
+NJS::VAR __NJS_Object_Stringify(NJS::VAR _var, bool _bracket)
 {
 
 	NJS::Enum::Type _t = _var.type;
@@ -129,7 +129,7 @@ __NJS_VAR __NJS_Object_Stringify(__NJS_VAR _var, bool _bracket)
 	else if (_t == NJS::Enum::Type::ARRAY)
 	{
 		var _res = "";
-		vector<__NJS_VAR> *_arr = &_var.get().a->__NJS_VALUE;
+		vector<NJS::VAR> *_arr = &_var.get().a->__NJS_VALUE;
 		if(_bracket) _res += "[";
 		int j = (*_arr).size();
 		for (int i = 0; i < j; i++)
@@ -145,7 +145,7 @@ __NJS_VAR __NJS_Object_Stringify(__NJS_VAR _var, bool _bracket)
 	else if (_t == NJS::Enum::Type::OBJECT)
 	{
 		var _res = "";
-		vector<pair<const char *, __NJS_VAR>> *_obj = &_var.get().o->__OBJECT;
+		vector<pair<const char *, NJS::VAR>> *_obj = &_var.get().o->__OBJECT;
 		_res = "{";
 		int j = (*_obj).size();
 		for (int _i = 0; _i < j; _i++)
@@ -163,7 +163,7 @@ __NJS_VAR __NJS_Object_Stringify(__NJS_VAR _var, bool _bracket)
 		return "";
 }
 
-__NJS_VAR __NJS_Object_Clone(__NJS_VAR _var)
+NJS::VAR __NJS_Object_Clone(NJS::VAR _var)
 {
 	NJS::Enum::Type _t = _var.type;
 	switch(_t)
@@ -178,7 +178,7 @@ __NJS_VAR __NJS_Object_Clone(__NJS_VAR _var)
 		case NJS::Enum::Type::ARRAY:
 		{
 			var _res = __NJS_Create_Array();
-			vector<__NJS_VAR> *_arr = &_var.get().a->__NJS_VALUE;
+			vector<NJS::VAR> *_arr = &_var.get().a->__NJS_VALUE;
 
 			int j = (*_arr).size();
 			for (int i = 0; i < j; i++)
@@ -190,7 +190,7 @@ __NJS_VAR __NJS_Object_Clone(__NJS_VAR _var)
 		case NJS::Enum::Type::OBJECT:
 		{
 			var _res = __NJS_Create_Object();
-			vector<pair<const char *, __NJS_VAR>> *_obj = &_var.get().o->__OBJECT;
+			vector<pair<const char *, NJS::VAR>> *_obj = &_var.get().o->__OBJECT;
 			int j = (*_obj).size();
 			for (int _i = 0; _i < j; _i++)
 			{
@@ -199,19 +199,19 @@ __NJS_VAR __NJS_Object_Clone(__NJS_VAR _var)
 			return _res;
 		}
 		default:
-			return __NJS_VAR();
+			return NJS::VAR();
 	}
 }
 
-void __NJS_Object_Construct(__NJS_VAR _this, __NJS_VAR _prototype)
+void __NJS_Object_Construct(NJS::VAR _this, NJS::VAR _prototype)
 {
 	if(_this.type == NJS::Enum::Type::OBJECT && _prototype.type == NJS::Enum::Type::OBJECT)
 	{
-		vector<pair<const char *, __NJS_VAR>> *_obj = &_prototype.get().o->__OBJECT;
+		vector<pair<const char *, NJS::VAR>> *_obj = &_prototype.get().o->__OBJECT;
 		int j = (*_obj).size();
 		for (int _i = 0; _i < j; _i++)
 		{
-			__NJS_VAR _tmp =  __NJS_Object_Get((*_obj)[_i].first, _this);
+			NJS::VAR _tmp =  __NJS_Object_Get((*_obj)[_i].first, _this);
 			if(_tmp.type == NJS::Enum::Type::UNDEFINED)
 			{
 				__NJS_Object_Set((*_obj)[_i].first, (*_obj)[_i].second, _this);
@@ -222,35 +222,35 @@ void __NJS_Object_Construct(__NJS_VAR _this, __NJS_VAR _prototype)
 }
 
 
-__NJS_VAR __NJS_Create_Object()
+NJS::VAR __NJS_Create_Object()
 {
 	__NJS_Class_Object *_obj = new __NJS_Class_Object();
-	return __NJS_VAR(_obj);
+	return NJS::VAR(_obj);
 }
 
-__NJS_VAR __NJS_CREATE_FUNCTION(void *_fn)
+NJS::VAR __NJS_CREATE_FUNCTION(void *_fn)
 {
-	return __NJS_VAR(NJS::Enum::Type::FUNCTION, _fn);
+	return NJS::VAR(NJS::Enum::Type::FUNCTION, _fn);
 }
 
-__NJS_VAR __NJS_Create_Native(void *_native)
+NJS::VAR __NJS_Create_Native(void *_native)
 {
-	return __NJS_VAR(NJS::Enum::Type::UNDEFINED, _native);
+	return NJS::VAR(NJS::Enum::Type::UNDEFINED, _native);
 }
 
 /*
-void* __NJS_Get_Function(__NJS_VAR _fn)
+void* __NJS_Get_Function(NJS::VAR _fn)
 {
   return _fn.get().f;
 }
 */
 
-function<var(vector<var>)> *__NJS_Get_Function(__NJS_VAR _v)
+function<var(vector<var>)> *__NJS_Get_Function(NJS::VAR _v)
 {
 	return (function<var(vector<var>)> *)_v.get().f->__NJS_VALUE;
 }
 
-void *__NJS_Get_Native(__NJS_VAR _native)
+void *__NJS_Get_Native(NJS::VAR _native)
 {
 	return _native.get().f;
 }
@@ -258,37 +258,37 @@ void *__NJS_Get_Native(__NJS_VAR _native)
 /*** REDIFINING STD OPERATORS ***/
 
 template <typename t>
-t operator+(t _left, const __NJS_VAR &_right)
+t operator+(t _left, const NJS::VAR &_right)
 {
 	return _left + (t)_right;
 }
 
 template <typename t>
-t operator-(t _left, const __NJS_VAR &_right)
+t operator-(t _left, const NJS::VAR &_right)
 {
 	return _left - (t)_right;
 }
 
 template <typename t>
-t operator*(t _left, const __NJS_VAR &_right)
+t operator*(t _left, const NJS::VAR &_right)
 {
 	return _left * (t)_right;
 }
 
 template <typename t>
-t operator/(t _left, const __NJS_VAR &_right)
+t operator/(t _left, const NJS::VAR &_right)
 {
 	return _left / (t)_right;
 }
 
 template <typename t>
-t operator<(t _left, const __NJS_VAR &_right)
+t operator<(t _left, const NJS::VAR &_right)
 {
 	return _left / (t)_right;
 }
 
 template <typename t>
-t operator>(t _left, const __NJS_VAR &_right)
+t operator>(t _left, const NJS::VAR &_right)
 {
 	return _left / (t)_right;
 }
@@ -303,10 +303,10 @@ __NJS_Create_Lambda(__IMPL_EVAL)
 });
 var eval = __NJS_Create_Function(__IMPL_EVAL);
 
-function<__NJS_VAR(vector<var>)> *__NJS_IS_NAN = new function<__NJS_VAR(vector<var>)>([](vector<var> __NJS_VARARGS) {
+function<NJS::VAR(vector<var>)> *__NJS_IS_NAN = new function<NJS::VAR(vector<var>)>([](vector<var> _NJS_VARARGS) {
 	var _test;
-	if (__NJS_VARARGS.size() > 0)
-		_test = __NJS_VARARGS[0];
+	if (_NJS_VARARGS.size() > 0)
+		_test = _NJS_VARARGS[0];
 	else
 		return __NJS_Create_Boolean(0);
 
@@ -318,9 +318,9 @@ function<__NJS_VAR(vector<var>)> *__NJS_IS_NAN = new function<__NJS_VAR(vector<v
 	return __NJS_Create_Boolean(0);
 });
 
-__NJS_VAR isNaN = __NJS_VAR(NJS::Enum::Type::FUNCTION, __NJS_IS_NAN);
+NJS::VAR isNaN = NJS::VAR(NJS::Enum::Type::FUNCTION, __NJS_IS_NAN);
 
-__NJS_VAR __NJS_EQUAL_VALUE_AND_TYPE(__NJS_VAR _left, __NJS_VAR _right)
+NJS::VAR __NJS_EQUAL_VALUE_AND_TYPE(NJS::VAR _left, NJS::VAR _right)
 {
 	if (_left.type == _right.type && _left == _right)
 	{
@@ -330,7 +330,7 @@ __NJS_VAR __NJS_EQUAL_VALUE_AND_TYPE(__NJS_VAR _left, __NJS_VAR _right)
 	return __NJS_Create_Boolean(0);
 }
 
-__NJS_VAR __NJS_NOT_EQUAL_VALUE_AND_TYPE(__NJS_VAR _left, __NJS_VAR _right)
+NJS::VAR __NJS_NOT_EQUAL_VALUE_AND_TYPE(NJS::VAR _left, NJS::VAR _right)
 {
 	if (_left.type != _right.type || _left != _right)
 	{

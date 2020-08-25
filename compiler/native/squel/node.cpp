@@ -35,7 +35,8 @@
 
 
  #include "njs.h"
- using namespace NECTAR;
+ using namespace NJS;
+ 
  var __NJS_ENV = "node";
  var __NJS_PLATFORM = "{{__PLATFORM__}}"; 
  {INCLUDE}
@@ -47,7 +48,7 @@ int main(int argc, char* argv[])
 	var __NJS_ARGS = __NJS_Create_Array();
 	for( int i = 0; i < argc; i++)
 	{
-		__NJS_Object_Set(i, __NJS_VAR(argv[i]), __NJS_ARGS);
+		__NJS_Object_Set(i, NJS::VAR(argv[i]), __NJS_ARGS);
 	}
 
 	{INIT}

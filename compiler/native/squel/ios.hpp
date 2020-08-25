@@ -35,7 +35,7 @@
  #include "njs.h"
  #include "httplib.h"
  
- using namespace NECTAR;
+ using namespace NJS;
 
  WKWebView * globalWK;
 

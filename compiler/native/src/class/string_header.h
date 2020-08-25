@@ -5,5 +5,5 @@ public:
 	void Delete();
 	__NJS_Class_String(string _str);
 	string __NJS_VALUE;
-	vector<pair<const char *, __NJS_VAR>> __OBJECT;
+	vector<pair<const char *, NJS::VAR>> __OBJECT;
 };

@@ -1,14 +1,14 @@
 __NJS_Class_Array::__NJS_Class_Array()
 {
 	cnt++;
-	function<__NJS_VAR()> *__OBJ_TO_NJS_STRING = new function<__NJS_VAR()>([&]() { return __NJS_Create_String("Array"); });
-	__NJS_VAR toString = __NJS_VAR(NJS::Enum::Type::FUNCTION, __OBJ_TO_NJS_STRING);
+	function<NJS::VAR()> *__OBJ_TO_NJS_STRING = new function<NJS::VAR()>([&]() { return __NJS_Create_String("Array"); });
+	NJS::VAR toString = NJS::VAR(NJS::Enum::Type::FUNCTION, __OBJ_TO_NJS_STRING);
 	__NJS_Object_Set("toString", toString, &this->__OBJECT);
 
-	function<__NJS_VAR(vector<var>)> *__ARRAY_PUSH = new function<__NJS_VAR(vector<var>)>([&](vector<var> __NJS_VARARGS) {
+	function<NJS::VAR(vector<var>)> *__ARRAY_PUSH = new function<NJS::VAR(vector<var>)>([&](vector<var> _NJS_VARARGS) {
 		var _add;
-		if (__NJS_VARARGS.size() > 0)
-			_add = __NJS_VARARGS[0];
+		if (_NJS_VARARGS.size() > 0)
+			_add = _NJS_VARARGS[0];
 		else
 			return (int)this->__NJS_VALUE.size();
 
@@ -17,7 +17,7 @@ __NJS_Class_Array::__NJS_Class_Array()
 
 		return (int)this->__NJS_VALUE.size();
 	});
-	__NJS_VAR arrayPush = __NJS_VAR(NJS::Enum::Type::FUNCTION, __ARRAY_PUSH);
+	NJS::VAR arrayPush = NJS::VAR(NJS::Enum::Type::FUNCTION, __ARRAY_PUSH);
 	__NJS_Object_Set("push", arrayPush, &this->__OBJECT);
 
 	__NJS_Object_Set("length", 0, &this->__OBJECT);

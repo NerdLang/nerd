@@ -36,7 +36,7 @@
  #include "njs.h"
  #include "httplib.h"
  
- using namespace NECTAR;
+ using namespace NJS;
  
 JNIEnv* globalEnv;
 jobject mainObject;

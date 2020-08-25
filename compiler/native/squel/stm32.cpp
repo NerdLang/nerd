@@ -35,7 +35,7 @@
 
 
 using namespace std;
-using namespace NECTAR;
+using namespace NJS;
 
  var __NJS_ENV = "stm32";
  var __NJS_PLATFORM = "{{__PLATFORM__}}";

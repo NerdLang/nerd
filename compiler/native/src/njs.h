@@ -51,7 +51,12 @@ using namespace std;
 using namespace NJS;
 
 #include "macro.h"
-struct __NJS_VAR;
+
+namespace NJS
+{
+	struct VAR;
+} // namespace NJS
+
 
 #include "class_header.h"
 #include "val.h"
@@ -59,11 +64,11 @@ struct __NJS_VAR;
 #include "functions.h"
 #include "var.h"
 
-namespace NECTAR
+namespace NJS
 {
-	__NJS_VAR null = __NJS_Create_Null();
-	__NJS_VAR undefined = __NJS_VAR();
-} // namespace NECTAR
+	NJS::VAR null = __NJS_Create_Null();
+	NJS::VAR undefined = NJS::VAR();
+} // namespace NJS
 
 
 #include "objmgmt.h"

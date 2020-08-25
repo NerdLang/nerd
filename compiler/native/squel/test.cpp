@@ -33,11 +33,11 @@
  using namespace std;
 
  #include "njs.h"
- using namespace NECTAR;
+ using namespace NJS;
  
 /*** $ERROR ***/
-function<__NJS_VAR (__NJS_VAR _var)>* __DOLLAR_TEST_ERROR = new function<__NJS_VAR (__NJS_VAR _var)>([&](__NJS_VAR _var){ __NJS_Log_Console(_var); exit(1); return 0; });
-__NJS_VAR __NJS_DOLLAR_ERROR = __NJS_VAR(NJS::Enum::Type::FUNCTION, __DOLLAR_TEST_ERROR);
+function<NJS::VAR (NJS::VAR _var)>* __DOLLAR_TEST_ERROR = new function<NJS::VAR (NJS::VAR _var)>([&](NJS::VAR _var){ __NJS_Log_Console(_var); exit(1); return 0; });
+NJS::VAR __NJS_DOLLAR_ERROR = NJS::VAR(NJS::Enum::Type::FUNCTION, __DOLLAR_TEST_ERROR);
 /* end $ERROR */
  
  {INCLUDE}

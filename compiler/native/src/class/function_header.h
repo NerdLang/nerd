@@ -5,6 +5,6 @@ public:
 	void Delete();
 	__NJS_Class_Function(void *_f);
 	void *__NJS_VALUE;
-	__NJS_VAR __NEW(vector<__NJS_VAR> _args);
-	vector<pair<const char *, __NJS_VAR>> __OBJECT;
+	NJS::VAR __NEW(vector<NJS::VAR> _args);
+	vector<pair<const char *, NJS::VAR>> __OBJECT;
 };

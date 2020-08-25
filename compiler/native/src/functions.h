@@ -1,11 +1,11 @@
-__NJS_VAR __NJS_Log_Console(__NJS_VAR _var);
-__NJS_VAR __NJS_Object_Keys(__NJS_VAR _var);
-__NJS_VAR __NJS_Object_Stringify(__NJS_VAR _var);
-__NJS_VAR __NJS_Object_Stringify(__NJS_VAR _var, bool _bracket);
-__NJS_VAR __NJS_Create_Object();
-__NJS_VAR __NJS_Create_Array();
-__NJS_VAR __NJS_Object_Clone(__NJS_VAR _var);
-__NJS_VAR __NJS_Object_Set(const char *_index, __NJS_VAR _value, vector<pair<const char *, __NJS_VAR>> *_obj);
+NJS::VAR __NJS_Log_Console(NJS::VAR _var);
+NJS::VAR __NJS_Object_Keys(NJS::VAR _var);
+NJS::VAR __NJS_Object_Stringify(NJS::VAR _var);
+NJS::VAR __NJS_Object_Stringify(NJS::VAR _var, bool _bracket);
+NJS::VAR __NJS_Create_Object();
+NJS::VAR __NJS_Create_Array();
+NJS::VAR __NJS_Object_Clone(NJS::VAR _var);
+NJS::VAR __NJS_Object_Set(const char *_index, NJS::VAR _value, vector<pair<const char *, NJS::VAR>> *_obj);
 
 /*** STRING MANIPULATION ***/
 #ifdef __NJS_ARDUINO
