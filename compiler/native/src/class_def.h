@@ -1,0 +1,5 @@
+#include "class/object.h"
+#include "class/string.h"
+#include "class/array.h"
+#include "class/function.h"
+#include "class/native.h"

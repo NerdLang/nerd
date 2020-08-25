@@ -50,17 +50,13 @@ using namespace nonstd;
 using namespace std;
 using namespace NJS;
 
-
 #include "macro.h"
-
 struct __NJS_VAR;
 
-#include "class.h"
-
+#include "class_header.h"
+#include "val.h"
 #include "memory.h"
-
 #include "functions.h"
-
 #include "var.h"
 
 namespace NECTAR
@@ -71,11 +67,5 @@ namespace NECTAR
 
 
 #include "objmgmt.h"
-
-#include "class/object.h"
-#include "class/string.h"
-#include "class/array.h"
-#include "class/function.h"
-#include "class/native.h"
-
+#include "class_def.h"
 #include "operator.h"
