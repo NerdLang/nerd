@@ -1,9 +1,9 @@
 #pragma once
-#include "object.h"
+#include "_base.h"
 
 namespace NJS::Class
 {
-	class Function : public Object
+	class Function : public Base
 	{
 	public:
 		const char *name = "function";

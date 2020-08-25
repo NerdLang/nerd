@@ -35,6 +35,13 @@ explicit NJS::Class::Undefined::operator long long() const
 	return 0;
 }
 
+template<typename T> NJS::VAR NJS::Class::Undefined::operator=(T &_v)
+{
+	__NJS_VALUE = _v.__NJS_VALUE;
+	_v.Delete();
+	return *this;
+}
+
 const NJS::VAR &NJS::Class::Undefined::operator[](std::string _index) const
 {
 	throw NJS::VAR("TypeError: Cannot read property '" + _index + "' of " + (std::string) * this);

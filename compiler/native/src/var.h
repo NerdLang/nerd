@@ -10,6 +10,7 @@ namespace NJS
 	private:
 		void setPtr();
 		void delPtr();
+		void Delete();
 
 	public:
 		NJS::Enum::Type type;
@@ -19,19 +20,26 @@ namespace NJS
 		VAR();
 		~VAR();
 
-		/**/
+		/** CONSTRUCTOR **/
 		VAR(VAR const &_v);
-		/**/
-
-		/*** CONSTRUCTOR ***/
-		VAR(NJS::Enum::Type _type, int _value);
-		VAR(int _value);
+		VAR(bool _value);
 		VAR(double _value);
+		VAR(int _value);
+		VAR(long long _value);
 		VAR(char *_value);
 		VAR(std::string _value);
 		VAR(const char *_value);
-		VAR(NJS::Enum::Type _type, void *_value);
+		VAR(void *_value);
 		VAR(std::function<VAR(std::vector<VAR>)> &_value);
+
+		VAR(NJS::Class::Array &_class);
+		VAR(NJS::Class::Boolean &_class);
+		VAR(NJS::Class::Function &_class);
+		VAR(NJS::Class::Native &_class);
+		VAR(NJS::Class::Number &_class);
+		VAR(NJS::Class::Object &_class);
+		VAR(NJS::Class::String &_class);
+		VAR(NJS::Class::Undefined &_class);
 
 		/*** VARIADIC LAMBDAS ***/
 		template <class... Args>

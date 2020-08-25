@@ -1,12 +1,6 @@
 #pragma once
 #include "classes.h"
 
-#ifdef IDE_INDEV
-#define NJS__REGISTER_SIZE 10000
-#else
-#define NJS__REGISTER_SIZE {{REGISTER}}
-#endif
-
 namespace NJS
 {
 	namespace MEMORY
@@ -23,9 +17,11 @@ namespace NJS
 		};
 		int FREE_PTR = -1;
 		int CURR_PTR = 0;
-		const unsigned int SIZE = NJS__REGISTER_SIZE;
-		VAL REGISTER[SIZE]{(VAL){.i = 0}};
-		int FREE[SIZE] = {0};
+		#ifndef NJS__REGISTER_SIZE
+			#define NJS__REGISTER_SIZE 10000
+		#endif
+		VAL REGISTER[NJS__REGISTER_SIZE]{(VAL){.i = 0}};
+		int FREE[NJS__REGISTER_SIZE] = {0};
 
 		static int get () {
 			if (FREE_PTR > -1)

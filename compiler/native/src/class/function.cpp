@@ -1,10 +1,10 @@
 #include "function.h"
-#include "object.cpp"
+#include "_base.cpp"
 #include <limits>
 
 NJS::Class::Function::Function()
 {
-	Object();
+	Base();
 	NJS::VAR proto = NJS::Class::Object();
 	(*this)["prototype"] = proto;
 }

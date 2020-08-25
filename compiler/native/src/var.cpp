@@ -18,30 +18,53 @@ namespace NJS
 			NJS::MEMORY::release(_ptr);
 		}
 
-	public:
-		NJS::Enum::Type type;
-		int _ptr = -1;
-
-		NJS::MEMORY::VAL get() const
+		inline NJS::MEMORY::VAL get() const
 		{
 			return NJS::MEMORY::REGISTER[_ptr];
 		}
 
-		__NJS_VAR()
+		void Delete()
+		{
+			switch (type)
+			{
+			case NJS::Enum::Type::ARRAY:
+				return get().a->Delete();
+			case NJS::Enum::Type::BOOLEAN:
+				return get().b->Delete();
+			case NJS::Enum::Type::FUNCTION:
+				return get().f->Delete();
+			case NJS::Enum::Type::NATIVE:
+				return get().n->Delete();
+			case NJS::Enum::Type::NUMBER:
+				return get().i->Delete();
+			case NJS::Enum::Type::OBJECT:
+				return get().o->Delete();
+			case NJS::Enum::Type::STRING:
+				return get().s->Delete();
+			case NJS::Enum::Type::UNDEFINED:
+				return get().u->Delete();
+			}
+		}
+
+	public:
+		NJS::Enum::Type type;
+		int _ptr = -1;
+
+		VAR()
 		{
 			setPtr();
 			type = __NJS_UNDEFINED;
-			get().i = 0;
+			get().u = NJS::Class::Undefined();
 		}
 
-		~__NJS_VAR()
+		~VAR()
 		{
 			get()->Delete();
 			delPtr();
 		}
 
 		/**/
-		__NJS_VAR(__NJS_VAR const &_v)
+		VAR(VAR const &_v)
 		{
 			setPtr();
 			type = _v.type;
@@ -80,74 +103,93 @@ namespace NJS
 
 		/*** CONSTRUCTOR ***/
 
-		__NJS_VAR(__NJS_TYPE _type, int _value)
+		VAR(bool _value);
+		VAR(double _value);
+		VAR(int _value);
+		VAR(long long _value);
+		VAR(char *_value);
+		VAR(std::string _value);
+		VAR(const char *_value);
+		VAR(void *_value);
+		VAR(std::function<VAR(std::vector<VAR>)> &_value);
+
+		VAR(NJS::Class::Array &_class);
+		VAR(NJS::Class::Boolean &_class);
+		VAR(NJS::Class::Function &_class);
+		VAR(NJS::Class::Native &_class);
+		VAR(NJS::Class::Number &_class);
+		VAR(NJS::Class::Object &_class);
+		VAR(NJS::Class::String &_class);
+		VAR(NJS::Class::Undefined &_class);
+
+		VAR(__NJS_TYPE _type, int _value)
 		{
 			setPtr();
 			this->type = _type;
 			get().i = _value;
 		}
 
-		__NJS_VAR(int _value)
+		VAR(int _value)
 		{
 			setPtr();
 			this->type = __NJS_NUMBER;
 			get().i = _value;
 		}
 
-		__NJS_VAR(double _value)
+		VAR(double _value)
 		{
 			setPtr();
 			this->type = __NJS_DOUBLE;
 			get().d = _value;
 		}
 
-		__NJS_VAR(char *_value)
+		VAR(char *_value)
 		{
 			setPtr();
 			type = __NJS_STRING;
 			get().s = new __NJS_Class_String(_value);
 		}
 
-		__NJS_VAR(string _value)
+		VAR(string _value)
 		{
 			setPtr();
 			type = __NJS_STRING;
 			get().s = new __NJS_Class_String(_value);
 		}
 
-		__NJS_VAR(const char *_value)
+		VAR(const char *_value)
 		{
 			setPtr();
 			type = __NJS_STRING;
 			get().s = new __NJS_Class_String(_value);
 		}
 
-		__NJS_VAR(__NJS_Class_Array *_value)
+		VAR(__NJS_Class_Array *_value)
 		{
 			setPtr();
 			type = __NJS_ARRAY;
 			get().a = _value;
 		}
-		__NJS_VAR(__NJS_Class_Object *_value)
+		VAR(__NJS_Class_Object *_value)
 		{
 			setPtr();
 			type = __NJS_OBJECT;
 			get().o = _value;
 		}
-		__NJS_VAR(__NJS_Class_Native *_value)
+		VAR(__NJS_Class_Native *_value)
 		{
 			setPtr();
 			type = __NJS_NATIVE;
 			get().n = _value;
 		}
-		__NJS_VAR(__NJS_TYPE _type, void *_value)
+		VAR(__NJS_TYPE _type, void *_value)
 		{
 			setPtr();
 			type = _type;
 			get().f = new __NJS_Class_Function(_value);
 		}
 
-		__NJS_VAR(function<__NJS_VAR(vector<var>)> &_value)
+		VAR(function<VAR(vector<var>)> &_value)
 		{
 			setPtr();
 			type = __NJS_FUNCTION;
@@ -156,7 +198,7 @@ namespace NJS
 
 		/*** VARIADIC LAMBDAS ***/
 		template <class... Args>
-		__NJS_VAR(function<__NJS_VAR(Args...)> &_value)
+		VAR(function<VAR(Args...)> &_value)
 		{
 			setPtr();
 			type = __NJS_FUNCTION;
@@ -167,14 +209,14 @@ namespace NJS
 		/*** CALL OVERLOAD ***/
 
 		template <class... Args>
-		__NJS_VAR __NJS_Class_Back_Var_Call_Function(Args... args)
+		VAR __NJS_Class_Back_Var_Call_Function(Args... args)
 		{
 			vector<var> _args = vector<var>{(var)args...};
-			return (*static_cast<function<__NJS_VAR(vector<var>)> *>(this->get().f->__NJS_VALUE))(_args);
+			return (*static_cast<function<VAR(vector<var>)> *>(this->get().f->__NJS_VALUE))(_args);
 		}
 
 		template <class... Args>
-		__NJS_VAR operator()(Args... args)
+		VAR operator()(Args... args)
 		{
 			if (this->type != __NJS_FUNCTION)
 			{
@@ -183,7 +225,7 @@ namespace NJS
 #endif
 				exit(1);
 			}
-			return __NJS_Class_Back_Var_Call_Function((__NJS_VAR)(args)...);
+			return __NJS_Class_Back_Var_Call_Function((VAR)(args)...);
 		}
 
 		/* END CALL OVERLOAD */
@@ -191,7 +233,7 @@ namespace NJS
 		/*** ACCESS OVERLOAD ***/
 		// WIP
 
-		__NJS_VAR operator[](__NJS_VAR _index) const
+		VAR operator[](VAR _index) const
 		{
 			if (this->type == __NJS_ARRAY && _index.type == __NJS_NUMBER)
 			{
@@ -199,7 +241,7 @@ namespace NJS
 			}
 			else if (this->type == __NJS_OBJECT || this->type == __NJS_STRING || this->type == __NJS_FUNCTION || this->type == __NJS_ARRAY || this->type == __NJS_NATIVE)
 			{
-				vector<pair<const char *, __NJS_VAR>> *_obj;
+				vector<pair<const char *, VAR>> *_obj;
 				if (this->type == __NJS_OBJECT)
 					_obj = &this->get().o->__OBJECT;
 				else if (this->type == __NJS_ARRAY)
@@ -214,23 +256,23 @@ namespace NJS
 				}
 
 				_index.get().s->cnt++;
-				__NJS_Object_Set(_index.get().s->__NJS_VALUE.c_str(), __NJS_VAR(), _obj);
+				__NJS_Object_Set(_index.get().s->__NJS_VALUE.c_str(), VAR(), _obj);
 				return (*this)[_index];
 			}
 
 			__NJS_RETURN_UNDEFINED;
 		}
 
-		__NJS_VAR &operator[](__NJS_VAR _index)
+		VAR &operator[](VAR _index)
 		{
-			static __NJS_VAR _retFN = __NJS_Create_Var_Scoped_Anon({ return __NJS_VAR(); });
+			static VAR _retFN = __NJS_Create_Var_Scoped_Anon({ return VAR(); });
 
-			static __NJS_VAR _retUndefined;
+			static VAR _retUndefined;
 
 			if (this->type == __NJS_UNDEFINED)
 			{
 #ifndef __NJS_ARDUINO
-				throw __NJS_VAR("Uncaught TypeError: Cannot read property '" + _index.get().s->__NJS_VALUE + "' of undefined");
+				throw VAR("Uncaught TypeError: Cannot read property '" + _index.get().s->__NJS_VALUE + "' of undefined");
 #endif
 			}
 			// 1..toString()
@@ -251,7 +293,7 @@ namespace NJS
 				else if (_index == "valueOf")
 				{
 
-					REGISTER[_retFN._ptr].f->__NJS_VALUE = new function<__NJS_VAR(vector<var>)>([&](vector<var> __NJS_VARARGS) { return *this; });
+					REGISTER[_retFN._ptr].f->__NJS_VALUE = new function<VAR(vector<var>)>([&](vector<var> VARARGS) { return *this; });
 					return _retFN;
 				}
 				return _retUndefined;
@@ -281,8 +323,8 @@ namespace NJS
 			}
 			else if (this->type == __NJS_STRING && _index.type == __NJS_NUMBER)
 			{
-				static __NJS_VAR _ret = __NJS_Create_String("");
-				__NJS_VAR _tmp = (*this)["substr"](_index, 1);
+				static VAR _ret = __NJS_Create_String("");
+				VAR _tmp = (*this)["substr"](_index, 1);
 				REGISTER[_ret._ptr].s->__NJS_VALUE = _tmp.get().s->__NJS_VALUE;
 				return _ret;
 			}
@@ -292,7 +334,7 @@ namespace NJS
 				{
 					return _retUndefined;
 				}
-				vector<pair<const char *, __NJS_VAR>> *_obj;
+				vector<pair<const char *, VAR>> *_obj;
 				if (this->type == __NJS_OBJECT)
 					_obj = &this->get().o->__OBJECT;
 				else if (this->type == __NJS_ARRAY)
@@ -315,7 +357,7 @@ namespace NJS
 				}
 
 				_index.get().s->cnt++;
-				__NJS_Object_Set(_index.get().s->__NJS_VALUE.c_str(), __NJS_VAR(), _obj);
+				__NJS_Object_Set(_index.get().s->__NJS_VALUE.c_str(), VAR(), _obj);
 				return (*this)[_index];
 			}
 			return _retUndefined;
@@ -326,18 +368,8 @@ namespace NJS
 		/*** END CONSTRUCTOR ***/
 
 		/*** OPERATOR ***/
-		__NJS_VAR operator=(const __NJS_VAR &_v)
+		VAR operator=(const VAR &_v)
 		{
-			if (type == __NJS_OBJECT)
-				get().o->Delete();
-			else if (type == __NJS_STRING)
-				get().s->Delete();
-			else if (type == __NJS_FUNCTION)
-				get().f->Delete();
-			else if (type == __NJS_ARRAY)
-				get().a->Delete();
-			else if (type == __NJS_NATIVE)
-				get().n->Delete();
 
 			type = _v.type;
 			;
@@ -372,43 +404,43 @@ namespace NJS
 		}
 
 		/// Unary operators
-		__NJS_VAR operator+()
+		VAR operator+()
 		{
 			if (type == __NJS_NUMBER || type == __NJS_DOUBLE)
 				return *this;
 			else
 				return (double)*this;
 		}
-		__NJS_VAR operator-()
+		VAR operator-()
 		{
 			if (type == __NJS_NUMBER)
 				return -(int)*this;
 			else
 				return -(double)*this;
 		}
-		__NJS_VAR operator!() { return !(bool)*this; };
+		VAR operator!() { return !(bool)*this; };
 
 		/// Logical operators
-		__NJS_VAR operator&&(const __NJS_VAR &_v1) { return (bool)*this && (bool)_v1; }
-		__NJS_VAR operator||(const __NJS_VAR &_v1) { return (bool)*this || (bool)_v1; }
+		VAR operator&&(const VAR &_v1) { return (bool)*this && (bool)_v1; }
+		VAR operator||(const VAR &_v1) { return (bool)*this || (bool)_v1; }
 
 		/// Arithmetic operators
-		__NJS_VAR operator+(const __NJS_VAR &_v1)
+		VAR operator+(const VAR &_v1)
 		{
 			if (type == __NJS_STRING || type == __NJS_ARRAY || type == __NJS_OBJECT || _v1.type == __NJS_STRING)
 				return __NJS_Concat_To_Str((string) * this, (string)_v1);
 			else if (type == __NJS_NUMBER)
-				return __NJS_VAR((int)*this + (int)_v1);
+				return VAR((int)*this + (int)_v1);
 			else if (type == __NJS_DOUBLE)
-				return __NJS_VAR((double)*this + (double)_v1);
+				return VAR((double)*this + (double)_v1);
 			else
-				return __NJS_VAR();
+				return VAR();
 		}
-		__NJS_VAR operator+(const char _v1[])
+		VAR operator+(const char _v1[])
 		{
 			return __NJS_Concat_To_Str((string) * this, _v1);
 		}
-		__NJS_VAR operator+=(const __NJS_VAR &_v1)
+		VAR operator+=(const VAR &_v1)
 		{
 			if (type == __NJS_NUMBER)
 				get().i += (int)_v1;
@@ -425,16 +457,16 @@ namespace NJS
 			}
 			return *this;
 		}
-		__NJS_VAR operator-(const __NJS_VAR &_v1)
+		VAR operator-(const VAR &_v1)
 		{
 			if (type == __NJS_NUMBER)
-				return __NJS_VAR((int)*this - (int)_v1);
+				return VAR((int)*this - (int)_v1);
 			else if (type == __NJS_DOUBLE)
-				return __NJS_VAR((double)*this - (double)_v1);
+				return VAR((double)*this - (double)_v1);
 			else
 				return "NaN";
 		}
-		__NJS_VAR operator-=(const __NJS_VAR &_v1)
+		VAR operator-=(const VAR &_v1)
 		{
 			if (type == __NJS_NUMBER && _v1.type == __NJS_NUMBER)
 				get().i -= (int)_v1;
@@ -451,39 +483,39 @@ namespace NJS
 			}
 			return *this;
 		}
-		__NJS_VAR operator*(const __NJS_VAR &_v1)
+		VAR operator*(const VAR &_v1)
 		{
 			if (type == __NJS_NUMBER)
 				return REGISTER[_ptr].i * (int)_v1;
 			else if (type == __NJS_DOUBLE)
 				return REGISTER[_ptr].d * (double)_v1;
-			return __NJS_VAR();
+			return VAR();
 		}
-		__NJS_VAR operator*=(const __NJS_VAR &_v1)
+		VAR operator*=(const VAR &_v1)
 		{
 			if (type == __NJS_NUMBER)
 				get().i *= (int)_v1;
 			else if (type == __NJS_DOUBLE)
 				get().d *= (double)_v1;
-			return __NJS_VAR();
+			return VAR();
 		}
-		__NJS_VAR operator/(const __NJS_VAR &_v1)
+		VAR operator/(const VAR &_v1)
 		{
 			if (type == __NJS_NUMBER)
 				return REGISTER[_ptr].i / (int)_v1;
 			else if (type == __NJS_DOUBLE)
 				return REGISTER[_ptr].d / (double)_v1;
-			return __NJS_VAR();
+			return VAR();
 		}
-		__NJS_VAR operator/=(const __NJS_VAR &_v1)
+		VAR operator/=(const VAR &_v1)
 		{
 			if (type == __NJS_NUMBER)
 				get().i /= (int)_v1;
 			else if (type == __NJS_DOUBLE)
 				get().d /= (double)_v1.get().d;
-			return __NJS_VAR();
+			return VAR();
 		}
-		__NJS_VAR operator%(const __NJS_VAR &_v1)
+		VAR operator%(const VAR &_v1)
 		{
 			if (type == __NJS_NUMBER && _v1.type == __NJS_NUMBER)
 				return REGISTER[_ptr].i % (int)_v1;
@@ -492,7 +524,7 @@ namespace NJS
 				return remainder(REGISTER[_ptr].d, (double)_v1);
 			}
 		}
-		__NJS_VAR operator%=(const __NJS_VAR &_v1)
+		VAR operator%=(const VAR &_v1)
 		{
 			if (type == __NJS_NUMBER && _v1.type == __NJS_NUMBER)
 			{
@@ -506,7 +538,7 @@ namespace NJS
 			return *this;
 		}
 		// TODO: "**" and "**=" operators
-		__NJS_VAR operator++(const int _v1)
+		VAR operator++(const int _v1)
 		{
 			if (type == __NJS_NUMBER)
 			{
@@ -523,7 +555,7 @@ namespace NJS
 			}
 			return *this;
 		}
-		__NJS_VAR operator--(const int _v1)
+		VAR operator--(const int _v1)
 		{
 			if (type == __NJS_NUMBER)
 				get().i--;
@@ -538,7 +570,7 @@ namespace NJS
 		}
 
 		/// Comparison operators
-		__NJS_VAR operator==(const __NJS_VAR &_v1)
+		VAR operator==(const VAR &_v1)
 		{
 			if (type == _v1.type)
 			{
@@ -548,7 +580,7 @@ namespace NJS
 					return __NJS_Create_Boolean(REGISTER[_ptr].i == (int)_v1);
 				case __NJS_DOUBLE:
 					return __NJS_Create_Boolean(REGISTER[_ptr].d == (double)_v1);
-				//case __NJS_BIGNUMBER: return __NJS_VAR((long)*this == (long)_v1);
+				//case __NJS_BIGNUMBER: return VAR((long)*this == (long)_v1);
 				case __NJS_BOOLEAN:
 					return __NJS_Create_Boolean(REGISTER[_ptr].b == (bool)_v1);
 				case __NJS_STRING:
@@ -576,34 +608,34 @@ namespace NJS
 			}
 		}
 		// === emulated with __NJS_EQUAL_VALUE_AND_TYPE
-		__NJS_VAR operator!=(const __NJS_VAR &_v1)
+		VAR operator!=(const VAR &_v1)
 		{
 			return !(*this == _v1);
 		}
 
 		// !== emulated with __NJS_NOT_EQUAL_VALUE_AND_TYPE
-		__NJS_VAR operator<(const __NJS_VAR &_v1)
+		VAR operator<(const VAR &_v1)
 		{
 			if (type == _v1.type && type == __NJS_NUMBER)
 				return (int)*this < (int)_v1;
 			else
 				return (double)*this < (double)_v1;
 		}
-		__NJS_VAR operator<=(const __NJS_VAR &_v1)
+		VAR operator<=(const VAR &_v1)
 		{
 			if (type == _v1.type && type == __NJS_NUMBER)
 				return (int)*this <= (int)_v1;
 			else
 				return (double)*this <= (double)_v1;
 		}
-		__NJS_VAR operator>(const __NJS_VAR &_v1)
+		VAR operator>(const VAR &_v1)
 		{
 			if (type == _v1.type && type == __NJS_NUMBER)
 				return (int)*this > (int)_v1;
 			else
 				return (double)*this > (double)_v1;
 		}
-		__NJS_VAR operator>=(const __NJS_VAR &_v1)
+		VAR operator>=(const VAR &_v1)
 		{
 			if (type == _v1.type && type == __NJS_NUMBER)
 				return (int)*this >= (int)_v1;
@@ -612,40 +644,40 @@ namespace NJS
 		}
 
 		/// Bitwise operators
-		__NJS_VAR operator&(const __NJS_VAR &_v1) { return (int)*this & (int)_v1; }
-		__NJS_VAR operator&=(const __NJS_VAR &_v1)
+		VAR operator&(const VAR &_v1) { return (int)*this & (int)_v1; }
+		VAR operator&=(const VAR &_v1)
 		{
 			type = __NJS_NUMBER;
 			get().i = (int)*this & (int)_v1;
 			return *this;
 		}
-		__NJS_VAR operator|(const __NJS_VAR &_v1) { return (int)*this | (int)_v1; }
-		__NJS_VAR operator|=(const __NJS_VAR &_v1)
+		VAR operator|(const VAR &_v1) { return (int)*this | (int)_v1; }
+		VAR operator|=(const VAR &_v1)
 		{
 			type = __NJS_NUMBER;
 			get().i = (int)*this | (int)_v1;
 			return *this;
 		}
-		__NJS_VAR operator^(const __NJS_VAR &_v1) { return (int)*this ^ (int)_v1; }
-		__NJS_VAR operator^=(const __NJS_VAR &_v1)
+		VAR operator^(const VAR &_v1) { return (int)*this ^ (int)_v1; }
+		VAR operator^=(const VAR &_v1)
 		{
 			type = __NJS_NUMBER;
 			get().i = (int)*this ^ (int)_v1;
 			return *this;
 		}
-		__NJS_VAR operator~() { return ~(int)*this; }
-		__NJS_VAR operator>>(const __NJS_VAR &_v1) { return (int)*this >> (int)_v1; }
-		__NJS_VAR operator>>=(const __NJS_VAR &_v1)
+		VAR operator~() { return ~(int)*this; }
+		VAR operator>>(const VAR &_v1) { return (int)*this >> (int)_v1; }
+		VAR operator>>=(const VAR &_v1)
 		{
 			type = __NJS_NUMBER;
 			get().i = (int)*this >> (int)_v1;
 			return *this;
 		}
-		__NJS_VAR operator<<(const __NJS_VAR &_v1)
+		VAR operator<<(const VAR &_v1)
 		{
 			return (int)*this << (int)_v1;
 		}
-		__NJS_VAR operator<<=(const __NJS_VAR &_v1)
+		VAR operator<<=(const VAR &_v1)
 		{
 			type = __NJS_NUMBER;
 			get().i = (int)*this << (int)_v1;
