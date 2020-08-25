@@ -35,6 +35,7 @@
 
  #include "njs.h"
  using namespace NJS;
+ using namespace NJS::Value;
  
  var __NJS_ENV = "std";
  var __NJS_PLATFORM = "{{__PLATFORM__}}";

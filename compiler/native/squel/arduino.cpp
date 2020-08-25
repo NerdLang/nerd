@@ -43,6 +43,7 @@
 
  #include "njs.h"
  using namespace NJS;
+ using namespace NJS::Value;
  
  // Declared weak in Arduino.h to allow user redefinitions.
 int atexit(void (* /*func*/ )()) { return 0; }

@@ -37,6 +37,7 @@
  #include "httplib.h"
  
  using namespace NJS;
+ using namespace NJS::Value;
  
 JNIEnv* globalEnv;
 jobject mainObject;

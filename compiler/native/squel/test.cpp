@@ -34,6 +34,7 @@
 
  #include "njs.h"
  using namespace NJS;
+ using namespace NJS::Value;
  
 /*** $ERROR ***/
 function<NJS::VAR (NJS::VAR _var)>* __DOLLAR_TEST_ERROR = new function<NJS::VAR (NJS::VAR _var)>([&](NJS::VAR _var){ __NJS_Log_Console(_var); exit(1); return 0; });

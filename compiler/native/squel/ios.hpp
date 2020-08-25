@@ -36,6 +36,7 @@
  #include "httplib.h"
  
  using namespace NJS;
+ using namespace NJS::Value;
 
  WKWebView * globalWK;
 
