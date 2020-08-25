@@ -155,7 +155,7 @@ namespace NJS::Class
 			if (!__builtin_add_overflow(a, b, c))
 			{
 				setSmi((int)*this + (int)_v1);
-				return;
+				return *this;
 			}
 		}
 		setHeap((double)*this + (double)_v1);
@@ -170,7 +170,7 @@ namespace NJS::Class
 			if (!__builtin_sub_overflow(a, b, c))
 			{
 				setSmi(a - b);
-				return;
+				return *this;
 			}
 		}
 		setHeap((double)*this - (double)_v1);
@@ -185,7 +185,7 @@ namespace NJS::Class
 			if (!__builtin_mul_overflow(a, b, c))
 			{
 				setSmi(a * b);
-				return;
+				return *this;
 			}
 		}
 		setHeap((double)*this * (double)_v1);
@@ -199,7 +199,7 @@ namespace NJS::Class
 			if (a % b == 0)
 			{
 				setSmi(a / b);
-				return;
+				return *this;
 			}
 		}
 		setHeap((double)*this / (double)_v1);

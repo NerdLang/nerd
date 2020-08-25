@@ -44,7 +44,7 @@ namespace NJS::Class
 
 	Array::Array(std::vector<NJS::VAR> vec)
 	{
-		Array::Array();
+		Array();
 		__NJS_VALUE = vec;
 		__NJS_Object_Set("length", (int)vec.size(), &this->__OBJECT);
 	}

@@ -14,7 +14,7 @@ namespace NJS::Class
 	Boolean Boolean::operator=(const Boolean &_v)
 	{
 		__NJS_VALUE = _v.__NJS_VALUE;
-		_v.Delete();
+		((Boolean)_v).Delete();
 		return *this;
 	}
 	Boolean Boolean::operator=(const bool &_v)

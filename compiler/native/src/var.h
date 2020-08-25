@@ -154,7 +154,7 @@ namespace NJS
 		{
 			setPtr();
 			type = NJS::Enum::Type::ARRAY;
-			NJS::MEMORY::REGISTER[_ptr].a = _value;
+			NJS::MEMORY::REGISTER[_ptr].a = (NJS::Class::Array *)_value;
 		}
 		
 		VAR(NJS::Class::Object *_value)
