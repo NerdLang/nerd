@@ -8,23 +8,23 @@ namespace NJS::Class
 		unsigned int cnt = 0;
 		Undefined();
 		void Delete();
-		explicit NJS::Class::Undefined::operator bool() const
+		explicit operator bool() const
 		{
 			return false;
 		}
-		explicit NJS::Class::Undefined::operator double() const
+		explicit operator double() const
 		{
 			return 0;
 		}
-		explicit NJS::Class::Undefined::operator int() const
+		explicit operator int() const
 		{
 			return 0;
 		}
-		explicit NJS::Class::Undefined::operator std::string() const
+		explicit operator std::string() const
 		{
 			return "undefined";
 		}
-		explicit NJS::Class::Undefined::operator long long() const
+		explicit operator long long() const
 		{
 			return 0;
 		}
