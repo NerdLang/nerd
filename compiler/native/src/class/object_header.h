@@ -1,6 +1,6 @@
 namespace NJS::Class
 {
-	class Object
+	class Object : public Undefined
 	{
 	public:
 		int cnt = 0;

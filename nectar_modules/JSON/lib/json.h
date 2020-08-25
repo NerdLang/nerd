@@ -123,7 +123,7 @@ int dump(const char *js, jsmntok_t *t, size_t count, int indent, var& _res)
 
 function __NJS_JSON_PARSE(__json)
 {
-	if(!__json) return undefined;
+	if(!__json) return NJS::Value::undefined;
 	size_t tokcount = 32;
 	int r;
 	int j = 0;

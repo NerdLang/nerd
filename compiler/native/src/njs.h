@@ -64,12 +64,7 @@ namespace NJS
 #include "functions.h"
 #include "var.h"
 
-namespace NJS
-{
-	NJS::VAR null = __NJS_Create_Null();
-	NJS::VAR undefined = NJS::VAR();
-} // namespace NJS
-
+#include "values.h"
 
 #include "objmgmt.h"
 #include "class_def.h"

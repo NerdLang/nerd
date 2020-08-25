@@ -17,6 +17,7 @@ for(var j = 0; j < _loop; j++)
 console.log(_res);
 console.log(_arr);
 
+console.log("_arr.join(':'): " + _arr.join(':'));
 
 var ArrInArr = [["Inception"]];
 console.log(ArrInArr[0][0]);

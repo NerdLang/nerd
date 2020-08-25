@@ -3,26 +3,13 @@ namespace NJS::Class
 	Array::Array()
 	{
 		cnt++;
-		function<NJS::VAR()> *__OBJ_TO_NJS_STRING = new function<NJS::VAR()>([&]() { return __NJS_Create_String("Array"); });
-		NJS::VAR toString = NJS::VAR(NJS::Enum::Type::FUNCTION, __OBJ_TO_NJS_STRING);
-		__NJS_Object_Set("toString", toString, &this->__OBJECT);
-
-		function<NJS::VAR(vector<var>)> *__ARRAY_PUSH = new function<NJS::VAR(vector<var>)>([&](vector<var> _NJS_VARARGS) {
-			var _add;
-			if (_NJS_VARARGS.size() > 0)
-				_add = _NJS_VARARGS[0];
-			else
-				return (int)this->__NJS_VALUE.size();
-
-			this->__NJS_VALUE.push_back(_add);
-			__NJS_Object_Set("length", (int)this->__NJS_VALUE.size(), &this->__OBJECT);
-
-			return (int)this->__NJS_VALUE.size();
-		});
-		NJS::VAR arrayPush = NJS::VAR(NJS::Enum::Type::FUNCTION, __ARRAY_PUSH);
-		__NJS_Object_Set("push", arrayPush, &this->__OBJECT);
-
+		__NJS_CreateMethodToClass("@@iterator", __iterator);
+		__NJS_CreateMethodToClass("@@unscopables", __unscopables);
+		__NJS_CreateMethodToClass("toString", toString);
+		__NJS_CreateMethodToClass("join", join);
+		
 		__NJS_Object_Set("length", 0, &this->__OBJECT);
+
 	}
 
 	void Array::Delete()
@@ -32,5 +19,26 @@ namespace NJS::Class
 		{
 			delete this;
 		}
+	}
+	NJS::VAR Array::__iterator(vector<var> _NJS_VARARGS) const { return NJS::VAR();}
+	NJS::VAR Array::__unscopables(vector<var> _NJS_VARARGS) const { return NJS::VAR(); }
+	NJS::VAR Array::join(std::vector<NJS::VAR> args) const
+	{
+		auto _str = (std::string)(args.size() ? args[0] : NJS::Value::undefined);
+		int l = __NJS_VALUE.size();
+		if (l == 0)
+			return "";
+		std::stringstream stream;
+		stream << (std::string)__NJS_VALUE[0];
+		for (int i = 1; i < l; i++)
+		{
+			stream << _str << (std::string)__NJS_VALUE[i];
+		}
+		return stream.str();
+	};
+	
+	NJS::VAR Array::toString(vector<var> _NJS_VARARGS) const
+	{
+		return join(std::vector<NJS::VAR>({","}));
 	}
 }
