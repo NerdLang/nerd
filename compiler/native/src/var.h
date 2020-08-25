@@ -75,7 +75,7 @@ namespace NJS
 			else if (_v.type == NJS::Enum::Type::STRING)
 			{
 
-				NJS::MEMORY::REGISTER[_ptr].s = new __NJS_Class_String(NJS::MEMORY::REGISTER[_v._ptr].s->__NJS_VALUE);
+				NJS::MEMORY::REGISTER[_ptr].s = new NJS::Class::String(NJS::MEMORY::REGISTER[_v._ptr].s->__NJS_VALUE);
 			}
 			else if (_v.type == NJS::Enum::Type::FUNCTION)
 			{
@@ -126,36 +126,36 @@ namespace NJS
 		{
 			setPtr();
 			type = NJS::Enum::Type::STRING;
-			NJS::MEMORY::REGISTER[_ptr].s = new __NJS_Class_String(_value);
+			NJS::MEMORY::REGISTER[_ptr].s = new NJS::Class::String(_value);
 		}
 
 		VAR(string _value)
 		{
 			setPtr();
 			type = NJS::Enum::Type::STRING;
-			NJS::MEMORY::REGISTER[_ptr].s = new __NJS_Class_String(_value);
+			NJS::MEMORY::REGISTER[_ptr].s = new NJS::Class::String(_value);
 		}
 
 		VAR(const char *_value)
 		{
 			setPtr();
 			type = NJS::Enum::Type::STRING;
-			NJS::MEMORY::REGISTER[_ptr].s = new __NJS_Class_String(_value);
+			NJS::MEMORY::REGISTER[_ptr].s = new NJS::Class::String(_value);
 		}
 
-		VAR(__NJS_Class_Array *_value)
+		VAR(NJS::Class::Array *_value)
 		{
 			setPtr();
 			type = NJS::Enum::Type::ARRAY;
 			NJS::MEMORY::REGISTER[_ptr].a = _value;
 		}
-		VAR(__NJS_Class_Object *_value)
+		VAR(NJS::Class::Object *_value)
 		{
 			setPtr();
 			type = NJS::Enum::Type::OBJECT;
 			NJS::MEMORY::REGISTER[_ptr].o = _value;
 		}
-		VAR(__NJS_Class_Native *_value)
+		VAR(NJS::Class::Native *_value)
 		{
 			setPtr();
 			type = NJS::Enum::Type::NATIVE;
@@ -165,14 +165,14 @@ namespace NJS
 		{
 			setPtr();
 			type = _type;
-			NJS::MEMORY::REGISTER[_ptr].f = new __NJS_Class_Function(_value);
+			NJS::MEMORY::REGISTER[_ptr].f = new NJS::Class::Function(_value);
 		}
 
 		VAR(function<VAR(vector<var>)> &_value)
 		{
 			setPtr();
 			type = NJS::Enum::Type::FUNCTION;
-			NJS::MEMORY::REGISTER[_ptr].f = new __NJS_Class_Function(&_value);
+			NJS::MEMORY::REGISTER[_ptr].f = new NJS::Class::Function(&_value);
 		}
 
 		/*** VARIADIC LAMBDAS ***/
@@ -181,7 +181,7 @@ namespace NJS
 		{
 			setPtr();
 			type = NJS::Enum::Type::FUNCTION;
-			NJS::MEMORY::REGISTER[_ptr].f = new __NJS_Class_Function(&_value);
+			NJS::MEMORY::REGISTER[_ptr].f = new NJS::Class::Function(&_value);
 		}
 		/*** END VARIADIC LAMBDAS ***/
 		
@@ -369,7 +369,7 @@ namespace NJS
 			}
 			else if (_v.type == NJS::Enum::Type::STRING)
 			{
-				NJS::MEMORY::REGISTER[_ptr].s = new __NJS_Class_String((string)_v);
+				NJS::MEMORY::REGISTER[_ptr].s = new NJS::Class::String((string)_v);
 			}
 			else if (_v.type == NJS::Enum::Type::FUNCTION)
 			{
@@ -440,7 +440,7 @@ namespace NJS
 			{
 				string _s = (string)*this;
 				type = NJS::Enum::Type::STRING;
-				NJS::MEMORY::REGISTER[_ptr].s = new __NJS_Class_String("");
+				NJS::MEMORY::REGISTER[_ptr].s = new NJS::Class::String("");
 				NJS::MEMORY::REGISTER[_ptr].s->__NJS_VALUE += _s + (string)_v1;
 			}
 			return *this;
@@ -466,7 +466,7 @@ namespace NJS
 			else 
 			{
 				type = NJS::Enum::Type::ISNAN;
-				NJS::MEMORY::REGISTER[_ptr].s = new __NJS_Class_String("NaN");
+				NJS::MEMORY::REGISTER[_ptr].s = new NJS::Class::String("NaN");
 			}
 			return *this;
 		}

@@ -1,14 +1,17 @@
-__NJS_Class_Native::__NJS_Class_Native(void *_n)
+namespace NJS::Class
 {
-	cnt++;
-	__NJS_VALUE = _n;
-}
-
-void __NJS_Class_Native::Delete()
-{
-	this->cnt--;
-	if (this->cnt < 1)
+	Native::Native(void *_n)
 	{
-		delete this;
+		cnt++;
+		__NJS_VALUE = _n;
 	}
-}
+
+	void Native::Delete()
+	{
+		this->cnt--;
+		if (this->cnt < 1)
+		{
+			delete this;
+		}
+	}
+} // namespace NJS::Class

@@ -1,12 +1,12 @@
 NJS::VAR __create_Array()
 {
-	__NJS_Class_Array *_a = new __NJS_Class_Array();
+	NJS::Class::Array *_a = new NJS::Class::Array();
 	return NJS::VAR(NJS::Enum::Type::ARRAY, _a);
 }
 
 NJS::VAR __NJS_Create_Array()
 {
-	__NJS_Class_Array *_a = new __NJS_Class_Array();
+	NJS::Class::Array *_a = new NJS::Class::Array();
 	return NJS::VAR(_a);
 }
 
@@ -39,7 +39,7 @@ NJS::VAR __NJS_Object_Set(const char *_index, NJS::VAR _value, vector<pair<const
 
 			if (_value.type == NJS::Enum::Type::STRING)
 			{
-				NJS::MEMORY::REGISTER[(*_obj)[_i].second._ptr].s = new __NJS_Class_String((string)_value);
+				NJS::MEMORY::REGISTER[(*_obj)[_i].second._ptr].s = new NJS::Class::String((string)_value);
 			}
 			else
 				NJS::MEMORY::REGISTER[(*_obj)[_i].second._ptr] = NJS::MEMORY::REGISTER[_value._ptr];

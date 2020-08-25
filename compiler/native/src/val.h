@@ -4,10 +4,10 @@ namespace NJS
 		int i;
 		double d;
 		bool b;
-		__NJS_Class_String *s;
-		__NJS_Class_Array *a;
-		__NJS_Class_Object *o;
-		__NJS_Class_Function *f;
-		__NJS_Class_Native *n;
+		NJS::Class::String *s;
+		NJS::Class::Array *a;
+		NJS::Class::Object *o;
+		NJS::Class::Function *f;
+		NJS::Class::Native *n;
 	};
 } // namespace NJS

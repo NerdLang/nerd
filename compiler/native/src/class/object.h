@@ -1,13 +1,16 @@
-__NJS_Class_Object::__NJS_Class_Object()
+namespace NJS::Class
 {
-	cnt++;
-}
-
-void __NJS_Class_Object::Delete()
-{
-	this->cnt--;
-	if (this->cnt < 1)
+	Object::Object()
 	{
-		delete this;
+		cnt++;
 	}
-}
+
+	void Object::Delete()
+	{
+		this->cnt--;
+		if (this->cnt < 1)
+		{
+			delete this;
+		}
+	}
+} // namespace NJS::Class

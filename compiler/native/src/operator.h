@@ -224,7 +224,7 @@ void __NJS_Object_Construct(NJS::VAR _this, NJS::VAR _prototype)
 
 NJS::VAR __NJS_Create_Object()
 {
-	__NJS_Class_Object *_obj = new __NJS_Class_Object();
+	NJS::Class::Object *_obj = new NJS::Class::Object();
 	return NJS::VAR(_obj);
 }
 
