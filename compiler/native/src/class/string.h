@@ -2,8 +2,8 @@ __NJS_Class_String::__NJS_Class_String(string _value)
 {
 	cnt++;
 	/*** toString ***/
-	function<__NJS_VAR(vector<var>)> *__OBJ_TO___NJS_STRING = new function<__NJS_VAR(vector<var>)>([&](vector<var> __NJS_VARARGS) { return __NJS_Create_String(this->__NJS_VALUE); });
-	__NJS_VAR toString = __NJS_VAR(__NJS_FUNCTION, __OBJ_TO___NJS_STRING);
+	function<__NJS_VAR(vector<var>)> *__OBJ_TO_NJS_STRING = new function<__NJS_VAR(vector<var>)>([&](vector<var> __NJS_VARARGS) { return __NJS_Create_String(this->__NJS_VALUE); });
+	__NJS_VAR toString = __NJS_VAR(NJS::Enum::Type::FUNCTION, __OBJ_TO_NJS_STRING);
 	__NJS_Object_Set("toString", toString, &this->__OBJECT);
 	/*** end to string ***/
 
@@ -42,7 +42,7 @@ __NJS_Class_String::__NJS_Class_String(string _value)
 		return _arr;
 	});
 
-	__NJS_VAR __split = __NJS_VAR(__NJS_FUNCTION, __OBJ_TO___NJS_SPLIT);
+	__NJS_VAR __split = __NJS_VAR(NJS::Enum::Type::FUNCTION, __OBJ_TO___NJS_SPLIT);
 	__NJS_Object_Set("split", __split, &this->__OBJECT);
 	/*** end split ***/
 
@@ -63,7 +63,7 @@ __NJS_Class_String::__NJS_Class_String(string _value)
 		return __NJS_VAR(-1);
 	});
 
-	__NJS_VAR __indexof = __NJS_VAR(__NJS_FUNCTION, __OBJ_TO___NJS_INDEXOF);
+	__NJS_VAR __indexof = __NJS_VAR(NJS::Enum::Type::FUNCTION, __OBJ_TO___NJS_INDEXOF);
 
 	__NJS_Object_Set("indexOf", __indexof, &this->__OBJECT);
 	/*** end indexOf ***/
@@ -84,7 +84,7 @@ __NJS_Class_String::__NJS_Class_String(string _value)
 		return __NJS_VAR(-1);
 	});
 
-	__NJS_VAR __lastindexof = __NJS_VAR(__NJS_FUNCTION, __OBJ_TO___NJS_LASTINDEXOF);
+	__NJS_VAR __lastindexof = __NJS_VAR(NJS::Enum::Type::FUNCTION, __OBJ_TO___NJS_LASTINDEXOF);
 
 	__NJS_Object_Set("lastIndexOf", __lastindexof, &this->__OBJECT);
 	/*** end lastIndexOf ***/
@@ -105,7 +105,7 @@ __NJS_Class_String::__NJS_Class_String(string _value)
 		return __NJS_VAR(-1);
 	});
 
-	__NJS_VAR __search = __NJS_VAR(__NJS_FUNCTION, __OBJ_TO___NJS_SEARCH);
+	__NJS_VAR __search = __NJS_VAR(NJS::Enum::Type::FUNCTION, __OBJ_TO___NJS_SEARCH);
 
 	__NJS_Object_Set("search", __search, &this->__OBJECT);
 	/*** end search ***/
@@ -121,13 +121,13 @@ __NJS_Class_String::__NJS_Class_String(string _value)
 		if (__NJS_VARARGS.size() > 1)
 			_end = __NJS_VARARGS[1];
 
-		if (_end.type == __NJS_UNDEFINED)
+		if (_end.type == NJS::Enum::Type::UNDEFINED)
 			return __NJS_VAR(this->__NJS_VALUE.substr(_start.get().i, string::npos));
 		int _endIndex = _end.get().i - _start.get().i;
 		return __NJS_VAR(this->__NJS_VALUE.substr(_start.get().i, _endIndex));
 	});
 
-	__NJS_VAR __slice = __NJS_VAR(__NJS_FUNCTION, __OBJ_TO___NJS_SLICE);
+	__NJS_VAR __slice = __NJS_VAR(NJS::Enum::Type::FUNCTION, __OBJ_TO___NJS_SLICE);
 
 	__NJS_Object_Set("slice", __slice, &this->__OBJECT);
 	__NJS_Object_Set("substring", __slice, &this->__OBJECT);
@@ -144,12 +144,12 @@ __NJS_Class_String::__NJS_Class_String(string _value)
 		if (__NJS_VARARGS.size() > 1)
 			_end = __NJS_VARARGS[1];
 
-		if (_end.type == __NJS_UNDEFINED)
+		if (_end.type == NJS::Enum::Type::UNDEFINED)
 			return __NJS_VAR(this->__NJS_VALUE.substr(_start.get().i, string::npos));
 		return __NJS_VAR(this->__NJS_VALUE.substr(_start.get().i, _end.get().i));
 	});
 
-	__NJS_VAR __substr = __NJS_VAR(__NJS_FUNCTION, __OBJ_TO___NJS_SUBSTR);
+	__NJS_VAR __substr = __NJS_VAR(NJS::Enum::Type::FUNCTION, __OBJ_TO___NJS_SUBSTR);
 
 	__NJS_Object_Set("substr", __substr, &this->__OBJECT);
 	/*** end substr ***/
@@ -173,7 +173,7 @@ __NJS_Class_String::__NJS_Class_String(string _value)
 		return var(this->__NJS_VALUE.replace(start_pos, _search.get().s->__NJS_VALUE.length(), _replace.get().s->__NJS_VALUE));
 	});
 
-	__NJS_VAR __replace = __NJS_VAR(__NJS_FUNCTION, __OBJ_TO___NJS_REPLACE);
+	__NJS_VAR __replace = __NJS_VAR(NJS::Enum::Type::FUNCTION, __OBJ_TO___NJS_REPLACE);
 
 	__NJS_Object_Set("replace", __replace, &this->__OBJECT);
 	/*** end replace ***/

@@ -1,20 +1,20 @@
-namespace NJS
+namespace NJS::Enum
 {
-	enum __NJS_TYPE
+	enum Type
 	{
-		__NJS_UNDEFINED = 1,
-		__NJS_NUMBER,
-		__NJS_DOUBLE,
-		__NJS_OBJECT,
-		__NJS_BIGNUMBER,
-		__NJS_BOOLEAN,
-		__NJS_STRING,
-		__NJS_NATIVE,
-		__NJS_FUNCTION,
-		__NJS_ARRAY,
-		__NJS_NAN,
-		__NJS_INFINITY,
-		__NJS_NULL
+		UNDEFINED = 1,
+		NUMBER,
+		DOUBLE,
+		OBJECT,
+		BIGNUMBER,
+		BOOLEAN,
+		STRING,
+		NATIVE,
+		FUNCTION,
+		ARRAY,
+		ISNAN,
+		ISINFINITY,
+		ISNULL
 
 	};
 }
