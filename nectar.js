@@ -395,7 +395,7 @@ function Build(prepare)
   
   if(!env) env = "std";
 
-  if(env != "std")
+  if(env != "std" && env != "test")
   {
     var _external = false;
     try 

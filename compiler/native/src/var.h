@@ -212,7 +212,7 @@ namespace NJS
 		#endif
 				exit(1);
 			}
-			return __NJS_Class_Back_Var_Call_Function((VAR)(args)...);
+			else return (*this->get().f)((VAR)(args)...);
 		}
 		
 		/* END CALL OVERLOAD */
@@ -343,7 +343,7 @@ namespace NJS
 					}
 				}
 
-				if(this->type == NJS::Enum::Type::OBJECT) 
+				if(this->type == NJS::Enum::Type::OBJECT || this->type == NJS::Enum::Type::FUNCTION) 
 				{
 					if(_index.get().s->__NJS_VALUE.compare("toString") == 0)
 					{
@@ -813,7 +813,7 @@ namespace NJS
 			case NJS::Enum::Type::NATIVE:
 				return "[native code]";
 			case NJS::Enum::Type::FUNCTION:
-				return "[Function]";
+				return (std::string)*this->get().f;
 			case NJS::Enum::Type::OBJECT:
 				return "[object Object]";
 			case NJS::Enum::Type::ISINFINITY:

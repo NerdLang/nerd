@@ -49,7 +49,7 @@ ostream &operator<<(ostream &os, const NJS::VAR &_v)
 		os << "NaN";
 		break;
 	case NJS::Enum::Type::FUNCTION:
-		os << "[Function]";
+		os << (std::string)*_v.get().f;
 		break;
 	case NJS::Enum::Type::ISINFINITY:
 		os << "Infinity";
@@ -125,7 +125,7 @@ NJS::VAR __NJS_Object_Stringify(NJS::VAR _var, bool _bracket)
 	else if (_t == NJS::Enum::Type::STRING)
 		return var("\"") + _var + "\"";
 	else if (_t == NJS::Enum::Type::FUNCTION)
-		return var("\"") + "[Function]" + "\"";
+		return var("\"") + (std::string)*_var.get().f + "\"";
 	else if (_t == NJS::Enum::Type::ARRAY)
 	{
 		var _res = "";
