@@ -11,7 +11,7 @@ namespace NJS::Class
 		vector<pair<const char *, NJS::VAR>> __OBJECT;
 		template <class... Args>
 		NJS::VAR operator()(Args... args);
-		explicit NJS::Class::Function::operator std::string() const
+		explicit operator std::string() const
 		{
 			return "function () { " + code + " }";
 		}
