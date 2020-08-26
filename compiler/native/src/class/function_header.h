@@ -13,7 +13,7 @@ namespace NJS::Class
 		NJS::VAR operator()(Args... args);
 		explicit operator std::string() const
 		{
-			return "function () { " + code + " }";
+			return code;
 		}
 	};
 } // namespace NJS::CLASS
