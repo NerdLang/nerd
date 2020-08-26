@@ -19,7 +19,9 @@
  * along with NectarJS.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
- 
+ #define _USE_MATH_DEFINES
+ #include <cmath>
+ #include <string>
  #include <avr/io.h>
  #include <wiring_digital.c>
  #include <Arduino.h>

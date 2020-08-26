@@ -20,9 +20,6 @@
  *
  */
  
-#define _USE_MATH_DEFINES
-#include <cmath>
-#include <string>
 
 using namespace std;
 

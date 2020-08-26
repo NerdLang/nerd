@@ -1,6 +1,6 @@
 {
   "name": "nectarjs",
-  "version": "0.7.8",
+  "version": "0.7.9",
   "description": "Javascript's God Mode. No VM. No Bytecode. No GC. Just native binaries.",
   "main": "nectar",
   "bin": {
