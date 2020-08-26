@@ -253,7 +253,7 @@ namespace NJS
 		VAR & operator[] (VAR _index)
 		{
 			static VAR _retFN = __NJS_Create_Var_Scoped_Anon({ return VAR();});
-			
+			static VAR _retObj;
 			static VAR _retUndefined;
 			
 			if(this->type == NJS::Enum::Type::UNDEFINED)
@@ -342,11 +342,36 @@ namespace NJS
 						return (*_obj)[_i].second;
 					}
 				}
+
+				if(this->type == NJS::Enum::Type::OBJECT) 
+				{
+					if(_index.get().s->__NJS_VALUE.compare("toString") == 0)
+					{
+						_index.get().s->cnt++;
+						__NJS_Object_Set(_index.get().s->__NJS_VALUE.c_str(), __NJS_Create_Var_Scoped_Anon( return __NJS_Object_Stringify(*this);), _obj);
+						return (*this)[_index];
+					}
+					else if(_index.get().s->__NJS_VALUE.compare("toLocaleString") == 0)
+					{
+						_index.get().s->cnt++;
+						__NJS_Object_Set(_index.get().s->__NJS_VALUE.c_str(), __NJS_Create_Var_Scoped_Anon( return __NJS_Object_Stringify(*this);), _obj);
+						return (*this)[_index];
+					}
+					else if(_index.get().s->__NJS_VALUE.compare("valueOf") == 0)
+					{
+						_index.get().s->cnt++;
+						__NJS_Object_Set(_index.get().s->__NJS_VALUE.c_str(), __NJS_Create_Var_Scoped_Anon( return __NJS_Object_Stringify(*this);), _obj);
+						return (*this)[_index];
+					}
+				}
 				
 				_index.get().s->cnt++;
 				__NJS_Object_Set(_index.get().s->__NJS_VALUE.c_str(), VAR(), _obj);
 				return (*this)[_index];
 			}
+			
+			
+			
 			return _retUndefined;
 		}
 		

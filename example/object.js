@@ -19,3 +19,10 @@ console.log("obj.a + obj.b: " + (obj.a + obj.b));
 console.log("obj.subobj.in: " + obj.subobj.in);
 console.log("obj.operation this.a + this.b : " + obj.operation);
 obj.fn("Hello !");
+console.log("obj.toString(): " + obj.toString());
+
+console.log("obj.toString = 'Hello'");
+obj.toString = "Hello";
+console.log("obj.toString: " + obj.toString);
+
+console.log("obj.valueOf(): " + obj.valueOf());

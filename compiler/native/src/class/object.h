@@ -3,6 +3,7 @@ namespace NJS::Class
 	Object::Object()
 	{
 		cnt++;
+
 	}
 
 	void Object::Delete()

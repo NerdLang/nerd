@@ -31,6 +31,7 @@ NJS::VAR __NJS_Typeof(NJS::VAR _var)
 /*** ***/
 NJS::VAR __NJS_Object_Set(const char *_index, NJS::VAR _value, vector<pair<const char *, NJS::VAR>> *_obj)
 {
+	//std::cout << _index << endl;
 	int _j = (*_obj).size();
 	for (int _i = 0; _i < _j; _i++)
 	{
@@ -55,6 +56,7 @@ NJS::VAR __NJS_Object_Set(const char *_index, NJS::VAR _value, vector<pair<const
 
 NJS::VAR __NJS_Object_Set(NJS::VAR _index, NJS::VAR _value, NJS::VAR _array)
 {
+	//cout << "SECOND" << endl;
 	if (_array.type == NJS::Enum::Type::ARRAY && _index.type == NJS::Enum::Type::NUMBER)
 	{
 

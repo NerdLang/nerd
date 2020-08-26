@@ -3,6 +3,8 @@
 * Add void 
 * Add prototype support
 * Update Fast Functions
+* Refactoring
+* Add Object.toString(), .toLocaleString(), .valueOf()
 
 ## VERSION 0.6.X
 * Add Variadic function support
