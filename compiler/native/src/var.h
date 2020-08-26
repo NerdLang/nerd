@@ -348,19 +348,21 @@ namespace NJS
 					if(_index.get().s->__NJS_VALUE.compare("toString") == 0)
 					{
 						_index.get().s->cnt++;
-						__NJS_Object_Set(_index.get().s->__NJS_VALUE.c_str(), __NJS_Create_Var_Scoped_Anon( return __NJS_Object_Stringify(*this);), _obj);
+						if(this->type == NJS::Enum::Type::OBJECT) __NJS_Object_Set(_index.get().s->__NJS_VALUE.c_str(), __NJS_Create_Var_Scoped_Anon( return __NJS_Object_Stringify(*this);), _obj);
+						else __NJS_Object_Set(_index.get().s->__NJS_VALUE.c_str(), __NJS_Create_Var_Scoped_Anon( return (std::string)*this;), _obj);
 						return (*this)[_index];
 					}
 					else if(_index.get().s->__NJS_VALUE.compare("toLocaleString") == 0)
 					{
 						_index.get().s->cnt++;
-						__NJS_Object_Set(_index.get().s->__NJS_VALUE.c_str(), __NJS_Create_Var_Scoped_Anon( return __NJS_Object_Stringify(*this);), _obj);
+						if(this->type == NJS::Enum::Type::OBJECT) __NJS_Object_Set(_index.get().s->__NJS_VALUE.c_str(), __NJS_Create_Var_Scoped_Anon( return __NJS_Object_Stringify(*this);), _obj);
+						else __NJS_Object_Set(_index.get().s->__NJS_VALUE.c_str(), __NJS_Create_Var_Scoped_Anon( return (std::string)*this;), _obj);
 						return (*this)[_index];
 					}
 					else if(_index.get().s->__NJS_VALUE.compare("valueOf") == 0)
 					{
 						_index.get().s->cnt++;
-						__NJS_Object_Set(_index.get().s->__NJS_VALUE.c_str(), __NJS_Create_Var_Scoped_Anon( return __NJS_Object_Stringify(*this);), _obj);
+						__NJS_Object_Set(_index.get().s->__NJS_VALUE.c_str(), __NJS_Create_Var_Scoped_Anon( return *this;), _obj);
 						return (*this)[_index];
 					}
 				}
