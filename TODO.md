@@ -15,6 +15,7 @@
 * add strings functions
 - startWith 
 - endWith
+- ...
 
 * add all Math functions
 
@@ -29,7 +30,3 @@
 * Put back API compilation switch
 
 * Finish ES3
-
-* Add --no-undef flag
-
-* Add try / catch / finally support 

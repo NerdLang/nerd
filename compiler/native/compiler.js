@@ -1,30 +1,25 @@
 /*
  * This file is part of NectarJS
- * Copyright (c) 2017-2020 Adrien THIERRY
- * http://nectarjs.com - https://www.linkedin.com/in/adrien-thierry-fr/
+ * Copyright (c) 2017 - 2020 Adrien THIERRY
+ * http://nectarjs.com - https://seraum.com/
  *
- * sources : https://github.com/nectarjs/nectarjs/
- *
- * this program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
+ * sources : https://github.com/nectarjs/nectarjs
+ * 
+ * NectarJS is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * NectarJS is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- *
- * You can be released from the requirements of the license by purchasing
- * a commercial license. Buying such a license is mandatory as soon as you
- * develop commercial activities involving the NectarJS software without
- * disclosing the source code of your own applications. Visit http://seraum.com/
- * and feel free to contact us.
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with NectarJS.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+ 
 global.babel = require( '@babel/core' );
 babel.generate = require( '@babel/generator' ).default;
 
@@ -33,6 +28,12 @@ babel.generate = require( '@babel/generator' ).default;
 var genRequire = require("./lib/genRequire.js");
 global.genMetaFunction = require("./lib/genMetaFunction.js");
 global.genPackage = require("./lib/genPackage.js");
+global.replaceObjAddr = require("./lib/replaceObjAddr.js");
+
+var createFunction = require("./lib/createFunction.js");
+var createAnon = require("./lib/createAnon.js");
+var createClass = require("./lib/createClass.js");
+var hoistingFunction = require("./lib/hoistingFunction.js");
 
 global.RND = function() { return "__" + Math.random().toString(36).substring(7); };
 
@@ -53,60 +54,16 @@ function loadEnv()
 
 function setRegister(_value)
 {
-	var _reg;
 	try 
 	{
-		_reg = parseInt(_value)
-		console.log("[*] Set register at: " + _reg);
+		COMPILER.REGISTER = parseInt(_value)
+		console.log("[*] Set register at: " + COMPILER.REGISTER);
 	}
 	catch(e)
 	{
 		console.log("[!] Invalid register, integer needed");
 		process.exit(1);
 	}
-	return _reg;
-}
-
-function replaceObjAddr(_code)
-{
-	var FUNCTION = [];
-
-	var _searchReg = / *__NJS_Object_Set *\( *([a-zA-Z0-9_\-" ]*) *, *([a-zA-Z0-9_\-\(\)" ]*) *, *([a-zA-Z0-9_\-" ]*) *\)/g;
-	var _searchFN = / *([a-zA-Z0-9_\-" ]*) * = __NJS_VAR\(__NJS_FUNCTION/g;
-	
-	var _allFN = _code.match(new RegExp(_searchFN));
-	if(_allFN)
-	{
-		for(var i = 0; i < _allFN.length; i++)
-		{
-			var _localSearch = new RegExp(_searchFN);
-			var _fn = _localSearch.exec(_allFN[i]);
-			if(_fn);
-			{
-				FUNCTION.push(_fn[1]);
-			}
-		}
-	}
-
-	var _searchObject = new RegExp(_searchReg);
-	var _match = _code.match(_searchObject);
-	if(_match)
-	{
-		for(var i = 0; i < _match.length; i++)
-		{
-			var _localSearch = new RegExp(_searchReg);
-			var _var = _localSearch.exec(_match[i]);
-			if(_var);
-			{
-				if(_var[1] != "\"exports\"" && FUNCTION.indexOf(_var[2]) > -1)
-				{	
-					var _getObject = new RegExp("__NJS_Object_Get\\\(" + _var[1]+ ", " + _var[3] + "\\\)", "gm");
-					_code = _code.replace(_getObject, _var[2]);
-				}
-			}
-		}
-	}
-	return _code;
 }
 
 var FAST_CALL = ["BinaryExpression", "NumericLiteral"];
@@ -173,6 +130,7 @@ function Compiler()
 	this.OUT = "";
 	this.TMP_FOLDER = "";
 	this.OPTION = "";
+	this.REGISTER = 100000;
 	
 	this.DECL = [];
 	
@@ -268,328 +226,6 @@ function Compiler()
 
 		COMPILER.INIT += COMPILER.REQUIRE;
 		
-		function hoistingFunction(_code)
-		{	
-			var _hoisting = "";
-			var _searchFN = new RegExp(/function +(.[a-zA-Z0-9_\-]*) *\((.*)\)/);
-			var _index = _code.search(_searchFN);
-			while(_index > -1)
-			{
-				var _count = 0;
-				var _start = -1;
-				var _end = -1;
-				let _match = _searchFN.exec(_code);
-
-				for(var i = _index; i < _code.length; i++)
-				{
-						if(_code[i] == "{")
-						{
-								if(_start == -1) _start = i;
-								_count++;
-						}
-						else if(_code[i] == "}")
-						{
-							_end = i;
-							_count--;
-							if(_count == 0)
-							{
-								_hoisting += _code.substring(_index, _end + 1) + "\n";
-								_code = _code.slice(0, _index) + _code.slice(_end + 1);
-								break;
-							}
-						}
-				}
-				_index = _code.search(_searchFN);
-			}
-			
-			return _hoisting + _code;
-		}
-		
-		function createFunction(_code, _scope)
-		{	
-			var _matchThis = new RegExp(/(| |{|,)__NJS_THIS([\.(";)]|$)/);
-			var _return = ";return __NJS_Create_Undefined();}";
-			var _returnThis = ";return __NJS_THIS;}";
-			var _searchFN = new RegExp(/function +(.[a-zA-Z0-9_\-]*) *\((.*)\)/);
-			var _index = _code.search(_searchFN);
-			while(_index > -1)
-			{
-				var _genFN = "__NJS_FN_" + RND();
-				var _genVAR = "__NJS_VAR_" + RND();
-
-				var _var = "";
-				var _count = 0;
-				var _start = -1;
-				var _end = -1;
-			
-				let _match = _searchFN.exec(_code);
-				_match[2] = _match[2].split(",");
-				var _getVar = "";
-				var _parameters = "";
-				var _variadic = false;
-
-				var _FAST = false;
-
-				if(COMPILER.INFO.SCOPE[_match[1]] && COMPILER.INFO.SCOPE[_match[1]].fast == true && COMPILER.INFO.SCOPE[_match[1]].param.length == 1 && COMPILER.INFO.SCOPE[_match[1]].param[0] == _match[2].length)
-				{
-					_FAST = true;
-					for(var i = 0; i < _match[2].length; i++)
-					{
-						if(_match[2][i].length > 0)
-						{
-							if(i != 0) _var += ",";
-							_var += "int " + _match[2][i];
-						}
-					}
-					_parameters = _var;
-					var _replaceCall = new RegExp(`__NJS_Call_Function\\\(${_match[1]}(?![a-zA-Z_])`, "g");
-					_code = _code.replace(_replaceCall, `__NJS_Call_Fast_Function(${_match[1]}`);
-				}
-				else
-				{
-					_variadic = true;
-					_parameters = "vector<var> __NJS_VARARGS";
-					for(var i = 0; i < _match[2].length; i++)
-					{
-						if(_match[2][i].length > 0)
-						{
-							_getVar += `var ${_match[2][i]}; if(__NJS_VARARGS.size() > ${i}) ${_match[2][i]} = __NJS_VARARGS[${i}];`;
-						}
-					}
-				}
-				/* TODO: more check to switch from call to fixed_call
-				else if(COMPILER.INFO.CALL[_match[1]] && (COMPILER.INFO.CALL[_match[1]].length > 1 || COMPILER.INFO.CALL[_match[1]].length != _match[2].length))
-				{
-					_variadic = true;
-					_parameters = "vector<var> __NJS_VARARGS";
-					for(var i = 0; i < _match[2].length; i++)
-					{
-						if(_match[2][i].length > 0)
-						{
-							_getVar += `var ${_match[2][i]}; if(__NJS_VARARGS.size() > ${i}) ${_match[2][i]} = __NJS_VARARGS[${i}];`;
-						}
-					}
-				}
-				else 
-				{
-					for(var i = 0; i < _match[2].length; i++)
-					{
-						if(_match[2][i].length > 0)
-						{
-							if(i != 0) _var += ",";
-							_var += "__NJS_VAR " + _match[2][i];
-						}
-					}
-					_parameters = _var;
-					var _replaceCall = new RegExp(`__NJS_Call_Function\\\(${_match[1]}(?![a-zA-Z_])`, "g");
-					_code = _code.replace(_replaceCall, `__NJS_Call_Fixed_Function(${_match[1]}`);
-				}
-				*/
-
-
-				for(var i = _index; i < _code.length; i++)
-				{
-						if(_code[i] == "{")
-						{
-								if(_start == -1) _start = i;
-								_count++;
-						}
-						else if(_code[i] == "}")
-						{
-							
-							_end = i;
-							_count--;
-							if(_count == 0)
-							{
-
-								if(!_FAST)
-								{
-									var _catch = "";
-									if(_scope) _catch = "&";
-									else if(_code.indexOf("'SCOPED_FUNCTION';") > -1) _catch = "=";
-									
-									var _fn = "{" + _getVar + _code.substring(_start + 1, _end);
-									var _fnThis = "{" + _getVar + " var __NJS_THIS = __NJS_Create_Object();" + _code.substring(_start + 1, _end);
-
-									if(_code.search(_matchThis) > -1) _fn = _fnThis;
-
-									_handler.DECL.push("var " + _match[1] +";");
-
-									var _formated = `__NJS_DECL_FUNCTION<__NJS_VAR (${_parameters})>* ${_genFN} = new __NJS_DECL_FUNCTION<__NJS_VAR (${_parameters})>([${_catch}]( ${_parameters} ) -> __NJS_VAR ${_fn} ${_return} );`;
-									_formated += _match[1] + "=__NJS_VAR(__NJS_FUNCTION, " + _genFN + ");";
-
-									if(_match[1].indexOf("__MODULE") != 0)
-									{
-										var _genNew = "__NEW_" + _genFN;
-										var _addNew = `__NJS_DECL_FUNCTION<__NJS_VAR (${_parameters})>* ${_genNew} = new __NJS_DECL_FUNCTION<__NJS_VAR (${_parameters})>([${_catch}]( ${_parameters} ) -> __NJS_VAR ${_fnThis}; __NJS_Object_Construct(__NJS_THIS, __NJS_Object_Clone(__NJS_Object_Get("prototype", ${_match[1]}))); ${_returnThis} );`;
-										_addNew += "var __NEW_" + _match[1] + "=__NJS_VAR(__NJS_FUNCTION, " + _genNew + ");";
-
-										_formated += _addNew;
-									}
-									
-									_code = [_code.slice(0, _index), _formated, _code.slice(_end + 1)].join('');
-								}
-								else 
-								{
-									// FAST CALL HERE
-									var _fn = _code.substring(_start, _end);
-									_handler.DECL.push(`int ${_match[1]}(${_parameters})${_fn}; return 0;}`);
-									_code = [_code.slice(0, _index), _code.slice(_end + 1)].join('');
-								}
-
-								break;
-							}
-						}
-				}
-				_index = _code.search(_searchFN);
-			}
-			_code = replaceObjAddr(_code);
-			return _code;
-		}
-
-		function createClass(_code, _scope)
-		{	
-			var _matchThis = new RegExp(/(| |{|,)__NJS_THIS([\.(";)]|$)/);
-			var _return = ";return __NJS_Create_Undefined();}";
-			var _returnThis = ";return __NJS_THIS;}";
-			var _searchFN = new RegExp(/function +__NJS_CLASS_(.[a-zA-Z0-9_\-]*) *\((.*)\)/);
-			var _index = _code.search(_searchFN);
-
-			while(_index > -1)
-			{
-				var _genFN = "__NJS_FN_" + RND();
-
-				var _var = "";
-				var _count = 0;
-				var _start = -1;
-				var _end = -1;
-			
-				let _match = _searchFN.exec(_code);
-
-				_match[2] = _match[2].split(",");
-				var _getVar = "";
-				for(var i = 0; i < _match[2].length; i++)
-				{
-					if(_match[2][i].length > 0)
-					{
-						_getVar += `var ${_match[2][i]}; if(__NJS_VARARGS.size() > ${i}) ${_match[2][i]} = __NJS_VARARGS[${i}];`;
-					}
-				}
-				for(var i = _index; i < _code.length; i++)
-				{
-						if(_code[i] == "{")
-						{
-								if(_start == -1) _start = i;
-								_count++;
-						}
-						else if(_code[i] == "}")
-						{
-							var _catch = "";
-							if(_scope) _catch = "&";
-							else if(_code.indexOf("'SCOPED_FUNCTION';") > -1) _catch = "=";
-
-							_end = i;
-							_count--;
-							if(_count == 0)
-							{
-								var _fn = "{" + _getVar + _code.substring(_start + 1, _end);
-
-								_handler.DECL.push("var " + _match[1] +";");
-
-								var _formated = "__NJS_DECL_FUNCTION<__NJS_VAR (vector<var>)>* " + _genFN +" = new __NJS_DECL_FUNCTION<__NJS_VAR (vector<var>)>([" + _catch + "]( vector<var> __NJS_VARARGS) -> __NJS_VAR" + _fn + _return + ");";
-								_formated += _match[1] + "=__NJS_VAR(__NJS_FUNCTION, " + _genFN + ");";
-
-								if(_match[1].indexOf("__MODULE") != 0)
-								{
-									
-									var _genNew = "__NEW_" + _genFN;
-									var _addNew = "__NJS_DECL_FUNCTION<__NJS_VAR (vector<var>)>* " + _genNew +" = new __NJS_DECL_FUNCTION<__NJS_VAR (vector<var>)>([" + _catch + "](vector<var> __NJS_VARARGS) -> __NJS_VAR" + _fn + _returnThis + ");";
-									_addNew += "var __NEW_" + _match[1] + "=__NJS_VAR(__NJS_FUNCTION, " + _genNew + ");";
-
-									_formated += _addNew;
-								}
-								
-								_code = [_code.slice(0, _index), _formated, _code.slice(_end + 1)].join('');
-								break;
-							}
-						}
-				}
-				_index = _code.search(_searchFN);
-			}
-			_code = replaceObjAddr(_code);
-			return _code;
-		}
-
-		function createAnon(_code, _scope)
-		{	
-			var _matchThis = new RegExp(/(| |{|,)__NJS_THIS([\.(";)]|$)/);
-			var _return = "return __NJS_Create_Undefined();}";
-			var _searchAnonFN = new RegExp(/(var)* *([a-zA-Z0-9_]*) *= *function +\(([a-zA-Z0-9_\-, ]*)\)/);
-			var _index = _code.search(_searchAnonFN);
-
-			while(_index > -1)
-			{
-				var _var = "";
-				var _count = 0;
-				var _start = -1;
-				var _end = -1;
-				var _genFN = "__NJS_FN_" + RND();
-				var _genVAR = "__NJS_VAR_" + RND();
-				
-				var _match = _searchAnonFN.exec(_code);
-				_match[3] = _match[3].split(",");
-				var _getVar = "";
-				for(var i = 0; i < _match[3].length; i++)
-				{
-					if(_match[3][i].length > 0)
-					{
-						_getVar += `var ${_match[3][i]}; if(__NJS_VARARGS.size() > ${i}) ${_match[3][i]} = __NJS_VARARGS[${i}];`;
-					}
-				}
-
-				for(var i = _index; i < _code.length; i++)
-				{
-						if(_code[i] == "{")
-						{
-								if(_start == -1) _start = i;
-								_count++;
-						}
-						else if(_code[i] == "}")
-						{
-							var _catch = "";
-							if(_scope) _catch = "=";
-							else if(_code.indexOf("'SCOPED_FUNCTION';") > -1) _catch = "=";
-							
-							_end = i;
-							_count--;
-							if(_count == 0)
-							{
-								
-								var _fn = "{" + _getVar + _code.substring(_start + 1, _end);
-								var _fnThis = "{" + _getVar + " var __NJS_THIS = __NJS_Create_Object();" + _code.substring(_start + 1, _end);
-
-								if(_code.indexOf("'__NJS_CLASS_ANON__';"))
-								{
-									_code.replace("'__NJS_CLASS_ANON__';", "");
-								}
-								else if(_code.search(_matchThis) > -1) _fn = _fnThis;
-								
-								var _formated = "";
-
-								if(_match[1]) COMPILER.DECL.push(`var ${_match[2]};`);
-								if(_match[2]) _formated += _match[2] + " = ";
-								_formated += "__NJS_VAR(__NJS_FUNCTION, new function<__NJS_VAR (vector<var>)> ([" + _catch + "](vector<var> __NJS_VARARGS) -> __NJS_VAR" + _fn + os.EOL + _return + "));";
-								_code = [_code.slice(0, _index), _formated, _code.slice(_end + 1)].join('');		
-								break;
-							}
-						}
-				}
-				_index = _code.search(_searchAnonFN);
-			}
-			_code = replaceObjAddr(_code);
-			return _code;
-		}
-
 		_handler.DECL = _handler.DECL.filter(function(v,i)
 		{
 			return _handler.DECL.indexOf(v) === i;
@@ -605,28 +241,26 @@ function Compiler()
 	  
 	this.Prepare = function(_folder)
 	{
-		var _reg = 1000000;
+		COMPILER.REGISTER = 1000000;
 		if(this.ENV.name == "arduino")
 		{
-			_reg = 250;
+			COMPILER.REGISTER = 250;
 			if(!this.TARGET)
 			{
 				this.TARGET = "nano"
 			}
-			if(this.TARGET.substring(0, 4) == "nano") _reg = 50;
+			if(this.TARGET.substring(0, 4) == "nano") COMPILER.REGISTER = 50;
 		}
 		else if(this.ENV.name == "stm32")
 		{
-			_reg = 1000;
+			COMPILER.REGISTER = 1000;
 		}
 
 
 		if(CLI.cli["--register"]) setRegister(CLI.cli["--register"].argument);
 		if(CLI.cli["-r"]) setRegister(CLI.cli["-r"].argument);
 
-		var _src = fs.readFileSync(__dirname + "/src/njs.h").toString();
-		_src = _src.replace(/{{REGISTER}}/g, _reg);
-		fs.writeFileSync(path.join(_folder, "njs.h"), _src);
+		copyDirSync(path.join(__dirname, "src"), _folder, true);
 	};
 
 	this.Out = function(_name)

@@ -1,0 +1,8 @@
+#include "class/undefined.h"
+#include "class/object.h"
+#include "class/boolean.h"
+#include "class/number.h"
+#include "class/string.h"
+#include "class/array.h"
+#include "class/function.h"
+#include "class/native.h"

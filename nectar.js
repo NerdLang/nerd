@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-// TODO : add babel visitors for missing parts
 
 /*
  * This file is part of NectarJS
@@ -8,18 +7,18 @@
  *
  * sources : https://github.com/nectarjs/nectarjs
  * 
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
+ * NectarJS is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  * 
- * This program is distributed in the hope that it will be useful,
+ * NectarJS is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
+ * GNU General Public License for more details.
  * 
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License
+ * along with NectarJS.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
 
@@ -396,7 +395,7 @@ function Build(prepare)
   
   if(!env) env = "std";
 
-  if(env != "std")
+  if(env != "std" && env != "test")
   {
     var _external = false;
     try 
@@ -417,10 +416,20 @@ function Build(prepare)
 	var target;
   if(CLI.cli["--target"] && CLI.cli["--target"].argument) target = CLI.cli["--target"].argument;
 	COMPILER.TARGET = target;
-	
+
 	var spec;
   if(CLI.cli["--spec"] && CLI.cli["--spec"].argument) spec = CLI.cli["--spec"].argument;
 	COMPILER.SPEC = spec;
+
+	var _tmp;
+	if(CLI.cli["--tmp"] && CLI.cli["--tmp"].argument)
+		_tmp = path.resolve(CLI.cli["--tmp"].argument);
+	else {
+		var _current = process.cwd();
+		var _npath = path.join(_current, ".nectar");
+		_tmp = path.join(_npath, Math.random().toString(36).substr(2, 5));
+	}
+	COMPILER.TMP_FOLDER = _tmp;
 
   if(!CLI.stack || CLI.stack.length < 1)
   {
@@ -454,18 +463,16 @@ function Build(prepare)
 		var _current = process.cwd();
 		var _npath = path.join(_current, ".nectar");
 		try { fs.mkdirSync(_npath); } catch(e){};
-    var _tmp = path.join(_npath, Math.random().toString(36).substr(2, 5));
-    COMPILER.TMP_FOLDER = _tmp;
-    if(COMPILER.ENV.init) COMPILER.ENV.init(_tmp);
+		if(COMPILER.ENV.init) COMPILER.ENV.init(COMPILER.TMP_FOLDER);
 		else try { fs.mkdirSync(_tmp); } catch(e){};
-		
-    /*** PREPARE SRC ***/
-    var _libOut = _tmp;
-    if(COMPILER.ENV.prepare)
-    {
-      var _tmpLibOut = COMPILER.ENV.prepare(_tmp);
-      if(_tmpLibOut) _libOut = _tmpLibOut;
-    }
+
+		/*** PREPARE SRC ***/
+		var _libOut = COMPILER.TMP_FOLDER;
+		if(COMPILER.ENV.prepare)
+		{
+			var _tmpLibOut = COMPILER.ENV.prepare(COMPILER.TMP_FOLDER);
+			if(_tmpLibOut) _libOut = _tmpLibOut;
+		}
 
 		COMPILER.Prepare(_libOut);
 
@@ -558,6 +565,7 @@ function Build(prepare)
 		
 		if(!CLI.cli["--conserve"])
 		{
+			var _current = process.cwd();
 			process.chdir(_current);
 			rmdir(_tmp, function() {});
 		}
@@ -647,7 +655,7 @@ function Check(file)
 function Help()
 {
   showVersion();
-  console.log("\n[*] Compile :\nnectar [--env std|node|arduino|wasm|android] [--target the-target] [--run] [--reg 1000] [--preset speed|size] [-o output] [--tips] [--flash device] source.js|project.json\n");
+  console.log("\n[*] Compile :\nnectar [--env std|node|arduino|wasm|android] [--target the-target] [--run] [--generate] [--conserve] [--reg 1000] [--preset speed|size] [-o output] [--tips] [--flash device] source.js|project.json\n");
   console.log("[*] Show project :\nnectar [--project] [project.json]\n");
   console.log("[*] Clean project :\nnectar [--clean] [--purge] [path_to_project.json]\n");
   console.log("[*] Copy example files :\nnectar --example\n");

@@ -1,6 +1,6 @@
 {
   "name": "nectarjs",
-  "version": "0.6.115",
+  "version": "0.7.10",
   "description": "Javascript's God Mode. No VM. No Bytecode. No GC. Just native binaries.",
   "main": "nectar",
   "bin": {
@@ -55,10 +55,10 @@
     "tsc"
   ],
   "author": "Adrien THIERRY <adrien.thierryfr@gmail.com> (https://seraum.com)",
-  "license": "AGPL",
+  "license": "GPL-3.0-or-later",
   "licenses": [
     {
-      "type": "AGPL",
+      "type": "GPL",
       "url": "https://github.com/nectarjs/nectarjs/blob/master/LICENSE"
     }
   ],
@@ -73,7 +73,7 @@
     "babel-plugin-minify-guarded-expressions": "^0.4.4",
     "babel-plugin-remove-unused-vars": "^2.2.0",
     "eslint": "^7.6.0",
-    "nectarjs_external": "^0.6.2",
+    "nectarjs_external": "^0.6.3",
     "strip-comments": "^2.0.1",
     "typescript": "^3.9.7"
   }

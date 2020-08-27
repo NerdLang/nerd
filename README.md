@@ -32,9 +32,9 @@ Some benchmarks with the file example/fibo.js and differents fibos arguments:
 
 |          | NodeJS v12.8.1 | QuickJS 2020-07-05 | NectarJS v0.6.104     |
 |----------|----------------|--------------------|-----------------------|
-| fibo(30) | 0.15s / 7.0Mb  | 0.20s / 1.1Mb      | **0.07s / 1.1Mb**     |
-| fibo(40) | 1.80s / 7.0Mb  | 21.06s / 1.1Mb     | **0.50s / 1.0Mb**     |
-| fibo(45) | 19.44s / 7.0Mb | 238.85s / 1.1Mb    | **4.82s / 1.0Mb**     |
+| fibo(30) | 0.15s / 7.0Mb  | 0.20s / 1.1Mb      | **0.07s / 1.0Mb**     |
+| fibo(40) | 1.80s / 7.0Mb  | 21.06s / 1.1Mb     | **0.07s / 1.0Mb**     |
+| fibo(45) | 19.44s / 7.0Mb | 238.85s / 1.1Mb    | **0.07s / 1.0Mb**     |
 
 # Main objectives
 * Supporting EcmaScript 3 standard (then 5, 6 ...)
@@ -179,6 +179,22 @@ You can also target a plateform for running simulation :
 NectarJS will then compile your app and launch it with the simulator.
 
 To test your configuration, you can compile example/ios.js app.
+
+# Arduino compilation
+
+To compile an Arduino firmware, you need a recent avr-gcc compiler that supports c++17 (8 or 10 for example).
+
+You can download it here: https://blog.zakkemble.net/avr-gcc-builds/
+
+Once done, compile your code by selecting the arduino env, and choosing a target: 
+
+`nectar example/arduino-led.js --env arduino --target nano`
+
+You can select a preset (speed or size) with:
+
+`--preset speed` or `--preset size`
+
+You can then flash the new firmware to a connected board with `--flash`
 
 # STM32 compilation
 

@@ -1,22 +1,22 @@
 /*
  * This file is part of NectarJS
- * Copyright (c) 2020 Adrien THIERRY
- * http://nectarjs.com - https://nectrium.com
+ * Copyright (c) 2017 - 2020 Adrien THIERRY
+ * http://nectarjs.com - https://seraum.com/
  *
  * sources : https://github.com/nectarjs/nectarjs
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
+ * 
+ * NectarJS is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  * 
- * This program is distributed in the hope that it will be useful,
+ * NectarJS is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
+ * GNU General Public License for more details.
  * 
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License
+ * along with NectarJS.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
 
@@ -63,7 +63,7 @@ var ARDUINO =
 		  console.log("[!] No target selected, switching to 'uno'");
 		  target = "uno";
 	  }
-	  var _cli = `${compiler} ${OPTIONS[target].preset} -DARDUINO_ARCH_AVR  -w -fpermissive -Os -fno-exceptions -fno-rtti -fno-stack-protector -fomit-frame-pointer -ffunction-sections -fdata-sections -Wl,--gc-sections \
+	  var _cli = `${compiler} -D__NJS_REGISTER_SIZE=${COMPILER.REGISTER} ${OPTIONS[target].preset} -DARDUINO_ARCH_AVR  -w -fpermissive -Os -fno-exceptions -fno-rtti -fno-stack-protector -fomit-frame-pointer -ffunction-sections -fdata-sections -Wl,--gc-sections \
 	  -I ${extern}/avr -I ${extern}/arduino/avr/variants/${OPTIONS[target].variant}/ -I ${extern}/arduino/avr/cores/arduino  -I ${extern}/avr/include -I ${extern}/stlarduino  ${extern}/arduino/avr/cores/arduino/abi.cpp -fno-threadsafe-statics -lm ${COMPILER.LIBS} -o ${out} ${_in}`;
 	  
  	  if(!OPT.elf) _cli += `&& avr-objcopy -O ihex -R .eeprom ${out}`;

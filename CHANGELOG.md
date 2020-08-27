@@ -1,3 +1,11 @@
+## VERSION 0.7.X
+* Use c++17
+* Add void 
+* Add prototype support
+* Update Fast Functions
+* Refactoring
+* Add Object.toString(), .toLocaleString(), .valueOf()
+
 ## VERSION 0.6.X
 * Add Variadic function support
 * Add WASM support

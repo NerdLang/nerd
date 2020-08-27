@@ -1,5 +1,25 @@
-#pragma once
-
+/*
+ * This file is part of NectarJS
+ * Copyright (c) 2017 - 2020 Adrien THIERRY
+ * http://nectarjs.com - https://seraum.com/
+ *
+ * sources : https://github.com/nectarjs/nectarjs
+ * 
+ * NectarJS is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * NectarJS is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with NectarJS.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+ 
 #include <iostream>
 #include <string>
 #include <cstring>
@@ -26,28 +46,26 @@ using namespace nonstd;
 #endif
 
 #include "enum.h"
+
+using namespace std;
+using namespace NJS;
+
+#include "macro.h"
+
+namespace NJS
+{
+	struct VAR;
+} // namespace NJS
+
+
+#include "class_header.h"
+#include "val.h"
+#include "memory.h"
+#include "functions.h"
+#include "var.h"
+
 #include "values.h"
-#include "classes.h"
 
-#define __NJS_VAR NJS::VAR
-#define var __NJS_VAR
-#define let __NJS_VAR
-#define __NJS_Create_Ptr_Scoped_Anon(__CONTENT__) new function<__NJS_VAR (vector<VAR>)>([&](vector<VAR> __NJS_VARARGS){ __CONTENT__ })
-#define __NJS_Create_Ptr_Unscoped_Anon(__CONTENT__) new function<__NJS_VAR (vector<VAR>)>([](vector<VAR> __NJS_VARARGS){ __CONTENT__ })
-#define __NJS_Create_Var_Scoped_Anon(__CONTENT__) __NJS_VAR(NJS::Enum::Type::FUNCTION, __NJS_Create_Ptr_Scoped_Anon(__CONTENT__))
-#define __NJS_Create_Var_Unscoped_Anon(__CONTENT__) __NJS_VAR(NJS::Enum::Type::FUNCTION, __NJS_Create_Ptr_Unscoped_Anon(__CONTENT__))
-
-union __NJS_VAL {
-	int i;
-	double d;
-	bool b;
-	NJS::Class::String *s;
-	NJS::Class::Array *a;
-	NJS::Class::Object *o;
-	NJS::Class::Function *f;
-	NJS::Class::Native *n;
-};
-
-/*** REGISTER ***/
-
-/*** END REGISTER ***/
+#include "objmgmt.h"
+#include "class_def.h"
+#include "operator.h"
