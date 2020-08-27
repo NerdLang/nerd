@@ -17,8 +17,6 @@
 - endWith
 - ...
 
-* add all Math functions
-
 * Add helpers flags to create modules
 
 * Add async support
@@ -30,3 +28,5 @@
 * Put back API compilation switch
 
 * Finish ES3
+
+* Add .call and .bind to functions
