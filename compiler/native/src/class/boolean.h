@@ -1,25 +1,93 @@
+#include "boolean_header.h"
+
 namespace NJS::Class
 {
-	Boolean::Boolean()
+	// Constructors
+	Boolean::Boolean() { ++counter; }
+	Boolean::Boolean(bool val)
 	{
-		Object();
-		__NJS_VALUE = false;
+		Boolean();
+		value = val;
 	}
-	Boolean::Boolean(bool b)
+	// Methods
+	Boolean::~Boolean()
 	{
-		Object();
-		__NJS_VALUE = b;
+		object.~vector();
 	}
-
-	Boolean Boolean::operator=(const Boolean &_v)
+	void Boolean::Delete()
 	{
-		__NJS_VALUE = _v.__NJS_VALUE;
-		((Boolean)_v).Delete();
-		return *this;
+		if (--counter == 0)
+		{
+			delete this;
+		}
 	}
-	Boolean Boolean::operator=(const bool &_v)
+	// Main operators
+	NJS::VAR const &Boolean::operator[](NJS::VAR key) const
 	{
-		__NJS_VALUE = _v;
-		return *this;
+		auto &obj = this->object;
+		auto index = (std::string)key;
+		for (auto pair : obj)
+		{
+			if (index.compare(pair.first) == 0)
+			{
+				return pair.second;
+			}
+		}
+		return NJS::VAR();
 	}
+	NJS::VAR &Boolean::operator[](NJS::VAR key)
+	{
+		auto &obj = this->object;
+		auto index = (std::string)key;
+		for (auto pair : obj)
+		{
+			if (index.compare(pair.first) == 0)
+			{
+				return pair.second;
+			}
+		}
+		auto value = NJS::VAR();
+		obj.push_back(std::pair<const char *, NJS::VAR>(index.c_str(), value));
+		return value;
+	}
+	template <class... Args>
+	NJS::VAR Boolean::operator()(Args... args) const { throw InvalidTypeException(); }
+	// Comparation operators
+	Boolean Boolean::operator!() const { return !value; }
+	bool Boolean::operator==(const Boolean &_v1) const { return value == _v1.value; }
+	// === emulated with __NJS_EQUAL_VALUE_AND_TYPE
+	// !== emulated with __NJS_NOT_EQUAL_VALUE_AND_TYPE
+	bool Boolean::operator!=(const Boolean &_v1) const { return value != _v1.value; }
+	bool Boolean::operator<(const Boolean &_v1) const { return value < _v1.value; }
+	bool Boolean::operator<=(const Boolean &_v1) const { return value <= _v1.value; }
+	bool Boolean::operator>(const Boolean &_v1) const { return value > _v1.value; }
+	bool Boolean::operator>=(const Boolean &_v1) const { return value >= _v1.value; }
+	// Numeric operators
+	Boolean Boolean::operator+() const { throw InvalidTypeException(); }
+	Boolean Boolean::operator-() const { throw InvalidTypeException(); }
+	Boolean Boolean::operator++(const int _v1) { throw InvalidTypeException(); }
+	Boolean Boolean::operator--(const int _v1) { throw InvalidTypeException(); }
+	Boolean Boolean::operator+(const Boolean &_v1) const { throw InvalidTypeException(); }
+	Boolean Boolean::operator+=(const Boolean &_v1) { throw InvalidTypeException(); }
+	Boolean Boolean::operator-(const Boolean &_v1) const { throw InvalidTypeException(); }
+	Boolean Boolean::operator-=(const Boolean &_v1) { throw InvalidTypeException(); }
+	Boolean Boolean::operator*(const Boolean &_v1) const { throw InvalidTypeException(); }
+	Boolean Boolean::operator*=(const Boolean &_v1) { throw InvalidTypeException(); }
+	// TODO: "**" and "**=" operators
+	Boolean Boolean::operator/(const Boolean &_v1) const { throw InvalidTypeException(); }
+	Boolean Boolean::operator/=(const Boolean &_v1) { throw InvalidTypeException(); }
+	Boolean Boolean::operator%(const Boolean &_v1) const { throw InvalidTypeException(); }
+	Boolean Boolean::operator%=(const Boolean &_v1) { throw InvalidTypeException(); }
+	Boolean Boolean::operator&(const Boolean &_v1) const { throw InvalidTypeException(); }
+	Boolean Boolean::operator|(const Boolean &_v1) const { throw InvalidTypeException(); }
+	Boolean Boolean::operator^(const Boolean &_v1) const { throw InvalidTypeException(); }
+	Boolean Boolean::operator~() const { throw InvalidTypeException(); }
+	Boolean Boolean::operator>>(const Boolean &_v1) const { throw InvalidTypeException(); }
+	Boolean Boolean::operator<<(const Boolean &_v1) const { throw InvalidTypeException(); }
+	Boolean Boolean::operator&=(const Boolean &_v1) { throw InvalidTypeException(); }
+	Boolean Boolean::operator|=(const Boolean &_v1) { throw InvalidTypeException(); }
+	Boolean Boolean::operator^=(const Boolean &_v1) { throw InvalidTypeException(); }
+	Boolean Boolean::operator>>=(const Boolean &_v1) { throw InvalidTypeException(); }
+	Boolean Boolean::operator<<=(const Boolean &_v1) { throw InvalidTypeException(); }
+	// TODO: ">>>" and ">>>=" operators
 } // namespace NJS::Class

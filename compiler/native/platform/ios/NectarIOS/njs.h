@@ -43,7 +43,7 @@ enum NJS::Enum::Type
 };
 
 /*** HELPERS ***/
-#define __NJS_GET_STRING(_var) _var.get().s->__NJS_VALUE.c_str()
+#define __NJS_GET_STRING(_var) _var.get().s->value.c_str()
 #define var NJS::VAR
 #define let NJS::VAR
 #define __NJS_Create_Boolean(_value) NJS::VAR(NJS::Enum::Type::BOOLEAN, _value)
@@ -71,7 +71,7 @@ class NJS::Class::Object
   int cnt = 0;
   void Delete();
 	NJS::Class::Object();
-	vector<pair<char*, NJS::VAR>> __OBJECT;
+	vector<pair<char*, NJS::VAR>> object;
 
 };
 
@@ -81,8 +81,8 @@ class NJS::Class::String
 	int cnt = 0;
 	void Delete();
     NJS::Class::String(char* _str);
-    string __NJS_VALUE;
-	vector<pair<char*, NJS::VAR>> __OBJECT;
+    string value;
+	vector<pair<char*, NJS::VAR>> object;
 };
 
 
@@ -92,8 +92,8 @@ class NJS::Class::Array
 	int cnt = 0;
 	void Delete();
     NJS::Class::Array();
-    vector<NJS::VAR> __NJS_VALUE = vector<NJS::VAR>();
-	vector<pair<char*, NJS::VAR>> __OBJECT;
+    vector<NJS::VAR> value = vector<NJS::VAR>();
+	vector<pair<char*, NJS::VAR>> object;
 };
 
 class NJS::Class::Function
@@ -102,8 +102,8 @@ class NJS::Class::Function
 	int cnt = 0;
 	void Delete();
   	NJS::Class::Function(void* _f);
-	void* __NJS_VALUE;
-	vector<pair<char*, NJS::VAR>> __OBJECT;
+	void* value;
+	vector<pair<char*, NJS::VAR>> object;
 };
 
 class NJS::Class::Native
@@ -112,8 +112,8 @@ class NJS::Class::Native
 	int cnt = 0;
 	void Delete();
   	NJS::Class::Native(void* _n);
-	void* __NJS_VALUE;
-	vector<pair<char*, NJS::VAR>> __OBJECT;
+	void* value;
+	vector<pair<char*, NJS::VAR>> object;
 };
 
 union NJS::VAL
@@ -272,7 +272,7 @@ struct NJS::VAR
 			else if(_v.type == NJS::Enum::Type::STRING)
 			{
 				
-				REGISTER[_ptr].s = new NJS::Class::String(strdup(REGISTER[_v._ptr].s->__NJS_VALUE.c_str()));
+				REGISTER[_ptr].s = new NJS::Class::String(strdup(REGISTER[_v._ptr].s->value.c_str()));
 
 			}
 			else if(_v.type == NJS::Enum::Type::FUNCTION)
@@ -407,7 +407,7 @@ struct NJS::VAR
 			}
 			else if(_v.type == NJS::Enum::Type::STRING)
 			{
-				REGISTER[_ptr].s = new NJS::Class::String(strdup(REGISTER[_v._ptr].s->__NJS_VALUE.c_str()));
+				REGISTER[_ptr].s = new NJS::Class::String(strdup(REGISTER[_v._ptr].s->value.c_str()));
 			}
 			else if(_v.type == NJS::Enum::Type::FUNCTION)
 			{
@@ -450,31 +450,31 @@ struct NJS::VAR
 			}
 			else if(type == NJS::Enum::Type::NUMBER && _v1.type == NJS::Enum::Type::STRING)
 			{
-				return __NJS_Create_String(__NJS_Concat_Str_To_Int(get().i, (char*)_v1.get().s->__NJS_VALUE.c_str()));
+				return __NJS_Create_String(__NJS_Concat_Str_To_Int(get().i, (char*)_v1.get().s->value.c_str()));
 			}
 			else if(type == NJS::Enum::Type::DOUBLE && _v1.type == NJS::Enum::Type::STRING)
 			{
-				return __NJS_Create_String(__NJS_Concat_Str_To_Int(get().d, (char*)_v1.get().s->__NJS_VALUE.c_str()));
+				return __NJS_Create_String(__NJS_Concat_Str_To_Int(get().d, (char*)_v1.get().s->value.c_str()));
 			}
 			else if(type == NJS::Enum::Type::STRING && _v1.type == NJS::Enum::Type::NUMBER)
 			{
-				return __NJS_Create_String(__NJS_Concat_Int_To_Str((char*)get().s->__NJS_VALUE.c_str(), _v1.get().i));
+				return __NJS_Create_String(__NJS_Concat_Int_To_Str((char*)get().s->value.c_str(), _v1.get().i));
 			}
 			else if(type == NJS::Enum::Type::STRING && _v1.type == NJS::Enum::Type::DOUBLE)
 			{
-				return __NJS_Create_String(__NJS_Concat_Int_To_Str((char*)get().s->__NJS_VALUE.c_str(), _v1.get().d));
+				return __NJS_Create_String(__NJS_Concat_Int_To_Str((char*)get().s->value.c_str(), _v1.get().d));
 			}
 			else if(type == NJS::Enum::Type::STRING && _v1.type == NJS::Enum::Type::BOOLEAN)
 			{
 				if(_v1.get().b)
 				{
-				  return __NJS_Create_String(__NJS_Concat_Str_To_Str((char*)get().s->__NJS_VALUE.c_str(), (char*)"true"));
+				  return __NJS_Create_String(__NJS_Concat_Str_To_Str((char*)get().s->value.c_str(), (char*)"true"));
 				}
-				return __NJS_Create_String(__NJS_Concat_Str_To_Str((char*)get().s->__NJS_VALUE.c_str(), (char*)"false"));
+				return __NJS_Create_String(__NJS_Concat_Str_To_Str((char*)get().s->value.c_str(), (char*)"false"));
 			}
 			else if(type == NJS::Enum::Type::STRING && _v1.type == NJS::Enum::Type::STRING)
 			{
-				return __NJS_Create_String(__NJS_Concat_Str_To_Str(get().s->__NJS_VALUE.c_str(), (char*)_v1.get().s->__NJS_VALUE.c_str()));
+				return __NJS_Create_String(__NJS_Concat_Str_To_Str(get().s->value.c_str(), (char*)_v1.get().s->value.c_str()));
 			}
 			else
 			{
@@ -511,9 +511,9 @@ struct NJS::VAR
 			else if(type == NJS::Enum::Type::NUMBER && _v1.type == NJS::Enum::Type::DOUBLE) REGISTER[_ptr].i += _v1.get().d;
 			else if(type == NJS::Enum::Type::DOUBLE && _v1.type == NJS::Enum::Type::NUMBER) REGISTER[_ptr].d += _v1.get().i;
 			else if(type == NJS::Enum::Type::DOUBLE && _v1.type == NJS::Enum::Type::DOUBLE) REGISTER[_ptr].d += _v1.get().d;
-			else if(type == NJS::Enum::Type::STRING && _v1.type == NJS::Enum::Type::STRING) REGISTER[_ptr].s->__NJS_VALUE += _v1.get().s->__NJS_VALUE;
-			else if(type == NJS::Enum::Type::STRING && _v1.type == NJS::Enum::Type::DOUBLE) REGISTER[_ptr].s->__NJS_VALUE += _v1.get().d;
-			else if(type == NJS::Enum::Type::STRING && _v1.type == NJS::Enum::Type::NUMBER) REGISTER[_ptr].s->__NJS_VALUE += _v1.get().i;
+			else if(type == NJS::Enum::Type::STRING && _v1.type == NJS::Enum::Type::STRING) REGISTER[_ptr].s->value += _v1.get().s->value;
+			else if(type == NJS::Enum::Type::STRING && _v1.type == NJS::Enum::Type::DOUBLE) REGISTER[_ptr].s->value += _v1.get().d;
+			else if(type == NJS::Enum::Type::STRING && _v1.type == NJS::Enum::Type::NUMBER) REGISTER[_ptr].s->value += _v1.get().i;
 			return NJS::VAR();
 		}
 	
@@ -587,7 +587,7 @@ struct NJS::VAR
 				if(type == NJS::Enum::Type::NUMBER) return NJS::VAR(NJS::Enum::Type::BOOLEAN, get().i == _v1.get().i);
 				else if(type == NJS::Enum::Type::STRING)
 				{
-					if(strcmp(get().s->__NJS_VALUE.c_str(),_v1.get().s->__NJS_VALUE.c_str()) == 0) return true;
+					if(strcmp(get().s->value.c_str(),_v1.get().s->value.c_str()) == 0) return true;
 					else return false;
 				}
 				else if(type == NJS::Enum::Type::UNDEFINED) return true;
@@ -693,7 +693,7 @@ template<class... Args>
 NJS::VAR __NJS_Back_Var_Call_Function(NJS::VAR _obj, Args... args)
 {
 	vector<var> _args = vector<var>{(var)args...};
-	return (*static_cast<function<NJS::VAR ( vector<var> )>*>(_obj.get().f->__NJS_VALUE))( _args );
+	return (*static_cast<function<NJS::VAR ( vector<var> )>*>(_obj.get().f->value))( _args );
 }
 
 
@@ -715,7 +715,7 @@ NJS::VAR __NJS_Call_Function(NJS::VAR _obj, Args... args)
 template<class... Args>
 NJS::VAR __NJS_Back_Var_Call_Fixed_Function(NJS::VAR _obj, Args... args)
 {
-	return (*static_cast<function<NJS::VAR ( Args... )>*>(_obj.get().f->__NJS_VALUE))( args... );
+	return (*static_cast<function<NJS::VAR ( Args... )>*>(_obj.get().f->value))( args... );
 }
 
 
@@ -757,7 +757,7 @@ int __NJS_Get_Int(NJS::VAR _v)
 
 char* __NJS_Get_String(NJS::VAR _v)
 {
-  return (char*)_v.get().s->__NJS_VALUE.c_str();
+  return (char*)_v.get().s->value.c_str();
 }
 
 NJS::VAR __NJS_Typeof(NJS::VAR _var)
@@ -777,7 +777,7 @@ NJS::VAR __NJS_Object_Set(char* _index, NJS::VAR _value, vector<pair<char*, NJS:
 
       if(_value.type == NJS::Enum::Type::STRING)
 	{
-		REGISTER[(*_obj)[_i].second._ptr].s = new NJS::Class::String(strdup(REGISTER[_value._ptr].s->__NJS_VALUE.c_str()));
+		REGISTER[(*_obj)[_i].second._ptr].s = new NJS::Class::String(strdup(REGISTER[_value._ptr].s->value.c_str()));
 	}
 	else REGISTER[(*_obj)[_i].second._ptr] = REGISTER[_value._ptr];
 
@@ -797,30 +797,30 @@ NJS::VAR __NJS_Object_Set(NJS::VAR _index, NJS::VAR _value, NJS::VAR _array)
 {
   if(_array.type == NJS::Enum::Type::ARRAY && _index.type == NJS::Enum::Type::NUMBER)
   {
-	 if(_array.get().a->__NJS_VALUE.size() <= _index.get().i) _array.get().a->__NJS_VALUE.resize(_index.get().i + 1);
-    _array.get().a->__NJS_VALUE[_index.get().i].type = _value.type;
+	 if(_array.get().a->value.size() <= _index.get().i) _array.get().a->value.resize(_index.get().i + 1);
+    _array.get().a->value[_index.get().i].type = _value.type;
 
 	if(_value.type == NJS::Enum::Type::STRING)
 	{
-		REGISTER[_array.get().a->__NJS_VALUE[_index.get().i]._ptr].s = new NJS::Class::String(strdup(REGISTER[_value._ptr].s->__NJS_VALUE.c_str()));
+		REGISTER[_array.get().a->value[_index.get().i]._ptr].s = new NJS::Class::String(strdup(REGISTER[_value._ptr].s->value.c_str()));
 	}
-	else REGISTER[_array.get().a->__NJS_VALUE[_index.get().i]._ptr] = REGISTER[_value._ptr];
+	else REGISTER[_array.get().a->value[_index.get().i]._ptr] = REGISTER[_value._ptr];
 	
-	__NJS_Object_Set((char*)"length", NJS::VAR((int)_array.get().a->__NJS_VALUE.size()), _array);
+	__NJS_Object_Set((char*)"length", NJS::VAR((int)_array.get().a->value.size()), _array);
 	return NJS::VAR();
     
   }
   else if(_array.type == NJS::Enum::Type::OBJECT || _array.type == NJS::Enum::Type::STRING || _array.type == NJS::Enum::Type::FUNCTION || _array.type == NJS::Enum::Type::ARRAY || _array.type == NJS::Enum::Type::NATIVE)
   {
     vector<pair<char*, NJS::VAR>>* _obj;
-    if(_array.type == NJS::Enum::Type::OBJECT) _obj = &_array.get().o->__OBJECT;
-	else if(_array.type == NJS::Enum::Type::ARRAY) _obj = &_array.get().a->__OBJECT;
-    else if(_array.type == NJS::Enum::Type::STRING) _obj = &_array.get().s->__OBJECT;
-	else if(_array.type == NJS::Enum::Type::FUNCTION) _obj = &_array.get().f->__OBJECT;
+    if(_array.type == NJS::Enum::Type::OBJECT) _obj = &_array.get().o->object;
+	else if(_array.type == NJS::Enum::Type::ARRAY) _obj = &_array.get().a->object;
+    else if(_array.type == NJS::Enum::Type::STRING) _obj = &_array.get().s->object;
+	else if(_array.type == NJS::Enum::Type::FUNCTION) _obj = &_array.get().f->object;
     else return NJS::VAR();
 	
 	_index.get().s->cnt++;
-	return __NJS_Object_Set((char*)_index.get().s->__NJS_VALUE.c_str(), _value, _obj);
+	return __NJS_Object_Set((char*)_index.get().s->value.c_str(), _value, _obj);
 
   }
 
@@ -836,11 +836,11 @@ NJS::VAR __NJS_Object_Get(NJS::VAR _index, NJS::VAR _array)
   }
   if(_array.type == NJS::Enum::Type::ARRAY && _index.type == NJS::Enum::Type::NUMBER)
   {
-    if(_index.get().i > _array.get().a->__NJS_VALUE.size())
+    if(_index.get().i > _array.get().a->value.size())
     {
       __NJS_RETURN_UNDEFINED;
     }
-    return _array.get().a->__NJS_VALUE[_index.get().i];
+    return _array.get().a->value[_index.get().i];
   }
   else
   {
@@ -849,10 +849,10 @@ NJS::VAR __NJS_Object_Get(NJS::VAR _index, NJS::VAR _array)
 		__NJS_RETURN_UNDEFINED;
 	}
     vector<pair<char*, NJS::VAR>>* _obj;
-    if(_array.type == NJS::Enum::Type::OBJECT) _obj = &_array.get().o->__OBJECT;
-	else if(_array.type == NJS::Enum::Type::ARRAY) _obj = &_array.get().a->__OBJECT;
-    else if(_array.type == NJS::Enum::Type::STRING) _obj = &_array.get().s->__OBJECT;
-	else if(_array.type == NJS::Enum::Type::FUNCTION) _obj = &_array.get().f->__OBJECT;
+    if(_array.type == NJS::Enum::Type::OBJECT) _obj = &_array.get().o->object;
+	else if(_array.type == NJS::Enum::Type::ARRAY) _obj = &_array.get().a->object;
+    else if(_array.type == NJS::Enum::Type::STRING) _obj = &_array.get().s->object;
+	else if(_array.type == NJS::Enum::Type::FUNCTION) _obj = &_array.get().f->object;
     else
 	{
 		__NJS_RETURN_UNDEFINED;
@@ -860,7 +860,7 @@ NJS::VAR __NJS_Object_Get(NJS::VAR _index, NJS::VAR _array)
     int _j = (*_obj).size();
     for(int _i = 0; _i < _j; _i++)
     {
-      if(strcmp(strdup(_index.get().s->__NJS_VALUE.c_str()), (*_obj)[_i].first) == 0)
+      if(strcmp(strdup(_index.get().s->value.c_str()), (*_obj)[_i].first) == 0)
       {
         return (*_obj)[_i].second;
       }
@@ -874,13 +874,13 @@ NJS::Class::String::NJS::Class::String(char* _value)
 {
 	cnt++;
 	/*** toString ***/
-  function<NJS::VAR ()>* __OBJ_TO_NJS_STRING = new function<NJS::VAR ()>([&](){ return __NJS_Create_String((char*)this->__NJS_VALUE.c_str()); });
+  function<NJS::VAR ()>* __OBJ_TO_NJS_STRING = new function<NJS::VAR ()>([&](){ return __NJS_Create_String((char*)this->value.c_str()); });
   NJS::VAR toString = NJS::VAR(NJS::Enum::Type::FUNCTION, __OBJ_TO_NJS_STRING);
-  __NJS_Object_Set((char*)"toString", toString, &this->__OBJECT);
+  __NJS_Object_Set((char*)"toString", toString, &this->object);
 	/*** end to string ***/
 	
 	/*** length ***/
-  __NJS_Object_Set((char*)"length", NJS::VAR((int)strlen(_value)), &this->__OBJECT);
+  __NJS_Object_Set((char*)"length", NJS::VAR((int)strlen(_value)), &this->object);
 	/*** end length ***/
 	
   /*** split ***/
@@ -888,13 +888,13 @@ NJS::Class::String::NJS::Class::String(char* _value)
   { 
 	  var _needle;
 	  if(NJS::VARARGS.size() > 0) _needle = NJS::VARARGS[0];
-	  else return NJS::VAR(this->__NJS_VALUE.c_str());
+	  else return NJS::VAR(this->value.c_str());
 
 	NJS::VAR _arr = __NJS_Create_Array();
-    char* _v = (char*)malloc(strlen(this->__NJS_VALUE.c_str()) + 1);
-	strcpy(_v, this->__NJS_VALUE.c_str());	
-	char* delim = (char*)malloc(strlen(_needle.get().s->__NJS_VALUE.c_str()) + 1);
-	strcpy(delim, _needle.get().s->__NJS_VALUE.c_str());
+    char* _v = (char*)malloc(strlen(this->value.c_str()) + 1);
+	strcpy(_v, this->value.c_str());	
+	char* delim = (char*)malloc(strlen(_needle.get().s->value.c_str()) + 1);
+	strcpy(delim, _needle.get().s->value.c_str());
 
 	char *ptr = strtok(_v, delim);
 	int i = 0;
@@ -913,7 +913,7 @@ NJS::Class::String::NJS::Class::String(char* _value)
   });
   
   NJS::VAR __split = NJS::VAR(NJS::Enum::Type::FUNCTION, __OBJ_TO___NJS_SPLIT);
-  __NJS_Object_Set((char*)"split", __split, &this->__OBJECT);
+  __NJS_Object_Set((char*)"split", __split, &this->object);
 	/*** end split ***/
 
  #ifndef __NJS_ARDUINO
@@ -924,7 +924,7 @@ NJS::Class::String::NJS::Class::String(char* _value)
 	  if(NJS::VARARGS.size() > 0) _needle = NJS::VARARGS[0];
 	  else return NJS::VAR(-1);
 
-	string::size_type loc = this->__NJS_VALUE.find( _needle.get().s->__NJS_VALUE, 0 );
+	string::size_type loc = this->value.find( _needle.get().s->value, 0 );
 	if( loc != string::npos ) 
 	{
 		return NJS::VAR((int)loc);
@@ -934,7 +934,7 @@ NJS::Class::String::NJS::Class::String(char* _value)
   
   NJS::VAR __indexof = NJS::VAR(NJS::Enum::Type::FUNCTION, __OBJ_TO___NJS_INDEXOF);
 
-  __NJS_Object_Set((char*)"indexOf", __indexof, &this->__OBJECT);
+  __NJS_Object_Set((char*)"indexOf", __indexof, &this->object);
 	/*** end indexOf ***/
 
 	/*** lastIndexOf ***/
@@ -944,7 +944,7 @@ NJS::Class::String::NJS::Class::String(char* _value)
 	  if(NJS::VARARGS.size() > 0) _needle = NJS::VARARGS[0];
 	  else return NJS::VAR(-1);
 
-	string::size_type loc = this->__NJS_VALUE.find_last_of( _needle.get().s->__NJS_VALUE, 0 );
+	string::size_type loc = this->value.find_last_of( _needle.get().s->value, 0 );
 	if( loc != string::npos ) 
 	{
 		return NJS::VAR((int)loc);
@@ -954,7 +954,7 @@ NJS::Class::String::NJS::Class::String(char* _value)
   
   NJS::VAR __lastindexof = NJS::VAR(NJS::Enum::Type::FUNCTION, __OBJ_TO___NJS_LASTINDEXOF);
 
-  __NJS_Object_Set((char*)"lastIndexOf", __lastindexof, &this->__OBJECT);
+  __NJS_Object_Set((char*)"lastIndexOf", __lastindexof, &this->object);
 	/*** end lastIndexOf ***/
 
   /*** search ***/
@@ -964,7 +964,7 @@ NJS::Class::String::NJS::Class::String(char* _value)
 	  if(NJS::VARARGS.size() > 0) _needle = NJS::VARARGS[0];
 	  else return NJS::VAR(-1);
 
-	string::size_type loc = this->__NJS_VALUE.find( _needle.get().s->__NJS_VALUE, 0 );
+	string::size_type loc = this->value.find( _needle.get().s->value, 0 );
 	if( loc != string::npos ) 
 	{
 		return NJS::VAR((int)loc);
@@ -974,7 +974,7 @@ NJS::Class::String::NJS::Class::String(char* _value)
   
   NJS::VAR __search = NJS::VAR(NJS::Enum::Type::FUNCTION, __OBJ_TO___NJS_SEARCH);
 
-  __NJS_Object_Set((char*)"search", __search, &this->__OBJECT);
+  __NJS_Object_Set((char*)"search", __search, &this->object);
 	/*** end search ***/
 
   /*** slice ***/
@@ -982,18 +982,18 @@ NJS::Class::String::NJS::Class::String(char* _value)
   { 
 	var _start; var _end;
 	if(NJS::VARARGS.size() > 0) _start = NJS::VARARGS[0];
-	else return  NJS::VAR(this->__NJS_VALUE.c_str());
+	else return  NJS::VAR(this->value.c_str());
 	if(NJS::VARARGS.size() > 1) _end = NJS::VARARGS[1];
 
-	if(_end.type == NJS::Enum::Type::UNDEFINED) return NJS::VAR(this->__NJS_VALUE.substr( _start.get().i, string::npos).c_str());
+	if(_end.type == NJS::Enum::Type::UNDEFINED) return NJS::VAR(this->value.substr( _start.get().i, string::npos).c_str());
 	int _endIndex = _end.get().i - _start.get().i;
-	return NJS::VAR(this->__NJS_VALUE.substr( _start.get().i, _endIndex).c_str());
+	return NJS::VAR(this->value.substr( _start.get().i, _endIndex).c_str());
   });
   
   NJS::VAR __slice = NJS::VAR(NJS::Enum::Type::FUNCTION, __OBJ_TO___NJS_SLICE);
 
-  __NJS_Object_Set((char*)"slice", __slice, &this->__OBJECT);
-  __NJS_Object_Set((char*)"substring", __slice, &this->__OBJECT);
+  __NJS_Object_Set((char*)"slice", __slice, &this->object);
+  __NJS_Object_Set((char*)"substring", __slice, &this->object);
 	/*** end slice ***/
 
 	  /*** substr ***/
@@ -1001,16 +1001,16 @@ NJS::Class::String::NJS::Class::String(char* _value)
   { 
 	var _start; var _end;
 	if(NJS::VARARGS.size() > 0) _start = NJS::VARARGS[0];
-	else return  NJS::VAR(this->__NJS_VALUE.c_str());
+	else return  NJS::VAR(this->value.c_str());
 	if(NJS::VARARGS.size() > 1) _end = NJS::VARARGS[1];
 
-	if(_end.type == NJS::Enum::Type::UNDEFINED) return NJS::VAR(this->__NJS_VALUE.substr( _start.get().i, string::npos).c_str());
-	return NJS::VAR(this->__NJS_VALUE.substr( _start.get().i, _end.get().i ).c_str());
+	if(_end.type == NJS::Enum::Type::UNDEFINED) return NJS::VAR(this->value.substr( _start.get().i, string::npos).c_str());
+	return NJS::VAR(this->value.substr( _start.get().i, _end.get().i ).c_str());
   });
   
   NJS::VAR __substr = NJS::VAR(NJS::Enum::Type::FUNCTION, __OBJ_TO___NJS_SUBSTR);
 
-  __NJS_Object_Set((char*)"substr", __substr, &this->__OBJECT);
+  __NJS_Object_Set((char*)"substr", __substr, &this->object);
 	/*** end substr ***/
 
 	/*** replace ***/
@@ -1018,24 +1018,24 @@ NJS::Class::String::NJS::Class::String(char* _value)
   { 
 	var _search; var _replace;
 	if(NJS::VARARGS.size() > 0) _search = NJS::VARARGS[0];
-	else return  NJS::VAR(this->__NJS_VALUE.c_str());
+	else return  NJS::VAR(this->value.c_str());
 	if(NJS::VARARGS.size() > 1) _replace = NJS::VARARGS[1];
 
-	size_t start_pos = this->__NJS_VALUE.find(_search.get().s->__NJS_VALUE);
+	size_t start_pos = this->value.find(_search.get().s->value);
     if(start_pos == std::string::npos)
 	{
-        return var(this->__NJS_VALUE.c_str());
+        return var(this->value.c_str());
 	}
-    return var(this->__NJS_VALUE.replace(start_pos, _search.get().s->__NJS_VALUE.length(), _replace.get().s->__NJS_VALUE).c_str());
+    return var(this->value.replace(start_pos, _search.get().s->value.length(), _replace.get().s->value).c_str());
   });
   
   NJS::VAR __replace = NJS::VAR(NJS::Enum::Type::FUNCTION, __OBJ_TO___NJS_REPLACE);
 
-  __NJS_Object_Set((char*)"replace", __replace, &this->__OBJECT);
+  __NJS_Object_Set((char*)"replace", __replace, &this->object);
 	/*** end replace ***/
 #endif
 
-  __NJS_VALUE = _value;
+  value = _value;
 }
 
 NJS::Class::Array::NJS::Class::Array()
@@ -1043,9 +1043,9 @@ NJS::Class::Array::NJS::Class::Array()
 	cnt++;
   function<NJS::VAR ()>* __OBJ_TO_NJS_STRING = new function<NJS::VAR ()>([&](){ return __NJS_Create_String((char*)"Array"); });
   NJS::VAR toString = NJS::VAR(NJS::Enum::Type::FUNCTION, __OBJ_TO_NJS_STRING);
-  __NJS_Object_Set((char*)"toString", toString, &this->__OBJECT);
+  __NJS_Object_Set((char*)"toString", toString, &this->object);
   
-  __NJS_Object_Set((char*)"length", NJS::VAR(0), &this->__OBJECT);
+  __NJS_Object_Set((char*)"length", NJS::VAR(0), &this->object);
 }
 
 NJS::Class::Object::NJS::Class::Object()
@@ -1057,14 +1057,14 @@ NJS::Class::Object::NJS::Class::Object()
 NJS::Class::Function::NJS::Class::Function(void* _f)
 {
 	cnt++;
-  __NJS_VALUE = _f;
+  value = _f;
 
 }
 
 NJS::Class::Native::NJS::Class::Native(void* _n)
 {
 	cnt++;
-  __NJS_VALUE = _n;
+  value = _n;
 
 }
 
@@ -1126,7 +1126,7 @@ NJS::VAR __NJS_Boolean_Result(NJS::VAR _v)
   else if(_v.type == NJS::Enum::Type::BOOLEAN) return _v.get().b;
   else if(_v.type == NJS::Enum::Type::STRING)
   {
-    if(strlen(_v.get().s->__NJS_VALUE.c_str()) > 0) return true;
+    if(strlen(_v.get().s->value.c_str()) > 0) return true;
     else return false;
   }
   else if(_v.type == NJS::Enum::Type::ARRAY) return true;
@@ -1148,7 +1148,7 @@ ostream& operator << (ostream& os, const NJS::VAR& _v)
 		os << _v.get().d;
 		break;
 	case NJS::Enum::Type::STRING:
-		os << _v.get().s->__NJS_VALUE;
+		os << _v.get().s->value;
 		break;
 	case NJS::Enum::Type::OBJECT:
 		os << __NJS_Object_Stringify(_v);
@@ -1185,7 +1185,7 @@ NJS::VAR parseInt(NJS::VAR _str)
 	#ifdef __NJS_ARDUINO
 		return NJS::VAR();
 	#else
-		return __NJS_Create_Number(stoi(_str.get().s->__NJS_VALUE));
+		return __NJS_Create_Number(stoi(_str.get().s->value));
 	#endif
   }
   else return __NJS_Create_Undefined();
@@ -1209,7 +1209,7 @@ NJS::VAR  __NJS_Object_Keys(NJS::VAR _var)
 	if(_var.type != NJS::Enum::Type::OBJECT) return 0;
 	var _res = __NJS_Create_Array();
 	
-	vector<pair<char*, NJS::VAR>>* _obj = &_var.get().o->__OBJECT;
+	vector<pair<char*, NJS::VAR>>* _obj = &_var.get().o->object;
     int _j = (*_obj).size();
     for(int _i = 0; _i < _j; _i++)
     {
@@ -1232,7 +1232,7 @@ NJS::VAR  __NJS_Object_Stringify(NJS::VAR _var)
 	else if(_t == NJS::Enum::Type::ARRAY)
 	{
 		var _res = "";
-		vector<NJS::VAR>* _arr = &_var.get().a->__NJS_VALUE;
+		vector<NJS::VAR>* _arr = &_var.get().a->value;
 		_res += "[";
 		int j = (*_arr).size();
 		for(int i = 0; i < j; i++)
@@ -1246,7 +1246,7 @@ NJS::VAR  __NJS_Object_Stringify(NJS::VAR _var)
 	else if(_t == NJS::Enum::Type::OBJECT)
 	{
 		var _res = "";
-		vector<pair<char*, NJS::VAR>>* _obj = &_var.get().o->__OBJECT;
+		vector<pair<char*, NJS::VAR>>* _obj = &_var.get().o->object;
 		_res = "{";
 		int j = (*_obj).size();
 		for(int _i = 0; _i < j; _i++)
@@ -1287,7 +1287,7 @@ void* __NJS_Get_Function(NJS::VAR _fn)
 
 function<var (vector<var>)>* __NJS_Get_Function(NJS::VAR _v)
 {
-  return (function<var (vector<var>)>*)_v.get().f->__NJS_VALUE;
+  return (function<var (vector<var>)>*)_v.get().f->value;
 }
 
 void* __NJS_Get_Native(NJS::VAR _native)

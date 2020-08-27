@@ -1,34 +1,74 @@
+#pragma once
+#include "_meta.h"
+
 namespace NJS::Class
 {
-	class Boolean : public Object
+	class Boolean
 	{
 	public:
+		// Constants
 		const char *name = "boolean";
 		const NJS::Enum::Type type = NJS::Enum::Type::BOOLEAN;
+		// Constructors
 		Boolean();
-		Boolean(bool b);
-		bool __NJS_VALUE;
-		explicit operator bool() const
+		Boolean(bool val);
+		// Properties
+		count_t counter = 0;
+		bool value = false;
+		object_t object = {};
+		// Methods
+		~Boolean();
+		void Delete() noexcept;
+		// Native cast
+		explicit Boolean::operator bool() const noexcept { return value; }
+		explicit Boolean::operator double() const noexcept { return value; }
+		explicit Boolean::operator int() const noexcept { return value; }
+		explicit Boolean::operator long long() const noexcept { return value; }
+		explicit Boolean::operator std::string() const noexcept
 		{
-			return __NJS_VALUE;
+			return value ? "true" : "false";
 		}
-		explicit operator double() const
-		{
-			return __NJS_VALUE;
-		}
-		explicit operator int() const
-		{
-			return __NJS_VALUE;
-		}
-		explicit operator std::string() const
-		{
-			return __NJS_VALUE ? "true" : "false";
-		}
-		explicit operator long long() const
-		{
-			return __NJS_VALUE;
-		}
-		Boolean operator=(const Boolean &_v);
-		Boolean operator=(const bool &_v);
+		// Main operators
+		NJS::VAR const &operator[](NJS::VAR key) const;
+		NJS::VAR &operator[](NJS::VAR key);
+		template <class... Args> NJS::VAR operator()(Args... args) const;
+		// Comparation operators
+		Boolean operator!() const;
+		bool operator==(const Boolean &_v1) const;
+		// === emulated with __NJS_EQUAL_VALUE_AND_TYPE
+		// !== emulated with __NJS_NOT_EQUAL_VALUE_AND_TYPE
+		bool operator!=(const Boolean &_v1) const;
+		bool operator<(const Boolean &_v1) const;
+		bool operator<=(const Boolean &_v1) const;
+		bool operator>(const Boolean &_v1) const;
+		bool operator>=(const Boolean &_v1) const;
+		// Numeric operators
+		Boolean operator+() const;
+		Boolean operator-() const;
+		Boolean operator++(const int _v1);
+		Boolean operator--(const int _v1);
+		Boolean operator+(const Boolean &_v1) const;
+		Boolean operator+=(const Boolean &_v1);
+		Boolean operator-(const Boolean &_v1) const;
+		Boolean operator-=(const Boolean &_v1);
+		Boolean operator*(const Boolean &_v1) const;
+		Boolean operator*=(const Boolean &_v1);
+		// TODO: "**" and "**=" operators
+		Boolean operator/(const Boolean &_v1) const;
+		Boolean operator/=(const Boolean &_v1);
+		Boolean operator%(const Boolean &_v1) const;
+		Boolean operator%=(const Boolean &_v1);
+		Boolean operator&(const Boolean &_v1) const;
+		Boolean operator|(const Boolean &_v1) const;
+		Boolean operator^(const Boolean &_v1) const;
+		Boolean operator~() const;
+		Boolean operator>>(const Boolean &_v1) const;
+		Boolean operator<<(const Boolean &_v1) const;
+		Boolean operator&=(const Boolean &_v1);
+		Boolean operator|=(const Boolean &_v1);
+		Boolean operator^=(const Boolean &_v1);
+		Boolean operator>>=(const Boolean &_v1);
+		Boolean operator<<=(const Boolean &_v1);
+		// TODO: ">>>" and ">>>=" operators
 	};
 } // namespace NJS::Class
