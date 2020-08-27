@@ -38,13 +38,13 @@ var TEST =
     }
 	  if(preset == "none")
 	  {
-		  return `${compiler} -D__NJS_REGISTER_SIZE=${COMPILER.REGISTER} -std=c++17 ${_in} ${option} -I ${extern}/lib/ -fpermissive -w -s ${COMPILER.LIBS} -o ${out}`;
+		  return `${compiler} -D__NJS_REGISTER_SIZE=${COMPILER.REGISTER} -std=c++17 ${_in} ${option} -I ${extern}/lib/ -w -s ${COMPILER.LIBS} -o ${out}`;
 	  }
 	  else if(preset == "size")
 	  {
-		  return `${compiler} -D__NJS_REGISTER_SIZE=${COMPILER.REGISTER} -std=c++17 ${_in} ${option} -I ${extern}/lib/ -fno-rtti -fno-stack-protector -fomit-frame-pointer -fpermissive -w -s ${COMPILER.LIBS}  -o ${out}`;
+		  return `${compiler} -D__NJS_REGISTER_SIZE=${COMPILER.REGISTER} -std=c++17 ${_in} ${option} -I ${extern}/lib/ -fno-rtti -fno-stack-protector -fomit-frame-pointer -w -s ${COMPILER.LIBS}  -o ${out}`;
 	  }
-	  else return `${compiler} -D__NJS_REGISTER_SIZE=${COMPILER.REGISTER} -std=c++17 ${_in} -I ${extern}/lib/ ${option} -fpermissive -w -s ${COMPILER.LIBS} -o ${out}`;
+	  else return `${compiler} -D__NJS_REGISTER_SIZE=${COMPILER.REGISTER} -std=c++17 ${_in} -I ${extern}/lib/ ${option} -w -s ${COMPILER.LIBS} -o ${out}`;
   },
   check: {
     "env": {

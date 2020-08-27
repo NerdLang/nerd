@@ -19,11 +19,17 @@ namespace NJS::Class
 		}
 	}
 	
+	NJS::VAR Function::Call(var __INJECTED_THIS, vector<var> __NJS_VARARGS)
+	{
+		return (*static_cast<function<NJS::VAR(var, vector<NJS::VAR>)> *>(__NJS_VALUE))(__INJECTED_THIS, __NJS_VARARGS);
+	}
+		
+	
 	template <class... Args>
 	NJS::VAR Function::operator()(Args... args)
 	{
 		vector<NJS::VAR> _args = vector<var>{(NJS::VAR)args...};
-		return (*static_cast<function<NJS::VAR(vector<NJS::VAR>)> *>(__NJS_VALUE))(_args);
+		return (*static_cast<function<NJS::VAR(var, vector<NJS::VAR>)> *>(__NJS_VALUE))(__NJS_Create_Undefined(), _args);
 	}
 
 

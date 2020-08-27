@@ -194,13 +194,6 @@ namespace NJS
 		/*** END VARIADIC LAMBDAS ***/
 		
 		/*** CALL OVERLOAD ***/
-		
-		template <class... Args>
-		VAR __NJS_Class_Back_Var_Call_Function(Args... args)
-		{
-			vector<var> _args = vector<var>{(var)args...};
-			return (*static_cast<function<VAR(vector<var>)> *>(this->get().f->__NJS_VALUE))(_args);
-		}
 
 		template <class... Args>
 		VAR operator() (Args... args)
@@ -363,6 +356,21 @@ namespace NJS
 					{
 						_index.get().s->cnt++;
 						__NJS_Object_Set(_index.get().s->__NJS_VALUE.c_str(), __NJS_Create_Var_Scoped_Anon( return *this;), _obj);
+						return (*this)[_index];
+					}
+					else if(this->type == NJS::Enum::Type::FUNCTION && _index.get().s->__NJS_VALUE.compare("call") == 0)
+					{
+						_index.get().s->cnt++;
+						__NJS_Object_Set(_index.get().s->__NJS_VALUE.c_str(), __NJS_Create_Var_Scoped_Anon( 
+						
+							NJS::VAR __THIS;
+							if(__NJS_VARARGS.size() > 0)
+							{
+								__THIS = __NJS_VARARGS[0];
+								__NJS_VARARGS.erase(__NJS_VARARGS.begin());
+							}
+							return this->get().f->Call(__THIS, __NJS_VARARGS);
+						), _obj);
 						return (*this)[_index];
 					}
 				}

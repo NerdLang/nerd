@@ -151,7 +151,7 @@ function __NJS_MATH_FROUND(x)
 	return __NJS_VAR(static_cast<double>(static_cast<double>(x))); 
 };
 
-__NJS_DECL_FUNCTION<__NJS_VAR (vector<var> __NJS_VARARGS)>* __NJS_MATH_NATIVE_HYPOT = new __NJS_DECL_FUNCTION<__NJS_VAR (vector<var> __NJS_VARARGS)>([]( vector<var> __NJS_VARARGS ) -> __NJS_VAR 
+function __NJS_MATH_HYPOT()
 {
 	double max = 0;
 	double s = 0;
@@ -164,8 +164,7 @@ __NJS_DECL_FUNCTION<__NJS_VAR (vector<var> __NJS_VARARGS)>* __NJS_MATH_NATIVE_HY
 		s += (x == 0 && max == 0) ? 0 : (x / max) * (x / max);
 	}
 	return __NJS_VAR(max == INFINITY ? INFINITY : max * sqrt(s));
-});
-var __NJS_MATH_HYPOT = __NJS_Create_Function(__NJS_MATH_NATIVE_HYPOT);
+};
 
 function __NJS_MATH_IMUL(x, y)
 {
@@ -192,7 +191,7 @@ function __NJS_MATH_LOG10(x)
 	return __NJS_VAR(log10(static_cast<double>(x))); 
 };
 
-__NJS_DECL_FUNCTION<__NJS_VAR (vector<var> __NJS_VARARGS)>* __NJS_MATH_NATIVE_MAX = new __NJS_DECL_FUNCTION<__NJS_VAR (vector<var> __NJS_VARARGS)>([]( vector<var> __NJS_VARARGS ) -> __NJS_VAR 
+function __NJS_MATH_MAX()
 {
 	double max = -INFINITY;
 	for (var x : __NJS_VARARGS) {
@@ -202,10 +201,9 @@ __NJS_DECL_FUNCTION<__NJS_VAR (vector<var> __NJS_VARARGS)>* __NJS_MATH_NATIVE_MA
 		}
 	}
 	return __NJS_VAR(max);
-});
-var __NJS_MATH_MAX = __NJS_Create_Function(__NJS_MATH_NATIVE_MAX);
+};
 
-__NJS_DECL_FUNCTION<__NJS_VAR (vector<var> __NJS_VARARGS)>* __NJS_MATH_NATIVE_MIN = new __NJS_DECL_FUNCTION<__NJS_VAR (vector<var> __NJS_VARARGS)>([]( vector<var> __NJS_VARARGS ) -> __NJS_VAR 
+function __NJS_MATH_MIN()
 {
 	double min = INFINITY;
 	for (var x : __NJS_VARARGS) {
@@ -215,8 +213,7 @@ __NJS_DECL_FUNCTION<__NJS_VAR (vector<var> __NJS_VARARGS)>* __NJS_MATH_NATIVE_MI
 		}
 	}
 	return __NJS_VAR(min);
-});
-var __NJS_MATH_MIN = __NJS_Create_Function(__NJS_MATH_NATIVE_MIN);
+};
 
 function __NJS_MATH_POW(x, x2) 
 { 
