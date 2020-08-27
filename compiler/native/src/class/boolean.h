@@ -14,12 +14,21 @@ namespace NJS::Class
 	{
 		object.~vector();
 	}
-	void Boolean::Delete()
+	void Boolean::Delete() noexcept
 	{
 		if (--counter == 0)
 		{
 			delete this;
 		}
+	}
+	// Native cast
+	Boolean::operator bool() const noexcept { return value; }
+	Boolean::operator double() const noexcept { return value; }
+	Boolean::operator int() const noexcept { return value; }
+	Boolean::operator long long() const noexcept { return value; }
+	Boolean::operator std::string() const noexcept
+	{
+		return value ? "true" : "false";
 	}
 	// Main operators
 	NJS::VAR const &Boolean::operator[](NJS::VAR key) const

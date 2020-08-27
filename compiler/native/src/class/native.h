@@ -25,6 +25,24 @@ namespace NJS::Class
 			delete this;
 		}
 	}
+	// Native cast
+	Native::operator bool() const noexcept { return true; }
+	Native::operator double() const noexcept
+	{
+		return std::numeric_limits<double>::quiet_NaN();
+	}
+	Native::operator int() const noexcept
+	{
+		return std::numeric_limits<int>::quiet_NaN();
+	}
+	Native::operator long long() const noexcept
+	{
+		return std::numeric_limits<long long>::quiet_NaN();
+	}
+	Native::operator std::string() const noexcept
+	{
+		return "[native code]";
+	}
 	// Main operators
 	NJS::VAR const &Native::operator[](NJS::VAR key) const
 	{
@@ -58,7 +76,7 @@ namespace NJS::Class
 	NJS::VAR Native::operator()(Args... args) const
 	{
 		auto _args = vector_t{(NJS::VAR)args...};
-		return (*static_cast<std::native<NJS::VAR(vector_t)> *>(value))(_args);
+		return (*static_cast<std::function<NJS::VAR(vector_t)> *>(value))(_args);
 	}
 	// Comparation operators
 	Native Native::operator!() const { throw InvalidTypeException(); }

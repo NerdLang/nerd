@@ -20,14 +20,11 @@ namespace NJS::Class
 		~Boolean();
 		void Delete() noexcept;
 		// Native cast
-		explicit Boolean::operator bool() const noexcept { return value; }
-		explicit Boolean::operator double() const noexcept { return value; }
-		explicit Boolean::operator int() const noexcept { return value; }
-		explicit Boolean::operator long long() const noexcept { return value; }
-		explicit Boolean::operator std::string() const noexcept
-		{
-			return value ? "true" : "false";
-		}
+		explicit operator bool() const noexcept;
+		explicit operator double() const noexcept;
+		explicit operator int() const noexcept;
+		explicit operator long long() const noexcept;
+		explicit operator std::string() const noexcept;
 		// Main operators
 		NJS::VAR const &operator[](NJS::VAR key) const;
 		NJS::VAR &operator[](NJS::VAR key);

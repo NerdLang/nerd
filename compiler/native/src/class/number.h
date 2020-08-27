@@ -36,7 +36,7 @@ namespace NJS::Class
 			return *(reinterpret_cast<double *>(value >> 1u));
 		}
 	}
-	inline void Number::setDouble(double v)
+	inline void Number::setDouble(double v) noexcept
 	{
 		if (!isInt())
 		{
@@ -93,12 +93,40 @@ namespace NJS::Class
 		object.~vector();
 	}
 	inline bool Number::isInt() const noexcept { return (value & 1) == 0; }
-	void Number::Delete()
+	void Number::Delete() noexcept
 	{
 		if (--counter == 0)
 		{
 			delete this;
 		}
+	}
+	// Native cast
+	Number::operator bool() const noexcept { return getInt(); }
+	Number::operator double() const noexcept { return getDouble(); }
+	Number::operator int() const noexcept { return getInt(); }
+	Number::operator long long() const noexcept
+	{
+		if (isFinite())
+		{
+			return isInt() ? getInt() : getDouble();
+		}
+		if (isNaN())
+		{
+			return std::numeric_limits<long long>::quiet_NaN();
+		}
+		return std::numeric_limits<long long>::infinity() * (isNegative() ? -1 : 1);
+	}
+	Number::operator std::string() const noexcept
+	{
+		if (isFinite())
+		{
+			return std::to_string(isInt() ? getInt() : getDouble());
+		}
+		if (isNaN())
+		{
+			return "NaN";
+		}
+		return isNegative() ? "-Infinity" : "Infinity";
 	}
 	// Main operators
 	NJS::VAR const &Number::operator[](NJS::VAR key) const

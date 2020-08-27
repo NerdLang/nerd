@@ -21,26 +21,11 @@ namespace NJS::Class
 		~String();
 		void Delete() noexcept;
 		// Native cast
-		explicit String::operator bool() const noexcept { return value.size() > 0; }
-		explicit String::operator double() const noexcept
-		{
-			std::string::size_type end;
-			auto res = std::stod(value, &end);
-			return end == value.size() ? res : std::numeric_limits<double>::quiet_NaN();
-		}
-		explicit String::operator int() const noexcept
-		{
-			std::string::size_type end;
-			auto res = std::stoi(value, &end, 10);
-			return end == value.size() ? res : std::numeric_limits<int>::quiet_NaN();
-		}
-		explicit String::operator long long() const noexcept
-		{
-			std::string::size_type end;
-			auto res = std::stoll(value, &end, 10);
-			return end == value.size() ? res : std::numeric_limits<long long>::quiet_NaN();
-		}
-		explicit String::operator std::string() const noexcept { return value; }
+		explicit operator bool() const noexcept;
+		explicit operator double() const noexcept;
+		explicit operator int() const noexcept;
+		explicit operator long long() const noexcept;
+		explicit operator std::string() const noexcept;
 		// Main operators
 		NJS::VAR const &operator[](NJS::VAR key) const;
 		NJS::VAR &operator[](NJS::VAR key);
