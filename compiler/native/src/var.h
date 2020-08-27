@@ -131,7 +131,7 @@ namespace NJS
 			else if (_v.type == NJS::Enum::Type::STRING)
 			{
 
-				NJS::MEMORY::REGISTER[_ptr].s = new NJS::Class::String(NJS::MEMORY::REGISTER[_v._ptr].s->__NJS_VALUE);
+				NJS::MEMORY::REGISTER[_ptr].s = new NJS::Class::String(NJS::MEMORY::REGISTER[_v._ptr].s->value);
 			}
 			else if (_v.type == NJS::Enum::Type::FUNCTION)
 			{
@@ -255,7 +255,7 @@ namespace NJS
 		VAR __NJS_Class_Back_Var_Call_Function(Args... args)
 		{
 			vector<var> _args = vector<var>{(var)args...};
-			return (*static_cast<function<VAR(vector<var>)> *>(this->get().f->__NJS_VALUE))(_args);
+			return (*static_cast<function<VAR(vector<var>)> *>(this->get().f->value))(_args);
 		}
 
 		template <class... Args>
@@ -280,26 +280,26 @@ namespace NJS
 		{
 			if (this->type == NJS::Enum::Type::ARRAY && _index.type == NJS::Enum::Type::NUMBER)
 			{
-				return this->get().a->__NJS_VALUE.at(_index.get().i);
+				return this->get().a->value.at(_index.get().i);
 			}
 			else if (this->type == NJS::Enum::Type::OBJECT || this->type == NJS::Enum::Type::STRING || this->type == NJS::Enum::Type::FUNCTION || this->type == NJS::Enum::Type::ARRAY || this->type == NJS::Enum::Type::NATIVE)
 			{
 				vector<pair<const char *, VAR>> *_obj;
 				if (this->type == NJS::Enum::Type::OBJECT)
-					_obj = &this->get().o->__OBJECT;
+					_obj = &this->get().o->object;
 				else if (this->type == NJS::Enum::Type::ARRAY)
-					_obj = &this->get().a->__OBJECT;
+					_obj = &this->get().a->object;
 				else if (this->type == NJS::Enum::Type::STRING)
-					_obj = &this->get().s->__OBJECT;
+					_obj = &this->get().s->object;
 				else if (this->type == NJS::Enum::Type::FUNCTION)
-					_obj = &this->get().f->__OBJECT;
+					_obj = &this->get().f->object;
 				else
 				{
 					__NJS_RETURN_UNDEFINED;
 				}
 
 				_index.get().s->cnt++;
-				__NJS_Object_Set(_index.get().s->__NJS_VALUE.c_str(), VAR(), _obj);
+				__NJS_Object_Set(_index.get().s->value.c_str(), VAR(), _obj);
 				return (*this)[_index];
 			}
 
@@ -315,7 +315,7 @@ namespace NJS
 			if(this->type == NJS::Enum::Type::UNDEFINED)
 			{
 				#ifndef __NJS_ARDUINO
-				throw VAR("Uncaught TypeError: Cannot read property '" + _index.get().s->__NJS_VALUE + "' of undefined");
+				throw VAR("Uncaught TypeError: Cannot read property '" + _index.get().s->value + "' of undefined");
 				#endif
 			}
 			// 1..toString()
@@ -325,18 +325,18 @@ namespace NJS
 				{
 					if(this->type == NJS::Enum::Type::NUMBER)
 					{
-						NJS::MEMORY::REGISTER[_retFN._ptr].f->__NJS_VALUE = __NJS_Create_Ptr_Scoped_Anon({ return to_string((int)*this);});
+						NJS::MEMORY::REGISTER[_retFN._ptr].f->value = __NJS_Create_Ptr_Scoped_Anon({ return to_string((int)*this);});
 					}
 					else 
 					{
-						NJS::MEMORY::REGISTER[_retFN._ptr].f->__NJS_VALUE = __NJS_Create_Ptr_Scoped_Anon({ return to_string((double)*this);});
+						NJS::MEMORY::REGISTER[_retFN._ptr].f->value = __NJS_Create_Ptr_Scoped_Anon({ return to_string((double)*this);});
 					}
 					return _retFN;
 				}
 				else if(_index == "valueOf")
 				{
 
-					NJS::MEMORY::REGISTER[_retFN._ptr].f->__NJS_VALUE = new function<VAR(vector<var>)>([&](vector<var> _NJS_VARARGS) { return *this;});
+					NJS::MEMORY::REGISTER[_retFN._ptr].f->value = new function<VAR(vector<var>)>([&](vector<var> _NJS_VARARGS) { return *this;});
 					return _retFN;
 				}
 				return _retUndefined;
@@ -348,27 +348,27 @@ namespace NJS
 			}
 			if (this->type == NJS::Enum::Type::ARRAY && _index.type == NJS::Enum::Type::NUMBER)
 			{
-				if ((int)_index > this->get().a->__NJS_VALUE.size())
+				if ((int)_index > this->get().a->value.size())
 				{
 					return _retUndefined;
 				}
 				else 
 				{
-					if (this->get().a->__NJS_VALUE.size() <= _index.get().i)
+					if (this->get().a->value.size() <= _index.get().i)
 					{
-						this->get().a->__NJS_VALUE.reserve(_index.get().i + 1);
-						this->get().a->__NJS_VALUE.resize(_index.get().i + 1);
+						this->get().a->value.reserve(_index.get().i + 1);
+						this->get().a->value.resize(_index.get().i + 1);
 					}
 
-					__NJS_Object_Set("length", (int)this->get().a->__NJS_VALUE.size(), &this->get().a->__OBJECT);
+					__NJS_Object_Set("length", (int)this->get().a->value.size(), &this->get().a->object);
 				}
-				return this->get().a->__NJS_VALUE[(int)_index];
+				return this->get().a->value[(int)_index];
 			}
 			else if(this->type == NJS::Enum::Type::STRING && _index.type == NJS::Enum::Type::NUMBER)
 			{
 				static VAR _ret = __NJS_Create_String("");
 				VAR _tmp = (*this)["substr"](_index, 1);
-				NJS::MEMORY::REGISTER[_ret._ptr].s->__NJS_VALUE = _tmp.get().s->__NJS_VALUE;
+				NJS::MEMORY::REGISTER[_ret._ptr].s->value = _tmp.get().s->value;
 				return _ret;
 			}
 			else
@@ -379,13 +379,13 @@ namespace NJS
 				}
 				vector<pair<const char *, VAR>> *_obj;
 				if (this->type == NJS::Enum::Type::OBJECT)
-					_obj = &this->get().o->__OBJECT;
+					_obj = &this->get().o->object;
 				else if (this->type == NJS::Enum::Type::ARRAY)
-					_obj = &this->get().a->__OBJECT;
+					_obj = &this->get().a->object;
 				else if (this->type == NJS::Enum::Type::STRING)
-					_obj = &this->get().s->__OBJECT;
+					_obj = &this->get().s->object;
 				else if (this->type == NJS::Enum::Type::FUNCTION)
-					_obj = &this->get().f->__OBJECT;
+					_obj = &this->get().f->object;
 				else
 				{
 					return _retUndefined;
@@ -393,7 +393,7 @@ namespace NJS
 				int _j = (*_obj).size();
 				for (int _i = 0; _i < _j; _i++)
 				{
-					if (_index.get().s->__NJS_VALUE.compare((*_obj)[_i].first) == 0)
+					if (_index.get().s->value.compare((*_obj)[_i].first) == 0)
 					{
 						return (*_obj)[_i].second;
 					}
@@ -401,30 +401,30 @@ namespace NJS
 
 				if(this->type == NJS::Enum::Type::OBJECT || this->type == NJS::Enum::Type::FUNCTION) 
 				{
-					if(_index.get().s->__NJS_VALUE.compare("toString") == 0)
+					if(_index.get().s->value.compare("toString") == 0)
 					{
 						_index.get().s->cnt++;
-						if(this->type == NJS::Enum::Type::OBJECT) __NJS_Object_Set(_index.get().s->__NJS_VALUE.c_str(), __NJS_Create_Var_Scoped_Anon( return __NJS_Object_Stringify(*this);), _obj);
-						else __NJS_Object_Set(_index.get().s->__NJS_VALUE.c_str(), __NJS_Create_Var_Scoped_Anon( return (std::string)*this;), _obj);
+						if(this->type == NJS::Enum::Type::OBJECT) __NJS_Object_Set(_index.get().s->value.c_str(), __NJS_Create_Var_Scoped_Anon( return __NJS_Object_Stringify(*this);), _obj);
+						else __NJS_Object_Set(_index.get().s->value.c_str(), __NJS_Create_Var_Scoped_Anon( return (std::string)*this;), _obj);
 						return (*this)[_index];
 					}
-					else if(_index.get().s->__NJS_VALUE.compare("toLocaleString") == 0)
+					else if(_index.get().s->value.compare("toLocaleString") == 0)
 					{
 						_index.get().s->cnt++;
-						if(this->type == NJS::Enum::Type::OBJECT) __NJS_Object_Set(_index.get().s->__NJS_VALUE.c_str(), __NJS_Create_Var_Scoped_Anon( return __NJS_Object_Stringify(*this);), _obj);
-						else __NJS_Object_Set(_index.get().s->__NJS_VALUE.c_str(), __NJS_Create_Var_Scoped_Anon( return (std::string)*this;), _obj);
+						if(this->type == NJS::Enum::Type::OBJECT) __NJS_Object_Set(_index.get().s->value.c_str(), __NJS_Create_Var_Scoped_Anon( return __NJS_Object_Stringify(*this);), _obj);
+						else __NJS_Object_Set(_index.get().s->value.c_str(), __NJS_Create_Var_Scoped_Anon( return (std::string)*this;), _obj);
 						return (*this)[_index];
 					}
-					else if(_index.get().s->__NJS_VALUE.compare("valueOf") == 0)
+					else if(_index.get().s->value.compare("valueOf") == 0)
 					{
 						_index.get().s->cnt++;
-						__NJS_Object_Set(_index.get().s->__NJS_VALUE.c_str(), __NJS_Create_Var_Scoped_Anon( return *this;), _obj);
+						__NJS_Object_Set(_index.get().s->value.c_str(), __NJS_Create_Var_Scoped_Anon( return *this;), _obj);
 						return (*this)[_index];
 					}
 				}
 				
 				_index.get().s->cnt++;
-				__NJS_Object_Set(_index.get().s->__NJS_VALUE.c_str(), VAR(), _obj);
+				__NJS_Object_Set(_index.get().s->value.c_str(), VAR(), _obj);
 				return (*this)[_index];
 			}
 			
@@ -585,13 +585,13 @@ namespace NJS
 			else if(type == NJS::Enum::Type::DOUBLE) 
 				NJS::MEMORY::REGISTER[_ptr].d += (double)_v1;
 			else if(type == NJS::Enum::Type::STRING) 
-				NJS::MEMORY::REGISTER[_ptr].s->__NJS_VALUE += (string)_v1;
+				NJS::MEMORY::REGISTER[_ptr].s->value += (string)_v1;
 			else 
 			{
 				string _s = (string)*this;
 				type = NJS::Enum::Type::STRING;
 				NJS::MEMORY::REGISTER[_ptr].s = new NJS::Class::String("");
-				NJS::MEMORY::REGISTER[_ptr].s->__NJS_VALUE += _s + (string)_v1;
+				NJS::MEMORY::REGISTER[_ptr].s->value += _s + (string)_v1;
 			}
 			return *this;
 		}
@@ -721,7 +721,7 @@ namespace NJS
 				case NJS::Enum::Type::BOOLEAN:
 					return __NJS_Create_Boolean(NJS::MEMORY::REGISTER[_ptr].b == (bool)_v1);
 				case NJS::Enum::Type::STRING:
-					return __NJS_Create_Boolean((NJS::MEMORY::REGISTER[_ptr].s->__NJS_VALUE).compare((string)_v1) == 0);
+					return __NJS_Create_Boolean((NJS::MEMORY::REGISTER[_ptr].s->value).compare((string)_v1) == 0);
 				case NJS::Enum::Type::ISINFINITY:
 				case NJS::Enum::Type::ISNULL:
 				case NJS::Enum::Type::UNDEFINED:
@@ -835,11 +835,11 @@ namespace NJS
 			case NJS::Enum::Type::BOOLEAN:
 				return static_cast<int>(this->get().b);
 			case NJS::Enum::Type::STRING:
-				return strtol(this->get().s->__NJS_VALUE.c_str(), nullptr, 10);
+				return strtol(this->get().s->value.c_str(), nullptr, 10);
 			case NJS::Enum::Type::ARRAY:
-				if (this->get().a->__NJS_VALUE.size() != 1)
+				if (this->get().a->value.size() != 1)
 					return 0;
-				return static_cast<int>(this->get().a->__NJS_VALUE[0]);
+				return static_cast<int>(this->get().a->value[0]);
 			case NJS::Enum::Type::NATIVE:
 			case NJS::Enum::Type::FUNCTION:
 			case NJS::Enum::Type::OBJECT:
@@ -865,13 +865,13 @@ namespace NJS
 			case NJS::Enum::Type::BOOLEAN:
 				return static_cast<double>(this->get().b);
 			case NJS::Enum::Type::STRING:
-				return strtod(this->get().s->__NJS_VALUE.c_str(), nullptr);
+				return strtod(this->get().s->value.c_str(), nullptr);
 			case NJS::Enum::Type::ARRAY:
-				if (this->get().a->__NJS_VALUE.size() == 0)
+				if (this->get().a->value.size() == 0)
 					return 0;
-				if (this->get().a->__NJS_VALUE.size() > 1)
+				if (this->get().a->value.size() > 1)
 					return NAN;
-				return static_cast<double>(this->get().a->__NJS_VALUE[0]);
+				return static_cast<double>(this->get().a->value[0]);
 			case NJS::Enum::Type::NATIVE:
 			case NJS::Enum::Type::FUNCTION:
 			case NJS::Enum::Type::OBJECT:
@@ -897,7 +897,7 @@ namespace NJS
 			case NJS::Enum::Type::BOOLEAN:
 				return this->get().b;
 			case NJS::Enum::Type::STRING:
-				return static_cast<bool>(this->get().s->__NJS_VALUE.size());
+				return static_cast<bool>(this->get().s->value.size());
 			case NJS::Enum::Type::ARRAY:
 			case NJS::Enum::Type::NATIVE:
 			case NJS::Enum::Type::FUNCTION:
@@ -924,9 +924,9 @@ namespace NJS
 			case NJS::Enum::Type::BOOLEAN:
 				return (bool)*this ? "true" : "false";
 			case NJS::Enum::Type::STRING:
-				return this->get().s->__NJS_VALUE;
+				return this->get().s->value;
 			case NJS::Enum::Type::ARRAY:
-				return __NJS_Object_Stringify(*this, false).get().s->__NJS_VALUE;
+				return __NJS_Object_Stringify(*this, false).get().s->value;
 			case NJS::Enum::Type::NATIVE:
 				return "[native code]";
 			case NJS::Enum::Type::FUNCTION:

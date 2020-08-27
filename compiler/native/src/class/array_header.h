@@ -20,11 +20,53 @@ namespace NJS::Class
 		~Array();
 		void Delete() noexcept;
 		// Native cast
-		explicit operator bool() const noexcept;
-		explicit operator double() const noexcept;
-		explicit operator int() const noexcept;
-		explicit operator long long() const noexcept;
-		explicit operator std::string() const noexcept;
+		explicit Array::operator bool() const noexcept { return true; }
+		explicit Array::operator double() const noexcept
+		{
+			if (value.size() < 2)
+			{
+				return (double)value[0];
+			}
+			else
+			{
+				return std::numeric_limits<double>::quiet_NaN();
+			}
+		}
+		explicit Array::operator int() const noexcept
+		{
+			if (value.size() < 2)
+			{
+				return (int)value[0];
+			}
+			else
+			{
+				return std::numeric_limits<int>::quiet_NaN();
+			}
+		}
+		explicit Array::operator long long() const noexcept
+		{
+			if (value.size() < 2)
+			{
+				return (long long)value[0];
+			}
+			else
+			{
+				return std::numeric_limits<long long>::quiet_NaN();
+			}
+		}
+		explicit Array::operator std::string() const noexcept
+		{
+			auto l = value.size();
+			if (l == 0)
+				return "";
+			std::stringstream stream;
+			stream << (std::string)value[0];
+			for (auto i = 1; i < l; i++)
+			{
+				stream << "," << (std::string)value[i];
+			}
+			return stream.str();
+		}
 		// Main operators
 		NJS::VAR const &operator[](NJS::VAR key) const;
 		NJS::VAR &operator[](NJS::VAR key);

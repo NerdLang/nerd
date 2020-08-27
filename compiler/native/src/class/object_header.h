@@ -20,11 +20,23 @@ namespace NJS::Class
 		~Object();
 		void Delete() noexcept;
 		// Native cast
-		explicit operator bool() const noexcept;
-		explicit operator double() const noexcept;
-		explicit operator int() const noexcept;
-		explicit operator long long() const noexcept;
-		explicit operator std::string() const noexcept;
+		explicit Object::operator bool() const noexcept { return true; }
+		explicit Object::operator double() const noexcept
+		{
+			return std::numeric_limits<double>::quiet_NaN();
+		}
+		explicit Object::operator int() const noexcept
+		{
+			return std::numeric_limits<int>::quiet_NaN();
+		}
+		explicit Object::operator long long() const noexcept
+		{
+			return std::numeric_limits<long long>::quiet_NaN();
+		}
+		explicit Object::operator std::string() const noexcept
+		{
+			return "[object Object]";
+		}
 		// Main operators
 		NJS::VAR const &operator[](NJS::VAR key) const;
 		NJS::VAR &operator[](NJS::VAR key);

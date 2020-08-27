@@ -58,7 +58,7 @@ function __NJS_fs_writeFileSync(_name, _content)
   {
     return __NJS_Create_Boolean(0);
   }
-  myfile.write(_content.get().s->__NJS_VALUE.c_str(), _content.get().s->__NJS_VALUE.size());
+  myfile.write(_content.get().s->value.c_str(), _content.get().s->value.size());
   myfile.close();
 
   return __NJS_Create_Boolean(1);
@@ -71,7 +71,7 @@ function __NJS_fs_appendFileSync(_name, _content)
   {
     return __NJS_Create_Boolean(0);
   }
-  myfile.write(_content.get().s->__NJS_VALUE.c_str(), _content.get().s->__NJS_VALUE.size());
+  myfile.write(_content.get().s->value.c_str(), _content.get().s->value.size());
   myfile.close();
 
   return __NJS_Create_Boolean(1);

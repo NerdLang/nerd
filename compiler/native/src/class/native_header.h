@@ -7,7 +7,7 @@ namespace NJS::Class
 	{
 	public:
 		// Constants
-		const char *name = "function";
+		const char *name = "native";
 		const NJS::Enum::Type type = NJS::Enum::Type::NATIVE;
 		// Constructors
 		Native();
@@ -20,11 +20,23 @@ namespace NJS::Class
 		~Native();
 		void Delete() noexcept;
 		// Native cast
-		explicit operator bool() const noexcept;
-		explicit operator double() const noexcept;
-		explicit operator int() const noexcept;
-		explicit operator long long() const noexcept;
-		explicit operator std::string() const noexcept;
+		explicit Native::operator bool() const noexcept { return true; }
+		explicit Native::operator double() const noexcept
+		{
+			return std::numeric_limits<double>::quiet_NaN();
+		}
+		explicit Native::operator int() const noexcept
+		{
+			return std::numeric_limits<int>::quiet_NaN();
+		}
+		explicit Native::operator long long() const noexcept
+		{
+			return std::numeric_limits<long long>::quiet_NaN();
+		}
+		explicit Native::operator std::string() const noexcept
+		{
+			return "[native code]";
+		}
 		// Main operators
 		NJS::VAR const &operator[](NJS::VAR key) const;
 		NJS::VAR &operator[](NJS::VAR key);

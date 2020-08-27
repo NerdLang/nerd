@@ -1,57 +1,4 @@
 #pragma once
-<<<<<<< HEAD
-#include "object.h"
-
-namespace NJS::Class
-{
-	class String : public Object
-	{
-	public:
-		const char *name = "string";
-		const NJS::Enum::Type type = NJS::Enum::Type::STRING;
-		String();
-		String(const char *str);
-		String(std::string str);
-		std::string __NJS_VALUE;
-		explicit operator bool() const;
-		explicit operator double() const;
-		explicit operator int() const;
-		explicit operator std::string() const;
-		explicit operator long long() const;
-		NJS::VAR &operator[](NJS::VAR _index) const;
-		NJS::VAR &operator[](NJS::VAR _index);
-		NJS::VAR __iterator();
-		String charAt(std::vector<NJS::VAR> args);
-		int charCodeAt(std::vector<NJS::VAR> args);
-		int codePointAt(std::vector<NJS::VAR> args);
-		String concat(std::vector<NJS::VAR> args);
-		bool endsWith(std::vector<NJS::VAR> args);
-		String fixed();
-		bool includes(std::vector<NJS::VAR> args);
-		int indexOf(std::vector<NJS::VAR> args);
-		int lastIndexOf();
-		String localeCompare();
-		String match();
-		String normalize();
-		String padEnd();
-		String padStart();
-		String repeat();
-		String replace();
-		String search();
-		String slice();
-		String split();
-		bool startsWith();
-		String substr();
-		String substring();
-		String toLocaleLowerCase();
-		String toLocaleUpperCase();
-		String toLowerCase();
-		String toUpperCase();
-		String trim();
-		String trimEnd();
-		String trimStart();
-	};
-=======
 #include "string_header.h"
 #include <string>
 #include <limits>
@@ -84,27 +31,6 @@ namespace NJS::Class
 			delete this;
 		}
 	}
-	// Native cast
-	explicit String::operator bool() const noexcept { return value.size() > 0; }
-	explicit String::operator double() const noexcept
-	{
-		std::string::size_type end;
-		auto res = std::stod(value, &end);
-		return end == value.size() ? res : std::numeric_limits<double>::quiet_NaN();
-	}
-	explicit String::operator int() const noexcept
-	{
-		std::string::size_type end;
-		auto res = std::stoi(value, &end, 10);
-		return end == value.size() ? res : std::numeric_limits<int>::quiet_NaN();
-	}
-	explicit String::operator long long() const noexcept
-	{
-		std::string::size_type end;
-		auto res = std::stoll(value, &end, 10);
-		return end == value.size() ? res : std::numeric_limits<long long>::quiet_NaN();
-	}
-	explicit String::operator std::string() const noexcept { return value; }
 	// Main operators
 	NJS::VAR const &String::operator[](NJS::VAR key) const
 	{
@@ -195,5 +121,4 @@ namespace NJS::Class
 	String String::operator>>=(const String &_v1) { throw InvalidTypeException(); }
 	String String::operator<<=(const String &_v1) { throw InvalidTypeException(); }
 	// TODO: ">>>" and ">>>=" operators
->>>>>>> develop-classes
 } // namespace NJS::Class

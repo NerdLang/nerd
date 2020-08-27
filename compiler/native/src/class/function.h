@@ -1,22 +1,4 @@
 #pragma once
-<<<<<<< HEAD
-#include "_base.h"
-
-namespace NJS::Class
-{
-	class Function : public Base
-	{
-	public:
-		const char *name = "function";
-		const NJS::Enum::Type type = NJS::Enum::Type::FUNCTION;
-		Function();
-		Function(void *_f);
-		void *__NJS_VALUE;
-		explicit operator std::string() const;
-		template <class... Args>
-		NJS::VAR operator()(Args... args) const;
-	};
-=======
 #include "function_header.h"
 #include <functional>
 #include <limits>
@@ -42,24 +24,6 @@ namespace NJS::Class
 		{
 			delete this;
 		}
-	}
-	// Native cast
-	explicit Function::operator bool() const noexcept { return true; }
-	explicit Function::operator double() const noexcept
-	{
-		return std::numeric_limits<double>::quiet_NaN();
-	}
-	explicit Function::operator int() const noexcept
-	{
-		return std::numeric_limits<int>::quiet_NaN();
-	}
-	explicit Function::operator long long() const noexcept
-	{
-		return std::numeric_limits<long long>::quiet_NaN();
-	}
-	explicit Function::operator std::string() const noexcept
-	{
-		return "[native code]";
 	}
 	// Main operators
 	NJS::VAR const &Function::operator[](NJS::VAR key) const
@@ -134,5 +98,4 @@ namespace NJS::Class
 	Function Function::operator>>=(const Function &_v1) { throw InvalidTypeException(); }
 	Function Function::operator<<=(const Function &_v1) { throw InvalidTypeException(); }
 	// TODO: ">>>" and ">>>=" operators
->>>>>>> develop-classes
 } // namespace NJS::Class

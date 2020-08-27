@@ -128,7 +128,7 @@ function __NJS_JSON_PARSE(__json)
 	int r;
 	int j = 0;
 	var __RESULT;
-	const char* JSON_STRING = __json.get().s->__NJS_VALUE.c_str();
+	const char* JSON_STRING = __json.get().s->value.c_str();
 	jsmn_parser p;
 	jsmntok_t *tok = (jsmntok_t*)malloc(sizeof(*tok) * tokcount);
 

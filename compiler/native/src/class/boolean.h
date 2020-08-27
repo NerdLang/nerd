@@ -1,26 +1,3 @@
-<<<<<<< HEAD
-#pragma once
-#include "object.h"
-
-namespace NJS::Class
-{
-	class Boolean : public Object
-	{
-	public:
-		const char *name = "boolean";
-		const NJS::Enum::Type type = NJS::Enum::Type::BOOLEAN;
-		Boolean();
-		Boolean(bool b);
-		bool __NJS_VALUE;
-		explicit operator bool() const;
-		explicit operator double() const;
-		explicit operator int() const;
-		explicit operator std::string() const;
-		explicit operator long long() const;
-		Boolean operator=(const Boolean &_v);
-		Boolean operator=(const bool &_v);
-	};
-=======
 #include "boolean_header.h"
 
 namespace NJS::Class
@@ -43,15 +20,6 @@ namespace NJS::Class
 		{
 			delete this;
 		}
-	}
-	// Native cast
-	explicit Boolean::operator bool() const noexcept { return value; }
-	explicit Boolean::operator double() const noexcept { return value; }
-	explicit Boolean::operator int() const noexcept { return value; }
-	explicit Boolean::operator long long() const noexcept { return value; }
-	explicit Boolean::operator std::string() const noexcept
-	{
-		return value ? "true" : "false";
 	}
 	// Main operators
 	NJS::VAR const &Boolean::operator[](NJS::VAR key) const
@@ -122,5 +90,4 @@ namespace NJS::Class
 	Boolean Boolean::operator>>=(const Boolean &_v1) { throw InvalidTypeException(); }
 	Boolean Boolean::operator<<=(const Boolean &_v1) { throw InvalidTypeException(); }
 	// TODO: ">>>" and ">>>=" operators
->>>>>>> develop-classes
 } // namespace NJS::Class

@@ -35,11 +35,33 @@ namespace NJS::Class
 		inline bool isInt() const noexcept;
 		void Delete() noexcept;
 		// Native cast
-		explicit operator bool() const noexcept;
-		explicit operator double() const noexcept;
-		explicit operator int() const noexcept;
-		explicit operator long long() const noexcept;
-		explicit operator std::string() const noexcept;
+		explicit Number::operator bool() const noexcept { return getInt(); }
+		explicit Number::operator double() const noexcept { return getDouble(); }
+		explicit Number::operator int() const noexcept { return getInt(); }
+		explicit Number::operator long long() const noexcept
+		{
+			if (isFinite())
+			{
+				return isInt() ? getInt() : getDouble();
+			}
+			if (isNaN())
+			{
+				return std::numeric_limits<long long>::quiet_NaN();
+			}
+			return std::numeric_limits<long long>::infinity() * (isNegative() ? -1 : 1);
+		}
+		explicit Number::operator std::string() const noexcept
+		{
+			if (isFinite())
+			{
+				return std::to_string(isInt() ? getInt() : getDouble());
+			}
+			if (isNaN())
+			{
+				return "NaN";
+			}
+			return isNegative() ? "-Infinity" : "Infinity";
+		}
 		// Main operators
 		NJS::VAR const &operator[](NJS::VAR key) const;
 		NJS::VAR &operator[](NJS::VAR key);

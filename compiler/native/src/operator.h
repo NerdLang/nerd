@@ -6,7 +6,7 @@ NJS::VAR __NJS_Boolean_Result(NJS::VAR _v)
 		return _v.get().b;
 	else if (_v.type == NJS::Enum::Type::STRING)
 	{
-		if (strlen(_v.get().s->__NJS_VALUE.c_str()) > 0)
+		if (strlen(_v.get().s->value.c_str()) > 0)
 			return true;
 		else
 			return false;
@@ -34,7 +34,7 @@ ostream &operator<<(ostream &os, const NJS::VAR &_v)
 		os << _v.get().d;
 		break;
 	case NJS::Enum::Type::STRING:
-		os << _v.get().s->__NJS_VALUE;
+		os << _v.get().s->value;
 		break;
 	case NJS::Enum::Type::OBJECT:
 		os << __NJS_Object_Stringify(_v);
@@ -71,7 +71,7 @@ NJS::VAR parseInt(NJS::VAR _str)
 #ifdef __NJS_ARDUINO
 		return NJS::VAR();
 #else
-		return __NJS_Create_Number(stoi(_str.get().s->__NJS_VALUE));
+		return __NJS_Create_Number(stoi(_str.get().s->value));
 #endif
 	}
 	else
@@ -96,7 +96,7 @@ NJS::VAR __NJS_Object_Keys(NJS::VAR _var)
 		return 0;
 	var _res = __NJS_Create_Array();
 
-	vector<pair<const char *, NJS::VAR>> *_obj = &_var.get().o->__OBJECT;
+	vector<pair<const char *, NJS::VAR>> *_obj = &_var.get().o->object;
 	int _j = (*_obj).size();
 	for (int _i = 0; _i < _j; _i++)
 	{
@@ -129,7 +129,7 @@ NJS::VAR __NJS_Object_Stringify(NJS::VAR _var, bool _bracket)
 	else if (_t == NJS::Enum::Type::ARRAY)
 	{
 		var _res = "";
-		vector<NJS::VAR> *_arr = &_var.get().a->__NJS_VALUE;
+		vector<NJS::VAR> *_arr = &_var.get().a->value;
 		if(_bracket) _res += "[";
 		int j = (*_arr).size();
 		for (int i = 0; i < j; i++)
@@ -145,7 +145,7 @@ NJS::VAR __NJS_Object_Stringify(NJS::VAR _var, bool _bracket)
 	else if (_t == NJS::Enum::Type::OBJECT)
 	{
 		var _res = "";
-		vector<pair<const char *, NJS::VAR>> *_obj = &_var.get().o->__OBJECT;
+		vector<pair<const char *, NJS::VAR>> *_obj = &_var.get().o->object;
 		_res = "{";
 		int j = (*_obj).size();
 		for (int _i = 0; _i < j; _i++)
@@ -178,7 +178,7 @@ NJS::VAR __NJS_Object_Clone(NJS::VAR _var)
 		case NJS::Enum::Type::ARRAY:
 		{
 			var _res = __NJS_Create_Array();
-			vector<NJS::VAR> *_arr = &_var.get().a->__NJS_VALUE;
+			vector<NJS::VAR> *_arr = &_var.get().a->value;
 
 			int j = (*_arr).size();
 			for (int i = 0; i < j; i++)
@@ -190,7 +190,7 @@ NJS::VAR __NJS_Object_Clone(NJS::VAR _var)
 		case NJS::Enum::Type::OBJECT:
 		{
 			var _res = __NJS_Create_Object();
-			vector<pair<const char *, NJS::VAR>> *_obj = &_var.get().o->__OBJECT;
+			vector<pair<const char *, NJS::VAR>> *_obj = &_var.get().o->object;
 			int j = (*_obj).size();
 			for (int _i = 0; _i < j; _i++)
 			{
@@ -207,7 +207,7 @@ void __NJS_Object_Construct(NJS::VAR _this, NJS::VAR _prototype)
 {
 	if(_this.type == NJS::Enum::Type::OBJECT && _prototype.type == NJS::Enum::Type::OBJECT)
 	{
-		vector<pair<const char *, NJS::VAR>> *_obj = &_prototype.get().o->__OBJECT;
+		vector<pair<const char *, NJS::VAR>> *_obj = &_prototype.get().o->object;
 		int j = (*_obj).size();
 		for (int _i = 0; _i < j; _i++)
 		{
@@ -247,7 +247,7 @@ void* __NJS_Get_Function(NJS::VAR _fn)
 
 function<var(vector<var>)> *__NJS_Get_Function(NJS::VAR _v)
 {
-	return (function<var(vector<var>)> *)_v.get().f->__NJS_VALUE;
+	return (function<var(vector<var>)> *)_v.get().f->value;
 }
 
 void *__NJS_Get_Native(NJS::VAR _native)

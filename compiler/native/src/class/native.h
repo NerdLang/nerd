@@ -1,20 +1,4 @@
 #pragma once
-<<<<<<< HEAD
-#include "function.h"
-
-namespace NJS::Class
-{
-	class Native : public Function
-	{
-	public:
-		const char *name = "function";
-		const NJS::Enum::Type type = NJS::Enum::Type::NATIVE;
-		Native();
-		Native(void *_f);
-		void *__NJS_VALUE;
-		explicit operator std::string() const;
-	};
-=======
 #include "native_header.h"
 #include <functional>
 #include <limits>
@@ -40,24 +24,6 @@ namespace NJS::Class
 		{
 			delete this;
 		}
-	}
-	// Native cast
-	explicit Native::operator bool() const noexcept { return true; }
-	explicit Native::operator double() const noexcept
-	{
-		return std::numeric_limits<double>::quiet_NaN();
-	}
-	explicit Native::operator int() const noexcept
-	{
-		return std::numeric_limits<int>::quiet_NaN();
-	}
-	explicit Native::operator long long() const noexcept
-	{
-		return std::numeric_limits<long long>::quiet_NaN();
-	}
-	explicit Native::operator std::string() const noexcept
-	{
-		return "[native code]";
 	}
 	// Main operators
 	NJS::VAR const &Native::operator[](NJS::VAR key) const
@@ -132,5 +98,4 @@ namespace NJS::Class
 	Native Native::operator>>=(const Native &_v1) { throw InvalidTypeException(); }
 	Native Native::operator<<=(const Native &_v1) { throw InvalidTypeException(); }
 	// TODO: ">>>" and ">>>=" operators
->>>>>>> develop-classes
 } // namespace NJS::Class

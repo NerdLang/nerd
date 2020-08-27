@@ -1,33 +1,4 @@
 #pragma once
-<<<<<<< HEAD
-#include "../var.h"
-#include "../enum.h"
-
-class Empty {};
-
-namespace NJS::Class
-{
-	class Undefined
-	{
-	public:
-		const char *name = "undefined";
-		const NJS::Enum::Type type = NJS::Enum::Type::UNDEFINED;
-		unsigned int cnt = 0;
-		Empty __NJS_VALUE;
-		Undefined();
-		void Delete();
-		explicit operator bool() const;
-		explicit operator double() const;
-		explicit operator int() const;
-		explicit operator std::string() const;
-		explicit operator long long() const;
-		template<typename T> NJS::VAR operator=(T &_v);
-		NJS::VAR const &operator[](std::string _index) const;
-		NJS::VAR &operator[](std::string _index);
-		template <class... Args>
-		NJS::VAR operator()(Args... args) const;
-	};
-=======
 #include "undefined_header.h"
 #include <limits>
 
@@ -44,12 +15,6 @@ namespace NJS::Class
 			delete this;
 		}
 	}
-	// Native cast
-	explicit Undefined::operator bool() const noexcept { return false; }
-	explicit Undefined::operator double() const noexcept { return 0.0; }
-	explicit Undefined::operator int() const noexcept { return 0; }
-	explicit Undefined::operator long long() const noexcept { return 0L; }
-	explicit Undefined::operator std::string() const noexcept { return "undefined"; }
 	// Main operators
 	NJS::VAR const &Undefined::operator[](NJS::VAR key) const
 	{
@@ -99,5 +64,4 @@ namespace NJS::Class
 	Undefined Undefined::operator>>=(const Undefined &_v1) { throw InvalidTypeException(); }
 	Undefined Undefined::operator<<=(const Undefined &_v1) { throw InvalidTypeException(); }
 	// TODO: ">>>" and ">>>=" operators
->>>>>>> develop-classes
 } // namespace NJS::Class

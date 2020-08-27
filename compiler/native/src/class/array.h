@@ -1,59 +1,4 @@
 #pragma once
-<<<<<<< HEAD
-#include "../var.h"
-#include "object.h"
-
-namespace NJS::Class
-{
-	class Array : public Object
-	{
-	public:
-		const char *name = "array";
-		const NJS::Enum::Type type = NJS::Enum::Type::ARRAY;
-		Array();
-		Array(std::vector<NJS::VAR> vec);
-		std::vector<NJS::VAR> __NJS_VALUE = std::vector<NJS::VAR>();
-		explicit operator double() const;
-		explicit operator int() const;
-		explicit operator std::string() const;
-		explicit operator long long() const;
-		NJS::VAR const &operator[](NJS::VAR _index) const;
-		NJS::VAR &operator[](NJS::VAR _index);
-		NJS::VAR __iterator() const;
-		NJS::VAR __unscopables() const;
-		NJS::VAR concat(std::vector<NJS::VAR> args) const;
-		NJS::VAR copyWithin(std::vector<NJS::VAR> args);
-		NJS::VAR entries(std::vector<NJS::VAR> args) const;
-		NJS::VAR every(std::vector<NJS::VAR> args) const;
-		NJS::VAR fill(std::vector<NJS::VAR> args) const;
-		NJS::VAR filter(std::vector<NJS::VAR> args) const;
-		NJS::VAR find(std::vector<NJS::VAR> args) const;
-		NJS::VAR findIndex(std::vector<NJS::VAR> args) const;
-		NJS::VAR flat(std::vector<NJS::VAR> args) const;
-		NJS::VAR flatMap(std::vector<NJS::VAR> args) const;
-		NJS::VAR forEach(std::vector<NJS::VAR> args) const;
-		NJS::VAR includes(std::vector<NJS::VAR> args) const;
-		NJS::VAR indexOf(std::vector<NJS::VAR> args) const;
-		NJS::VAR join(std::vector<NJS::VAR> args) const;
-		NJS::VAR keys() const;
-		NJS::VAR lastIndexOf(std::vector<NJS::VAR> args) const;
-		NJS::VAR map(std::vector<NJS::VAR> args) const;
-		NJS::VAR pop(std::vector<NJS::VAR> args);
-		NJS::VAR push(std::vector<NJS::VAR> args);
-		NJS::VAR reduce(std::vector<NJS::VAR> args) const;
-		NJS::VAR reduceRight(std::vector<NJS::VAR> args) const;
-		NJS::VAR reverse(std::vector<NJS::VAR> args);
-		NJS::VAR shift(std::vector<NJS::VAR> args);
-		NJS::VAR slice(std::vector<NJS::VAR> args) const;
-		NJS::VAR some(std::vector<NJS::VAR> args) const;
-		NJS::VAR sort(std::vector<NJS::VAR> args) const;
-		NJS::VAR splice(std::vector<NJS::VAR> args);
-		NJS::VAR toLocaleString() const;
-		NJS::VAR toString() const;
-		NJS::VAR unshift(std::vector<NJS::VAR> values);
-		NJS::VAR values() const;
-	};
-=======
 #include "array_header.h"
 #include <sstream>
 #include <limits>
@@ -80,54 +25,6 @@ namespace NJS::Class
 		{
 			delete this;
 		}
-	}
-	// Native cast
-	explicit Array::operator bool() const noexcept { return true; }
-	explicit Array::operator double() const noexcept
-	{
-		if (value.size() < 2)
-		{
-			return (double)value[0];
-		}
-		else
-		{
-			return std::numeric_limits<double>::quiet_NaN();
-		}
-	}
-	explicit Array::operator int() const noexcept
-	{
-		if (value.size() < 2)
-		{
-			return (int)value[0];
-		}
-		else
-		{
-			return std::numeric_limits<int>::quiet_NaN();
-		}
-	}
-	explicit Array::operator long long() const noexcept
-	{
-		if (value.size() < 2)
-		{
-			return (long long)value[0];
-		}
-		else
-		{
-			return std::numeric_limits<long long>::quiet_NaN();
-		}
-	}
-	explicit Array::operator std::string() const noexcept
-	{
-		auto l = value.size();
-		if (l == 0)
-			return "";
-		std::stringstream stream;
-		stream << (std::string)value[0];
-		for (auto i = 1; i < l; i++)
-		{
-			stream << "," << (std::string)value[i];
-		}
-		return stream.str();
 	}
 	// Main operators
 	NJS::VAR const &Array::operator[](NJS::VAR key) const
@@ -219,5 +116,4 @@ namespace NJS::Class
 	Array Array::operator>>=(const Array &_v1) { throw InvalidTypeException(); }
 	Array Array::operator<<=(const Array &_v1) { throw InvalidTypeException(); }
 	// TODO: ">>>" and ">>>=" operators
->>>>>>> develop-classes
 } // namespace NJS::Class

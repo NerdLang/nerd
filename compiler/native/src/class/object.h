@@ -1,23 +1,4 @@
 #pragma once
-<<<<<<< HEAD
-#include <vector>
-#include <string>
-#include "_base.h"
-#include "../enum.h"
-
-namespace NJS::Class
-{
-	class Object : public Base
-	{
-	public:
-		Object();
-		Object(std::vector<std::pair<const char *, NJS::VAR>> &obj);
-		std::vector<std::pair<const char *, NJS::VAR>> &__NJS_VALUE = *__OBJECT;
-		NJS::VAR valueOf() const;
-		NJS::VAR toLocaleString() const;
-		NJS::VAR toString() const;
-	};
-=======
 #include "object_header.h"
 #include <limits>
 
@@ -41,24 +22,6 @@ namespace NJS::Class
 		{
 			delete this;
 		}
-	}
-	// Native cast
-	explicit Object::operator bool() const noexcept { return true; }
-	explicit Object::operator double() const noexcept
-	{
-		return std::numeric_limits<double>::quiet_NaN();
-	}
-	explicit Object::operator int() const noexcept
-	{
-		return std::numeric_limits<int>::quiet_NaN();
-	}
-	explicit Object::operator long long() const noexcept
-	{
-		return std::numeric_limits<long long>::quiet_NaN();
-	}
-	explicit Object::operator std::string() const noexcept
-	{
-		return "[object Object]";
 	}
 	// Main operators
 	NJS::VAR const &Object::operator[](NJS::VAR key) const
@@ -129,5 +92,4 @@ namespace NJS::Class
 	Object Object::operator>>=(const Object &_v1) { throw InvalidTypeException(); }
 	Object Object::operator<<=(const Object &_v1) { throw InvalidTypeException(); }
 	// TODO: ">>>" and ">>>=" operators
->>>>>>> develop-classes
 } // namespace NJS::Class
