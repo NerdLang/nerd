@@ -31,6 +31,27 @@ namespace NJS::Class
 			delete this;
 		}
 	}
+	// Native cast
+	String::operator bool() const noexcept { return value.size() > 0; }
+	String::operator double() const noexcept
+	{
+		std::string::size_type end;
+		auto res = std::stod(value, &end);
+		return end == value.size() ? res : std::numeric_limits<double>::quiet_NaN();
+	}
+	String::operator int() const noexcept
+	{
+		std::string::size_type end;
+		auto res = std::stoi(value, &end, 10);
+		return end == value.size() ? res : std::numeric_limits<int>::quiet_NaN();
+	}
+	String::operator long long() const noexcept
+	{
+		std::string::size_type end;
+		auto res = std::stoll(value, &end, 10);
+		return end == value.size() ? res : std::numeric_limits<long long>::quiet_NaN();
+	}
+	String::operator std::string() const noexcept { return value; }
 	// Main operators
 	NJS::VAR const &String::operator[](NJS::VAR key) const
 	{
@@ -55,6 +76,7 @@ namespace NJS::Class
 	}
 	NJS::VAR &String::operator[](NJS::VAR key)
 	{
+		static NJS::VAR _char;
 		if (key.type == NJS::Enum::Type::NUMBER)
 		{
 			auto i = (int)key;
@@ -65,7 +87,8 @@ namespace NJS::Class
 					value.resize(i + 1);
 					(*this)["length"] = (int)value.size();
 				}
-				return NJS::VAR(value.at(i));
+				_char = value.at(i);
+				return _char;
 			}
 		}
 		auto &obj = this->object;

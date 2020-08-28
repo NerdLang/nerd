@@ -85,7 +85,7 @@ NJS::VAR __NJS_Object_Set(NJS::VAR _index, NJS::VAR _value, NJS::VAR _array)
 		else
 			return NJS::VAR();
 
-		_index.get().s->cnt++;
+		_index.get().s->counter++;
 		return __NJS_Object_Set(_index.get().s->value.c_str(), _value, _obj);
 	}
 

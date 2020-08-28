@@ -19,11 +19,11 @@ namespace NJS::Class
 		~Undefined();
 		void Delete() noexcept;
 		// Native cast
-		explicit Undefined::operator bool() const noexcept { return false; }
-		explicit Undefined::operator double() const noexcept { return 0.0; }
-		explicit Undefined::operator int() const noexcept { return 0; }
-		explicit Undefined::operator long long() const noexcept { return 0L; }
-		explicit Undefined::operator std::string() const noexcept { return "undefined"; }
+		explicit operator bool() const noexcept;
+		explicit operator double() const noexcept;
+		explicit operator int() const noexcept;
+		explicit operator long long() const noexcept;
+		explicit operator std::string() const noexcept;
 		// Main operators
 		NJS::VAR const &operator[](NJS::VAR key) const;
 		NJS::VAR &operator[](NJS::VAR key);

@@ -18,12 +18,30 @@ namespace NJS::Class
 		delete value;
 		object.~vector();
 	}
-	void Function::Delete()
+	void Function::Delete() noexcept
 	{
 		if (--counter == 0)
 		{
 			delete this;
 		}
+	}
+	// Native cast
+	Function::operator bool() const noexcept { return true; }
+	Function::operator double() const noexcept
+	{
+		return std::numeric_limits<double>::quiet_NaN();
+	}
+	Function::operator int() const noexcept
+	{
+		return std::numeric_limits<int>::quiet_NaN();
+	}
+	Function::operator long long() const noexcept
+	{
+		return std::numeric_limits<long long>::quiet_NaN();
+	}
+	Function::operator std::string() const noexcept
+	{
+		return "[native code]";
 	}
 	// Main operators
 	NJS::VAR const &Function::operator[](NJS::VAR key) const

@@ -23,6 +23,24 @@ namespace NJS::Class
 			delete this;
 		}
 	}
+	// Native cast
+	Object::operator bool() const noexcept { return true; }
+	Object::operator double() const noexcept
+	{
+		return std::numeric_limits<double>::quiet_NaN();
+	}
+	Object::operator int() const noexcept
+	{
+		return std::numeric_limits<int>::quiet_NaN();
+	}
+	Object::operator long long() const noexcept
+	{
+		return std::numeric_limits<long long>::quiet_NaN();
+	}
+	Object::operator std::string() const noexcept
+	{
+		return "[object Object]";
+	}
 	// Main operators
 	NJS::VAR const &Object::operator[](NJS::VAR key) const
 	{

@@ -70,7 +70,7 @@ namespace NJS
 			if (_v.type == NJS::Enum::Type::OBJECT)
 			{
 				NJS::MEMORY::REGISTER[_ptr] = NJS::MEMORY::REGISTER[_v._ptr];
-				NJS::MEMORY::REGISTER[_ptr].o->cnt++;
+				NJS::MEMORY::REGISTER[_ptr].o->counter++;
 			}
 			else if (_v.type == NJS::Enum::Type::STRING)
 			{
@@ -80,17 +80,17 @@ namespace NJS
 			else if (_v.type == NJS::Enum::Type::FUNCTION)
 			{
 				NJS::MEMORY::REGISTER[_ptr] = NJS::MEMORY::REGISTER[_v._ptr];
-				NJS::MEMORY::REGISTER[_ptr].f->cnt++;
+				NJS::MEMORY::REGISTER[_ptr].f->counter++;
 			}
 			else if (_v.type == NJS::Enum::Type::ARRAY)
 			{
 				NJS::MEMORY::REGISTER[_ptr] = NJS::MEMORY::REGISTER[_v._ptr];
-				NJS::MEMORY::REGISTER[_ptr].a->cnt++;
+				NJS::MEMORY::REGISTER[_ptr].a->counter++;
 			}
 			else if (_v.type == NJS::Enum::Type::NATIVE)
 			{
 				NJS::MEMORY::REGISTER[_ptr] = NJS::MEMORY::REGISTER[_v._ptr];
-				NJS::MEMORY::REGISTER[_ptr].n->cnt++;
+				NJS::MEMORY::REGISTER[_ptr].n->counter++;
 			}
 			else
 			{
@@ -242,7 +242,7 @@ namespace NJS
 					__NJS_RETURN_UNDEFINED;
 				}
 
-				_index.get().s->cnt++;
+				_index.get().s->counter++;
 				__NJS_Object_Set(_index.get().s->value.c_str(), VAR(), _obj);
 				return (*this)[_index];
 			}
@@ -347,27 +347,27 @@ namespace NJS
 				{
 					if(_index.get().s->value.compare("toString") == 0)
 					{
-						_index.get().s->cnt++;
+						_index.get().s->counter++;
 						if(this->type == NJS::Enum::Type::OBJECT) __NJS_Object_Set(_index.get().s->value.c_str(), __NJS_Create_Var_Scoped_Anon( return __NJS_Object_Stringify(*this);), _obj);
 						else __NJS_Object_Set(_index.get().s->value.c_str(), __NJS_Create_Var_Scoped_Anon( return (std::string)*this;), _obj);
 						return (*this)[_index];
 					}
 					else if(_index.get().s->value.compare("toLocaleString") == 0)
 					{
-						_index.get().s->cnt++;
+						_index.get().s->counter++;
 						if(this->type == NJS::Enum::Type::OBJECT) __NJS_Object_Set(_index.get().s->value.c_str(), __NJS_Create_Var_Scoped_Anon( return __NJS_Object_Stringify(*this);), _obj);
 						else __NJS_Object_Set(_index.get().s->value.c_str(), __NJS_Create_Var_Scoped_Anon( return (std::string)*this;), _obj);
 						return (*this)[_index];
 					}
 					else if(_index.get().s->value.compare("valueOf") == 0)
 					{
-						_index.get().s->cnt++;
+						_index.get().s->counter++;
 						__NJS_Object_Set(_index.get().s->value.c_str(), __NJS_Create_Var_Scoped_Anon( return *this;), _obj);
 						return (*this)[_index];
 					}
 				}
 				
-				_index.get().s->cnt++;
+				_index.get().s->counter++;
 				__NJS_Object_Set(_index.get().s->value.c_str(), VAR(), _obj);
 				return (*this)[_index];
 			}
@@ -400,7 +400,7 @@ namespace NJS
 			if (_v.type == NJS::Enum::Type::OBJECT)
 			{
 				NJS::MEMORY::REGISTER[_ptr] = NJS::MEMORY::REGISTER[_v._ptr];
-				NJS::MEMORY::REGISTER[_ptr].o->cnt++;
+				NJS::MEMORY::REGISTER[_ptr].o->counter++;
 			}
 			else if (_v.type == NJS::Enum::Type::STRING)
 			{
@@ -409,17 +409,17 @@ namespace NJS
 			else if (_v.type == NJS::Enum::Type::FUNCTION)
 			{
 				NJS::MEMORY::REGISTER[_ptr] = NJS::MEMORY::REGISTER[_v._ptr];
-				NJS::MEMORY::REGISTER[_ptr].f->cnt++;
+				NJS::MEMORY::REGISTER[_ptr].f->counter++;
 			}
 			else if (_v.type == NJS::Enum::Type::ARRAY)
 			{
 				NJS::MEMORY::REGISTER[_ptr] = NJS::MEMORY::REGISTER[_v._ptr];
-				NJS::MEMORY::REGISTER[_ptr].a->cnt++;
+				NJS::MEMORY::REGISTER[_ptr].a->counter++;
 			}
 			else if (_v.type == NJS::Enum::Type::NATIVE)
 			{
 				NJS::MEMORY::REGISTER[_ptr] = NJS::MEMORY::REGISTER[_v._ptr];
-				NJS::MEMORY::REGISTER[_ptr].n->cnt++;
+				NJS::MEMORY::REGISTER[_ptr].n->counter++;
 			}
 			else
 				NJS::MEMORY::REGISTER[_ptr] = NJS::MEMORY::REGISTER[_v._ptr];

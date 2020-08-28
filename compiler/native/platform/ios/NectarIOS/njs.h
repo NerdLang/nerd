@@ -267,7 +267,7 @@ struct NJS::VAR
 			if(_v.type == NJS::Enum::Type::OBJECT)
 			{
 				REGISTER[_ptr] = REGISTER[_v._ptr];
-				REGISTER[_ptr].o->cnt++;
+				REGISTER[_ptr].o->counter++;
 			}
 			else if(_v.type == NJS::Enum::Type::STRING)
 			{
@@ -278,17 +278,17 @@ struct NJS::VAR
 			else if(_v.type == NJS::Enum::Type::FUNCTION)
 			{
 				REGISTER[_ptr] = REGISTER[_v._ptr];
-				REGISTER[_ptr].f->cnt++;
+				REGISTER[_ptr].f->counter++;
 			}
 			else if(_v.type == NJS::Enum::Type::ARRAY)
 			{
 				REGISTER[_ptr] = REGISTER[_v._ptr];
-				REGISTER[_ptr].a->cnt++;
+				REGISTER[_ptr].a->counter++;
 			}
 			else if(_v.type == NJS::Enum::Type::NATIVE)
 			{
 				REGISTER[_ptr] = REGISTER[_v._ptr];
-				REGISTER[_ptr].n->cnt++;
+				REGISTER[_ptr].n->counter++;
 			}
 			else
 			{
@@ -403,7 +403,7 @@ struct NJS::VAR
 			if(_v.type == NJS::Enum::Type::OBJECT)
 			{
 				REGISTER[_ptr] = REGISTER[_v._ptr];
-				REGISTER[_ptr].o->cnt++;
+				REGISTER[_ptr].o->counter++;
 			}
 			else if(_v.type == NJS::Enum::Type::STRING)
 			{
@@ -412,17 +412,17 @@ struct NJS::VAR
 			else if(_v.type == NJS::Enum::Type::FUNCTION)
 			{
 				REGISTER[_ptr] = REGISTER[_v._ptr];
-				REGISTER[_ptr].f->cnt++;
+				REGISTER[_ptr].f->counter++;
 			}
 			else if(_v.type == NJS::Enum::Type::ARRAY)
 			{
 				REGISTER[_ptr] = REGISTER[_v._ptr];
-				REGISTER[_ptr].a->cnt++;
+				REGISTER[_ptr].a->counter++;
 			}
 			else if(_v.type == NJS::Enum::Type::NATIVE)
 			{
 				REGISTER[_ptr] = REGISTER[_v._ptr];
-				REGISTER[_ptr].n->cnt++;
+				REGISTER[_ptr].n->counter++;
 			}
 			else REGISTER[_ptr] = REGISTER[_v._ptr];
 			
@@ -819,7 +819,7 @@ NJS::VAR __NJS_Object_Set(NJS::VAR _index, NJS::VAR _value, NJS::VAR _array)
 	else if(_array.type == NJS::Enum::Type::FUNCTION) _obj = &_array.get().f->object;
     else return NJS::VAR();
 	
-	_index.get().s->cnt++;
+	_index.get().s->counter++;
 	return __NJS_Object_Set((char*)_index.get().s->value.c_str(), _value, _obj);
 
   }
@@ -1071,8 +1071,8 @@ NJS::Class::Native::NJS::Class::Native(void* _n)
 
 void NJS::Class::String::Delete()
 {
-	this->cnt --;
-	if(this->cnt < 1)
+	this->counter --;
+	if(this->counter < 1)
 	{
 		delete this;
 	}	
@@ -1080,8 +1080,8 @@ void NJS::Class::String::Delete()
 
 void NJS::Class::Array::Delete()
 {
-	this->cnt --;
-	if(this->cnt < 1)
+	this->counter --;
+	if(this->counter < 1)
 	{
 		delete this;
 	}	
@@ -1089,8 +1089,8 @@ void NJS::Class::Array::Delete()
 
 void NJS::Class::Object::Delete()
 {
-	this->cnt --;
-	if(this->cnt < 1)
+	this->counter --;
+	if(this->counter < 1)
 	{
 		delete this;
 	}	
@@ -1098,8 +1098,8 @@ void NJS::Class::Object::Delete()
 
 void NJS::Class::Function::Delete()
 {
-	this->cnt --;
-	if(this->cnt < 1)
+	this->counter --;
+	if(this->counter < 1)
 	{
 		delete this;
 	}	
@@ -1107,8 +1107,8 @@ void NJS::Class::Function::Delete()
 
 void NJS::Class::Native::Delete()
 {
-	this->cnt --;
-	if(this->cnt < 1)
+	this->counter --;
+	if(this->counter < 1)
 	{
 		delete this;
 	}	
