@@ -57,7 +57,11 @@ function createAnon(_code, _scope)
 				{
 					var _catch = "";
 					if(_scope) _catch = "=";
-					else if(_code.indexOf("'SCOPED_FUNCTION';") > -1) _catch = "=";
+					else if(_code.indexOf("'SCOPED_FUNCTION';") > -1) 
+					{
+						_code = _code.replace(/'SCOPED_FUNCTION';/g, "                  ");
+						_catch = "=";
+					}
 					
 					_end = i;
 					_count--;

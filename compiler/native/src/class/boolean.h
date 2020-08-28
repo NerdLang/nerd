@@ -29,13 +29,14 @@ namespace NJS::Class
 	// Main operators
 	NJS::VAR const Boolean::operator[](NJS::VAR key) const
 	{
-		auto *obj = &this->object;
+		auto &obj = this->object;
 		auto index = (std::string)key;
-		for (auto pair : *obj)
+		int _j = obj.size();
+		for (int _i = 0; _i < _j; _i++)
 		{
-			if (index.compare(pair.first) == 0)
+			if (index.compare(obj[_i].first) == 0)
 			{
-				return pair.second;
+				return obj[_i].second;
 			}
 		}
 		
@@ -45,15 +46,16 @@ namespace NJS::Class
 	{
 		auto &obj = this->object;
 		auto index = (std::string)key;
-		for (auto pair : obj)
+		int _j = obj.size();
+		for (int _i = 0; _i < _j; _i++)
 		{
-			if (index.compare(pair.first) == 0)
+			if (index.compare(obj[_i].first) == 0)
 			{
-				return pair.second;
+				return obj[_i].second;
 			}
 		}
 
-		obj.push_back(std::pair<const char *, NJS::VAR>(index.c_str(), NJS::VAR()));
+		obj.push_back(pair_t(index.c_str(), __NJS_VAR()));
 		return (*this)[key];
 	}
 	template <class... Args>

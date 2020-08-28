@@ -6,7 +6,7 @@ namespace NJS
 		/*** REGISTER ***/
 
 		#ifndef __NJS_REGISTER_SIZE
-		#define __NJS_REGISTER_SIZE 100000
+		#define __NJS_REGISTER_SIZE 1000000
 		#endif
 
 		int FREE_PTR = -1;

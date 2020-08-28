@@ -20,7 +20,7 @@
  *
  */
  
-#if defined(_USE_MATH_DEFINES) && !defined(_MATH_DEFINES_DEFINED)
+#if defined(_USE_MATH_DEFINES) && !defined(M_E)
 #define _MATH_DEFINES_DEFINED
 
 /* Define _USE_MATH_DEFINES before including math.h to expose these macro
