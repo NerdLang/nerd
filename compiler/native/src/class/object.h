@@ -44,16 +44,20 @@ namespace NJS::Class
 	// Main operators
 	NJS::VAR const &Object::operator[](NJS::VAR key) const
 	{
-		auto &obj = this->object;
+		auto *obj = &this->object;
 		auto index = (std::string)key;
-		for (auto pair : obj)
+		for (auto pair : *obj)
 		{
 			if (index.compare(pair.first) == 0)
 			{
 				return pair.second;
 			}
 		}
-		return NJS::VAR();
+		
+		// TODO: mark this index as non enumarable
+		key.get().s->counter++;
+		__NJS_Object_Set(key.get().s->value.c_str(), VAR(), obj);
+		return (*this)[key];
 	}
 	NJS::VAR &Object::operator[](NJS::VAR key)
 	{

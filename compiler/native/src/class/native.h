@@ -18,7 +18,7 @@ namespace NJS::Class
 		delete value;
 		object.~vector();
 	}
-	void Native::Delete()
+	void Native::Delete() noexcept
 	{
 		if (--counter == 0)
 		{
@@ -72,6 +72,7 @@ namespace NJS::Class
 		obj.push_back(std::pair<const char *, NJS::VAR>(index.c_str(), value));
 		return value;
 	}
+	
 	template <class... Args>
 	NJS::VAR Native::operator()(Args... args) const
 	{

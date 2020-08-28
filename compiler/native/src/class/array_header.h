@@ -31,14 +31,27 @@ namespace NJS::Class
 		template <class... Args> NJS::VAR operator()(Args... args) const;
 		// Comparation operators
 		Array operator!() const;
-		bool operator==(const Array &_v1) const;
+		
+		template <typename t>
+		bool operator==(const t &_v1) const;
+		
 		// === emulated with __NJS_EQUAL_VALUE_AND_TYPE
 		// !== emulated with __NJS_NOT_EQUAL_VALUE_AND_TYPE
-		bool operator!=(const Array &_v1) const;
-		bool operator<(const Array &_v1) const;
-		bool operator<=(const Array &_v1) const;
-		bool operator>(const Array &_v1) const;
-		bool operator>=(const Array &_v1) const;
+		
+		template <typename t>
+		bool operator!=(const t &_v1) const;
+		
+		template <typename t>
+		bool operator<(const t &_v1) const;
+		
+		template <typename t>
+		bool operator<=(const t &_v1) const;
+		
+		template <typename t>
+		bool operator>(const t &_v1) const;
+		
+		template <typename t>
+		bool operator>=(const t &_v1) const;
 		// Numeric operators
 		Array operator+() const;
 		Array operator-() const;

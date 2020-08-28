@@ -121,6 +121,13 @@ namespace NJS
 			this->type = NJS::Enum::Type::DOUBLE;
 			NJS::MEMORY::REGISTER[_ptr].d = _value;
 		}
+		
+		VAR(long long _value)
+		{
+			setPtr();
+			this->type = NJS::Enum::Type::DOUBLE;
+			NJS::MEMORY::REGISTER[_ptr].d = (double)_value;
+		}
 
 		VAR(char *_value)
 		{
@@ -834,5 +841,11 @@ namespace NJS
 		{
 			((string)*this).c_str();
 		}
+		
+		explicit operator const long long() const
+		{
+			(long long)((double)*this);
+		}
+		
 	};
 } // namespace NJS

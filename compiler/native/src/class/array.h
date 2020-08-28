@@ -128,14 +128,27 @@ namespace NJS::Class
 	NJS::VAR Array::operator()(Args... args) const { throw InvalidTypeException(); }
 	// Comparation operators
 	Array Array::operator!() const { throw InvalidTypeException(); }
-	bool Array::operator==(const Array &_v1) const { return false; }
+	
+	template <typename t>
+	bool Array::operator==(const t &_v1) const { return false; }
+	
 	// === emulated with __NJS_EQUAL_VALUE_AND_TYPE
 	// !== emulated with __NJS_NOT_EQUAL_VALUE_AND_TYPE
-	bool Array::operator!=(const Array &_v1) const { return true; }
-	bool Array::operator<(const Array &_v1) const { return (*this)[0] < _v1[0]; }
-	bool Array::operator<=(const Array &_v1) const { return (*this)[0] <= _v1[0]; }
-	bool Array::operator>(const Array &_v1) const { return (*this)[0] > _v1[0]; }
-	bool Array::operator>=(const Array &_v1) const { return (*this)[0] >= _v1[0]; }
+	
+	template <typename t>
+	bool Array::operator!=(const t &_v1) const { return true; }
+	
+	template <typename t>
+	bool Array::operator<(const t &_v1) const { return (*this)[0] < _v1;}
+	
+	template <typename t>
+	bool Array::operator<=(const t &_v1) const { return (*this)[0] <= _v1; }
+	
+	template <typename t>
+	bool Array::operator>(const t &_v1) const { return (*this)[0] > _v1; }
+	
+	template <typename t>
+	bool Array::operator>=(const t &_v1) const { return (*this)[0] >= _v1; }
 	// Numeric operators
 	Array Array::operator+() const { throw InvalidTypeException(); }
 	Array Array::operator-() const { throw InvalidTypeException(); }

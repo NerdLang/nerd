@@ -281,18 +281,30 @@ t operator/(t _left, const NJS::VAR &_right)
 	return _left / (t)_right;
 }
 
-template <typename t>
-t operator<(t _left, const NJS::VAR &_right)
+template <typename t, typename u>
+t operator<(t _left, const u &_right)
 {
-	return _left / (t)_right;
+	return _left < (t)_right;
 }
+
+template <typename t, typename u>
+t operator<=(t _left, const u &_right)
+{
+	return _left <= (t)_right;
+}
+
 
 template <typename t>
 t operator>(t _left, const NJS::VAR &_right)
 {
-	return _left / (t)_right;
+	return _left > (t)_right;
 }
 
+template <typename t>
+t operator>=(t _left, const NJS::VAR &_right)
+{
+	return _left >= (t)_right;
+}
 
 /*** END REDIFINING STD OPERATORS ***/
 
