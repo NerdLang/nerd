@@ -42,7 +42,7 @@ function genMetaFunction(_code)
         {
             if(_match[2][i].length > 0)
             {
-                _getVar += `var ${_match[2][i]}; if(_NJS_VARARGS.size() > ${i}) ${_match[2][i]} = _NJS_VARARGS[${i}];`;
+                _getVar += `var ${_match[2][i]}; if(__NJS_VARARGS.size() > ${i}) ${_match[2][i]} = __NJS_VARARGS[${i}];`;
             }
         }
         for(var i = _index; i < _code.length; i++)
@@ -64,7 +64,7 @@ function genMetaFunction(_code)
                         if(_code.indexOf("'SCOPED_FUNCTION';") > -1) _catch = "=";
                         else if(_code.indexOf("\"SCOPED_FUNCTION\";") > -1) _catch = "=";
 
-                        var _formated = "__NJS_DECL_FUNCTION<NJS::VAR (vector<var>)>* " + _genFN +" = new __NJS_DECL_FUNCTION<NJS::VAR (vector<var>)>([" + _catch + "]( vector<var> _NJS_VARARGS ) -> NJS::VAR" + _fn + _return + ");";
+                        var _formated = "__NJS_DECL_FUNCTION<NJS::VAR (var, vector<var>)>* " + _genFN +" = new __NJS_DECL_FUNCTION<NJS::VAR (var, vector<var>)>([" + _catch + "](var __INJECTED_THIS, vector<var> __NJS_VARARGS ) -> NJS::VAR" + _fn + _return + ");";
                         _formated += "var " + _match[1] + "=NJS::VAR(NJS::Enum::Type::FUNCTION, " + _genFN + ");";                        
                         _code = [_code.slice(0, _index), _formated, _code.slice(_end + 1)].join('');
                         break;

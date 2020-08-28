@@ -39,8 +39,7 @@
  using namespace NJS::Value;
  
 /*** $ERROR ***/
-function<NJS::VAR (NJS::VAR _var)>* __DOLLAR_TEST_ERROR = new function<NJS::VAR (NJS::VAR _var)>([&](NJS::VAR _var){ __NJS_Log_Console(_var); exit(1); return 0; });
-NJS::VAR __NJS_DOLLAR_ERROR = NJS::VAR(NJS::Enum::Type::FUNCTION, __DOLLAR_TEST_ERROR);
+NJS::VAR __NJS_DOLLAR_ERROR = __NJS_Create_Var_Unscoped_Anon( __NJS_Log_Console(__NJS_VARARGS[0]); exit(1); return NJS::VAR(); );
 /* end $ERROR */
  
  {INCLUDE}

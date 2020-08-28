@@ -8,5 +8,6 @@ namespace NJS::Class
 	{
 	};
 	typedef std::vector<NJS::VAR> vector_t;
-	typedef std::vector<std::pair<const char *, NJS::VAR>> object_t;
+	typedef std::pair<const char *, NJS::VAR> pair_t;
+	typedef std::vector<pair_t> object_t;
 } // namespace NJS::Class

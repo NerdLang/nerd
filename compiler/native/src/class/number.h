@@ -43,7 +43,7 @@ namespace NJS::Class
 			delete reinterpret_cast<double *>(value >> 1u);
 		}
 		double *tmp = &v;
-		value = (reinterpret_cast<unsigned int>(tmp) << 1) | 1;
+		value = (reinterpret_cast<long long>(tmp) << 1) | 1;
 	}
 	inline bool Number::isNaN() const noexcept
 	{
@@ -59,13 +59,13 @@ namespace NJS::Class
 	}
 
 	// Constructors
-	Number::Number() { counter++; }
-	Number::Number(int val)
+	Number::Number() { ++counter; }
+	Number::Number(const int val)
 	{
 		Number();
 		setInt(val);
 	}
-	Number::Number(double val)
+	Number::Number(const double val)
 	{
 		Number();
 		double dummy;
@@ -78,7 +78,7 @@ namespace NJS::Class
 			setDouble(val);
 		}
 	}
-	Number::Number(long long val)
+	Number::Number(const long long val)
 	{
 		Number();
 		setDouble(static_cast<double>(val));
@@ -87,7 +87,7 @@ namespace NJS::Class
 	inline bool Number::isInt() const noexcept { return (value & 1) == 0; }
 	void Number::Delete() noexcept
 	{
-		if (--counter < 1)
+		if (--counter == 0)
 		{
 			delete this;
 		}
@@ -146,8 +146,8 @@ namespace NJS::Class
 			}
 		}
 		auto value = NJS::VAR();
-		obj.push_back(std::pair<const char *, NJS::VAR>(str.c_str(), value));
-		return (*this)[key];
+		obj.push_back(pair_t(str.c_str(), value));
+		return value;
 	}
 	template <class... Args>
 	NJS::VAR Number::operator()(Args... args) const { throw InvalidTypeException(); }
@@ -363,7 +363,7 @@ namespace NJS::Class
 			if (a % b == 0)
 			{
 				setInt(a / b);
-				return;
+				return Number();
 			}
 		}
 		setDouble((double)*this / (double)_v1);

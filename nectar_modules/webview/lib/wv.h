@@ -29,8 +29,8 @@ function __NJS_LAUNCH_WEBVIEW(content, title, width, height)
 	if(width.type == __NJS_UNDEFINED) width = 600;
 	if(height.type == __NJS_UNDEFINED) height = 400;;
 	webview::webview w(true, nullptr);
-	w.set_title(title.get().s->value);
+	w.set_title(title.get().s->__NJS_VALUE);
 	w.set_size(width.get().i, height.get().i, WEBVIEW_HINT_NONE);
-	w.navigate(content.get().s->value);
+	w.navigate(content.get().s->__NJS_VALUE);
 	w.run();
 }

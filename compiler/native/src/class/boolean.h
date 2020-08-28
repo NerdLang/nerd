@@ -27,14 +27,34 @@ namespace NJS::Class
 		return value ? "true" : "false";
 	}
 	// Main operators
-	NJS::VAR const &Boolean::operator[](NJS::VAR key) const
+	NJS::VAR const Boolean::operator[](NJS::VAR key) const
 	{
+		auto *obj = &this->object;
+		auto index = (std::string)key;
+		for (auto pair : *obj)
+		{
+			if (index.compare(pair.first) == 0)
+			{
+				return pair.second;
+			}
+		}
+		
 		return NJS::VAR();
 	}
 	NJS::VAR &Boolean::operator[](NJS::VAR key)
 	{
-		static NJS::VAR _undef;
-		return _undef;
+		auto &obj = this->object;
+		auto index = (std::string)key;
+		for (auto pair : obj)
+		{
+			if (index.compare(pair.first) == 0)
+			{
+				return pair.second;
+			}
+		}
+
+		obj.push_back(std::pair<const char *, NJS::VAR>(index.c_str(), NJS::VAR()));
+		return (*this)[key];
 	}
 	template <class... Args>
 	NJS::VAR Boolean::operator()(Args... args) const { throw InvalidTypeException(); }

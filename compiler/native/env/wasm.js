@@ -74,15 +74,15 @@ var WASM =
   {
 		if(preset == "none")
 		{
-			return `${compiler} -D__NJS_REGISTER_SIZE=${COMPILER.REGISTER} ${_in} -O1 -fpermissive -w -s TOTAL_MEMORY=33554432 ${COMPILER.LIBS} -o ${out}`;
+			return `${compiler} -D__NJS_REGISTER_SIZE=${COMPILER.REGISTER} ${_in} -O1 -w -s TOTAL_MEMORY=33554432 ${COMPILER.LIBS} -o ${out}`;
 		}
 		else if(preset == "size")
 		{
-			return `${compiler} -D__NJS_REGISTER_SIZE=${COMPILER.REGISTER} ${_in} -Os -fno-exceptions -fno-rtti -fno-stack-protector -fomit-frame-pointer -fpermissive -w -s TOTAL_MEMORY=33554432 ${COMPILER.LIBS} -o ${out}`;
+			return `${compiler} -D__NJS_REGISTER_SIZE=${COMPILER.REGISTER} ${_in} -Os -fno-exceptions -fno-rtti -fno-stack-protector -fomit-frame-pointer -w -s TOTAL_MEMORY=33554432 ${COMPILER.LIBS} -o ${out}`;
 		}
 		else
 		{
-			return `${compiler} -D__NJS_REGISTER_SIZE=${COMPILER.REGISTER} ${_in} -O3 -fpermissive -w -s TOTAL_MEMORY=33554432 ${COMPILER.LIBS} -o ${out}`;
+			return `${compiler} -D__NJS_REGISTER_SIZE=${COMPILER.REGISTER} ${_in} -O3 -w -s TOTAL_MEMORY=33554432 ${COMPILER.LIBS} -o ${out}`;
 		}
   }
 }

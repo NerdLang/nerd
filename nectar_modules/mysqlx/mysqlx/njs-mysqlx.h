@@ -93,9 +93,9 @@ function __NJS_NATIVE_CONNECT_MYSQL(_auth, _schema, _coll)
         var _set = __NJS_Object_Get("set", _obj);
         if(_set && _set.type == __NJS_ARRAY)                                                                                   
         {                                                                                                                                                                                                                                               
-          for(int i = 0; i < _set.get().a->value.size(); i+=2)                                                             
+          for(int i = 0; i < _set.get().a->__NJS_VALUE.size(); i+=2)                                                             
           {                                                                                                                            
-            if(i+1 <= _set.get().a->value.size())                                                                            
+            if(i+1 <= _set.get().a->__NJS_VALUE.size())                                                                            
             {                                                                                                      
               var _left = __NJS_Object_Get(i, _set);                                                                                 
               var _right = __NJS_Object_Get(i+1, _set);
