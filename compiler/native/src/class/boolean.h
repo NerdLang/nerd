@@ -3,20 +3,16 @@
 namespace NJS::Class
 {
 	// Constructors
-	Boolean::Boolean() { ++counter; }
+	Boolean::Boolean() { counter++; }
 	Boolean::Boolean(bool val)
 	{
 		Boolean();
 		value = val;
 	}
 	// Methods
-	Boolean::~Boolean()
-	{
-		object.~vector();
-	}
 	void Boolean::Delete() noexcept
 	{
-		if (--counter == 0)
+		if (--counter < 1)
 		{
 			delete this;
 		}
@@ -33,31 +29,12 @@ namespace NJS::Class
 	// Main operators
 	NJS::VAR const &Boolean::operator[](NJS::VAR key) const
 	{
-		auto &obj = this->object;
-		auto index = (std::string)key;
-		for (auto pair : obj)
-		{
-			if (index.compare(pair.first) == 0)
-			{
-				return pair.second;
-			}
-		}
 		return NJS::VAR();
 	}
 	NJS::VAR &Boolean::operator[](NJS::VAR key)
 	{
-		auto &obj = this->object;
-		auto index = (std::string)key;
-		for (auto pair : obj)
-		{
-			if (index.compare(pair.first) == 0)
-			{
-				return pair.second;
-			}
-		}
-		auto value = NJS::VAR();
-		obj.push_back(std::pair<const char *, NJS::VAR>(index.c_str(), value));
-		return value;
+		static NJS::VAR _undef;
+		return _undef;
 	}
 	template <class... Args>
 	NJS::VAR Boolean::operator()(Args... args) const { throw InvalidTypeException(); }

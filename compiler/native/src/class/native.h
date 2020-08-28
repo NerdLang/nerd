@@ -6,21 +6,16 @@
 namespace NJS::Class
 {
 	// Constructors
-	Native::Native() { ++counter; }
+	Native::Native() { counter++; }
 	Native::Native(void *val)
 	{
 		Native();
 		value = val;
 	}
 	// Methods
-	Native::~Native()
-	{
-		delete value;
-		object.~vector();
-	}
 	void Native::Delete() noexcept
 	{
-		if (--counter == 0)
+		if (--counter < 1)
 		{
 			delete this;
 		}

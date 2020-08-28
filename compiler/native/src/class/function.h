@@ -6,21 +6,16 @@
 namespace NJS::Class
 {
 	// Constructors
-	Function::Function() { ++counter; }
+	Function::Function() { counter++; }
 	Function::Function(void *val)
 	{
 		Function();
 		value = val;
 	}
 	// Methods
-	Function::~Function()
-	{
-		delete value;
-		object.~vector();
-	}
 	void Function::Delete() noexcept
 	{
-		if (--counter == 0)
+		if (--counter < 1)
 		{
 			delete this;
 		}
@@ -44,7 +39,7 @@ namespace NJS::Class
 		return code;
 	}
 	// Main operators
-	NJS::VAR const &Function::operator[](NJS::VAR key) const
+	NJS::VAR const Function::operator[](NJS::VAR key) const
 	{
 		auto *obj = &this->object;
 		auto index = (std::string)key;
@@ -56,10 +51,7 @@ namespace NJS::Class
 			}
 		}
 		
-		// TODO: mark this index as non enumarable
-		key.get().s->counter++;
-		__NJS_Object_Set(key.get().s->value.c_str(), VAR(), obj);
-		return (*this)[key];
+		return NJS::VAR();
 	}
 	NJS::VAR &Function::operator[](NJS::VAR key)
 	{
@@ -72,9 +64,9 @@ namespace NJS::Class
 				return pair.second;
 			}
 		}
-		auto value = NJS::VAR();
-		obj.push_back(std::pair<const char *, NJS::VAR>(index.c_str(), value));
-		return value;
+
+		obj.push_back(std::pair<const char *, NJS::VAR>(index.c_str(), NJS::VAR()));
+		return (*this)[key];
 	}
 	template <class... Args>
 	NJS::VAR Function::operator()(Args... args) const

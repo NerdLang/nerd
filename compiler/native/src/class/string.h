@@ -6,27 +6,23 @@
 namespace NJS::Class
 {
 	// Constructors
-	String::String() { ++counter; }
+	String::String() { counter++; }
 	String::String(std::string val)
 	{
-		String();
+		counter++;
 		value = val;
-		(*this)["length"] = (int)val.size();
+		__NJS_Object_Set("length", (int)value.size(), &this->object);
 	}
 	String::String(const char* val)
 	{
-		String();
+		counter++;
 		value = val;
-		(*this)["length"] = (int)value.size();
+		__NJS_Object_Set("length", (int)value.size(), &this->object);
 	}
 	// Methods
-	String::~String()
-	{
-		object.~vector();
-	}
 	void String::Delete() noexcept
 	{
-		if (--counter == 0)
+		if (--counter < 1)
 		{
 			delete this;
 		}
@@ -53,7 +49,7 @@ namespace NJS::Class
 	}
 	String::operator std::string() const noexcept { return value; }
 	// Main operators
-	NJS::VAR const &String::operator[](NJS::VAR key) const
+	NJS::VAR const String::operator[](NJS::VAR key) const
 	{
 		if (key.type == NJS::Enum::Type::NUMBER)
 		{
@@ -85,7 +81,7 @@ namespace NJS::Class
 				if (i >= value.size())
 				{
 					value.resize(i + 1);
-					(*this)["length"] = (int)value.size();
+					__NJS_Object_Set("length", (int)value.size(), &this->object);
 				}
 				_char = value.at(i);
 				return _char;
@@ -100,9 +96,9 @@ namespace NJS::Class
 				return pair.second;
 			}
 		}
-		auto value = NJS::VAR();
-		obj.push_back(std::pair<const char *, NJS::VAR>(index.c_str(), value));
-		return value;
+
+		obj.push_back(std::pair<const char *, NJS::VAR>(index.c_str(), NJS::VAR()));
+		return (*this)[key];
 	}
 	template <class... Args>
 	NJS::VAR String::operator()(Args... args) const { throw InvalidTypeException(); }

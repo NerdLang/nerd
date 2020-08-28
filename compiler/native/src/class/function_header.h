@@ -16,9 +16,8 @@ namespace NJS::Class
 		// Properties
 		count_t counter = 0;
 		void* value = nullptr;
-		object_t object = {};
+		object_t object;
 		// Methods
-		~Function();
 		void Delete() noexcept;
 		// Native cast
 		explicit operator bool() const noexcept;
@@ -27,7 +26,7 @@ namespace NJS::Class
 		explicit operator long long() const noexcept;
 		explicit operator std::string() const noexcept;
 		// Main operators
-		NJS::VAR const &operator[](NJS::VAR key) const;
+		NJS::VAR const operator[](NJS::VAR key) const;
 		NJS::VAR &operator[](NJS::VAR key);
 		template <class... Args> NJS::VAR operator()(Args... args) const;
 		// Comparation operators

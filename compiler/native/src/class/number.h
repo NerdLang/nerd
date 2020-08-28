@@ -59,7 +59,7 @@ namespace NJS::Class
 	}
 
 	// Constructors
-	Number::Number() { ++counter; }
+	Number::Number() { counter++; }
 	Number::Number(int val)
 	{
 		Number();
@@ -84,18 +84,10 @@ namespace NJS::Class
 		setDouble(static_cast<double>(val));
 	}
 	// Methods
-	Number::~Number()
-	{
-		if (!isInt())
-		{
-			delete reinterpret_cast<double *>(value >> 1u);
-		}
-		object.~vector();
-	}
 	inline bool Number::isInt() const noexcept { return (value & 1) == 0; }
 	void Number::Delete() noexcept
 	{
-		if (--counter == 0)
+		if (--counter < 1)
 		{
 			delete this;
 		}
@@ -129,7 +121,7 @@ namespace NJS::Class
 		return isNegative() ? "-Infinity" : "Infinity";
 	}
 	// Main operators
-	NJS::VAR const &Number::operator[](NJS::VAR key) const
+	NJS::VAR const Number::operator[](NJS::VAR key) const
 	{
 		auto &obj = this->object;
 		auto index = (std::string)key;
@@ -155,7 +147,7 @@ namespace NJS::Class
 		}
 		auto value = NJS::VAR();
 		obj.push_back(std::pair<const char *, NJS::VAR>(str.c_str(), value));
-		return value;
+		return (*this)[key];
 	}
 	template <class... Args>
 	NJS::VAR Number::operator()(Args... args) const { throw InvalidTypeException(); }

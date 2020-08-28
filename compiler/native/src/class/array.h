@@ -6,22 +6,17 @@
 namespace NJS::Class
 {
 	// Constructors
-	Array::Array() { ++counter; }
+	Array::Array() { counter++; }
 	Array::Array(vector_t vec)
 	{
 		Array();
 		value = vec;
-		(*this)["length"] = (int)vec.size();
+		__NJS_Object_Set("length", (int)vec.size(), &this->object);
 	}
 	// Methods
-	Array::~Array()
-	{
-		value.~vector();
-		object.~vector();
-	}
 	void Array::Delete() noexcept
 	{
-		if (--counter == 0)
+		if (--counter < 1)
 		{
 			delete this;
 		}
@@ -75,7 +70,7 @@ namespace NJS::Class
 		return stream.str();
 	}
 	// Main operators
-	NJS::VAR const &Array::operator[](NJS::VAR key) const
+	NJS::VAR const Array::operator[](NJS::VAR key) const
 	{
 		if (key.type == NJS::Enum::Type::NUMBER)
 		{
@@ -106,7 +101,7 @@ namespace NJS::Class
 				if (i >= value.size())
 				{
 					value.resize(i + 1);
-					(*this)["length"] = (int)value.size();
+					__NJS_Object_Set("length", (int)value.size(), &this->object);
 				}
 				return value.at(i);
 			}
@@ -122,7 +117,7 @@ namespace NJS::Class
 		}
 		auto value = NJS::VAR();
 		obj.push_back(std::pair<const char *, NJS::VAR>(index.c_str(), value));
-		return value;
+		return (*this)[key];
 	}
 	template <class... Args>
 	NJS::VAR Array::operator()(Args... args) const { throw InvalidTypeException(); }
