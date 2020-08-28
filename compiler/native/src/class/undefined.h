@@ -7,7 +7,6 @@ namespace NJS::Class
 	// Constructors
 	Undefined::Undefined() { counter++; }
 	// Methods
-	Undefined::~Undefined() {}
 	void Undefined::Delete() noexcept
 	{
 		if (--counter < 1)
@@ -22,7 +21,7 @@ namespace NJS::Class
 	Undefined::operator long long() const noexcept { return 0L; }
 	Undefined::operator std::string() const noexcept { return "undefined"; }
 	// Main operators
-	NJS::VAR const &Undefined::operator[](NJS::VAR key) const
+	NJS::VAR const Undefined::operator[](NJS::VAR key) const
 	{
 		throw NJS::VAR("TypeError: Cannot read property '" + (std::string)key + "' of undefined ");
 	}

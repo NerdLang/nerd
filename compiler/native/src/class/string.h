@@ -7,16 +7,14 @@ namespace NJS::Class
 {
 	// Constructors
 	String::String() { ++counter; }
-	String::String(std::string val)
+	String::String(std::string &val) : value(val)
 	{
 		String();
-		value = val;
-		(*this)["length"] = (int)val.size();
+		(*this)["length"] = (int)value.size();
 	}
-	String::String(const char* val)
+	String::String(const char* val) : value(val)
 	{
 		String();
-		value = val;
 		(*this)["length"] = (int)value.size();
 	}
 	// Methods
@@ -53,7 +51,7 @@ namespace NJS::Class
 	}
 	String::operator std::string() const noexcept { return value; }
 	// Main operators
-	NJS::VAR const &String::operator[](NJS::VAR key) const
+	NJS::VAR const String::operator[](NJS::VAR key) const
 	{
 		if (key.type == NJS::Enum::Type::NUMBER)
 		{
@@ -121,7 +119,7 @@ namespace NJS::Class
 	String String::operator-() const { throw InvalidTypeException(); }
 	String String::operator++(const int _v1) { throw InvalidTypeException(); }
 	String String::operator--(const int _v1) { throw InvalidTypeException(); }
-	String String::operator+(const String &_v1) const { return value + _v1.value; }
+	String String::operator+(const String &_v1) const { return (value + _v1.value).c_str(); }
 	String String::operator+=(const String &_v1) { value += _v1.value; return *this; }
 	String String::operator-(const String &_v1) const { throw InvalidTypeException(); }
 	String String::operator-=(const String &_v1) { throw InvalidTypeException(); }

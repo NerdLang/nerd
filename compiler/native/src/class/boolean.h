@@ -4,16 +4,8 @@ namespace NJS::Class
 {
 	// Constructors
 	Boolean::Boolean() { ++counter; }
-	Boolean::Boolean(bool val)
-	{
-		Boolean();
-		value = val;
-	}
+	Boolean::Boolean(const bool val) : value(val) { Boolean(); }
 	// Methods
-	Boolean::~Boolean()
-	{
-		object.~vector();
-	}
 	void Boolean::Delete() noexcept
 	{
 		if (--counter == 0)
@@ -31,8 +23,10 @@ namespace NJS::Class
 		return value ? "true" : "false";
 	}
 	// Main operators
-	NJS::VAR const &Boolean::operator[](NJS::VAR key) const
+	NJS::VAR const Boolean::operator[](NJS::VAR key) const
 	{
+		// TODO: Add object support
+		/*
 		auto &obj = this->object;
 		auto index = (std::string)key;
 		for (auto pair : obj)
@@ -42,10 +36,12 @@ namespace NJS::Class
 				return pair.second;
 			}
 		}
+		*/
 		return NJS::VAR();
 	}
 	NJS::VAR &Boolean::operator[](NJS::VAR key)
 	{
+		/*
 		auto &obj = this->object;
 		auto index = (std::string)key;
 		for (auto pair : obj)
@@ -55,8 +51,9 @@ namespace NJS::Class
 				return pair.second;
 			}
 		}
+		*/
 		auto value = NJS::VAR();
-		obj.push_back(pair_t(index.c_str(), value));
+		// obj.push_back(pair_t(index.c_str(), value));
 		return value;
 	}
 	template <class... Args>

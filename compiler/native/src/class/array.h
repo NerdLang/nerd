@@ -7,11 +7,10 @@ namespace NJS::Class
 {
 	// Constructors
 	Array::Array() { ++counter; }
-	Array::Array(vector_t vec)
+	Array::Array(vector_t &val) : value(val)
 	{
 		Array();
-		value = vec;
-		(*this)["length"] = (int)vec.size();
+		(*this)["length"] = (int)value.size();
 	}
 	// Methods
 	Array::~Array()
@@ -75,7 +74,7 @@ namespace NJS::Class
 		return stream.str();
 	}
 	// Main operators
-	NJS::VAR const &Array::operator[](NJS::VAR key) const
+	NJS::VAR const Array::operator[](NJS::VAR key) const
 	{
 		if (key.type == NJS::Enum::Type::NUMBER)
 		{

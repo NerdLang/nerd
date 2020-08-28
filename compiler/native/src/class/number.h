@@ -60,12 +60,12 @@ namespace NJS::Class
 
 	// Constructors
 	Number::Number() { ++counter; }
-	Number::Number(int val)
+	Number::Number(const int val)
 	{
 		Number();
 		setInt(val);
 	}
-	Number::Number(double val)
+	Number::Number(const double val)
 	{
 		Number();
 		double dummy;
@@ -78,7 +78,7 @@ namespace NJS::Class
 			setDouble(val);
 		}
 	}
-	Number::Number(long long val)
+	Number::Number(const long long val)
 	{
 		Number();
 		setDouble(static_cast<double>(val));
@@ -129,7 +129,7 @@ namespace NJS::Class
 		return isNegative() ? "-Infinity" : "Infinity";
 	}
 	// Main operators
-	NJS::VAR const &Number::operator[](NJS::VAR key) const
+	NJS::VAR const Number::operator[](NJS::VAR key) const
 	{
 		auto &obj = this->object;
 		auto index = (std::string)key;

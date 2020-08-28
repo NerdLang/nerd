@@ -6,11 +6,7 @@ namespace NJS::Class
 {
 	// Constructors
 	Object::Object() { ++counter; }
-	Object::Object(object_t obj)
-	{
-		Object();
-		value = obj;
-	}
+	Object::Object(object_t &val) : value(val) { Object(); }
 	// Methods
 	Object::~Object()
 	{
@@ -42,7 +38,7 @@ namespace NJS::Class
 		return "[object Object]";
 	}
 	// Main operators
-	NJS::VAR const &Object::operator[](NJS::VAR key) const
+	NJS::VAR const Object::operator[](NJS::VAR key) const
 	{
 		auto &obj = this->object;
 		auto index = (std::string)key;

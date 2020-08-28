@@ -7,11 +7,7 @@ namespace NJS::Class
 {
 	// Constructors
 	Native::Native() { counter++; }
-	Native::Native(void *val)
-	{
-		Native();
-		value = val;
-	}
+	Native::Native(void *val) : value(val) { Native(); }
 	// Methods
 	void Native::Delete() noexcept
 	{
@@ -39,7 +35,7 @@ namespace NJS::Class
 		return "[native code]";
 	}
 	// Main operators
-	NJS::VAR const &Native::operator[](NJS::VAR key) const
+	NJS::VAR const Native::operator[](NJS::VAR key) const
 	{
 		auto &obj = this->object;
 		auto index = (std::string)key;

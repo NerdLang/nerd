@@ -11,6 +11,7 @@ namespace NJS::Class
 		const NJS::Enum::Type type = NJS::Enum::Type::OBJECT;
 		// Constructors
 		Object();
+		Object(object_t &val);
 		// Properties
 		count_t counter = 0;
 		object_t object;

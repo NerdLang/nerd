@@ -7,11 +7,7 @@ namespace NJS::Class
 {
 	// Constructors
 	Function::Function() { ++counter; }
-	Function::Function(void *val)
-	{
-		Function();
-		value = val;
-	}
+	Function::Function(void *val) : value(val) { Function(); }
 	// Methods
 	Function::~Function()
 	{
@@ -41,10 +37,10 @@ namespace NJS::Class
 	}
 	Function::operator std::string() const noexcept
 	{
-		return "[native code]";
+		return code;
 	}
 	// Main operators
-	NJS::VAR const &Function::operator[](NJS::VAR key) const
+	NJS::VAR const Function::operator[](NJS::VAR key) const
 	{
 		auto &obj = this->object;
 		auto index = (std::string)key;

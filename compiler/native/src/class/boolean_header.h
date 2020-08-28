@@ -11,7 +11,7 @@ namespace NJS::Class
 		const NJS::Enum::Type type = NJS::Enum::Type::BOOLEAN;
 		// Constructors
 		Boolean();
-		Boolean(bool val);
+		Boolean(const bool val);
 		// Properties
 		count_t counter = 0;
 		bool value = false;
@@ -24,7 +24,7 @@ namespace NJS::Class
 		explicit operator long long() const noexcept;
 		explicit operator std::string() const noexcept;
 		// Main operators
-		NJS::VAR const &operator[](NJS::VAR key) const;
+		NJS::VAR const operator[](NJS::VAR key) const;
 		NJS::VAR &operator[](NJS::VAR key);
 		template <class... Args> NJS::VAR operator()(Args... args) const;
 		// Comparation operators

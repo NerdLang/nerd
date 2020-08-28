@@ -11,7 +11,7 @@ namespace NJS::Class
 		const NJS::Enum::Type type = NJS::Enum::Type::ARRAY;
 		// Constructors
 		Array();
-		Array(vector_t vec);
+		Array(vector_t &val);
 		// Properties
 		count_t counter = 0;
 		vector_t value;
