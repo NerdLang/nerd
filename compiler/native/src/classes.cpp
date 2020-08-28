@@ -1,9 +1,0 @@
-#pragma once
-#include "./class/array.cpp"
-#include "./class/boolean.cpp"
-#include "./class/function.cpp"
-#include "./class/native.cpp"
-#include "./class/number.cpp"
-#include "./class/object.cpp"
-#include "./class/string.cpp"
-#include "./class/undefined.cpp"
