@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 #pragma once
 
 namespace NJS {
@@ -8,7 +7,6 @@ namespace NJS {
 		bool NotEqualStrict(NJS::VAR a, NJS::VAR b);
 	};
 }
-=======
 NJS::VAR __NJS_Log_Console(NJS::VAR _var);
 NJS::VAR __NJS_Object_Keys(NJS::VAR _var);
 NJS::VAR __NJS_Object_Stringify(NJS::VAR _var);
@@ -36,7 +34,7 @@ m remainder(m _dividend, n _divisor)
 }
 #endif
 template <typename m, typename n>
-string __NJS_Concat_To_Str(m _left, n _right)
+std::string __NJS_Concat_To_Str(m _left, n _right)
 {
 	std::stringstream output;
 	output << _left << _right;
@@ -64,4 +62,3 @@ double __NJS_Str_To_Double(m _left)
 	return out;
 }
 /* END NUMBER MANIPULATION */
->>>>>>> develop-classes
