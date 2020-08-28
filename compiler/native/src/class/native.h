@@ -6,21 +6,16 @@
 namespace NJS::Class
 {
 	// Constructors
-	Native::Native() { ++counter; }
+	Native::Native() { counter++; }
 	Native::Native(void *val)
 	{
 		Native();
 		value = val;
 	}
 	// Methods
-	Native::~Native()
+	void Native::Delete() noexcept
 	{
-		delete value;
-		object.~vector();
-	}
-	void Native::Delete()
-	{
-		if (--counter == 0)
+		if (--counter < 1)
 		{
 			delete this;
 		}
@@ -72,6 +67,7 @@ namespace NJS::Class
 		obj.push_back(pair_t(index.c_str(), value));
 		return value;
 	}
+	
 	template <class... Args>
 	NJS::VAR Native::operator()(Args... args) const
 	{

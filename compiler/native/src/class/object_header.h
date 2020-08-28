@@ -11,13 +11,11 @@ namespace NJS::Class
 		const NJS::Enum::Type type = NJS::Enum::Type::OBJECT;
 		// Constructors
 		Object();
-		Object(object_t obj);
 		// Properties
 		count_t counter = 0;
-		object_t object = {};
+		object_t object;
 		object_t &value = object;
 		// Methods
-		~Object();
 		void Delete() noexcept;
 		// Native cast
 		explicit operator bool() const noexcept;
@@ -26,7 +24,7 @@ namespace NJS::Class
 		explicit operator long long() const noexcept;
 		explicit operator std::string() const noexcept;
 		// Main operators
-		NJS::VAR const &operator[](NJS::VAR key) const;
+		NJS::VAR const operator[](NJS::VAR key) const;
 		NJS::VAR &operator[](NJS::VAR key);
 		template <class... Args> NJS::VAR operator()(Args... args) const;
 		// Comparation operators

@@ -5,12 +5,12 @@
 namespace NJS::Class
 {
 	// Constructors
-	Undefined::Undefined() { ++counter; }
+	Undefined::Undefined() { counter++; }
 	// Methods
 	Undefined::~Undefined() {}
 	void Undefined::Delete() noexcept
 	{
-		if (--counter == 0)
+		if (--counter < 1)
 		{
 			delete this;
 		}

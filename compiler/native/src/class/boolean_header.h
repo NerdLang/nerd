@@ -15,9 +15,7 @@ namespace NJS::Class
 		// Properties
 		count_t counter = 0;
 		bool value = false;
-		object_t object = {};
 		// Methods
-		~Boolean();
 		void Delete() noexcept;
 		// Native cast
 		explicit operator bool() const noexcept;
