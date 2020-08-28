@@ -56,7 +56,7 @@ namespace NJS::Class
 			}
 		}
 		auto value = NJS::VAR();
-		obj.push_back(std::pair<const char *, NJS::VAR>(index.c_str(), value));
+		obj.push_back(pair_t(index.c_str(), value));
 		return value;
 	}
 	template <class... Args>
