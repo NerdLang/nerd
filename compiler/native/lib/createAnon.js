@@ -22,7 +22,6 @@
  
 function createAnon(_code, _scope)
 {	
-	var _matchThis = new RegExp(/(| |{|,)__NJS_THIS([\.(";)]|$)/);
 	var _return = "return __NJS_Create_Undefined();}";
 	var _searchAnonFN = new RegExp(/(var)* *([\[\]a-zA-Z0-9_"]*) *= *function +\(([a-zA-Z0-9_\-, ]*)\)/);
 	var _index = _code.search(_searchAnonFN);
@@ -43,7 +42,7 @@ function createAnon(_code, _scope)
 		{
 			if(_match[3][i].length > 0)
 			{
-				_getVar += `var ${_match[3][i]}; if(_NJS_VARARGS.size() > ${i}) ${_match[3][i]} = _NJS_VARARGS[${i}];`;
+				_getVar += `var ${_match[3][i]}; if(__NJS_VARARGS.size() > ${i}) ${_match[3][i]} = __NJS_VARARGS[${i}];`;
 			}
 		}
 
@@ -64,21 +63,13 @@ function createAnon(_code, _scope)
 					_count--;
 					if(_count == 0)
 					{
-						
-						var _fn = "{" + _getVar + _code.substring(_start + 1, _end);
-						var _fnThis = "{" + _getVar + " var __NJS_THIS = __NJS_Create_Object();" + _code.substring(_start + 1, _end);
+						var _fn = "{" + _getVar + " var __NJS_THIS; if(__INJECTED_THIS.type != NJS::Enum::Type::UNDEFINED) __NJS_THIS = __INJECTED_THIS; else __NJS_THIS = __NJS_Create_Object();" + _code.substring(_start + 1, _end);
 
-						if(_code.indexOf("'__NJS_CLASS_ANON__';"))
-						{
-							_code.replace("'__NJS_CLASS_ANON__';", "");
-						}
-						else if(_code.search(_matchThis) > -1) _fn = _fnThis;
-						
 						var _formated = "";
 
 						if(_match[1]) COMPILER.DECL.push(`var ${_match[2]};`);
 						if(_match[2]) _formated += _match[2] + " = ";
-						_formated += "NJS::VAR(NJS::Enum::Type::FUNCTION, new function<NJS::VAR (vector<var>)> ([" + _catch + "](vector<var> _NJS_VARARGS) -> NJS::VAR" + _fn + os.EOL + _return + "));";
+						_formated += "NJS::VAR(NJS::Enum::Type::FUNCTION, new function<NJS::VAR (var, vector<var>)> ([" + _catch + "](var __INJECTED_THIS, vector<var> __NJS_VARARGS) -> NJS::VAR" + _fn + os.EOL + _return + "));";
 						_code = [_code.slice(0, _index), _formated, _code.slice(_end + 1)].join('');		
 						break;
 					}

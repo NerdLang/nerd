@@ -22,18 +22,18 @@
 
  #include "SPI.h"
 
- __NJS_FFI_FUNCTION(__NJS_BEGIN_TRANSACTION, __NJS_VAR _v1, __NJS_VAR _v2, __NJS_VAR _v3)
+ function __NJS_BEGIN_TRANSACTION (__NJS_VAR _v1, __NJS_VAR _v2, __NJS_VAR _v3)
 { 
 	SPI.beginTransaction(SPISettings(__NJS_Get_Int(_v1), __NJS_Get_Int(_v2), __NJS_Get_Int(_v3)));
 	return __NJS_VAR();
 };
  
- __NJS_FFI_FUNCTION(__NJS_END_TRANSACTION, __NJS_VAR _v1, __NJS_VAR _v2, __NJS_VAR _v3)
+ function __NJS_END_TRANSACTION (__NJS_VAR _v1, __NJS_VAR _v2, __NJS_VAR _v3)
 { 
 	return __NJS_VAR();
 };
 
- __NJS_FFI_FUNCTION(__NJS_TRANSFER, __NJS_VAR _v1, __NJS_VAR _v2, __NJS_VAR _v3)
+ function __NJS_TRANSFER (__NJS_VAR _v1, __NJS_VAR _v2, __NJS_VAR _v3)
 { 
 	return __NJS_VAR();
 };

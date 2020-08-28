@@ -43,7 +43,7 @@ namespace NJS::Class
 			delete reinterpret_cast<double *>(value >> 1u);
 		}
 		double *tmp = &v;
-		value = (reinterpret_cast<unsigned int>(tmp) << 1) | 1;
+		value = (reinterpret_cast<long long>(tmp) << 1) | 1;
 	}
 	inline bool Number::isNaN() const noexcept
 	{
@@ -371,7 +371,7 @@ namespace NJS::Class
 			if (a % b == 0)
 			{
 				setInt(a / b);
-				return;
+				return Number();
 			}
 		}
 		setDouble((double)*this / (double)_v1);

@@ -19,6 +19,7 @@ namespace NJS::Class
 		object_t object;
 		// Methods
 		void Delete() noexcept;
+		NJS::VAR Call(var __INJECTED_THIS, vector<var> __NJS_VARARGS);
 		// Native cast
 		explicit operator bool() const noexcept;
 		explicit operator double() const noexcept;
@@ -28,7 +29,7 @@ namespace NJS::Class
 		// Main operators
 		NJS::VAR const operator[](NJS::VAR key) const;
 		NJS::VAR &operator[](NJS::VAR key);
-		template <class... Args> NJS::VAR operator()(Args... args) const;
+		template <class... Args> NJS::VAR operator()(Args... args);
 		// Comparation operators
 		Function operator!() const;
 		bool operator==(const Function &_v1) const;

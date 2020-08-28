@@ -14,6 +14,7 @@ namespace NJS::Class
 		Boolean(const bool val);
 		// Properties
 		count_t counter = 0;
+		object_t object = {};
 		bool value = false;
 		// Methods
 		void Delete() noexcept;
