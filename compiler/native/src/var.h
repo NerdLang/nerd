@@ -458,7 +458,7 @@ namespace NJS
 		/// Arithmetic operators
 		VAR operator+(const VAR &_v1)
 		{
-			/*
+			
 			if (type == NJS::Enum::Type::STRING || type == NJS::Enum::Type::ARRAY || type == NJS::Enum::Type::OBJECT || _v1.type == NJS::Enum::Type::STRING)
 				return __NJS_Concat_To_Str((string) * this, (string)_v1);
 			else if (type == NJS::Enum::Type::NUMBER)
@@ -466,7 +466,7 @@ namespace NJS
 			else if (type == NJS::Enum::Type::DOUBLE)
 				return VAR((double)*this + (double)_v1);
 			else return VAR();
-			*/
+			
 		}
 		VAR operator+(const char _v1[])
 		{
