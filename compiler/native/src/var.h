@@ -154,6 +154,7 @@ namespace NJS
 		{
 			setPtr();
 			type = NJS::Enum::Type::ARRAY;
+			_value->counter++;
 			NJS::MEMORY::REGISTER[_ptr].a = _value;
 		}
 		
@@ -162,12 +163,14 @@ namespace NJS
 			setPtr();
 			type = NJS::Enum::Type::ARRAY;
 			NJS::MEMORY::REGISTER[_ptr].a = (NJS::Class::Array *)_value;
+			NJS::MEMORY::REGISTER[_ptr].a->counter++;
 		}
 		
 		VAR(NJS::Class::Boolean *_value)
 		{
 			setPtr();
 			type = NJS::Enum::Type::BOOLEAN;
+			_value->counter++;
 			NJS::MEMORY::REGISTER[_ptr].b = _value;
 		}
 		
@@ -175,6 +178,7 @@ namespace NJS
 		{
 			setPtr();
 			type = NJS::Enum::Type::FUNCTION;
+			_value->counter++;
 			NJS::MEMORY::REGISTER[_ptr].f = _value;
 		}
 		
@@ -182,6 +186,7 @@ namespace NJS
 		{
 			setPtr();
 			type = NJS::Enum::Type::OBJECT;
+			_value->counter++;
 			NJS::MEMORY::REGISTER[_ptr].o = _value;
 		}
 		
@@ -189,6 +194,7 @@ namespace NJS
 		{
 			setPtr();
 			type = NJS::Enum::Type::STRING;
+			_value->counter++;
 			NJS::MEMORY::REGISTER[_ptr].s = new NJS::Class::String(_value->value);
 		}
 		
@@ -196,6 +202,7 @@ namespace NJS
 		{
 			setPtr();
 			type = NJS::Enum::Type::STRING;
+			_value->counter++;
 			NJS::MEMORY::REGISTER[_ptr].i = 0; // TODO: replace when Class::Number is integrated
 		}
 		
@@ -203,6 +210,7 @@ namespace NJS
 		{
 			setPtr();
 			type = NJS::Enum::Type::NATIVE;
+			_value->counter++;
 			NJS::MEMORY::REGISTER[_ptr].n = _value;
 		}
 		VAR(NJS::Enum::Type _type, void *_value)

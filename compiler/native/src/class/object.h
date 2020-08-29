@@ -60,11 +60,11 @@ namespace NJS::Class
 		key.get().s->counter++;
 		if(key.get().s->value.compare("toString") == 0  || key.get().s->value.compare("toLocaleString") == 0)
 		{
-			object.push_back(pair_t(key.get().s->value.c_str(), __NJS_Create_Var_Scoped_Anon( counter++; return __NJS_Object_Stringify(this);)));
+			object.push_back(pair_t(key.get().s->value.c_str(), __NJS_Create_Var_Scoped_Anon( return __NJS_Object_Stringify(this);)));
 		}
 		else if(key.get().s->value.compare("valueOf") == 0)
 		{
-			object.push_back(pair_t(key.get().s->value.c_str(), __NJS_Create_Var_Scoped_Anon( counter++; return this; )));
+			object.push_back(pair_t(key.get().s->value.c_str(), __NJS_Create_Var_Scoped_Anon( return this; )));
 		}
 		else 
 		{
