@@ -63,7 +63,7 @@ var ARDUINO =
 		  console.log("[!] No target selected, switching to 'uno'");
 		  target = "uno";
 	  }
-	  var _cli = `${compiler} -D__NJS_REGISTER_SIZE=${COMPILER.REGISTER} ${OPTIONS[target].preset} -DARDUINO_ARCH_AVR  -w  -Os -fno-exceptions -fno-rtti -fno-stack-protector -fomit-frame-pointer -ffunction-sections -fdata-sections -Wl,--gc-sections \
+	  var _cli = `${compiler} -D__NJS_REGISTER_SIZE=${COMPILER.REGISTER} ${OPTIONS[target].preset} -DARDUINO_ARCH_AVR  -Os -fno-exceptions -fno-rtti -fno-stack-protector -fomit-frame-pointer -ffunction-sections -fdata-sections -Wl,--gc-sections \
 	  -I ${extern}/avr -I ${extern}/arduino/avr/variants/${OPTIONS[target].variant}/ -I ${extern}/arduino/avr/cores/arduino  -I ${extern}/avr/include -I ${extern}/stlarduino  ${extern}/arduino/avr/cores/arduino/abi.cpp -fno-threadsafe-statics -lm ${COMPILER.LIBS} -o ${out} ${_in}`;
 	  
  	  if(!OPT.elf) _cli += `&& avr-objcopy -O ihex -R .eeprom ${out}`;

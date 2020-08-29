@@ -39,11 +39,12 @@ namespace NJS::Class
 	{
 		auto &obj = this->object;
 		auto index = (std::string)key;
-		for (auto pair : obj)
+		int _j = obj.size();
+		for (int _i = 0; _i < _j; _i++)
 		{
-			if (index.compare(pair.first) == 0)
+			if (index.compare(obj[_i].first) == 0)
 			{
-				return pair.second;
+				return obj[_i].second;
 			}
 		}
 		return NJS::VAR();
@@ -52,16 +53,16 @@ namespace NJS::Class
 	{
 		auto &obj = this->object;
 		auto index = (std::string)key;
-		for (auto pair : obj)
+		int _j = obj.size();
+		for (int _i = 0; _i < _j; _i++)
 		{
-			if (index.compare(pair.first) == 0)
+			if (index.compare(obj[_i].first) == 0)
 			{
-				return pair.second;
+				return obj[_i].second;
 			}
 		}
-		auto value = NJS::VAR();
-		obj.push_back(pair_t(index.c_str(), value));
-		return value;
+		obj.push_back(pair_t(index.c_str(), __NJS_VAR()));
+		return (*this)[key];
 	}
 	
 	template <class... Args>

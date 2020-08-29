@@ -86,55 +86,62 @@ namespace NJS::Class
 		}
 		auto &obj = this->object;
 		auto index = (std::string)key;
-		for (auto pair : obj)
+		int _j = obj.size();
+		for (int _i = 0; _i < _j; _i++)
 		{
-			if (index.compare(pair.first) == 0)
+			if (index.compare(obj[_i].first) == 0)
 			{
-				return pair.second;
+				return obj[_i].second;
 			}
 		}
 		return NJS::VAR();
 	}
 	NJS::VAR &Array::operator[](NJS::VAR key)
 	{
+		static NJS::VAR _retUndefined;
 		if (key.type == NJS::Enum::Type::NUMBER)
 		{
 			auto i = (int)key;
-			if (i >= 0)
+			if (i < 0)
+			{
+				return _retUndefined;
+			}
+			else 
 			{
 				if (i >= value.size())
 				{
+					value.reserve(i + 1);
 					value.resize(i + 1);
 					(*this)["length"] = (int)value.size();
 				}
-				return value.at(i);
 			}
+			return value[i];
 		}
 		auto &obj = this->object;
 		auto index = (std::string)key;
-		for (auto pair : obj)
+		int _j = obj.size();
+		for (int _i = 0; _i < _j; _i++)
 		{
-			if (index.compare(pair.first) == 0)
+			if (index.compare(obj[_i].first) == 0)
 			{
-				return pair.second;
+				return obj[_i].second;
 			}
 		}
-		auto value = NJS::VAR();
-		obj.push_back(pair_t(index.c_str(), value));
-		return value;
+		obj.push_back(pair_t(index.c_str(), __NJS_VAR()));
+		return (*this)[key];
 	}
 	template <class... Args>
 	NJS::VAR Array::operator()(Args... args) const { throw InvalidTypeException(); }
 	// Comparation operators
 	Array Array::operator!() const { throw InvalidTypeException(); }
-	bool Array::operator==(const Array &_v1) const { return false; }
+	template <typename t> bool Array::operator==(const t &_v1) const { return false; }
 	// === emulated with __NJS_EQUAL_VALUE_AND_TYPE
 	// !== emulated with __NJS_NOT_EQUAL_VALUE_AND_TYPE
-	bool Array::operator!=(const Array &_v1) const { return true; }
-	bool Array::operator<(const Array &_v1) const { return (*this)[0] < _v1[0]; }
-	bool Array::operator<=(const Array &_v1) const { return (*this)[0] <= _v1[0]; }
-	bool Array::operator>(const Array &_v1) const { return (*this)[0] > _v1[0]; }
-	bool Array::operator>=(const Array &_v1) const { return (*this)[0] >= _v1[0]; }
+	template <typename t> bool Array::operator!=(const t &_v1) const { return true; }
+	template <typename t> bool Array::operator<(const t &_v1) const { return (*this)[0] < _v1[0]; }
+	template <typename t> bool Array::operator<=(const t &_v1) const { return (*this)[0] <= _v1[0]; }
+	template <typename t> bool Array::operator>(const t &_v1) const { return (*this)[0] > _v1[0]; }
+	template <typename t> bool Array::operator>=(const t &_v1) const { return (*this)[0] >= _v1[0]; }
 	// Numeric operators
 	Array Array::operator+() const { throw InvalidTypeException(); }
 	Array Array::operator-() const { throw InvalidTypeException(); }

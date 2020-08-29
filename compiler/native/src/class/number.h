@@ -133,11 +133,12 @@ namespace NJS::Class
 	{
 		auto &obj = this->object;
 		auto index = (std::string)key;
-		for (int i = 0, l = obj.size(); i < l; i++)
+		int _j = obj.size();
+		for (int _i = 0; _i < _j; _i++)
 		{
-			if (index.compare(obj[i].first) == 0)
+			if (index.compare(obj[_i].first) == 0)
 			{
-				return obj[i].second;
+				return obj[_i].second;
 			}
 		}
 		return NJS::VAR();
@@ -145,17 +146,16 @@ namespace NJS::Class
 	NJS::VAR &Number::operator[](NJS::VAR key)
 	{
 		auto &obj = this->object;
-		auto str = (std::string)key;
+		auto index = (std::string)key;
 		for (int i = 0, l = obj.size(); i < l; i++)
 		{
-			if (str.compare(obj[i].first) == 0)
+			if (index.compare(obj[i].first) == 0)
 			{
 				return obj[i].second;
 			}
 		}
-		auto value = NJS::VAR();
-		obj.push_back(pair_t(str.c_str(), value));
-		return value;
+		obj.push_back(pair_t(index.c_str(), __NJS_VAR()));
+		return (*this)[key];
 	}
 	template <class... Args>
 	NJS::VAR Number::operator()(Args... args) const { throw InvalidTypeException(); }
@@ -244,6 +244,7 @@ namespace NJS::Class
 			double v = getDouble();
 			setDouble(++v);
 		}
+		return *this;
 	}
 	Number Number::operator--(const int _v1)
 	{
@@ -257,6 +258,7 @@ namespace NJS::Class
 			double v = getDouble();
 			setDouble(--v);
 		}
+		return *this;
 	}
 	Number Number::operator+(const Number &_v1) const
 	{
@@ -375,6 +377,7 @@ namespace NJS::Class
 			}
 		}
 		setDouble((double)*this / (double)_v1);
+		return *this;
 	}
 	Number Number::operator%(const Number &_v1) const
 	{

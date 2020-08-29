@@ -5,16 +5,13 @@ namespace NJS
 {
 	namespace MEMORY
 	{
-		union VAL {
-			NJS::Class::Array *a;
-			NJS::Class::Boolean *b;
-			NJS::Class::Function *f;
-			NJS::Class::Native *n;
-			NJS::Class::Number *i;
-			NJS::Class::Object *o;
-			NJS::Class::String *s;
-			NJS::Class::Undefined u;
-		};
+
+		/*** REGISTER ***/
+
+		#ifndef __NJS_REGISTER_SIZE
+		#define __NJS_REGISTER_SIZE 1000000
+		#endif
+
 		int FREE_PTR = -1;
 		int CURR_PTR = 0;
 		#ifndef NJS__REGISTER_SIZE

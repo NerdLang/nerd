@@ -88,7 +88,11 @@ function createFunction(_code, _scope)
 						{
 							var _catch = "";
 							if(_scope) _catch = "&";
-							else if(_code.indexOf("'SCOPED_FUNCTION';") > -1) _catch = "=";
+							else if(_code.indexOf("'SCOPED_FUNCTION';") > -1) 
+							{
+								_code = _code.replace(/'SCOPED_FUNCTION';/g, "                  ");
+								_catch = "=";
+							}
 							
 							var _constructor = `${_match[1]}["prototype"]["constructor"] = __NJS_Create_Var_Scoped_Anon(return __NJS_THIS;);`;
 							var _fn = "{" + _getVar + " var __NJS_THIS; if(__INJECTED_THIS.type != NJS::Enum::Type::UNDEFINED) __NJS_THIS = __INJECTED_THIS; else __NJS_THIS = __NJS_Create_Object();" + _code.substring(_start + 1, _end);

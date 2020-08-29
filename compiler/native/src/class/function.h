@@ -44,11 +44,12 @@ namespace NJS::Class
 	{
 		auto &obj = this->object;
 		auto index = (std::string)key;
-		for (auto pair : obj)
+		int _j = obj.size();
+		for (int _i = 0; _i < _j; _i++)
 		{
-			if (index.compare(pair.first) == 0)
+			if (index.compare(obj[_i].first) == 0)
 			{
-				return pair.second;
+				return obj[_i].second;
 			}
 		}
 		return NJS::VAR();
@@ -57,16 +58,30 @@ namespace NJS::Class
 	{
 		auto &obj = this->object;
 		auto index = (std::string)key;
-		for (auto pair : obj)
+		int _j = obj.size();
+		for (int _i = 0; _i < _j; _i++)
 		{
-			if (index.compare(pair.first) == 0)
+			if (index.compare(obj[_i].first) == 0)
 			{
-				return pair.second;
+				return obj[_i].second;
 			}
 		}
-		auto value = NJS::VAR();
-		obj.push_back(pair_t(index.c_str(), value));
-		return value;
+		
+		if(index.compare("toString") == 0  || index.compare("toLocaleString") == 0)
+		{
+			key.get().s->counter++;
+			__NJS_Object_Set(index.c_str(), __NJS_Create_Var_Scoped_Anon( return (std::string)*this;), &this->object);
+			return (*this)[key];
+		}
+		else if(index.compare("valueOf") == 0)
+		{
+			key.get().s->counter++;
+			__NJS_Object_Set(index.c_str(), __NJS_Create_Var_Scoped_Anon( return this; ), &this->object);
+			return (*this)[key];
+		}
+		
+		obj.push_back(pair_t(index.c_str(), __NJS_VAR()));
+		return (*this)[key];
 	}
 	NJS::VAR Function::Call(var __INJECTED_THIS, vector<var> __NJS_VARARGS)
 	{

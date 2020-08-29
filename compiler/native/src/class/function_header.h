@@ -9,7 +9,7 @@ namespace NJS::Class
 		// Constants
 		const char *name = "function";
 		const NJS::Enum::Type type = NJS::Enum::Type::FUNCTION;
-		string code = "[native code]";
+		std::string code = "[native code]";
 		// Constructors
 		Function();
 		Function(void* val);
