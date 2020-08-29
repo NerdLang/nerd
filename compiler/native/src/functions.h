@@ -1,12 +1,3 @@
-#pragma once
-
-namespace NJS {
-	namespace Func {
-		void eval(NJS::VAR str);
-		bool EqualStrict(NJS::VAR a, NJS::VAR b);
-		bool NotEqualStrict(NJS::VAR a, NJS::VAR b);
-	};
-}
 NJS::VAR __NJS_Log_Console(NJS::VAR _var);
 NJS::VAR __NJS_Object_Keys(NJS::VAR _var);
 NJS::VAR __NJS_Object_Stringify(NJS::VAR _var);
@@ -34,7 +25,7 @@ m remainder(m _dividend, n _divisor)
 }
 #endif
 template <typename m, typename n>
-std::string __NJS_Concat_To_Str(m _left, n _right)
+string __NJS_Concat_To_Str(m _left, n _right)
 {
 	std::stringstream output;
 	output << _left << _right;

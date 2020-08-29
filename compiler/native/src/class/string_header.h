@@ -11,11 +11,11 @@ namespace NJS::Class
 		const NJS::Enum::Type type = NJS::Enum::Type::STRING;
 		// Constructors
 		String();
-		String(std::string &val);
+		String(std::string val);
 		String(const char* val);
 		// Properties
 		count_t counter = 0;
-		std::string value;
+		std::string value = "";
 		object_t object;
 		// Methods
 		void Delete() noexcept;

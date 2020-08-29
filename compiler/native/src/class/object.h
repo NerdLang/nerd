@@ -5,16 +5,11 @@
 namespace NJS::Class
 {
 	// Constructors
-	Object::Object() { ++counter; }
-	Object::Object(object_t &val) : value(val) { Object(); }
+	Object::Object() { counter++; }
 	// Methods
-	Object::~Object()
-	{
-		object.~vector();
-	}
 	void Object::Delete() noexcept
 	{
-		if (--counter == 0)
+		if (--counter < 1)
 		{
 			delete this;
 		}

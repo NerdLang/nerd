@@ -23,9 +23,9 @@ namespace NJS::Class
 		const int SMI_MIN = -1073741824;
 		// Constructors
 		Number();
-		Number(const int val);
-		Number(const double val);
-		Number(const long long val);
+		Number(int val);
+		Number(double val);
+		Number(long long val);
 		// Properties
 		count_t counter = 0;
 		uint32_t value = 0;
