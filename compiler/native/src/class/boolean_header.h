@@ -11,7 +11,7 @@ namespace NJS::Class
 		const NJS::Enum::Type type = NJS::Enum::Type::BOOLEAN;
 		// Constructors
 		Boolean();
-		Boolean(bool val);
+		Boolean(const bool val);
 		// Properties
 		count_t counter = 0;
 		object_t object = {};

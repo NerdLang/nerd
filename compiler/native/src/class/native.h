@@ -7,11 +7,7 @@ namespace NJS::Class
 {
 	// Constructors
 	Native::Native() { counter++; }
-	Native::Native(void *val)
-	{
-		Native();
-		value = val;
-	}
+	Native::Native(void *val) : value(val) { Native(); }
 	// Methods
 	void Native::Delete() noexcept
 	{

@@ -6,23 +6,25 @@
 namespace NJS::Class
 {
 	// Constructors
-	String::String() { counter++; }
-	String::String(std::string val)
+	String::String() { ++counter; }
+	String::String(std::string &val) : value(val)
 	{
-		counter++;
-		value = val;
-		__NJS_Object_Set("length", (int)value.size(), &this->object);
+		String();
+		(*this)["length"] = (int)value.size();
 	}
-	String::String(const char* val)
+	String::String(const char* val) : value(val)
 	{
-		counter++;
-		value = val;
-		__NJS_Object_Set("length", (int)value.size(), &this->object);
+		String();
+		(*this)["length"] = (int)value.size();
 	}
 	// Methods
+	String::~String()
+	{
+		object.~vector();
+	}
 	void String::Delete() noexcept
 	{
-		if (--counter < 1)
+		if (--counter == 0)
 		{
 			delete this;
 		}
@@ -82,7 +84,7 @@ namespace NJS::Class
 				if (i >= value.size())
 				{
 					value.resize(i + 1);
-					__NJS_Object_Set("length", (int)value.size(), &this->object);
+					(*this)["length"] = (int)value.size();
 				}
 				_char = value.at(i);
 			}
@@ -118,7 +120,7 @@ namespace NJS::Class
 	String String::operator-() const { throw InvalidTypeException(); }
 	String String::operator++(const int _v1) { throw InvalidTypeException(); }
 	String String::operator--(const int _v1) { throw InvalidTypeException(); }
-	String String::operator+(const String &_v1) const { return value + _v1.value; }
+	String String::operator+(const String &_v1) const { return (value + _v1.value).c_str(); }
 	String String::operator+=(const String &_v1) { value += _v1.value; return *this; }
 	String String::operator-(const String &_v1) const { throw InvalidTypeException(); }
 	String String::operator-=(const String &_v1) { throw InvalidTypeException(); }
