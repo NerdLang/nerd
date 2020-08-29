@@ -45,38 +45,33 @@ namespace NJS::Class
 				return obj[_i].second;
 			}
 		}
-		
 		return NJS::VAR();
 	}
 	NJS::VAR &Object::operator[](NJS::VAR key)
 	{
-		auto &obj = this->object;
-		auto index = (std::string)key;
-		int _j = obj.size();
-
-		for (int _i = 0; _i < _j; _i++)
+		for (auto & search : object)
 		{
-			if (index.compare(obj[_i].first) == 0)
+			if (key.get().s->value.compare(search.first) == 0)
 			{
-				return obj[_i].second;
+				return search.second;
 			}
 		}
-		
-		if(index.compare("toString") == 0  || index.compare("toLocaleString") == 0)
+
+		key.get().s->counter++;
+		if(key.get().s->value.compare("toString") == 0  || key.get().s->value.compare("toLocaleString") == 0)
 		{
-			key.get().s->counter++;
-			__NJS_Object_Set(index.c_str(), __NJS_Create_Var_Scoped_Anon( return __NJS_Object_Stringify(this);), &this->object);
-			return (*this)[key];
+			object.push_back(pair_t(key.get().s->value.c_str(), __NJS_Create_Var_Scoped_Anon( counter++; return __NJS_Object_Stringify(this);)));
 		}
-		else if(index.compare("valueOf") == 0)
+		else if(key.get().s->value.compare("valueOf") == 0)
 		{
-			key.get().s->counter++;
-			__NJS_Object_Set(index.c_str(), __NJS_Create_Var_Scoped_Anon( return this; ), &this->object);
-			return (*this)[key];
+			object.push_back(pair_t(key.get().s->value.c_str(), __NJS_Create_Var_Scoped_Anon( counter++; return this; )));
+		}
+		else 
+		{
+			object.push_back(pair_t(key.get().s->value.c_str(), __NJS_VAR()));
 		}
 
-		obj.push_back(pair_t(index.c_str(), __NJS_VAR()));
-		return (*this)[key];
+		return object[object.size() - 1].second;
 	}
 	template <class... Args>
 	NJS::VAR Object::operator()(Args... args) const { throw InvalidTypeException(); }

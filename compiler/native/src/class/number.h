@@ -137,17 +137,29 @@ namespace NJS::Class
 	}
 	NJS::VAR &Number::operator[](NJS::VAR key)
 	{
-		auto &obj = this->object;
-		auto index = (std::string)key;
-		for (int i = 0, l = obj.size(); i < l; i++)
+		for (auto & search : object)
 		{
-			if (index.compare(obj[i].first) == 0)
+			if (key.get().s->value.compare(search.first) == 0)
 			{
-				return obj[i].second;
+				return search.second;
 			}
 		}
-		obj.push_back(pair_t(index.c_str(), __NJS_VAR()));
-		return (*this)[key];
+
+		key.get().s->counter++;
+		if(key.get().s->value.compare("toString") == 0  || key.get().s->value.compare("toLocaleString") == 0)
+		{
+			object.push_back(pair_t(key.get().s->value.c_str(), __NJS_Create_Var_Scoped_Anon( counter++; return __NJS_Object_Stringify(this);)));
+		}
+		else if(key.get().s->value.compare("valueOf") == 0)
+		{
+			object.push_back(pair_t(key.get().s->value.c_str(), __NJS_Create_Var_Scoped_Anon( counter++; return this; )));
+		}
+		else 
+		{
+			object.push_back(pair_t(key.get().s->value.c_str(), __NJS_VAR()));
+		}
+
+		return object[object.size() - 1].second;
 	}
 	template <class... Args>
 	NJS::VAR Number::operator()(Args... args) const { throw InvalidTypeException(); }
