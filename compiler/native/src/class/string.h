@@ -87,22 +87,21 @@ namespace NJS::Class
 					(*this)["length"] = (int)value.size();
 				}
 				_char = value.at(i);
-				return _char;
 			}
+			return _char;
 		}
-		auto &obj = this->object;
-		auto index = (std::string)key;
-		int _j = obj.size();
-		for (int _i = 0; _i < _j; _i++)
+		
+		for (auto & search : object)
 		{
-			if (index.compare(obj[_i].first) == 0)
+			if (key.get().s->value.compare(search.first) == 0)
 			{
-				return obj[_i].second;
+				return search.second;
 			}
 		}
 
-		obj.push_back(pair_t(index.c_str(), __NJS_VAR()));
-		return (*this)[key];
+		key.get().s->counter++;
+		object.push_back(pair_t(key.get().s->value.c_str(), __NJS_VAR()));
+		return object[object.size() - 1].second;
 	}
 	template <class... Args>
 	NJS::VAR String::operator()(Args... args) const { throw InvalidTypeException(); }

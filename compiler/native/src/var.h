@@ -136,7 +136,7 @@ namespace NJS
 			NJS::MEMORY::REGISTER[_ptr].s = new NJS::Class::String(_value);
 		}
 
-		VAR(string _value)
+		VAR(std::string _value)
 		{
 			setPtr();
 			type = NJS::Enum::Type::STRING;
@@ -164,6 +164,13 @@ namespace NJS
 			NJS::MEMORY::REGISTER[_ptr].a = (NJS::Class::Array *)_value;
 		}
 		
+		VAR(NJS::Class::Boolean *_value)
+		{
+			setPtr();
+			type = NJS::Enum::Type::BOOLEAN;
+			NJS::MEMORY::REGISTER[_ptr].b = _value;
+		}
+		
 		VAR(NJS::Class::Function *_value)
 		{
 			setPtr();
@@ -177,6 +184,21 @@ namespace NJS
 			type = NJS::Enum::Type::OBJECT;
 			NJS::MEMORY::REGISTER[_ptr].o = _value;
 		}
+		
+		VAR(NJS::Class::String *_value)
+		{
+			setPtr();
+			type = NJS::Enum::Type::STRING;
+			NJS::MEMORY::REGISTER[_ptr].s = new NJS::Class::String(_value->value);
+		}
+		
+		VAR(NJS::Class::Number *_value)
+		{
+			setPtr();
+			type = NJS::Enum::Type::STRING;
+			NJS::MEMORY::REGISTER[_ptr].i = 0; // TODO: replace when Class::Number is integrated
+		}
+		
 		VAR(NJS::Class::Native *_value)
 		{
 			setPtr();
@@ -292,8 +314,6 @@ namespace NJS
 					if (_index.type != NJS::Enum::Type::STRING) return _retUndefined;
 					return (*this->get().f)[_index];
 				break;
-				case NJS::Enum::Type::NUMBER:
-					//return (*this->get().i)[_index];
 				case NJS::Enum::Type::STRING:
 					return (*this->get().s)[_index];
 				break;

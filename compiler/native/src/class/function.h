@@ -6,17 +6,16 @@
 namespace NJS::Class
 {
 	// Constructors
-	Function::Function() { ++counter; }
-	Function::Function(void *val) : value(val) { Function(); }
-	// Methods
-	Function::~Function()
+	Function::Function() { counter++; }
+	Function::Function(void *val)
 	{
-		delete value;
-		object.~vector();
+		counter++;
+		value = val;
 	}
+	// Methods
 	void Function::Delete() noexcept
 	{
-		if (--counter == 0)
+		if (--counter < 1)
 		{
 			delete this;
 		}
@@ -56,33 +55,41 @@ namespace NJS::Class
 	}
 	NJS::VAR &Function::operator[](NJS::VAR key)
 	{
-		auto &obj = this->object;
-		auto index = (std::string)key;
-		int _j = obj.size();
-		for (int _i = 0; _i < _j; _i++)
+		for (auto & search : object)
 		{
-			if (index.compare(obj[_i].first) == 0)
+			if (key.get().s->value.compare(search.first) == 0)
 			{
-				return obj[_i].second;
+				return search.second;
 			}
 		}
 		
-		if(index.compare("toString") == 0  || index.compare("toLocaleString") == 0)
+		key.get().s->counter++;
+		if(key.get().s->value.compare("toString") == 0  || key.get().s->value.compare("toLocaleString") == 0)
 		{
-			key.get().s->counter++;
-			__NJS_Object_Set(index.c_str(), __NJS_Create_Var_Scoped_Anon( return (std::string)*this;), &this->object);
-			return (*this)[key];
+			object.push_back(pair_t(key.get().s->value.c_str(), __NJS_Create_Var_Scoped_Anon( counter++; return (std::string)*this;)));
 		}
-		else if(index.compare("valueOf") == 0)
+		else if(key.get().s->value.compare("valueOf") == 0)
 		{
-			key.get().s->counter++;
-			__NJS_Object_Set(index.c_str(), __NJS_Create_Var_Scoped_Anon( return this; ), &this->object);
-			return (*this)[key];
+			object.push_back(pair_t(key.get().s->value.c_str(), __NJS_Create_Var_Scoped_Anon( counter++; return this; )));
 		}
+		else if(key.get().s->value.compare("call") == 0)
+		{
+			object.push_back(pair_t(key.get().s->value.c_str(), __NJS_Create_Var_Scoped_Anon(
+				counter++;
+				NJS::VAR __THIS;
+				if(__NJS_VARARGS.size() > 0)
+				{
+					__THIS = __NJS_VARARGS[0];
+					__NJS_VARARGS.erase(__NJS_VARARGS.begin());
+				}
+				return Call(__THIS, __NJS_VARARGS);
+			)));
+		}
+		else object.push_back(pair_t(key.get().s->value.c_str(), __NJS_VAR()));
 		
-		obj.push_back(pair_t(index.c_str(), __NJS_VAR()));
-		return (*this)[key];
+		return object[object.size() - 1].second;
 	}
+	
 	NJS::VAR Function::Call(var __INJECTED_THIS, vector<var> __NJS_VARARGS)
 	{
 		return (*static_cast<function<NJS::VAR(var, vector<NJS::VAR>)> *>(value))(__INJECTED_THIS, __NJS_VARARGS);
