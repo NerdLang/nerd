@@ -10,11 +10,11 @@ namespace NJS::Class
 	{
 		if (isInt())
 		{
-			return static_cast<int>(value >> 1u);
+			return static_cast<int32_t>(value >> 1u);
 		}
 		else
 		{
-			return static_cast<int>(*(reinterpret_cast<double *>(value >> 1u)));
+			return static_cast<int32_t>(*(reinterpret_cast<double *>(value >> 1u)));
 		}
 	}
 	inline void Number::setInt(int v) noexcept
@@ -23,13 +23,13 @@ namespace NJS::Class
 		{
 			delete reinterpret_cast<double *>(value >> 1u);
 		}
-		value = static_cast<unsigned int>(v) << 1u;
+		value = static_cast<uint32_t>(v << 1u);
 	}
 	inline double Number::getDouble() const noexcept
 	{
 		if (isInt())
 		{
-			return static_cast<double>(static_cast<int>(value >> 1u));
+			return static_cast<double>(static_cast<int32_t>(value >> 1u));
 		}
 		else
 		{
@@ -43,7 +43,7 @@ namespace NJS::Class
 			delete reinterpret_cast<double *>(value >> 1u);
 		}
 		double *tmp = &v;
-		value = (reinterpret_cast<long long>(tmp) << 1) | 1;
+		value = (reinterpret_cast<uintptr_t>(tmp) << 1) | 1;
 	}
 	inline bool Number::isNaN() const noexcept
 	{
