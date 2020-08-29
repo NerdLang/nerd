@@ -6,18 +6,7 @@ namespace NJS
 	private:
 		void setPtr()
 		{
-			if (_ptr > -1)
-			{
-				return;
-			}
-			if (NJS::MEMORY::FREE_PTR > -1)
-			{
-				_ptr = NJS::MEMORY::FREE[NJS::MEMORY::FREE_PTR--];
-			}
-			else
-			{
-				_ptr = NJS::MEMORY::REGISTER_PTR++;
-			}
+			_ptr = NJS::MEMORY::Get();
 		}
 
 	public:
@@ -58,7 +47,7 @@ namespace NJS
 			{
 				NJS::MEMORY::REGISTER[_ptr].n->Delete();
 			}
-			NJS::MEMORY::FREE[++NJS::MEMORY::FREE_PTR] = _ptr;
+			NJS::MEMORY::Release(_ptr);
 		}
 
 		/**/

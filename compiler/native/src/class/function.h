@@ -92,15 +92,15 @@ namespace NJS::Class
 	
 	NJS::VAR Function::Call(var __INJECTED_THIS, vector<var> __NJS_VARARGS)
 	{
-		return (*static_cast<function<NJS::VAR(var, vector<NJS::VAR>)> *>(value))(__INJECTED_THIS, __NJS_VARARGS);
+		return (*static_cast<function<NJS::VAR(var, vector_t)> *>(value))(__INJECTED_THIS, __NJS_VARARGS);
 	}
 		
 	
 	template <class... Args>
 	NJS::VAR Function::operator()(Args... args)
 	{
-		vector<NJS::VAR> _args = vector<var>{(NJS::VAR)args...};
-		return (*static_cast<function<NJS::VAR(var, vector<NJS::VAR>)> *>(value))(__NJS_Create_Undefined(), _args);
+		vector_t _args = vector<var>{(NJS::VAR)args...};
+		return (*static_cast<function<NJS::VAR(var, vector_t)> *>(value))(__NJS_Create_Undefined(), _args);
 	}
 	// Comparation operators
 	Function Function::operator!() const { throw InvalidTypeException(); }

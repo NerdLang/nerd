@@ -1,4 +1,6 @@
 #pragma once
+#define __INC_NJS_CLASSES_HEADER
+
 #include "./class/array_header.h"
 #include "./class/boolean_header.h"
 #include "./class/function_header.h"

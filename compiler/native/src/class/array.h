@@ -219,9 +219,9 @@ namespace NJS::Class
 	// TODO: ">>>" and ">>>=" operators
 	
 	
-	NJS::VAR Array::__iterator(std::vector<NJS::VAR> args) const { return NJS::VAR(); }
-	NJS::VAR Array::__unscopables(std::vector<NJS::VAR> args) const { return NJS::VAR(); }
-	NJS::VAR Array::concat(std::vector<NJS::VAR> args) const
+	NJS::VAR Array::__iterator(vector_t args) const { return NJS::VAR(); }
+	NJS::VAR Array::__unscopables(vector_t args) const { return NJS::VAR(); }
+	NJS::VAR Array::concat(vector_t args) const
 	{
 		/*
 		auto &res = *new Array();
@@ -235,7 +235,7 @@ namespace NJS::Class
 		*/
 		return NJS::VAR();
 	}
-	NJS::VAR Array::copyWithin(std::vector<NJS::VAR> args)
+	NJS::VAR Array::copyWithin(vector_t args)
 	{
 		/*
 		auto &vec = value;
@@ -256,9 +256,9 @@ namespace NJS::Class
 		return *this;*/
 		return NJS::VAR();
 	}
-	NJS::VAR Array::entries(std::vector<NJS::VAR> args) const { return NJS::VAR(); }
-	NJS::VAR Array::every(std::vector<NJS::VAR> args) const { return NJS::VAR(); }
-	NJS::VAR Array::fill(std::vector<NJS::VAR> args) const
+	NJS::VAR Array::entries(vector_t args) const { return NJS::VAR(); }
+	NJS::VAR Array::every(vector_t args) const { return NJS::VAR(); }
+	NJS::VAR Array::fill(vector_t args) const
 	{
 		/*
 		NJS::VAR value = args.size() ? args[0] : NJS::Value::undefined;
@@ -267,15 +267,15 @@ namespace NJS::Class
 		*/
 		return NJS::VAR();
 	};
-	NJS::VAR Array::filter(std::vector<NJS::VAR> args) const { return NJS::VAR(); }
-	NJS::VAR Array::find(std::vector<NJS::VAR> args) const { return NJS::VAR(); }
-	NJS::VAR Array::findIndex(std::vector<NJS::VAR> args) const { return NJS::VAR(); }
-	NJS::VAR Array::flat(std::vector<NJS::VAR> args) const { return NJS::VAR(); }
-	NJS::VAR Array::flatMap(std::vector<NJS::VAR> args) const { return NJS::VAR(); }
-	NJS::VAR Array::forEach(std::vector<NJS::VAR> args) const { return NJS::VAR(); }
-	NJS::VAR Array::includes(std::vector<NJS::VAR> args) const { return NJS::VAR(); }
-	NJS::VAR Array::indexOf(std::vector<NJS::VAR> args) const { return NJS::VAR(); }
-	NJS::VAR Array::join(std::vector<NJS::VAR> args) const
+	NJS::VAR Array::filter(vector_t args) const { return NJS::VAR(); }
+	NJS::VAR Array::find(vector_t args) const { return NJS::VAR(); }
+	NJS::VAR Array::findIndex(vector_t args) const { return NJS::VAR(); }
+	NJS::VAR Array::flat(vector_t args) const { return NJS::VAR(); }
+	NJS::VAR Array::flatMap(vector_t args) const { return NJS::VAR(); }
+	NJS::VAR Array::forEach(vector_t args) const { return NJS::VAR(); }
+	NJS::VAR Array::includes(vector_t args) const { return NJS::VAR(); }
+	NJS::VAR Array::indexOf(vector_t args) const { return NJS::VAR(); }
+	NJS::VAR Array::join(vector_t args) const
 	{
 		auto _str = (std::string)(args.size() ? args[0] : NJS::Value::undefined);
 		int l = value.size();
@@ -289,11 +289,11 @@ namespace NJS::Class
 		}
 		return stream.str();
 	};
-	NJS::VAR Array::keys(std::vector<NJS::VAR> args) const { return NJS::VAR(); }
-	NJS::VAR Array::lastIndexOf(std::vector<NJS::VAR> args) const { return NJS::VAR(); }
-	NJS::VAR Array::map(std::vector<NJS::VAR> args) const { return NJS::VAR(); }
-	NJS::VAR Array::pop(std::vector<NJS::VAR> args) { return NJS::VAR(); }
-	NJS::VAR Array::push(std::vector<NJS::VAR> args)
+	NJS::VAR Array::keys(vector_t args) const { return NJS::VAR(); }
+	NJS::VAR Array::lastIndexOf(vector_t args) const { return NJS::VAR(); }
+	NJS::VAR Array::map(vector_t args) const { return NJS::VAR(); }
+	NJS::VAR Array::pop(vector_t args) { return NJS::VAR(); }
+	NJS::VAR Array::push(vector_t args)
 	{
 		/*
 		for (auto value : args)
@@ -304,18 +304,18 @@ namespace NJS::Class
 		*/
 		return this;
 	};
-	NJS::VAR Array::reduce(std::vector<NJS::VAR> args) const { return NJS::VAR(); }
-	NJS::VAR Array::reduceRight(std::vector<NJS::VAR> args) const { return NJS::VAR(); }
-	NJS::VAR Array::reverse(std::vector<NJS::VAR> args) {
+	NJS::VAR Array::reduce(vector_t args) const { return NJS::VAR(); }
+	NJS::VAR Array::reduceRight(vector_t args) const { return NJS::VAR(); }
+	NJS::VAR Array::reverse(vector_t args) {
 		std::reverse(value.begin(), value.end());
 		return this;
 	}
-	NJS::VAR Array::shift(std::vector<NJS::VAR> args) { return NJS::VAR(); }
-	NJS::VAR Array::slice(std::vector<NJS::VAR> args) const { return NJS::VAR(); }
-	NJS::VAR Array::some(std::vector<NJS::VAR> args) const { return NJS::VAR(); }
-	NJS::VAR Array::sort(std::vector<NJS::VAR> args) const { return NJS::VAR(); }
-	NJS::VAR Array::splice(std::vector<NJS::VAR> args) { return NJS::VAR(); }
-	NJS::VAR Array::toLocaleString(std::vector<NJS::VAR> args) const
+	NJS::VAR Array::shift(vector_t args) { return NJS::VAR(); }
+	NJS::VAR Array::slice(vector_t args) const { return NJS::VAR(); }
+	NJS::VAR Array::some(vector_t args) const { return NJS::VAR(); }
+	NJS::VAR Array::sort(vector_t args) const { return NJS::VAR(); }
+	NJS::VAR Array::splice(vector_t args) { return NJS::VAR(); }
+	NJS::VAR Array::toLocaleString(vector_t args) const
 	{
 		/*
 		int l = value.size();
@@ -332,12 +332,12 @@ namespace NJS::Class
 		*/
 		return this;
 	}
-	NJS::VAR Array::toString(std::vector<NJS::VAR> args) const
+	NJS::VAR Array::toString(vector_t args) const
 	{
-		return join(std::vector<NJS::VAR>({","}));
+		return join(vector_t({","}));
 	}
 
-	NJS::VAR Array::unshift(std::vector<NJS::VAR> values)
+	NJS::VAR Array::unshift(vector_t values)
 	{
 		auto pos = value.begin();
 		for (auto value : values)
@@ -346,6 +346,6 @@ namespace NJS::Class
 		}
 		return this;
 	}
-	NJS::VAR Array::values(std::vector<NJS::VAR> args) const { return NJS::VAR(); }
+	NJS::VAR Array::values(vector_t args) const { return NJS::VAR(); }
 	
 } // namespace NJS::Class

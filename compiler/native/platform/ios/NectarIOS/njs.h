@@ -92,7 +92,7 @@ class NJS::Class::Array
 	int cnt = 0;
 	void Delete();
     NJS::Class::Array();
-    vector<NJS::VAR> value = vector<NJS::VAR>();
+    vector_t value = vector_t();
 	vector<pair<char*, NJS::VAR>> object;
 };
 
@@ -1116,7 +1116,7 @@ void NJS::Class::Native::Delete()
 
 NJS::VAR Array()
 {
-  vector<NJS::VAR>* _arr = new vector<NJS::VAR>();
+  vector_t* _arr = new vector_t();
   return NJS::VAR(NJS::Enum::Type::ARRAY, _arr);
 }
 
@@ -1232,7 +1232,7 @@ NJS::VAR  __NJS_Object_Stringify(NJS::VAR _var)
 	else if(_t == NJS::Enum::Type::ARRAY)
 	{
 		var _res = "";
-		vector<NJS::VAR>* _arr = &_var.get().a->value;
+		vector_t* _arr = &_var.get().a->value;
 		_res += "[";
 		int j = (*_arr).size();
 		for(int i = 0; i < j; i++)

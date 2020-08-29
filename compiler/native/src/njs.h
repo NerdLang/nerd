@@ -58,7 +58,7 @@ namespace NJS
 } // namespace NJS
 
 
-#include "class_header.h"
+#include "classes_header.h"
 #include "val.h"
 #include "memory.h"
 #include "functions.h"
@@ -67,5 +67,5 @@ namespace NJS
 #include "values.h"
 
 #include "objmgmt.h"
-#include "class_def.h"
+#include "classes.h"
 #include "operator.h"

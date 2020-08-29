@@ -129,7 +129,7 @@ NJS::VAR __NJS_Object_Stringify(NJS::VAR _var, bool _bracket)
 	else if (_t == NJS::Enum::Type::ARRAY)
 	{
 		var _res = "";
-		vector<NJS::VAR> *_arr = &_var.get().a->value;
+		std::vector<NJS::VAR> *_arr = &_var.get().a->value;
 		if(_bracket) _res += "[";
 		int j = (*_arr).size();
 		for (int i = 0; i < j; i++)
@@ -178,7 +178,7 @@ NJS::VAR __NJS_Object_Clone(NJS::VAR _var)
 		case NJS::Enum::Type::ARRAY:
 		{
 			var _res = __NJS_Create_Array();
-			vector<NJS::VAR> *_arr = &_var.get().a->value;
+			std::vector<NJS::VAR> *_arr = &_var.get().a->value;
 
 			int j = (*_arr).size();
 			for (int i = 0; i < j; i++)
