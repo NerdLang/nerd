@@ -66,11 +66,24 @@ namespace NJS::Class
 		key.get().s->counter++;
 		if(key.get().s->value.compare("toString") == 0  || key.get().s->value.compare("toLocaleString") == 0)
 		{
-			object.push_back(pair_t(key.get().s->value.c_str(), __NJS_Create_Var_Scoped_Anon( return (std::string)*this;)));
+			object.push_back(pair_t(key.get().s->value.c_str(), __NJS_Create_Var_Scoped_Anon( counter++; return (std::string)*this;)));
 		}
 		else if(key.get().s->value.compare("valueOf") == 0)
 		{
-			object.push_back(pair_t(key.get().s->value.c_str(), __NJS_Create_Var_Scoped_Anon( return this; )));
+			object.push_back(pair_t(key.get().s->value.c_str(), __NJS_Create_Var_Scoped_Anon( counter++; return this; )));
+		}
+		else if(key.get().s->value.compare("call") == 0)
+		{
+			object.push_back(pair_t(key.get().s->value.c_str(), __NJS_Create_Var_Scoped_Anon(
+				counter++;
+				NJS::VAR __THIS;
+				if(__NJS_VARARGS.size() > 0)
+				{
+					__THIS = __NJS_VARARGS[0];
+					__NJS_VARARGS.erase(__NJS_VARARGS.begin());
+				}
+				return Call(__THIS, __NJS_VARARGS);
+			)));
 		}
 		else object.push_back(pair_t(key.get().s->value.c_str(), __NJS_VAR()));
 		
