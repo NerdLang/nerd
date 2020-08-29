@@ -2,7 +2,7 @@ name: CI_NJS_CLANG
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master, develop ]
   pull_request:
     branches: [ master ]
 
