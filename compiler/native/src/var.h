@@ -666,21 +666,16 @@ namespace NJS
 		VAR operator^(const VAR &_v1) { return (int)*this ^ (int)_v1; }
 		VAR operator^=(const VAR &_v1)
 		{
-			try {
-				get() ^= _v1.get();
-				return *this;
-			} catch (NJS::Class::InvalidTypeException e) {
-				type = NJS::Enum::Type::NUMBER;
-				*NJS::MEMORY::REGISTER[_ptr].i = (int)*this ^ (int)_v1;
-				return *this;
-			}
+			type = NJS::Enum::Type::NUMBER;
+			NJS::MEMORY::REGISTER[_ptr].i = (int)*this ^ (int)_v1;
+			return *this;
 		}
 		VAR operator~() { return ~(int)*this; }
 		VAR operator>>(const VAR &_v1) { return (int)*this >> (int)_v1; }
 		VAR operator>>=(const VAR &_v1)
 		{
 			type = NJS::Enum::Type::NUMBER;
-			*NJS::MEMORY::REGISTER[_ptr].i = (int)*this >> (int)_v1;
+			NJS::MEMORY::REGISTER[_ptr].i = (int)*this >> (int)_v1;
 			return *this;
 		}
 		VAR operator<<(const VAR &_v1) 
@@ -701,6 +696,8 @@ namespace NJS
 			{
 			case NJS::Enum::Type::NUMBER:
 				return this->get().i;
+			case NJS::Enum::Type::DOUBLE:
+				return static_cast<int>(this->get().d);
 			//case NJS::Enum::Type::BIGNUMBER: return static_cast<int>(this->get().l);
 			case NJS::Enum::Type::BOOLEAN:
 				return static_cast<int>(this->get().b);
@@ -713,6 +710,9 @@ namespace NJS
 			case NJS::Enum::Type::NATIVE:
 			case NJS::Enum::Type::FUNCTION:
 			case NJS::Enum::Type::OBJECT:
+			case NJS::Enum::Type::ISINFINITY:
+			case NJS::Enum::Type::ISNAN:
+			case NJS::Enum::Type::ISNULL:
 			case NJS::Enum::Type::UNDEFINED:
 			default:
 				return 0;
@@ -725,6 +725,8 @@ namespace NJS
 			{
 			case NJS::Enum::Type::NUMBER:
 				return static_cast<double>(this->get().i);
+			case NJS::Enum::Type::DOUBLE:
+				return this->get().d;
 			//case NJS::Enum::Type::BIGNUMBER:
 			//	return static_cast<double>(this->get().l);
 			case NJS::Enum::Type::BOOLEAN:
@@ -740,6 +742,9 @@ namespace NJS
 			case NJS::Enum::Type::NATIVE:
 			case NJS::Enum::Type::FUNCTION:
 			case NJS::Enum::Type::OBJECT:
+			case NJS::Enum::Type::ISINFINITY:
+			case NJS::Enum::Type::ISNAN:
+			case NJS::Enum::Type::ISNULL:
 			case NJS::Enum::Type::UNDEFINED:
 			default:
 				return 0;
@@ -752,6 +757,8 @@ namespace NJS
 			{
 			case NJS::Enum::Type::NUMBER:
 				return static_cast<bool>(this->get().i);
+			case NJS::Enum::Type::DOUBLE:
+				return static_cast<bool>(this->get().d);
 			//case NJS::Enum::Type::BIGNUMBER:
 			//	return static_cast<bool>(this->get().l);
 			case NJS::Enum::Type::BOOLEAN:
@@ -778,6 +785,8 @@ namespace NJS
 			{
 			case NJS::Enum::Type::NUMBER:
 				return to_string(this->get().i);
+			case NJS::Enum::Type::DOUBLE:
+				return to_string(this->get().d);
 			//case NJS::Enum::Type::BIGNUMBER: return to_string(this->get().l);
 			case NJS::Enum::Type::BOOLEAN:
 				return (bool)*this ? "true" : "false";
