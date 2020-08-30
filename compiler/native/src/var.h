@@ -575,7 +575,7 @@ namespace NJS
 					return __NJS_Create_Boolean(NJS::MEMORY::REGISTER[_ptr].d == (double)_v1);
 				//case NJS::Enum::Type::BIGNUMBER: return VAR((long)*this == (long)_v1);
 				case NJS::Enum::Type::BOOLEAN:
-					return __NJS_Create_Boolean(NJS::MEMORY::REGISTER[_ptr].b == (bool)_v1);
+					return __NJS_Create_Boolean((bool)NJS::MEMORY::REGISTER[_ptr].b == (bool)_v1);
 				case NJS::Enum::Type::STRING:
 					return __NJS_Create_Boolean((NJS::MEMORY::REGISTER[_ptr].s->value).compare((string)_v1) == 0);
 				case NJS::Enum::Type::ISINFINITY:
@@ -689,7 +689,7 @@ namespace NJS
 				return static_cast<int>(this->get().d);
 			//case NJS::Enum::Type::BIGNUMBER: return static_cast<int>(this->get().l);
 			case NJS::Enum::Type::BOOLEAN:
-				return static_cast<int>(this->get().b);
+				return (int)*this->get().b;
 			case NJS::Enum::Type::STRING:
 				return strtol(this->get().s->value.c_str(), nullptr, 10);
 			case NJS::Enum::Type::ARRAY:
@@ -719,7 +719,7 @@ namespace NJS
 			//case NJS::Enum::Type::BIGNUMBER:
 			//	return static_cast<double>(this->get().l);
 			case NJS::Enum::Type::BOOLEAN:
-				return static_cast<double>(this->get().b);
+				return (double)*this->get().b;
 			case NJS::Enum::Type::STRING:
 				return strtod(this->get().s->value.c_str(), nullptr);
 			case NJS::Enum::Type::ARRAY:
