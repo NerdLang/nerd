@@ -1,18 +1,6 @@
-NJS::VAR __create_Array()
-{
-	NJS::Class::Array *_a = new NJS::Class::Array();
-	return NJS::VAR(NJS::Enum::Type::ARRAY, _a);
-}
-
-NJS::VAR __NJS_Create_Array()
-{
-	NJS::Class::Array *_a = new NJS::Class::Array();
-	return NJS::VAR(_a);
-}
-
 int __NJS_Get_Int(NJS::VAR _v)
 {
-	return _v.get().i;
+	return (int)*_v.get().i;
 }
 
 const char *__NJS_Get_String(NJS::VAR _v)
@@ -56,19 +44,20 @@ NJS::VAR __NJS_Object_Set(const char *_index, NJS::VAR _value, vector<pair<const
 
 NJS::VAR __NJS_Object_Set(NJS::VAR _index, NJS::VAR _value, NJS::VAR _array)
 {
-	//cout << "SECOND" << endl;
 	if (_array.type == NJS::Enum::Type::ARRAY && _index.type == NJS::Enum::Type::NUMBER)
 	{
 
-		if (_array.get().a->value.size() <= _index.get().i)
+		if (_array.get().a->value.size() <= (int)(*_index.get().i))
 		{
-			_array.get().a->value.reserve(_index.get().i + 1);
-			_array.get().a->value.resize(_index.get().i + 1);
+
+			_array.get().a->value.reserve( (int)(*_index.get().i) + 1);
+			_array.get().a->value.resize( (int)(*_index.get().i) + 1);
 		}
 
-		_array.get().a->value.at(_index.get().i) = _value;
+		_array.get().a->value.at( (int)(*_index.get().i) ) = _value;
 
 		__NJS_Object_Set("length", (int)_array.get().a->value.size(), &_array.get().a->object);
+		
 		return NJS::VAR();
 	}
 	else if (_array.type == NJS::Enum::Type::OBJECT || _array.type == NJS::Enum::Type::STRING || _array.type == NJS::Enum::Type::FUNCTION || _array.type == NJS::Enum::Type::ARRAY || _array.type == NJS::Enum::Type::NATIVE)
@@ -100,11 +89,11 @@ NJS::VAR __NJS_Object_Get(NJS::VAR _index, NJS::VAR _array)
 	}
 	if (_array.type == NJS::Enum::Type::ARRAY && _index.type == NJS::Enum::Type::NUMBER)
 	{
-		if (_index.get().i > _array.get().a->value.size())
+		if ((bool)(*_index.get().i) > (int)_array.get().a->value.size())
 		{
 			__NJS_RETURN_UNDEFINED;
 		}
-		return _array.get().a->value[_index.get().i];
+		return _array.get().a->value[(int)(*_index.get().i)];
 	}
 	else
 	{

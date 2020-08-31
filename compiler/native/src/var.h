@@ -22,7 +22,13 @@ namespace NJS
 		{
 			setPtr();
 			type = NJS::Enum::Type::UNDEFINED;
-			NJS::MEMORY::REGISTER[_ptr].i = 0;
+			NJS::MEMORY::REGISTER[_ptr].u = new NJS::Class::Undefined();
+		}
+		
+		template <typename T>
+		void DeleteByType(T type)
+		{
+			type->Delete();
 		}
 
 		~VAR()
@@ -47,6 +53,10 @@ namespace NJS
 			{
 				NJS::MEMORY::REGISTER[_ptr].n->Delete();
 			}
+			else if (type == NJS::Enum::Type::NUMBER)
+			{
+				NJS::MEMORY::REGISTER[_ptr].i->Delete();
+			}
 			NJS::MEMORY::Release(_ptr);
 		}
 
@@ -63,8 +73,11 @@ namespace NJS
 			}
 			else if (_v.type == NJS::Enum::Type::STRING)
 			{
-
 				NJS::MEMORY::REGISTER[_ptr].s = new NJS::Class::String(NJS::MEMORY::REGISTER[_v._ptr].s->value);
+			}
+			else if (_v.type == NJS::Enum::Type::NUMBER)
+			{
+				NJS::MEMORY::REGISTER[_ptr].i = new NJS::Class::Number(NJS::MEMORY::REGISTER[_v._ptr].i);
 			}
 			else if (_v.type == NJS::Enum::Type::FUNCTION)
 			{
@@ -94,28 +107,28 @@ namespace NJS
 		{
 			setPtr();
 			this->type = _type;
-			NJS::MEMORY::REGISTER[_ptr].i = _value;
+			NJS::MEMORY::REGISTER[_ptr].i = new NJS::Class::Number(_value);
 		}
 
 		VAR(int _value)
 		{
 			setPtr();
 			this->type = NJS::Enum::Type::NUMBER;
-			NJS::MEMORY::REGISTER[_ptr].i = _value;
+			NJS::MEMORY::REGISTER[_ptr].i = new NJS::Class::Number(_value);
 		}
 
 		VAR(double _value)
 		{
 			setPtr();
-			this->type = NJS::Enum::Type::DOUBLE;
-			NJS::MEMORY::REGISTER[_ptr].d = _value;
+			this->type = NJS::Enum::Type::NUMBER;
+			NJS::MEMORY::REGISTER[_ptr].i = new NJS::Class::Number(_value);
 		}
 		
 		VAR(long long _value)
 		{
 			setPtr();
-			this->type = NJS::Enum::Type::DOUBLE;
-			NJS::MEMORY::REGISTER[_ptr].d = (double)_value;
+			this->type = NJS::Enum::Type::NUMBER;
+			NJS::MEMORY::REGISTER[_ptr].i = new NJS::Class::Number(_value);
 		}
 
 		VAR(char *_value)
@@ -187,12 +200,19 @@ namespace NJS
 			NJS::MEMORY::REGISTER[_ptr].s = new NJS::Class::String(_value->value);
 		}
 		
+		VAR(NJS::Class::Number _value)
+		{
+			setPtr();
+			type = NJS::Enum::Type::NUMBER;
+			NJS::MEMORY::REGISTER[_ptr].i = new NJS::Class::Number(_value);
+		}
+		
 		VAR(NJS::Class::Number *_value)
 		{
 			setPtr();
-			type = NJS::Enum::Type::STRING;
+			type = NJS::Enum::Type::NUMBER;
 			_value->counter++;
-			NJS::MEMORY::REGISTER[_ptr].i = 0; // TODO: replace when Class::Number is integrated
+			NJS::MEMORY::REGISTER[_ptr].i = _value;
 		}
 		
 		VAR(NJS::Class::Native *_value)
@@ -223,25 +243,6 @@ namespace NJS
 			setPtr();
 			type = NJS::Enum::Type::FUNCTION;
 			NJS::MEMORY::REGISTER[_ptr].f = new NJS::Class::Function(&_value);
-		}
-
-		/*** VARIADIC LAMBDAS ***/
-		template <class... Args>
-		VAR(function<VAR(Args...)> &_value)
-		{
-			setPtr();
-			type = NJS::Enum::Type::FUNCTION;
-			NJS::MEMORY::REGISTER[_ptr].f = new NJS::Class::Function(&_value);
-		}
-		/*** END VARIADIC LAMBDAS ***/
-		
-		/*** CALL OVERLOAD ***/
-		
-		template <class... Args>
-		VAR __NJS_Class_Back_Var_Call_Function(Args... args)
-		{
-			vector<var> _args = vector<var>{(var)args...};
-			return (*static_cast<function<VAR(vector<var>)> *>(this->get().f->value))(_args);
 		}
 
 		template <class... Args>
@@ -323,6 +324,15 @@ namespace NJS
 				case NJS::Enum::Type::STRING:
 					return (*this->get().s)[_index];
 				break;
+				case NJS::Enum::Type::NUMBER:
+					return (*this->get().i)[_index];
+				break;
+				case NJS::Enum::Type::BOOLEAN:
+					return (*this->get().b)[_index];
+				break;
+				case NJS::Enum::Type::UNDEFINED:
+					return (*this->get().u)[_index];
+				break;
 				default:
 				break;
 			}
@@ -372,6 +382,12 @@ namespace NJS
 				NJS::MEMORY::REGISTER[_ptr].a->Delete();
 			else if (type == NJS::Enum::Type::NATIVE)
 				NJS::MEMORY::REGISTER[_ptr].n->Delete();
+			else if (type == NJS::Enum::Type::NUMBER)
+				NJS::MEMORY::REGISTER[_ptr].i->Delete();
+			else if (type == NJS::Enum::Type::UNDEFINED)
+				NJS::MEMORY::REGISTER[_ptr].u->Delete();
+			else if (type == NJS::Enum::Type::BOOLEAN)
+				NJS::MEMORY::REGISTER[_ptr].b->Delete();
 
 			type = _v.type;
 			;
@@ -383,6 +399,10 @@ namespace NJS
 			else if (_v.type == NJS::Enum::Type::STRING)
 			{
 				NJS::MEMORY::REGISTER[_ptr].s = new NJS::Class::String((string)_v);
+			}
+			else if (_v.type == NJS::Enum::Type::NUMBER)
+			{
+				NJS::MEMORY::REGISTER[_ptr].i = new NJS::Class::Number(*_v.get().i);
 			}
 			else if (_v.type == NJS::Enum::Type::FUNCTION)
 			{
@@ -408,7 +428,7 @@ namespace NJS
 		/// Unary operators
 		VAR operator+()
 		{
-			if (type == NJS::Enum::Type::NUMBER || type == NJS::Enum::Type::DOUBLE)
+			if (type == NJS::Enum::Type::NUMBER)
 				return *this;
 			else
 				return (double)*this;
@@ -429,13 +449,12 @@ namespace NJS
 		/// Arithmetic operators
 		VAR operator+(const VAR &_v1)
 		{
-			
 			if (type == NJS::Enum::Type::STRING || type == NJS::Enum::Type::ARRAY || type == NJS::Enum::Type::OBJECT || _v1.type == NJS::Enum::Type::STRING)
 				return __NJS_Concat_To_Str((string) * this, (string)_v1);
 			else if (type == NJS::Enum::Type::NUMBER)
-				return VAR((int)*this + (int)_v1);
-			else if (type == NJS::Enum::Type::DOUBLE)
-				return VAR((double)*this + (double)_v1);
+			{
+				return (*this->get().i) + _v1;
+			}
 			else return VAR();
 			
 		}
@@ -446,9 +465,7 @@ namespace NJS
 		VAR operator+=(const VAR &_v1)
 		{
 			if(type == NJS::Enum::Type::NUMBER) 
-				NJS::MEMORY::REGISTER[_ptr].i += (int)_v1;
-			else if(type == NJS::Enum::Type::DOUBLE) 
-				NJS::MEMORY::REGISTER[_ptr].d += (double)_v1;
+				(*NJS::MEMORY::REGISTER[_ptr].i) += _v1;
 			else if(type == NJS::Enum::Type::STRING) 
 				NJS::MEMORY::REGISTER[_ptr].s->value += (string)_v1;
 			else 
@@ -464,20 +481,12 @@ namespace NJS
 		{
 			if (type == NJS::Enum::Type::NUMBER )
 				return VAR((int)*this - (int)_v1);
-			else if (type == NJS::Enum::Type::DOUBLE )
-				return VAR((double)*this - (double)_v1);
 			else return "NaN";
 		}
 		VAR operator-=(const VAR &_v1)
 		{
 			if(type == NJS::Enum::Type::NUMBER && _v1.type == NJS::Enum::Type::NUMBER) 
-				NJS::MEMORY::REGISTER[_ptr].i -= (int)_v1;
-			else if(type == NJS::Enum::Type::NUMBER && _v1.type == NJS::Enum::Type::DOUBLE) 
-				NJS::MEMORY::REGISTER[_ptr].i -= (double)_v1;
-			else if(type == NJS::Enum::Type::DOUBLE && _v1.type == NJS::Enum::Type::NUMBER) 
-				NJS::MEMORY::REGISTER[_ptr].d -= (int)_v1;
-			else if(type == NJS::Enum::Type::DOUBLE && _v1.type == NJS::Enum::Type::DOUBLE) 
-				NJS::MEMORY::REGISTER[_ptr].d -= (double)_v1;
+				(*NJS::MEMORY::REGISTER[_ptr].i) -= _v1;
 			else 
 			{
 				type = NJS::Enum::Type::ISNAN;
@@ -488,54 +497,45 @@ namespace NJS
 		VAR operator*(const VAR &_v1)
 		{
 			if(type == NJS::Enum::Type::NUMBER) 
-				return NJS::MEMORY::REGISTER[_ptr].i * (int)_v1;
-			else if(type == NJS::Enum::Type::DOUBLE) 
-				return NJS::MEMORY::REGISTER[_ptr].d * (double)_v1;
+				return (*NJS::MEMORY::REGISTER[_ptr].i) * _v1;
 			return VAR();
 		}
 		VAR operator*=(const VAR &_v1)
 		{
 			if(type == NJS::Enum::Type::NUMBER) 
-				NJS::MEMORY::REGISTER[_ptr].i *= (int)_v1;
-			else if(type == NJS::Enum::Type::DOUBLE) 
-				NJS::MEMORY::REGISTER[_ptr].d *= (double)_v1;
+				(*NJS::MEMORY::REGISTER[_ptr].i) *= _v1;
 			return VAR();
 		}
 		VAR operator/(const VAR &_v1)
 		{
 			if (type == NJS::Enum::Type::NUMBER)
-				return NJS::MEMORY::REGISTER[_ptr].i / (int)_v1;
-			else if (type == NJS::Enum::Type::DOUBLE)
-				return NJS::MEMORY::REGISTER[_ptr].d / (double)_v1;
+				return (*NJS::MEMORY::REGISTER[_ptr].i) / _v1;
 			return VAR();
 		}
 		VAR operator/=(const VAR &_v1)
 		{
 			if(type == NJS::Enum::Type::NUMBER) 
-				NJS::MEMORY::REGISTER[_ptr].i /= (int)_v1;
-			else if(type == NJS::Enum::Type::DOUBLE) 
-				NJS::MEMORY::REGISTER[_ptr].d /= (double)_v1.get().d;
+				(*NJS::MEMORY::REGISTER[_ptr].i) /= _v1;
 			return VAR();
 		}
 		VAR operator%(const VAR &_v1)
 		{
 			if (type == NJS::Enum::Type::NUMBER && _v1.type == NJS::Enum::Type::NUMBER)
-				return NJS::MEMORY::REGISTER[_ptr].i % (int)_v1;
+				return (*NJS::MEMORY::REGISTER[_ptr].i) % _v1;
 			else
 			{
-				return remainder(NJS::MEMORY::REGISTER[_ptr].d, (double)_v1);
+				return remainder((int)(*NJS::MEMORY::REGISTER[_ptr].i), (int)_v1);
 			}
 		}
 		VAR operator%=(const VAR &_v1)
 		{
 			if (type == NJS::Enum::Type::NUMBER && _v1.type == NJS::Enum::Type::NUMBER)
 			{
-				NJS::MEMORY::REGISTER[_ptr].i %= (int)_v1;
+				(*NJS::MEMORY::REGISTER[_ptr].i) %= _v1;
 			}
 			else
 			{
-				type = NJS::Enum::Type::DOUBLE;
-				NJS::MEMORY::REGISTER[_ptr].d = remainder((double)*this, (double)_v1);
+				NJS::MEMORY::REGISTER[_ptr].i = new NJS::Class::Number(remainder((int)*this, (int)_v1));
 			}
 			return *this;
 		}
@@ -544,30 +544,14 @@ namespace NJS
 		{
 			if (type == NJS::Enum::Type::NUMBER)
 			{
-				NJS::MEMORY::REGISTER[_ptr].i++;
-			}
-			else if (type == NJS::Enum::Type::DOUBLE)
-			{
-				NJS::MEMORY::REGISTER[_ptr].d++;
-			}
-			else
-			{
-				type = NJS::Enum::Type::DOUBLE;
-				NJS::MEMORY::REGISTER[_ptr].d = (double)*this;
+				(*NJS::MEMORY::REGISTER[_ptr].i)++;
 			}
 			return *this;
 		}
 		VAR operator--(const int _v1)
 		{
 			if (type == NJS::Enum::Type::NUMBER)
-				NJS::MEMORY::REGISTER[_ptr].i--;
-			else if (type == NJS::Enum::Type::DOUBLE)
-				NJS::MEMORY::REGISTER[_ptr].d--;
-			else
-			{
-				type = NJS::Enum::Type::DOUBLE;
-				NJS::MEMORY::REGISTER[_ptr].d = (double)*this;
-			}
+				(*NJS::MEMORY::REGISTER[_ptr].i)--;
 			return *this;
 		}
 
@@ -579,9 +563,7 @@ namespace NJS
 				switch (type)
 				{
 				case NJS::Enum::Type::NUMBER:
-					return __NJS_Create_Boolean(NJS::MEMORY::REGISTER[_ptr].i == (int)_v1);
-				case NJS::Enum::Type::DOUBLE:
-					return __NJS_Create_Boolean(NJS::MEMORY::REGISTER[_ptr].d == (double)_v1);
+					return (bool)((*NJS::MEMORY::REGISTER[_ptr].i) == (int)_v1);
 				//case NJS::Enum::Type::BIGNUMBER: return VAR((long)*this == (long)_v1);
 				case NJS::Enum::Type::BOOLEAN:
 					return __NJS_Create_Boolean((bool)NJS::MEMORY::REGISTER[_ptr].b == (bool)_v1);
@@ -619,31 +601,19 @@ namespace NJS
 		// !== emulated with __NJS_NOT_EQUAL_VALUE_AND_TYPE
 		VAR operator<(const VAR &_v1)
 		{
-			if (type == _v1.type && type == NJS::Enum::Type::NUMBER)
-				return (int)*this < (int)_v1;
-			else
-				return (double)*this < (double)_v1;
+			return (int)*this < (int)_v1;
 		}
 		VAR operator<=(const VAR &_v1)
 		{
-			if (type == _v1.type && type == NJS::Enum::Type::NUMBER)
-				return (int)*this <= (int)_v1;
-			else
-				return (double)*this <= (double)_v1;
+			return (int)*this <= (int)_v1;
 		}
 		VAR operator>(const VAR &_v1)
 		{
-			if (type == _v1.type && type == NJS::Enum::Type::NUMBER)
-				return (int)*this > (int)_v1;
-			else
-				return (double)*this > (double)_v1;
+			return (int)*this > (int)_v1;
 		}
 		VAR operator>=(const VAR &_v1)
 		{
-			if (type == _v1.type && type == NJS::Enum::Type::NUMBER)
-				return (int)*this >= (int)_v1;
-			else
-				return (double)*this >= (double)_v1;
+			return (int)*this >= (int)_v1;
 		}
 
 		/// Bitwise operators
@@ -651,21 +621,21 @@ namespace NJS
 		VAR operator&=(const VAR &_v1)
 		{
 			type = NJS::Enum::Type::NUMBER;
-			NJS::MEMORY::REGISTER[_ptr].i = (int)*this & (int)_v1;
+			NJS::MEMORY::REGISTER[_ptr].i = new NJS::Class::Number((int)*this & (int)_v1);
 			return *this;
 		}
 		VAR operator|(const VAR &_v1) { return (int)*this | (int)_v1; }
 		VAR operator|=(const VAR &_v1)
 		{
 			type = NJS::Enum::Type::NUMBER;
-			NJS::MEMORY::REGISTER[_ptr].i = (int)*this | (int)_v1;
+			NJS::MEMORY::REGISTER[_ptr].i = new NJS::Class::Number((int)*this | (int)_v1);
 			return *this;
 		}
 		VAR operator^(const VAR &_v1) { return (int)*this ^ (int)_v1; }
 		VAR operator^=(const VAR &_v1)
 		{
 			type = NJS::Enum::Type::NUMBER;
-			NJS::MEMORY::REGISTER[_ptr].i = (int)*this ^ (int)_v1;
+			NJS::MEMORY::REGISTER[_ptr].i = new NJS::Class::Number((int)*this ^ (int)_v1);
 			return *this;
 		}
 		VAR operator~() { return ~(int)*this; }
@@ -673,7 +643,7 @@ namespace NJS
 		VAR operator>>=(const VAR &_v1)
 		{
 			type = NJS::Enum::Type::NUMBER;
-			NJS::MEMORY::REGISTER[_ptr].i = (int)*this >> (int)_v1;
+			NJS::MEMORY::REGISTER[_ptr].i = new NJS::Class::Number((int)*this >> (int)_v1);
 			return *this;
 		}
 		VAR operator<<(const VAR &_v1) 
@@ -683,7 +653,7 @@ namespace NJS
 		VAR operator<<=(const VAR &_v1)
 		{
 			type = NJS::Enum::Type::NUMBER;
-			NJS::MEMORY::REGISTER[_ptr].i = (int)*this << (int)_v1;
+			NJS::MEMORY::REGISTER[_ptr].i = new NJS::Class::Number((int)*this << (int)_v1);
 			return *this;
 		}
 		// TODO: ">>>" and ">>>=" operator support
@@ -693,9 +663,7 @@ namespace NJS
 			switch (type)
 			{
 			case NJS::Enum::Type::NUMBER:
-				return this->get().i;
-			case NJS::Enum::Type::DOUBLE:
-				return static_cast<int>(this->get().d);
+				return (int)*this->get().i;
 			//case NJS::Enum::Type::BIGNUMBER: return static_cast<int>(this->get().l);
 			case NJS::Enum::Type::BOOLEAN:
 				return (int)*this->get().b;
@@ -722,9 +690,7 @@ namespace NJS
 			switch (type)
 			{
 			case NJS::Enum::Type::NUMBER:
-				return static_cast<double>(this->get().i);
-			case NJS::Enum::Type::DOUBLE:
-				return this->get().d;
+				return (double)(*this->get().i);
 			//case NJS::Enum::Type::BIGNUMBER:
 			//	return static_cast<double>(this->get().l);
 			case NJS::Enum::Type::BOOLEAN:
@@ -754,9 +720,7 @@ namespace NJS
 			switch (type)
 			{
 			case NJS::Enum::Type::NUMBER:
-				return static_cast<bool>(this->get().i);
-			case NJS::Enum::Type::DOUBLE:
-				return static_cast<bool>(this->get().d);
+				return (bool)(*this->get().i);
 			//case NJS::Enum::Type::BIGNUMBER:
 			//	return static_cast<bool>(this->get().l);
 			case NJS::Enum::Type::BOOLEAN:
@@ -782,9 +746,7 @@ namespace NJS
 			switch (type)
 			{
 			case NJS::Enum::Type::NUMBER:
-				return to_string(this->get().i);
-			case NJS::Enum::Type::DOUBLE:
-				return to_string(this->get().d);
+				return (string)(*this->get().i);
 			//case NJS::Enum::Type::BIGNUMBER: return to_string(this->get().l);
 			case NJS::Enum::Type::BOOLEAN:
 				return (bool)*this ? "true" : "false";
@@ -819,6 +781,7 @@ namespace NJS
 		{
 			return (long long)((double)*this);
 		}
+
 		
 	};
 } // namespace NJS

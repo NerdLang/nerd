@@ -21,20 +21,17 @@ ostream &operator<<(ostream &os, const NJS::VAR &_v)
 {
 	switch (_v.type)
 	{
+	case NJS::Enum::Type::UNDEFINED:
+		os << (std::string)(*_v.get().u);
+		break;
 	case NJS::Enum::Type::BOOLEAN:
-		if (_v.get().b)
-			os << "true";
-		else
-			os << "false";
+		os << (std::string)(*_v.get().b);
 		break;
 	case NJS::Enum::Type::NUMBER:
-		os << _v.get().i;
-		break;
-	case NJS::Enum::Type::DOUBLE:
-		os << _v.get().d;
+		os << (std::string)(*_v.get().i);
 		break;
 	case NJS::Enum::Type::STRING:
-		os << _v.get().s->value;
+		os << (std::string)(*_v.get().s);
 		break;
 	case NJS::Enum::Type::OBJECT:
 		os << __NJS_Object_Stringify(_v);
@@ -49,7 +46,7 @@ ostream &operator<<(ostream &os, const NJS::VAR &_v)
 		os << "NaN";
 		break;
 	case NJS::Enum::Type::FUNCTION:
-		os << (std::string)*_v.get().f;
+		os << (std::string)(*_v.get().f);
 		break;
 	case NJS::Enum::Type::ISINFINITY:
 		os << "Infinity";

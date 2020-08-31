@@ -83,6 +83,32 @@ namespace NJS::Class
 		Number();
 		setDouble(static_cast<double>(val));
 	}
+	
+	Number::Number(const Number& val)
+	{
+		Number();
+		value = val.value;
+	}
+	
+	Number::Number(const Number* val)
+	{
+		Number();
+		value = val->value;
+	}
+	
+	Number::Number(const NJS::VAR& val)
+	{
+		Number();
+		switch(val.type)
+		{
+			case NJS::Enum::Type::NUMBER:
+				value = val.get().i->value;
+			break;
+			default:
+				value = (int)val;
+			break;
+		}
+	}
 	// Methods
 	inline bool Number::isInt() const noexcept { return (value & 1) == 0; }
 	void Number::Delete() noexcept

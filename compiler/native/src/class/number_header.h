@@ -26,6 +26,9 @@ namespace NJS::Class
 		Number(int val);
 		Number(double val);
 		Number(long long val);
+		Number(const Number& val);
+		Number(const Number* val);
+		Number(const NJS::VAR& val);
 		// Properties
 		count_t counter = 0;
 		uint32_t value = 0;
