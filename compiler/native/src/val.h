@@ -3,6 +3,7 @@ namespace NJS
 	union VAL {
 		int i;
 		double d;
+		NJS::Class::Undefined *u;
 		NJS::Class::Boolean *b;
 		NJS::Class::String *s;
 		NJS::Class::Array *a;

@@ -7,7 +7,7 @@
 #define __NJS_Create_Boolean(_value) NJS::VAR(new NJS::Class::Boolean(_value))
 #define __NJS_Create_Number(_value) NJS::VAR(_value)
 #define __NJS_Create_Function(_value) NJS::VAR(NJS::Enum::Type::FUNCTION, _value)
-#define __NJS_Create_Undefined() NJS::VAR()
+#define __NJS_Create_Undefined() NJS::VAR(new NJS::Class::Undefined())
 #define __NJS_DECL_FUNCTION function
 #define __NJS_RETURN_UNDEFINED \
 	var __undef = NJS::VAR(); \

@@ -202,6 +202,15 @@ namespace NJS
 			_value->counter++;
 			NJS::MEMORY::REGISTER[_ptr].n = _value;
 		}
+		
+		VAR(NJS::Class::Undefined *_value)
+		{
+			setPtr();
+			type = NJS::Enum::Type::UNDEFINED;
+			_value->counter++;
+			NJS::MEMORY::REGISTER[_ptr].u = _value;
+		}
+		
 		VAR(NJS::Enum::Type _type, void *_value)
 		{
 			setPtr();
@@ -241,7 +250,7 @@ namespace NJS
 			if (this->type != NJS::Enum::Type::FUNCTION)
 			{
 		#ifndef __NJS_ARDUINO
-				cout << "[!] Fatal error, object is not a function" << endl;
+				throw NJS::VAR("TypeError: object is not a function");
 		#endif
 				exit(1);
 			}
@@ -721,7 +730,7 @@ namespace NJS
 			case NJS::Enum::Type::BOOLEAN:
 				return (double)*this->get().b;
 			case NJS::Enum::Type::STRING:
-				return strtod(this->get().s->value.c_str(), nullptr);
+				return (double)(*this->get().s);
 			case NJS::Enum::Type::ARRAY:
 				if (this->get().a->value.size() == 0)
 					return 0;
@@ -753,7 +762,7 @@ namespace NJS
 			case NJS::Enum::Type::BOOLEAN:
 				return this->get().b;
 			case NJS::Enum::Type::STRING:
-				return static_cast<bool>(this->get().s->value.size());
+				return (bool)(*this->get().s);
 			case NJS::Enum::Type::ARRAY:
 			case NJS::Enum::Type::NATIVE:
 			case NJS::Enum::Type::FUNCTION:
