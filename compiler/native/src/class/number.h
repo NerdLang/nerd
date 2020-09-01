@@ -306,7 +306,7 @@ namespace NJS::Class
 	}
 	Number Number::operator+=(const Number &_v1)
 	{
-		if (isInt() && isInt())
+		if (isInt() && _v1.isInt())
 		{
 			int a = (int)*this;
 			int b = (int)_v1;
@@ -322,7 +322,7 @@ namespace NJS::Class
 	}
 	Number Number::operator-(const Number &_v1) const
 	{
-		if (isInt() && isInt())
+		if (isInt() && _v1.isInt())
 		{
 			int a = (int)*this;
 			int b = (int)_v1;
@@ -336,7 +336,7 @@ namespace NJS::Class
 	}
 	Number Number::operator-=(const Number &_v1)
 	{
-		if (isInt() && isInt())
+		if (isInt() && _v1.isInt())
 		{
 			int a = (int)*this;
 			int b = (int)_v1;
@@ -352,7 +352,7 @@ namespace NJS::Class
 	}
 	Number Number::operator*(const Number &_v1) const
 	{
-		if (isInt() && isInt())
+		if (isInt() && _v1.isInt())
 		{
 			int a = (int)*this;
 			int b = (int)_v1;
@@ -366,7 +366,7 @@ namespace NJS::Class
 	}
 	Number Number::operator*=(const Number &_v1)
 	{
-		if (isInt() && isInt())
+		if (isInt() && _v1.isInt())
 		{
 			int a = (int)*this;
 			int b = (int)_v1;
@@ -383,7 +383,7 @@ namespace NJS::Class
 	// TODO: "**" and "**=" operators
 	Number Number::operator/(const Number &_v1) const
 	{
-		if (isInt() && isInt())
+		if (isInt() && _v1.isInt())
 		{
 			int a = (int)*this;
 			int b = (int)_v1;
@@ -396,7 +396,7 @@ namespace NJS::Class
 	}
 	Number Number::operator/=(const Number &_v1)
 	{
-		if (isInt() && isInt())
+		if (isInt() && _v1.isInt())
 		{
 			int a = (int)*this;
 			int b = (int)_v1;
@@ -411,7 +411,7 @@ namespace NJS::Class
 	}
 	Number Number::operator%(const Number &_v1) const
 	{
-		if (isInt() && isInt())
+		if (isInt() && _v1.isInt())
 		{
 			return (int)*this % (int)_v1;
 		}
@@ -422,7 +422,7 @@ namespace NJS::Class
 	}
 	Number Number::operator%=(const Number &_v1)
 	{
-		if (isInt() && isInt())
+		if (isInt() && _v1.isInt())
 		{
 			setInt((int)*this % (int)_v1);
 		}
