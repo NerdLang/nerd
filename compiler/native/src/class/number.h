@@ -296,10 +296,10 @@ namespace NJS::Class
 		{
 			int a = (int)*this;
 			int b = (int)_v1;
-			int *c;
-			if (!__builtin_add_overflow(a, b, c))
+			int c;
+			if (!__builtin_add_overflow(a, b, &c))
 			{
-				return a + b;
+				return c;
 			}
 		}
 		return (double)*this + (double)_v1;
@@ -310,10 +310,10 @@ namespace NJS::Class
 		{
 			int a = (int)*this;
 			int b = (int)_v1;
-			int *c;
-			if (!__builtin_add_overflow(a, b, c))
+			int c;
+			if (!__builtin_add_overflow(a, b, &c))
 			{
-				setInt((int)*this + (int)_v1);
+				setInt(c);
 				return *this;
 			}
 		}
@@ -326,10 +326,10 @@ namespace NJS::Class
 		{
 			int a = (int)*this;
 			int b = (int)_v1;
-			int *c;
-			if (!__builtin_sub_overflow(a, b, c))
+			int c;
+			if (!__builtin_sub_overflow(a, b, &c))
 			{
-				return a - b;
+				return c;
 			}
 		}
 		return (double)*this - (double)_v1;
@@ -340,10 +340,10 @@ namespace NJS::Class
 		{
 			int a = (int)*this;
 			int b = (int)_v1;
-			int *c;
-			if (!__builtin_sub_overflow(a, b, c))
+			int c;
+			if (!__builtin_sub_overflow(a, b, &c))
 			{
-				setInt(a - b);
+				setInt(c);
 				return *this;
 			}
 		}
@@ -356,10 +356,10 @@ namespace NJS::Class
 		{
 			int a = (int)*this;
 			int b = (int)_v1;
-			int *c;
-			if (!__builtin_mul_overflow(a, b, c))
+			int c;
+			if (!__builtin_mul_overflow(a, b, &c))
 			{
-				return a * b;
+				return c;
 			}
 		}
 		return (double)*this * (double)_v1;
@@ -370,10 +370,10 @@ namespace NJS::Class
 		{
 			int a = (int)*this;
 			int b = (int)_v1;
-			int *c;
-			if (!__builtin_mul_overflow(a, b, c))
+			int c;
+			if (!__builtin_mul_overflow(a, b, &c))
 			{
-				setInt(a * b);
+				setInt(c);
 				return *this;
 			}
 		}

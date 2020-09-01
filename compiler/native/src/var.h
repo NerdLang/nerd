@@ -480,7 +480,7 @@ namespace NJS
 		VAR operator-(const VAR &_v1)
 		{
 			if (type == NJS::Enum::Type::NUMBER )
-				return VAR((int)*this - (int)_v1);
+				return (*this->get().i) - _v1;
 			else return "NaN";
 		}
 		VAR operator-=(const VAR &_v1)

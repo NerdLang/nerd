@@ -19,8 +19,6 @@ namespace NJS::Class
 		// Constants
 		const char *name = "number";
 		const NJS::Enum::Type type = NJS::Enum::Type::NUMBER;
-		const int SMI_MAX = 1073741823;
-		const int SMI_MIN = -1073741824;
 		// Constructors
 		Number();
 		Number(int val);
