@@ -12,7 +12,7 @@ const char *__NJS_Get_String(NJS::VAR _v)
 
 NJS::VAR __NJS_Typeof(NJS::VAR _var)
 {
-	const char *_array[] = {"", "undefined", "number", "number", "object", "number", "boolean", "string", "native", "function", "array", "NaN", "number", "object"};
+	const char *_array[] = {"", "undefined", "number", "object", "boolean", "string", "native", "function", "array", "NaN", "number", "object"};
 	return __NJS_Create_String(_array[_var.type]);
 }
 

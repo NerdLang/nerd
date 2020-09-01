@@ -4,9 +4,7 @@ namespace NJS::Enum
 	{
 		UNDEFINED = 1,
 		NUMBER,
-		DOUBLE,
 		OBJECT,
-		BIGNUMBER,
 		BOOLEAN,
 		STRING,
 		NATIVE,

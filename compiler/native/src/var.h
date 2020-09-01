@@ -339,7 +339,7 @@ namespace NJS
 			/* END NEW IMPL */
 			
 			// 1..toString()
-			if(this->type == NJS::Enum::Type::NUMBER || this->type == NJS::Enum::Type::DOUBLE)
+			if(this->type == NJS::Enum::Type::NUMBER)
 			{
 				if(_index == "toString")
 				{
@@ -564,7 +564,6 @@ namespace NJS
 				{
 				case NJS::Enum::Type::NUMBER:
 					return (bool)((*NJS::MEMORY::REGISTER[_ptr].i) == (int)_v1);
-				//case NJS::Enum::Type::BIGNUMBER: return VAR((long)*this == (long)_v1);
 				case NJS::Enum::Type::BOOLEAN:
 					return __NJS_Create_Boolean((bool)NJS::MEMORY::REGISTER[_ptr].b == (bool)_v1);
 				case NJS::Enum::Type::STRING:
@@ -578,7 +577,7 @@ namespace NJS
 				case NJS::Enum::Type::FUNCTION:
 				case NJS::Enum::Type::OBJECT:
 				case NJS::Enum::Type::ISNAN:
-				default: // XXX: Is this correct???
+				default:
 					return __NJS_Create_Boolean(false);
 				}
 			}
@@ -664,7 +663,6 @@ namespace NJS
 			{
 			case NJS::Enum::Type::NUMBER:
 				return (int)*this->get().i;
-			//case NJS::Enum::Type::BIGNUMBER: return static_cast<int>(this->get().l);
 			case NJS::Enum::Type::BOOLEAN:
 				return (int)*this->get().b;
 			case NJS::Enum::Type::STRING:
@@ -691,8 +689,6 @@ namespace NJS
 			{
 			case NJS::Enum::Type::NUMBER:
 				return (double)(*this->get().i);
-			//case NJS::Enum::Type::BIGNUMBER:
-			//	return static_cast<double>(this->get().l);
 			case NJS::Enum::Type::BOOLEAN:
 				return (double)*this->get().b;
 			case NJS::Enum::Type::STRING:
@@ -721,8 +717,6 @@ namespace NJS
 			{
 			case NJS::Enum::Type::NUMBER:
 				return (bool)(*this->get().i);
-			//case NJS::Enum::Type::BIGNUMBER:
-			//	return static_cast<bool>(this->get().l);
 			case NJS::Enum::Type::BOOLEAN:
 				return this->get().b;
 			case NJS::Enum::Type::STRING:
@@ -747,7 +741,6 @@ namespace NJS
 			{
 			case NJS::Enum::Type::NUMBER:
 				return (string)(*this->get().i);
-			//case NJS::Enum::Type::BIGNUMBER: return to_string(this->get().l);
 			case NJS::Enum::Type::BOOLEAN:
 				return (bool)*this ? "true" : "false";
 			case NJS::Enum::Type::STRING:

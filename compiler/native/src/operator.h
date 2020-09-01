@@ -117,8 +117,6 @@ NJS::VAR __NJS_Object_Stringify(NJS::VAR _var, bool _bracket)
 		return "NaN";
 	else if (_t == NJS::Enum::Type::NUMBER)
 		return var("") + _var;
-	else if (_t == NJS::Enum::Type::DOUBLE)
-		return var("") + _var;
 	else if (_t == NJS::Enum::Type::STRING)
 		return var("\"") + _var + "\"";
 	else if (_t == NJS::Enum::Type::FUNCTION)
@@ -168,7 +166,6 @@ NJS::VAR __NJS_Object_Clone(NJS::VAR _var)
 		case NJS::Enum::Type::UNDEFINED:
 		case NJS::Enum::Type::ISNAN:
 		case NJS::Enum::Type::NUMBER:
-		case NJS::Enum::Type::DOUBLE:
 		case NJS::Enum::Type::STRING:
 		case NJS::Enum::Type::FUNCTION:
 			return _var;
@@ -319,7 +316,7 @@ function<NJS::VAR(vector<var>)> *__NJS_IS_NAN = new function<NJS::VAR(vector<var
 	else
 		return __NJS_Create_Boolean(0);
 
-	if (_test.type == NJS::Enum::Type::NUMBER || _test.type == NJS::Enum::Type::DOUBLE)
+	if (_test.type == NJS::Enum::Type::NUMBER)
 	{
 		return __NJS_Create_Boolean(1);
 	}
