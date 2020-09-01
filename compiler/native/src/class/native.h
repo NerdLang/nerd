@@ -57,14 +57,14 @@ namespace NJS::Class
 	{
 		for (auto & search : object)
 		{
-			if (key.get().s->value.compare(search.first) == 0)
+			if (((NJS::Class::String*)key._ptr)->value.compare(search.first) == 0)
 			{
 				return search.second;
 			}
 		}
 
-		key.get().s->counter++;
-		object.push_back(pair_t(key.get().s->value.c_str(), __NJS_VAR()));
+		((NJS::Class::String*)key._ptr)->counter++;
+		object.push_back(pair_t(((NJS::Class::String*)key._ptr)->value.c_str(), __NJS_VAR()));
 		return object[object.size() - 1].second;
 	}
 	

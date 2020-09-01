@@ -57,24 +57,24 @@ namespace NJS::Class
 	{
 		for (auto & search : object)
 		{
-			if (key.get().s->value.compare(search.first) == 0)
+			if (((NJS::Class::String*)key._ptr)->value.compare(search.first) == 0)
 			{
 				return search.second;
 			}
 		}
 		
-		key.get().s->counter++;
-		if(key.get().s->value.compare("toString") == 0  || key.get().s->value.compare("toLocaleString") == 0)
+		((NJS::Class::String*)key._ptr)->counter++;
+		if(((NJS::Class::String*)key._ptr)->value.compare("toString") == 0  || ((NJS::Class::String*)key._ptr)->value.compare("toLocaleString") == 0)
 		{
-			object.push_back(pair_t(key.get().s->value.c_str(), __NJS_Create_Var_Scoped_Anon( return (std::string)*this;)));
+			object.push_back(pair_t(((NJS::Class::String*)key._ptr)->value.c_str(), __NJS_Create_Var_Scoped_Anon( return (std::string)*this;)));
 		}
-		else if(key.get().s->value.compare("valueOf") == 0)
+		else if(((NJS::Class::String*)key._ptr)->value.compare("valueOf") == 0)
 		{
-			object.push_back(pair_t(key.get().s->value.c_str(), __NJS_Create_Var_Scoped_Anon( return this; )));
+			object.push_back(pair_t(((NJS::Class::String*)key._ptr)->value.c_str(), __NJS_Create_Var_Scoped_Anon( return this; )));
 		}
-		else if(key.get().s->value.compare("call") == 0)
+		else if(((NJS::Class::String*)key._ptr)->value.compare("call") == 0)
 		{
-			object.push_back(pair_t(key.get().s->value.c_str(), __NJS_Create_Var_Scoped_Anon(
+			object.push_back(pair_t(((NJS::Class::String*)key._ptr)->value.c_str(), __NJS_Create_Var_Scoped_Anon(
 				counter++;
 				NJS::VAR __THIS;
 				if(__NJS_VARARGS.size() > 0)
@@ -85,7 +85,7 @@ namespace NJS::Class
 				return Call(__THIS, __NJS_VARARGS);
 			)));
 		}
-		else object.push_back(pair_t(key.get().s->value.c_str(), __NJS_VAR()));
+		else object.push_back(pair_t(((NJS::Class::String*)key._ptr)->value.c_str(), __NJS_VAR()));
 		
 		return object[object.size() - 1].second;
 	}
@@ -100,7 +100,7 @@ namespace NJS::Class
 	NJS::VAR Function::operator()(Args... args)
 	{
 		vector_t _args = vector<var>{(NJS::VAR)args...};
-		return (*static_cast<function<NJS::VAR(var, vector_t)> *>(value))(__NJS_Create_Undefined(), _args);
+		return (*static_cast<function<NJS::VAR(var, vector_t)> *>(value))(1, _args);
 	}
 	// Comparation operators
 	Function Function::operator!() const { throw InvalidTypeException(); }

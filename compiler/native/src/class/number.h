@@ -102,7 +102,7 @@ namespace NJS::Class
 		switch(val.type)
 		{
 			case NJS::Enum::Type::NUMBER:
-				value = val.get().i->value;
+				value = ((NJS::Class::Number*)val._ptr)->value;
 			break;
 			default:
 				value = (int)val;
@@ -165,24 +165,24 @@ namespace NJS::Class
 	{
 		for (auto & search : object)
 		{
-			if (key.get().s->value.compare(search.first) == 0)
+			if (((NJS::Class::String*)key._ptr)->value.compare(search.first) == 0)
 			{
 				return search.second;
 			}
 		}
 
-		key.get().s->counter++;
-		if(key.get().s->value.compare("toString") == 0  || key.get().s->value.compare("toLocaleString") == 0)
+		((NJS::Class::String*)key._ptr)->counter++;
+		if(((NJS::Class::String*)key._ptr)->value.compare("toString") == 0  || ((NJS::Class::String*)key._ptr)->value.compare("toLocaleString") == 0)
 		{
-			object.push_back(pair_t(key.get().s->value.c_str(), __NJS_Create_Var_Scoped_Anon( return __NJS_Object_Stringify(this);)));
+			object.push_back(pair_t(((NJS::Class::String*)key._ptr)->value.c_str(), __NJS_Create_Var_Scoped_Anon( return __NJS_Object_Stringify(this);)));
 		}
-		else if(key.get().s->value.compare("valueOf") == 0)
+		else if(((NJS::Class::String*)key._ptr)->value.compare("valueOf") == 0)
 		{
-			object.push_back(pair_t(key.get().s->value.c_str(), __NJS_Create_Var_Scoped_Anon( return this; )));
+			object.push_back(pair_t(((NJS::Class::String*)key._ptr)->value.c_str(), __NJS_Create_Var_Scoped_Anon( return this; )));
 		}
 		else 
 		{
-			object.push_back(pair_t(key.get().s->value.c_str(), __NJS_VAR()));
+			object.push_back(pair_t(((NJS::Class::String*)key._ptr)->value.c_str(), __NJS_VAR()));
 		}
 
 		return object[object.size() - 1].second;

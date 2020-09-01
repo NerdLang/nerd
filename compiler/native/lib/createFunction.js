@@ -43,7 +43,7 @@ function createFunction(_code, _scope)
 
 		var _FAST = false;
 
-		if(COMPILER.INFO.SCOPE[_match[1]] && COMPILER.INFO.SCOPE[_match[1]].fast == true && COMPILER.INFO.SCOPE[_match[1]].param.length == 1 && COMPILER.INFO.SCOPE[_match[1]].param[0] == _match[2].length)
+		if(false && COMPILER.INFO.SCOPE[_match[1]] && COMPILER.INFO.SCOPE[_match[1]].fast == true && COMPILER.INFO.SCOPE[_match[1]].param.length == 1 && COMPILER.INFO.SCOPE[_match[1]].param[0] == _match[2].length)
 		{
 			_FAST = true;
 			for(var i = 0; i < _match[2].length; i++)
@@ -101,8 +101,8 @@ function createFunction(_code, _scope)
 
 							var _formated = `__NJS_DECL_FUNCTION<NJS::VAR (${_parameters})>* ${_genFN} = new __NJS_DECL_FUNCTION<NJS::VAR (${_parameters})>([${_catch}]( ${_parameters} ) -> NJS::VAR ${_fn} ${_return} );`;
 							_formated += _match[1] + "=NJS::VAR(NJS::Enum::Type::FUNCTION, " + _genFN + ");";
-							if(CLI.cli["--debug"]) _formated += `${_match[1]}.get().f->code = R"(Function ${_match[1]}(${_match[2]}) ${_code.substring(_start, _end)}})";`
-							else _formated += `${_match[1]}.get().f->code = R"([Function: ${_match[1]}])";`
+							if(CLI.cli["--debug"]) _formated += `((NJS::Class::Function*)${_match[1]}._ptr)->code = R"(Function ${_match[1]}(${_match[2]}) ${_code.substring(_start, _end)}})";`
+							else _formated += `((NJS::Class::Function*)${_match[1]}._ptr)->code = R"([Function: ${_match[1]}])";`
 
 							if(_match[1].indexOf("__MODULE") != 0)
 							{
