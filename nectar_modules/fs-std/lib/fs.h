@@ -43,7 +43,7 @@ function __NJS_fs_readFileSync(_name)
 
   char* buffer = (char*)malloc((fsize + 1) * sizeof(char));
 
-  fread(buffer, fsize+1, 1, fp);
+  size_t _ret = fread(buffer, fsize+1, 1, fp);
 
   buffer[fsize] = '\0';
   fclose(fp);
