@@ -41,15 +41,29 @@ string __NJS_EM_BIND(string _name, string _data)
 	{
 		if(it->first.compare(_name) == 0)
 		{
-			return __NJS_Get_String(it->second(_data));
+			return (string)(it->second(_data));
 			break;
 		}
 	}
 	return "undefined";
 }
 
+int __NJS_EM_BIND_INT(string _name, int _data) 
+{
+    for (auto it = begin (__NJS_INTERNAL_BIND); it != end (__NJS_INTERNAL_BIND); ++it) 
+	{
+		if(it->first.compare(_name) == 0)
+		{
+			return (int)(it->second(_data));
+			break;
+		}
+	}
+	return 0;
+}
+
 
 EMSCRIPTEN_BINDINGS(nectar_module) 
 {
     emscripten::function("callNectar", &__NJS_EM_BIND);
+	emscripten::function("callNectarInt", &__NJS_EM_BIND_INT);
 }

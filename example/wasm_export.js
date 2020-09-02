@@ -8,8 +8,14 @@ function callFromJS(_data)
 	return "Executed from WASM";
 }
 
+function callIntOp(_i)
+{
+	return _i * 2;
+}
+
 // bind function to be executed in Browser env with Module.callNectar(_functionName, _data);
 WASM.bind("callFromJS", callFromJS);
+WASM.bind("callIntOp", callIntOp);
 
 // Fire a JS function to know when env is set up, see wasm.html
 WASM.run("WasmLoaded();");
