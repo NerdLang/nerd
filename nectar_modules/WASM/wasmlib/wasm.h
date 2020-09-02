@@ -19,7 +19,7 @@
  * along with NectarJS.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
- 
+#pragma once
 #include <emscripten.h>
 #include <emscripten/bind.h>
 
