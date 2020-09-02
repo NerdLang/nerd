@@ -29,4 +29,4 @@
 
 * Finish ES3
 
-* Add .call and .bind to functions
+* Add .bind to functions
