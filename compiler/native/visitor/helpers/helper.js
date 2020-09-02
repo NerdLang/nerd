@@ -24,7 +24,7 @@ VISITOR.pushDeclVar = function(_name, _index)
 {
 	if(_index == undefined)
 	{
-		var currentScope = VISITOR.CURRENT_FUNCTION + 1;
+		var currentScope = VISITOR.CURRENT_Function + 1;
 		COMPILER.VAR_STATE[currentScope].push(_name);
 	}
 	else COMPILER.VAR_STATE[_index].push(_name);
@@ -32,7 +32,7 @@ VISITOR.pushDeclVar = function(_name, _index)
 
 VISITOR.checkUndefVar = function(_name)
 {
-	var currentScope = VISITOR.CURRENT_FUNCTION + 1;
+	var currentScope = VISITOR.CURRENT_Function + 1;
 	var _exists = false;
 	
 	for(var i = currentScope; i > -1; i--)
@@ -54,19 +54,19 @@ VISITOR.checkUndefVar = function(_name)
 
 VISITOR.addFunctionVarInit = function(_name)
 {
-	if(VISITOR.CURRENT_FUNCTION > -1)
+	if(VISITOR.CURRENT_Function > -1)
 	{
-		if(COMPILER.INFO.SCOPE[VISITOR.FUNCTION_STATE[VISITOR.CURRENT_FUNCTION]].init.indexOf(_name) < 0)
-		COMPILER.INFO.SCOPE[VISITOR.FUNCTION_STATE[VISITOR.CURRENT_FUNCTION]].init.push(_name);
+		if(COMPILER.INFO.SCOPE[VISITOR.Function_STATE[VISITOR.CURRENT_Function]].init.indexOf(_name) < 0)
+		COMPILER.INFO.SCOPE[VISITOR.Function_STATE[VISITOR.CURRENT_Function]].init.push(_name);
 	}
 }
 
 VISITOR.addFunctionVarUse = function(_value)
 {
-	if(VISITOR.CURRENT_FUNCTION > -1)
+	if(VISITOR.CURRENT_Function > -1)
 	{
-		if(COMPILER.INFO.SCOPE[VISITOR.FUNCTION_STATE[VISITOR.CURRENT_FUNCTION]].use.indexOf(_value) < 0 && VISITOR.IGNORE.indexOf(_value) < 0)
-		COMPILER.INFO.SCOPE[VISITOR.FUNCTION_STATE[VISITOR.CURRENT_FUNCTION]].use.push(_value);
+		if(COMPILER.INFO.SCOPE[VISITOR.Function_STATE[VISITOR.CURRENT_Function]].use.indexOf(_value) < 0 && VISITOR.IGNORE.indexOf(_value) < 0)
+		COMPILER.INFO.SCOPE[VISITOR.Function_STATE[VISITOR.CURRENT_Function]].use.push(_value);
 	}
 }
 

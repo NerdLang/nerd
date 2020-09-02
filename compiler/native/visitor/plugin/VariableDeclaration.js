@@ -35,7 +35,7 @@ function VariableDeclaration(_path)
 				_path.node.kind = "";
 				COMPILER.DECL.push(" var " + _path.node.declarations[d].id.name + ";");
 			}
-			else if(VISITOR.CURRENT_FUNCTION < 0)
+			else if(VISITOR.CURRENT_Function < 0)
 			{
 				_path.node.kind = "";
 				if(COMPILER.INFO.HOISTING.indexOf(_path.node.declarations[d].id.name) < 0)

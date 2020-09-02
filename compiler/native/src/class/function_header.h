@@ -3,12 +3,12 @@
 
 namespace NJS::Class
 {
-	class Function
+	class Function final : public Base
 	{
 	public:
 		// Constants
 		const char *name = "function";
-		const NJS::Enum::Type type = NJS::Enum::Type::FUNCTION;
+		const NJS::Enum::Type type = NJS::Enum::Type::Function;
 		std::string code = "[native code]";
 		// Constructors
 		Function();

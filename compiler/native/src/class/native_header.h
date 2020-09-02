@@ -3,12 +3,12 @@
 
 namespace NJS::Class
 {
-	class Native
+	class Native final : public Base
 	{
 	public:
 		// Constants
 		const char *name = "native";
-		const NJS::Enum::Type type = NJS::Enum::Type::NATIVE;
+		const NJS::Enum::Type type = NJS::Enum::Type::Native;
 		// Constructors
 		Native();
 		Native(void* val);

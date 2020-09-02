@@ -144,7 +144,7 @@ function Compiler()
 	
 	this.INFO = 
 	{
-		FUNCTION: [],
+		Function: [],
 		CACHE: {},
 		VALUE: [],
 		CALL: {},

@@ -5,7 +5,7 @@ int __NJS_Get_Int(NJS::VAR _v)
 
 const char *__NJS_Get_String(NJS::VAR _v)
 {
-	if (_v.type != NJS::Enum::Type::STRING)
+	if (_v.type != NJS::Enum::Type::String)
 		return "";
 	return ((NJS::Class::String*)_v._ptr)->value.c_str();
 }
@@ -25,7 +25,7 @@ NJS::VAR __NJS_Object_Set(const char *_index, NJS::VAR _value, vector<pair<const
 		if (strcmp(_index, (*_obj)[_i].first) == 0)
 		{
 
-			if (_value.type == NJS::Enum::Type::STRING)
+			if (_value.type == NJS::Enum::Type::String)
 			{
 				(*_obj)[_i].second = new NJS::Class::String((string)_value);
 			}
@@ -45,7 +45,7 @@ NJS::VAR __NJS_Object_Set(const char *_index, NJS::VAR _value, vector<pair<const
 
 NJS::VAR __NJS_Object_Set(NJS::VAR _index, NJS::VAR _value, NJS::VAR _array)
 {
-	if (_array.type == NJS::Enum::Type::ARRAY && _index.type == NJS::Enum::Type::NUMBER)
+	if (_array.type == NJS::Enum::Type::Array && _index.type == NJS::Enum::Type::Number)
 	{
 
 		if (((NJS::Class::Array*)_array._ptr)->value.size() <= (int)(*(NJS::Class::Number*)_index._ptr))
@@ -61,16 +61,16 @@ NJS::VAR __NJS_Object_Set(NJS::VAR _index, NJS::VAR _value, NJS::VAR _array)
 		
 		return NJS::VAR();
 	}
-	else if (_array.type == NJS::Enum::Type::OBJECT || _array.type == NJS::Enum::Type::STRING || _array.type == NJS::Enum::Type::FUNCTION || _array.type == NJS::Enum::Type::ARRAY || _array.type == NJS::Enum::Type::NATIVE)
+	else if (_array.type == NJS::Enum::Type::Object || _array.type == NJS::Enum::Type::String || _array.type == NJS::Enum::Type::Function || _array.type == NJS::Enum::Type::Array || _array.type == NJS::Enum::Type::Native)
 	{
 		vector<pair<const char *, NJS::VAR>> *_obj;
-		if (_array.type == NJS::Enum::Type::OBJECT)
+		if (_array.type == NJS::Enum::Type::Object)
 			_obj = &((NJS::Class::Object*)_array._ptr)->object;
-		else if (_array.type == NJS::Enum::Type::ARRAY)
+		else if (_array.type == NJS::Enum::Type::Array)
 			_obj = &((NJS::Class::Array*)_array._ptr)->object;
-		else if (_array.type == NJS::Enum::Type::STRING)
+		else if (_array.type == NJS::Enum::Type::String)
 			_obj = &((NJS::Class::String*)_array._ptr)->object;
-		else if (_array.type == NJS::Enum::Type::FUNCTION)
+		else if (_array.type == NJS::Enum::Type::Function)
 			_obj = &((NJS::Class::Function*)_array._ptr)->object;
 		else
 			return NJS::VAR();
@@ -84,36 +84,36 @@ NJS::VAR __NJS_Object_Set(NJS::VAR _index, NJS::VAR _value, NJS::VAR _array)
 
 NJS::VAR __NJS_Object_Get(NJS::VAR _index, NJS::VAR _array)
 {
-	if (_array.type != NJS::Enum::Type::ARRAY && _array.type != NJS::Enum::Type::OBJECT && _array.type != NJS::Enum::Type::STRING && _array.type != NJS::Enum::Type::FUNCTION && _array.type != NJS::Enum::Type::NATIVE)
+	if (_array.type != NJS::Enum::Type::Array && _array.type != NJS::Enum::Type::Object && _array.type != NJS::Enum::Type::String && _array.type != NJS::Enum::Type::Function && _array.type != NJS::Enum::Type::Native)
 	{
-		__NJS_RETURN_UNDEFINED;
+		__NJS_RETURN_Undefined;
 	}
-	if (_array.type == NJS::Enum::Type::ARRAY && _index.type == NJS::Enum::Type::NUMBER)
+	if (_array.type == NJS::Enum::Type::Array && _index.type == NJS::Enum::Type::Number)
 	{
 		if ((bool)(*(NJS::Class::Number*)_index._ptr) > (int)((NJS::Class::Array*)_array._ptr)->value.size())
 		{
-			__NJS_RETURN_UNDEFINED;
+			__NJS_RETURN_Undefined;
 		}
 		return ((NJS::Class::Array*)_array._ptr)->value[(int)(*(NJS::Class::Number*)_index._ptr)];
 	}
 	else
 	{
-		if (_index.type != NJS::Enum::Type::STRING)
+		if (_index.type != NJS::Enum::Type::String)
 		{
-			__NJS_RETURN_UNDEFINED;
+			__NJS_RETURN_Undefined;
 		}
 		vector<pair<const char *, NJS::VAR>> *_obj;
-		if (_array.type == NJS::Enum::Type::OBJECT)
+		if (_array.type == NJS::Enum::Type::Object)
 			_obj = &((NJS::Class::Object*)_array._ptr)->object;
-		else if (_array.type == NJS::Enum::Type::ARRAY)
+		else if (_array.type == NJS::Enum::Type::Array)
 			_obj = &((NJS::Class::Array*)_array._ptr)->object;
-		else if (_array.type == NJS::Enum::Type::STRING)
+		else if (_array.type == NJS::Enum::Type::String)
 			_obj = &((NJS::Class::String*)_array._ptr)->object;
-		else if (_array.type == NJS::Enum::Type::FUNCTION)
+		else if (_array.type == NJS::Enum::Type::Function)
 			_obj = &((NJS::Class::Function*)_array._ptr)->object;
 		else
 		{
-			__NJS_RETURN_UNDEFINED;
+			__NJS_RETURN_Undefined;
 		}
 		int _j = (*_obj).size();
 		for (int _i = 0; _i < _j; _i++)
@@ -125,5 +125,5 @@ NJS::VAR __NJS_Object_Get(NJS::VAR _index, NJS::VAR _array)
 		}
 	}
 
-	__NJS_RETURN_UNDEFINED;
+	__NJS_RETURN_Undefined;
 }

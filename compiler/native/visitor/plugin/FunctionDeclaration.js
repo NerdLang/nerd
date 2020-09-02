@@ -29,8 +29,8 @@ var FunctionDeclaration=
 			COMPILER.VAR_STATE.push([]);
 			VISITOR.pushDeclVar(_path.node.id.name, 0);
 			
-			VISITOR.CURRENT_FUNCTION++;
-			VISITOR.FUNCTION_STATE.push(_path.node.id.name);
+			VISITOR.CURRENT_Function++;
+			VISITOR.Function_STATE.push(_path.node.id.name);
 			
 			if(!COMPILER.INFO.SCOPE[_path.node.id.name]) COMPILER.INFO.SCOPE[_path.node.id.name] = {init:[], use:[], call:[], param: [], fast: true};
 			VISITOR.addFunctionVarInit(_path.node.id.name);
@@ -41,7 +41,7 @@ var FunctionDeclaration=
 					VISITOR.addFunctionVarInit(_path.node.params[i].name);
 				}
 			}
-			if(VISITOR.CURRENT_FUNCTION > 0)
+			if(VISITOR.CURRENT_Function > 0)
 			{
 			
 			}
@@ -52,8 +52,8 @@ var FunctionDeclaration=
 	{
 		if(_path.node.id)
 		{
-			VISITOR.CURRENT_FUNCTION--;
-			VISITOR.FUNCTION_STATE.pop();
+			VISITOR.CURRENT_Function--;
+			VISITOR.Function_STATE.pop();
 			COMPILER.VAR_STATE.pop();
 		}
 	},

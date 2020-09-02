@@ -110,7 +110,7 @@ namespace NJS::Class
 	// Main operators
 	NJS::VAR const Array::operator[](NJS::VAR key) const
 	{
-		if (key.type == NJS::Enum::Type::NUMBER)
+		if (key.type == NJS::Enum::Type::Number)
 		{
 			auto i = (int)key;
 			if (i >= 0 && i <= value.size())
@@ -133,7 +133,7 @@ namespace NJS::Class
 	NJS::VAR &Array::operator[](NJS::VAR key)
 	{
 		static NJS::VAR _retUndefined;
-		if (key.type == NJS::Enum::Type::NUMBER)
+		if (key.type == NJS::Enum::Type::Number)
 		{
 			auto i = (int)key;
 			if (i < 0)
@@ -300,7 +300,7 @@ namespace NJS::Class
 		{
 			value.push_back(value);
 		}
-		__NJS_Object_Set("length", (int)value.size(), &this->__OBJECT);
+		__NJS_Object_Set("length", (int)value.size(), &this->__Object);
 		*/
 		return this;
 	};

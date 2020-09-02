@@ -3,7 +3,7 @@
 
 namespace NJS::Class
 {
-	class Number
+	class Number final : public Base
 	{
 	private:
 		// Private methods
@@ -18,7 +18,7 @@ namespace NJS::Class
 	public:
 		// Constants
 		const char *name = "number";
-		const NJS::Enum::Type type = NJS::Enum::Type::NUMBER;
+		const NJS::Enum::Type type = NJS::Enum::Type::Number;
 		// Constructors
 		Number();
 		Number(int val);

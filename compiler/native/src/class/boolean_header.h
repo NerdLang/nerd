@@ -3,12 +3,12 @@
 
 namespace NJS::Class
 {
-	class Boolean
+	class Boolean final : public Base
 	{
 	public:
 		// Constants
 		const char *name = "boolean";
-		const NJS::Enum::Type type = NJS::Enum::Type::BOOLEAN;
+		const NJS::Enum::Type type = NJS::Enum::Type::Boolean;
 		// Constructors
 		Boolean();
 		Boolean(bool val);

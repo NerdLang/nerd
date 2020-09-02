@@ -51,7 +51,7 @@ namespace NJS::Class
 	// Main operators
 	NJS::VAR const String::operator[](NJS::VAR key) const
 	{
-		if (key.type == NJS::Enum::Type::NUMBER)
+		if (key.type == NJS::Enum::Type::Number)
 		{
 			auto i = (int)key;
 			if (i >= 0 && i <= value.size())
@@ -74,7 +74,7 @@ namespace NJS::Class
 	NJS::VAR &String::operator[](NJS::VAR key)
 	{
 		static NJS::VAR _char;
-		if (key.type == NJS::Enum::Type::NUMBER)
+		if (key.type == NJS::Enum::Type::Number)
 		{
 			auto i = (int)key;
 			if (i >= 0)

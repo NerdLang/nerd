@@ -101,7 +101,7 @@ namespace NJS::Class
 		Number();
 		switch(val.type)
 		{
-			case NJS::Enum::Type::NUMBER:
+			case NJS::Enum::Type::Number:
 				value = ((NJS::Class::Number*)val._ptr)->value;
 			break;
 			default:

@@ -3,12 +3,12 @@
 
 namespace NJS::Class
 {
-	class String
+	class String final : public Base
 	{
 	public:
 		// Constants
 		const char *name = "string";
-		const NJS::Enum::Type type = NJS::Enum::Type::STRING;
+		const NJS::Enum::Type type = NJS::Enum::Type::String;
 		// Constructors
 		String();
 		String(std::string val);

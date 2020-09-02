@@ -3,12 +3,12 @@
 
 namespace NJS::Class
 {
-	class Object
+	class Object final : public Base
 	{
 	public:
 		// Constants
 		const char *name = "object";
-		const NJS::Enum::Type type = NJS::Enum::Type::OBJECT;
+		const NJS::Enum::Type type = NJS::Enum::Type::Object;
 		// Constructors
 		Object();
 		// Properties

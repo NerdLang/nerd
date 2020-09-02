@@ -1,4 +1,5 @@
 #pragma once
+
 #include "./class/array.h"
 #include "./class/boolean.h"
 #include "./class/function.h"

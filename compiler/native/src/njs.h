@@ -32,6 +32,7 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include <stdarg.h>
+#include <variant>
 
 #ifdef __NJS_ARDUINO
 #include <util/delay.h>
@@ -59,8 +60,6 @@ namespace NJS
 
 
 #include "classes_header.h"
-#include "val.h"
-#include "memory.h"
 #include "functions.h"
 #include "var.h"
 

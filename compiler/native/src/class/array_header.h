@@ -3,12 +3,12 @@
 
 namespace NJS::Class
 {
-	class Array
+	class Array final : public Base
 	{
 	public:
 		// Constants
 		const char *name = "array";
-		const NJS::Enum::Type type = NJS::Enum::Type::ARRAY;
+		const NJS::Enum::Type type = NJS::Enum::Type::Array;
 		// Constructors
 		Array();
 		Array(vector_t vec);

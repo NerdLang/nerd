@@ -26,9 +26,9 @@ VISITOR.NO_MODIFY_CALL = ["require", "Object"];
 VISITOR.NJS_START = ["__NJS", "__FFI"];
 
 VISITOR.IGNORE = ["__NJS_Call_Function", "__NJS_Object_Set", "__NJS_Obejct_Get", "__NJS_VAR"];
-VISITOR.FUNCTION_STATE = [];
+VISITOR.Function_STATE = [];
 
-VISITOR.CURRENT_FUNCTION = -1;
+VISITOR.CURRENT_Function = -1;
 
 require("./helpers/helper.js");
 

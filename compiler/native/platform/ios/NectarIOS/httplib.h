@@ -192,14 +192,14 @@ using socket_t = int;
 #include <iostream>
 #include <sstream>
 
-// #if OPENSSL_VERSION_NUMBER < 0x1010100fL
+// #if OPENSSL_VERSION_Number < 0x1010100fL
 // #error Sorry, OpenSSL versions prior to 1.1.1 are not supported
 // #endif
 
-#if OPENSSL_VERSION_NUMBER < 0x10100000L
+#if OPENSSL_VERSION_Number < 0x10100000L
 #include <openssl/crypto.h>
-inline const unsigned char *ASN1_STRING_get0_data(const ASN1_STRING *asn1) {
-  return M_ASN1_STRING_data(asn1);
+inline const unsigned char *ASN1_String_get0_data(const ASN1_String *asn1) {
+  return M_ASN1_String_data(asn1);
 }
 #endif
 #endif
@@ -5167,7 +5167,7 @@ inline bool process_and_close_socket_ssl(
   return ret;
 }
 
-#if OPENSSL_VERSION_NUMBER < 0x10100000L
+#if OPENSSL_VERSION_Number < 0x10100000L
 static std::shared_ptr<std::vector<std::mutex>> openSSL_locks_;
 
 class SSLThreadLocks {
@@ -5197,23 +5197,23 @@ private:
 class SSLInit {
 public:
   SSLInit() {
-#if OPENSSL_VERSION_NUMBER < 0x1010001fL
+#if OPENSSL_VERSION_Number < 0x1010001fL
     SSL_load_error_strings();
     SSL_library_init();
 #else
     OPENSSL_init_ssl(
-        OPENSSL_INIT_LOAD_SSL_STRINGS | OPENSSL_INIT_LOAD_CRYPTO_STRINGS, NULL);
+        OPENSSL_INIT_LOAD_SSL_StringS | OPENSSL_INIT_LOAD_CRYPTO_StringS, NULL);
 #endif
   }
 
   ~SSLInit() {
-#if OPENSSL_VERSION_NUMBER < 0x1010001fL
+#if OPENSSL_VERSION_Number < 0x1010001fL
     ERR_free_strings();
 #endif
   }
 
 private:
-#if OPENSSL_VERSION_NUMBER < 0x10100000L
+#if OPENSSL_VERSION_Number < 0x10100000L
   SSLThreadLocks thread_init_;
 #endif
 };
@@ -5536,8 +5536,8 @@ SSLClient::verify_host_with_subject_alt_name(X509 *server_cert) const {
     for (auto i = 0; i < count && !dsn_matched; i++) {
       auto val = sk_GENERAL_NAME_value(alt_names, i);
       if (val->type == type) {
-        auto name = (const char *)ASN1_STRING_get0_data(val->d.ia5);
-        auto name_len = (size_t)ASN1_STRING_length(val->d.ia5);
+        auto name = (const char *)ASN1_String_get0_data(val->d.ia5);
+        auto name_len = (size_t)ASN1_String_length(val->d.ia5);
 
         if (strlen(name) == name_len) {
           switch (type) {

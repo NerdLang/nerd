@@ -3,13 +3,13 @@
 
 namespace NJS::Class
 {
-	class Undefined
+	class Undefined final : public Base
 	{
 	class Empty {};
 	public:
 		// Constants
 		const char *name = "undefined";
-		const NJS::Enum::Type type = NJS::Enum::Type::UNDEFINED;
+		const NJS::Enum::Type type = NJS::Enum::Type::Undefined;
 		// Constructors
 		Undefined();
 		// Properties

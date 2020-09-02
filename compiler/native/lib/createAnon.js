@@ -57,9 +57,9 @@ function createAnon(_code, _scope)
 				{
 					var _catch = "";
 					if(_scope) _catch = "=";
-					else if(_code.indexOf("'SCOPED_FUNCTION';") > -1) 
+					else if(_code.indexOf("'SCOPED_Function';") > -1) 
 					{
-						_code = _code.replace(/'SCOPED_FUNCTION';/g, "                  ");
+						_code = _code.replace(/'SCOPED_Function';/g, "                  ");
 						_catch = "=";
 					}
 					
@@ -67,13 +67,13 @@ function createAnon(_code, _scope)
 					_count--;
 					if(_count == 0)
 					{
-						var _fn = "{" + _getVar + " var __NJS_THIS; if(__INJECTED_THIS.type != NJS::Enum::Type::UNDEFINED) __NJS_THIS = __INJECTED_THIS; else __NJS_THIS = __NJS_Create_Object();" + _code.substring(_start + 1, _end);
+						var _fn = "{" + _getVar + " var __NJS_THIS; if(__INJECTED_THIS.type != NJS::Enum::Type::Undefined) __NJS_THIS = __INJECTED_THIS; else __NJS_THIS = __NJS_Create_Object();" + _code.substring(_start + 1, _end);
 
 						var _formated = "";
 
 						if(_match[1]) COMPILER.DECL.push(`var ${_match[2]};`);
 						if(_match[2]) _formated += _match[2] + " = ";
-						_formated += "NJS::VAR(NJS::Enum::Type::FUNCTION, new function<NJS::VAR (var, vector<var>)> ([" + _catch + "](var __INJECTED_THIS, vector<var> __NJS_VARARGS) -> NJS::VAR" + _fn + os.EOL + _return + "));";
+						_formated += "NJS::VAR(NJS::Enum::Type::Function, new function<NJS::VAR (var, vector<var>)> ([" + _catch + "](var __INJECTED_THIS, vector<var> __NJS_VARARGS) -> NJS::VAR" + _fn + os.EOL + _return + "));";
 						_code = [_code.slice(0, _index), _formated, _code.slice(_end + 1)].join('');		
 						break;
 					}
