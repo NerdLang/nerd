@@ -3,7 +3,7 @@
 
 namespace NJS::Class
 {
-	class Undefined final : public Base
+	class Undefined : public virtual Base
 	{
 	class Empty {};
 	public:

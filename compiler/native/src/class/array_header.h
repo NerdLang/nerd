@@ -3,7 +3,7 @@
 
 namespace NJS::Class
 {
-	class Array final : public Base
+	class Array : public virtual Base
 	{
 	public:
 		// Constants

@@ -38,6 +38,9 @@
  using namespace NJS;
  using namespace NJS::Value;
  
+ var __NJS_ENV = "std";
+ var __NJS_PLATFORM = "{{__PLATFORM__}}";
+ 
 /*** $ERROR ***/
 NJS::VAR __NJS_DOLLAR_ERROR = __NJS_Create_Var_Unscoped_Anon( __NJS_Log_Console(__NJS_VARARGS[0]); exit(1); return NJS::VAR(); );
 /* end $ERROR */
@@ -48,6 +51,12 @@ NJS::VAR __NJS_DOLLAR_ERROR = __NJS_Create_Var_Unscoped_Anon( __NJS_Log_Console(
 
 int main(int argc, char* argv[])
 {
+	var __NJS_ARGS = __NJS_Create_Array();
+	for( int i = 0; i < argc; i++)
+	{
+		__NJS_Object_Set(i, NJS::VAR(argv[i]), __NJS_ARGS);
+	}
+	
 	{INIT}
 
 	{CODE}

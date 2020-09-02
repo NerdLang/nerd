@@ -34,7 +34,6 @@
 
  using namespace std;
 
-
  #include "njs.h"
  using namespace NJS;
  using namespace NJS::Value;

@@ -3,7 +3,7 @@
 
 namespace NJS::Class
 {
-	class Boolean final : public Base
+	class Boolean : public virtual Base
 	{
 	public:
 		// Constants

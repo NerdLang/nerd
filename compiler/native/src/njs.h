@@ -32,7 +32,6 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include <stdarg.h>
-#include <variant>
 
 #ifdef __NJS_ARDUINO
 #include <util/delay.h>
@@ -56,9 +55,20 @@ using namespace NJS;
 namespace NJS
 {
 	struct VAR;
+	namespace Class
+	{
+		class Number;
+		class Undefined;
+		class Boolean;
+		class String;
+		class Array;
+		class Object;
+		class Function;
+		class Native;
+	}
 } // namespace NJS
 
-
+#include "var_header.h"
 #include "classes_header.h"
 #include "functions.h"
 #include "var.h"

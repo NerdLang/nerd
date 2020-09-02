@@ -12,7 +12,6 @@ namespace NJS::Enum
 		Array,
 		ISNAN,
 		ISINFINITY,
-		ISNULL
-
+		ISNULL,
 	};
 }

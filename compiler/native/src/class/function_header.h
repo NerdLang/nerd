@@ -3,7 +3,7 @@
 
 namespace NJS::Class
 {
-	class Function final : public Base
+	class Function : public virtual Base
 	{
 	public:
 		// Constants

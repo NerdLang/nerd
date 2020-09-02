@@ -3,7 +3,7 @@
 
 namespace NJS::Class
 {
-	class Number final : public Base
+	class Number : public virtual Base
 	{
 	private:
 		// Private methods
