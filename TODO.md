@@ -30,3 +30,5 @@
 * Finish ES3
 
 * Add .bind to functions
+
+* Update Class
