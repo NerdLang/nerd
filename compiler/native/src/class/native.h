@@ -9,7 +9,7 @@ namespace NJS::Class
 	Native::Native() { counter++; }
 	Native::Native(void *val)
 	{
-		Native();
+		counter++;
 		value = val;
 	}
 	// Methods

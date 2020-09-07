@@ -16,7 +16,6 @@ namespace NJS::Class
 		count_t counter = 0;
 		Empty value;
 		// Methods
-		~Undefined();
 		void Delete() noexcept;
 		// Native cast
 		explicit operator bool() const noexcept;

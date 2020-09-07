@@ -6,7 +6,7 @@ namespace NJS::Class
 	Boolean::Boolean() { counter++; }
 	Boolean::Boolean(bool val)
 	{
-		Boolean();
+		counter++;
 		value = val;
 	}
 	// Methods

@@ -59,15 +59,15 @@ namespace NJS::Class
 	}
 
 	// Constructors
-	Number::Number() { ++counter; }
+	Number::Number() { counter++; }
 	Number::Number(const int val)
 	{
-		Number();
+		counter++;
 		setInt(val);
 	}
 	Number::Number(const double val)
 	{
-		Number();
+		counter++;
 		double dummy;
 		if (modf(val, &dummy) == 0.0 && val < SMI_MAX && val > SMI_MIN)
 		{
@@ -80,25 +80,25 @@ namespace NJS::Class
 	}
 	Number::Number(const long long val)
 	{
-		Number();
+		counter++;
 		setDouble(static_cast<double>(val));
 	}
 	
 	Number::Number(const Number& val)
 	{
-		Number();
+		counter++;
 		value = val.value;
 	}
 	
 	Number::Number(const Number* val)
 	{
-		Number();
+		counter++;
 		value = val->value;
 	}
 	
 	Number::Number(const NJS::VAR& val)
 	{
-		Number();
+		counter++;
 		switch(val.type)
 		{
 			case NJS::Enum::Type::Number:
@@ -126,7 +126,8 @@ namespace NJS::Class
 	{
 		if (isFinite())
 		{
-			return isInt() ? getInt() : getDouble();
+			if(isInt()) return (int)getInt();
+			else return (double)getDouble();
 		}
 		if (isNaN())
 		{
@@ -138,7 +139,14 @@ namespace NJS::Class
 	{
 		if (isFinite())
 		{
-			return std::to_string(isInt() ? getInt() : getDouble());
+			if(isInt() == 1)
+			{
+				return std::to_string(getInt());
+			}
+			else 
+			{
+				return to_string(getDouble());
+			}
 		}
 		if (isNaN())
 		{
@@ -261,7 +269,7 @@ namespace NJS::Class
 	}
 	// Numeric operators
 	Number Number::operator+() const { throw InvalidTypeException(); }
-	Number Number::operator-() const { return isInt() ? -getInt() : -getDouble(); }
+	Number Number::operator-() const { if(isInt()) return (int)-getInt() ; else return (double)-getDouble(); }
 	Number Number::operator++(const int _v1)
 	{
 		if (isInt())
