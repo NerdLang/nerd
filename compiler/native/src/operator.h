@@ -257,6 +257,11 @@ t operator+(t _left, const NJS::VAR &_right)
 	return _left + (t)_right;
 }
 
+std::string operator+(const char* _left, const NJS::VAR &_right)
+{
+	return std::string(_left) + (std::string)_right;
+}
+
 template <typename t>
 t operator-(t _left, const NJS::VAR &_right)
 {

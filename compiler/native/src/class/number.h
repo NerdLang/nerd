@@ -8,14 +8,16 @@ namespace NJS::Class
 	// Private methods
 	inline int Number::getInt() const noexcept
 	{
+		int _res;
 		if (isInt())
 		{
-			return static_cast<int>(value >> 1u);
+			_res = static_cast<int>(value >> 1u);
 		}
 		else
 		{
-			return static_cast<int>(*(reinterpret_cast<double *>(value >> 1u)));
+			_res = static_cast<int>(*(reinterpret_cast<double *>(value >> 1u)));
 		}
+		return _res;
 	}
 	inline void Number::setInt(int v) noexcept
 	{
@@ -23,18 +25,20 @@ namespace NJS::Class
 		{
 			delete reinterpret_cast<double *>(value >> 1u);
 		}
-		value = static_cast<unsigned int>(v) << 1u;
+		value = static_cast<int>(v) << 1u;
 	}
 	inline double Number::getDouble() const noexcept
 	{
+		double _res;
 		if (isInt())
 		{
-			return static_cast<double>(static_cast<int>(value >> 1u));
+			_res = static_cast<double>(static_cast<int>(value >> 1u));
 		}
 		else
 		{
-			return *(reinterpret_cast<double *>(value >> 1u));
+			_res =  *(reinterpret_cast<double *>(value >> 1u));
 		}
+		return _res;
 	}
 	inline void Number::setDouble(double v) noexcept
 	{
@@ -59,7 +63,7 @@ namespace NJS::Class
 	}
 
 	// Constructors
-	Number::Number() { counter++; }
+	Number::Number() { counter++; setInt(0); }
 	Number::Number(const int val)
 	{
 		counter++;
@@ -90,11 +94,7 @@ namespace NJS::Class
 		value = val.value;
 	}
 	
-	Number::Number(const Number* val)
-	{
-		counter++;
-		value = val->value;
-	}
+
 	
 	Number::Number(const NJS::VAR& val)
 	{
@@ -110,7 +110,10 @@ namespace NJS::Class
 		}
 	}
 	// Methods
-	inline bool Number::isInt() const noexcept { return (value & 1) == 0; }
+	inline bool Number::isInt() const noexcept 
+	{ 
+		return (value & 1) == 0; 
+	}
 	void Number::Delete() noexcept
 	{
 		if (--counter == 0)

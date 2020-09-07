@@ -7,9 +7,7 @@ namespace NJS::Class
 	{
 	private:
 		// Private methods
-		inline int getInt() const noexcept;
 		inline void setInt(int v) noexcept;
-		inline double getDouble() const noexcept;
 		inline void setDouble(double v) noexcept;
 		inline bool isNaN() const noexcept;
 		inline bool isFinite() const noexcept;
@@ -17,7 +15,6 @@ namespace NJS::Class
 
 	public:
 		// Constants
-		const char *name = "number";
 		const NJS::Enum::Type type = NJS::Enum::Type::Number;
 		// Constructors
 		Number();
@@ -25,14 +22,16 @@ namespace NJS::Class
 		Number(double val);
 		Number(long long val);
 		Number(const Number& val);
-		Number(const Number* val);
+		//Number(const Number* val);
 		Number(const NJS::VAR& val);
 		// Properties
 		count_t counter = 0;
-		uint32_t value = 0;
+		int value = 0;
 		object_t object;
 		// Methods
 		inline bool isInt() const noexcept;
+		inline int getInt() const noexcept;
+		inline double getDouble() const noexcept;
 		void Delete() noexcept;
 		// Native cast
 		explicit operator bool() const noexcept;
