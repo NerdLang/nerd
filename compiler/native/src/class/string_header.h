@@ -7,7 +7,6 @@ namespace NJS::Class
 	{
 	public:
 		// Constants
-		const char *name = "string";
 		const NJS::Enum::Type type = NJS::Enum::Type::String;
 		// Constructors
 		String();
@@ -67,5 +66,15 @@ namespace NJS::Class
 		String operator>>=(const String &_v1);
 		String operator<<=(const String &_v1);
 		// TODO: ">>>" and ">>>=" operators
+		/*** STRING METHODS ***/
+		NJS::VAR toString(vector_t args) const;
+		NJS::VAR split(vector_t args) const;
+		NJS::VAR indexOf(vector_t args) const;
+		NJS::VAR lastIndexOf(vector_t args) const;
+		NJS::VAR search(vector_t args) const;
+		NJS::VAR slice(vector_t args) const;
+		NJS::VAR substr(vector_t args) const;
+		NJS::VAR replace(vector_t args) const;
+		/* END STRING METHODS */
 	};
 } // namespace NJS::Class

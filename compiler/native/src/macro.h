@@ -26,6 +26,6 @@
 #define __NJS_Boolean_TRUE __NJS_Create_Boolean(true)
 #define __NJS_Boolean_FALSE __NJS_Create_Boolean(false)
 #define __NJS_FAST_INT constexpr int
-#define __NJS_CreateMethodToClass(name, fn) (*this)[name] = __NJS_Create_Var_Scoped_Anon( return fn(__NJS_VARARGS); );
+#define __NJS_CreateMethodToClass(_name, _fn) __NJS_Object_Set(_name, __NJS_Create_Var_Scoped_Anon( return _fn(__NJS_VARARGS); ), &object);
 
 /*** END HELPERS ***/

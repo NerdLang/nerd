@@ -208,6 +208,11 @@ namespace NJS
 		return (*(NJS::Class::Base*)_ptr)[_index];
 	}
 	
+	VAR & VAR::operator[] (VAR _index) const
+	{
+		return (*(NJS::Class::Base*)_ptr)[_index];
+	}
+	
 	/* END ACCESS OVERLOAD */
 
 	/*** END CONSTRUCTOR ***/

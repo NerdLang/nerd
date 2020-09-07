@@ -2,22 +2,36 @@
 #include "string_header.h"
 #include <string>
 #include <limits>
+#define __NJS_Class_String_Init()\
+counter++; \
+__NJS_CreateMethodToClass("toString", toString); \
+__NJS_CreateMethodToClass("split", split); \
+__NJS_CreateMethodToClass("indexOf", indexOf); \
+__NJS_CreateMethodToClass("lastIndexOf", lastIndexOf); \
+__NJS_CreateMethodToClass("search", search); \
+__NJS_CreateMethodToClass("slice", slice); \
+__NJS_CreateMethodToClass("substr", substr); \
+__NJS_CreateMethodToClass("replace", replace);
 
 namespace NJS::Class
 {
 	// Constructors
-	String::String() { counter++; }
+	String::String()
+	{ 
+		__NJS_Class_String_Init();
+		__NJS_Object_Set("length", NJS::VAR((int)value.size()), &object);
+	}
 	String::String(std::string val)
 	{
-		counter++;
+		__NJS_Class_String_Init();
 		value = val;
-		object.push_back(pair_t("length", (int)value.size()));
+		__NJS_Object_Set("length", NJS::VAR((int)value.size()), &object);
 	}
 	String::String(const char* val)
 	{
-		counter++;
+		__NJS_Class_String_Init();
 		value = val;
-		object.push_back(pair_t("length", (int)value.size()));
+		__NJS_Object_Set("length", NJS::VAR((int)value.size()), &object);
 	}
 	// Methods
 	void String::Delete() noexcept
@@ -141,4 +155,143 @@ namespace NJS::Class
 	String String::operator>>=(const String &_v1) { throw InvalidTypeException(); }
 	String String::operator<<=(const String &_v1) { throw InvalidTypeException(); }
 	// TODO: ">>>" and ">>>=" operators
+	/*** STRING METHODS ***/
+	NJS::VAR String::toString(std::vector<NJS::VAR> _args) const
+	{
+		return value;
+	}
+	
+	NJS::VAR String::split(std::vector<NJS::VAR> _args) const
+	{
+		var _needle;
+		if (_args.size() > 0)
+			_needle = _args[0];
+		else
+			return NJS::VAR(this->value);
+
+		NJS::VAR _arr = __NJS_Create_Array();
+		char *_v = (char *)malloc(strlen(this->value.c_str()) + 1);
+		strcpy(_v, this->value.c_str());
+		char *delim = (char *)malloc(strlen(((std::string)_needle).c_str()) + 1);
+		strcpy(delim, ((std::string)_needle).c_str());
+
+		char *ptr = strtok(_v, delim);
+		int i = 0;
+		char *_new;
+		while (ptr != NULL)
+		{
+			_new = (char *)malloc(strlen(ptr) + 1);
+			strcpy(_new, ptr);
+			__NJS_Object_Set(i, _new, _arr);
+			free(_new);
+			ptr = strtok(NULL, delim);
+			i++;
+		}
+
+		free(delim);
+		return _arr;
+	}
+	
+	NJS::VAR String::indexOf(std::vector<NJS::VAR> _args) const
+	{
+		var _needle;
+		if (_args.size() > 0)
+			_needle = _args[0];
+		else
+			return NJS::VAR(-1);
+
+		string::size_type loc = this->value.find((std::string)_needle, 0);
+		if (loc != string::npos)
+		{
+			return NJS::VAR((int)loc);
+		}
+		return NJS::VAR(-1);
+	}
+	
+	NJS::VAR String::lastIndexOf(std::vector<NJS::VAR> _args) const
+	{
+		var _needle;
+		if (_args.size() > 0)
+			_needle = _args[0];
+		else
+			return NJS::VAR(-1);
+
+		string::size_type loc = this->value.find_last_of((std::string)_needle, 0);
+		if (loc != string::npos)
+		{
+			return NJS::VAR((int)loc);
+		}
+		return NJS::VAR(-1);
+	}
+	
+	NJS::VAR String::search(std::vector<NJS::VAR> _args) const
+	{
+		var _needle;
+		if (_args.size() > 0)
+			_needle = _args[0];
+		else
+			return NJS::VAR(-1);
+
+		string::size_type loc = this->value.find((std::string)_needle, 0);
+		if (loc != string::npos)
+		{
+			return NJS::VAR((int)loc);
+		}
+		return NJS::VAR(-1);
+	}
+	
+	NJS::VAR String::slice(std::vector<NJS::VAR> _args) const
+	{
+		var _start;
+		var _end;
+		if (_args.size() > 0)
+			_start = _args[0];
+		else
+			return NJS::VAR(this->value);
+		if (_args.size() > 1)
+			_end = _args[1];
+
+		if (_end.type == NJS::Enum::Type::Undefined)
+			return NJS::VAR(this->value.substr((int)_start, string::npos));
+		int _endIndex = (int)_end - (int)_start;
+		return NJS::VAR(this->value.substr((int)_start, _endIndex));
+	}
+	
+	NJS::VAR String::substr(std::vector<NJS::VAR> _args) const
+	{
+		var _start;
+		var _end;
+		if (_args.size() > 0)
+			_start = _args[0];
+		else
+			return NJS::VAR(this->value);
+		if (_args.size() > 1)
+			_end = _args[1];
+
+		if (_end.type == NJS::Enum::Type::Undefined)
+			return NJS::VAR(this->value.substr((int)_start, string::npos));
+		return NJS::VAR(this->value.substr((int)_start, (int)_end));
+	}
+		
+	NJS::VAR String::replace(std::vector<NJS::VAR> _args) const
+	{
+		var _search;
+		var _replace;
+		if (_args.size() > 0)
+			_search = _args[0];
+		else
+			return NJS::VAR(this->value);
+		if (_args.size() > 1)
+			_replace = _args[1];
+
+		size_t start_pos = this->value.find((std::string)_search);
+		if (start_pos == std::string::npos)
+		{
+			return var(value);
+		}
+		
+		std::string _new = value;
+		return var(_new.replace(start_pos, ((std::string)_search).length(), (std::string)_replace));
+	}
+	/* END STRING METHODS */
 } // namespace NJS::Class

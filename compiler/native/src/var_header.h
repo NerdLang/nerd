@@ -40,7 +40,7 @@ namespace NJS
 		/* END CALL OVERLOAD */
 
 		VAR & operator[] (VAR _index);
-		
+		VAR & operator[] (VAR _index) const;
 		/* END ACCESS OVERLOAD */
 
 		/*** END CONSTRUCTOR ***/

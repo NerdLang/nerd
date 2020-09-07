@@ -2,52 +2,53 @@
 #include "array_header.h"
 #include <sstream>
 #include <limits>
-
+#define __NJS_Class_Array_Init() \
+counter++; \
+__NJS_CreateMethodToClass("@@iterator", __iterator); \
+__NJS_CreateMethodToClass("@@unscopables", __unscopables); \
+__NJS_CreateMethodToClass("concat", concat); \
+__NJS_CreateMethodToClass("copyWithin", copyWithin); \
+__NJS_CreateMethodToClass("entries", entries); \
+__NJS_CreateMethodToClass("every", every); \
+__NJS_CreateMethodToClass("fill", fill); \
+__NJS_CreateMethodToClass("filter", filter); \
+__NJS_CreateMethodToClass("find", find); \
+__NJS_CreateMethodToClass("findIndex", findIndex); \
+__NJS_CreateMethodToClass("flat", flat); \
+__NJS_CreateMethodToClass("flatMap", flatMap); \
+__NJS_CreateMethodToClass("forEach", forEach); \
+__NJS_CreateMethodToClass("includes", includes); \
+__NJS_CreateMethodToClass("indexOf", indexOf); \
+__NJS_CreateMethodToClass("join", join); \
+__NJS_CreateMethodToClass("keys", keys); \
+__NJS_CreateMethodToClass("lastIndexOf", lastIndexOf); \
+__NJS_CreateMethodToClass("map", map); \
+__NJS_CreateMethodToClass("pop", pop); \
+__NJS_CreateMethodToClass("push", push); \
+__NJS_CreateMethodToClass("reduce", reduce); \
+__NJS_CreateMethodToClass("reduceRight", reduceRight); \
+__NJS_CreateMethodToClass("reverse", reverse); \
+__NJS_CreateMethodToClass("shift", shift); \
+__NJS_CreateMethodToClass("slice", slice); \
+__NJS_CreateMethodToClass("some", some); \
+__NJS_CreateMethodToClass("sort", sort); \
+__NJS_CreateMethodToClass("splice", splice); \
+__NJS_CreateMethodToClass("toLocaleString", toLocaleString); \
+__NJS_CreateMethodToClass("toString", toString); \
+__NJS_CreateMethodToClass("unshift", unshift); \
+__NJS_CreateMethodToClass("values", values);
+		
 namespace NJS::Class
 {
 	// Constructors
 	Array::Array() 
 	{ 
-		counter++;
+		__NJS_Class_Array_Init();	
 		object.push_back(pair_t("length", 0));
-		
-		__NJS_CreateMethodToClass("@@iterator", __iterator);
-		__NJS_CreateMethodToClass("@@unscopables", __unscopables);
-		__NJS_CreateMethodToClass("concat", concat);
-		__NJS_CreateMethodToClass("copyWithin", copyWithin);
-		__NJS_CreateMethodToClass("entries", entries);
-		__NJS_CreateMethodToClass("every", every);
-		__NJS_CreateMethodToClass("fill", fill);
-		__NJS_CreateMethodToClass("filter", filter);
-		__NJS_CreateMethodToClass("find", find);
-		__NJS_CreateMethodToClass("findIndex", findIndex);
-		__NJS_CreateMethodToClass("flat", flat);
-		__NJS_CreateMethodToClass("flatMap", flatMap);
-		__NJS_CreateMethodToClass("forEach", forEach);
-		__NJS_CreateMethodToClass("includes", includes);
-		__NJS_CreateMethodToClass("indexOf", indexOf);
-		__NJS_CreateMethodToClass("join", join);
-		__NJS_CreateMethodToClass("keys", keys);
-		__NJS_CreateMethodToClass("lastIndexOf", lastIndexOf);
-		__NJS_CreateMethodToClass("map", map);
-		__NJS_CreateMethodToClass("pop", pop);
-		__NJS_CreateMethodToClass("push", push);
-		__NJS_CreateMethodToClass("reduce", reduce);
-		__NJS_CreateMethodToClass("reduceRight", reduceRight);
-		__NJS_CreateMethodToClass("reverse", reverse);
-		__NJS_CreateMethodToClass("shift", shift);
-		__NJS_CreateMethodToClass("slice", slice);
-		__NJS_CreateMethodToClass("some", some);
-		__NJS_CreateMethodToClass("sort", sort);
-		__NJS_CreateMethodToClass("splice", splice);
-		__NJS_CreateMethodToClass("toLocaleString", toLocaleString);
-		__NJS_CreateMethodToClass("toString", toString);
-		__NJS_CreateMethodToClass("unshift", unshift);
-		__NJS_CreateMethodToClass("values", values);
 	}
 	Array::Array(vector_t vec)
 	{
-		Array();
+		__NJS_Class_Array_Init();
 		value = vec;
 		__NJS_Object_Set("length", (int)vec.size(), &this->object);
 	}
