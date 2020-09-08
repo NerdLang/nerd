@@ -2,60 +2,38 @@
 #include "number_header.h"
 #include <cmath>
 #include <limits>
+#include <iomanip>
 
 namespace NJS::Class
 {
 	// Private methods
 	inline int Number::getInt() const noexcept
 	{
-		int _res;
-		if (isInt())
-		{
-			_res = static_cast<int>(value >> 1u);
-		}
-		else
-		{
-			_res = static_cast<int>(*(reinterpret_cast<double *>(value >> 1u)));
-		}
-		return _res;
+		if(isInt) return value.i;
+		return value.d;
 	}
 	inline void Number::setInt(int v) noexcept
 	{
-		if (!isInt())
-		{
-			delete reinterpret_cast<double *>(value >> 1u);
-		}
-		value = static_cast<int>(v) << 1u;
+		isInt = true;
+		value.i = v;
 	}
 	inline double Number::getDouble() const noexcept
 	{
-		double _res;
-		if (isInt())
-		{
-			_res = static_cast<double>(static_cast<int>(value >> 1u));
-		}
-		else
-		{
-			_res =  *(reinterpret_cast<double *>(value >> 1u));
-		}
-		return _res;
+		if(isInt) return value.i;
+		return value.d;
 	}
 	inline void Number::setDouble(double v) noexcept
 	{
-		if (!isInt())
-		{
-			delete reinterpret_cast<double *>(value >> 1u);
-		}
-		double *tmp = &v;
-		value = (reinterpret_cast<long long>(tmp) << 1) | 1;
+		isInt = false;
+		value.d = v;
 	}
 	inline bool Number::isNaN() const noexcept
 	{
-		return !isInt() && std::isnan(getDouble());
+		return !isInt && std::isnan(getDouble());
 	}
 	inline bool Number::isFinite() const noexcept
 	{
-		return isInt() || std::isfinite(getDouble());
+		return isInt || std::isfinite(getDouble());
 	}
 	inline bool Number::isNegative() const noexcept
 	{
@@ -66,16 +44,18 @@ namespace NJS::Class
 	Number::Number() { counter++; setInt(0); }
 	Number::Number(const int val)
 	{
+		isInt = true;
 		counter++;
 		setInt(val);
 	}
 	Number::Number(const double val)
 	{
+		isInt = false;
 		counter++;
 		double dummy;
 		if (modf(val, &dummy) == 0.0 && val < SMI_MAX && val > SMI_MIN)
 		{
-			setInt(static_cast<int>(val));
+			setInt(val);
 		}
 		else
 		{
@@ -84,36 +64,34 @@ namespace NJS::Class
 	}
 	Number::Number(const long long val)
 	{
+		isInt = false;
 		counter++;
-		setDouble(static_cast<double>(val));
+		setDouble(val);
 	}
 	
 	Number::Number(const Number& val)
 	{
 		counter++;
 		value = val.value;
+		isInt = val.isInt;
 	}
-	
 
 	
 	Number::Number(const NJS::VAR& val)
 	{
 		counter++;
+		isInt = ((NJS::Class::Number*)val._ptr)->isInt;
 		switch(val.type)
 		{
 			case NJS::Enum::Type::Number:
 				value = ((NJS::Class::Number*)val._ptr)->value;
 			break;
 			default:
-				value = (int)val;
+				value.i = (int)val;
 			break;
 		}
 	}
 	// Methods
-	inline bool Number::isInt() const noexcept 
-	{ 
-		return (value & 1) == 0; 
-	}
 	void Number::Delete() noexcept
 	{
 		if (--counter == 0)
@@ -129,8 +107,8 @@ namespace NJS::Class
 	{
 		if (isFinite())
 		{
-			if(isInt()) return (int)getInt();
-			else return (double)getDouble();
+			if(isInt) return getInt();
+			else return getDouble();
 		}
 		if (isNaN())
 		{
@@ -142,13 +120,17 @@ namespace NJS::Class
 	{
 		if (isFinite())
 		{
-			if(isInt() == 1)
+			if(isInt)
 			{
-				return std::to_string(getInt());
+				return std::to_string(value.i);
 			}
 			else 
 			{
-				return to_string(getDouble());
+				ostringstream strout ;
+				strout << fixed << std::setprecision(14) << value.d ;
+				string str = strout.str() ;
+				size_t end = str.find_last_not_of( '0' ) + 1 ;
+				return str.erase( end ) ;
 			}
 		}
 		if (isNaN())
@@ -204,78 +186,78 @@ namespace NJS::Class
 	Number Number::operator!() const { throw InvalidTypeException(); }
 	bool Number::operator==(const Number &_v1) const
 	{
-		if (isInt() && _v1.isInt())
+		if (isInt && _v1.isInt)
 		{
-			return value == _v1.value;
+			return value.i == _v1.value.i;
 		}
 		else
 		{
-			return (double)*this == (double)_v1;
+			return value.d == (double)_v1;
 		}
 	}
 	// === emulated with __NJS_EQUAL_VALUE_AND_TYPE
 	// !== emulated with __NJS_NOT_EQUAL_VALUE_AND_TYPE
 	bool Number::operator!=(const Number &_v1) const
 	{
-		if (isInt() && _v1.isInt())
+		if (isInt && _v1.isInt)
 		{
-			return value != _v1.value;
+			return value.i != _v1.value.i;
 		}
 		else
 		{
-			return (double)*this != (double)_v1;
+			return value.d != (double)_v1;
 		}
 	}
 	bool Number::operator<(const Number &_v1) const
 	{
-		if (isInt() && _v1.isInt())
+		if (isInt && _v1.isInt)
 		{
-			return value < _v1.value;
+			return value.i < _v1.value.i;
 		}
 		else
 		{
-			return (double)*this < (double)_v1;
+			return value.d < (double)_v1;
 		}
 	}
 	bool Number::operator<=(const Number &_v1) const
 	{
-		if (isInt() && _v1.isInt())
+		if (isInt && _v1.isInt)
 		{
-			return value <= _v1.value;
+			return value.i <= _v1.value.i;
 		}
 		else
 		{
-			return (double)*this <= (double)_v1;
+			return value.d <= (double)_v1;
 		}
 	}
 	bool Number::operator>(const Number &_v1) const
 	{
-		if (isInt() && _v1.isInt())
+		if (isInt && _v1.isInt)
 		{
-			return value > _v1.value;
+			return value.i > _v1.value.i;
 		}
 		else
 		{
-			return (double)*this > (double)_v1;
+			return value.d > (double)_v1;
 		}
 	}
 	bool Number::operator>=(const Number &_v1) const
 	{
-		if (isInt() && _v1.isInt())
+		if (isInt && _v1.isInt)
 		{
-			return value >= _v1.value;
+			return value.i >= _v1.value.i;
 		}
 		else
 		{
-			return (double)*this >= (double)_v1;
+			return value.d >= (double)_v1;
 		}
 	}
 	// Numeric operators
 	Number Number::operator+() const { throw InvalidTypeException(); }
-	Number Number::operator-() const { if(isInt()) return (int)-getInt() ; else return (double)-getDouble(); }
+	Number Number::operator-() const { if(isInt) return (int)-getInt() ; else return (double)-getDouble(); }
 	Number Number::operator++(const int _v1)
 	{
-		if (isInt())
+		if (isInt)
 		{
 			int v = getInt();
 			setInt(++v);
@@ -289,7 +271,7 @@ namespace NJS::Class
 	}
 	Number Number::operator--(const int _v1)
 	{
-		if (isInt())
+		if (isInt)
 		{
 			int v = getInt();
 			setInt(--v);
@@ -303,7 +285,7 @@ namespace NJS::Class
 	}
 	Number Number::operator+(const Number &_v1) const
 	{
-		if (isInt() && isInt())
+		if (isInt && isInt)
 		{
 			int a = (int)*this;
 			int b = (int)_v1;
@@ -313,11 +295,11 @@ namespace NJS::Class
 				return c;
 			}
 		}
-		return (double)*this + (double)_v1;
+		return ((double)*this) + (double)_v1;
 	}
 	Number Number::operator+=(const Number &_v1)
 	{
-		if (isInt() && _v1.isInt())
+		if (isInt && _v1.isInt)
 		{
 			int a = (int)*this;
 			int b = (int)_v1;
@@ -333,7 +315,7 @@ namespace NJS::Class
 	}
 	Number Number::operator-(const Number &_v1) const
 	{
-		if (isInt() && _v1.isInt())
+		if (isInt && _v1.isInt)
 		{
 			int a = (int)*this;
 			int b = (int)_v1;
@@ -343,11 +325,11 @@ namespace NJS::Class
 				return c;
 			}
 		}
-		return (double)*this - (double)_v1;
+		return value.d - (double)_v1;
 	}
 	Number Number::operator-=(const Number &_v1)
 	{
-		if (isInt() && _v1.isInt())
+		if (isInt && _v1.isInt)
 		{
 			int a = (int)*this;
 			int b = (int)_v1;
@@ -363,7 +345,7 @@ namespace NJS::Class
 	}
 	Number Number::operator*(const Number &_v1) const
 	{
-		if (isInt() && _v1.isInt())
+		if (isInt && _v1.isInt)
 		{
 			int a = (int)*this;
 			int b = (int)_v1;
@@ -373,11 +355,11 @@ namespace NJS::Class
 				return c;
 			}
 		}
-		return (double)*this * (double)_v1;
+		return ((double)*this) * (double)_v1;
 	}
 	Number Number::operator*=(const Number &_v1)
 	{
-		if (isInt() && _v1.isInt())
+		if (isInt && _v1.isInt)
 		{
 			int a = (int)*this;
 			int b = (int)_v1;
@@ -388,13 +370,13 @@ namespace NJS::Class
 				return *this;
 			}
 		}
-		setDouble((double)*this * (double)_v1);
+		setDouble(((double)*this) * (double)_v1);
 		return *this;
 	}
 	// TODO: "**" and "**=" operators
 	Number Number::operator/(const Number &_v1) const
 	{
-		if (isInt() && _v1.isInt())
+		if (isInt && _v1.isInt)
 		{
 			int a = (int)*this;
 			int b = (int)_v1;
@@ -403,11 +385,11 @@ namespace NJS::Class
 				return a / b;
 			}
 		}
-		return (double)*this / (double)_v1;
+		return ((double)*this) / (double)_v1;
 	}
 	Number Number::operator/=(const Number &_v1)
 	{
-		if (isInt() && _v1.isInt())
+		if (isInt && _v1.isInt)
 		{
 			int a = (int)*this;
 			int b = (int)_v1;
@@ -417,12 +399,12 @@ namespace NJS::Class
 				return Number();
 			}
 		}
-		setDouble((double)*this / (double)_v1);
+		setDouble( ((double)*this) / (double)_v1);
 		return *this;
 	}
 	Number Number::operator%(const Number &_v1) const
 	{
-		if (isInt() && _v1.isInt())
+		if (isInt && _v1.isInt)
 		{
 			return (int)*this % (int)_v1;
 		}
@@ -433,7 +415,7 @@ namespace NJS::Class
 	}
 	Number Number::operator%=(const Number &_v1)
 	{
-		if (isInt() && _v1.isInt())
+		if (isInt && _v1.isInt)
 		{
 			setInt((int)*this % (int)_v1);
 		}
@@ -456,22 +438,22 @@ namespace NJS::Class
 	}
 	Number Number::operator|=(const Number &_v1)
 	{
-		setInt((int)*this | (int)_v1);
+		setInt( ((int)*this) | (int)_v1);
 		return *this;
 	}
 	Number Number::operator^=(const Number &_v1)
 	{
-		setInt((int)*this ^ (int)_v1);
+		setInt( ((int)*this) ^ (int)_v1);
 		return *this;
 	}
 	Number Number::operator>>=(const Number &_v1)
 	{
-		setInt((int)*this >> (int)_v1);
+		setInt( ((int)*this) >> (int)_v1);
 		return *this;
 	}
 	Number Number::operator<<=(const Number &_v1)
 	{
-		setInt((int)*this << (int)_v1);
+		setInt( ((int)*this) << (int)_v1);
 		return *this;
 	}
 	// TODO: ">>>" and ">>>=" operators

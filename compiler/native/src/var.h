@@ -29,7 +29,7 @@ namespace NJS
 		}
 		else if (_v.type == NJS::Enum::Type::Number)
 		{
-			if(((NJS::Class::Number*)_v._ptr)->isInt())
+			if(((NJS::Class::Number*)_v._ptr)->isInt)
 			{
 				_ptr = new NJS::Class::Number(((NJS::Class::Number*)_v._ptr)->getInt());
 			}
@@ -242,7 +242,7 @@ namespace NJS
 		}
 		else if (_v.type == NJS::Enum::Type::Number)
 		{
-			if(((NJS::Class::Number*)_v._ptr)->isInt())
+			if(((NJS::Class::Number*)_v._ptr)->isInt)
 			{
 				_ptr = new NJS::Class::Number(((NJS::Class::Number*)_v._ptr)->getInt());
 			}

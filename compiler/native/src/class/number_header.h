@@ -3,6 +3,12 @@
 
 namespace NJS::Class
 {
+	union NumberValue
+	{
+		int i;
+		double d;
+	};
+	
 	class Number : public virtual Base
 	{
 	private:
@@ -26,10 +32,10 @@ namespace NJS::Class
 		Number(const NJS::VAR& val);
 		// Properties
 		count_t counter = 0;
-		int value = 0;
+		NumberValue value = {.i = 0};
 		object_t object;
 		// Methods
-		inline bool isInt() const noexcept;
+		bool isInt = true;
 		inline int getInt() const noexcept;
 		inline double getDouble() const noexcept;
 		void Delete() noexcept;
