@@ -10,6 +10,7 @@ namespace NJS::Class
 	Function::Function(void *val)
 	{
 		counter++;
+		_this = __NJS_Create_Object();
 		value = val;
 	}
 	// Methods
@@ -94,13 +95,22 @@ namespace NJS::Class
 	{
 		return (*static_cast<function<NJS::VAR(var, vector_t)> *>(value))(__INJECTED_THIS, __NJS_VARARGS);
 	}
-		
+	
+	
+	template <class... Args>
+	NJS::VAR Function::New(Args... args)
+	{
+		vector_t _args = vector<var>{(NJS::VAR)args...};
+		var _ret = (NJS::VAR)(*static_cast<function<NJS::VAR(var, vector_t)> *>(value))(_this, _args);
+		if(_ret) return _ret;
+		else return _this;
+	}
 	
 	template <class... Args>
 	NJS::VAR Function::operator()(Args... args)
 	{
 		vector_t _args = vector<var>{(NJS::VAR)args...};
-		return (*static_cast<function<NJS::VAR(var, vector_t)> *>(value))(1, _args);
+		return (*static_cast<function<NJS::VAR(var, vector_t)> *>(value))(_this, _args);
 	}
 	// Comparation operators
 	Function Function::operator!() const { throw InvalidTypeException(); }

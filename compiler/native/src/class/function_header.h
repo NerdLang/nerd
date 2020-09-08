@@ -7,7 +7,6 @@ namespace NJS::Class
 	{
 	public:
 		// Constants
-		const char *name = "function";
 		const NJS::Enum::Type type = NJS::Enum::Type::Function;
 		std::string code = "[native code]";
 		// Constructors
@@ -16,10 +15,15 @@ namespace NJS::Class
 		// Properties
 		count_t counter = 0;
 		void* value = nullptr;
+		NJS::VAR _this;
 		object_t object;
 		// Methods
 		void Delete() noexcept;
+		
 		NJS::VAR Call(var __INJECTED_THIS, vector<var> __NJS_VARARGS);
+		
+		template <class... Args>
+		NJS::VAR New(Args... args);
 		// Native cast
 		explicit operator bool() const noexcept;
 		explicit operator double() const noexcept;

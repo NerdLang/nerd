@@ -56,11 +56,17 @@ function createAnon(_code, _scope)
 				else if(_code[i] == "}")
 				{
 					var _catch = "";
+					var _classAnon = false;
 					if(_scope) _catch = "=";
 					else if(_code.indexOf("'SCOPED_Function';") > -1) 
 					{
 						_code = _code.replace(/'SCOPED_Function';/g, "                  ");
 						_catch = "=";
+					}
+					if(_code.indexOf("'__NJS_CLASS_ANON__';") > -1) 
+					{
+						_code = _code.replace(/'__NJS_CLASS_ANON__';/g, "                     ");
+						_classAnon = true;
 					}
 					
 					_end = i;
@@ -68,7 +74,7 @@ function createAnon(_code, _scope)
 					if(_count == 0)
 					{
 						var _fn = "{" + _getVar + " var __NJS_THIS; if(__INJECTED_THIS.type != NJS::Enum::Type::Undefined) __NJS_THIS = __INJECTED_THIS; else __NJS_THIS = __NJS_Create_Object();" + _code.substring(_start + 1, _end);
-
+						if(_classAnon) _fn = "{" + _getVar + _code.substring(_start + 1, _end);
 						var _formated = "";
 
 						if(_match[1]) COMPILER.DECL.push(`var ${_match[2]};`);

@@ -23,6 +23,6 @@
 function NewExpression(_path)
 {
 	_path.node.type = "CallExpression";
-	_path.node.callee.name = "__NEW_" + _path.node.callee.name;
+	_path.node.callee.name = `__NJS_NEW(${_path.node.callee.name})`;
 }
 module.exports = NewExpression;
