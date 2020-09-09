@@ -38,7 +38,7 @@ function ClassDeclaration(_path)
 				var _params = "";
 				for(var p = 0; p < _path.node.body.body[o].params.length; p++)
 				{
-					if(p > 1) _params += ",";
+					if(p > 0) _params += ",";
 					_params += _path.node.body.body[o].params[p].name;
 				}
 				_class += _params + "){\nvar __NJS_THIS = __INJECTED_THIS;\n";
