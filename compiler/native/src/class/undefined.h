@@ -24,15 +24,12 @@ namespace NJS::Class
 	NJS::VAR const Undefined::operator[](NJS::VAR key) const
 	{
 		// ES3 ?
-		//throw NJS::VAR("TypeError: Cannot read property '" + (std::string)key + "' of undefined ");
-		return NJS::VAR();
+		throw NJS::VAR("TypeError: Cannot read property '" + (std::string)key + "' of undefined ");
 	}
 	NJS::VAR &Undefined::operator[](NJS::VAR key)
 	{
 		// ES3 ?
-		//throw NJS::VAR("TypeError: Cannot read property '" + (std::string)key + "' of undefined ");
-		static NJS::VAR _ret;
-		return _ret;
+		throw NJS::VAR("TypeError: Cannot read property '" + (std::string)key + "' of undefined ");
 	}
 	template <class... Args>
 	NJS::VAR Undefined::operator()(Args... args) const { throw InvalidTypeException(); }
