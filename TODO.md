@@ -32,3 +32,5 @@
 * Add .bind to functions
 
 * Update Class
+
+* Merge the refactoring
