@@ -97,6 +97,7 @@ function createFunction(_code, _scope)
 							var _constructor = `${_match[1]}["prototype"]["constructor"] = __NJS_Create_Var_Scoped_Anon(return __NJS_THIS;);`;
 							var _fn = "{" + _getVar + " var __NJS_THIS = __INJECTED_THIS;" + _code.substring(_start + 1, _end);
 
+
 							COMPILER.DECL.push("var " + _match[1] +";");
 
 							var _formated = `__NJS_DECL_Function<NJS::VAR (${_parameters})>* ${_genFN} = new __NJS_DECL_Function<NJS::VAR (${_parameters})>([${_catch}]( ${_parameters} ) -> NJS::VAR ${_fn} ${_return} );`;

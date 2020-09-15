@@ -45,6 +45,7 @@ var TEST =
 		  return `${compiler} -std=c++17 "${_in}" ${option} -I ${extern}/lib/ -fno-rtti -fno-stack-protector -fomit-frame-pointer -s ${COMPILER.LIBS}  -o ${out}`;
 	  }
 	  else return `${compiler} -std=c++17 "${_in}" -I ${extern}/lib/ ${option} -s ${COMPILER.LIBS} -o ${out}`;
+
   },
   check: {
     "env": {

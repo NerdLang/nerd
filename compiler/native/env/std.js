@@ -109,7 +109,6 @@ var STD =
             var _opt = "-O";
             if(os.platform() == "darwin" || compiler.indexOf("clang") > -1) _opt += "3";
             else _opt += "fast";
-
             return `${compiler} ${_stack} -std=c++17 "${_in}" ${_opt} -s ${COMPILER.LIBS}  -o "${out}" ${_sysVNetLibs}`;
         }
     }

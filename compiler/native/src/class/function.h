@@ -115,11 +115,19 @@ namespace NJS::Class
 		else return _this;
 	}
 	
+	NJS::VAR Function::Call(var __INJECTED_THIS, vector<var> __NJS_VARARGS)
+	{
+		return (*static_cast<function<NJS::VAR(var, vector<NJS::VAR>)> *>(__NJS_VALUE))(__INJECTED_THIS, __NJS_VARARGS);
+	}
+		
+	
 	template <class... Args>
 	NJS::VAR Function::operator()(Args... args)
 	{
+
 		vector_t _args = vector<var>{(NJS::VAR)args...};
 		return (*static_cast<function<NJS::VAR(var, vector_t)> *>(value))((*this)["prototype"], _args);
+
 	}
 	// Comparation operators
 	Function Function::operator!() const { throw InvalidTypeException(); }

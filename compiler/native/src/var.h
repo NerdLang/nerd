@@ -71,7 +71,6 @@ namespace NJS
 	/**/
 	
 	/*** CONSTRUCTOR ***/
-
 	VAR::VAR(NJS::Enum::Type _type, int _value)
 	{
 		this->type = _type;
