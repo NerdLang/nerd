@@ -20,8 +20,9 @@
  *
  */
  
-var process = {};
-
-process.argv = __NJS_ARGS;
+var process = 
+{
+	argv: __NJS_ARGS
+};
 
 module.exports = process;

@@ -3,11 +3,10 @@ NJS::VAR __NJS_Object_Keys(NJS::VAR _var);
 NJS::VAR __NJS_Object_Stringify(NJS::VAR _var);
 NJS::VAR __NJS_Object_Stringify(NJS::VAR _var, bool _bracket);
 NJS::VAR __NJS_Create_Object();
-NJS::VAR __NJS_Create_Array();
 NJS::VAR __NJS_Object_Clone(NJS::VAR _var);
 NJS::VAR __NJS_Object_Set(const char *_index, NJS::VAR _value, vector<pair<const char *, NJS::VAR>> *_obj);
 
-/*** STRING MANIPULATION ***/
+/*** String MANIPULATION ***/
 #ifdef __NJS_ARDUINO
 template <typename m>
 string to_string(m _var)
@@ -31,9 +30,9 @@ string __NJS_Concat_To_Str(m _left, n _right)
 	output << _left << _right;
 	return output.str();
 }
-/* END STRING MANIPULATION */
+/* END String MANIPULATION */
 
-/*** NUMBER MANIPULATION ***/
+/*** Number MANIPULATION ***/
 template <typename m>
 int __NJS_Str_To_Int(m _left)
 {
@@ -52,4 +51,4 @@ double __NJS_Str_To_Double(m _left)
 	output >> out;
 	return out;
 }
-/* END NUMBER MANIPULATION */
+/* END Number MANIPULATION */

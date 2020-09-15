@@ -38,10 +38,10 @@ function ClassDeclaration(_path)
 				var _params = "";
 				for(var p = 0; p < _path.node.body.body[o].params.length; p++)
 				{
-					if(p > 1) _params += ",";
+					if(p > 0) _params += ",";
 					_params += _path.node.body.body[o].params[p].name;
 				}
-				_class += _params + "){\nvar __NJS_THIS = __NJS_Create_Object();\n";
+				_class += _params + "){\nvar __NJS_THIS = __INJECTED_THIS;\n";
 				var _newBody = babel.generate(_path.node.body.body[o].body).code;
 				_newBody = _newBody.substring(1, _newBody.length -1);
 				 _class += _newBody;
@@ -65,7 +65,7 @@ function ClassDeclaration(_path)
 	}
 	if(!_constructor)
 	{
-		_class += "){\nvar __NJS_THIS = __NJS_Create_Object();\n";
+		_class += "){\nvar __NJS_THIS = __INJECTED_THIS;\n";
 	}
 	_class += _body;
 	_class += "}";

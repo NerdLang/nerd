@@ -121,14 +121,13 @@ int dump(const char *js, jsmntok_t *t, size_t count, int indent, var& _res)
   return 0;
 }
 
-function __NJS_JSON_PARSE(__json)
-{
+__NJS_DECL_Function<NJS::VAR (var, vector<var>)>* __NJS_FN___5po78g = new __NJS_DECL_Function<NJS::VAR (var, vector<var>)>([](var __INJECTED_THIS, vector<var> __NJS_VARARGS ) -> NJS::VAR{var __json; if(__NJS_VARARGS.size() > 0) __json = __NJS_VARARGS[0];
 	if(!__json) return NJS::Value::undefined;
 	size_t tokcount = 32;
 	int r;
 	int j = 0;
 	var __RESULT;
-	const char* JSON_STRING = __json.get().s->__NJS_VALUE.c_str();
+	const char* JSON_STRING = ((NJS::Class::String*)__json._ptr)->value.c_str();
 	jsmn_parser p;
 	jsmntok_t *tok = (jsmntok_t*)malloc(sizeof(*tok) * tokcount);
 
@@ -159,10 +158,9 @@ function __NJS_JSON_PARSE(__json)
 	}
 	free(tok);
 	return __RESULT;
-};
+;return __NJS_Create_Undefined();});var __NJS_JSON_PARSE=NJS::VAR(NJS::Enum::Type::Function, __NJS_FN___5po78g);;
 
 
-function __NJS_JSON_STRINGIFY(__object)
-{
+__NJS_DECL_Function<NJS::VAR (var, vector<var>)>* __NJS_FN___ylc1k6 = new __NJS_DECL_Function<NJS::VAR (var, vector<var>)>([](var __INJECTED_THIS, vector<var> __NJS_VARARGS ) -> NJS::VAR{var __object; if(__NJS_VARARGS.size() > 0) __object = __NJS_VARARGS[0];
 	return __NJS_Object_Stringify(__object);
-};
+;return __NJS_Create_Undefined();});var __NJS_JSON_STRINGIFY=NJS::VAR(NJS::Enum::Type::Function, __NJS_FN___ylc1k6);;

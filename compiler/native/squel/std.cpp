@@ -34,7 +34,6 @@
 
  using namespace std;
 
-
  #include "njs.h"
  using namespace NJS;
  using namespace NJS::Value;
@@ -54,8 +53,18 @@ int main(int argc, char* argv[])
 		__NJS_Object_Set(i, NJS::VAR(argv[i]), __NJS_ARGS);
 	}
 
-	{INIT}
+	try 
+	{
 
-	{CODE}
+		{INIT}
+
+		{CODE}
+		
+	}
+	catch(NJS::VAR __NJS_Global_Exception)
+	{
+		__NJS_Log_Console(__NJS_Global_Exception);
+		exit(1);
+	}
 	return 0;
 }

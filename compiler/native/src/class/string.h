@@ -1,195 +1,297 @@
+#pragma once
+#include "string_header.h"
+#include <string>
+#include <limits>
+#define __NJS_Class_String_Init()\
+counter++; \
+__NJS_CreateMethodToClass("toString", toString); \
+__NJS_CreateMethodToClass("split", split); \
+__NJS_CreateMethodToClass("indexOf", indexOf); \
+__NJS_CreateMethodToClass("lastIndexOf", lastIndexOf); \
+__NJS_CreateMethodToClass("search", search); \
+__NJS_CreateMethodToClass("slice", slice); \
+__NJS_CreateMethodToClass("substr", substr); \
+__NJS_CreateMethodToClass("replace", replace);
+
 namespace NJS::Class
 {
-	String::String(string _value)
-	{
-		cnt++;
-		/*** toString ***/
-		function<NJS::VAR(vector<var>)> *__OBJ_TO_NJS_STRING = new function<NJS::VAR(vector<var>)>([&](vector<var> _NJS_VARARGS) { return __NJS_Create_String(this->__NJS_VALUE); });
-		NJS::VAR toString = NJS::VAR(NJS::Enum::Type::FUNCTION, __OBJ_TO_NJS_STRING);
-		__NJS_Object_Set("toString", toString, &this->__OBJECT);
-		/*** end to string ***/
-
-		/*** length ***/
-		__NJS_Object_Set("length", NJS::VAR((int)_value.size()), &this->__OBJECT);
-		/*** end length ***/
-
-		/*** split ***/
-		function<NJS::VAR(vector<var>)> *__OBJ_TO___NJS_SPLIT = new function<NJS::VAR(vector<var>)>([&](vector<var> _NJS_VARARGS) {
-			var _needle;
-			if (_NJS_VARARGS.size() > 0)
-				_needle = _NJS_VARARGS[0];
-			else
-				return NJS::VAR(this->__NJS_VALUE);
-
-			NJS::VAR _arr = __NJS_Create_Array();
-			char *_v = (char *)malloc(strlen(this->__NJS_VALUE.c_str()) + 1);
-			strcpy(_v, this->__NJS_VALUE.c_str());
-			char *delim = (char *)malloc(strlen(_needle.get().s->__NJS_VALUE.c_str()) + 1);
-			strcpy(delim, _needle.get().s->__NJS_VALUE.c_str());
-
-			char *ptr = strtok(_v, delim);
-			int i = 0;
-			char *_new;
-			while (ptr != NULL)
-			{
-				_new = (char *)malloc(strlen(ptr) + 1);
-				strcpy(_new, ptr);
-				__NJS_Object_Set(i, _new, _arr);
-				free(_new);
-				ptr = strtok(NULL, delim);
-				i++;
-			}
-
-			free(delim);
-			return _arr;
-		});
-
-		NJS::VAR __split = NJS::VAR(NJS::Enum::Type::FUNCTION, __OBJ_TO___NJS_SPLIT);
-		__NJS_Object_Set("split", __split, &this->__OBJECT);
-		/*** end split ***/
-
-	#ifndef __NJS_ARDUINO
-		/*** indexOf ***/
-		function<NJS::VAR(vector<var>)> *__OBJ_TO___NJS_INDEXOF = new function<NJS::VAR(vector<var>)>([&](vector<var> _NJS_VARARGS) {
-			var _needle;
-			if (_NJS_VARARGS.size() > 0)
-				_needle = _NJS_VARARGS[0];
-			else
-				return NJS::VAR(-1);
-
-			string::size_type loc = this->__NJS_VALUE.find(_needle.get().s->__NJS_VALUE, 0);
-			if (loc != string::npos)
-			{
-				return NJS::VAR((int)loc);
-			}
-			return NJS::VAR(-1);
-		});
-
-		NJS::VAR __indexof = NJS::VAR(NJS::Enum::Type::FUNCTION, __OBJ_TO___NJS_INDEXOF);
-
-		__NJS_Object_Set("indexOf", __indexof, &this->__OBJECT);
-		/*** end indexOf ***/
-
-		/*** lastIndexOf ***/
-		function<NJS::VAR(vector<var>)> *__OBJ_TO___NJS_LASTINDEXOF = new function<NJS::VAR(vector<var>)>([&](vector<var> _NJS_VARARGS) {
-			var _needle;
-			if (_NJS_VARARGS.size() > 0)
-				_needle = _NJS_VARARGS[0];
-			else
-				return NJS::VAR(-1);
-
-			string::size_type loc = this->__NJS_VALUE.find_last_of(_needle.get().s->__NJS_VALUE, 0);
-			if (loc != string::npos)
-			{
-				return NJS::VAR((int)loc);
-			}
-			return NJS::VAR(-1);
-		});
-
-		NJS::VAR __lastindexof = NJS::VAR(NJS::Enum::Type::FUNCTION, __OBJ_TO___NJS_LASTINDEXOF);
-
-		__NJS_Object_Set("lastIndexOf", __lastindexof, &this->__OBJECT);
-		/*** end lastIndexOf ***/
-
-		/*** search ***/
-		function<NJS::VAR(vector<var>)> *__OBJ_TO___NJS_SEARCH = new function<NJS::VAR(vector<var>)>([&](vector<var> _NJS_VARARGS) {
-			var _needle;
-			if (_NJS_VARARGS.size() > 0)
-				_needle = _NJS_VARARGS[0];
-			else
-				return NJS::VAR(-1);
-
-			string::size_type loc = this->__NJS_VALUE.find(_needle.get().s->__NJS_VALUE, 0);
-			if (loc != string::npos)
-			{
-				return NJS::VAR((int)loc);
-			}
-			return NJS::VAR(-1);
-		});
-
-		NJS::VAR __search = NJS::VAR(NJS::Enum::Type::FUNCTION, __OBJ_TO___NJS_SEARCH);
-
-		__NJS_Object_Set("search", __search, &this->__OBJECT);
-		/*** end search ***/
-
-		/*** slice ***/
-		function<NJS::VAR(vector<var>)> *__OBJ_TO___NJS_SLICE = new function<NJS::VAR(vector<var>)>([&](vector<var> _NJS_VARARGS) {
-			var _start;
-			var _end;
-			if (_NJS_VARARGS.size() > 0)
-				_start = _NJS_VARARGS[0];
-			else
-				return NJS::VAR(this->__NJS_VALUE);
-			if (_NJS_VARARGS.size() > 1)
-				_end = _NJS_VARARGS[1];
-
-			if (_end.type == NJS::Enum::Type::UNDEFINED)
-				return NJS::VAR(this->__NJS_VALUE.substr(_start.get().i, string::npos));
-			int _endIndex = _end.get().i - _start.get().i;
-			return NJS::VAR(this->__NJS_VALUE.substr(_start.get().i, _endIndex));
-		});
-
-		NJS::VAR __slice = NJS::VAR(NJS::Enum::Type::FUNCTION, __OBJ_TO___NJS_SLICE);
-
-		__NJS_Object_Set("slice", __slice, &this->__OBJECT);
-		__NJS_Object_Set("substring", __slice, &this->__OBJECT);
-		/*** end slice ***/
-
-		/*** substr ***/
-		function<NJS::VAR(vector<var>)> *__OBJ_TO___NJS_SUBSTR = new function<NJS::VAR(vector<var>)>([&](vector<var> _NJS_VARARGS) {
-			var _start;
-			var _end;
-			if (_NJS_VARARGS.size() > 0)
-				_start = _NJS_VARARGS[0];
-			else
-				return NJS::VAR(this->__NJS_VALUE);
-			if (_NJS_VARARGS.size() > 1)
-				_end = _NJS_VARARGS[1];
-
-			if (_end.type == NJS::Enum::Type::UNDEFINED)
-				return NJS::VAR(this->__NJS_VALUE.substr(_start.get().i, string::npos));
-			return NJS::VAR(this->__NJS_VALUE.substr(_start.get().i, _end.get().i));
-		});
-
-		NJS::VAR __substr = NJS::VAR(NJS::Enum::Type::FUNCTION, __OBJ_TO___NJS_SUBSTR);
-
-		__NJS_Object_Set("substr", __substr, &this->__OBJECT);
-		/*** end substr ***/
-
-		/*** replace ***/
-		function<NJS::VAR(vector<var>)> *__OBJ_TO___NJS_REPLACE = new function<NJS::VAR(vector<var>)>([&](vector<var> _NJS_VARARGS) {
-			var _search;
-			var _replace;
-			if (_NJS_VARARGS.size() > 0)
-				_search = _NJS_VARARGS[0];
-			else
-				return NJS::VAR(this->__NJS_VALUE);
-			if (_NJS_VARARGS.size() > 1)
-				_replace = _NJS_VARARGS[1];
-
-			size_t start_pos = this->__NJS_VALUE.find(_search.get().s->__NJS_VALUE);
-			if (start_pos == std::string::npos)
-			{
-				return var(this->__NJS_VALUE);
-			}
-			return var(this->__NJS_VALUE.replace(start_pos, _search.get().s->__NJS_VALUE.length(), _replace.get().s->__NJS_VALUE));
-		});
-
-		NJS::VAR __replace = NJS::VAR(NJS::Enum::Type::FUNCTION, __OBJ_TO___NJS_REPLACE);
-
-		__NJS_Object_Set("replace", __replace, &this->__OBJECT);
-		/*** end replace ***/
-	#endif
-
-		__NJS_VALUE = _value;
+	// Constructors
+	String::String()
+	{ 
+		__NJS_Class_String_Init();
+		__NJS_Object_Set("length", NJS::VAR((int)value.size()), &object);
 	}
-
-	void String::Delete()
+	String::String(std::string val)
 	{
-		this->cnt--;
-		if (this->cnt < 1)
+		__NJS_Class_String_Init();
+		value = val;
+		__NJS_Object_Set("length", NJS::VAR((int)value.size()), &object);
+	}
+	String::String(const char* val)
+	{
+		__NJS_Class_String_Init();
+		value = val;
+		__NJS_Object_Set("length", NJS::VAR((int)value.size()), &object);
+	}
+	// Methods
+	void String::Delete() noexcept
+	{
+		if (--counter < 1)
 		{
 			delete this;
 		}
 	}
+	// Native cast
+	String::operator bool() const noexcept { return value.size() > 0; }
+	String::operator double() const noexcept
+	{
+		std::string::size_type end;
+		auto res = std::stod(value, &end);
+		return end == value.size() ? res : std::numeric_limits<double>::quiet_NaN();
+	}
+	String::operator int() const noexcept
+	{
+		std::string::size_type end;
+		auto res = std::stoi(value, &end, 10);
+		return end == value.size() ? res : std::numeric_limits<int>::quiet_NaN();
+	}
+	String::operator long long() const noexcept
+	{
+		std::string::size_type end;
+		auto res = std::stoll(value, &end, 10);
+		return end == value.size() ? res : std::numeric_limits<long long>::quiet_NaN();
+	}
+	String::operator std::string() const noexcept { return value; }
+	// Main operators
+	NJS::VAR const String::operator[](NJS::VAR key) const
+	{
+		if (key.type == NJS::Enum::Type::Number)
+		{
+			auto i = (int)key;
+			if (i >= 0 && i <= value.size())
+			{
+				return value.at(i);
+			}
+		}
+		auto &obj = this->object;
+		auto index = (std::string)key;
+		int _j = obj.size();
+		for (int _i = 0; _i < _j; _i++)
+		{
+			if (index.compare(obj[_i].first) == 0)
+			{
+				return obj[_i].second;
+			}
+		}
+		return NJS::VAR();
+	}
+	NJS::VAR &String::operator[](NJS::VAR key)
+	{
+		static NJS::VAR _char;
+		if (key.type == NJS::Enum::Type::Number)
+		{
+			auto i = (int)key;
+			if (i >= 0)
+			{
+				if (i >= value.size())
+				{
+					value.resize(i + 1);
+					__NJS_Object_Set("length", (int)value.size(), &this->object);
+				}
+				_char = value.at(i);
+			}
+			return _char;
+		}
+		
+		for (auto & search : object)
+		{
+			if (((NJS::Class::String*)key._ptr)->value.compare(search.first) == 0)
+			{
+				return search.second;
+			}
+		}
+
+		((NJS::Class::String*)key._ptr)->counter++;
+		object.push_back(pair_t(((NJS::Class::String*)key._ptr)->value.c_str(), __NJS_VAR()));
+		return object[object.size() - 1].second;
+	}
+	template <class... Args>
+	NJS::VAR String::operator()(Args... args) const { throw InvalidTypeException(); }
+	// Comparation operators
+	String String::operator!() const { throw InvalidTypeException(); }
+	bool String::operator==(const String &_v1) const { return value.compare(_v1.value) == 0; }
+	// === emulated with __NJS_EQUAL_VALUE_AND_TYPE
+	// !== emulated with __NJS_NOT_EQUAL_VALUE_AND_TYPE
+	bool String::operator!=(const String &_v1) const { return value.compare(_v1.value) != 0; }
+	bool String::operator<(const String &_v1) const { return value.at(0) < _v1.value.at(0); }
+	bool String::operator<=(const String &_v1) const { return value.at(0) <= _v1.value.at(0); }
+	bool String::operator>(const String &_v1) const { return value.at(0) > _v1.value.at(0); }
+	bool String::operator>=(const String &_v1) const { return value.at(0) >= _v1.value.at(0); }
+	// Numeric operators
+	String String::operator+() const { throw InvalidTypeException(); }
+	String String::operator-() const { throw InvalidTypeException(); }
+	String String::operator++(const int _v1) { throw InvalidTypeException(); }
+	String String::operator--(const int _v1) { throw InvalidTypeException(); }
+	String String::operator+(const String &_v1) const { return value + _v1.value; }
+	String String::operator+=(const String &_v1) { value += _v1.value; return *this; }
+	String String::operator-(const String &_v1) const { throw InvalidTypeException(); }
+	String String::operator-=(const String &_v1) { throw InvalidTypeException(); }
+	String String::operator*(const String &_v1) const { throw InvalidTypeException(); }
+	String String::operator*=(const String &_v1) { throw InvalidTypeException(); }
+	// TODO: "**" and "**=" operators
+	String String::operator/(const String &_v1) const { throw InvalidTypeException(); }
+	String String::operator/=(const String &_v1) { throw InvalidTypeException(); }
+	String String::operator%(const String &_v1) const { throw InvalidTypeException(); }
+	String String::operator%=(const String &_v1) { throw InvalidTypeException(); }
+	String String::operator&(const String &_v1) const { throw InvalidTypeException(); }
+	String String::operator|(const String &_v1) const { throw InvalidTypeException(); }
+	String String::operator^(const String &_v1) const { throw InvalidTypeException(); }
+	String String::operator~() const { throw InvalidTypeException(); }
+	String String::operator>>(const String &_v1) const { throw InvalidTypeException(); }
+	String String::operator<<(const String &_v1) const { throw InvalidTypeException(); }
+	String String::operator&=(const String &_v1) { throw InvalidTypeException(); }
+	String String::operator|=(const String &_v1) { throw InvalidTypeException(); }
+	String String::operator^=(const String &_v1) { throw InvalidTypeException(); }
+	String String::operator>>=(const String &_v1) { throw InvalidTypeException(); }
+	String String::operator<<=(const String &_v1) { throw InvalidTypeException(); }
+	// TODO: ">>>" and ">>>=" operators
+	/*** STRING METHODS ***/
+	NJS::VAR String::toString(std::vector<NJS::VAR> _args) const
+	{
+		return value;
+	}
+	
+	NJS::VAR String::split(std::vector<NJS::VAR> _args) const
+	{
+		var _needle;
+		if (_args.size() > 0)
+			_needle = _args[0];
+		else
+			return NJS::VAR(this->value);
+
+		NJS::VAR _arr = __NJS_Create_Array();
+		char *_v = (char *)malloc(strlen(this->value.c_str()) + 1);
+		strcpy(_v, this->value.c_str());
+		char *delim = (char *)malloc(strlen(((std::string)_needle).c_str()) + 1);
+		strcpy(delim, ((std::string)_needle).c_str());
+
+		char *ptr = strtok(_v, delim);
+		int i = 0;
+		char *_new;
+		while (ptr != NULL)
+		{
+			_new = (char *)malloc(strlen(ptr) + 1);
+			strcpy(_new, ptr);
+			__NJS_Object_Set(i, _new, _arr);
+			free(_new);
+			ptr = strtok(NULL, delim);
+			i++;
+		}
+
+		free(delim);
+		return _arr;
+	}
+	
+	NJS::VAR String::indexOf(std::vector<NJS::VAR> _args) const
+	{
+		var _needle;
+		if (_args.size() > 0)
+			_needle = _args[0];
+		else
+			return NJS::VAR(-1);
+
+		string::size_type loc = this->value.find((std::string)_needle, 0);
+		if (loc != string::npos)
+		{
+			return NJS::VAR((int)loc);
+		}
+		return NJS::VAR(-1);
+	}
+	
+	NJS::VAR String::lastIndexOf(std::vector<NJS::VAR> _args) const
+	{
+		var _needle;
+		if (_args.size() > 0)
+			_needle = _args[0];
+		else
+			return NJS::VAR(-1);
+
+		string::size_type loc = this->value.find_last_of((std::string)_needle, 0);
+		if (loc != string::npos)
+		{
+			return NJS::VAR((int)loc);
+		}
+		return NJS::VAR(-1);
+	}
+	
+	NJS::VAR String::search(std::vector<NJS::VAR> _args) const
+	{
+		var _needle;
+		if (_args.size() > 0)
+			_needle = _args[0];
+		else
+			return NJS::VAR(-1);
+
+		string::size_type loc = this->value.find((std::string)_needle, 0);
+		if (loc != string::npos)
+		{
+			return NJS::VAR((int)loc);
+		}
+		return NJS::VAR(-1);
+	}
+	
+	NJS::VAR String::slice(std::vector<NJS::VAR> _args) const
+	{
+		var _start;
+		var _end;
+		if (_args.size() > 0)
+			_start = _args[0];
+		else
+			return NJS::VAR(this->value);
+		if (_args.size() > 1)
+			_end = _args[1];
+
+		if (_end.type == NJS::Enum::Type::Undefined)
+			return NJS::VAR(this->value.substr((int)_start, string::npos));
+		int _endIndex = (int)_end - (int)_start;
+		return NJS::VAR(this->value.substr((int)_start, _endIndex));
+	}
+	
+	NJS::VAR String::substr(std::vector<NJS::VAR> _args) const
+	{
+		var _start;
+		var _end;
+		if (_args.size() > 0)
+			_start = _args[0];
+		else
+			return NJS::VAR(this->value);
+		if (_args.size() > 1)
+			_end = _args[1];
+
+		if (_end.type == NJS::Enum::Type::Undefined)
+			return NJS::VAR(this->value.substr((int)_start, string::npos));
+		return NJS::VAR(this->value.substr((int)_start, (int)_end));
+	}
+		
+	NJS::VAR String::replace(std::vector<NJS::VAR> _args) const
+	{
+		var _search;
+		var _replace;
+		if (_args.size() > 0)
+			_search = _args[0];
+		else
+			return NJS::VAR(this->value);
+		if (_args.size() > 1)
+			_replace = _args[1];
+
+		size_t start_pos = this->value.find((std::string)_search);
+		if (start_pos == std::string::npos)
+		{
+			return var(value);
+		}
+		
+		std::string _new = value;
+		return var(_new.replace(start_pos, ((std::string)_search).length(), (std::string)_replace));
+	}
+	/* END STRING METHODS */
 } // namespace NJS::Class

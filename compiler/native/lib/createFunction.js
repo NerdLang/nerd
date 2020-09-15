@@ -88,27 +88,22 @@ function createFunction(_code, _scope)
 						{
 							var _catch = "";
 							if(_scope) _catch = "&";
-							else if(_code.indexOf("'SCOPED_FUNCTION';") > -1) _catch = "=";
-							
+							else if(_code.indexOf("'SCOPED_Function';") > -1) 
+							{
+								_code = _code.replace(/'SCOPED_Function';/g, "                  ");
+								_catch = "=";
+							}
+							_catch = "=";
 							var _constructor = `${_match[1]}["prototype"]["constructor"] = __NJS_Create_Var_Scoped_Anon(return __NJS_THIS;);`;
-							var _fn = "{" + _getVar + " var __NJS_THIS; if(__INJECTED_THIS.type != NJS::Enum::Type::UNDEFINED) __NJS_THIS = __INJECTED_THIS; else __NJS_THIS = __NJS_Create_Object();" + _code.substring(_start + 1, _end);
+							var _fn = "{" + _getVar + " var __NJS_THIS = __INJECTED_THIS;" + _code.substring(_start + 1, _end);
 
 							COMPILER.DECL.push("var " + _match[1] +";");
 
-							var _formated = `__NJS_DECL_FUNCTION<NJS::VAR (${_parameters})>* ${_genFN} = new __NJS_DECL_FUNCTION<NJS::VAR (${_parameters})>([${_catch}]( ${_parameters} ) -> NJS::VAR ${_fn} ${_return} );`;
-							_formated += _match[1] + "=NJS::VAR(NJS::Enum::Type::FUNCTION, " + _genFN + ");";
-							if(CLI.cli["--debug"]) _formated += `${_match[1]}.get().f->code = R"(Function ${_match[1]}(${_match[2]}) ${_code.substring(_start, _end)}})";`
-							else _formated += `${_match[1]}.get().f->code = R"([Function: ${_match[1]}])";`
+							var _formated = `__NJS_DECL_Function<NJS::VAR (${_parameters})>* ${_genFN} = new __NJS_DECL_Function<NJS::VAR (${_parameters})>([${_catch}]( ${_parameters} ) -> NJS::VAR ${_fn} ${_return} );`;
+							_formated += _match[1] + "=NJS::VAR(NJS::Enum::Type::Function, " + _genFN + ");";
+							if(CLI.cli["--debug"]) _formated += `((NJS::Class::Function*)${_match[1]}._ptr)->code = R"(Function ${_match[1]}(${_match[2]}) ${_code.substring(_start, _end)}})";`
+							else _formated += `((NJS::Class::Function*)${_match[1]}._ptr)->code = R"([Function: ${_match[1]}])";`
 
-							if(_match[1].indexOf("__MODULE") != 0)
-							{
-								var _genNew = "__NEW_" + _genFN;
-								var _addNew = `__NJS_DECL_FUNCTION<NJS::VAR (${_parameters})>* ${_genNew} = new __NJS_DECL_FUNCTION<NJS::VAR (${_parameters})>([${_catch}]( ${_parameters} ) -> NJS::VAR ${_fn}; __NJS_Object_Construct(__NJS_THIS, __NJS_Object_Clone(__NJS_Object_Get("prototype", ${_match[1]}))); ${_constructor}; return ${_match[1]}["prototype"]["constructor"](); } );`;
-								_addNew += "var __NEW_" + _match[1] + "=NJS::VAR(NJS::Enum::Type::FUNCTION, " + _genNew + ");";
-
-								_formated += _addNew;
-							}
-							
 							_code = [_code.slice(0, _index), _formated, _code.slice(_end + 1)].join('');
 						}
 						else 

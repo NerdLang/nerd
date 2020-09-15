@@ -67,7 +67,7 @@ function __NJS_NATIVE_CONNECT_MYSQL(_auth, _schema, _coll)
 
     function _mysql_add(_json)
     {
-      "SCOPED_FUNCTION";                                                                                                    
+      "SCOPED_Function";                                                                                                    
       try
       {                                                                                                                       
         coll.add(__NJS_Get_String(_json)).execute();
@@ -82,7 +82,7 @@ function __NJS_NATIVE_CONNECT_MYSQL(_auth, _schema, _coll)
     
    function _mysql_modify(_obj)
    {
-     "SCOPED_FUNCTION";
+     "SCOPED_Function";
      try
       {
         var _search = __NJS_Object_Get("search",_obj);
@@ -93,9 +93,9 @@ function __NJS_NATIVE_CONNECT_MYSQL(_auth, _schema, _coll)
         var _set = __NJS_Object_Get("set", _obj);
         if(_set && _set.type == __NJS_ARRAY)                                                                                   
         {                                                                                                                                                                                                                                               
-          for(int i = 0; i < _set.get().a->__NJS_VALUE.size(); i+=2)                                                             
+          for(int i = 0; i < _set.get().a->value.size(); i+=2)                                                             
           {                                                                                                                            
-            if(i+1 <= _set.get().a->__NJS_VALUE.size())                                                                            
+            if(i+1 <= _set.get().a->value.size())                                                                            
             {                                                                                                      
               var _left = __NJS_Object_Get(i, _set);                                                                                 
               var _right = __NJS_Object_Get(i+1, _set);
@@ -117,7 +117,7 @@ function __NJS_NATIVE_CONNECT_MYSQL(_auth, _schema, _coll)
 
     function _mysql_find(_request)
     {
-      "SCOPED_FUNCTION";
+      "SCOPED_Function";
       try
       {
         var _result = __NJS_Create_Array();
@@ -148,7 +148,7 @@ function __NJS_NATIVE_CONNECT_MYSQL(_auth, _schema, _coll)
     
     function _mysql_remove(_request)
     {
-      "SCOPED_FUNCTION";
+      "SCOPED_Function";
       try 
       {
         coll.remove(__NJS_Get_String(_request)).execute();

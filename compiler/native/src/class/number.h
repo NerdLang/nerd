@@ -1,128 +1,395 @@
+#pragma once
+#include "number_header.h"
+#include <cmath>
+#include <limits>
+#include <iomanip>
+
 namespace NJS::Class
 {
-	Number::Number()
+	// Private methods
+	inline int Number::getInt() const noexcept
 	{
-		Object();
-		__NJS_VALUE = 0;
+		if(isInt) return value.i;
+		return value.d;
 	}
-	Number::Number(int i)
+	inline void Number::setInt(int v) noexcept
 	{
-		Object();
-		setSmi(i);
+		isInt = true;
+		value.i = v;
+	}
+	inline double Number::getDouble() const noexcept
+	{
+		if(isInt) return value.i;
+		return value.d;
+	}
+	inline void Number::setDouble(double v) noexcept
+	{
+		isInt = false;
+		value.d = v;
+	}
+	inline bool Number::isNaN() const noexcept
+	{
+		return !isInt && std::isnan(getDouble());
+	}
+	inline bool Number::isFinite() const noexcept
+	{
+		return isInt || std::isfinite(getDouble());
+	}
+	inline bool Number::isNegative() const noexcept
+	{
+		return std::signbit(getDouble());
 	}
 
-	Number::Number(double d)
+	// Constructors
+	Number::Number() { counter++; setInt(0); }
+	Number::Number(const int val)
 	{
-		Object();
+		isInt = true;
+		counter++;
+		setInt(val);
+	}
+	Number::Number(const double val)
+	{
+		counter++;
 		double dummy;
-		if (modf(d, &dummy) == 0.0 && d < INT32_MAX && d > INT32_MIN)
+		if (modf(val, &dummy) == 0.0 && val < SMI_MAX && val > SMI_MIN)
 		{
-			setSmi(static_cast<int>(d));
+			isInt = true;
+			setInt(val);
 		}
 		else
 		{
-			setHeap(d);
+			isInt = false;
+			setDouble(val);
 		}
 	}
-
-	Number::Number(long long d)
+	Number::Number(const long long val)
 	{
-		Object();
-		setSmi(static_cast<int>(d));
+		isInt = false;
+		counter++;
+		setDouble(val);
+	}
+	
+	Number::Number(const Number& val)
+	{
+		counter++;
+		value = val.value;
+		isInt = val.isInt;
 	}
 
-	inline bool Number::isHeap() const
+	Number::Number(const NJS::VAR& val)
 	{
-		return __NJS_VALUE & 1;
+		counter++;
+		isInt = ((NJS::Class::Number*)val._ptr)->isInt;
+		switch(val.type)
+		{
+			case NJS::Enum::Type::Number:
+				value = ((NJS::Class::Number*)val._ptr)->value;
+			break;
+			default:
+				value.i = (int)val;
+			break;
+		}
 	}
-	inline int Number::getSmi() const
+	// Methods
+	void Number::Delete() noexcept
 	{
-		return __NJS_VALUE >> 1;
+		if (--counter == 0)
+		{
+			delete this;
+		}
 	}
-	inline void Number::setSmi(int v)
+	// Native cast
+	Number::operator bool() const noexcept { return getInt(); }
+	Number::operator double() const noexcept { return getDouble(); }
+	Number::operator int() const noexcept { return getInt(); }
+	Number::operator long long() const noexcept
 	{
-		__NJS_VALUE = v << 1;
+		if (isFinite())
+		{
+			if(isInt) return getInt();
+			else return getDouble();
+		}
+		if (isNaN())
+		{
+			return std::numeric_limits<long long>::quiet_NaN();
+		}
+		return std::numeric_limits<long long>::infinity() * (isNegative() ? -1 : 1);
 	}
-	inline double Number::getHeap() const
+	Number::operator std::string() const noexcept
 	{
-		return *(reinterpret_cast<double *>(__NJS_VALUE >> 1));
+		if (isFinite())
+		{
+			if(isInt)
+			{
+				return std::to_string(value.i);
+			}
+			else 
+			{
+				ostringstream strout ;
+				strout << fixed << std::setprecision(14) << value.d ;
+				string str = strout.str() ;
+				
+				size_t end = str.find_last_not_of( '0' ) + 1 ;
+				str = str.erase( end ) ;
+				
+				end = str.find_last_not_of( '.' ) + 1 ;
+				str = str.erase( end ) ;
+				
+				int exp = str.length();
+				if(exp > 20)
+				{
+					string first = str.substr(0, 1);
+					string second = str.substr(1, 15);
+					str = first + "." + second + "e+" + std::to_string(exp-1);
+				}
+				return str;
+			}
+		}
+		if (isNaN())
+		{
+			return "NaN";
+		}
+		return isNegative() ? "-Infinity" : "Infinity";
 	}
-	inline void Number::setHeap(double d)
+	// Main operators
+	NJS::VAR const Number::operator[](NJS::VAR key) const
 	{
-		*reinterpret_cast<double *>(__NJS_VALUE) = d;
-		__NJS_VALUE = (__NJS_VALUE << 1) | 1;
+		auto &obj = this->object;
+		auto index = (std::string)key;
+		int _j = obj.size();
+		for (int _i = 0; _i < _j; _i++)
+		{
+			if (index.compare(obj[_i].first) == 0)
+			{
+				return obj[_i].second;
+			}
+		}
+		return NJS::VAR();
 	}
+	NJS::VAR &Number::operator[](NJS::VAR key)
+	{
+		for (auto & search : object)
+		{
+			if (((NJS::Class::String*)key._ptr)->value.compare(search.first) == 0)
+			{
+				return search.second;
+			}
+		}
 
-	Number Number::operator=(Number &_v)
+		((NJS::Class::String*)key._ptr)->counter++;
+		if(((NJS::Class::String*)key._ptr)->value.compare("toString") == 0  || ((NJS::Class::String*)key._ptr)->value.compare("toLocaleString") == 0)
+		{
+			object.push_back(pair_t(((NJS::Class::String*)key._ptr)->value.c_str(), __NJS_Create_Var_Scoped_Anon( return __NJS_Object_Stringify(this);)));
+		}
+		else if(((NJS::Class::String*)key._ptr)->value.compare("valueOf") == 0)
+		{
+			object.push_back(pair_t(((NJS::Class::String*)key._ptr)->value.c_str(), __NJS_Create_Var_Scoped_Anon( return this; )));
+		}
+		else 
+		{
+			object.push_back(pair_t(((NJS::Class::String*)key._ptr)->value.c_str(), __NJS_VAR()));
+		}
+
+		return object[object.size() - 1].second;
+	}
+	template <class... Args>
+	NJS::VAR Number::operator()(Args... args) const { throw InvalidTypeException(); }
+	// Comparation operators
+	Number Number::operator!() const { throw InvalidTypeException(); }
+	bool Number::operator==(const Number &_v1) const
 	{
-		__NJS_VALUE = _v.__NJS_VALUE;
-		_v.Delete();
+		if (isInt && _v1.isInt)
+		{
+			return value.i == _v1.value.i;
+		}
+		else
+		{
+			return value.d == (double)_v1;
+		}
+	}
+	// === emulated with __NJS_EQUAL_VALUE_AND_TYPE
+	// !== emulated with __NJS_NOT_EQUAL_VALUE_AND_TYPE
+	bool Number::operator!=(const Number &_v1) const
+	{
+		if (isInt && _v1.isInt)
+		{
+			return value.i != _v1.value.i;
+		}
+		else
+		{
+			return value.d != (double)_v1;
+		}
+	}
+	bool Number::operator<(const Number &_v1) const
+	{
+		if (isInt && _v1.isInt)
+		{
+			return value.i < _v1.value.i;
+		}
+		else
+		{
+			return value.d < (double)_v1;
+		}
+	}
+	bool Number::operator<=(const Number &_v1) const
+	{
+		if (isInt && _v1.isInt)
+		{
+			return value.i <= _v1.value.i;
+		}
+		else
+		{
+			return value.d <= (double)_v1;
+		}
+	}
+	bool Number::operator>(const Number &_v1) const
+	{
+		if (isInt && _v1.isInt)
+		{
+			return value.i > _v1.value.i;
+		}
+		else
+		{
+			return value.d > (double)_v1;
+		}
+	}
+	bool Number::operator>=(const Number &_v1) const
+	{
+		if (isInt && _v1.isInt)
+		{
+			return value.i >= _v1.value.i;
+		}
+		else
+		{
+			return value.d >= (double)_v1;
+		}
+	}
+	// Numeric operators
+	Number Number::operator+() const { throw InvalidTypeException(); }
+	Number Number::operator-() const { if(isInt) return (int)-getInt() ; else return (double)-getDouble(); }
+	Number Number::operator++(const int _v1)
+	{
+		if (isInt)
+		{
+			int v = getInt();
+			setInt(++v);
+		}
+		else
+		{
+			double v = getDouble();
+			setDouble(++v);
+		}
 		return *this;
 	}
-	Number Number::operator=(int &_v)
+	Number Number::operator--(const int _v1)
 	{
-		setSmi(_v);
+		if (isInt)
+		{
+			int v = getInt();
+			setInt(--v);
+		}
+		else
+		{
+			double v = getDouble();
+			setDouble(--v);
+		}
 		return *this;
 	}
-	Number Number::operator=(double &_v)
+	Number Number::operator+(const Number &_v1) const
 	{
-		setHeap(_v);
-		return *this;
-	}
-
-	Number Number::operator-()
-	{
-		return -(isHeap() ? getHeap() : getSmi());
-	}
-
-	Number Number::operator+(const Number &_v1)
-	{
-		if (!isHeap() && !_v1.isHeap())
+		if (isInt && isInt)
 		{
 			int a = (int)*this;
 			int b = (int)_v1;
-			int *c;
-			if (!__builtin_add_overflow(a, b, c))
+			int c;
+			if (!__builtin_add_overflow(a, b, &c))
 			{
-				return a + b;
+				return c;
 			}
 		}
-		return (double)*this + (double)_v1;
+		return ((double)*this) + (double)_v1;
 	}
-
-	Number Number::operator-(const Number &_v1)
+	Number Number::operator+=(const Number &_v1)
 	{
-		if (!isHeap() && !_v1.isHeap())
+		if (isInt && _v1.isInt)
 		{
 			int a = (int)*this;
 			int b = (int)_v1;
-			int *c;
-			if (!__builtin_sub_overflow(a, b, c))
+			int c;
+			if (!__builtin_add_overflow(a, b, &c))
 			{
-				return a - b;
+				setInt(c);
+				return *this;
 			}
 		}
-		return (double)*this - (double)_v1;
+		setDouble((double)*this + (double)_v1);
+		return *this;
 	}
-
-	Number Number::operator*(const Number &_v1)
+	Number Number::operator-(const Number &_v1) const
 	{
-		if (!isHeap() && !_v1.isHeap())
+		if (isInt && _v1.isInt)
 		{
 			int a = (int)*this;
 			int b = (int)_v1;
-			int *c;
-			if (!__builtin_mul_overflow(a, b, c))
+			int c;
+			if (!__builtin_sub_overflow(a, b, &c))
 			{
-				return a * b;
+				return c;
 			}
 		}
-		return (double)*this * (double)_v1;
+		return value.d - (double)_v1;
 	}
-
-	Number Number::operator/(const Number &_v1)
+	Number Number::operator-=(const Number &_v1)
 	{
-		if (!isHeap() && !_v1.isHeap())
+		if (isInt && _v1.isInt)
+		{
+			int a = (int)*this;
+			int b = (int)_v1;
+			int c;
+			if (!__builtin_sub_overflow(a, b, &c))
+			{
+				setInt(c);
+				return *this;
+			}
+		}
+		setDouble((double)*this - (double)_v1);
+		return *this;
+	}
+	Number Number::operator*(const Number &_v1) const
+	{
+		if (isInt && _v1.isInt)
+		{
+			int a = (int)*this;
+			int b = (int)_v1;
+			int c;
+			if (!__builtin_mul_overflow(a, b, &c))
+			{
+				return c;
+			}
+		}
+		return ((double)*this) * (double)_v1;
+	}
+	Number Number::operator*=(const Number &_v1)
+	{
+		if (isInt && _v1.isInt)
+		{
+			int a = (int)*this;
+			int b = (int)_v1;
+			int c;
+			if (!__builtin_mul_overflow(a, b, &c))
+			{
+				setInt(c);
+				return *this;
+			}
+		}
+		setDouble(((double)*this) * (double)_v1);
+		return *this;
+	}
+	// TODO: "**" and "**=" operators
+	Number Number::operator/(const Number &_v1) const
+	{
+		if (isInt && _v1.isInt)
 		{
 			int a = (int)*this;
 			int b = (int)_v1;
@@ -131,11 +398,26 @@ namespace NJS::Class
 				return a / b;
 			}
 		}
-		return (double)*this / (double)_v1;
+		return ((double)*this) / (double)_v1;
 	}
-	Number Number::operator%(const Number &_v1)
+	Number Number::operator/=(const Number &_v1)
 	{
-		if (!isHeap() && !_v1.isHeap())
+		if (isInt && _v1.isInt)
+		{
+			int a = (int)*this;
+			int b = (int)_v1;
+			if (a % b == 0)
+			{
+				setInt(a / b);
+				return Number();
+			}
+		}
+		setDouble( ((double)*this) / (double)_v1);
+		return *this;
+	}
+	Number Number::operator%(const Number &_v1) const
+	{
+		if (isInt && _v1.isInt)
 		{
 			return (int)*this % (int)_v1;
 		}
@@ -144,184 +426,48 @@ namespace NJS::Class
 			return std::fmod((double)*this, (double)_v1);
 		}
 	}
-
-	Number Number::operator+=(const Number &_v1)
-	{
-		if (!isHeap() && !_v1.isHeap())
-		{
-			int a = (int)*this;
-			int b = (int)_v1;
-			int *c;
-			if (!__builtin_add_overflow(a, b, c))
-			{
-				setSmi((int)*this + (int)_v1);
-				return *this;
-			}
-		}
-		setHeap((double)*this + (double)_v1);
-	}
-	Number Number::operator-=(const Number &_v1)
-	{
-		if (!isHeap() && !_v1.isHeap())
-		{
-			int a = (int)*this;
-			int b = (int)_v1;
-			int *c;
-			if (!__builtin_sub_overflow(a, b, c))
-			{
-				setSmi(a - b);
-				return *this;
-			}
-		}
-		setHeap((double)*this - (double)_v1);
-	}
-	Number Number::operator*=(const Number &_v1)
-	{
-		if (!isHeap() && !_v1.isHeap())
-		{
-			int a = (int)*this;
-			int b = (int)_v1;
-			int *c;
-			if (!__builtin_mul_overflow(a, b, c))
-			{
-				setSmi(a * b);
-				return *this;
-			}
-		}
-		setHeap((double)*this * (double)_v1);
-	}
-	Number Number::operator/=(const Number &_v1)
-	{
-		if (!isHeap() && !_v1.isHeap())
-		{
-			int a = (int)*this;
-			int b = (int)_v1;
-			if (a % b == 0)
-			{
-				setSmi(a / b);
-				return *this;
-			}
-		}
-		setHeap((double)*this / (double)_v1);
-	}
 	Number Number::operator%=(const Number &_v1)
 	{
-		if (!isHeap() && !_v1.isHeap())
+		if (isInt && _v1.isInt)
 		{
-			setSmi((int)*this % (int)_v1);
+			setInt((int)*this % (int)_v1);
 		}
 		else
 		{
-			setHeap(std::fmod((double)*this, (double)_v1));
+			setDouble(std::fmod((double)*this, (double)_v1));
 		}
+		return *this;
 	}
-	// TODO: "**" and "**=" operators
-	Number Number::operator++(const int _v1)
-	{
-		if (isHeap())
-		{
-			double v = getHeap();
-			setHeap(++v);
-		}
-		else
-		{
-			int v = getSmi();
-			setSmi(++v);
-		}
-	}
-	Number Number::operator--(const int _v1)
-	{
-		if (isHeap())
-		{
-			double v = getHeap();
-			setHeap(--v);
-		}
-		else
-		{
-			int v = getSmi();
-			setSmi(--v);
-		}
-	}
-	// Comparison operators
-
-	bool Number::operator<(const Number &_v1)
-	{
-		if (!isHeap() && !_v1.isHeap())
-		{
-			return (int)*this < (int)_v1;
-		}
-		return (double)*this < (double)_v1;
-	}
-	bool Number::operator<=(const Number &_v1)
-	{
-		if (!isHeap() && !_v1.isHeap())
-		{
-			return (int)*this <= (int)_v1;
-		}
-		return (double)*this <= (double)_v1;
-	}
-	bool Number::operator>(const Number &_v1)
-	{
-		if (!isHeap() && !_v1.isHeap())
-		{
-			return (int)*this > (int)_v1;
-		}
-		return (double)*this > (double)_v1;
-	}
-	bool Number::operator>=(const Number &_v1)
-	{
-		if (!isHeap() && !_v1.isHeap())
-		{
-			return (int)*this >= (int)_v1;
-		}
-		return (double)*this >= (double)_v1;
-	}
-
-	int Number::operator&(const Number &_v1) { return (int)*this & (int)_v1; }
-	int Number::operator|(const Number &_v1) { return (int)*this | (int)_v1; }
-	int Number::operator^(const Number &_v1) { return (int)*this ^ (int)_v1; }
-	int Number::operator>>(const Number &_v1) { return (int)*this >> (int)_v1; }
-	int Number::operator<<(const Number &_v1) { return (int)*this << (int)_v1; }
-	int Number::operator~() { return ~(int)*this; }
-
+	Number Number::operator&(const Number &_v1) const { return (int)*this & (int)_v1; }
+	Number Number::operator|(const Number &_v1) const { return (int)*this | (int)_v1; }
+	Number Number::operator^(const Number &_v1) const { return (int)*this ^ (int)_v1; }
+	Number Number::operator~() const { return ~(int)*this; }
+	Number Number::operator>>(const Number &_v1) const { return (int)*this >> (int)_v1; }
+	Number Number::operator<<(const Number &_v1) const { return (int)*this << (int)_v1; }
 	Number Number::operator&=(const Number &_v1)
 	{
-		setSmi(*this & _v1);
+		setInt((int)*this & (int)_v1);
 		return *this;
 	}
 	Number Number::operator|=(const Number &_v1)
 	{
-		setSmi(*this | _v1);
+		setInt( ((int)*this) | (int)_v1);
 		return *this;
 	}
 	Number Number::operator^=(const Number &_v1)
 	{
-		setSmi(*this ^ _v1);
+		setInt( ((int)*this) ^ (int)_v1);
 		return *this;
 	}
 	Number Number::operator>>=(const Number &_v1)
 	{
-		setSmi(*this >> _v1);
+		setInt( ((int)*this) >> (int)_v1);
 		return *this;
 	}
 	Number Number::operator<<=(const Number &_v1)
 	{
-		setSmi(*this << _v1);
+		setInt( ((int)*this) << (int)_v1);
 		return *this;
 	}
-
-	inline bool Number::_isNaN() const
-	{
-		return isHeap() && std::isnan(getHeap());
-	}
-
-	inline bool Number::_isFinite() const
-	{
-		return !isHeap() || std::isfinite(getHeap());
-	}
-
-	inline bool Number::_isNegative() const
-	{
-		return isHeap() ? std::signbit(getHeap()) : getSmi() < 0;
-	}
+	// TODO: ">>>" and ">>>=" operators
 } // namespace NJS::Class

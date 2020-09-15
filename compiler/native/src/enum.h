@@ -2,19 +2,16 @@ namespace NJS::Enum
 {
 	enum Type
 	{
-		UNDEFINED = 1,
-		NUMBER,
-		DOUBLE,
-		OBJECT,
-		BIGNUMBER,
-		BOOLEAN,
-		STRING,
-		NATIVE,
-		FUNCTION,
-		ARRAY,
+		Undefined = 1,
+		Number,
+		Object,
+		Boolean,
+		String,
+		Native,
+		Function,
+		Array,
 		ISNAN,
 		ISINFINITY,
-		ISNULL
-
+		ISNULL,
 	};
 }

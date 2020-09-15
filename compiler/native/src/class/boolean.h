@@ -1,25 +1,96 @@
+#include "boolean_header.h"
+
 namespace NJS::Class
 {
-	Boolean::Boolean()
+	// Constructors
+	Boolean::Boolean() { counter++; }
+	Boolean::Boolean(bool val)
 	{
-		Object();
-		__NJS_VALUE = false;
+		counter++;
+		value = val;
 	}
-	Boolean::Boolean(bool b)
+	// Methods
+	void Boolean::Delete() noexcept
 	{
-		Object();
-		__NJS_VALUE = b;
+		if (--counter < 1)
+		{
+			delete this;
+		}
 	}
+	// Native cast
+	Boolean::operator bool() const noexcept { return value; }
+	Boolean::operator double() const noexcept { return value; }
+	Boolean::operator int() const noexcept { return value; }
+	Boolean::operator long long() const noexcept { return value; }
+	Boolean::operator std::string() const noexcept
+	{
+		return value ? "true" : "false";
+	}
+	// Main operators
+	NJS::VAR &Boolean::operator[](NJS::VAR key)
+	{
+		for (auto & search : object)
+		{
+			if (((NJS::Class::String*)key._ptr)->value.compare(search.first) == 0)
+			{
+				return search.second;
+			}
+		}
 
-	Boolean Boolean::operator=(const Boolean &_v)
-	{
-		__NJS_VALUE = _v.__NJS_VALUE;
-		((Boolean)_v).Delete();
-		return *this;
+		((NJS::Class::String*)key._ptr)->counter++;
+		if(((NJS::Class::String*)key._ptr)->value.compare("toString") == 0  || ((NJS::Class::String*)key._ptr)->value.compare("toLocaleString") == 0)
+		{
+			object.push_back(pair_t(((NJS::Class::String*)key._ptr)->value.c_str(), __NJS_Create_Var_Scoped_Anon( return __NJS_Object_Stringify(this);)));
+		}
+		else if(((NJS::Class::String*)key._ptr)->value.compare("valueOf") == 0)
+		{
+			object.push_back(pair_t(((NJS::Class::String*)key._ptr)->value.c_str(), __NJS_Create_Var_Scoped_Anon( return this; )));
+		}
+		else 
+		{
+			object.push_back(pair_t(((NJS::Class::String*)key._ptr)->value.c_str(), __NJS_VAR()));
+		}
+
+		return object[object.size() - 1].second;
 	}
-	Boolean Boolean::operator=(const bool &_v)
-	{
-		__NJS_VALUE = _v;
-		return *this;
-	}
+	template <class... Args>
+	NJS::VAR Boolean::operator()(Args... args) const { throw InvalidTypeException(); }
+	// Comparation operators
+	Boolean Boolean::operator!() const { return !value; }
+	bool Boolean::operator==(const Boolean &_v1) const { return value == _v1.value; }
+	// === emulated with __NJS_EQUAL_VALUE_AND_TYPE
+	// !== emulated with __NJS_NOT_EQUAL_VALUE_AND_TYPE
+	bool Boolean::operator!=(const Boolean &_v1) const { return value != _v1.value; }
+	bool Boolean::operator<(const Boolean &_v1) const { return value < _v1.value; }
+	bool Boolean::operator<=(const Boolean &_v1) const { return value <= _v1.value; }
+	bool Boolean::operator>(const Boolean &_v1) const { return value > _v1.value; }
+	bool Boolean::operator>=(const Boolean &_v1) const { return value >= _v1.value; }
+	// Numeric operators
+	Boolean Boolean::operator+() const { throw InvalidTypeException(); }
+	Boolean Boolean::operator-() const { throw InvalidTypeException(); }
+	Boolean Boolean::operator++(const int _v1) { throw InvalidTypeException(); }
+	Boolean Boolean::operator--(const int _v1) { throw InvalidTypeException(); }
+	Boolean Boolean::operator+(const Boolean &_v1) const { throw InvalidTypeException(); }
+	Boolean Boolean::operator+=(const Boolean &_v1) { throw InvalidTypeException(); }
+	Boolean Boolean::operator-(const Boolean &_v1) const { throw InvalidTypeException(); }
+	Boolean Boolean::operator-=(const Boolean &_v1) { throw InvalidTypeException(); }
+	Boolean Boolean::operator*(const Boolean &_v1) const { throw InvalidTypeException(); }
+	Boolean Boolean::operator*=(const Boolean &_v1) { throw InvalidTypeException(); }
+	// TODO: "**" and "**=" operators
+	Boolean Boolean::operator/(const Boolean &_v1) const { throw InvalidTypeException(); }
+	Boolean Boolean::operator/=(const Boolean &_v1) { throw InvalidTypeException(); }
+	Boolean Boolean::operator%(const Boolean &_v1) const { throw InvalidTypeException(); }
+	Boolean Boolean::operator%=(const Boolean &_v1) { throw InvalidTypeException(); }
+	Boolean Boolean::operator&(const Boolean &_v1) const { throw InvalidTypeException(); }
+	Boolean Boolean::operator|(const Boolean &_v1) const { throw InvalidTypeException(); }
+	Boolean Boolean::operator^(const Boolean &_v1) const { throw InvalidTypeException(); }
+	Boolean Boolean::operator~() const { throw InvalidTypeException(); }
+	Boolean Boolean::operator>>(const Boolean &_v1) const { throw InvalidTypeException(); }
+	Boolean Boolean::operator<<(const Boolean &_v1) const { throw InvalidTypeException(); }
+	Boolean Boolean::operator&=(const Boolean &_v1) { throw InvalidTypeException(); }
+	Boolean Boolean::operator|=(const Boolean &_v1) { throw InvalidTypeException(); }
+	Boolean Boolean::operator^=(const Boolean &_v1) { throw InvalidTypeException(); }
+	Boolean Boolean::operator>>=(const Boolean &_v1) { throw InvalidTypeException(); }
+	Boolean Boolean::operator<<=(const Boolean &_v1) { throw InvalidTypeException(); }
+	// TODO: ">>>" and ">>>=" operators
 } // namespace NJS::Class

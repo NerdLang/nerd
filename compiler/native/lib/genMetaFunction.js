@@ -61,12 +61,16 @@ function genMetaFunction(_code)
                     {
                         var _fn = "{" + _getVar + _code.substring(_start + 1, _end);
                         var _catch = "";
-                        if(_code.indexOf("'SCOPED_FUNCTION';") > -1) _catch = "=";
-                        else if(_code.indexOf("\"SCOPED_FUNCTION\";") > -1) _catch = "=";
+                        if(_code.indexOf("'SCOPED_Function';") > -1) 
+						{
+							_code = _code.replace(/'SCOPED_Function';/g, "                  ");
+							_catch = "=";
+						}
 
-                        var _formated = "__NJS_DECL_FUNCTION<NJS::VAR (var, vector<var>)>* " + _genFN +" = new __NJS_DECL_FUNCTION<NJS::VAR (var, vector<var>)>([" + _catch + "](var __INJECTED_THIS, vector<var> __NJS_VARARGS ) -> NJS::VAR" + _fn + _return + ");";
-                        _formated += "var " + _match[1] + "=NJS::VAR(NJS::Enum::Type::FUNCTION, " + _genFN + ");";                        
-                        _code = [_code.slice(0, _index), _formated, _code.slice(_end + 1)].join('');
+                        var _formated = "__NJS_DECL_Function<NJS::VAR (var, vector<var>)>* " + _genFN +" = new __NJS_DECL_Function<NJS::VAR (var, vector<var>)>([" + _catch + "](var __INJECTED_THIS, vector<var> __NJS_VARARGS ) -> NJS::VAR" + _fn + _return + ");";
+                        _formated += "var " + _match[1] + "=NJS::VAR(NJS::Enum::Type::Function, " + _genFN + ");";                        
+
+						_code = [_code.slice(0, _index), _formated, _code.slice(_end + 1)].join('');
                         break;
                     }
                 }

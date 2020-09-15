@@ -47,7 +47,7 @@ string __NJS_EM_BIND(string _name, string _data)
 	}
 	return "undefined";
 }
-
+/*
 int __NJS_EM_BIND_INT(string _name, int _data) 
 {
     for (auto it = begin (__NJS_INTERNAL_BIND); it != end (__NJS_INTERNAL_BIND); ++it) 
@@ -60,10 +60,10 @@ int __NJS_EM_BIND_INT(string _name, int _data)
 	}
 	return 0;
 }
-
+*/
 
 EMSCRIPTEN_BINDINGS(nectar_module) 
 {
     emscripten::function("callNectar", &__NJS_EM_BIND);
-	emscripten::function("callNectarInt", &__NJS_EM_BIND_INT);
+	//emscripten::function("callNectarInt", &__NJS_EM_BIND_INT);
 }

@@ -105,9 +105,9 @@ function VariableDeclarator(_path)
   }
   else if(_path.node.init.type == "FunctionExpression")
   {
-	if(VISITOR.CURRENT_FUNCTION > -1)
+	if(VISITOR.CURRENT_Function > -1)
 	{
-		var _directive = "'SCOPED_FUNCTION';";
+		var _directive = "'SCOPED_Function';";
 		_path.node.init.body.body.splice(0, 0, babel.parse(_directive));
 	}
   }

@@ -22,10 +22,10 @@
  
 function replaceObjAddr(_code)
 {
-	var FUNCTION = [];
+	var Function = [];
 
 	var _searchReg = / *__NJS_Object_Set *\( *([a-zA-Z0-9_\-" ]*) *, *([a-zA-Z0-9_\-\(\)" ]*) *, *([a-zA-Z0-9_\-" ]*) *\)/g;
-	var _searchFN = / *([a-zA-Z0-9_\-" ]*) * = NJS::VAR\(NJS::Enum::Type::FUNCTION/g;
+	var _searchFN = / *([a-zA-Z0-9_\-" ]*) * = NJS::VAR\(NJS::Enum::Type::Function/g;
 	
 	var _allFN = _code.match(new RegExp(_searchFN));
 	if(_allFN)
@@ -36,7 +36,7 @@ function replaceObjAddr(_code)
 			var _fn = _localSearch.exec(_allFN[i]);
 			if(_fn);
 			{
-				FUNCTION.push(_fn[1]);
+				Function.push(_fn[1]);
 			}
 		}
 	}
@@ -51,7 +51,7 @@ function replaceObjAddr(_code)
 			var _var = _localSearch.exec(_match[i]);
 			if(_var);
 			{
-				if(_var[1] != "\"exports\"" && FUNCTION.indexOf(_var[2]) > -1)
+				if(_var[1] != "\"exports\"" && Function.indexOf(_var[2]) > -1)
 				{	
 					var _getObject = new RegExp("__NJS_Object_Get\\\(" + _var[1]+ ", " + _var[3] + "\\\)", "gm");
 					_code = _code.replace(_getObject, _var[2]);

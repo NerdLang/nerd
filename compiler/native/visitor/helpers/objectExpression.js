@@ -47,7 +47,7 @@ function objectExpression(_path, _name)
 	else if(_path.value.type == "FunctionExpression")
 	{
 		var _value = RND();
-		COMPILER.INFO.FUNCTION.push(_value);
+		COMPILER.INFO.Function.push(_value);
 		_code += "var " + _value + " = " + babel.generate(_path.value).code + ";";		
 	}
 	else if(_path.value.type == "ObjectExpression")

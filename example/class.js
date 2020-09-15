@@ -1,16 +1,17 @@
-class Greeter
+class Greeter 
 {
-	constructor(value)
+	constructor(value, age)
 	{
 		this.name = value;
+		this.age = age;
 	}
 	
 	Say()
 	{
-		console.log("Hello " + this.name);
+		console.log("Hello, my name is " + this.name + ", I'm " + this.age + "yo");
 	}
 }
 
-var g = new Greeter("NectarJS");
+var g = new Greeter("NectarJS", 3);
 
 g.Say();

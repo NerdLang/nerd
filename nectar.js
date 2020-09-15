@@ -464,7 +464,7 @@ function Build(prepare)
 		var _npath = path.join(_current, ".nectar");
 		try { fs.mkdirSync(_npath); } catch(e){};
 		if(COMPILER.ENV.init) COMPILER.ENV.init(COMPILER.TMP_FOLDER);
-		else try { fs.mkdirSync(_tmp); } catch(e){};
+		else try { fs.mkdirSync(COMPILER.TMP_FOLDER); } catch(e){};
 
 		/*** PREPARE SRC ***/
 		var _libOut = COMPILER.TMP_FOLDER;
@@ -512,7 +512,7 @@ function Build(prepare)
 		
 		_binoutput = path.join(process.cwd(), _binoutput)
 		
-		var _cout = path.join(_tmp, path.basename(_in).slice(0, path.basename(_in).length - path.extname(_in).length) + ".cpp");
+		var _cout = path.join(COMPILER.TMP_FOLDER, path.basename(_in).slice(0, path.basename(_in).length - path.extname(_in).length) + ".cpp");
 
 		_binoutput = COMPILER.Out(_binoutput);
 	
@@ -545,7 +545,7 @@ function Build(prepare)
 		if(!QUIET) console.log("[*] Compiling with preset: " + COMPILER.preset);
 		try 
 		{
-			COMPILER.Compile(_tmp, _cout);
+			COMPILER.Compile(COMPILER.TMP_FOLDER, _cout);
 		}
 		catch(e)
 		{
@@ -563,11 +563,13 @@ function Build(prepare)
 		
 		if(COMPILER.Package) COMPILER.Package();
 		
+		process.chdir(NECTAR_PATH);
+		
 		if(!CLI.cli["--conserve"])
 		{
 			var _current = process.cwd();
 			process.chdir(_current);
-			rmdir(_tmp, function() {});
+			rmdir(COMPILER.TMP_FOLDER, function() {});
 		}
 		
 		var verb = false;

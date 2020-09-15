@@ -55,17 +55,26 @@ using namespace NJS;
 namespace NJS
 {
 	struct VAR;
+	namespace Class
+	{
+		class Number;
+		class Undefined;
+		class Boolean;
+		class String;
+		class Array;
+		class Object;
+		class Function;
+		class Native;
+	}
 } // namespace NJS
 
-
-#include "class_header.h"
-#include "val.h"
-#include "memory.h"
+#include "var_header.h"
+#include "classes_header.h"
 #include "functions.h"
 #include "var.h"
 
 #include "values.h"
 
 #include "objmgmt.h"
-#include "class_def.h"
+#include "classes.h"
 #include "operator.h"
