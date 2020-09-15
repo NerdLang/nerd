@@ -30,3 +30,8 @@
 * Put back API compilation switch
 
 * Finish ES3
+
+* Add .bind to functions
+
+* Update Class
+
