@@ -129,8 +129,21 @@ namespace NJS::Class
 				ostringstream strout ;
 				strout << fixed << std::setprecision(14) << value.d ;
 				string str = strout.str() ;
+				
 				size_t end = str.find_last_not_of( '0' ) + 1 ;
-				return str.erase( end ) ;
+				str = str.erase( end ) ;
+				
+				end = str.find_last_not_of( '.' ) + 1 ;
+				str = str.erase( end ) ;
+				
+				int exp = str.length();
+				if(exp > 20)
+				{
+					string first = str.substr(0, 1);
+					string second = str.substr(1, 15);
+					str = first + "." + second + "e+" + std::to_string(exp-1);
+				}
+				return str;
 			}
 		}
 		if (isNaN())
