@@ -77,7 +77,6 @@ namespace NJS::Class
 		isInt = val.isInt;
 	}
 
-	
 	Number::Number(const NJS::VAR& val)
 	{
 		counter++;
