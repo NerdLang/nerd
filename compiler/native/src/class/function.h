@@ -6,11 +6,11 @@
 namespace NJS::Class
 {
 	// Constructors
-	Function::Function() { counter++; }
+	Function::Function() { counter++; object.push_back(pair_t("prototype", __NJS_Create_Object())); }
 	Function::Function(void *val)
 	{
 		counter++;
-		_this = __NJS_Create_Object();
+		object.push_back(pair_t("prototype", __NJS_Create_Object()));
 		value = val;
 	}
 	// Methods
@@ -101,6 +101,15 @@ namespace NJS::Class
 	NJS::VAR Function::New(Args... args)
 	{
 		vector_t _args = vector<var>{(NJS::VAR)args...};
+		
+		NJS::VAR _this = __NJS_Create_Object();
+		object_t object = ((NJS::Class::Object*)(*this)["prototype"]._ptr)->object;
+		
+		for (auto & search : object)
+		{
+			_this[search.first] = search.second;
+		}
+		
 		var _ret = (NJS::VAR)(*static_cast<function<NJS::VAR(var, vector_t)> *>(value))(_this, _args);
 		if(_ret) return _ret;
 		else return _this;
@@ -110,7 +119,7 @@ namespace NJS::Class
 	NJS::VAR Function::operator()(Args... args)
 	{
 		vector_t _args = vector<var>{(NJS::VAR)args...};
-		return (*static_cast<function<NJS::VAR(var, vector_t)> *>(value))(_this, _args);
+		return (*static_cast<function<NJS::VAR(var, vector_t)> *>(value))((*this)["prototype"], _args);
 	}
 	// Comparation operators
 	Function Function::operator!() const { throw InvalidTypeException(); }

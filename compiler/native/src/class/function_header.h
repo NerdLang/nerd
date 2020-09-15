@@ -15,7 +15,7 @@ namespace NJS::Class
 		// Properties
 		count_t counter = 0;
 		void* value = nullptr;
-		NJS::VAR _this;
+		//NJS::VAR _this;
 		object_t object;
 		// Methods
 		void Delete() noexcept;

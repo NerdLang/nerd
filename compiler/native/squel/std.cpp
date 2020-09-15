@@ -64,7 +64,7 @@ int main(int argc, char* argv[])
 	catch(NJS::VAR __NJS_Global_Exception)
 	{
 		__NJS_Log_Console(__NJS_Global_Exception);
-		//exit(1);
+		exit(1);
 	}
 	return 0;
 }
