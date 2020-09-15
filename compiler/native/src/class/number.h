@@ -50,15 +50,16 @@ namespace NJS::Class
 	}
 	Number::Number(const double val)
 	{
-		isInt = false;
 		counter++;
 		double dummy;
 		if (modf(val, &dummy) == 0.0 && val < SMI_MAX && val > SMI_MIN)
 		{
+			isInt = true;
 			setInt(val);
 		}
 		else
 		{
+			isInt = false;
 			setDouble(val);
 		}
 	}
