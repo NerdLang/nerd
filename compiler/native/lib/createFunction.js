@@ -91,9 +91,9 @@ function createFunction(_code, _scope)
 							else if(_code.indexOf("'SCOPED_Function';") > -1) 
 							{
 								_code = _code.replace(/'SCOPED_Function';/g, "                  ");
-								_catch = "=";
+								_catch = "&";
 							}
-							_catch = "=";
+							_catch = "&";
 							var _constructor = `${_match[1]}["prototype"]["constructor"] = __NJS_Create_Var_Scoped_Anon(return __NJS_THIS;);`;
 							var _fn = "{" + _getVar + " var __NJS_THIS = __INJECTED_THIS;" + _code.substring(_start + 1, _end);
 

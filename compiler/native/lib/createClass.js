@@ -62,7 +62,7 @@ function createClass(_code, _scope)
 					else if(_code.indexOf("'SCOPED_Function';") > -1) 
 					{
 						_code = _code.replace(/'SCOPED_Function';/g, "                  ");
-						_catch = "=";
+						_catch = "&";
 					}
 
 					_end = i;
