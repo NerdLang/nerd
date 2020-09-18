@@ -27,7 +27,7 @@ function UnaryExpression(_path)
 	{
 		if(_path.node.argument.type == "Identifier")	
 		{
-			_path.replaceWithSourceString("__NJS_Typeof(" + _path.node.argument.name + ")");
+			_path.replaceWithSourceString("__NJS_typeof(" + _path.node.argument.name + ")");
 		}
 		else if(_path.node.argument.extra)
 		{
