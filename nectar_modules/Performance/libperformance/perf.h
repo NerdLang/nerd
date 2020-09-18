@@ -28,5 +28,5 @@ NJS::VAR __NJS_NATIVE_PERFORMANCE_NOW()
 {
    return __NJS_VAR( (double)duration_cast<microseconds>(
       system_clock::now().time_since_epoch()
-   ).count()/1000);
+   ).count());
 };

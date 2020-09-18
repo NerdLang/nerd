@@ -29,8 +29,9 @@ function _performance()
 	this.timeOrigin = __NJS_NATIVE_PERFORMANCE_NOW();
 	this.now = function()
 	{
-		return __NJS_NATIVE_PERFORMANCE_NOW() - this.timeOrigin;
-	}
+		return (__NJS_NATIVE_PERFORMANCE_NOW() - this.timeOrigin) * 1000;
+	};
+	
 };
 
 module.exports = new _performance();
