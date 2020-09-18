@@ -22,6 +22,7 @@
  
 function UnaryExpression(_path) 
 { 
+	// typeof
 	if (_path.node.operator == "typeof")
 	{
 		if(_path.node.argument.type == "Identifier")	
@@ -30,19 +31,20 @@ function UnaryExpression(_path)
 		}
 		else if(_path.node.argument.extra)
 		{
-			_path.replaceWithSourceString("__NJS_Typeof(" + _path.node.argument.extra.raw + ")");
+			_path.replaceWithSourceString("__NJS_typeof(" + _path.node.argument.extra.raw + ")");
 		}
 		else if (_path.node.argument.type == "MemberExpression")
 		{
 			VISITOR.memberExpression(_path.node.argument);
-			_path.replaceWithSourceString("__NJS_Typeof(" + babel.generate(_path.node.argument).code + ")");
+			_path.replaceWithSourceString("__NJS_typeof(" + babel.generate(_path.node.argument).code + ")");
 		}
 		else if (_path.node.argument.type == "CallExpression")
 		{
-			_path.replaceWithSourceString("__NJS_Typeof(" + babel.generate(_path.node.argument).code + ")");
+			_path.replaceWithSourceString("__NJS_typeof(" + babel.generate(_path.node.argument).code + ")");
 		}
 		_path.skip();
 	}
+	// void
 	else if(_path.node.operator == "void")
 	{
 		var _rnd = "__NJS_VOID_" + RND();

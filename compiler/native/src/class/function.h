@@ -115,11 +115,13 @@ namespace NJS::Class
 		if(_ret)
 		{
 			((NJS::Class::Object*)_ret._ptr)->prototype = true;
+			((NJS::Class::Object*)_ret._ptr)->instance.push_back((*this)["prototype"]._ptr);
 			return _ret;
 		}
 		else
 		{
 			((NJS::Class::Object*)_this._ptr)->prototype = true;
+			((NJS::Class::Object*)_this._ptr)->instance.push_back((*this)["prototype"]._ptr);
 			return _this;
 		}
 	}

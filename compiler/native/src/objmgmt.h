@@ -10,10 +10,26 @@ const char *__NJS_Get_String(NJS::VAR _v)
 	return ((NJS::Class::String*)_v._ptr)->value.c_str();
 }
 
-NJS::VAR __NJS_Typeof(NJS::VAR _var)
+NJS::VAR __NJS_typeof(NJS::VAR _var)
 {
 	const char *_array[] = {"", "undefined", "number", "object", "boolean", "string", "native", "function", "array", "NaN", "number", "object"};
 	return __NJS_Create_String(_array[_var.type]);
+}
+
+NJS::VAR __NJS_instanceof(NJS::VAR _left, NJS::VAR _right)
+{
+	if(_left.type != NJS::Enum::Type::Object) return __NJS_Boolean_FALSE;
+	
+	var protoRight = _right["prototype"];
+	if(!protoRight) return __NJS_Boolean_FALSE;
+	
+	vector_p vLeft = ((NJS::Class::Object*)_left._ptr)->instance;
+		
+	for (auto searchLeft : vLeft)
+	{
+		if(searchLeft == protoRight._ptr) return __NJS_Boolean_TRUE;
+	}
+	return __NJS_Boolean_FALSE;
 }
 
 /*** ***/

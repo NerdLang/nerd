@@ -36,5 +36,10 @@ function BinaryExpression(_path)
 		_not_eq += babel.generate(_path.node.right).code + ")";
 		_path.replaceWithSourceString(_not_eq);
 	}
+	// instanceof
+	else if(_path.node.operator == "instanceof")
+	{
+		_path.replaceWithSourceString(`__NJS_instanceof(${babel.generate(_path.node.left).code},${babel.generate(_path.node.right).code})`);
+	}
 }
 module.exports = BinaryExpression;
