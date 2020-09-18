@@ -41,7 +41,7 @@ function ClassDeclaration(_path)
 					if(p > 0) _params += ",";
 					_params += _path.node.body.body[o].params[p].name;
 				}
-				_class += _params + "){\nvar __NJS_THIS = __INJECTED_THIS;\n";
+				_class += _params + "){\n";
 				var _newBody = babel.generate(_path.node.body.body[o].body).code;
 				_newBody = _newBody.substring(1, _newBody.length -1);
 				 _class += _newBody;
@@ -65,7 +65,7 @@ function ClassDeclaration(_path)
 	}
 	if(!_constructor)
 	{
-		_class += "){\nvar __NJS_THIS = __INJECTED_THIS;\n";
+		_class += "){\n";
 	}
 	_class += _body;
 	_class += "}";

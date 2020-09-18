@@ -23,9 +23,9 @@
 /* Date std module */
 "!_ffi_include libdate/date.h";
 
-function _date()
+function _date(_date)
 {
-	
+	this.__NJS_Internal_Date = _date;
 };
 
 _date.now = __NJS_NATIVE_DATE_NOW;

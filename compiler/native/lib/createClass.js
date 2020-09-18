@@ -73,8 +73,8 @@ function createClass(_code, _scope)
 
 						COMPILER.DECL.push("var " + _match[1] +";");
 
-						var _formated = "__NJS_DECL_Function<NJS::VAR (var, vector<var>)>* " + _genFN +" = new __NJS_DECL_Function<NJS::VAR (var __INJECTED_THIS, vector<var>)>([" + _catch + "](var __INJECTED_THIS, vector<var> __NJS_VARARGS) -> NJS::VAR" + _fn + _return + ");";
-						_formated += _match[1] + "=NJS::VAR(NJS::Enum::Type::Function, " + _genFN + ");";
+						var _formated = "__NJS_DECL_Function<NJS::VAR (var, vector<var>)>* " + _genFN +" = new __NJS_DECL_Function<NJS::VAR (var __NJS_THIS, vector<var>)>([" + _catch + "](var __NJS_THIS, vector<var> __NJS_VARARGS) -> NJS::VAR" + _fn + _return + ");";
+						_formated += _match[1] + "=NJS::VAR(NJS::Enum::Type::Function, " + _genFN + ", __NJS_THIS);";
 						
 						_code = [_code.slice(0, _index), _formated, _code.slice(_end + 1)].join('');
 						break;

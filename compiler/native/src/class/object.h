@@ -53,7 +53,18 @@ namespace NJS::Class
 		{
 			if (((NJS::Class::String*)key._ptr)->value.compare(search.first) == 0)
 			{
-				return search.second;
+				if(!prototype)
+				{
+					return search.second;
+				}
+				else 
+				{
+					if(search.second.type == NJS::Enum::Type::Function)
+					{
+						((NJS::Class::Function*)search.second._ptr)->This = this;
+					}
+					return search.second;
+				}
 			}
 		}
 		((NJS::Class::String*)key._ptr)->counter++;
@@ -69,7 +80,9 @@ namespace NJS::Class
 		{
 			object.push_back(pair_t(((NJS::Class::String*)key._ptr)->value.c_str(), __NJS_VAR()));
 		}
+		
 		return object[object.size() - 1].second;
+
 	}
 	template <class... Args>
 	NJS::VAR Object::operator()(Args... args) const { throw InvalidTypeException(); }

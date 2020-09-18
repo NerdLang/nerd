@@ -6,7 +6,7 @@
 namespace NJS::Class
 {
 	// Constructors
-	Function::Function() { counter++; object.push_back(pair_t("prototype", __NJS_Create_Object())); }
+	Function::Function() { counter++; object.push_back(pair_t("prototype", __NJS_Create_Object()));}
 	Function::Function(void *val)
 	{
 		counter++;
@@ -91,9 +91,9 @@ namespace NJS::Class
 		return object[object.size() - 1].second;
 	}
 	
-	NJS::VAR Function::Call(var __INJECTED_THIS, vector<var> __NJS_VARARGS)
+	NJS::VAR Function::Call(var __NJS_THIS, vector<var> __NJS_VARARGS)
 	{
-		return (*static_cast<function<NJS::VAR(var, vector_t)> *>(value))(__INJECTED_THIS, __NJS_VARARGS);
+		return (*static_cast<function<NJS::VAR(var, vector_t)> *>(value))(__NJS_THIS, __NJS_VARARGS);
 	}
 	
 	
@@ -109,17 +109,26 @@ namespace NJS::Class
 		{
 			_this[search.first] = search.second;
 		}
-		
+
 		var _ret = (NJS::VAR)(*static_cast<function<NJS::VAR(var, vector_t)> *>(value))(_this, _args);
-		if(_ret) return _ret;
-		else return _this;
+
+		if(_ret)
+		{
+			((NJS::Class::Object*)_ret._ptr)->prototype = true;
+			return _ret;
+		}
+		else
+		{
+			((NJS::Class::Object*)_this._ptr)->prototype = true;
+			return _this;
+		}
 	}
 	
 	template <class... Args>
 	NJS::VAR Function::operator()(Args... args)
 	{
 		vector_t _args = vector<var>{(NJS::VAR)args...};
-		return (*static_cast<function<NJS::VAR(var, vector_t)> *>(value))((*this)["prototype"], _args);
+		return (*static_cast<function<NJS::VAR(var, vector_t)> *>(value))(This, _args);
 	}
 	// Comparation operators
 	Function Function::operator!() const { throw InvalidTypeException(); }

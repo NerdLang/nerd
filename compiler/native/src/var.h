@@ -188,6 +188,13 @@ namespace NJS
 		type = _type;
 		_ptr = new NJS::Class::Function(_value);
 	}
+	
+	VAR::VAR(NJS::Enum::Type _type, void *_value, var _this)
+	{
+		type = _type;
+		_ptr = new NJS::Class::Function(_value);
+		((NJS::Class::Function*)_ptr)->This = _this;
+	}
 
 	VAR::VAR(function<VAR(vector<var>)> &_value)
 	{

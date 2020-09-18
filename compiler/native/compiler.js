@@ -151,6 +151,9 @@ function Compiler()
 		SCOPE: {},
 		HOISTING: [],
 	};
+	
+	this.GLOBAL = ["__NJS_THIS"];
+	
 	this.VAR_STATE = [[]];
 
 	if(this.ENV.stdlib)

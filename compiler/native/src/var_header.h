@@ -33,6 +33,7 @@ namespace NJS
 		VAR(NJS::Class::Native *_value);
 		VAR(NJS::Class::Undefined *_value);
 		VAR(NJS::Enum::Type _type, void *_value);
+		VAR(NJS::Enum::Type _type, void *_value, var _this);
 		VAR(function<VAR(vector<var>)> &_value);
 		template <class... Args>
 		VAR operator() (Args... args);

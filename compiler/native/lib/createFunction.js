@@ -59,7 +59,7 @@ function createFunction(_code, _scope)
 		else
 		{
 			_variadic = true;
-			_parameters = "var __INJECTED_THIS, vector<var> __NJS_VARARGS";
+			_parameters = "var __NJS_THIS, vector<var> __NJS_VARARGS";
 			for(var i = 0; i < _match[2].length; i++)
 			{
 				if(_match[2][i].length > 0)
@@ -95,7 +95,7 @@ function createFunction(_code, _scope)
 							}
 							_catch = "&";
 							var _constructor = `${_match[1]}["prototype"]["constructor"] = __NJS_Create_Var_Scoped_Anon(return __NJS_THIS;);`;
-							var _fn = "{" + _getVar + " var __NJS_THIS = __INJECTED_THIS;" + _code.substring(_start + 1, _end);
+							var _fn = "{" + _getVar + _code.substring(_start + 1, _end);
 
 							COMPILER.DECL.push("var " + _match[1] +";");
 

@@ -42,6 +42,11 @@ VISITOR.checkUndefVar = function(_name)
 			_exists = true;
 			break;
 		}
+		else if(COMPILER.GLOBAL.indexOf(_name) > -1)
+		{
+			_exists = true;
+			break;
+		}
 	}
 
 	if(!_exists)

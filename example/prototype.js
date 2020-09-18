@@ -1,10 +1,7 @@
-function protoObject()
-{
-	
-}
+function protoObject(){}
 
-protoObject.prototype.hello = "hello";
-protoObject.prototype.sayHello = function(){console.log("Hello from prototype");};
+protoObject.prototype.hello = "Hello";
+protoObject.prototype.sayHello = function(){console.log(this.hello + " from prototype");};
 
 var greeter = new protoObject();
 

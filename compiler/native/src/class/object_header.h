@@ -15,6 +15,7 @@ namespace NJS::Class
 		count_t counter = 0;
 		object_t object;
 		object_t &value = object;
+		bool prototype = false;
 		// Methods
 		void Delete() noexcept;
 		// Native cast

@@ -16,9 +16,9 @@
 #define __NJS_Create_String(_value) NJS::VAR(_value)
 #define __NJS_Create_Infinity() NJS::VAR(NJS::Enum::Type::ISINFINITY, 0)
 #define __NJS_Create_Null() NJS::VAR(NJS::Enum::Type::ISNULL, 0)
-#define __NJS_Create_Lambda(name) function<NJS::VAR (var, vector<var>)>* name = new function<NJS::VAR (var, vector<var>)>([](var __INJECTED_THIS, vector<var> _NJS_VARARGS)
-#define __NJS_Create_Ptr_Scoped_Anon(__CONTENT__) new function<NJS::VAR (var, vector<var>)>([&](var __INJECTED_THIS, vector<var> __NJS_VARARGS){ __CONTENT__ })
-#define __NJS_Create_Ptr_Unscoped_Anon(__CONTENT__) new function<NJS::VAR (var, vector<var>)>([](var __INJECTED_THIS, vector<var> __NJS_VARARGS){ __CONTENT__ })
+#define __NJS_Create_Lambda(name) function<NJS::VAR (var, vector<var>)>* name = new function<NJS::VAR (var, vector<var>)>([](var __NJS_THIS, vector<var> _NJS_VARARGS)
+#define __NJS_Create_Ptr_Scoped_Anon(__CONTENT__) new function<NJS::VAR (var, vector<var>)>([&](var __NJS_THIS, vector<var> __NJS_VARARGS){ __CONTENT__ })
+#define __NJS_Create_Ptr_Unscoped_Anon(__CONTENT__) new function<NJS::VAR (var, vector<var>)>([](var __NJS_THIS, vector<var> __NJS_VARARGS){ __CONTENT__ })
 #define __NJS_Create_Var_Scoped_Anon(__CONTENT__) NJS::VAR(NJS::Enum::Type::Function, __NJS_Create_Ptr_Scoped_Anon(__CONTENT__))
 #define __NJS_Create_Var_Unscoped_Anon(__CONTENT__) NJS::VAR(NJS::Enum::Type::Function, __NJS_Create_Ptr_Unscoped_Anon(__CONTENT__))
 #define __NJS_EXCEPTION_PARAMETER NJS::VAR &e

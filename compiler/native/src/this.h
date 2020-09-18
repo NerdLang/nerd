@@ -1,0 +1,1 @@
+var __NJS_THIS = __NJS_Create_Object();

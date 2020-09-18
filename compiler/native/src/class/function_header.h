@@ -15,12 +15,13 @@ namespace NJS::Class
 		// Properties
 		count_t counter = 0;
 		void* value = nullptr;
+		var This;
 		//NJS::VAR _this;
 		object_t object;
 		// Methods
 		void Delete() noexcept;
 		
-		NJS::VAR Call(var __INJECTED_THIS, vector<var> __NJS_VARARGS);
+		NJS::VAR Call(var __NJS_THIS, vector<var> __NJS_VARARGS);
 		
 		template <class... Args>
 		NJS::VAR New(Args... args);
