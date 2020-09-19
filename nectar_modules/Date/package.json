@@ -19,10 +19,10 @@
     "Date",
 	"javascript"
   ],
-  "license": "AGPL",
+  "license": "GPL-3.0-or-later",
   "licenses": [
     {
-      "type": "AGPL",
+      "type": "GPL",
       "url": "https://github.com/nectarjs/nectarjs/blob/master/LICENSE"
     }
   ],

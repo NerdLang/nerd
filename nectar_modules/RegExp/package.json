@@ -1,6 +1,6 @@
 {
-  "name": "stm32_led",
-  "description": "NectarJS stm32_led module",
+  "name": "RegExp",
+  "description": "NectarJS base RegExp module",
   "main": "index.js",
   "bugs":
   {
@@ -10,15 +10,14 @@
   "directories":
   {
     "root": ".",
-    "lib": "lib"
+    "lib": "libregexp"
   },
   "homepage": "https://github.com/NectarJS/nectarjs#readme",
   "keywords":
   [
     "nectarjs",
-    "STMicro",
-  "STM32",
-  "nucleo"
+    "RegExp",
+	"javascript"
   ],
   "license": "GPL-3.0-or-later",
   "licenses": [
@@ -35,8 +34,8 @@
   "version": "0.0.1",
   "nectar":
   {
-    "env": ["stm32"],
+    "env": ["std", "android", "ios", "node", "arduino", "stm32", "wasm"],
     "read_only": [],
-    "expose": ["__NJS_STM32_ledState", "__NJS_STM32_ledBlink"]
+    "expose": ["__NJS_RegExp_Test"]
   }
 }

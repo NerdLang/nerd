@@ -20,18 +20,25 @@
  *
  */
  
-/* RegExp std module */
+#include <regex>
 
-"!_ffi_include libregexp/regexp.h";
-
-function _regexp(_expression, _flag)
+function __NJS_RegExp_Test(_search, _re)
 {
-	this.__NJS_Internal_Expression = _expression;
-	this.flag = _flag;
-	this.test = function(_search)
-	{
-		return __NJS_RegExp_Test(_search, this.__NJS_Internal_Expression);
-	}
-};
+ 	if( std::regex_match ( (string)_search, std::regex((string)_re, std::regex::ECMAScript) ) ) return __NJS_Boolean_TRUE;
+	else return __NJS_Boolean_FALSE;
+}
 
-module.exports = _regexp;
+/*
+function __NJS_RegExp_StringMatch(_search, _re)
+{
+	var _res = __NJS_Create_Array();
+	std::string s = (string)_search;
+	std::smatch m;
+ 	while(std::regex_search ( s, m, std::regex((string)_re, std::regex::ECMAScript) ))
+	{
+		for(auto x:m) ((NJS::Class::Array*)_res._ptr)->value.push_back((string)x);
+		s = m.suffix().str();
+	}
+	return _res;
+}
+*/
