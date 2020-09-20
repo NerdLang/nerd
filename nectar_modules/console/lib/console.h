@@ -23,7 +23,7 @@
 function __NJS_NATIVE_LOG_CONSOLE()
 {
 	if(__NJS_VARARGS.size() == 0) __NJS_Log_Console("");
-	else __NJS_Log_Console(__NJS_VARARGS[0]);
+	else __NJS_Log_Console(__NJS_VARARGS);
 	return var();
 };
 

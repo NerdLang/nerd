@@ -87,6 +87,25 @@ NJS::VAR __NJS_Log_Console(NJS::VAR _var)
 	return NJS::VAR();
 }
 
+NJS::VAR __NJS_Log_Console(vector_t _var)
+{
+#ifdef __NJS_ARDUINO
+
+#else
+	bool first = false;
+	for(auto _v:_var)
+	{
+		if(first) cout << " ";
+		cout << _v;
+		if(!first) first = true;
+	}
+	cout << endl;
+#endif
+
+	return NJS::VAR();
+}
+
+
 NJS::VAR __NJS_Object_Keys(NJS::VAR _var)
 {
 	if (_var.type != NJS::Enum::Type::Object)
