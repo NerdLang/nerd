@@ -44,6 +44,12 @@ function objectExpression(_path, _name)
 	{
 		_code += VISITOR.objectExpression(_path.value, _key);
 	}
+	else if(_path.value.type == "ArrayExpression")
+	{
+		var _arr = VISITOR.arrayExpression(_path.value, _key);
+		COMPILER.DECL.push(_arr.setter + ";");
+		_code += _name + "[\"" + _key + "\"] = " + _arr.getter + "();" ;
+	}
 	else if(_path.value.type == "FunctionExpression")
 	{
 		var _value = RND();
@@ -58,12 +64,12 @@ function objectExpression(_path, _name)
 		{
 			_code += VISITOR.objectExpression(_path.value.properties[i], _subRND); 
 		}
-		_code += _name + "['" + _key + "'] = " + _subRND + ";";
+		_code += _name + "[\"" + _key + "\"] = " + _subRND + ";";
 	}
 	else if(_path.value.type == "MemberExpression")
 	{
 		VISITOR.memberExpression(_path.value);
-		_code += _name + "['" + _key + "'] = " + babel.generate(_path.value).code + ";";
+		_code += _name + "[\"" + _key + "\"] = " + babel.generate(_path.value).code + ";";
 	}
 	else if(_path.value.type == "BooleanLiteral")
 	{
@@ -88,7 +94,7 @@ function objectExpression(_path, _name)
 		if(_path.value.left.type == "MemberExpression") VISITOR.memberExpression(_path.value.left, _name);
 		if(_path.value.right.type == "MemberExpression") VISITOR.memberExpression(_path.value.right, _name);
 		
-		_code += _name + "['" + _key + "'] = " + babel.generate(_path.value).code + ";";
+		_code += _name + "[\"" + _key + "\"] = " + babel.generate(_path.value).code + ";";
 	}
 	else if(_path.value.extra) _value = _path.value.extra.raw;
 	else
@@ -96,7 +102,7 @@ function objectExpression(_path, _name)
 	  console.log("Visitor VISITOR.objectExpression not implemented yet for " + _path.value.type);
 	  process.exit(0);
 	}
-	if(_value) _code += _name + "['" + _key + "'] = " + _value + ";";
+	if(_value) _code += _name + "[\"" + _key + "\"] = " + _value + ";";
 	return _code;
 }
 module.exports = objectExpression;

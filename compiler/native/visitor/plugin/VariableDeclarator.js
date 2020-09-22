@@ -49,6 +49,22 @@ function VariableDeclarator(_path)
 			COMPILER.DECL.push(_a.setter + ";");
 			_value = _a.getter + "()";
 		  }
+		  else if(_el[i].type == "ObjectExpression")
+		  {
+			var _obj = "__NJS_TMP_OBJ_" + RND();
+			var _set = "__NJS_SET_OBJ_" + RND();
+			var _setter = `inline NJS::VAR ${_set}() { var ${_obj} = __NJS_Create_Array();`;
+			
+			for(var j = 0; j < _el[i].properties.length; j++)
+			{
+				var _tmp = VISITOR.objectExpression(_el[i].properties[j], _obj);
+				_setter += _tmp + ";"
+			}
+			
+			_setter += `return ${_obj};}`;
+			COMPILER.DECL.push( _setter );
+			_value = _set + "()";
+		  }
 		  else
 		  {
 			  console.log("Visitor VariableDeclarator not implemented yet for " + _el[i].type);
@@ -110,6 +126,13 @@ function VariableDeclarator(_path)
 		var _directive = "'SCOPED_Function';";
 		_path.node.init.body.body.splice(0, 0, babel.parse(_directive));
 	}
+  }
+
+  if(_path.node.init && _path.node.init.type == "File")
+  {
+	var _decl = babel.generate(_path.node).code;
+	if(_decl[_decl.length - 1] == ";") _decl = _decl.substring(0, _decl.length - 1);
+	_path.replaceWithSourceString(_decl);
   }
 }
 module.exports = VariableDeclarator;

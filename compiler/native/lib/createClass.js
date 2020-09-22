@@ -40,6 +40,7 @@ function createClass(_code, _scope)
 		let _match = _searchFN.exec(_code);
 
 		_match[2] = _match[2].split(",");
+
 		var _getVar = "";
 		for(var i = 0; i < _match[2].length; i++)
 		{

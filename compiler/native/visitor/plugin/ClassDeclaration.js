@@ -41,7 +41,7 @@ function ClassDeclaration(_path)
 					if(p > 0) _globalParams += ",";
 					_globalParams += _path.node.body.body[o].params[p].name;
 				}
-		
+				
 				var _newBody = babel.generate(_path.node.body.body[o].body).code;
 				_newBody = _newBody.substring(1, _newBody.length -1);
 				 _ctor += _newBody;
@@ -58,7 +58,7 @@ function ClassDeclaration(_path)
 				var _params = "";
 				for(var p = 0; p < _path.node.body.body[o].params.length; p++)
 				{
-					if(p > 1) _params += ",";
+					if(p > 0) _params += ",";
 					_params += _path.node.body.body[o].params[p].name;
 				}
 				_method += _params + ")\n";
