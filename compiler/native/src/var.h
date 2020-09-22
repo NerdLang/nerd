@@ -63,6 +63,14 @@ namespace NJS
 			_ptr = _v._ptr;
 			((NJS::Class::Undefined*)_ptr)->counter++;
 		}
+		else if (_v.type == NJS::Enum::Type::ISNULL)
+		{
+			_ptr = new NJS::Class::Number(((NJS::Class::Number*)_v._ptr)->getInt());
+		}
+		else if (_v.type == NJS::Enum::Type::ISNAN)
+		{
+			_ptr = new NJS::Class::Number(((NJS::Class::Number*)_v._ptr)->getDouble());
+		}
 		else
 		{
 			_ptr = _v._ptr;
@@ -282,6 +290,14 @@ namespace NJS
 		{
 			_ptr = _v._ptr;
 			((NJS::Class::Undefined*)_ptr)->counter++;
+		}
+		else if (_v.type == NJS::Enum::Type::ISNULL)
+		{
+			_ptr = new NJS::Class::Number(((NJS::Class::Number*)_v._ptr)->getInt());
+		}
+		else if (_v.type == NJS::Enum::Type::ISNAN)
+		{
+			_ptr = new NJS::Class::Number(((NJS::Class::Number*)_v._ptr)->getDouble());
 		}
 		else
 		{

@@ -91,7 +91,7 @@ namespace NJS::Class
 		return object[object.size() - 1].second;
 	}
 	
-	NJS::VAR Function::Call(var __NJS_THIS, vector<var> __NJS_VARARGS)
+	NJS::VAR Function::Call(var __NJS_THIS, vector_t __NJS_VARARGS)
 	{
 		return (*static_cast<function<NJS::VAR(var, vector_t)> *>(value))(__NJS_THIS, __NJS_VARARGS);
 	}
@@ -112,7 +112,7 @@ namespace NJS::Class
 
 		var _ret = (NJS::VAR)(*static_cast<function<NJS::VAR(var, vector_t)> *>(value))(_this, _args);
 
-		if(_ret)
+		if(_ret.type == NJS::Enum::Type::Object)
 		{
 			((NJS::Class::Object*)_ret._ptr)->prototype = true;
 			((NJS::Class::Object*)_ret._ptr)->instance.push_back((*this)["prototype"]._ptr);

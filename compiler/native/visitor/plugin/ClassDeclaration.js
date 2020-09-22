@@ -23,32 +23,37 @@
 function ClassDeclaration(_path)
 {
 	var _class = " function __NJS_CLASS_" + _path.node.id.name + "(";
-	var _constructor = false;
+	var _ctor = "";
 	var _body = "";
-
+	var _static = "";
+	var _globalParams = "";
+	
 	if(_path.node.body && _path.node.body.body)
 	{
 		for(var o = 0; o < _path.node.body.body.length; o++)
 		{
 			if(_path.node.body.body[o].kind == "constructor")
 			{
-				_constructor = true;
 				_path.node.body.body[o].key == babel.parse(_path.node.id.name);
 				
-				var _params = "";
 				for(var p = 0; p < _path.node.body.body[o].params.length; p++)
 				{
-					if(p > 0) _params += ",";
-					_params += _path.node.body.body[o].params[p].name;
+					if(p > 0) _globalParams += ",";
+					_globalParams += _path.node.body.body[o].params[p].name;
 				}
-				_class += _params + "){\n";
+		
 				var _newBody = babel.generate(_path.node.body.body[o].body).code;
 				_newBody = _newBody.substring(1, _newBody.length -1);
-				 _class += _newBody;
+				 _ctor += _newBody;
 			}
 			else if(_path.node.body.body[o].kind == "method")
 			{
-				var _method = "__NJS_THIS." + _path.node.body.body[o].key.name + "= function(";
+				var _method = "";
+				if(_path.node.body.body[o].static)
+				{
+					_method = _path.node.id.name + "." + _path.node.body.body[o].key.name + "= function(";
+				}
+				else _method = "__NJS_THIS." + _path.node.body.body[o].key.name + "= function(";
 				
 				var _params = "";
 				for(var p = 0; p < _path.node.body.body[o].params.length; p++)
@@ -59,18 +64,19 @@ function ClassDeclaration(_path)
 				_method += _params + ")\n";
 				_method += "{\n'__NJS_CLASS_ANON__';"
 				_method += babel.generate(_path.node.body.body[o].body).code.substring(1);
-				_body += _method + "\n";
+				
+				if(_path.node.body.body[o].static) _static += _method + "\n";
+				else _body += _method + "\n";
 			} 
 		}
 	}
-	if(!_constructor)
-	{
-		_class += "){\n";
-	}
+	_class += _globalParams + "){\n";
 	_class += _body;
+	_class += _ctor;
 	_class += "}";
 
 	var _n = babel.parse(_class);
 	_path.replaceWith(_n.program);
+	if(_static.length > 0) _path.insertAfter(babel.parse(_static));
 }
 module.exports = ClassDeclaration;
