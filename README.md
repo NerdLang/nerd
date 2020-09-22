@@ -6,7 +6,33 @@
 
 Javascript's God Mode : one language to rule them all. Code everything, everywhere, for everything, in JavaScript.
 
-No VM. No Bytecode. No Garbage Collector. Full Compiled and Native binaries.
+No VM. No Bytecode. No packaging. No Garbage Collector. Fully compiled to native binaries.
+
+# Table of contents
+
+* [What is NectarJS](#what-is-nectarjs)
+* [Efficiency](#efficiency)
+* [EcmaScript Support](#ecmascript-support)
+* [Main objectives](#main-objectives)
+* [Install](#install)
+* [Using Native Compiler](#using-native-compiler)
+  - [Testing Your Installation](#testing-your-installation)
+  - [Windows](#windows)
+  - [Linux / FreeBSD](#linux--freebsd)
+  - [Apple](#apple-ios)
+  - [First Compilation](#first-compilation)
+* [Starting with compilation](#starting-with-compilation)
+* [Using Compiler Environmants](#using-compiler-environments)
+* [Android Compilation](#android-compilation)
+* [iOS Compilation](#ios-compilation)
+* [Arduino Compilation](#arduino-compilation)
+* [STM32 Compilation](#stm32-compilation)
+* [Compatibility Targets / Platforms](#compatibility-targetsplatforms-)
+* [Actively Tested For](#actively-tested-for-)
+
+
+
+# What is NectarJS
 
 **NectarJS** is a **JavaScript native compiler**.
 
@@ -36,6 +62,166 @@ Some benchmarks with the file example/fibo.js and differents fibos arguments:
 | fibo(40) | 1.80s / 7.0Mb  | 21.06s / 1.1Mb     | **0.04s / 1.0Mb**     |
 | fibo(45) | 19.44s / 7.0Mb | 238.85s / 1.1Mb    | **0.04s / 1.0Mb**     |
 
+# EcmaScript Support
+
+NectarJS already supports more than 80% of ES3.
+
+<details>
+<summary>Array</summary>
+<br>
+ 
+* .length
+
+* .push(value)
+
+</details>
+
+<details>
+<summary>Class</summary>
+<br>
+ 
+* constructor
+
+* methods
+
+* static methods
+
+</details>
+
+<details>
+<summary>Console</summary>
+<br>
+ 
+* .log(variadic)
+
+</details>
+
+<details>
+<summary>JSON</summary>
+<br>
+ 
+* .parse(str)
+ 
+* .stringify(obj)
+
+</details>
+
+<details>
+<summary>Math</summary>
+<br>
+ 
+* E
+
+* LN2
+
+* LOG2E
+
+* LOG10E
+
+* PI
+
+* SQRT1_2
+
+* SQRT2
+
+* .abs
+
+* .acos
+
+* .acosh
+
+* .asin
+
+* .asinh
+
+* .atan
+
+* .atanh
+
+* .atan2
+
+* .cbrt
+
+* .ceil
+
+* .clz32
+
+* .cos
+
+* .cosh
+
+* .exp
+
+* .expm1
+
+* .floor
+
+* .fround
+
+* .hypot
+
+* .imul
+
+* .log
+
+* .log1p
+
+* .log10
+
+* .log2
+
+* .max
+
+* .min
+
+* .pow
+
+* .random
+
+* .round
+
+* .sign
+
+* .sin
+
+* .sinh
+
+* .sqrt
+
+* .tan
+
+* .tanh
+
+* .trunc
+
+* .toString
+
+</details>
+
+<details>
+<summary>performance</summary>
+<br>
+ 
+* timeOrigin
+
+* .now()
+
+</details>
+
+<details>
+<summary>String</summary>
+<br>
+* .length
+* .toString()
+* .indexOf(needle)
+* .lastIndexOf(needle)
+* .search(needle)
+* .slice(start, end)
+* .substring(start, end)
+* .substr(start, end)
+* .replace(needle, str)
+</details>
+
 # Main objectives
 * Supporting EcmaScript 3 standard (then 5, 6 ...)
 * Supporting NodeJS and NPM ecosystem
@@ -49,32 +235,6 @@ Some benchmarks with the file example/fibo.js and differents fibos arguments:
 ```
 npm install -g nectarjs
 ```
-
-# Starting with compilation
-
-The simplest way to use NectarJS is :
-
-```
-nectar file.js
-```
-
-The output file name will be automatically chosen regarding the target. You can specify another output with `-o something.out`
-
-To show more compilation infos :
-
-```
-nectar --verbose file.js
-```
-
-Changing the stack size (usefull on Windows) :
-
-```
-nectar --stack 10000000 flood.js
-```
-
-For more informations about compilation output, use `--verbose`
-
-For help, use `--help`
 
 # Using native compiler
 
@@ -125,6 +285,33 @@ You can enable the quiet mode with --quiet:
 ```
 nectar file.js --quiet
 ```
+
+# Starting with compilation
+
+The simplest way to use NectarJS is :
+
+```
+nectar file.js
+```
+
+The output file name will be automatically chosen regarding the target. You can specify another output with `-o something.out`
+
+To show more compilation infos :
+
+```
+nectar --verbose file.js
+```
+
+Changing the stack size (usefull on Windows) :
+
+```
+nectar --stack 10000000 flood.js
+```
+
+For more informations about compilation output, use `--verbose`
+
+For help, use `--help`
+
 
 # Using compiler environments
 
@@ -262,20 +449,3 @@ NectarJS compiled apps are tested to be publishable on :
 * nucleo-l432kc
 
 * nucleo-f446re
-
-# String
-
-* .length
-* .toString()
-* .indexOf(needle)
-* .lastIndexOf(needle)
-* .search(needle)
-* .slice(start, end)
-* .substring(start, end)
-* .substr(start, end)
-* .replace(needle, str)
-
-# Array
-
-* .length
-* .push(value)
