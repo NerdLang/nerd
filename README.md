@@ -27,8 +27,9 @@ No VM. No Bytecode. No packaging. No Garbage Collector. Fully compiled to native
 * [iOS Compilation](#ios-compilation)
 * [Arduino Compilation](#arduino-compilation)
 * [STM32 Compilation](#stm32-compilation)
-* [Compatibility Targets / Platforms](#compatibility-targetsplatforms-)
-* [Actively Tested For](#actively-tested-for-)
+* [Compatibility Targets / Platforms](#compatibility-targetsplatforms)
+* [Stores](#stores)
+* [Actively Tested For](#actively-tested-for)
 
 
 
@@ -397,7 +398,7 @@ You can select a preset (speed or size) with:
 
 `--preset speed` or `--preset size`
 
-# Compatibility targets/platforms :
+# Compatibility targets/platforms
 
 * All supported GCC platforms
 
@@ -405,14 +406,14 @@ You can select a preset (speed or size) with:
 
 * All supported AVR-GCC platforms
 
-# Store 
+# Stores 
 
 NectarJS compiled apps are tested to be publishable on :
 
 * Apple Store
     * https://apps.apple.com/fr/app/hiphen-plant/id1523867733
 
-# Actively tested for :
+# Actively tested for
 
 * android
 
