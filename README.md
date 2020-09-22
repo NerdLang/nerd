@@ -111,19 +111,19 @@ NectarJS already supports more than 80% of ES3.
 <summary>Math</summary>
 <br>
  
-* E
+* .E
 
-* LN2
+* .LN2
 
-* LOG2E
+* .LOG2E
 
-* LOG10E
+* .LOG10E
 
-* PI
+* .PI
 
-* SQRT1_2
+* .SQRT1_2
 
-* SQRT2
+* .SQRT2
 
 * .abs
 
@@ -196,6 +196,14 @@ NectarJS already supports more than 80% of ES3.
 * .trunc
 
 * .toString
+
+</details>
+
+<details>
+<summary>Object</summary>
+<br>
+ 
+* .keys
 
 </details>
 
