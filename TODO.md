@@ -2,10 +2,6 @@
 
 * Add babel visitors for missing
 
-* Add Date Object with nectar module
-
-* Add RegExp Object with nectar module
-
 * Add NectarJS REPL
 
 * put back project management
@@ -16,8 +12,6 @@
 - startWith 
 - endWith
 - ...
-
-* add all Math functions
 
 * Add helpers flags to create modules
 
@@ -33,5 +27,5 @@
 
 * Add .bind to functions
 
-* Update Class
+* Add delete keyword
 

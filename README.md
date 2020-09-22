@@ -231,6 +231,40 @@ NectarJS already supports more than 80% of ES3.
 * .replace(needle, str)
 </details>
 
+<details>
+<summary>Syntax</summary>
+<br>
+ 
+* for
+ 
+* while / do while
+
+* if / else if / else
+
+* try / catch / finally
+
+* function / lambda
+
+* class
+
+* new
+
+* typeof
+
+* instanceof
+
+* undefined
+
+* null
+
+* Infinite
+
+* NaN / isNaN
+
+* true / false
+
+</details>
+
 # Main objectives
 * Supporting EcmaScript 3 standard (then 5, 6 ...)
 * Supporting NodeJS and NPM ecosystem
