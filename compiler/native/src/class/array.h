@@ -120,7 +120,7 @@ namespace NJS::Class
 		
 		if(((std::string)key).compare("length") == 0)
 		{
-			return = (int)value.size();
+			return (int)value.size();
 		}
 		
 		auto &obj = this->object;
