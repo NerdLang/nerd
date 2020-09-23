@@ -44,13 +44,11 @@ namespace NJS::Class
 	Array::Array() 
 	{ 
 		__NJS_Class_Array_Init();	
-		object.push_back(NJS::Type::pair_t("length", 0));
 	}
 	Array::Array(NJS::Type::vector_t vec)
 	{
 		__NJS_Class_Array_Init();
 		value = vec;
-		__NJS_Object_Set("length", (int)vec.size(), &this->object);
 	}
 	// Methods
 	void Array::Delete() noexcept
@@ -119,6 +117,12 @@ namespace NJS::Class
 				return value.at(i);
 			}
 		}
+		
+		if(((std::string)key).compare("length") == 0)
+		{
+			return = (int)value.size();
+		}
+		
 		auto &obj = this->object;
 		auto index = (std::string)key;
 		int _j = obj.size();
@@ -133,10 +137,12 @@ namespace NJS::Class
 	}
 	NJS::VAR &Array::operator[](NJS::VAR key)
 	{
+		static NJS::VAR __retLength;
 		static NJS::VAR _retUndefined;
 		if (key.type == NJS::Enum::Type::Number)
 		{
 			auto i = (int)key;
+			
 			if (i < 0)
 			{
 				return _retUndefined;
@@ -145,14 +151,19 @@ namespace NJS::Class
 			{
 				if (i >= value.size())
 				{
+					
 					value.reserve(i + 1);
 					value.resize(i + 1);
-					__NJS_Object_Set("length", (int)value.size(), &this->object);
 				}
 			}
 			return value[i];
 		}
 		
+		if(((std::string)key).compare("length") == 0)
+		{
+			__retLength = (int)value.size();
+			return __retLength;
+		}
 		for (auto & search : object)
 		{
 			if (((NJS::Class::String*)key._ptr)->value.compare(search.first) == 0)
