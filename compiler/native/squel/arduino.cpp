@@ -20,7 +20,6 @@
  *
  */
  #define _USE_MATH_DEFINES
- #include <cmath>
  #include <string>
  #include <avr/io.h>
  #include <wiring_digital.c>
@@ -39,13 +38,10 @@
  
  #include <nonstd-function.h>
 
- using namespace std;
-
  #define __NJS_ARDUINO 1
 
  #include "njs.h"
- using namespace NJS;
- using namespace NJS::Value;
+
  
  // Declared weak in Arduino.h to allow user redefinitions.
 int atexit(void (* /*func*/ )()) { return 0; }

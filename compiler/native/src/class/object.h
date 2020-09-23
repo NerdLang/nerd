@@ -85,9 +85,19 @@ namespace NJS::Class
 
 	}
 	template <class... Args>
-	NJS::VAR Object::operator()(Args... args) const { throw InvalidTypeException(); }
+	NJS::VAR Object::operator()(Args... args) const 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
 	// Comparation operators
-	Object Object::operator!() const { throw InvalidTypeException(); }
+	Object Object::operator!() const 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
 	bool Object::operator==(const Object &_v1) const { return false; }
 	// === emulated with __NJS_EQUAL_VALUE_AND_TYPE
 	// !== emulated with __NJS_NOT_EQUAL_VALUE_AND_TYPE
@@ -97,31 +107,156 @@ namespace NJS::Class
 	bool Object::operator>(const Object &_v1) const { return false; }
 	bool Object::operator>=(const Object &_v1) const { return true; }
 	// Numeric operators
-	Object Object::operator+() const { throw InvalidTypeException(); }
-	Object Object::operator-() const { throw InvalidTypeException(); }
-	Object Object::operator++(const int _v1) { throw InvalidTypeException(); }
-	Object Object::operator--(const int _v1) { throw InvalidTypeException(); }
-	Object Object::operator+(const Object &_v1) const { throw InvalidTypeException(); }
-	Object Object::operator+=(const Object &_v1) { throw InvalidTypeException(); }
-	Object Object::operator-(const Object &_v1) const { throw InvalidTypeException(); }
-	Object Object::operator-=(const Object &_v1) { throw InvalidTypeException(); }
-	Object Object::operator*(const Object &_v1) const { throw InvalidTypeException(); }
-	Object Object::operator*=(const Object &_v1) { throw InvalidTypeException(); }
+	Object Object::operator+() const 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	Object Object::operator-() const 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	Object Object::operator++(const int _v1) 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	Object Object::operator--(const int _v1) 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	Object Object::operator+(const Object &_v1) const 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	Object Object::operator+=(const Object &_v1) 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	Object Object::operator-(const Object &_v1) const 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	Object Object::operator-=(const Object &_v1) 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	Object Object::operator*(const Object &_v1) const 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	Object Object::operator*=(const Object &_v1) 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
 	// TODO: "**" and "**=" operators
-	Object Object::operator/(const Object &_v1) const { throw InvalidTypeException(); }
-	Object Object::operator/=(const Object &_v1) { throw InvalidTypeException(); }
-	Object Object::operator%(const Object &_v1) const { throw InvalidTypeException(); }
-	Object Object::operator%=(const Object &_v1) { throw InvalidTypeException(); }
-	Object Object::operator&(const Object &_v1) const { throw InvalidTypeException(); }
-	Object Object::operator|(const Object &_v1) const { throw InvalidTypeException(); }
-	Object Object::operator^(const Object &_v1) const { throw InvalidTypeException(); }
-	Object Object::operator~() const { throw InvalidTypeException(); }
-	Object Object::operator>>(const Object &_v1) const { throw InvalidTypeException(); }
-	Object Object::operator<<(const Object &_v1) const { throw InvalidTypeException(); }
-	Object Object::operator&=(const Object &_v1) { throw InvalidTypeException(); }
-	Object Object::operator|=(const Object &_v1) { throw InvalidTypeException(); }
-	Object Object::operator^=(const Object &_v1) { throw InvalidTypeException(); }
-	Object Object::operator>>=(const Object &_v1) { throw InvalidTypeException(); }
-	Object Object::operator<<=(const Object &_v1) { throw InvalidTypeException(); }
+	Object Object::operator/(const Object &_v1) const 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	Object Object::operator/=(const Object &_v1) 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	Object Object::operator%(const Object &_v1) const 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	Object Object::operator%=(const Object &_v1) 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	Object Object::operator&(const Object &_v1) const 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	Object Object::operator|(const Object &_v1) const 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	Object Object::operator^(const Object &_v1) const 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	Object Object::operator~() const 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	Object Object::operator>>(const Object &_v1) const 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	Object Object::operator<<(const Object &_v1) const 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	Object Object::operator&=(const Object &_v1) 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	Object Object::operator|=(const Object &_v1) 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	Object Object::operator^=(const Object &_v1) 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	Object Object::operator>>=(const Object &_v1) 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	Object Object::operator<<=(const Object &_v1) 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
 	// TODO: ">>>" and ">>>=" operators
 } // namespace NJS::Class

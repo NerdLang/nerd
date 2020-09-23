@@ -11,6 +11,11 @@ namespace NJS::Class
 	class InvalidTypeException : public std::exception
 	{
 	};
+	#ifdef __NJS_ARDUINO
+	const int SMI_MAX = 32767;
+	const int SMI_MIN = -32768;
+	#else
 	const int SMI_MAX = 1073741823;
 	const int SMI_MIN = -1073741824;
+	#endif
 } // namespace NJS::Class

@@ -30,8 +30,8 @@
 #include <memory>
 #include <vector>
 #define _USE_MATH_DEFINES
-#include <math.h>
 #include <stdarg.h>
+
 
 #ifdef __NJS_ARDUINO
 #include <util/delay.h>
@@ -40,7 +40,8 @@
 #include <new.h>
 #include <time.h>
 #include <nonstd-function.h>
-using namespace nonstd;
+#include <cmath>
+#include <limits>
 #else
 #include <functional>
 #endif

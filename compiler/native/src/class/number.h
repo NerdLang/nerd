@@ -194,9 +194,19 @@ namespace NJS::Class
 		return object[object.size() - 1].second;
 	}
 	template <class... Args>
-	NJS::VAR Number::operator()(Args... args) const { throw InvalidTypeException(); }
+	NJS::VAR Number::operator()(Args... args) const 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
 	// Comparation operators
-	Number Number::operator!() const { throw InvalidTypeException(); }
+	Number Number::operator!() const 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
 	bool Number::operator==(const Number &_v1) const
 	{
 		if (isInt && _v1.isInt)
@@ -266,7 +276,12 @@ namespace NJS::Class
 		}
 	}
 	// Numeric operators
-	Number Number::operator+() const { throw InvalidTypeException(); }
+	Number Number::operator+() const 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
 	Number Number::operator-() const { if(isInt) return (int)-getInt() ; else return (double)-getDouble(); }
 	Number Number::operator++(const int _v1)
 	{

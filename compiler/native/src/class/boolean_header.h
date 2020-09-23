@@ -14,7 +14,7 @@ namespace NJS::Class
 		Boolean(bool val);
 		// Properties
 		count_t counter = 0;
-		NJS::Type::object_t object = {};
+		NJS::Type::object_t object;
 		bool value = false;
 		// Methods
 		void Delete() noexcept;

@@ -75,7 +75,12 @@ namespace NJS::Class
 		return (*static_cast<std::function<NJS::VAR(NJS::Type::vector_t)> *>(value))(_args);
 	}
 	// Comparation operators
-	Native Native::operator!() const { throw InvalidTypeException(); }
+	Native Native::operator!() const 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
 	bool Native::operator==(const Native &_v1) const { return false; }
 	// === emulated with __NJS_EQUAL_VALUE_AND_TYPE
 	// !== emulated with __NJS_NOT_EQUAL_VALUE_AND_TYPE
@@ -85,31 +90,156 @@ namespace NJS::Class
 	bool Native::operator>(const Native &_v1) const { return false; }
 	bool Native::operator>=(const Native &_v1) const { return true; }
 	// Numeric operators
-	Native Native::operator+() const { throw InvalidTypeException(); }
-	Native Native::operator-() const { throw InvalidTypeException(); }
-	Native Native::operator++(const int _v1) { throw InvalidTypeException(); }
-	Native Native::operator--(const int _v1) { throw InvalidTypeException(); }
-	Native Native::operator+(const Native &_v1) const { throw InvalidTypeException(); }
-	Native Native::operator+=(const Native &_v1) { throw InvalidTypeException(); }
-	Native Native::operator-(const Native &_v1) const { throw InvalidTypeException(); }
-	Native Native::operator-=(const Native &_v1) { throw InvalidTypeException(); }
-	Native Native::operator*(const Native &_v1) const { throw InvalidTypeException(); }
-	Native Native::operator*=(const Native &_v1) { throw InvalidTypeException(); }
+	Native Native::operator+() const 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	Native Native::operator-() const 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	Native Native::operator++(const int _v1) 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	Native Native::operator--(const int _v1) 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	Native Native::operator+(const Native &_v1) const 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	Native Native::operator+=(const Native &_v1) 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	Native Native::operator-(const Native &_v1) const 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	Native Native::operator-=(const Native &_v1) 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	Native Native::operator*(const Native &_v1) const 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	Native Native::operator*=(const Native &_v1) 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
 	// TODO: "**" and "**=" operators
-	Native Native::operator/(const Native &_v1) const { throw InvalidTypeException(); }
-	Native Native::operator/=(const Native &_v1) { throw InvalidTypeException(); }
-	Native Native::operator%(const Native &_v1) const { throw InvalidTypeException(); }
-	Native Native::operator%=(const Native &_v1) { throw InvalidTypeException(); }
-	Native Native::operator&(const Native &_v1) const { throw InvalidTypeException(); }
-	Native Native::operator|(const Native &_v1) const { throw InvalidTypeException(); }
-	Native Native::operator^(const Native &_v1) const { throw InvalidTypeException(); }
-	Native Native::operator~() const { throw InvalidTypeException(); }
-	Native Native::operator>>(const Native &_v1) const { throw InvalidTypeException(); }
-	Native Native::operator<<(const Native &_v1) const { throw InvalidTypeException(); }
-	Native Native::operator&=(const Native &_v1) { throw InvalidTypeException(); }
-	Native Native::operator|=(const Native &_v1) { throw InvalidTypeException(); }
-	Native Native::operator^=(const Native &_v1) { throw InvalidTypeException(); }
-	Native Native::operator>>=(const Native &_v1) { throw InvalidTypeException(); }
-	Native Native::operator<<=(const Native &_v1) { throw InvalidTypeException(); }
+	Native Native::operator/(const Native &_v1) const 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	Native Native::operator/=(const Native &_v1) 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	Native Native::operator%(const Native &_v1) const 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	Native Native::operator%=(const Native &_v1) 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	Native Native::operator&(const Native &_v1) const 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	Native Native::operator|(const Native &_v1) const 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	Native Native::operator^(const Native &_v1) const 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	Native Native::operator~() const 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	Native Native::operator>>(const Native &_v1) const 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	Native Native::operator<<(const Native &_v1) const 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	Native Native::operator&=(const Native &_v1) 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	Native Native::operator|=(const Native &_v1) 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	Native Native::operator^=(const Native &_v1) 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	Native Native::operator>>=(const Native &_v1) 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	Native Native::operator<<=(const Native &_v1) 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
 	// TODO: ">>>" and ">>>=" operators
 } // namespace NJS::Class

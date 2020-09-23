@@ -116,9 +116,19 @@ namespace NJS::Class
 		return object[object.size() - 1].second;
 	}
 	template <class... Args>
-	NJS::VAR String::operator()(Args... args) const { throw InvalidTypeException(); }
+	NJS::VAR String::operator()(Args... args) const 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
 	// Comparation operators
-	String String::operator!() const { throw InvalidTypeException(); }
+	String String::operator!() const 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
 	bool String::operator==(const String &_v1) const { return value.compare(_v1.value) == 0; }
 	// === emulated with __NJS_EQUAL_VALUE_AND_TYPE
 	// !== emulated with __NJS_NOT_EQUAL_VALUE_AND_TYPE
@@ -128,32 +138,147 @@ namespace NJS::Class
 	bool String::operator>(const String &_v1) const { return value.at(0) > _v1.value.at(0); }
 	bool String::operator>=(const String &_v1) const { return value.at(0) >= _v1.value.at(0); }
 	// Numeric operators
-	String String::operator+() const { throw InvalidTypeException(); }
-	String String::operator-() const { throw InvalidTypeException(); }
-	String String::operator++(const int _v1) { throw InvalidTypeException(); }
-	String String::operator--(const int _v1) { throw InvalidTypeException(); }
+	String String::operator+() const 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	String String::operator-() const 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	String String::operator++(const int _v1) 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	String String::operator--(const int _v1) 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
 	String String::operator+(const String &_v1) const { return value + _v1.value; }
 	String String::operator+=(const String &_v1) { value += _v1.value; return *this; }
-	String String::operator-(const String &_v1) const { throw InvalidTypeException(); }
-	String String::operator-=(const String &_v1) { throw InvalidTypeException(); }
-	String String::operator*(const String &_v1) const { throw InvalidTypeException(); }
-	String String::operator*=(const String &_v1) { throw InvalidTypeException(); }
+	String String::operator-(const String &_v1) const 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	String String::operator-=(const String &_v1) 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	String String::operator*(const String &_v1) const 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	String String::operator*=(const String &_v1) 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
 	// TODO: "**" and "**=" operators
-	String String::operator/(const String &_v1) const { throw InvalidTypeException(); }
-	String String::operator/=(const String &_v1) { throw InvalidTypeException(); }
-	String String::operator%(const String &_v1) const { throw InvalidTypeException(); }
-	String String::operator%=(const String &_v1) { throw InvalidTypeException(); }
-	String String::operator&(const String &_v1) const { throw InvalidTypeException(); }
-	String String::operator|(const String &_v1) const { throw InvalidTypeException(); }
-	String String::operator^(const String &_v1) const { throw InvalidTypeException(); }
-	String String::operator~() const { throw InvalidTypeException(); }
-	String String::operator>>(const String &_v1) const { throw InvalidTypeException(); }
-	String String::operator<<(const String &_v1) const { throw InvalidTypeException(); }
-	String String::operator&=(const String &_v1) { throw InvalidTypeException(); }
-	String String::operator|=(const String &_v1) { throw InvalidTypeException(); }
-	String String::operator^=(const String &_v1) { throw InvalidTypeException(); }
-	String String::operator>>=(const String &_v1) { throw InvalidTypeException(); }
-	String String::operator<<=(const String &_v1) { throw InvalidTypeException(); }
+	String String::operator/(const String &_v1) const 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	String String::operator/=(const String &_v1) 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	String String::operator%(const String &_v1) const 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	String String::operator%=(const String &_v1) 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	String String::operator&(const String &_v1) const 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	String String::operator|(const String &_v1) const 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	String String::operator^(const String &_v1) const 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	String String::operator~() const 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	String String::operator>>(const String &_v1) const 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	String String::operator<<(const String &_v1) const 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	String String::operator&=(const String &_v1) 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	String String::operator|=(const String &_v1) 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	String String::operator^=(const String &_v1) 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	String String::operator>>=(const String &_v1) 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	String String::operator<<=(const String &_v1) 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
 	// TODO: ">>>" and ">>>=" operators
 	/*** STRING METHODS ***/
 	NJS::VAR String::toString(std::vector<NJS::VAR> _args) const

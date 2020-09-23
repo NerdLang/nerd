@@ -166,9 +166,19 @@ namespace NJS::Class
 		return object[object.size() - 1].second;
 	}
 	template <class... Args>
-	NJS::VAR Array::operator()(Args... args) const { throw InvalidTypeException(); }
+	NJS::VAR Array::operator()(Args... args) const 
+	{ 
+		#ifndef __NJS_ARDUINO
+		throw InvalidTypeException(); 
+		#endif
+	}
 	// Comparation operators
-	Array Array::operator!() const { throw InvalidTypeException(); }
+	Array Array::operator!() const 
+	{ 
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException(); 
+		#endif
+	}
 	
 	template <typename t>
 	bool Array::operator==(const t &_v1) const { return false; }
@@ -191,32 +201,157 @@ namespace NJS::Class
 	template <typename t>
 	bool Array::operator>=(const t &_v1) const { return (*this)[0] >= _v1; }
 	// Numeric operators
-	Array Array::operator+() const { throw InvalidTypeException(); }
-	Array Array::operator-() const { throw InvalidTypeException(); }
-	Array Array::operator++(const int _v1) { throw InvalidTypeException(); }
-	Array Array::operator--(const int _v1) { throw InvalidTypeException(); }
-	Array Array::operator+(const Array &_v1) const { throw InvalidTypeException(); }
-	Array Array::operator+=(const Array &_v1) { throw InvalidTypeException(); }
-	Array Array::operator-(const Array &_v1) const { throw InvalidTypeException(); }
-	Array Array::operator-=(const Array &_v1) { throw InvalidTypeException(); }
-	Array Array::operator*(const Array &_v1) const { throw InvalidTypeException(); }
-	Array Array::operator*=(const Array &_v1) { throw InvalidTypeException(); }
+	Array Array::operator+() const
+	{ 
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException(); 
+		#endif
+	}
+	Array Array::operator-() const
+	{ 
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException(); 
+		#endif
+	}
+	Array Array::operator++(const int _v1)
+	{ 
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException(); 
+		#endif
+	}
+	Array Array::operator--(const int _v1)
+	{ 
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException(); 
+		#endif
+	}
+	Array Array::operator+(const Array &_v1) const 
+	{ 
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException(); 
+		#endif
+	}
+	Array Array::operator+=(const Array &_v1) 
+	{ 
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException(); 
+		#endif
+	}
+	Array Array::operator-(const Array &_v1) const 
+	{ 
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException(); 
+		#endif
+	}
+	Array Array::operator-=(const Array &_v1) 
+	{ 
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException(); 
+		#endif
+	}
+	Array Array::operator*(const Array &_v1) const 
+	{ 
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException(); 
+		#endif
+	}
+	Array Array::operator*=(const Array &_v1) 
+	{ 
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException(); 
+		#endif
+	}
 	// TODO: "**" and "**=" operators
-	Array Array::operator/(const Array &_v1) const { throw InvalidTypeException(); }
-	Array Array::operator/=(const Array &_v1) { throw InvalidTypeException(); }
-	Array Array::operator%(const Array &_v1) const { throw InvalidTypeException(); }
-	Array Array::operator%=(const Array &_v1) { throw InvalidTypeException(); }
-	Array Array::operator&(const Array &_v1) const { throw InvalidTypeException(); }
-	Array Array::operator|(const Array &_v1) const { throw InvalidTypeException(); }
-	Array Array::operator^(const Array &_v1) const { throw InvalidTypeException(); }
-	Array Array::operator~() const { throw InvalidTypeException(); }
-	Array Array::operator>>(const Array &_v1) const { throw InvalidTypeException(); }
-	Array Array::operator<<(const Array &_v1) const { throw InvalidTypeException(); }
-	Array Array::operator&=(const Array &_v1) { throw InvalidTypeException(); }
-	Array Array::operator|=(const Array &_v1) { throw InvalidTypeException(); }
-	Array Array::operator^=(const Array &_v1) { throw InvalidTypeException(); }
-	Array Array::operator>>=(const Array &_v1) { throw InvalidTypeException(); }
-	Array Array::operator<<=(const Array &_v1) { throw InvalidTypeException(); }
+	Array Array::operator/(const Array &_v1) const 
+	{ 
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException(); 
+		#endif
+	}
+	Array Array::operator/=(const Array &_v1) 
+	{ 
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException(); 
+		#endif
+	}
+	Array Array::operator%(const Array &_v1) const 
+	{ 
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException(); 
+		#endif
+	}
+	Array Array::operator%=(const Array &_v1) 
+	{ 
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException(); 
+		#endif
+	}
+	Array Array::operator&(const Array &_v1) const 
+	{ 
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException(); 
+		#endif
+	}
+	Array Array::operator|(const Array &_v1) const 
+	{ 
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException(); 
+		#endif
+	}
+	Array Array::operator^(const Array &_v1) const 
+	{ 
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException(); 
+		#endif
+	}
+	Array Array::operator~() const 
+	{ 
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException(); 
+		#endif
+	}
+	Array Array::operator>>(const Array &_v1) const 
+	{ 
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException(); 
+		#endif
+	}
+	Array Array::operator<<(const Array &_v1) const 
+	{ 
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException(); 
+		#endif
+	}
+	Array Array::operator&=(const Array &_v1) 
+	{ 
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException(); 
+		#endif
+	}
+	Array Array::operator|=(const Array &_v1) 
+	{ 
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException(); 
+		#endif
+	}
+	Array Array::operator^=(const Array &_v1) 
+	{ 
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException(); 
+		#endif
+	}
+	Array Array::operator>>=(const Array &_v1) 
+	{ 
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException(); 
+		#endif
+	}
+	Array Array::operator<<=(const Array &_v1) 
+	{ 
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException(); 
+		#endif
+	}
 	// TODO: ">>>" and ">>>=" operators
 	
 	

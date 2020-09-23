@@ -54,7 +54,12 @@ namespace NJS::Class
 		return object[object.size() - 1].second;
 	}
 	template <class... Args>
-	NJS::VAR Boolean::operator()(Args... args) const { throw InvalidTypeException(); }
+	NJS::VAR Boolean::operator()(Args... args) const 
+	{ 
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException(); 
+		#endif
+	}
 	// Comparation operators
 	Boolean Boolean::operator!() const { return !value; }
 	bool Boolean::operator==(const Boolean &_v1) const { return value == _v1.value; }
@@ -66,31 +71,156 @@ namespace NJS::Class
 	bool Boolean::operator>(const Boolean &_v1) const { return value > _v1.value; }
 	bool Boolean::operator>=(const Boolean &_v1) const { return value >= _v1.value; }
 	// Numeric operators
-	Boolean Boolean::operator+() const { throw InvalidTypeException(); }
-	Boolean Boolean::operator-() const { throw InvalidTypeException(); }
-	Boolean Boolean::operator++(const int _v1) { throw InvalidTypeException(); }
-	Boolean Boolean::operator--(const int _v1) { throw InvalidTypeException(); }
-	Boolean Boolean::operator+(const Boolean &_v1) const { throw InvalidTypeException(); }
-	Boolean Boolean::operator+=(const Boolean &_v1) { throw InvalidTypeException(); }
-	Boolean Boolean::operator-(const Boolean &_v1) const { throw InvalidTypeException(); }
-	Boolean Boolean::operator-=(const Boolean &_v1) { throw InvalidTypeException(); }
-	Boolean Boolean::operator*(const Boolean &_v1) const { throw InvalidTypeException(); }
-	Boolean Boolean::operator*=(const Boolean &_v1) { throw InvalidTypeException(); }
+	Boolean Boolean::operator+() const 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	Boolean Boolean::operator-() const 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	Boolean Boolean::operator++(const int _v1) 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	Boolean Boolean::operator--(const int _v1) 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	Boolean Boolean::operator+(const Boolean &_v1) const 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	Boolean Boolean::operator+=(const Boolean &_v1) 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	Boolean Boolean::operator-(const Boolean &_v1) const 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	Boolean Boolean::operator-=(const Boolean &_v1) 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	Boolean Boolean::operator*(const Boolean &_v1) const 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	Boolean Boolean::operator*=(const Boolean &_v1) 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
 	// TODO: "**" and "**=" operators
-	Boolean Boolean::operator/(const Boolean &_v1) const { throw InvalidTypeException(); }
-	Boolean Boolean::operator/=(const Boolean &_v1) { throw InvalidTypeException(); }
-	Boolean Boolean::operator%(const Boolean &_v1) const { throw InvalidTypeException(); }
-	Boolean Boolean::operator%=(const Boolean &_v1) { throw InvalidTypeException(); }
-	Boolean Boolean::operator&(const Boolean &_v1) const { throw InvalidTypeException(); }
-	Boolean Boolean::operator|(const Boolean &_v1) const { throw InvalidTypeException(); }
-	Boolean Boolean::operator^(const Boolean &_v1) const { throw InvalidTypeException(); }
-	Boolean Boolean::operator~() const { throw InvalidTypeException(); }
-	Boolean Boolean::operator>>(const Boolean &_v1) const { throw InvalidTypeException(); }
-	Boolean Boolean::operator<<(const Boolean &_v1) const { throw InvalidTypeException(); }
-	Boolean Boolean::operator&=(const Boolean &_v1) { throw InvalidTypeException(); }
-	Boolean Boolean::operator|=(const Boolean &_v1) { throw InvalidTypeException(); }
-	Boolean Boolean::operator^=(const Boolean &_v1) { throw InvalidTypeException(); }
-	Boolean Boolean::operator>>=(const Boolean &_v1) { throw InvalidTypeException(); }
-	Boolean Boolean::operator<<=(const Boolean &_v1) { throw InvalidTypeException(); }
+	Boolean Boolean::operator/(const Boolean &_v1) const 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	Boolean Boolean::operator/=(const Boolean &_v1) 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	Boolean Boolean::operator%(const Boolean &_v1) const 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	Boolean Boolean::operator%=(const Boolean &_v1) 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	Boolean Boolean::operator&(const Boolean &_v1) const 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	Boolean Boolean::operator|(const Boolean &_v1) const 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	Boolean Boolean::operator^(const Boolean &_v1) const 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	Boolean Boolean::operator~() const 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	Boolean Boolean::operator>>(const Boolean &_v1) const 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	Boolean Boolean::operator<<(const Boolean &_v1) const 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	Boolean Boolean::operator&=(const Boolean &_v1) 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	Boolean Boolean::operator|=(const Boolean &_v1) 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	Boolean Boolean::operator^=(const Boolean &_v1) 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	Boolean Boolean::operator>>=(const Boolean &_v1) 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
+	Boolean Boolean::operator<<=(const Boolean &_v1) 
+	{
+		#ifndef __NJS_ARDUINO 
+		throw InvalidTypeException();
+		#endif
+	}
 	// TODO: ">>>" and ">>>=" operators
 } // namespace NJS::Class
