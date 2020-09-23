@@ -262,7 +262,7 @@ namespace NJS::Class
 	NJS::VAR Array::fill(NJS::Type::vector_t args) const
 	{
 		/*
-		NJS::VAR value = args.size() ? args[0] : NJS::Value::undefined;
+		NJS::VAR value = args.size() ? args[0] : undefined;
 		value.assign(value.size(), value);
 		return *this;
 		*/
@@ -278,7 +278,7 @@ namespace NJS::Class
 	NJS::VAR Array::indexOf(NJS::Type::vector_t args) const { return NJS::VAR(); }
 	NJS::VAR Array::join(NJS::Type::vector_t args) const
 	{
-		auto _str = (std::string)(args.size() ? args[0] : NJS::Value::undefined);
+		auto _str = (std::string)(args.size() ? args[0] : undefined);
 		int l = value.size();
 		if (l == 0)
 			return "";

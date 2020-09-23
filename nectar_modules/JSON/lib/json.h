@@ -122,7 +122,7 @@ int dump(const char *js, jsmntok_t *t, size_t count, int indent, var& _res)
 }
 
 __NJS_DECL_Function<NJS::VAR (var, NJS::Type::vector_t)>* __NJS_FN___5po78g = new __NJS_DECL_Function<NJS::VAR (var, NJS::Type::vector_t)>([](var __INJECTED_THIS, vector<var> __NJS_VARARGS ) -> NJS::VAR{var __json; if(__NJS_VARARGS.size() > 0) __json = __NJS_VARARGS[0];
-	if(!__json) return NJS::Value::undefined;
+	if(!__json) return undefined;
 	size_t tokcount = 32;
 	int r;
 	int j = 0;
