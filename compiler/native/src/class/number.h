@@ -270,6 +270,21 @@ namespace NJS::Class
 	Number Number::operator-() const { if(isInt) return (int)-getInt() ; else return (double)-getDouble(); }
 	Number Number::operator++(const int _v1)
 	{
+		Number old(*this);
+		if (isInt)
+		{
+			int v = getInt();
+			setInt(++v);
+		}
+		else
+		{
+			double v = getDouble();
+			setDouble(++v);
+		}
+		return old;
+	}
+	Number Number::operator++()
+	{
 		if (isInt)
 		{
 			int v = getInt();
@@ -283,6 +298,21 @@ namespace NJS::Class
 		return *this;
 	}
 	Number Number::operator--(const int _v1)
+	{
+		Number old(*this);
+		if (isInt)
+		{
+			int v = getInt();
+			setInt(--v);
+		}
+		else
+		{
+			double v = getDouble();
+			setDouble(--v);
+		}
+		return old;
+	}
+	Number Number::operator--()
 	{
 		if (isInt)
 		{

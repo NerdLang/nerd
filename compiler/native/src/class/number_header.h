@@ -63,7 +63,9 @@ namespace NJS::Class
 		Number operator+() const;
 		Number operator-() const;
 		Number operator++(const int _v1);
+		Number operator++();
 		Number operator--(const int _v1);
+		Number operator--();
 		Number operator+(const Number &_v1) const;
 		Number operator+=(const Number &_v1);
 		Number operator-(const Number &_v1) const;

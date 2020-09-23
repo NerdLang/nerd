@@ -423,18 +423,40 @@ namespace NJS
 		return *this;
 	}
 	// TODO: "**" and "**=" VAR::operators
+	// var++
 	VAR VAR::operator++(const int _v1)
 	{
 		if (type == NJS::Enum::Type::Number)
 		{
-			(*((NJS::Class::Number*)_ptr))++;
+			return (*((NJS::Class::Number*)_ptr))++;
+		}
+		return (*this);
+	}
+	// ++var
+	VAR VAR::operator++()
+	{
+		if (type == NJS::Enum::Type::Number)
+		{
+			++(*((NJS::Class::Number*)_ptr));
 		}
 		return *this;
 	}
+	// var--
 	VAR VAR::operator--(const int _v1)
 	{
 		if (type == NJS::Enum::Type::Number)
-			(*((NJS::Class::Number*)_ptr))--;
+		{
+			return (*((NJS::Class::Number*)_ptr))--;
+		}
+		return *this;
+	}
+	// --var
+	VAR VAR::operator--()
+	{
+		if (type == NJS::Enum::Type::Number)
+		{
+			--(*((NJS::Class::Number*)_ptr));
+		}
 		return *this;
 	}
 
