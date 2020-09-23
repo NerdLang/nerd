@@ -15,7 +15,7 @@ namespace NJS::Class
 		// Properties
 		count_t counter = 0;
 		std::string value = "";
-		object_t object;
+		NJS::Type::object_t object;
 		// Methods
 		void Delete() noexcept;
 		// Native cast
@@ -67,14 +67,14 @@ namespace NJS::Class
 		String operator<<=(const String &_v1);
 		// TODO: ">>>" and ">>>=" operators
 		/*** STRING METHODS ***/
-		NJS::VAR toString(vector_t args) const;
-		NJS::VAR split(vector_t args) const;
-		NJS::VAR indexOf(vector_t args) const;
-		NJS::VAR lastIndexOf(vector_t args) const;
-		NJS::VAR search(vector_t args) const;
-		NJS::VAR slice(vector_t args) const;
-		NJS::VAR substr(vector_t args) const;
-		NJS::VAR replace(vector_t args) const;
+		NJS::VAR toString(NJS::Type::vector_t args) const;
+		NJS::VAR split(NJS::Type::vector_t args) const;
+		NJS::VAR indexOf(NJS::Type::vector_t args) const;
+		NJS::VAR lastIndexOf(NJS::Type::vector_t args) const;
+		NJS::VAR search(NJS::Type::vector_t args) const;
+		NJS::VAR slice(NJS::Type::vector_t args) const;
+		NJS::VAR substr(NJS::Type::vector_t args) const;
+		NJS::VAR replace(NJS::Type::vector_t args) const;
 		/* END STRING METHODS */
 	};
 } // namespace NJS::Class

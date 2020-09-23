@@ -24,7 +24,7 @@
 
 function __NJS_RegExp_Test(_search, _re)
 {
- 	if( std::regex_match ( (string)_search, std::regex((string)_re, std::regex::ECMAScript) ) ) return __NJS_Boolean_TRUE;
+ 	if( std::regex_match ( (std::string)_search, std::regex((std::string)_re, std::regex::ECMAScript) ) ) return __NJS_Boolean_TRUE;
 	else return __NJS_Boolean_FALSE;
 }
 

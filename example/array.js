@@ -24,3 +24,5 @@ console.log(ArrInArr[0][0]);
 
 ArrInArr[1] = [["Double Inception"]];
 console.log(ArrInArr[1][0][0]);
+
+Array.prototype.slice.call([0,1,2], 2);

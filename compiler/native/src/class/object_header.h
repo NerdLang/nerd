@@ -13,10 +13,10 @@ namespace NJS::Class
 		Object();
 		// Properties
 		count_t counter = 0;
-		object_t object;
-		object_t &value = object;
+		NJS::Type::object_t object;
+		NJS::Type::object_t &value = object;
 		bool prototype = false;
-		vector_p instance;
+		NJS::Type::vector_p instance;
 		// Methods
 		void Delete() noexcept;
 		// Native cast

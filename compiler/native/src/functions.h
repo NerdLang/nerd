@@ -4,7 +4,7 @@ NJS::VAR __NJS_Object_Stringify(NJS::VAR _var);
 NJS::VAR __NJS_Object_Stringify(NJS::VAR _var, bool _bracket);
 NJS::VAR __NJS_Create_Object();
 NJS::VAR __NJS_Object_Clone(NJS::VAR _var);
-NJS::VAR __NJS_Object_Set(const char *_index, NJS::VAR _value, vector<pair<const char *, NJS::VAR>> *_obj);
+NJS::VAR __NJS_Object_Set(const char *_index, NJS::VAR _value, NJS::Type::object_t *_obj);
 
 /*** String MANIPULATION ***/
 #ifdef __NJS_ARDUINO
@@ -24,7 +24,7 @@ m remainder(m _dividend, n _divisor)
 }
 #endif
 template <typename m, typename n>
-string __NJS_Concat_To_Str(m _left, n _right)
+std::string __NJS_Concat_To_Str(m _left, n _right)
 {
 	std::stringstream output;
 	output << _left << _right;

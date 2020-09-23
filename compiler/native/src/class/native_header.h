@@ -15,7 +15,7 @@ namespace NJS::Class
 		// Properties
 		count_t counter = 0;
 		void* value = nullptr;
-		object_t object;
+		NJS::Type::object_t object;
 		// Methods
 		void Delete() noexcept;
 		// Native cast

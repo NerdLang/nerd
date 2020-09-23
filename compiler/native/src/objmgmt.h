@@ -23,7 +23,7 @@ NJS::VAR __NJS_instanceof(NJS::VAR _left, NJS::VAR _right)
 	var protoRight = _right["prototype"];
 	if(!protoRight) return __NJS_Boolean_FALSE;
 	
-	vector_p vLeft = ((NJS::Class::Object*)_left._ptr)->instance;
+	NJS::Type::vector_p vLeft = ((NJS::Class::Object*)_left._ptr)->instance;
 		
 	for (auto searchLeft : vLeft)
 	{
@@ -33,7 +33,7 @@ NJS::VAR __NJS_instanceof(NJS::VAR _left, NJS::VAR _right)
 }
 
 /*** ***/
-NJS::VAR __NJS_Object_Set(const char *_index, NJS::VAR _value, vector<pair<const char *, NJS::VAR>> *_obj)
+NJS::VAR __NJS_Object_Set(const char *_index, NJS::VAR _value, NJS::Type::object_t *_obj)
 {
 	int _j = (*_obj).size();
 	for (int _i = 0; _i < _j; _i++)
@@ -43,7 +43,7 @@ NJS::VAR __NJS_Object_Set(const char *_index, NJS::VAR _value, vector<pair<const
 
 			if (_value.type == NJS::Enum::Type::String)
 			{
-				(*_obj)[_i].second = new NJS::Class::String((string)_value);
+				(*_obj)[_i].second = new NJS::Class::String((std::string)_value);
 			}
 			else
 			{
@@ -54,7 +54,7 @@ NJS::VAR __NJS_Object_Set(const char *_index, NJS::VAR _value, vector<pair<const
 		}
 	}
 
-	(*_obj).push_back(pair<const char *, NJS::VAR>(_index, _value));
+	(*_obj).push_back(NJS::Type::pair_t(_index, _value));
 	return NJS::VAR();
 }
 /**/
@@ -79,7 +79,7 @@ NJS::VAR __NJS_Object_Set(NJS::VAR _index, NJS::VAR _value, NJS::VAR _array)
 	}
 	else if (_array.type == NJS::Enum::Type::Object || _array.type == NJS::Enum::Type::String || _array.type == NJS::Enum::Type::Function || _array.type == NJS::Enum::Type::Array || _array.type == NJS::Enum::Type::Native)
 	{
-		vector<pair<const char *, NJS::VAR>> *_obj;
+		NJS::Type::object_t *_obj;
 		if (_array.type == NJS::Enum::Type::Object)
 			_obj = &((NJS::Class::Object*)_array._ptr)->object;
 		else if (_array.type == NJS::Enum::Type::Array)
@@ -118,7 +118,7 @@ NJS::VAR __NJS_Object_Get(NJS::VAR _index, NJS::VAR _array)
 		{
 			__NJS_RETURN_Undefined;
 		}
-		vector<pair<const char *, NJS::VAR>> *_obj;
+		NJS::Type::object_t *_obj;
 		if (_array.type == NJS::Enum::Type::Object)
 			_obj = &((NJS::Class::Object*)_array._ptr)->object;
 		else if (_array.type == NJS::Enum::Type::Array)

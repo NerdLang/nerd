@@ -34,7 +34,7 @@ namespace NJS
 		VAR(NJS::Class::Undefined *_value);
 		VAR(NJS::Enum::Type _type, void *_value);
 		VAR(NJS::Enum::Type _type, void *_value, var _this);
-		VAR(function<VAR(vector<var>)> &_value);
+		VAR(std::function<VAR(std::vector<var>)> &_value);
 		template <class... Args>
 		VAR operator() (Args... args);
 		
@@ -101,7 +101,7 @@ namespace NJS
 		explicit operator int() const;
 		explicit operator double() const;
 		explicit operator bool() const;
-		explicit operator string() const;	
+		explicit operator std::string() const;	
 		explicit operator const char*() const;	
 		explicit operator const long long() const;
 		

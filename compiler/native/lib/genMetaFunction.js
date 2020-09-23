@@ -67,7 +67,7 @@ function genMetaFunction(_code)
 							_catch = "=";
 						}
 
-                        var _formated = "__NJS_DECL_Function<NJS::VAR (var, vector<var>)>* " + _genFN +" = new __NJS_DECL_Function<NJS::VAR (var, vector<var>)>([" + _catch + "](var __NJS_THIS, vector<var> __NJS_VARARGS ) -> NJS::VAR" + _fn + _return + ");";
+                        var _formated = "__NJS_DECL_Function<NJS::VAR (var, NJS::Type::vector_t)>* " + _genFN +" = new __NJS_DECL_Function<NJS::VAR (var, NJS::Type::vector_t)>([" + _catch + "](var __NJS_THIS, NJS::Type::vector_t __NJS_VARARGS ) -> NJS::VAR" + _fn + _return + ");";
                         _formated += "var " + _match[1] + "=NJS::VAR(NJS::Enum::Type::Function, " + _genFN + ");";                        
 
 						_code = [_code.slice(0, _index), _formated, _code.slice(_end + 1)].join('');

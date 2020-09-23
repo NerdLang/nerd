@@ -46,10 +46,6 @@ using namespace nonstd;
 #endif
 
 #include "enum.h"
-
-using namespace std;
-using namespace NJS;
-
 #include "macro.h"
 
 namespace NJS

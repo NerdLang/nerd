@@ -17,7 +17,7 @@ NJS::VAR __NJS_Boolean_Result(NJS::VAR _v)
 		return false;
 }
 
-ostream &operator<<(ostream &os, const NJS::VAR &_v)
+std::ostream &operator<<(std::ostream &os, const NJS::VAR &_v)
 {
 	switch (_v.type)
 	{
@@ -80,14 +80,14 @@ NJS::VAR __NJS_Log_Console(NJS::VAR _var)
 #ifdef __NJS_ARDUINO
 
 #else
-	cout << _var;
-	cout << endl;
+	std::cout << _var;
+	std::cout << std::endl;
 #endif
 
 	return NJS::VAR();
 }
 
-NJS::VAR __NJS_Log_Console(vector_t _var)
+NJS::VAR __NJS_Log_Console(NJS::Type::vector_t _var)
 {
 #ifdef __NJS_ARDUINO
 
@@ -95,11 +95,11 @@ NJS::VAR __NJS_Log_Console(vector_t _var)
 	bool first = false;
 	for(auto _v:_var)
 	{
-		if(first) cout << " ";
-		cout << _v;
+		if(first) std::cout << " ";
+		std::cout << _v;
 		if(!first) first = true;
 	}
-	cout << endl;
+	std::cout << std::endl;
 #endif
 
 	return NJS::VAR();
@@ -112,7 +112,7 @@ NJS::VAR __NJS_Object_Keys(NJS::VAR _var)
 		return 0;
 	var _res = __NJS_Create_Array();
 
-	vector<pair<const char *, NJS::VAR>> *_obj = &((NJS::Class::Object*)_var._ptr)->object;
+	NJS::Type::object_t *_obj = &((NJS::Class::Object*)_var._ptr)->object;
 	int _j = (*_obj).size();
 	for (int _i = 0; _i < _j; _i++)
 	{
@@ -159,7 +159,7 @@ NJS::VAR __NJS_Object_Stringify(NJS::VAR _var, bool _bracket)
 	else if (_t == NJS::Enum::Type::Object)
 	{
 		var _res = "";
-		vector<pair<const char *, NJS::VAR>> *_obj = &((NJS::Class::Object*)_var._ptr)->object;
+		NJS::Type::object_t *_obj = &((NJS::Class::Object*)_var._ptr)->object;
 		_res = "{";
 		int j = (*_obj).size();
 		for (int _i = 0; _i < j; _i++)
@@ -203,7 +203,7 @@ NJS::VAR __NJS_Object_Clone(NJS::VAR _var)
 		case NJS::Enum::Type::Object:
 		{
 			var _res = __NJS_Create_Object();
-			vector<pair<const char *, NJS::VAR>> *_obj = &((NJS::Class::Object*)_var._ptr)->object;
+			NJS::Type::object_t *_obj = &((NJS::Class::Object*)_var._ptr)->object;
 			int j = (*_obj).size();
 			for (int _i = 0; _i < j; _i++)
 			{
@@ -220,7 +220,7 @@ void __NJS_Object_Construct(NJS::VAR _this, NJS::VAR _prototype)
 {
 	if(_this.type == NJS::Enum::Type::Object && _prototype.type == NJS::Enum::Type::Object)
 	{
-		vector<pair<const char *, NJS::VAR>> *_obj = &((NJS::Class::Object*)_prototype._ptr)->object;
+		NJS::Type::object_t *_obj = &((NJS::Class::Object*)_prototype._ptr)->object;
 		int j = (*_obj).size();
 		for (int _i = 0; _i < j; _i++)
 		{
@@ -258,9 +258,9 @@ void* __NJS_Get_Function(NJS::VAR _fn)
 }
 */
 
-function<var(vector<var>)> *__NJS_Get_Function(NJS::VAR _v)
+std::function<var(NJS::Type::vector_t)> *__NJS_Get_Function(NJS::VAR _v)
 {
-	return (function<var(vector<var>)> *)((NJS::Class::Function*)_v._ptr)->value;
+	return (std::function<var(NJS::Type::vector_t)> *)((NJS::Class::Function*)_v._ptr)->value;
 }
 
 void *__NJS_Get_Native(NJS::VAR _native)
@@ -333,7 +333,7 @@ __NJS_Create_Lambda(__IMPL_EVAL)
 });
 var eval = __NJS_Create_Function(__IMPL_EVAL);
 
-function<NJS::VAR(vector<var>)> *__NJS_IS_NAN = new function<NJS::VAR(vector<var>)>([](vector<var> _NJS_VARARGS) {
+std::function<NJS::VAR(NJS::Type::vector_t)> *__NJS_IS_NAN = new std::function<NJS::VAR(NJS::Type::vector_t)>([](NJS::Type::vector_t _NJS_VARARGS) {
 	var _test;
 	if (_NJS_VARARGS.size() > 0)
 		_test = _NJS_VARARGS[0];

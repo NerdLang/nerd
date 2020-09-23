@@ -17,11 +17,11 @@ namespace NJS::Class
 		void* value = nullptr;
 		var This;
 		//NJS::VAR _this;
-		object_t object;
+		NJS::Type::object_t object;
 		// Methods
 		void Delete() noexcept;
 		
-		NJS::VAR Call(var __NJS_THIS, vector<var> __NJS_VARARGS);
+		NJS::VAR Call(var __NJS_THIS, NJS::Type::vector_t __NJS_VARARGS);
 		
 		template <class... Args>
 		NJS::VAR New(Args... args);

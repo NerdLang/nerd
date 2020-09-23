@@ -64,15 +64,15 @@ namespace NJS::Class
 		}
 
 		((NJS::Class::String*)key._ptr)->counter++;
-		object.push_back(pair_t(((NJS::Class::String*)key._ptr)->value.c_str(), __NJS_VAR()));
+		object.push_back(NJS::Type::pair_t(((NJS::Class::String*)key._ptr)->value.c_str(), __NJS_VAR()));
 		return object[object.size() - 1].second;
 	}
 	
 	template <class... Args>
 	NJS::VAR Native::operator()(Args... args) const
 	{
-		auto _args = vector_t{(NJS::VAR)args...};
-		return (*static_cast<std::function<NJS::VAR(vector_t)> *>(value))(_args);
+		auto _args = NJS::Type::vector_t{(NJS::VAR)args...};
+		return (*static_cast<std::function<NJS::VAR(NJS::Type::vector_t)> *>(value))(_args);
 	}
 	// Comparation operators
 	Native Native::operator!() const { throw InvalidTypeException(); }

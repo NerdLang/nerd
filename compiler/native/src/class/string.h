@@ -112,7 +112,7 @@ namespace NJS::Class
 		}
 
 		((NJS::Class::String*)key._ptr)->counter++;
-		object.push_back(pair_t(((NJS::Class::String*)key._ptr)->value.c_str(), __NJS_VAR()));
+		object.push_back(NJS::Type::pair_t(((NJS::Class::String*)key._ptr)->value.c_str(), __NJS_VAR()));
 		return object[object.size() - 1].second;
 	}
 	template <class... Args>
@@ -200,8 +200,8 @@ namespace NJS::Class
 		else
 			return NJS::VAR(-1);
 
-		string::size_type loc = this->value.find((std::string)_needle, 0);
-		if (loc != string::npos)
+		std::string::size_type loc = this->value.find((std::string)_needle, 0);
+		if (loc != std::string::npos)
 		{
 			return NJS::VAR((int)loc);
 		}
@@ -216,8 +216,8 @@ namespace NJS::Class
 		else
 			return NJS::VAR(-1);
 
-		string::size_type loc = this->value.find_last_of((std::string)_needle, 0);
-		if (loc != string::npos)
+		std::string::size_type loc = this->value.find_last_of((std::string)_needle, 0);
+		if (loc != std::string::npos)
 		{
 			return NJS::VAR((int)loc);
 		}
@@ -232,8 +232,8 @@ namespace NJS::Class
 		else
 			return NJS::VAR(-1);
 
-		string::size_type loc = this->value.find((std::string)_needle, 0);
-		if (loc != string::npos)
+		std::string::size_type loc = this->value.find((std::string)_needle, 0);
+		if (loc != std::string::npos)
 		{
 			return NJS::VAR((int)loc);
 		}
@@ -252,7 +252,7 @@ namespace NJS::Class
 			_end = _args[1];
 
 		if (_end.type == NJS::Enum::Type::Undefined)
-			return NJS::VAR(this->value.substr((int)_start, string::npos));
+			return NJS::VAR(this->value.substr((int)_start, std::string::npos));
 		int _endIndex = (int)_end - (int)_start;
 		return NJS::VAR(this->value.substr((int)_start, _endIndex));
 	}
@@ -269,7 +269,7 @@ namespace NJS::Class
 			_end = _args[1];
 
 		if (_end.type == NJS::Enum::Type::Undefined)
-			return NJS::VAR(this->value.substr((int)_start, string::npos));
+			return NJS::VAR(this->value.substr((int)_start, std::string::npos));
 		return NJS::VAR(this->value.substr((int)_start, (int)_end));
 	}
 		

@@ -11,11 +11,11 @@ namespace NJS::Class
 		const NJS::Enum::Type type = NJS::Enum::Type::Array;
 		// Constructors
 		Array();
-		Array(vector_t vec);
+		Array(NJS::Type::vector_t vec);
 		// Properties
 		count_t counter = 0;
-		vector_t value;
-		object_t object;
+		NJS::Type::vector_t value;
+		NJS::Type::object_t object;
 		// Methods
 		void Delete() noexcept;
 		// Native cast
@@ -80,38 +80,38 @@ namespace NJS::Class
 		Array operator<<=(const Array &_v1);
 		// TODO: ">>>" and ">>>=" operators
 		
-		NJS::VAR __iterator(vector_t args) const;
-		NJS::VAR __unscopables(vector_t args) const;
-		NJS::VAR concat(vector_t args) const;
-		NJS::VAR copyWithin(vector_t args);
-		NJS::VAR entries(vector_t args) const;
-		NJS::VAR every(vector_t args) const;
-		NJS::VAR fill(vector_t args) const;
-		NJS::VAR filter(vector_t args) const;
-		NJS::VAR find(vector_t args) const;
-		NJS::VAR findIndex(vector_t args) const;
-		NJS::VAR flat(vector_t args) const;
-		NJS::VAR flatMap(vector_t args) const;
-		NJS::VAR forEach(vector_t args) const;
-		NJS::VAR includes(vector_t args) const;
-		NJS::VAR indexOf(vector_t args) const;
-		NJS::VAR join(vector_t args) const;
-		NJS::VAR keys(vector_t args) const;
-		NJS::VAR lastIndexOf(vector_t args) const;
-		NJS::VAR map(vector_t args) const;
-		NJS::VAR pop(vector_t args);
-		NJS::VAR push(vector_t args);
-		NJS::VAR reduce(vector_t args) const;
-		NJS::VAR reduceRight(vector_t args) const;
-		NJS::VAR reverse(vector_t args);
-		NJS::VAR shift(vector_t args);
-		NJS::VAR slice(vector_t args) const;
-		NJS::VAR some(vector_t args) const;
-		NJS::VAR sort(vector_t args) const;
-		NJS::VAR splice(vector_t args);
-		NJS::VAR toLocaleString(vector_t args) const;
-		NJS::VAR toString(vector_t args) const;
-		NJS::VAR unshift(vector_t values);
-		NJS::VAR values(vector_t args) const;
+		NJS::VAR __iterator(NJS::Type::vector_t args) const;
+		NJS::VAR __unscopables(NJS::Type::vector_t args) const;
+		NJS::VAR concat(NJS::Type::vector_t args) const;
+		NJS::VAR copyWithin(NJS::Type::vector_t args);
+		NJS::VAR entries(NJS::Type::vector_t args) const;
+		NJS::VAR every(NJS::Type::vector_t args) const;
+		NJS::VAR fill(NJS::Type::vector_t args) const;
+		NJS::VAR filter(NJS::Type::vector_t args) const;
+		NJS::VAR find(NJS::Type::vector_t args) const;
+		NJS::VAR findIndex(NJS::Type::vector_t args) const;
+		NJS::VAR flat(NJS::Type::vector_t args) const;
+		NJS::VAR flatMap(NJS::Type::vector_t args) const;
+		NJS::VAR forEach(NJS::Type::vector_t args) const;
+		NJS::VAR includes(NJS::Type::vector_t args) const;
+		NJS::VAR indexOf(NJS::Type::vector_t args) const;
+		NJS::VAR join(NJS::Type::vector_t args) const;
+		NJS::VAR keys(NJS::Type::vector_t args) const;
+		NJS::VAR lastIndexOf(NJS::Type::vector_t args) const;
+		NJS::VAR map(NJS::Type::vector_t args) const;
+		NJS::VAR pop(NJS::Type::vector_t args);
+		NJS::VAR push(NJS::Type::vector_t args);
+		NJS::VAR reduce(NJS::Type::vector_t args) const;
+		NJS::VAR reduceRight(NJS::Type::vector_t args) const;
+		NJS::VAR reverse(NJS::Type::vector_t args);
+		NJS::VAR shift(NJS::Type::vector_t args);
+		NJS::VAR slice(NJS::Type::vector_t args) const;
+		NJS::VAR some(NJS::Type::vector_t args) const;
+		NJS::VAR sort(NJS::Type::vector_t args) const;
+		NJS::VAR splice(NJS::Type::vector_t args);
+		NJS::VAR toLocaleString(NJS::Type::vector_t args) const;
+		NJS::VAR toString(NJS::Type::vector_t args) const;
+		NJS::VAR unshift(NJS::Type::vector_t values);
+		NJS::VAR values(NJS::Type::vector_t args) const;
 	};
 } // namespace NJS::Class

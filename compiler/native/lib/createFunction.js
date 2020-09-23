@@ -59,7 +59,7 @@ function createFunction(_code, _scope)
 		else
 		{
 			_variadic = true;
-			_parameters = "var __NJS_THIS, vector<var> __NJS_VARARGS";
+			_parameters = "var __NJS_THIS, NJS::Type::vector_t __NJS_VARARGS";
 			for(var i = 0; i < _match[2].length; i++)
 			{
 				if(_match[2][i].length > 0)

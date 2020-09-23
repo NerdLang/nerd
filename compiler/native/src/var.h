@@ -204,7 +204,7 @@ namespace NJS
 		((NJS::Class::Function*)_ptr)->This = _this;
 	}
 
-	VAR::VAR(function<VAR(vector<var>)> &_value)
+	VAR::VAR(std::function<NJS::VAR(NJS::Type::vector_t)> &_value)
 	{
 		type = NJS::Enum::Type::Function;
 		_ptr = new NJS::Class::Function(&_value);
@@ -253,7 +253,7 @@ namespace NJS
 		}
 		else if (_v.type == NJS::Enum::Type::String)
 		{
-			_ptr = new NJS::Class::String((string)_v);
+			_ptr = new NJS::Class::String((std::string)_v);
 		}
 		else if (_v.type == NJS::Enum::Type::Number)
 		{
@@ -333,7 +333,7 @@ namespace NJS
 	VAR VAR::operator+(const VAR &_v1)
 	{
 		if (type == NJS::Enum::Type::String || type == NJS::Enum::Type::Array || type == NJS::Enum::Type::Object || _v1.type == NJS::Enum::Type::String)
-			return __NJS_Concat_To_Str((string) * this, (string)_v1);
+			return __NJS_Concat_To_Str((std::string) * this, (std::string)_v1);
 		else if (type == NJS::Enum::Type::Number)
 		{
 			return ((*(NJS::Class::Number*)_ptr)) + _v1;
@@ -343,20 +343,20 @@ namespace NJS
 	}
 	VAR VAR::operator+(const char _v1[])
 	{
-		return __NJS_Concat_To_Str((string)*this, _v1);
+		return __NJS_Concat_To_Str((std::string)*this, _v1);
 	}
 	VAR VAR::operator+=(const VAR &_v1)
 	{
 		if(type == NJS::Enum::Type::Number) 
 			(*((NJS::Class::Number*)_ptr)) += _v1;
 		else if(type == NJS::Enum::Type::String) 
-			((NJS::Class::String*)_ptr)->value += (string)_v1;
+			((NJS::Class::String*)_ptr)->value += (std::string)_v1;
 		else 
 		{
-			string _s = (string)*this;
+			std::string _s = (std::string)*this;
 			type = NJS::Enum::Type::String;
 			_ptr = new NJS::Class::String("");
-			((NJS::Class::String*)_ptr)->value += _s + (string)_v1;
+			((NJS::Class::String*)_ptr)->value += _s + (std::string)_v1;
 		}
 		return *this;
 	}
@@ -472,7 +472,7 @@ namespace NJS
 			case NJS::Enum::Type::Boolean:
 				return __NJS_Create_Boolean((bool)((NJS::Class::Boolean*)_ptr) == (bool)_v1);
 			case NJS::Enum::Type::String:
-				return __NJS_Create_Boolean((((NJS::Class::String*)_ptr)->value).compare((string)_v1) == 0);
+				return __NJS_Create_Boolean((((NJS::Class::String*)_ptr)->value).compare((std::string)_v1) == 0);
 			case NJS::Enum::Type::ISINFINITY:
 			case NJS::Enum::Type::ISNULL:
 			case NJS::Enum::Type::Undefined:
@@ -490,7 +490,7 @@ namespace NJS
 		{
 			if (type == NJS::Enum::Type::String || _v1.type == NJS::Enum::Type::String)
 			{
-				return __NJS_Create_Boolean((string) * this == (string)_v1);
+				return __NJS_Create_Boolean((std::string) * this == (std::string)_v1);
 			}
 			else
 				return __NJS_Create_Boolean((double)*this == (double)_v1);
@@ -576,14 +576,14 @@ namespace NJS
 		return (bool)(*(NJS::Class::Base*)_ptr);
 	}
 
-	VAR::operator string() const
+	VAR::operator std::string() const
 	{
-		return (string)(*(NJS::Class::Base*)_ptr);
+		return (std::string)(*(NJS::Class::Base*)_ptr);
 	}
 	
 	VAR::operator const char*() const
 	{
-		return ((string)*this).c_str();
+		return ((std::string)*this).c_str();
 	}
 	
 	VAR::operator const long long() const

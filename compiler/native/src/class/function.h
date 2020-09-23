@@ -6,11 +6,11 @@
 namespace NJS::Class
 {
 	// Constructors
-	Function::Function() { counter++; object.push_back(pair_t("prototype", __NJS_Create_Object()));}
+	Function::Function() { counter++; object.push_back(NJS::Type::pair_t("prototype", __NJS_Create_Object()));}
 	Function::Function(void *val)
 	{
 		counter++;
-		object.push_back(pair_t("prototype", __NJS_Create_Object()));
+		object.push_back(NJS::Type::pair_t("prototype", __NJS_Create_Object()));
 		value = val;
 	}
 	// Methods
@@ -67,15 +67,15 @@ namespace NJS::Class
 		((NJS::Class::String*)key._ptr)->counter++;
 		if(((NJS::Class::String*)key._ptr)->value.compare("toString") == 0  || ((NJS::Class::String*)key._ptr)->value.compare("toLocaleString") == 0)
 		{
-			object.push_back(pair_t(((NJS::Class::String*)key._ptr)->value.c_str(), __NJS_Create_Var_Scoped_Anon( return (std::string)*this;)));
+			object.push_back(NJS::Type::pair_t(((NJS::Class::String*)key._ptr)->value.c_str(), __NJS_Create_Var_Scoped_Anon( return (std::string)*this;)));
 		}
 		else if(((NJS::Class::String*)key._ptr)->value.compare("valueOf") == 0)
 		{
-			object.push_back(pair_t(((NJS::Class::String*)key._ptr)->value.c_str(), __NJS_Create_Var_Scoped_Anon( return this; )));
+			object.push_back(NJS::Type::pair_t(((NJS::Class::String*)key._ptr)->value.c_str(), __NJS_Create_Var_Scoped_Anon( return this; )));
 		}
 		else if(((NJS::Class::String*)key._ptr)->value.compare("call") == 0)
 		{
-			object.push_back(pair_t(((NJS::Class::String*)key._ptr)->value.c_str(), __NJS_Create_Var_Scoped_Anon(
+			object.push_back(NJS::Type::pair_t(((NJS::Class::String*)key._ptr)->value.c_str(), __NJS_Create_Var_Scoped_Anon(
 				counter++;
 				NJS::VAR __THIS;
 				if(__NJS_VARARGS.size() > 0)
@@ -86,31 +86,31 @@ namespace NJS::Class
 				return Call(__THIS, __NJS_VARARGS);
 			)));
 		}
-		else object.push_back(pair_t(((NJS::Class::String*)key._ptr)->value.c_str(), __NJS_VAR()));
+		else object.push_back(NJS::Type::pair_t(((NJS::Class::String*)key._ptr)->value.c_str(), __NJS_VAR()));
 		
 		return object[object.size() - 1].second;
 	}
 	
-	NJS::VAR Function::Call(var __NJS_THIS, vector_t __NJS_VARARGS)
+	NJS::VAR Function::Call(var __NJS_THIS, NJS::Type::vector_t __NJS_VARARGS)
 	{
-		return (*static_cast<function<NJS::VAR(var, vector_t)> *>(value))(__NJS_THIS, __NJS_VARARGS);
+		return (*static_cast<std::function<NJS::VAR(var, NJS::Type::vector_t)> *>(value))(__NJS_THIS, __NJS_VARARGS);
 	}
 	
 	
 	template <class... Args>
 	NJS::VAR Function::New(Args... args)
 	{
-		vector_t _args = vector<var>{(NJS::VAR)args...};
+		NJS::Type::vector_t _args = NJS::Type::vector_t{(NJS::VAR)args...};
 		
 		NJS::VAR _this = __NJS_Create_Object();
-		object_t object = ((NJS::Class::Object*)(*this)["prototype"]._ptr)->object;
+		NJS::Type::object_t object = ((NJS::Class::Object*)(*this)["prototype"]._ptr)->object;
 		
 		for (auto & search : object)
 		{
 			_this[search.first] = search.second;
 		}
 
-		var _ret = (NJS::VAR)(*static_cast<function<NJS::VAR(var, vector_t)> *>(value))(_this, _args);
+		var _ret = (NJS::VAR)(*static_cast<std::function<NJS::VAR(var, NJS::Type::vector_t)> *>(value))(_this, _args);
 
 		if(_ret.type == NJS::Enum::Type::Object)
 		{
@@ -129,8 +129,8 @@ namespace NJS::Class
 	template <class... Args>
 	NJS::VAR Function::operator()(Args... args)
 	{
-		vector_t _args = vector<var>{(NJS::VAR)args...};
-		return (*static_cast<function<NJS::VAR(var, vector_t)> *>(value))(This, _args);
+		NJS::Type::vector_t _args = NJS::Type::vector_t{(NJS::VAR)args...};
+		return (*static_cast<std::function<NJS::VAR(var, NJS::Type::vector_t)> *>(value))(This, _args);
 	}
 	// Comparation operators
 	Function Function::operator!() const { throw InvalidTypeException(); }

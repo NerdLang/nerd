@@ -126,9 +126,9 @@ namespace NJS::Class
 			}
 			else 
 			{
-				ostringstream strout ;
-				strout << fixed << std::setprecision(14) << value.d ;
-				string str = strout.str() ;
+				std::ostringstream strout ;
+				strout << std::fixed << std::setprecision(14) << value.d ;
+				std::string str = strout.str() ;
 				
 				size_t end = str.find_last_not_of( '0' ) + 1 ;
 				str = str.erase( end ) ;
@@ -139,8 +139,8 @@ namespace NJS::Class
 				int exp = str.length();
 				if(exp > 20)
 				{
-					string first = str.substr(0, 1);
-					string second = str.substr(1, 15);
+					std::string first = str.substr(0, 1);
+					std::string second = str.substr(1, 15);
 					str = first + "." + second + "e+" + std::to_string(exp-1);
 				}
 				return str;
@@ -180,15 +180,15 @@ namespace NJS::Class
 		((NJS::Class::String*)key._ptr)->counter++;
 		if(((NJS::Class::String*)key._ptr)->value.compare("toString") == 0  || ((NJS::Class::String*)key._ptr)->value.compare("toLocaleString") == 0)
 		{
-			object.push_back(pair_t(((NJS::Class::String*)key._ptr)->value.c_str(), __NJS_Create_Var_Scoped_Anon( return __NJS_Object_Stringify(this);)));
+			object.push_back(NJS::Type::pair_t(((NJS::Class::String*)key._ptr)->value.c_str(), __NJS_Create_Var_Scoped_Anon( return __NJS_Object_Stringify(this);)));
 		}
 		else if(((NJS::Class::String*)key._ptr)->value.compare("valueOf") == 0)
 		{
-			object.push_back(pair_t(((NJS::Class::String*)key._ptr)->value.c_str(), __NJS_Create_Var_Scoped_Anon( return this; )));
+			object.push_back(NJS::Type::pair_t(((NJS::Class::String*)key._ptr)->value.c_str(), __NJS_Create_Var_Scoped_Anon( return this; )));
 		}
 		else 
 		{
-			object.push_back(pair_t(((NJS::Class::String*)key._ptr)->value.c_str(), __NJS_VAR()));
+			object.push_back(NJS::Type::pair_t(((NJS::Class::String*)key._ptr)->value.c_str(), __NJS_VAR()));
 		}
 
 		return object[object.size() - 1].second;

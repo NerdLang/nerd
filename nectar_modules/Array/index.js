@@ -26,9 +26,8 @@ var _Array =
 	{
 		slice: function()
 		{
-			
+			console.log(this);
 		},
-		test: "OK",
 	},
 };
 
