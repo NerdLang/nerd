@@ -18,9 +18,8 @@ NJS::VAR __NJS_typeof(NJS::VAR _var)
 
 NJS::VAR __NJS_instanceof(NJS::VAR _left, NJS::VAR _right)
 {
-	if(_left.type != NJS::Enum::Type::Object || _right.type != NJS::Enum::Type::Object) return __NJS_Boolean_FALSE;
+	if(_left.type != NJS::Enum::Type::Object || _right.type != NJS::Enum::Type::Function) return __NJS_Boolean_FALSE;
 	
-	cout << "instance" << endl;
 	var protoRight = _right["prototype"];
 	if(!protoRight) return __NJS_Boolean_FALSE;
 	

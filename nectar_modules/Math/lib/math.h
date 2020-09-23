@@ -19,7 +19,7 @@
  * along with NectarJS.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
- 
+#define __NJS_INIT_RAND_SEED
 #if defined(_USE_MATH_DEFINES) && !defined(M_E)
 #define _MATH_DEFINES_DEFINED
 

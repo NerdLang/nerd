@@ -58,6 +58,10 @@ int main(int argc, char* argv[])
 	{
 
 		{INIT}
+		
+		#ifdef __NJS_INIT_RAND_SEED
+		srand (time(NULL));
+		#endif
 
 		{CODE}
 		
