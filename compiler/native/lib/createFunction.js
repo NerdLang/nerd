@@ -98,10 +98,11 @@ function createFunction(_code, _scope)
 							var _fn = "{" + _getVar + _code.substring(_start + 1, _end);
 
 							COMPILER.DECL.push("var " + _match[1] +";");
-
+							
+							var __STR_MARKER = "__LIT" + RND();
 							var _formated = `__NJS_DECL_Function<NJS::VAR (${_parameters})>* ${_genFN} = new __NJS_DECL_Function<NJS::VAR (${_parameters})>([${_catch}]( ${_parameters} ) -> NJS::VAR ${_fn} ${_return} );`;
 							_formated += _match[1] + "=NJS::VAR(NJS::Enum::Type::Function, " + _genFN + ");";
-							if(CLI.cli["--debug"]) _formated += `((NJS::Class::Function*)${_match[1]}._ptr)->code = R"(Function ${_match[1]}(${_match[2]}) ${_code.substring(_start, _end)}})";`
+							if(CLI.cli["--debug"]) _formated += `((NJS::Class::Function*)${_match[1]}._ptr)->code = R"${__STR_MARKER}(Function ${_match[1]}(${_match[2]}) ${_code.substring(_start, _end )}})${__STR_MARKER}";`
 							else _formated += `((NJS::Class::Function*)${_match[1]}._ptr)->code = R"([Function: ${_match[1]}])";`
 
 							_code = [_code.slice(0, _index), _formated, _code.slice(_end + 1)].join('');

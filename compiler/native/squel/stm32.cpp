@@ -36,11 +36,6 @@
  #include "mbed.h"
  #include "njs.h"
 
-
-using namespace std;
-using namespace NJS;
-using namespace NJS::Value;
-
  var __NJS_ENV = "stm32";
  var __NJS_PLATFORM = "{{__PLATFORM__}}";
  

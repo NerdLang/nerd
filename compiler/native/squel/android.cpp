@@ -32,15 +32,10 @@
  #include <sstream>
  #include <vector>
  #include <memory>
-#include <jni.h>
-
- using namespace std;
+ #include <jni.h>
 
  #include "njs.h"
  #include "httplib.h"
- 
- using namespace NJS;
- using namespace NJS::Value;
  
 JNIEnv* globalEnv;
 jobject mainObject;

@@ -32,13 +32,10 @@
  #include <vector>
  #include <memory>
 
- using namespace std;
 
  #include "njs.h"
  #include "httplib.h"
- 
- using namespace NJS;
- using namespace NJS::Value;
+
 
  WKWebView * globalWK;
 
