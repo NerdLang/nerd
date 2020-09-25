@@ -33,12 +33,12 @@ NJS::VAR __NJS_instanceof(NJS::VAR _left, NJS::VAR _right)
 }
 
 /*** ***/
-NJS::VAR __NJS_Object_Set(const char *_index, NJS::VAR _value, NJS::Type::object_t *_obj)
+NJS::VAR __NJS_Object_Set(std::string _index, NJS::VAR _value, NJS::Type::object_t *_obj)
 {
 	int _j = (*_obj).size();
 	for (int _i = 0; _i < _j; _i++)
 	{
-		if (strcmp(_index, (*_obj)[_i].first) == 0)
+		if (_index.compare((*_obj)[_i].first) == 0)
 		{
 
 			if (_value.type == NJS::Enum::Type::String)
@@ -72,8 +72,6 @@ NJS::VAR __NJS_Object_Set(NJS::VAR _index, NJS::VAR _value, NJS::VAR _array)
 		}
 
 		((NJS::Class::Array*)_array._ptr)->value.at( (int)(*(NJS::Class::Number*)_index._ptr) ) = _value;
-
-		__NJS_Object_Set("length", (int)((NJS::Class::Array*)_array._ptr)->value.size(), &((NJS::Class::Array*)_array._ptr)->object);
 		
 		return NJS::VAR();
 	}
@@ -91,8 +89,7 @@ NJS::VAR __NJS_Object_Set(NJS::VAR _index, NJS::VAR _value, NJS::VAR _array)
 		else
 			return NJS::VAR();
 
-		((NJS::Class::String*)_index._ptr)->counter++;
-		return __NJS_Object_Set(((NJS::Class::String*)_index._ptr)->value.c_str(), _value, _obj);
+		return __NJS_Object_Set((std::string)_index, _value, _obj);
 	}
 
 	return NJS::VAR();
@@ -134,7 +131,7 @@ NJS::VAR __NJS_Object_Get(NJS::VAR _index, NJS::VAR _array)
 		int _j = (*_obj).size();
 		for (int _i = 0; _i < _j; _i++)
 		{
-			if (strcmp(((NJS::Class::String*)_index._ptr)->value.c_str(), (*_obj)[_i].first) == 0)
+			if (((std::string)_index).compare((*_obj)[_i].first) == 0)
 			{
 				return (*_obj)[_i].second;
 			}

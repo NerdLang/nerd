@@ -14,7 +14,6 @@ namespace NJS::Class
 		// Properties
 		count_t counter = 0;
 		NJS::Type::object_t object;
-		NJS::Type::object_t &value = object;
 		bool prototype = false;
 		NJS::Type::vector_p instance;
 		// Methods

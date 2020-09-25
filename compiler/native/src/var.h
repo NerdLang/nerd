@@ -25,7 +25,7 @@ namespace NJS
 		}
 		else if (_v.type == NJS::Enum::Type::String)
 		{
-			_ptr = new NJS::Class::String(((NJS::Class::String*)_v._ptr)->value);
+			_ptr = new NJS::Class::String((std::string)_v);
 		}
 		else if (_v.type == NJS::Enum::Type::Number)
 		{
@@ -160,7 +160,7 @@ namespace NJS
 	VAR::VAR(NJS::Class::String *_value)
 	{
 		type = NJS::Enum::Type::String;
-		_value->counter++;
+		//_value->counter++;
 		_ptr = new NJS::Class::String(_value->value);
 	}
 	
@@ -173,8 +173,9 @@ namespace NJS
 	VAR::VAR(NJS::Class::Number *_value)
 	{
 		type = NJS::Enum::Type::Number;
-		_value->counter++;
-		_ptr = _value;
+		_ptr = new NJS::Class::Number(*_value);
+		//_value->counter++;
+		//_ptr = _value;
 	}
 	
 	VAR::VAR(NJS::Class::Native *_value)

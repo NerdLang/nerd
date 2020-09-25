@@ -116,13 +116,13 @@ namespace NJS::Class
 		
 		for (auto & search : object)
 		{
-			if (((NJS::Class::String*)key._ptr)->value.compare(search.first) == 0)
+			if (((std::string)key).compare(search.first) == 0)
 			{
 				return search.second;
 			}
 		}
-		((NJS::Class::String*)key._ptr)->counter++;
-		object.push_back(NJS::Type::pair_t(((NJS::Class::String*)key._ptr)->value.c_str(), __NJS_VAR()));
+
+		object.push_back(NJS::Type::pair_t(((std::string)*this).c_str(), __NJS_VAR()));
 		return object[object.size() - 1].second;
 	}
 	template <class... Args>

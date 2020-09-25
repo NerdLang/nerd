@@ -71,7 +71,7 @@ namespace NJS::Class
 		
 		for (auto & search : object)
 		{
-			if (((NJS::Class::String*)key._ptr)->value.compare(search.first) == 0)
+			if (((std::string)key).compare(search.first) == 0)
 			{
 				if(!prototype)
 				{
@@ -87,20 +87,20 @@ namespace NJS::Class
 				}
 			}
 		}
-		((NJS::Class::String*)key._ptr)->counter++;
-		if(((NJS::Class::String*)key._ptr)->value.compare("toString") == 0  || ((NJS::Class::String*)key._ptr)->value.compare("toLocaleString") == 0)
+
+		if(((std::string)key).compare("toString") == 0  || ((std::string)key).compare("toLocaleString") == 0)
 		{
-			object.push_back(NJS::Type::pair_t(((NJS::Class::String*)key._ptr)->value.c_str(), __NJS_Create_Var_Scoped_Anon( return __NJS_Object_Stringify(this);)));
+			object.push_back(NJS::Type::pair_t((std::string)key, __NJS_Create_Var_Scoped_Anon( return __NJS_Object_Stringify(this);)));
 		}
-		else if(((NJS::Class::String*)key._ptr)->value.compare("valueOf") == 0)
+		else if(((std::string)key).compare("valueOf") == 0)
 		{
-			object.push_back(NJS::Type::pair_t(((NJS::Class::String*)key._ptr)->value.c_str(), __NJS_Create_Var_Scoped_Anon( return this; )));
+			object.push_back(NJS::Type::pair_t((std::string)key, __NJS_Create_Var_Scoped_Anon( return this; )));
 		}
 		else 
 		{
-			object.push_back(NJS::Type::pair_t(((NJS::Class::String*)key._ptr)->value.c_str(), __NJS_VAR()));
+			object.push_back(NJS::Type::pair_t((std::string)key, __NJS_VAR()));
 		}
-		
+
 		return object[object.size() - 1].second;
 
 	}

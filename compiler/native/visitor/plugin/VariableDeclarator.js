@@ -70,8 +70,7 @@ function VariableDeclarator(_path)
 			  console.log("Visitor VariableDeclarator not implemented yet for " + _el[i].type);
 			  process.exit(0);
 		  }
-
-		_code += "__NJS_Object_Set(" + i + ", " + _value + "," + _name + ");";
+		_code += `${_name}[${i}] = ${_value};`;
 
 	  }
 	   _path.replaceWith(babel.parse(_code));
@@ -112,7 +111,7 @@ function VariableDeclarator(_path)
 		  
 		  if(_value && !_o)
 		  {
-			  _code += "__NJS_Object_Set(\"" + _key + "\"," + _value + "," + _name + ");"
+			  _code += `${_name}["${_key}"] = ${_value};`;
 			  COMPILER.INFO.VALUE.push(_value);
 		  }
 	  }

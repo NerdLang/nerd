@@ -63,23 +63,23 @@ namespace NJS::Class
 	{
 		for (auto & search : object)
 		{
-			if (((NJS::Class::String*)key._ptr)->value.compare(search.first) == 0)
+			if (((std::string)key).compare(search.first) == 0)
 			{
 				return search.second;
 			}
 		}
 		
-		if(((NJS::Class::String*)key._ptr)->value.compare("toString") == 0  || ((NJS::Class::String*)key._ptr)->value.compare("toLocaleString") == 0)
+		if(((std::string)key).compare("toString") == 0  || ((std::string)key).compare("toLocaleString") == 0)
 		{
-			object.push_back(NJS::Type::pair_t(((NJS::Class::String*)key._ptr)->value.c_str(), __NJS_Create_Var_Scoped_Anon( return (std::string)*this;)));
+			object.push_back(NJS::Type::pair_t((std::string)key, __NJS_Create_Var_Scoped_Anon( return (std::string)*this;)));
 		}
-		else if(((NJS::Class::String*)key._ptr)->value.compare("valueOf") == 0)
+		else if(((std::string)key).compare("valueOf") == 0)
 		{
-			object.push_back(NJS::Type::pair_t(((NJS::Class::String*)key._ptr)->value.c_str(), __NJS_Create_Var_Scoped_Anon( return this; )));
+			object.push_back(NJS::Type::pair_t((std::string)key, __NJS_Create_Var_Scoped_Anon( return this; )));
 		}
-		else if(((NJS::Class::String*)key._ptr)->value.compare("call") == 0)
+		else if(((std::string)key).compare("call") == 0)
 		{
-			object.push_back(NJS::Type::pair_t(((NJS::Class::String*)key._ptr)->value.c_str(), __NJS_Create_Var_Scoped_Anon(
+			object.push_back(NJS::Type::pair_t((std::string)key, __NJS_Create_Var_Scoped_Anon(
 				counter++;
 				NJS::VAR __THIS;
 				if(__NJS_VARARGS.size() > 0)
@@ -90,7 +90,7 @@ namespace NJS::Class
 				return Call(__THIS, __NJS_VARARGS);
 			)));
 		}
-		else object.push_back(NJS::Type::pair_t(((NJS::Class::String*)key._ptr)->value.c_str(), __NJS_VAR()));
+		else object.push_back(NJS::Type::pair_t((std::string)key, __NJS_VAR()));
 		
 		return object[object.size() - 1].second;
 	}
@@ -114,8 +114,8 @@ namespace NJS::Class
 			_this[search.first] = search.second;
 		}
 
-		var _ret = (NJS::VAR)(*static_cast<std::function<NJS::VAR(var, NJS::Type::vector_t)> *>(value))(_this, _args);
-
+		var _ret = this->Call(_this, _args);
+		
 		if(_ret.type == NJS::Enum::Type::Object)
 		{
 			((NJS::Class::Object*)_ret._ptr)->prototype = true;
@@ -124,10 +124,12 @@ namespace NJS::Class
 		}
 		else
 		{
+			((NJS::Class::Base*)_ret._ptr)->Delete();
 			((NJS::Class::Object*)_this._ptr)->prototype = true;
 			((NJS::Class::Object*)_this._ptr)->instance.push_back((*this)["prototype"]._ptr);
 			return _this;
 		}
+
 	}
 	
 	template <class... Args>
