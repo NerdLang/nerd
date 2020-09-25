@@ -14,7 +14,7 @@ namespace NJS::Class
 		Function(void* val);
 		// Properties
 		count_t counter = 0;
-		void* value = nullptr;
+		NJS::Type::function_t* value = nullptr;
 		var This;
 		//NJS::VAR _this;
 		NJS::Type::object_t object;

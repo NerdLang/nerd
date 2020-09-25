@@ -19,19 +19,16 @@ namespace NJS::Class
 	String::String()
 	{ 
 		__NJS_Class_String_Init();
-		__NJS_Object_Set("length", NJS::VAR((int)value.size()), &object);
 	}
 	String::String(std::string val)
 	{
 		__NJS_Class_String_Init();
 		value = val;
-		__NJS_Object_Set("length", NJS::VAR((int)value.size()), &object);
 	}
 	String::String(const char* val)
 	{
 		__NJS_Class_String_Init();
 		value = val;
-		__NJS_Object_Set("length", NJS::VAR((int)value.size()), &object);
 	}
 	// Methods
 	void String::Delete() noexcept
@@ -72,7 +69,14 @@ namespace NJS::Class
 			{
 				return value.at(i);
 			}
+			else return undefined;
 		}
+		
+		if(((std::string)key).compare("length") == 0)
+		{
+			return (int)value.size();
+		}
+		
 		auto &obj = this->object;
 		auto index = (std::string)key;
 		int _j = obj.size();
@@ -88,6 +92,7 @@ namespace NJS::Class
 	NJS::VAR &String::operator[](NJS::VAR key)
 	{
 		static NJS::VAR _char;
+		static NJS::VAR _retLength;
 		if (key.type == NJS::Enum::Type::Number)
 		{
 			auto i = (int)key;
@@ -96,11 +101,17 @@ namespace NJS::Class
 				if (i >= value.size())
 				{
 					value.resize(i + 1);
-					__NJS_Object_Set("length", (int)value.size(), &this->object);
 				}
 				_char = value.at(i);
 			}
+			else _char = "";
 			return _char;
+		}
+		
+		if(((std::string)key).compare("length") == 0)
+		{
+			_retLength = (int)value.size();
+			return _retLength;
 		}
 		
 		for (auto & search : object)
@@ -110,7 +121,6 @@ namespace NJS::Class
 				return search.second;
 			}
 		}
-
 		((NJS::Class::String*)key._ptr)->counter++;
 		object.push_back(NJS::Type::pair_t(((NJS::Class::String*)key._ptr)->value.c_str(), __NJS_VAR()));
 		return object[object.size() - 1].second;

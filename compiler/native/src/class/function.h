@@ -6,18 +6,23 @@
 namespace NJS::Class
 {
 	// Constructors
-	Function::Function() { counter++; object.push_back(NJS::Type::pair_t("prototype", __NJS_Create_Object()));}
+	Function::Function()
+	{ 
+		counter++; 
+		object.push_back(NJS::Type::pair_t("prototype", __NJS_Create_Object()));
+	}
 	Function::Function(void *val)
 	{
 		counter++;
 		object.push_back(NJS::Type::pair_t("prototype", __NJS_Create_Object()));
-		value = val;
+		value = (NJS::Type::function_t*)val;
 	}
 	// Methods
 	void Function::Delete() noexcept
 	{
 		if (--counter < 1)
 		{
+			delete (NJS::Type::function_t*)value;
 			delete this;
 		}
 	}
@@ -64,7 +69,6 @@ namespace NJS::Class
 			}
 		}
 		
-		((NJS::Class::String*)key._ptr)->counter++;
 		if(((NJS::Class::String*)key._ptr)->value.compare("toString") == 0  || ((NJS::Class::String*)key._ptr)->value.compare("toLocaleString") == 0)
 		{
 			object.push_back(NJS::Type::pair_t(((NJS::Class::String*)key._ptr)->value.c_str(), __NJS_Create_Var_Scoped_Anon( return (std::string)*this;)));

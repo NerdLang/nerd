@@ -49,6 +49,26 @@ namespace NJS::Class
 	}
 	NJS::VAR &Object::operator[](NJS::VAR key)
 	{
+		static NJS::VAR _retUndefined;
+		if (key.type == NJS::Enum::Type::Number)
+		{
+			auto i = (int)key;
+			
+			if (i < 0)
+			{
+				return _retUndefined;
+			}
+			else 
+			{
+				if (i >= object.size())
+				{
+					object.reserve(i + 1);
+					object.resize(i + 1);
+				}
+			}
+			return object[i].second;
+		}
+		
 		for (auto & search : object)
 		{
 			if (((NJS::Class::String*)key._ptr)->value.compare(search.first) == 0)

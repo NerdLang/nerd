@@ -3,6 +3,7 @@ NJS::VAR __NJS_Object_Keys(NJS::VAR _var);
 NJS::VAR __NJS_Object_Stringify(NJS::VAR _var);
 NJS::VAR __NJS_Object_Stringify(NJS::VAR _var, bool _bracket);
 NJS::VAR __NJS_Create_Object();
+NJS::VAR __NJS_Create_Array();
 NJS::VAR __NJS_Object_Clone(NJS::VAR _var);
 NJS::VAR __NJS_Object_Set(const char *_index, NJS::VAR _value, NJS::Type::object_t *_obj);
 
