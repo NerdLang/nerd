@@ -32,19 +32,19 @@ __NJS_VAR to_int(char const *s)
 	bool _float = false;
 	if(strchr(s, '.'))
 	{
-		return __NJS_VAR(stod(s));
+		return __NJS_VAR(std::stod(s));
 	}
 	else 
 	{
-		return __NJS_VAR(stoi(s));
+		return __NJS_VAR(std::stoi(s));
 	}
 } 
 
 static inline void *realloc_it(void *ptrmem, size_t size) {
-  void *p = realloc(ptrmem, size);
+  void *p = std::realloc(ptrmem, size);
   if (!p) {
-    free(ptrmem);
-    fprintf(stderr, "realloc(): errno=%d\n", errno);
+    std::free(ptrmem);
+    std::fprintf(stderr, "realloc(): errno=%d\n", errno);
   }
   return p;
 }
@@ -71,7 +71,7 @@ int dump(const char *js, jsmntok_t *t, size_t count, int indent, var& _res)
   }
   if (t->type == JSMN_PRIMITIVE) 
   {
-	  string _s = substr(js, t->start, t->end - t->start);
+	std::string _s = substr(js, t->start, t->end - t->start);
 	if(_s[0] == 't') _res = true;
 	else if(_s[0] == 'f') _res = false;
 	else if(_s[0] == 'n') _res = var();
@@ -107,7 +107,7 @@ int dump(const char *js, jsmntok_t *t, size_t count, int indent, var& _res)
   {
     j = 0;
     _res = __NJS_Create_Array();
-    vector<var> _arr;
+    std::vector<var> _arr;
 
     
     for (i = 0; i < t->size; i++) 
@@ -121,7 +121,7 @@ int dump(const char *js, jsmntok_t *t, size_t count, int indent, var& _res)
   return 0;
 }
 
-__NJS_DECL_Function<NJS::VAR (var, NJS::Type::vector_t)>* __NJS_FN___5po78g = new __NJS_DECL_Function<NJS::VAR (var, NJS::Type::vector_t)>([](var __INJECTED_THIS, vector<var> __NJS_VARARGS ) -> NJS::VAR{var __json; if(__NJS_VARARGS.size() > 0) __json = __NJS_VARARGS[0];
+__NJS_DECL_Function<NJS::VAR (var, NJS::Type::vector_t)>* __NJS_FN___5po78g = new __NJS_DECL_Function<NJS::VAR (var, NJS::Type::vector_t)>([](var __INJECTED_THIS, NJS::Type::vector_t __NJS_VARARGS ) -> NJS::VAR{var __json; if(__NJS_VARARGS.size() > 0) __json = __NJS_VARARGS[0];
 	if(!__json) return undefined;
 	size_t tokcount = 32;
 	int r;
@@ -161,6 +161,6 @@ __NJS_DECL_Function<NJS::VAR (var, NJS::Type::vector_t)>* __NJS_FN___5po78g = ne
 ;return __NJS_Create_Undefined();});var __NJS_JSON_PARSE=NJS::VAR(NJS::Enum::Type::Function, __NJS_FN___5po78g);;
 
 
-__NJS_DECL_Function<NJS::VAR (var, NJS::Type::vector_t)>* __NJS_FN___ylc1k6 = new __NJS_DECL_Function<NJS::VAR (var, NJS::Type::vector_t)>([](var __INJECTED_THIS, vector<var> __NJS_VARARGS ) -> NJS::VAR{var __object; if(__NJS_VARARGS.size() > 0) __object = __NJS_VARARGS[0];
+__NJS_DECL_Function<NJS::VAR (var, NJS::Type::vector_t)>* __NJS_FN___ylc1k6 = new __NJS_DECL_Function<NJS::VAR (var, NJS::Type::vector_t)>([](var __INJECTED_THIS, NJS::Type::vector_t __NJS_VARARGS ) -> NJS::VAR{var __object; if(__NJS_VARARGS.size() > 0) __object = __NJS_VARARGS[0];
 	return __NJS_Object_Stringify(__object);
 ;return __NJS_Create_Undefined();});var __NJS_JSON_STRINGIFY=NJS::VAR(NJS::Enum::Type::Function, __NJS_FN___ylc1k6);;

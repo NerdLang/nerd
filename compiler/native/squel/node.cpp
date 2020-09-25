@@ -32,9 +32,6 @@
  #include <vector>
  #include <memory>
  #include "uv.h"
- 
- using namespace std;
-
 
  #include "njs.h"
  
