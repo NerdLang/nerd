@@ -116,7 +116,7 @@ NJS::VAR __NJS_Object_Keys(NJS::VAR _var)
 	int _j = (*_obj).size();
 	for (int _i = 0; _i < _j; _i++)
 	{
-		__NJS_Object_Set(_i, (*_obj)[_i].first, _res);
+		_res[_i] = (*_obj)[_i].first;
 	}
 	return _res;
 }
@@ -196,7 +196,7 @@ NJS::VAR __NJS_Object_Clone(NJS::VAR _var)
 			int j = (*_arr).size();
 			for (int i = 0; i < j; i++)
 			{
-				__NJS_Object_Set(i, __NJS_Object_Clone((*_arr)[i]), _res);
+				_res[i] = __NJS_Object_Clone((*_arr)[i]);
 			}
 			return _res;
 		}
@@ -207,7 +207,7 @@ NJS::VAR __NJS_Object_Clone(NJS::VAR _var)
 			int j = (*_obj).size();
 			for (int _i = 0; _i < j; _i++)
 			{
-				__NJS_Object_Set((*_obj)[_i].first, __NJS_Object_Clone((*_obj)[_i].second), _res);
+				_res[(*_obj)[_i].first] = __NJS_Object_Clone((*_obj)[_i].second);
 			}
 			return _res;
 		}
@@ -227,7 +227,7 @@ void __NJS_Object_Construct(NJS::VAR _this, NJS::VAR _prototype)
 			NJS::VAR _tmp =  __NJS_Object_Get((*_obj)[_i].first, _this);
 			if(_tmp.type == NJS::Enum::Type::Undefined)
 			{
-				__NJS_Object_Set((*_obj)[_i].first, (*_obj)[_i].second, _this);
+				_this[(*_obj)[_i].first] = (*_obj)[_i].second;
 			}
 		}
 	}
