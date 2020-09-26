@@ -8,7 +8,6 @@ namespace NJS::Class
 	class Empty {};
 	public:
 		// Constants
-		const char *name = "undefined";
 		const NJS::Enum::Type type = NJS::Enum::Type::Undefined;
 		// Constructors
 		Undefined();

@@ -60,8 +60,7 @@ namespace NJS
 		}
 		else if (_v.type == NJS::Enum::Type::Undefined)
 		{
-			_ptr = _v._ptr;
-			((NJS::Class::Undefined*)_ptr)->counter++;
+			_ptr = new NJS::Class::Undefined();
 		}
 		else if (_v.type == NJS::Enum::Type::ISNULL)
 		{
@@ -160,7 +159,6 @@ namespace NJS
 	VAR::VAR(NJS::Class::String *_value)
 	{
 		type = NJS::Enum::Type::String;
-		//_value->counter++;
 		_ptr = new NJS::Class::String(_value->value);
 	}
 	
@@ -174,8 +172,6 @@ namespace NJS
 	{
 		type = NJS::Enum::Type::Number;
 		_ptr = new NJS::Class::Number(*_value);
-		//_value->counter++;
-		//_ptr = _value;
 	}
 	
 	VAR::VAR(NJS::Class::Native *_value)
@@ -188,8 +184,7 @@ namespace NJS
 	VAR::VAR(NJS::Class::Undefined *_value)
 	{
 		type = NJS::Enum::Type::Undefined;
-		_value->counter++;
-		_ptr = _value;
+		_ptr = new NJS::Class::Undefined();
 	}
 	
 	VAR::VAR(NJS::Enum::Type _type, void *_value)
@@ -289,8 +284,7 @@ namespace NJS
 		}
 		else if (_v.type == NJS::Enum::Type::Undefined)
 		{
-			_ptr = _v._ptr;
-			((NJS::Class::Undefined*)_ptr)->counter++;
+			_ptr = new NJS::Class::Undefined();
 		}
 		else if (_v.type == NJS::Enum::Type::ISNULL)
 		{
