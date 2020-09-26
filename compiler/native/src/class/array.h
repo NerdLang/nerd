@@ -441,13 +441,10 @@ namespace NJS::Class
 	NJS::VAR Array::pop(NJS::Type::vector_t args) { return NJS::VAR(); }
 	NJS::VAR Array::push(NJS::Type::vector_t args)
 	{
-		/*
-		for (auto value : args)
+		for (auto _value : args)
 		{
-			value.push_back(value);
+			value.push_back(_value);
 		}
-		__NJS_Object_Set("length", (int)value.size(), &this->__Object);
-		*/
 		return this;
 	};
 	NJS::VAR Array::reduce(NJS::Type::vector_t args) const { return NJS::VAR(); }
