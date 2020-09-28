@@ -56,8 +56,9 @@ int main(int argc, char* argv[])
 	try 
 	{
 		{INIT}
-
-		{CODE}
+		{
+			{CODE}
+		}
 	}
 	catch(NJS::VAR __NJS_Global_Exception)
 	{

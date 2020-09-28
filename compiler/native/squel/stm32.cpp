@@ -47,6 +47,8 @@ int main()
 {
   {INIT}
 
-	{CODE}
+	{
+		{CODE}
+	}
 	return 0;
 }

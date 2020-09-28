@@ -104,6 +104,9 @@ Java_com_nectarjs_nectar_1android_1app_MainActivity_callFromJNI(
     
 	{INIT}
 
-	{CODE}
+	{
+		{CODE}
+	}
+	
     return;
 }

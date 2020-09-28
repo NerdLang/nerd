@@ -86,6 +86,9 @@ void loadedCallback(WKWebView *wkWV)
 
     {INIT}
 
-	{CODE}
-    return;
+	{
+		{CODE}
+    }
+	
+	return;
 }

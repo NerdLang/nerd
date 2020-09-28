@@ -69,7 +69,9 @@ int main(int argc, char* argv[])
 
 	{INIT}
 	
-	{CODE}
+	{
+		{CODE}
+	}
 	
 	setup();
 	

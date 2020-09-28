@@ -224,10 +224,9 @@ function Compiler()
 		{
 			_hoisting += "var " + COMPILER.INFO.HOISTING[i] + ";";
 		}
+		_handler.CODE = _handler.CODE;
 
-		_handler.CODE = _hoisting + _handler.CODE;
-
-		COMPILER.INIT += COMPILER.REQUIRE;
+		COMPILER.INIT += COMPILER.REQUIRE + _hoisting;
 		
 		_handler.DECL = _handler.DECL.filter(function(v,i)
 		{

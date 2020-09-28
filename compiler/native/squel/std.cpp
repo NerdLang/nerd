@@ -58,8 +58,9 @@ int main(int argc, char* argv[])
 		#ifdef __NJS_INIT_RAND_SEED
 		srand (time(NULL));
 		#endif
-
-		{CODE}
+		{
+			{CODE}
+		}
 		
 	}
 	catch(NJS::VAR __NJS_Global_Exception)

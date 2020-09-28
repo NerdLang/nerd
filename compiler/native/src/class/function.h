@@ -95,11 +95,9 @@ namespace NJS::Class
 		return object[object.size() - 1].second;
 	}
 	
-	NJS::VAR Function::Call(var __NJS_THIS, NJS::Type::vector_t __NJS_VARARGS)
+	NJS::VAR Function::Call(var& __NJS_THIS, NJS::Type::vector_t __NJS_VARARGS)
 	{
-		NJS::VAR _result = (*static_cast<std::function<NJS::VAR(var, NJS::Type::vector_t)> *>(value))(__NJS_THIS, __NJS_VARARGS);
-		((NJS::Class::Object*)__NJS_THIS._ptr)->counter--;
-		return _result;
+		return (*static_cast<std::function<NJS::VAR(var, NJS::Type::vector_t)> *>(value))(__NJS_THIS, __NJS_VARARGS);
 	}
 	
 	
@@ -117,6 +115,8 @@ namespace NJS::Class
 		}
 
 		var _ret = this->Call(_this, _args);
+		((NJS::Class::Object*)_this._ptr)->counter = 1;
+		((NJS::Class::Object*)_ret._ptr)->counter = 1;
 		
 		if(_ret.type == NJS::Enum::Type::Object)
 		{
@@ -126,7 +126,6 @@ namespace NJS::Class
 		}
 		else
 		{
-			((NJS::Class::Base*)_ret._ptr)->Delete();
 			((NJS::Class::Object*)_this._ptr)->prototype = true;
 			((NJS::Class::Object*)_this._ptr)->instance.push_back((*this)["prototype"]._ptr);
 			return _this;

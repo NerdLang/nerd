@@ -54,7 +54,9 @@ int main(int argc, char* argv[])
 	uv_loop_t *loop = (uv_loop_t *)malloc(sizeof(uv_loop_t));
     uv_loop_init(loop);
 
-	{CODE};
+	{
+		{CODE};
+	}
 	
     printf("Exiting.\n");
     uv_run(loop, UV_RUN_DEFAULT);
