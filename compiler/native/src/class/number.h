@@ -42,13 +42,14 @@ namespace NJS::Class
 
 	// Constructors
 	Number::Number() { counter++; setInt(0); }
-	Number::Number(const int val)
+	Number::Number(int val)
 	{
 		isInt = true;
 		counter++;
 		setInt(val);
 	}
-	Number::Number(const double val)
+
+	Number::Number(double val)
 	{
 		counter++;
 		double dummy;
@@ -63,18 +64,17 @@ namespace NJS::Class
 			setDouble(val);
 		}
 	}
-	Number::Number(const long long val)
+	Number::Number(long long val)
 	{
 		isInt = false;
 		counter++;
 		setDouble(val);
 	}
 	
-	Number::Number(const Number& val)
+	Number::Number(const Number* val)
 	{
-		counter++;
-		value = val.value;
-		isInt = val.isInt;
+		value = val->value;
+		isInt = val->isInt;
 	}
 
 	Number::Number(const NJS::VAR& val)

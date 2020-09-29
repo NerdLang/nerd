@@ -1,5 +1,4 @@
 /*** HELPERS ***/
-
 #define __NJS_GET_String(_var) _var.get().s->value
 #define __NJS_VAR NJS::VAR
 #define var NJS::VAR
@@ -27,4 +26,4 @@
 #define __NJS_FAST_INT constexpr int
 #define __NJS_CreateMethodToClass(_name, _fn) __NJS_Object_Set(_name, __NJS_Create_Var_Scoped_Anon( return _fn(__NJS_VARARGS); ), &object);
 #define __NJS_NEW(_fn) ((NJS::Class::Function*)_fn._ptr)->New
-/*** END HELPERS ***/
+/* END HELPERS */

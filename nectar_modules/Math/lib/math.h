@@ -62,93 +62,93 @@
 
 
 
-var __NJS_MATH_E = __NJS_VAR(M_E);
-var __NJS_MATH_LN2 = __NJS_VAR(M_LN2);
-var __NJS_MATH_LOG2E = __NJS_VAR(M_LOG2E);
-var __NJS_MATH_LOG10E = __NJS_VAR(M_LOG10E);
-var __NJS_MATH_PI = __NJS_VAR(M_PI);
-var __NJS_MATH_SQRT1_2 = __NJS_VAR(M_SQRT1_2);
-var __NJS_MATH_SQRT2 = __NJS_VAR(M_SQRT2);
+var __NJS_MATH_E = NJS::VAR(M_E);
+var __NJS_MATH_LN2 = NJS::VAR(M_LN2);
+var __NJS_MATH_LOG2E = NJS::VAR(M_LOG2E);
+var __NJS_MATH_LOG10E = NJS::VAR(M_LOG10E);
+var __NJS_MATH_PI = NJS::VAR(M_PI);
+var __NJS_MATH_SQRT1_2 = NJS::VAR(M_SQRT1_2);
+var __NJS_MATH_SQRT2 = NJS::VAR(M_SQRT2);
 
 function __NJS_MATH_ABS(x) 
 { 
-	return __NJS_VAR(std::abs((double)(x))); 
+	return NJS::VAR(std::abs((double)(x))); 
 };
 
 function __NJS_MATH_ACOS(x) 
 { 
-	return __NJS_VAR(std::acos((double)(x))); 
+	return NJS::VAR(std::acos((double)(x))); 
 };
 
 function __NJS_MATH_ACOSH(x)
 { 
-	return __NJS_VAR(std::acosh((double)(x))); 
+	return NJS::VAR(std::acosh((double)(x))); 
 };
 
 function __NJS_MATH_ASIN(x) 
 { 
-	return __NJS_VAR(std::asin((double)(x))); 
+	return NJS::VAR(std::asin((double)(x))); 
 };
 
 function __NJS_MATH_ASINH(x) 
 {
-	return __NJS_VAR(std::asinh((double)(x))); 
+	return NJS::VAR(std::asinh((double)(x))); 
 };
 function __NJS_MATH_ATAN(x) 
 { 
-	return __NJS_VAR(std::atan((double)(x))); 
+	return NJS::VAR(std::atan((double)(x))); 
 };
 function __NJS_MATH_ATAN2(x, y) 
 { 
-	return __NJS_VAR(std::atan2((double)(x), (double)(y))); 
+	return NJS::VAR(std::atan2((double)(x), (double)(y))); 
 };
 function __NJS_MATH_ATANH(x) 
 { 
-	return __NJS_VAR(std::atanh((double)(x))); 
+	return NJS::VAR(std::atanh((double)(x))); 
 };
 function __NJS_MATH_CBRT(x) 
 { 
-	return __NJS_VAR(std::cbrt((double)(x))); 
+	return NJS::VAR(std::cbrt((double)(x))); 
 };
 function __NJS_MATH_CEIL(x) 
 { 
-	return __NJS_VAR(std::ceil((double)(x))); 
+	return NJS::VAR(std::ceil((double)(x))); 
 };
 
 function __NJS_MATH_CLZ32(x) 
 {
 	int n = (int)(x);
-	return __NJS_VAR(n > 0 ? (int)(31 - std::log2(n >> 0)) : 32);
+	return NJS::VAR(n > 0 ? (int)(31 - std::log2(n >> 0)) : 32);
 };
 
 function __NJS_MATH_COS(x) 
 { 
-	return __NJS_VAR(std::cos((double)(x))); 
+	return NJS::VAR(std::cos((double)(x))); 
 };
 
 function __NJS_MATH_COSH(x) 
 { 
-	return __NJS_VAR(std::cosh((double)(x))); 
+	return NJS::VAR(std::cosh((double)(x))); 
 };
 
 function __NJS_MATH_EXP(x) 
 { 
-	return __NJS_VAR(std::exp((double)(x))); 
+	return std::exp((double)(x)); 
 };
 
 function __NJS_MATH_EXPM1(x) 
 { 
-	return __NJS_VAR(std::expm1((double)(x))); 
+	return NJS::VAR(std::expm1((double)(x))); 
 };
 
 function __NJS_MATH_FLOOR(x) 
 { 
-	return __NJS_VAR((int)(std::floor((double)(x))));
+	return NJS::VAR((int)(std::floor((double)(x))));
 };
 
 function __NJS_MATH_FROUND(x) 
 { 
-	return __NJS_VAR((double)((double)(x))); 
+	return NJS::VAR((double)((double)(x))); 
 };
 
 function __NJS_MATH_HYPOT()
@@ -163,32 +163,32 @@ function __NJS_MATH_HYPOT()
 		}
 		s += (x == 0 && max == 0) ? 0 : (x / max) * (x / max);
 	}
-	return __NJS_VAR(max == INFINITY ? INFINITY : max * std::sqrt(s));
+	return NJS::VAR(max == INFINITY ? INFINITY : max * std::sqrt(s));
 };
 
 function __NJS_MATH_IMUL(x, y)
 {
-	return __NJS_VAR((int)(x) * (int)(y));
+	return NJS::VAR((int)(x) * (int)(y));
 };
 
 function __NJS_MATH_LOG(x) 
 { 
-	return __NJS_VAR(std::log((double)(x))); 
+	return NJS::VAR(std::log((double)(x))); 
 };
 
 function __NJS_MATH_LOG1P(x) 
 { 
-	return __NJS_VAR(std::log1p((double)(x))); 
+	return NJS::VAR(std::log1p((double)(x))); 
 };
 
 function __NJS_MATH_LOG2(x) 
 { 
-	return __NJS_VAR(std::log2((double)(x))); 
+	return NJS::VAR(std::log2((double)(x))); 
 };
 
 function __NJS_MATH_LOG10(x) 
 { 
-	return __NJS_VAR(std::log10((double)(x))); 
+	return NJS::VAR(std::log10((double)(x))); 
 };
 
 function __NJS_MATH_MAX()
@@ -200,7 +200,7 @@ function __NJS_MATH_MAX()
 			max = n;
 		}
 	}
-	return __NJS_VAR(max);
+	return NJS::VAR(max);
 };
 
 function __NJS_MATH_MIN()
@@ -212,57 +212,57 @@ function __NJS_MATH_MIN()
 			min = n;
 		}
 	}
-	return __NJS_VAR(min);
+	return NJS::VAR(min);
 };
 
 function __NJS_MATH_POW(x, x2) 
 { 
-	return __NJS_VAR(std::pow((double)(x), (double)(x2))); 
+	return NJS::VAR(std::pow((double)(x), (double)(x2))); 
 };
 
 function __NJS_MATH_RANDOM() 
 { 
-	return __NJS_VAR((double)(std::rand()) / (double)(RAND_MAX));
+	return NJS::VAR((double)(std::rand()) / (double)(RAND_MAX));
 };
 
 function __NJS_MATH_ROUND(x) 
 { 
-	return __NJS_VAR((int)(std::round((double)(x))));
+	return NJS::VAR((int)(std::round((double)(x))));
 };
 
 function __NJS_MATH_SIGN(x) 
 {
 	double n = (double)(x);
-	if (n == 0) { return __NJS_VAR(0); }
-	else { return __NJS_VAR(n > 0 ? 1 : -1); };
+	if (n == 0) { return NJS::VAR(0); }
+	else { return NJS::VAR(n > 0 ? 1 : -1); };
 };
 
 function __NJS_MATH_SIN(x) 
 { 
-	return __NJS_VAR(std::sin((double)(x))); 
+	return NJS::VAR(std::sin((double)(x))); 
 };
 
 function __NJS_MATH_SINH(x) 
 { 
-	return __NJS_VAR(std::sinh((double)(x))); 
+	return NJS::VAR(std::sinh((double)(x))); 
 };
 
 function __NJS_MATH_SQRT(x) 
 { 
-	return __NJS_VAR(std::sqrt((double)(x))); 
+	return NJS::VAR(std::sqrt((double)(x))); 
 };
 
 function __NJS_MATH_TAN(x) 
 { 
-	return __NJS_VAR(std::tan((double)(x))); 
+	return NJS::VAR(std::tan((double)(x))); 
 };
 
 function __NJS_MATH_TANH(x) 
 { 
-	return __NJS_VAR(std::tanh((double)(x))); 
+	return NJS::VAR(std::tanh((double)(x))); 
 };
 
 function __NJS_MATH_TRUNC(x) 
 { 
-	return __NJS_VAR((int)(x)); 
+	return NJS::VAR((int)(x)); 
 };

@@ -171,7 +171,8 @@ namespace NJS
 	VAR::VAR(NJS::Class::Number *_value)
 	{
 		type = NJS::Enum::Type::Number;
-		_ptr = new NJS::Class::Number(*_value);
+		_ptr = _value;
+		_value->counter++;
 	}
 	
 	VAR::VAR(NJS::Class::Native *_value)
@@ -179,12 +180,6 @@ namespace NJS
 		type = NJS::Enum::Type::Native;
 		_value->counter++;
 		_ptr = _value;
-	}
-	
-	VAR::VAR(NJS::Class::Undefined *_value)
-	{
-		type = NJS::Enum::Type::Undefined;
-		_ptr = new NJS::Class::Undefined();
 	}
 	
 	VAR::VAR(NJS::Enum::Type _type, void *_value)

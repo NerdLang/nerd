@@ -22,7 +22,7 @@
  
 function NumericLiteral(_path)
 {
-	if(_path.parent.type == "MemberExpression")
+	if(_path.parent.type == "MemberExpression" || _path.parent.type == "BinaryExpression")
 	{
 		_path.replaceWithSourceString("__NJS_VAR(" + _path.node.extra.raw + ")");
 		_path.skip();

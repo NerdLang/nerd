@@ -27,7 +27,7 @@ namespace NJS::Class
 		Number(int val);
 		Number(double val);
 		Number(long long val);
-		Number(const Number& val);
+		Number(const Number* val);
 		//Number(const Number* val);
 		Number(const NJS::VAR& val);
 		// Properties
