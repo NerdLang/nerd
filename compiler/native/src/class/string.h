@@ -49,7 +49,13 @@ namespace NJS::Class
 	String::operator int() const noexcept
 	{
 		std::string::size_type end;
-		auto res = std::stoi(value, &end, 10);
+		std::cout << value << std::endl;
+		int res;
+		try
+		{
+			res = std::stoi(value, &end, 10);
+		}catch(std::invalid_argument e){}
+		
 		return end == value.size() ? res : std::numeric_limits<int>::quiet_NaN();
 	}
 	String::operator long long() const noexcept

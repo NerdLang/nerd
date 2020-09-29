@@ -53,7 +53,7 @@ function VariableDeclarator(_path)
 		  {
 			var _obj = "__NJS_TMP_OBJ_" + RND();
 			var _set = "__NJS_SET_OBJ_" + RND();
-			var _setter = `inline NJS::VAR ${_set}() { var ${_obj} = __NJS_Create_Array();`;
+			var _setter = `inline NJS::VAR ${_set}() { var ${_obj} = __NJS_Create_Object();`;
 			
 			for(var j = 0; j < _el[i].properties.length; j++)
 			{
