@@ -33,8 +33,8 @@ function NumericLiteral(_path)
 		var end = _path.node.end;
 		if(_path.parent.left.start == start && _path.parent.left.end == end)
 		{
-			_path.replaceWithSourceString("__NJS_VAR(" + _path.node.extra.raw + ")");
-			_path.skip();
+			//_path.replaceWithSourceString("__NJS_VAR(" + _path.node.extra.raw + ")");
+			//_path.skip();
 		}
 	}
 }

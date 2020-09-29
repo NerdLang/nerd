@@ -376,3 +376,5 @@ NJS::VAR __NJS_NOT_EQUAL_VALUE_AND_TYPE(NJS::VAR _left, NJS::VAR _right)
 
 	return __NJS_Create_Boolean(0);
 }
+
+

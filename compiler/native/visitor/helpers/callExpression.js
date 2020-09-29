@@ -22,6 +22,12 @@
  
 function callExpression(_path)
 {
+	
+	if(!_path.callee || !_path.callee.name)
+	{
+		VISITOR.disableFastFunction(_path.callee.name);
+	}
+	
 	if(_path.callee && _path.callee.name && (VISITOR.NJS_START.indexOf(_path.callee.name.substring(0, 5)) > -1 || VISITOR.NO_MODIFY_CALL.indexOf(_path.callee.name) > -1))
 	{
 	  return "";

@@ -87,6 +87,14 @@ VISITOR.addFunctionVarParam = function(_id, _number)
 	COMPILER.INFO.SCOPE[_id].param.push(_number);
 }
 
+VISITOR.disableFastFunction = function()
+{
+	if(COMPILER.INFO.SCOPE[VISITOR.Function_STATE[VISITOR.CURRENT_Function]])
+	{
+		COMPILER.INFO.SCOPE[VISITOR.Function_STATE[VISITOR.CURRENT_Function]].fast = false;
+	}
+}
+
 VISITOR.readOnlyVar = function(_name)
 {
 	VISITOR.addFunctionVarInit(_name);

@@ -77,3 +77,4 @@ namespace NJS
 #include "objmgmt.h"
 #include "classes.h"
 #include "operator.h"
+#include "native.h"

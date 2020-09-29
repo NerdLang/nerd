@@ -34,7 +34,6 @@ function memberExpression(_path, _root)
 		_obj.object.type = "Identifier";
 		_obj.object.name = _root; 
 	}
-
 	
 	while(_obj)
 	{

@@ -51,7 +51,7 @@ function createFunction(_code, _scope)
 				if(_match[2][i].length > 0)
 				{
 					if(i != 0) _var += ",";
-					_var += "int " + _match[2][i];
+					_var += "double " + _match[2][i];
 				}
 			}
 			_parameters = _var;
