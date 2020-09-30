@@ -42,6 +42,8 @@ namespace NJS
 
 		VAR & operator[] (VAR _index);
 		VAR & operator[] (VAR _index) const;
+		VAR & operator[] (int _index) const;
+		VAR & operator[] (int _index);
 		VAR & operator[] (const char* _index);
 		/* END ACCESS OVERLOAD */
 

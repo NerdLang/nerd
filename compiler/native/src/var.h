@@ -221,6 +221,16 @@ namespace NJS
 		return (*(NJS::Class::Base*)_ptr)[_index];
 	}
 	
+	VAR & VAR::operator[] (int _index) const
+	{
+		return (*(NJS::Class::Base*)_ptr)[NJS::VAR(_index)];
+	}
+	
+	VAR & VAR::operator[] (int _index)
+	{
+		return (*(NJS::Class::Base*)_ptr)[NJS::VAR(_index)];
+	}
+	
 	VAR & VAR::operator[] (VAR _index) const
 	{
 		return (*(NJS::Class::Base*)_ptr)[_index];
