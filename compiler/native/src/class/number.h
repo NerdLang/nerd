@@ -342,7 +342,7 @@ namespace NJS::Class
 	}
 	Number Number::operator+(const Number &_v1) const
 	{
-		if (isInt && isInt)
+		if (isInt && _v1.isInt)
 		{
 			int a = (int)*this;
 			int b = (int)_v1;
@@ -352,6 +352,7 @@ namespace NJS::Class
 				return c;
 			}
 		}
+		
 		return ((double)*this) + (double)_v1;
 	}
 	Number Number::operator+=(const Number &_v1)
