@@ -21,7 +21,7 @@ namespace NJS::Class
 		// Methods
 		void Delete() noexcept;
 		
-		NJS::VAR Call(var& __NJS_THIS, NJS::Type::vector_t __NJS_VARARGS);
+		NJS::VAR Call(var __NJS_THIS, NJS::Type::vector_t __NJS_VARARGS);
 		
 		template <class... Args>
 		NJS::VAR New(Args... args);

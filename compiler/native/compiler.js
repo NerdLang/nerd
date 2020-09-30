@@ -152,7 +152,7 @@ function Compiler()
 		HOISTING: [],
 	};
 	
-	this.GLOBAL = ["__NJS_THIS"];
+	this.GLOBAL = ["__NJS_THIS", "parseInt"];
 	
 	this.VAR_STATE = [[]];
 

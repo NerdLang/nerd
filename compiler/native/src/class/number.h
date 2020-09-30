@@ -185,6 +185,22 @@ namespace NJS::Class
 		{
 			object.push_back(NJS::Type::pair_t((std::string)key, __NJS_Create_Var_Scoped_Anon( return this; )));
 		}
+		else if(((std::string)key).compare("toFixed") == 0)
+		{
+			object.push_back(NJS::Type::pair_t((std::string)key, __NJS_Create_Var_Scoped_Anon( 
+				
+				int precision;
+				if(__NJS_VARARGS.size() > 0)
+				{
+					precision = __NJS_VARARGS[0];
+				}
+				else precision = 0;
+				std::ostringstream strout ;
+				strout << std::fixed << std::setprecision(precision) << value.d ;
+				std::string str = strout.str() ;
+				return str;
+			)));
+		}
 		else 
 		{
 			object.push_back(NJS::Type::pair_t((std::string)key, __NJS_VAR()));

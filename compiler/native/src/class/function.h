@@ -95,7 +95,7 @@ namespace NJS::Class
 		return object[object.size() - 1].second;
 	}
 	
-	NJS::VAR Function::Call(var& __NJS_THIS, NJS::Type::vector_t __NJS_VARARGS)
+	NJS::VAR Function::Call(var __NJS_THIS, NJS::Type::vector_t __NJS_VARARGS)
 	{
 		return (*static_cast<std::function<NJS::VAR(var, NJS::Type::vector_t)> *>(value))(__NJS_THIS, __NJS_VARARGS);
 	}
