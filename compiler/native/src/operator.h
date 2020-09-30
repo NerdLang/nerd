@@ -68,7 +68,7 @@ NJS::VAR parseInt(NJS::VAR _str)
 #ifdef __NJS_ARDUINO
 		return NJS::VAR();
 #else
-		return __NJS_Create_Number(stoi(((NJS::Class::String*)_str._ptr)->value));
+		return __NJS_Create_Number((double)(*(NJS::Class::String*)_str._ptr));
 #endif
 	}
 	else
