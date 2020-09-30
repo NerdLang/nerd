@@ -42,6 +42,7 @@ namespace NJS
 
 		VAR & operator[] (VAR _index);
 		VAR & operator[] (VAR _index) const;
+		VAR & operator[] (const char* _index);
 		/* END ACCESS OVERLOAD */
 
 		/*** END CONSTRUCTOR ***/
@@ -99,9 +100,13 @@ namespace NJS
 		VAR operator<<=(const VAR &_v1);
 
 		explicit operator int() const;
+		operator int();
 		explicit operator double() const;
+		operator double();
 		explicit operator bool() const;
-		explicit operator std::string() const;	
+		operator bool();
+		explicit operator std::string() const;
+		operator std::string();
 		explicit operator const char*() const;	
 		explicit operator const long long() const;
 		

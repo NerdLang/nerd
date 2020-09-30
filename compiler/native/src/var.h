@@ -226,6 +226,11 @@ namespace NJS
 		return (*(NJS::Class::Base*)_ptr)[_index];
 	}
 	
+	VAR & VAR::operator[] (const char* _index)
+	{
+		return (*(NJS::Class::Base*)_ptr)[NJS::VAR(_index)];
+	}
+	
 	/* END ACCESS OVERLOAD */
 
 	/*** END CONSTRUCTOR ***/
@@ -555,8 +560,18 @@ namespace NJS
 	{
 		return (int)(*(NJS::Class::Base*)_ptr);
 	}
+	
+	VAR::operator int()
+	{
+		return (int)(*(NJS::Class::Base*)_ptr);
+	}
 
 	VAR::operator double() const
+	{
+		return (double)(*(NJS::Class::Base*)_ptr);
+	}
+	
+	VAR::operator double()
 	{
 		return (double)(*(NJS::Class::Base*)_ptr);
 	}
@@ -565,8 +580,18 @@ namespace NJS
 	{
 		return (bool)(*(NJS::Class::Base*)_ptr);
 	}
+	
+	VAR::operator bool()
+	{
+		return (bool)(*(NJS::Class::Base*)_ptr);
+	}
 
 	VAR::operator std::string() const
+	{
+		return (std::string)(*(NJS::Class::Base*)_ptr);
+	}
+	
+	VAR::operator std::string()
 	{
 		return (std::string)(*(NJS::Class::Base*)_ptr);
 	}
