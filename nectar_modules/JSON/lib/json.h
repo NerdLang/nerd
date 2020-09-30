@@ -139,7 +139,7 @@ __NJS_DECL_Function<NJS::VAR (var, NJS::Type::vector_t)>* __NJS_FN___5po78g = ne
 		r = jsmn_parse(&p, JSON_STRING, strlen(JSON_STRING), tok, tokcount);
 		if (r < 0) 
 		{
-			if (r == JSMN_ERROR_NOMEM) 
+			if (r == (int)JSMN_ERROR_NOMEM) 
 			{
 				tokcount = tokcount * 2;
 				tok = (jsmntok_t *)realloc_it(tok, sizeof(*tok) * tokcount);

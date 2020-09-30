@@ -430,3 +430,15 @@ NJS::VAR operator% (NJS::VAR _left, T right)
 {
 	return _left % NJS::VAR(right);
 }
+
+template<class T>
+NJS::VAR operator== (NJS::VAR _left, T right)
+{
+	return _left == NJS::VAR(right);
+}
+
+template<class T>
+NJS::VAR operator!= (NJS::VAR _left, T right)
+{
+	return _left != NJS::VAR(right);
+}
