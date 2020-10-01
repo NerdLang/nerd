@@ -287,9 +287,9 @@ for (let i = 0; i < 500; i++) {
     }
 }
 
-console.log(NN.feed_forward([1,0])) //[ 0.973527677207338 ]
-console.log(NN.feed_forward([0,1])) //[ 0.9829688288812666 ]
-console.log(NN.feed_forward([1,1])) //[ 0.025380822747380676 ]
-console.log(NN.feed_forward([0,0])) //[ 0.01929245473990312 ]
+console.log("[1,0] => ", NN.feed_forward([1,0])) //[ 0.973527677207338 ]
+console.log("[0,1] => ", NN.feed_forward([0,1])) //[ 0.9829688288812666 ]
+console.log("[1,1] => ", NN.feed_forward([1,1])) //[ 0.025380822747380676 ]
+console.log("[0,0] => ", NN.feed_forward([0,0])) //[ 0.01929245473990312 ]
 
 
