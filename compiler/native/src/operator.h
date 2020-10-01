@@ -144,7 +144,7 @@ NJS::VAR __NJS_Object_Stringify(NJS::VAR _var, bool _bracket)
 	{
 		var _res = "";
 		std::vector<NJS::VAR> *_arr = &((NJS::Class::Array*)_var._ptr)->value;
-		if(_bracket) _res += "[";
+		if(_bracket) _res += " [ ";
 		int j = (*_arr).size();
 		for (int i = 0; i < j; i++)
 		{
@@ -152,7 +152,7 @@ NJS::VAR __NJS_Object_Stringify(NJS::VAR _var, bool _bracket)
 				_res += ",";
 			_res += __NJS_Object_Stringify((*_arr)[i], _bracket);
 		}
-		if(_bracket) _res += "]";
+		if(_bracket) _res += " ] ";
 
 		return _res;
 	}

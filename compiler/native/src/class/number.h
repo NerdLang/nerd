@@ -41,17 +41,15 @@ namespace NJS::Class
 	}
 
 	// Constructors
-	Number::Number() { counter++; setInt(0); }
+	Number::Number() { setInt(0); }
 	Number::Number(int val)
 	{
 		isInt = true;
-		counter++;
 		setInt(val);
 	}
 
 	Number::Number(double val)
 	{
-		counter++;
 		double dummy;
 		if (modf(val, &dummy) == 0.0 && val < SMI_MAX && val > SMI_MIN)
 		{
@@ -67,7 +65,6 @@ namespace NJS::Class
 	Number::Number(long long val)
 	{
 		isInt = false;
-		counter++;
 		setDouble(val);
 	}
 	
@@ -79,7 +76,6 @@ namespace NJS::Class
 
 	Number::Number(const NJS::VAR& val)
 	{
-		counter++;
 		isInt = ((NJS::Class::Number*)val._ptr)->isInt;
 		switch(val.type)
 		{
@@ -196,7 +192,7 @@ namespace NJS::Class
 				}
 				else precision = 0;
 				std::ostringstream strout ;
-				strout << std::fixed << std::setprecision(precision) << value.d ;
+				strout << std::fixed << std::setprecision(precision) << (double)*this ;
 				std::string str = strout.str() ;
 				return str;
 			)));
@@ -230,7 +226,7 @@ namespace NJS::Class
 		}
 		else
 		{
-			return value.d == (double)_v1;
+			return (double)*this == (double)_v1;
 		}
 	}
 	// === emulated with __NJS_EQUAL_VALUE_AND_TYPE
@@ -243,7 +239,7 @@ namespace NJS::Class
 		}
 		else
 		{
-			return value.d != (double)_v1;
+			return (double)*this != (double)_v1;
 		}
 	}
 	bool Number::operator<(const Number &_v1) const
@@ -254,7 +250,7 @@ namespace NJS::Class
 		}
 		else
 		{
-			return value.d < (double)_v1;
+			return (double)*this < (double)_v1;
 		}
 	}
 	bool Number::operator<=(const Number &_v1) const
@@ -265,7 +261,7 @@ namespace NJS::Class
 		}
 		else
 		{
-			return value.d <= (double)_v1;
+			return (double)*this <= (double)_v1;
 		}
 	}
 	bool Number::operator>(const Number &_v1) const
@@ -276,7 +272,7 @@ namespace NJS::Class
 		}
 		else
 		{
-			return value.d > (double)_v1;
+			return (double)*this > (double)_v1;
 		}
 	}
 	bool Number::operator>=(const Number &_v1) const
@@ -287,7 +283,7 @@ namespace NJS::Class
 		}
 		else
 		{
-			return value.d >= (double)_v1;
+			return (double)*this >= (double)_v1;
 		}
 	}
 	// Numeric operators
@@ -297,7 +293,17 @@ namespace NJS::Class
 		throw InvalidTypeException();
 		#endif
 	}
-	Number Number::operator-() const { if(isInt) return (int)-getInt() ; else return (double)-getDouble(); }
+	Number Number::operator-() const 
+	{ 
+		if(isInt)
+		{
+			return -getInt(); 
+		}
+		else
+		{
+			return (double)-getDouble();
+		}
+	}
 	Number Number::operator++(const int _v1)
 	{
 		Number old(*this);
@@ -399,7 +405,7 @@ namespace NJS::Class
 				return c;
 			}
 		}
-		return value.d - (double)_v1;
+		return (double)*this - (double)_v1;
 	}
 	Number Number::operator-=(const Number &_v1)
 	{

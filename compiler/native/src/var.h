@@ -324,7 +324,7 @@ namespace NJS
 	VAR VAR::operator-()
 	{
 		if (type == NJS::Enum::Type::Number)
-			return -(int)*this;
+			return -((*(NJS::Class::Number*)_ptr));
 		else
 			return -(double)*this;
 	}
@@ -366,9 +366,11 @@ namespace NJS
 		return *this;
 	}
 	VAR VAR::operator-(const VAR &_v1)
-	{
+	{	
 		if (type == NJS::Enum::Type::Number )
+		{
 			return ((*(NJS::Class::Number*)_ptr)) - _v1;
+		}
 		else return "NaN";
 	}
 	VAR VAR::operator-=(const VAR &_v1)

@@ -31,7 +31,7 @@ namespace NJS::Class
 		//Number(const Number* val);
 		Number(const NJS::VAR& val);
 		// Properties
-		count_t counter = 0;
+		count_t counter = 1;
 		NumberValue value = {.i = 0};
 		NJS::Type::object_t object;
 		// Methods
