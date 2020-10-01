@@ -286,6 +286,7 @@ for (let i = 0; i < 500; i++) {
       NN.train(shuffled[j].input,shuffled[j].output)
     }
 }
+
 console.log(NN.feed_forward([1,0])) //[ 0.973527677207338 ]
 console.log(NN.feed_forward([0,1])) //[ 0.9829688288812666 ]
 console.log(NN.feed_forward([1,1])) //[ 0.025380822747380676 ]

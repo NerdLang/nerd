@@ -26,4 +26,9 @@
 #define __NJS_FAST_INT constexpr double
 #define __NJS_CreateMethodToClass(_name, _fn) __NJS_Object_Set(_name, __NJS_Create_Var_Scoped_Anon( return _fn(__NJS_VARARGS); ), &object);
 #define __NJS_NEW(_fn) ((NJS::Class::Function*)_fn._ptr)->New
+#define __NJS_Method_Lazy_Loader(_name, _fn) \
+if(((std::string)key).compare(_name) == 0) { \
+_lazy = __NJS_Create_Var_Scoped_Anon( return _fn(__NJS_VARARGS); ); \
+object.push_back(NJS::Type::pair_t((std::string)key, _lazy)); \
+return _lazy;}
 /* END HELPERS */

@@ -5,7 +5,7 @@
 namespace NJS::Class
 {
 	// Constructors
-	Object::Object() { counter++; }
+	Object::Object() { }
 	// Methods
 	void Object::Delete() noexcept
 	{

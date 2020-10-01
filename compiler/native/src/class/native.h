@@ -6,10 +6,9 @@
 namespace NJS::Class
 {
 	// Constructors
-	Native::Native() { counter++; }
+	Native::Native() {}
 	Native::Native(void *val)
 	{
-		counter++;
 		value = val;
 	}
 	// Methods

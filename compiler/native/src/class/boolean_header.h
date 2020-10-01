@@ -6,14 +6,11 @@ namespace NJS::Class
 	class Boolean : public virtual Base
 	{
 	public:
-		// Constants
-		const char *name = "boolean";
-		const NJS::Enum::Type type = NJS::Enum::Type::Boolean;
 		// Constructors
 		Boolean();
 		Boolean(bool val);
 		// Properties
-		count_t counter = 0;
+		count_t counter = 1;
 		NJS::Type::object_t object;
 		bool value = false;
 		// Methods

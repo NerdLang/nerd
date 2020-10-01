@@ -8,12 +8,10 @@ namespace NJS::Class
 	// Constructors
 	Function::Function()
 	{ 
-		counter++; 
 		object.push_back(NJS::Type::pair_t("prototype", __NJS_Create_Object()));
 	}
 	Function::Function(void *val)
 	{
-		counter++;
 		object.push_back(NJS::Type::pair_t("prototype", __NJS_Create_Object()));
 		value = (NJS::Type::function_t*)val;
 	}

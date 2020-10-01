@@ -6,14 +6,12 @@ namespace NJS::Class
 	class String : public virtual Base
 	{
 	public:
-		// Constants
-		const NJS::Enum::Type type = NJS::Enum::Type::String;
 		// Constructors
 		String();
 		String(std::string val);
 		String(const char* val);
 		// Properties
-		count_t counter = 0;
+		count_t counter = 1;
 		std::string value = "";
 		NJS::Type::object_t object;
 		// Methods

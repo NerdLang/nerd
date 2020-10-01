@@ -2,52 +2,16 @@
 #include "array_header.h"
 #include <sstream>
 #include <limits>
-#define __NJS_Class_Array_Init() \
-counter++; \
-__NJS_CreateMethodToClass("@@iterator", __iterator); \
-__NJS_CreateMethodToClass("@@unscopables", __unscopables); \
-__NJS_CreateMethodToClass("concat", concat); \
-__NJS_CreateMethodToClass("copyWithin", copyWithin); \
-__NJS_CreateMethodToClass("entries", entries); \
-__NJS_CreateMethodToClass("every", every); \
-__NJS_CreateMethodToClass("fill", fill); \
-__NJS_CreateMethodToClass("filter", filter); \
-__NJS_CreateMethodToClass("find", find); \
-__NJS_CreateMethodToClass("findIndex", findIndex); \
-__NJS_CreateMethodToClass("flat", flat); \
-__NJS_CreateMethodToClass("flatMap", flatMap); \
-__NJS_CreateMethodToClass("forEach", forEach); \
-__NJS_CreateMethodToClass("includes", includes); \
-__NJS_CreateMethodToClass("indexOf", indexOf); \
-__NJS_CreateMethodToClass("join", join); \
-__NJS_CreateMethodToClass("keys", keys); \
-__NJS_CreateMethodToClass("lastIndexOf", lastIndexOf); \
-__NJS_CreateMethodToClass("map", map); \
-__NJS_CreateMethodToClass("pop", pop); \
-__NJS_CreateMethodToClass("push", push); \
-__NJS_CreateMethodToClass("reduce", reduce); \
-__NJS_CreateMethodToClass("reduceRight", reduceRight); \
-__NJS_CreateMethodToClass("reverse", reverse); \
-__NJS_CreateMethodToClass("shift", shift); \
-__NJS_CreateMethodToClass("slice", slice); \
-__NJS_CreateMethodToClass("some", some); \
-__NJS_CreateMethodToClass("sort", sort); \
-__NJS_CreateMethodToClass("splice", splice); \
-__NJS_CreateMethodToClass("toLocaleString", toLocaleString); \
-__NJS_CreateMethodToClass("toString", toString); \
-__NJS_CreateMethodToClass("unshift", unshift); \
-__NJS_CreateMethodToClass("values", values);
 		
 namespace NJS::Class
 {
 	// Constructors
 	Array::Array() 
 	{ 
-		__NJS_Class_Array_Init();	
+
 	}
 	Array::Array(NJS::Type::vector_t vec)
 	{
-		__NJS_Class_Array_Init();
 		value = vec;
 	}
 	// Methods
@@ -139,6 +103,7 @@ namespace NJS::Class
 	{
 		static NJS::VAR __retLength;
 		static NJS::VAR _retUndefined;
+		static NJS::VAR _lazy;
 		if (key.type == NJS::Enum::Type::Number)
 		{
 			auto i = (int)key;
@@ -164,6 +129,7 @@ namespace NJS::Class
 			__retLength = (int)value.size();
 			return __retLength;
 		}
+		
 		for (auto & search : object)
 		{
 			if (((std::string)key).compare(search.first) == 0)
@@ -171,6 +137,41 @@ namespace NJS::Class
 				return search.second;
 			}
 		}
+		
+		__NJS_Method_Lazy_Loader("push", push);
+		__NJS_Method_Lazy_Loader("@@iterator", __iterator);
+		__NJS_Method_Lazy_Loader("@@unscopables", __unscopables);
+		__NJS_Method_Lazy_Loader("concat", concat);
+		__NJS_Method_Lazy_Loader("copyWithin", copyWithin);
+		__NJS_Method_Lazy_Loader("entries", entries);
+		__NJS_Method_Lazy_Loader("every", every);
+		__NJS_Method_Lazy_Loader("fill", fill);
+		__NJS_Method_Lazy_Loader("filter", filter);
+		__NJS_Method_Lazy_Loader("find", find);
+		__NJS_Method_Lazy_Loader("findIndex", findIndex);
+		__NJS_Method_Lazy_Loader("flat", flat);
+		__NJS_Method_Lazy_Loader("flatMap", flatMap);
+		__NJS_Method_Lazy_Loader("forEach", forEach);
+		__NJS_Method_Lazy_Loader("includes", includes);
+		__NJS_Method_Lazy_Loader("indexOf", indexOf);
+		__NJS_Method_Lazy_Loader("join", join);
+		__NJS_Method_Lazy_Loader("keys", keys);
+		__NJS_Method_Lazy_Loader("lastIndexOf", lastIndexOf);
+		__NJS_Method_Lazy_Loader("map", map);
+		__NJS_Method_Lazy_Loader("pop", pop);
+		__NJS_Method_Lazy_Loader("push", push);
+		__NJS_Method_Lazy_Loader("reduce", reduce);
+		__NJS_Method_Lazy_Loader("reduceRight", reduceRight);
+		__NJS_Method_Lazy_Loader("reverse", reverse);
+		__NJS_Method_Lazy_Loader("shift", shift);
+		__NJS_Method_Lazy_Loader("slice", slice);
+		__NJS_Method_Lazy_Loader("some", some);
+		__NJS_Method_Lazy_Loader("sort", sort);
+		__NJS_Method_Lazy_Loader("splice", splice);
+		__NJS_Method_Lazy_Loader("toLocaleString", toLocaleString);
+		__NJS_Method_Lazy_Loader("toString", toString);
+		__NJS_Method_Lazy_Loader("unshift", unshift);
+		__NJS_Method_Lazy_Loader("values", values);
 
 		object.push_back(NJS::Type::pair_t((std::string)key, __NJS_VAR()));
 		return object[object.size() - 1].second;

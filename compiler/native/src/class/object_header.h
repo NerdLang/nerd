@@ -6,13 +6,10 @@ namespace NJS::Class
 	class Object : public virtual Base
 	{
 	public:
-		// Constants
-		const char *name = "object";
-		const NJS::Enum::Type type = NJS::Enum::Type::Object;
 		// Constructors
 		Object();
 		// Properties
-		count_t counter = 0;
+		count_t counter = 1;
 		NJS::Type::object_t object;
 		bool prototype = false;
 		NJS::Type::vector_p instance;

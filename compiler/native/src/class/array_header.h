@@ -6,14 +6,11 @@ namespace NJS::Class
 	class Array : public virtual Base
 	{
 	public:
-		// Constants
-		const char *name = "array";
-		const NJS::Enum::Type type = NJS::Enum::Type::Array;
 		// Constructors
 		Array();
 		Array(NJS::Type::vector_t vec);
 		// Properties
-		count_t counter = 0;
+		count_t counter = 1;
 		NJS::Type::vector_t value;
 		NJS::Type::object_t object;
 		// Methods

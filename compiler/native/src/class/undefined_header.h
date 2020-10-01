@@ -7,12 +7,10 @@ namespace NJS::Class
 	{
 	class Empty {};
 	public:
-		// Constants
-		const NJS::Enum::Type type = NJS::Enum::Type::Undefined;
 		// Constructors
 		Undefined();
 		// Properties
-		count_t counter = 0;
+		count_t counter = 1;
 		Empty value;
 		// Methods
 		void Delete() noexcept;

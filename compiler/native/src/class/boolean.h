@@ -3,10 +3,9 @@
 namespace NJS::Class
 {
 	// Constructors
-	Boolean::Boolean() { counter++; }
+	Boolean::Boolean() { }
 	Boolean::Boolean(bool val)
 	{
-		counter++;
 		value = val;
 	}
 	// Methods

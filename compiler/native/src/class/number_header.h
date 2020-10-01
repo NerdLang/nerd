@@ -20,8 +20,6 @@ namespace NJS::Class
 		inline bool isNegative() const noexcept;
 
 	public:
-		// Constants
-		const NJS::Enum::Type type = NJS::Enum::Type::Number;
 		// Constructors
 		Number();
 		Number(int val);

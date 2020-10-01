@@ -6,14 +6,12 @@ namespace NJS::Class
 	class Function : public virtual Base
 	{
 	public:
-		// Constants
-		const NJS::Enum::Type type = NJS::Enum::Type::Function;
-		std::string code = "[native code]";
 		// Constructors
 		Function();
 		Function(void* val);
 		// Properties
-		count_t counter = 0;
+		count_t counter = 1;
+		std::string code = "[native code]";
 		NJS::Type::function_t* value = nullptr;
 		var This;
 		//NJS::VAR _this;

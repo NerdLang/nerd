@@ -2,32 +2,20 @@
 #include "string_header.h"
 #include <string>
 #include <limits>
-#define __NJS_Class_String_Init()\
-counter++; \
-__NJS_CreateMethodToClass("toString", toString); \
-__NJS_CreateMethodToClass("split", split); \
-__NJS_CreateMethodToClass("indexOf", indexOf); \
-__NJS_CreateMethodToClass("lastIndexOf", lastIndexOf); \
-__NJS_CreateMethodToClass("search", search); \
-__NJS_CreateMethodToClass("slice", slice); \
-__NJS_CreateMethodToClass("substr", substr); \
-__NJS_CreateMethodToClass("replace", replace);
 
 namespace NJS::Class
 {
 	// Constructors
 	String::String()
 	{ 
-		__NJS_Class_String_Init();
+
 	}
 	String::String(std::string val)
 	{
-		__NJS_Class_String_Init();
 		value = val;
 	}
 	String::String(const char* val)
 	{
-		__NJS_Class_String_Init();
 		value = val;
 	}
 	// Methods
@@ -99,6 +87,7 @@ namespace NJS::Class
 	{
 		static NJS::VAR _char;
 		static NJS::VAR _retLength;
+		static NJS::VAR _lazy;
 		if (key.type == NJS::Enum::Type::Number)
 		{
 			auto i = (int)key;
@@ -120,6 +109,8 @@ namespace NJS::Class
 			return _retLength;
 		}
 		
+		
+		
 		for (auto & search : object)
 		{
 			if (((std::string)key).compare(search.first) == 0)
@@ -127,6 +118,15 @@ namespace NJS::Class
 				return search.second;
 			}
 		}
+		
+		__NJS_Method_Lazy_Loader("toString", toString);
+		__NJS_Method_Lazy_Loader("split", split);
+		__NJS_Method_Lazy_Loader("indexOf", indexOf);
+		__NJS_Method_Lazy_Loader("lastIndexOf", lastIndexOf);
+		__NJS_Method_Lazy_Loader("search", search);
+		__NJS_Method_Lazy_Loader("slice", slice);
+		__NJS_Method_Lazy_Loader("substr", substr);
+		__NJS_Method_Lazy_Loader("replace", replace);
 
 		object.push_back(NJS::Type::pair_t(((std::string)*this).c_str(), __NJS_VAR()));
 		return object[object.size() - 1].second;

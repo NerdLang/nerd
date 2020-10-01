@@ -5,7 +5,7 @@
 namespace NJS::Class
 {
 	// Constructors
-	Undefined::Undefined() { counter++; }
+	Undefined::Undefined() { }
 	// Methods
 	void Undefined::Delete() noexcept
 	{
