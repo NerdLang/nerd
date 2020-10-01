@@ -151,39 +151,26 @@ namespace NJS::Class
 	// Main operators
 	NJS::VAR const Number::operator[](NJS::VAR key) const
 	{
-		auto &obj = this->object;
-		auto index = (std::string)key;
-		int _j = obj.size();
-		for (int _i = 0; _i < _j; _i++)
-		{
-			if (index.compare(obj[_i].first) == 0)
-			{
-				return obj[_i].second;
-			}
-		}
 		return NJS::VAR();
 	}
 	NJS::VAR &Number::operator[](NJS::VAR key)
 	{
-		for (auto & search : object)
-		{
-			if (((std::string)key).compare(search.first) == 0)
-			{
-				return search.second;
-			}
-		}
+		static NJS::VAR _retUndefined;
+		static NJS::VAR _retMethod;
 		
 		if(((std::string)key).compare("toString") == 0  || ((std::string)key).compare("toLocaleString") == 0)
 		{
-			object.push_back(NJS::Type::pair_t((std::string)key, __NJS_Create_Var_Scoped_Anon( return __NJS_Object_Stringify(this);)));
+			_retMethod = __NJS_Create_Var_Scoped_Anon( return __NJS_Object_Stringify(this););
+			return _retMethod;
 		}
 		else if(((std::string)key).compare("valueOf") == 0)
 		{
-			object.push_back(NJS::Type::pair_t((std::string)key, __NJS_Create_Var_Scoped_Anon( return this; )));
+			_retMethod = __NJS_Create_Var_Scoped_Anon( return this; );
+			return _retMethod;
 		}
 		else if(((std::string)key).compare("toFixed") == 0)
 		{
-			object.push_back(NJS::Type::pair_t((std::string)key, __NJS_Create_Var_Scoped_Anon( 
+			_retMethod = __NJS_Create_Var_Scoped_Anon( 
 				
 				int precision;
 				if(__NJS_VARARGS.size() > 0)
@@ -192,17 +179,14 @@ namespace NJS::Class
 				}
 				else precision = 0;
 				std::ostringstream strout ;
-				strout << std::fixed << std::setprecision(precision) << (double)*this ;
+				strout << std::fixed << std::setprecision(precision) << value.d ;
 				std::string str = strout.str() ;
 				return str;
-			)));
+			);
+			return _retMethod;
 		}
-		else 
-		{
-			object.push_back(NJS::Type::pair_t((std::string)key, __NJS_VAR()));
-		}
-
-		return object[object.size() - 1].second;
+		
+		return _retUndefined;
 	}
 	template <class... Args>
 	NJS::VAR Number::operator()(Args... args) const 

@@ -31,7 +31,6 @@ namespace NJS::Class
 		// Properties
 		count_t counter = 1;
 		NumberValue value = {.i = 0};
-		NJS::Type::object_t object;
 		// Methods
 		bool isInt = true;
 		inline int getInt() const noexcept;

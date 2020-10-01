@@ -6,13 +6,9 @@
 namespace NJS::Class
 {
 	// Constructors
-	Function::Function()
-	{ 
-		object.push_back(NJS::Type::pair_t("prototype", __NJS_Create_Object()));
-	}
+	Function::Function(){}
 	Function::Function(void *val)
 	{
-		object.push_back(NJS::Type::pair_t("prototype", __NJS_Create_Object()));
 		value = (NJS::Type::function_t*)val;
 	}
 	// Methods
@@ -59,6 +55,7 @@ namespace NJS::Class
 	}
 	NJS::VAR &Function::operator[](NJS::VAR key)
 	{
+		static NJS::VAR _lazy;
 		for (auto & search : object)
 		{
 			if (((std::string)key).compare(search.first) == 0)
@@ -66,6 +63,8 @@ namespace NJS::Class
 				return search.second;
 			}
 		}
+		
+		__NJS_Object_Lazy_Loader("prototype");
 		
 		if(((std::string)key).compare("toString") == 0  || ((std::string)key).compare("toLocaleString") == 0)
 		{
