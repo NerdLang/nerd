@@ -53,7 +53,6 @@ namespace NJS::Class
 	{
 		std::string::size_type end;
 		long long res;
-		int res;
 		try
 		{
 			res = std::stoll(value, &end, 10);
