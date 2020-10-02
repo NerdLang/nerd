@@ -103,7 +103,7 @@ function __NJS_fs_renameSync(_old, _new)
 
 function __NJS_fs_mkdirSync(_path)
 {
-	#ifdef __linux__ 
+	#infdef __linux__ 
 	mkdir( ((std::string)_path).c_str() );
 	#endif
 	return __NJS_Create_Boolean(1);
