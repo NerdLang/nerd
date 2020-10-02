@@ -27,7 +27,7 @@ var STD =
     name: "std",
     main: "std.cpp",
     compiler: "g++",
-    stdlib: ["console", "performance", "RegExp", "Number", "Object", "Math", "JSON", "Array"],
+    stdlib: ["console", "performance", "RegExp", "Number", "Object", "Math", "JSON", "Array", "Date"],
     check: 
     {
         "env": 

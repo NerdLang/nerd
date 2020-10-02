@@ -438,7 +438,11 @@ namespace NJS::Class
 	NJS::VAR Array::keys(NJS::Type::vector_t args) const { return NJS::VAR(); }
 	NJS::VAR Array::lastIndexOf(NJS::Type::vector_t args) const { return NJS::VAR(); }
 	NJS::VAR Array::map(NJS::Type::vector_t args) const { return NJS::VAR(); }
-	NJS::VAR Array::pop(NJS::Type::vector_t args) { return NJS::VAR(); }
+	NJS::VAR Array::pop(NJS::Type::vector_t args) 
+	{ 
+		value.pop_back();
+		return NJS::VAR(); 
+	}
 	NJS::VAR Array::push(NJS::Type::vector_t args)
 	{
 		for (auto _value : args)

@@ -18,6 +18,9 @@ console.log(_res);
 console.log(_arr);
 console.log("_arr.length: " + _arr.length);
 
+_arr.pop();
+console.log("_arr.length after pop(): " + _arr.length);
+
 console.log("_arr.join(':'): " + _arr.join(':'));
 
 var ArrInArr = [["Inception"]];
