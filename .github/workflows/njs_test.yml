@@ -21,6 +21,8 @@ jobs:
     # Runs a set of commands using the runners shell
     - name: Install and run
       run: | 
+        sudo update-alternatives --remove-all gcc 
+        sudo update-alternatives --remove-all g++
         sudo add-apt-repository ppa:ubuntu-toolchain-r/test
         sudo apt-get update
         sudo apt install g++-10
