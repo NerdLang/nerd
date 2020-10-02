@@ -25,9 +25,9 @@ jobs:
         sudo apt install g++-10
         wget -qO- https://deb.nodesource.com/setup_12.x | sudo -E bash
         sudo apt install -y nodejs
+        npm i
         g++ -v
     - name: run
       run: | 
-        npm i
         npm run njs_test
   
