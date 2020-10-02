@@ -34,4 +34,5 @@ return object.back().second;}
 if(((std::string)key).compare(_name) == 0) { \
 object.push_back(NJS::Type::pair_t((std::string)key, __NJS_Create_Object())); \
 return object.back().second;}
+#define __NJS_EXIT exit
 /* END HELPERS */
