@@ -18,15 +18,16 @@ jobs:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
       
-    # Runs a set of commands using the runners shell
-    - name: Install and run
+    - name: Install
       run: | 
         sudo add-apt-repository ppa:ubuntu-toolchain-r/test
         sudo apt-get update
         sudo apt install g++-10
         wget -qO- https://deb.nodesource.com/setup_12.x | sudo -E bash
         sudo apt install -y nodejs
+        g++ -v
+    - name: run
+      run: | 
         npm i
         npm run njs_test
-        g++ -v
   
