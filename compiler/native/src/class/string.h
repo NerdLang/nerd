@@ -31,13 +31,16 @@ namespace NJS::Class
 	String::operator double() const noexcept
 	{
 		std::string::size_type end;
-		auto res = std::stod(value, &end);
+		double res;
+		try
+		{
+			res = std::stod(value, &end);
+		}catch(std::invalid_argument e){}
 		return end == value.size() ? res : std::numeric_limits<double>::quiet_NaN();
 	}
 	String::operator int() const noexcept
 	{
 		std::string::size_type end;
-		std::cout << value << std::endl;
 		int res;
 		try
 		{
@@ -49,7 +52,13 @@ namespace NJS::Class
 	String::operator long long() const noexcept
 	{
 		std::string::size_type end;
-		auto res = std::stoll(value, &end, 10);
+		long long res;
+		int res;
+		try
+		{
+			res = std::stoll(value, &end, 10);
+		}catch(std::invalid_argument e){}
+
 		return end == value.size() ? res : std::numeric_limits<long long>::quiet_NaN();
 	}
 	String::operator std::string() const noexcept { return value; }
