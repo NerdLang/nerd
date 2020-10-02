@@ -94,3 +94,15 @@ function __NJS_fs_removeSync(_name)
   remove(__NJS_Get_String(_name));
   return __NJS_Create_Boolean(1);
 };
+
+function __NJS_fs_renameSync(_old, _new)
+{
+  rename(__NJS_Get_String(_old), __NJS_Get_String(_new));
+  return __NJS_Create_Boolean(1);
+};
+
+function __NJS_fs_mkdirSync(_path)
+{
+	std::filesystem::create_directory((std::string)_path);
+	return __NJS_Create_Boolean(1);
+}

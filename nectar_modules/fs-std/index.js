@@ -30,6 +30,8 @@ var fs =
   unlinkSync : __NJS_fs_unlinkSync,
   rmdirSync : __NJS_fs_rmdirSync,
   removeSync : __NJS_fs_removeSync,
+  renameSync: __NJS_fs_renameSync,
+  mkdirSync: __NJS_fs_mkdirSync,
 };
 
 module.exports = fs;

@@ -31,6 +31,7 @@
 #include <vector>
 #define _USE_MATH_DEFINES
 #include <stdarg.h>
+#include <filesystem>
 
 
 #ifdef __NJS_ARDUINO
