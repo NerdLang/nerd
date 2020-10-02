@@ -103,6 +103,6 @@ function __NJS_fs_renameSync(_old, _new)
 
 function __NJS_fs_mkdirSync(_path)
 {
-	std::filesystem::create_directory((std::string)_path);
+	mkdir( ((std::string)_path).c_str() );
 	return __NJS_Create_Boolean(1);
 }

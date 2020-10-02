@@ -38,6 +38,7 @@ function __NJS_CHILD_PROCESS_EXEC_SYNC(_cmd)
   char pChar[pSize];
 
   fp = popen(((std::string)_cmd).c_str(), "r");
+  
   if (fp == NULL)
   {
     printf("Failed to run command\n" );
@@ -55,7 +56,7 @@ function __NJS_CHILD_PROCESS_EXEC_SYNC(_cmd)
     strcat(buffer, pChar);
   }
 
-  pclose(fp);
+	pclose(fp);
 
   NJS::VAR _return = buffer;
   free(buffer);
