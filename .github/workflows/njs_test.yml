@@ -28,4 +28,5 @@ jobs:
         sudo apt install -y nodejs
         npm i
         npm run njs_test
+        g++ -v
   
