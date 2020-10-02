@@ -442,6 +442,8 @@ You can select a preset (speed or size) with:
 
 # Compatibility targets/platforms
 
+Tests are made with GCC 7 and Clang 6
+
 * All supported GCC platforms
 
 * All supported Clang platforms
