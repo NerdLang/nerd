@@ -87,7 +87,7 @@ namespace NJS::Class
 	{
 		static NJS::VAR _char;
 		static NJS::VAR _retLength;
-		static NJS::VAR _lazy;
+		
 		if (key.type == NJS::Enum::Type::Number)
 		{
 			auto i = (int)key;

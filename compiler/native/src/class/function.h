@@ -55,7 +55,6 @@ namespace NJS::Class
 	}
 	NJS::VAR &Function::operator[](NJS::VAR key)
 	{
-		static NJS::VAR _lazy;
 		for (auto & search : object)
 		{
 			if (((std::string)key).compare(search.first) == 0)

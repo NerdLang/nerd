@@ -1,12 +1,13 @@
 /*
 	Neural Network example by @wesley1989
+	v1.2
 */
 
 function sigmoid(x) {
   return 1 / (1 + Math.exp(-x));
 }
-function derivativeOfSigmoid(y){  
 
+function derivativeOfSigmoid(y){  
   return y * (1 - y); 
 }
 
@@ -18,21 +19,13 @@ function derivativeOfSigmoid(y){
       for (let i = 0; i < this.rows; i++) {
           this.data[i] = [];
         for (let j = 0; j < this.cols; j++) {
-          this.data[i][j] = (Math.random() * 2) - 1; 
+          this.data[i][j] = Number(((Math.random() * 2) - 1).toFixed(2)); 
         }
       }           
     }
-    copy() {
-      let m = new Matrix(this.rows, this.cols);
-      for (let i = 0; i < this.rows; i++) {
-        for (let j = 0; j < this.cols; j++) {
-          m.data[i][j] = this.data[i][j];
-        }
-      }
-      return m;
-    }
 
-    static transpose(matrix) {
+
+    static transposeMatrix(matrix) {
       let result = new Matrix(matrix.cols, matrix.rows);
       for (let i = 0; i < matrix.rows; i++) {
         for (let j = 0; j < matrix.cols; j++) {
@@ -42,19 +35,19 @@ function derivativeOfSigmoid(y){
       return result;
     }
   
-    static multiply(a, b) {
-      if (a.cols !== b.rows) {
-        return undefined;
+    static dotProduct(matrix1, matrix2) {
+      if (matrix1.cols !== matrix2.rows) {
+        return 1;
       } 
-      let result = new Matrix(a.rows, b.cols); 
+      let result = new Matrix(matrix1.rows, matrix2.cols); 
       for (let i = 0; i < result.rows; i++) {
         for (let j = 0; j < result.cols; j++) {
           let sum = 0;
-          for (let k = 0; k < a.cols; k++) {
-  
-            sum += a.data[i][k] * b.data[k][j];
+          for (let k = 0; k < matrix1.cols; k++) {
+            sum = sum + matrix1.data[i][k] * matrix2.data[k][j];
           }
             result.data[i][j] = sum;
+            result.data[i][j] = Number((result.data[i][j]).toFixed(2))
         }
       }
        return result;
@@ -63,7 +56,7 @@ function derivativeOfSigmoid(y){
     static fromArray(arr) {
       let m = new Matrix(arr.length, 1);
       for (let i = 0; i < arr.length; i++) {
-        m.data[i][0] = arr[i];
+        m.data[i][0] = Number((arr[i]).toFixed(2));
       }
       return m;
     }
@@ -72,7 +65,8 @@ function derivativeOfSigmoid(y){
       let result = new Matrix(a.rows, a.cols);
       for (let i = 0; i < result.rows; i++) {
         for (let j = 0; j < result.cols; j++) {
-          result.data[i][j] = a.data[i][j] - b.data[i][j];
+          var sub = a.data[i][j] - b.data[i][j]
+          result.data[i][j] = Number((sub).toFixed(2));
         }
       }
       return result;
@@ -82,7 +76,7 @@ function derivativeOfSigmoid(y){
       let result = new Matrix(matrix.rows, matrix.cols);
       for (let i = 0; i < matrix.rows; i++) {
         for (let j = 0; j < matrix.cols; j++) {
-          result.data[i][j] = activation(matrix.data[i][j]);
+          result.data[i][j] = Number((activation(matrix.data[i][j])).toFixed(2));
         }
       }
       return result;
@@ -102,13 +96,15 @@ function derivativeOfSigmoid(y){
       if (n instanceof Matrix) {
         for (let i = 0; i < this.rows; i++) {
           for (let j = 0; j < this.cols; j++) {
-            this.data[i][j] += n.data[i][j];
+            this.data[i][j] = this.data[i][j] + n.data[i][j];
+            this.data[i][j] = Number((this.data[i][j]).toFixed(2))
           }
         }
       } else {
         for (let i = 0; i < this.rows; i++) {
           for (let j = 0; j < this.cols; j++) {
-            this.data[i][j] += n;
+            this.data[i][j] =this.data[i][j] + n;
+            this.data[i][j] = Number((this.data[i][j]).toFixed(2))
           }
         }
       }
@@ -119,13 +115,15 @@ function derivativeOfSigmoid(y){
       if (n instanceof Matrix) {
         for (let i = 0; i < this.rows; i++) {
           for (let j = 0; j < this.cols; j++) {
-            this.data[i][j] *= n.data[i][j];
+            this.data[i][j] = this.data[i][j] * n.data[i][j];
+            this.data[i][j] = Number((this.data[i][j]).toFixed(2))
           }
         }
       } else {
         for (let i = 0; i < this.rows; i++) {
           for (let j = 0; j <  this.cols; j++) {
-            this.data[i][j] *= n;
+            this.data[i][j] = this.data[i][j] * n;
+            this.data[i][j] = Number((this.data[i][j]).toFixed(2))
           }
         }
       }
@@ -134,7 +132,7 @@ function derivativeOfSigmoid(y){
     map(otherFunction) {
       for (let i = 0; i < this.rows; i++) {
         for (let j = 0; j < this.cols; j++) {
-          this.data[i][j] = otherFunction(this.data[i][j]);
+          this.data[i][j] = Number((otherFunction(this.data[i][j])).toFixed(2));
         }
       }
     }
@@ -143,42 +141,26 @@ function derivativeOfSigmoid(y){
 
 class NeuralNetwork {
 
-  //a length of input
-  //b length of output
-  constructor(a, b) {
-    if (a instanceof NeuralNetwork) { 
-      //copying neural network
-      this.input_nodes = a.input_nodes;
-      this.output_nodes = a.output_nodes;
-      this.hidden_nodes = a.hidden_nodes;
-      this.weights_1 = a.weights_1.copy();
-      this.weights_2 = a.weights_2.copy();
-      this.bias_1 = a.bias_1.copy();
-      this.bias_2 = a.bias_2.copy();   
-      this.learning_rate=a.learning_rate;
-    } else {
-      this.input_nodes = a;
-      this.output_nodes = b;
-      // weights = (input length + output length) times 2 
-      // for a better nn training
-      this.hidden_nodes = (a + b) * 2;
-      this.weights_1 = new Matrix(this.hidden_nodes, this.input_nodes);
-      this.weights_2 = new Matrix(this.output_nodes, this.hidden_nodes); 
-      this.bias_1 = new Matrix(this.hidden_nodes, 1);
-      this.bias_2 = new Matrix(this.output_nodes, 1);
-      this.learning_rate = 0.9;  
-    }  
-
+  // length of input
+  // length of output
+  constructor(input_length, output_length) {
+    // weights = (input length + output length) times 2 
+    // for a better nn training
+    this.weights_1 = new Matrix((input_length + output_length) * 2, input_length);
+    this.weights_2 = new Matrix(output_length, (input_length + output_length) * 2); 
+    this.bias_1 = new Matrix((input_length + output_length) * 2, 1);
+    this.bias_2 = new Matrix(output_length, 1);
+    this.learning_rate = 0.9;  
   }
 
 
 
   feed_forward(inputs) {
     let inputs_from = Matrix.fromArray(inputs);
-    let hidden = Matrix.multiply(this.weights_1, inputs_from);
+    let hidden = Matrix.dotProduct(this.weights_1, inputs_from);
     hidden.add(this.bias_1);
     hidden.map(sigmoid);
-    let output = Matrix.multiply(this.weights_2, hidden);
+    let output = Matrix.dotProduct(this.weights_2, hidden);
     output.add(this.bias_2);
     output.map(sigmoid);
     return output.toArray();
@@ -188,11 +170,11 @@ class NeuralNetwork {
   train(input_array, target_array) {  
     let inputs = Matrix.fromArray(input_array);
 
-    let hidden = Matrix.multiply(this.weights_1, inputs);  
+    let hidden = Matrix.dotProduct(this.weights_1, inputs);  
     hidden.add(this.bias_1);
     hidden.map(sigmoid);
     
-    let outputs = Matrix.multiply(this.weights_2, hidden);
+    let outputs = Matrix.dotProduct(this.weights_2, hidden);
     outputs.add(this.bias_2);
     outputs.map(sigmoid); 
 
@@ -203,39 +185,26 @@ class NeuralNetwork {
     let gradients = Matrix.map(outputs,derivativeOfSigmoid);
     gradients.multiply(output_errors);
     gradients.multiply(this.learning_rate);
-  
-    let hidden_T = Matrix.transpose(hidden);
-    let weight_ho_deltas = Matrix.multiply(gradients, hidden_T);
 
-    this.weights_2.add(weight_ho_deltas);
+    let hidden_transposed = Matrix.transposeMatrix(hidden);
+  
+    let weights_2_deltas = Matrix.dotProduct(gradients, hidden_transposed);
+
+
+
+    this.weights_2.add(weights_2_deltas);
     this.bias_2.add(gradients);
-
-  
-    let who_t = Matrix.transpose(this.weights_2);
-    let hidden_errors = Matrix.multiply(who_t, output_errors);
-    
+    let who_t = Matrix.transposeMatrix(this.weights_2);
+    let hidden_errors = Matrix.dotProduct(who_t, output_errors);
     
     let hidden_gradient = Matrix.map(hidden,derivativeOfSigmoid);
     hidden_gradient.multiply(hidden_errors);
     hidden_gradient.multiply(this.learning_rate);
 
-    let inputs_T = Matrix.transpose(inputs);
-    let weight_ih_deltas = Matrix.multiply(hidden_gradient, inputs_T);
-
-    this.weights_1.add(weight_ih_deltas);
+    let inputs_transposed = Matrix.transposeMatrix(inputs);
+    let weights_1_deltas = Matrix.dotProduct(hidden_gradient, inputs_transposed);
+    this.weights_1.add(weights_1_deltas);
     this.bias_1.add(hidden_gradient);
-      
-  }
-
-  copy() {
-    return new NeuralNetwork(this);
-  }
- 
-  mutate(func) {
-    this.weights_1.map(func);
-    this.weights_2.map(func);
-    this.bias_1.map(func);
-    this.bias_2.map(func);
   }
 
 }
@@ -279,17 +248,15 @@ var defined_data = [
 },
 ]
 
-
-for (let i = 0; i < 500; i++) {
-	var shuffled = shuffle(defined_data)
-    for (let j = 0; j < defined_data.length; j++) {
+for (let i = 0; i < 1000; i++) {
+    var shuffled = shuffle(defined_data)
+    for (let j = 0; j < shuffled.length; j++) {
       NN.train(shuffled[j].input,shuffled[j].output)
     }
-}
-
-console.log("[1,0] => ", NN.feed_forward([1,0])) //[ 0.973527677207338 ]
-console.log("[0,1] => ", NN.feed_forward([0,1])) //[ 0.9829688288812666 ]
-console.log("[1,1] => ", NN.feed_forward([1,1])) //[ 0.025380822747380676 ]
-console.log("[0,0] => ", NN.feed_forward([0,0])) //[ 0.01929245473990312 ]
+} 
 
 
+console.log("[0,1] =>", NN.feed_forward([0,1]));
+console.log("[0,0] =>", NN.feed_forward([0,0]));
+console.log("[1,0] =>", NN.feed_forward([1,0]));
+console.log("[1,1] =>", NN.feed_forward([1,1]));

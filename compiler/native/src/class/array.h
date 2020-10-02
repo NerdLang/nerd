@@ -101,9 +101,8 @@ namespace NJS::Class
 	}
 	NJS::VAR &Array::operator[](NJS::VAR key)
 	{
-		static NJS::VAR __retLength;
 		static NJS::VAR _retUndefined;
-		static NJS::VAR _lazy;
+
 		if (key.type == NJS::Enum::Type::Number)
 		{
 			auto i = (int)key;
@@ -126,8 +125,8 @@ namespace NJS::Class
 		
 		if(((std::string)key).compare("length") == 0)
 		{
-			__retLength = (int)value.size();
-			return __retLength;
+			length = (int)value.size();
+			return length;
 		}
 		
 		for (auto & search : object)

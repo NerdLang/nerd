@@ -11,6 +11,7 @@ namespace NJS::Class
 		Array(NJS::Type::vector_t vec);
 		// Properties
 		count_t counter = 1;
+		NJS::VAR length;
 		NJS::Type::vector_t value;
 		NJS::Type::object_t object;
 		// Methods
