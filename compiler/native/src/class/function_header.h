@@ -9,6 +9,7 @@ namespace NJS::Class
 		// Constructors
 		Function();
 		Function(void* val);
+		Function(void* val, NJS::VAR bind);
 		// Properties
 		count_t counter = 1;
 		std::string code = "[native code]";
@@ -20,6 +21,7 @@ namespace NJS::Class
 		void Delete() noexcept;
 		
 		NJS::VAR Call(var __NJS_THIS, NJS::Type::vector_t __NJS_VARARGS);
+		NJS::VAR Bind(var __NJS_THIS);
 		
 		template <class... Args>
 		NJS::VAR New(Args... args);

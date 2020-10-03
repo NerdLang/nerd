@@ -11,6 +11,11 @@ namespace NJS::Class
 	{
 		value = (NJS::Type::function_t*)val;
 	}
+	Function::Function(void *val, NJS::VAR bind)
+	{
+		This = bind;
+		value = (NJS::Type::function_t*)val;
+	}
 	// Methods
 	void Function::Delete() noexcept
 	{
@@ -84,6 +89,19 @@ namespace NJS::Class
 					__NJS_VARARGS.erase(__NJS_VARARGS.begin());
 				}
 				return Call(__THIS, __NJS_VARARGS);
+			)));
+		}
+		else if(((std::string)key).compare("bind") == 0)
+		{
+			object.push_back(NJS::Type::pair_t((std::string)key, __NJS_Create_Var_Scoped_Anon(
+				counter++;
+			var _bind;
+			if(__NJS_VARARGS.size() > 0)
+			{
+				_bind = __NJS_VARARGS[0];
+			}
+			var _binded = new NJS::Class::Function(value, _bind);
+			return _binded;
 			)));
 		}
 		else object.push_back(NJS::Type::pair_t((std::string)key, __NJS_VAR()));
