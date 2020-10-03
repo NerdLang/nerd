@@ -464,7 +464,12 @@ namespace NJS::Class
 		{
 			NJS::Type::vector_t _ret;
 			int start = 0;
-			if(args[0].type == NJS::Enum::Type::Number) start = args[0];
+			if(args[0].type == NJS::Enum::Type::Number)
+			{
+				if((int)args[0] > -1) start = args[0];
+				else start = value.size() + (int)args[0];
+				if(start > value.size()) start = value.size();
+			}
 			_ret = NJS::Type::vector_t(value.begin() + start, value.end());
 			return new NJS::Class::Array(_ret);
 		}
@@ -483,18 +488,67 @@ namespace NJS::Class
 				}
 				else if((int)args[1] < start) return new NJS::Class::Array(_ret);
 				else if((int)args[1] <= end) end = (end - (int)args[1]);
+				else end = 0;
 			}
 			else end = 0;
 			
+			if(value.size() - end < start) return new NJS::Class::Array(_ret);
 			_ret = NJS::Type::vector_t(value.begin() + start, value.end() - end);
 			return new NJS::Class::Array(_ret);
 		}
 		else return new NJS::Class::Array(value);
-		return NJS::VAR(); 
 	}
 	NJS::VAR Array::some(NJS::Type::vector_t args) const { return NJS::VAR(); }
 	NJS::VAR Array::sort(NJS::Type::vector_t args) const { return NJS::VAR(); }
-	NJS::VAR Array::splice(NJS::Type::vector_t args) { return NJS::VAR(); }
+	NJS::VAR Array::splice(NJS::Type::vector_t args)
+	{ 
+		NJS::VAR _ret = slice(args);
+		if(args.size() == 1)
+		{
+			int start = 0;
+			if(args[0].type == NJS::Enum::Type::Number)
+			{
+				if((int)args[0] > -1) start = args[0];
+				else start = value.size() + (int)args[0];
+				if(start > value.size()) start = value.size();
+			}
+			
+			value.erase(value.begin() + start, value.end());
+			return _ret;
+		}
+		else if(args.size() > 1)
+		{
+			int start = 0;
+			int end = value.size();
+			if(args[0].type == NJS::Enum::Type::Number) start = args[0];
+			
+			if(args[1].type == NJS::Enum::Type::Number)
+			{
+				if((int)args[1] < 0)
+				{
+					end = abs((int)args[1]);
+					if(end > value.size() - start) return _ret;
+					
+				}
+				else if((int)args[1] < start) return _ret;
+				else if((int)args[1] <= end) end = (end - (int)args[1]) -1;
+				else end = 0;
+				
+				if(start > value.size()) start = value.size();
+			
+			}
+			else end = 0;
+			
+			if(value.size() - end < start) return _ret;
+			value.erase(value.begin() + start, value.end() - end);
+
+		}
+		for(int i = 2; i < args.size(); i++)
+		{
+			value.push_back(args[i]);
+		}
+		return _ret;
+	}
 	NJS::VAR Array::toLocaleString(NJS::Type::vector_t args) const
 	{
 		/*
