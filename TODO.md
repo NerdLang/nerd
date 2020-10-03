@@ -1,7 +1,5 @@
 * Add import
 
-* Add babel visitors for missing
-
 * Add NectarJS REPL
 
 * put back project management
