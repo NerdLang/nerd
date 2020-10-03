@@ -458,7 +458,40 @@ namespace NJS::Class
 		return this;
 	}
 	NJS::VAR Array::shift(NJS::Type::vector_t args) { return NJS::VAR(); }
-	NJS::VAR Array::slice(NJS::Type::vector_t args) const { return NJS::VAR(); }
+	NJS::VAR Array::slice(NJS::Type::vector_t args) const 
+	{ 
+		if(args.size() == 1)
+		{
+			NJS::Type::vector_t _ret;
+			int start = 0;
+			if(args[0].type == NJS::Enum::Type::Number) start = args[0];
+			_ret = NJS::Type::vector_t(value.begin() + start, value.end());
+			return new NJS::Class::Array(_ret);
+		}
+		else if(args.size() > 1)
+		{
+			NJS::Type::vector_t _ret;
+			int start = 0;
+			int end = value.size();
+			if(args[0].type == NJS::Enum::Type::Number) start = args[0];
+			if(args[1].type == NJS::Enum::Type::Number)
+			{
+				if((int)args[1] < 0)
+				{
+					end = abs((int)args[1]);
+					if(end > value.size() - start) return new NJS::Class::Array(_ret);
+				}
+				else if((int)args[1] < start) return new NJS::Class::Array(_ret);
+				else if((int)args[1] <= end) end = (end - (int)args[1]);
+			}
+			else end = 0;
+			
+			_ret = NJS::Type::vector_t(value.begin() + start, value.end() - end);
+			return new NJS::Class::Array(_ret);
+		}
+		else return new NJS::Class::Array(value);
+		return NJS::VAR(); 
+	}
 	NJS::VAR Array::some(NJS::Type::vector_t args) const { return NJS::VAR(); }
 	NJS::VAR Array::sort(NJS::Type::vector_t args) const { return NJS::VAR(); }
 	NJS::VAR Array::splice(NJS::Type::vector_t args) { return NJS::VAR(); }

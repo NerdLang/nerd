@@ -18,6 +18,10 @@ console.log(_res);
 console.log(_arr);
 console.log("_arr.length: " + _arr.length);
 
+console.log("_arr.slice(3, 6): ", _arr.slice(3, 6));
+console.log("_arr.slice(3, -6): ", _arr.slice(3, -6));
+
+
 _arr.pop();
 console.log("_arr.length after pop(): " + _arr.length);
 
