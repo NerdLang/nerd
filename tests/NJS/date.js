@@ -1,1 +1,3 @@
-console.log("TS: " + date.now());
+
+console.log("TS: " + _date.now());
+console.log("UTC: " + _date.now("UTC"));

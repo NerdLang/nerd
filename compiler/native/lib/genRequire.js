@@ -24,6 +24,7 @@ var genInclude = require("./genInclude.js");
 var strip = require("strip-comments");
 module.exports = genRequire;
 var fs = require("fs");
+var CACHE = {};
 
 function showModuleComment(_obj, _name)
 {
@@ -102,128 +103,139 @@ function genRequire(from, src)
   while(_match)
   {
     var addSource = _match[1];
-    var modSource = "";
-    var fileSource;
-    if(addSource.indexOf(COMPILER.PATH) > -1)
-    {
-      modSource = addSource;
-    }
-    else
-    {
-      modSource = path.join(from + addSource);
-    }
-    var trySource = [modSource, modSource + "/" + "index.js", from + "nectar_modules/" + addSource + "/index.js", NECTAR_PATH + "/nectar_modules/" + addSource + "/index.js", from + "node_modules/" + addSource + "/index.js", NECTAR_PATH + "/node_modules/" + modSource + "/index.js", modSource + ".js",
-					modSource, modSource + "/" + "index.ts", from + "nectar_modules/" + addSource + "/index.ts", NECTAR_PATH + "/nectar_modules/" + addSource + "/index.ts", from + "node_modules/" + addSource + "/index.ts", NECTAR_PATH + "/node_modules/" + modSource + "/index.ts", modSource + ".ts"];
-    var newSrc = "";
-    for(var i = 0; i < trySource.length; i++)
-    {
-      try
-      {
-        modSource = path.dirname(trySource[i]) + "/";
-        newSrc = fs.readFileSync(trySource[i]).toString();
-        fileSource = trySource[i];
-        
-        var pkgPath = path.join(modSource, "package.json");
-        var pkgObject;
-        if(fs.existsSync(pkgPath))
-        {
-          var pkg = fs.readFileSync(pkgPath);
-          try
-          {
-            pkg = JSON.parse(pkg);
-            pkgObject = pkg;
-            if(pkg.nectar)
-            {
-				if(pkg.nectar.comment)
-              {
-				  showModuleComment(pkg.nectar.comment, pkg.name);
-			  }
-              if(pkg.nectar.env)
-              {
-                if(pkg.nectar.env.indexOf(COMPILER.ENV.name) < 0)
-                {
-                  console.error("NectarJS:\n\n[!] module " + addSource + " doesn't support env : " + COMPILER.ENV.name + " only these : " + pkg.nectar.env);
-                  process.exit(1);
-                }
-              }
-
-              if(pkg.nectar.target)
-              {
-                if(!COMPILER.TARGET)
-                {
-                  console.error("NectarJS:\n\n[!] module " + addSource + " require one of these targets : " + pkg.nectar.target + ". None specified");
-                  process.exit(1);
-                }
-                else if(pkg.nectar.target.indexOf(COMPILER.TARGET) < 0)
-                {
-                  console.error("NectarJS:\n\n[!] module " + addSource + " require one of these targets : " + pkg.nectar.target + ". " + COMPILER.TARGET + " specified");
-                  process.exit(1);
-                }
-              }
-
-              if(pkg.nectar.expose)
-              {
-                COMPILER.EXPOSE = COMPILER.EXPOSE.concat(pkg.nectar.expose);
-              }
-
-              if(pkg.nectar.lib)
-              {
-					addModuleLib(pkg.nectar.lib, modSource);
-              }
-
-            }
-          }
-          catch(e)
-          {
-            console.log("NectarJS:\n\n[!] " + e + " -> " + pkgPath.split("/").splice(-3).join("/"))
-          }
-        }
-
-        // EXPOSE VAR
-        var _expose = {};
-        if(pkgObject && pkgObject.nectar && pkgObject.nectar.expose) _expose = pkgObject.nectar.expose;
-
-        // READ ONLY VAR
-        if(pkgObject && pkgObject.nectar && pkgObject.nectar.read_only) COMPILER.READ_ONLY = COMPILER.READ_ONLY.concat(pkgObject.nectar.read_only);
-        
-        if(!CLI.cli["--no-check"]) LINT(newSrc, trySource[i], _expose);
-
-        break;
-      }
-      catch (e) {}
-    }
-
-    if(newSrc.length == 0)
-  {
-    console.log("[!] Warning : index file of module " + addSource + " seems empty");
-  }
-    
-    var ext = "js";
-	if(fileSource && fileSource.split)
-	{
-		var _Ext = fileSource.split(".");
-		if(_Ext.length > 1) ext = _Ext[_Ext.length - 1];
-		
-		if(ext == "ts") newSrc = compileTS(newSrc, fileSource);
-		
-		newSrc = genInclude(path.resolve(modSource) + "/", newSrc);
-
-
-		var reqFN = "__MODULE_" + Math.random().toString(36).substr(2, 10);
-		COMPILER.ENV.check.globals[reqFN] = false;
-
-		src = src.replace(_SEARCH, reqFN + "()");
-
-		newSrc = "function " + reqFN + "(){\nvar module = __NJS_Create_Object();\n" + newSrc;
-		newSrc = newSrc.replace(/(module\.exports *= *.*)$/g, "$1;");
-		newSrc += "return module.exports;\n}";
-		newSrc = genRequire(modSource, newSrc);
-
-		COMPILER.REQUIRE += newSrc + ";";
-	}
-	else src = src.replace(_SEARCH, "");
 	
-    var _match = src.match(_SEARCH);
+	if(CACHE[addSource])
+	{
+		src = src.replace(_SEARCH, CACHE[addSource]);
+		var _match = src.match(_SEARCH);
+	}
+	else 
+	{
+	
+		var modSource = "";
+		var fileSource;
+		if(addSource.indexOf(COMPILER.PATH) > -1)
+		{
+		  modSource = addSource;
+		}
+		else
+		{
+		  modSource = path.join(from + addSource);
+		}
+		var trySource = [modSource, modSource + "/" + "index.js", from + "nectar_modules/" + addSource + "/index.js", NECTAR_PATH + "/nectar_modules/" + addSource + "/index.js", from + "node_modules/" + addSource + "/index.js", NECTAR_PATH + "/node_modules/" + modSource + "/index.js", modSource + ".js",
+						modSource, modSource + "/" + "index.ts", from + "nectar_modules/" + addSource + "/index.ts", NECTAR_PATH + "/nectar_modules/" + addSource + "/index.ts", from + "node_modules/" + addSource + "/index.ts", NECTAR_PATH + "/node_modules/" + modSource + "/index.ts", modSource + ".ts"];
+		var newSrc = "";
+		for(var i = 0; i < trySource.length; i++)
+		{
+		  try
+		  {
+			modSource = path.dirname(trySource[i]) + "/";
+			newSrc = fs.readFileSync(trySource[i]).toString();
+			fileSource = trySource[i];
+			
+			var pkgPath = path.join(modSource, "package.json");
+			var pkgObject;
+			if(fs.existsSync(pkgPath))
+			{
+			  var pkg = fs.readFileSync(pkgPath);
+			  try
+			  {
+				pkg = JSON.parse(pkg);
+				pkgObject = pkg;
+				if(pkg.nectar)
+				{
+					if(pkg.nectar.comment)
+				  {
+					  showModuleComment(pkg.nectar.comment, pkg.name);
+				  }
+				  if(pkg.nectar.env)
+				  {
+					if(pkg.nectar.env.indexOf(COMPILER.ENV.name) < 0)
+					{
+					  console.error("NectarJS:\n\n[!] module " + addSource + " doesn't support env : " + COMPILER.ENV.name + " only these : " + pkg.nectar.env);
+					  process.exit(1);
+					}
+				  }
+
+				  if(pkg.nectar.target)
+				  {
+					if(!COMPILER.TARGET)
+					{
+					  console.error("NectarJS:\n\n[!] module " + addSource + " require one of these targets : " + pkg.nectar.target + ". None specified");
+					  process.exit(1);
+					}
+					else if(pkg.nectar.target.indexOf(COMPILER.TARGET) < 0)
+					{
+					  console.error("NectarJS:\n\n[!] module " + addSource + " require one of these targets : " + pkg.nectar.target + ". " + COMPILER.TARGET + " specified");
+					  process.exit(1);
+					}
+				  }
+
+				  if(pkg.nectar.expose)
+				  {
+					COMPILER.EXPOSE = COMPILER.EXPOSE.concat(pkg.nectar.expose);
+				  }
+
+				  if(pkg.nectar.lib)
+				  {
+						addModuleLib(pkg.nectar.lib, modSource);
+				  }
+
+				}
+			  }
+			  catch(e)
+			  {
+				console.log("NectarJS:\n\n[!] " + e + " -> " + pkgPath.split("/").splice(-3).join("/"))
+			  }
+			}
+
+			// EXPOSE VAR
+			var _expose = {};
+			if(pkgObject && pkgObject.nectar && pkgObject.nectar.expose) _expose = pkgObject.nectar.expose;
+
+			// READ ONLY VAR
+			if(pkgObject && pkgObject.nectar && pkgObject.nectar.read_only) COMPILER.READ_ONLY = COMPILER.READ_ONLY.concat(pkgObject.nectar.read_only);
+			
+			if(!CLI.cli["--no-check"]) LINT(newSrc, trySource[i], _expose);
+
+			break;
+		  }
+		  catch (e) {}
+		}
+
+		if(newSrc.length == 0)
+		{
+		console.log("[!] Warning : index file of module " + addSource + " seems empty");
+		}
+
+		var ext = "js";
+		if(fileSource && fileSource.split)
+		{
+			var _Ext = fileSource.split(".");
+			if(_Ext.length > 1) ext = _Ext[_Ext.length - 1];
+			
+			if(ext == "ts") newSrc = compileTS(newSrc, fileSource);
+			
+			newSrc = genInclude(path.resolve(modSource) + "/", newSrc);
+
+
+			var reqFN = "__MODULE_" + Math.random().toString(36).substr(2, 10);
+			COMPILER.ENV.check.globals[reqFN] = false;
+			CACHE[addSource] = reqFN + "()";
+
+			src = src.replace(_SEARCH, reqFN + "()");
+
+			newSrc = "function " + reqFN + "(){\nvar module = __NJS_Create_Object();\n" + newSrc;
+			newSrc = newSrc.replace(/(module\.exports *= *.*)$/g, "$1;");
+			newSrc += "return module.exports;\n}";
+			newSrc = genRequire(modSource, newSrc);
+
+			COMPILER.REQUIRE += newSrc + ";";
+		}
+		else src = src.replace(_SEARCH, "");
+
+		var _match = src.match(_SEARCH);
+	}
   }
   return src;
 }

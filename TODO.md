@@ -30,5 +30,3 @@
 * Add delete keyword
 
 * Use <filesystem> for fs module
-
-* Cache module at compilation
