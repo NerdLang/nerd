@@ -3,6 +3,7 @@
 #define __NJS_VAR NJS::VAR
 #define var NJS::VAR
 #define let NJS::VAR
+#define __NJS_CONST const NJS::VAR
 #define __NJS_Create_Boolean(_value) NJS::VAR(new NJS::Class::Boolean(_value))
 #define __NJS_Create_Number(_value) NJS::VAR(_value)
 #define __NJS_Create_Function(_value) NJS::VAR(NJS::Enum::Type::Function, _value)

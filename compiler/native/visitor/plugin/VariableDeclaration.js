@@ -32,13 +32,14 @@ function VariableDeclaration(_path)
 			VISITOR.readOnlyVar(_path.node.declarations[d].id.name);
 			if(COMPILER.ENV.name == "android" && COMPILER.STATE == "CODE")
 			{
-				console.log(VISITOR.CURRENT_Function);
-				//_path.node.kind = "";
+				if(VISITOR.CURRENT_Function < 0) _path.node.kind = "";
 				COMPILER.DECL.push(" var " + _path.node.declarations[d].id.name + ";");
 			}
 			else if(VISITOR.CURRENT_Function < 0)
 			{
-				if(VISITOR.CURRENT_Function < 0) _path.node.kind = "";
+				if(_path.node.kind == "const")_path.node.kind = "__NJS_CONST";
+				else if(VISITOR.CURRENT_Function < 0) _path.node.kind = "";
+
 				if(COMPILER.INFO.HOISTING.indexOf(_path.node.declarations[d].id.name) < 0)
 				{
 					COMPILER.INFO.HOISTING.push(_path.node.declarations[d].id.name);
