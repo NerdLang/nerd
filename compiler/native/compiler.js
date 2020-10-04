@@ -150,6 +150,7 @@ function Compiler()
 		CALL: {},
 		SCOPE: {},
 		HOISTING: [],
+		CLASS:{},
 	};
 	
 	this.GLOBAL = ["__NJS_THIS", "parseInt"];

@@ -43,6 +43,7 @@ var STD =
             "linebreak-style": "off",
             "no-unused-vars": ["warn", { "vars": "all", "args": "after-used", "ignoreRestSiblings": false }],
             "no-redeclare": ["error", { "builtinGlobals": false }],
+			"no-const-assign": "error",
         },
         "globals":
         {
