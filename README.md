@@ -67,6 +67,17 @@ Some benchmarks with the file example/fibo.js and differents fibos arguments:
 
 NectarJS already supports more than 80% of ES3.
 
+
+<details>
+<summary>Prototype</summary>
+<br>
+ 
+* .call()
+
+* .bind()
+
+</details>
+
 <details>
 <summary>Array</summary>
 <br>
