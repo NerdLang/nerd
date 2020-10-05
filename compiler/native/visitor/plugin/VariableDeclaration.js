@@ -39,12 +39,16 @@ function VariableDeclaration(_path)
 			{
 				if(_path.node.kind == "const")_path.node.kind = "__NJS_CONST";
 				else if(VISITOR.CURRENT_Function < 0) _path.node.kind = "";
-
+				
 				if(COMPILER.INFO.HOISTING.indexOf(_path.node.declarations[d].id.name) < 0)
 				{
 					COMPILER.INFO.HOISTING.push(_path.node.declarations[d].id.name);
 				}
-			}	
+			}
+		}
+		if(_path.node.declarations.length == 1 && _path.node.declarations[0].init && _path.node.declarations[0].init.type == "NumericLiteral")
+		{
+			if(_path.parent.type == "ForStatement") _path.node.kind = "int";
 		}
 		if(!(_path.node.declarations[d].init)) _path.node.declarations[d].init = babel.parse("__NJS_VAR()");
 	  }

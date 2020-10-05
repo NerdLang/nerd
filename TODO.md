@@ -23,8 +23,6 @@
 
 * Finish ES3
 
-* Add .bind to functions
-
 * Add delete keyword
 
 * Use <filesystem> for fs module
