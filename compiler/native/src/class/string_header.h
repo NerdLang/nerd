@@ -11,7 +11,7 @@ namespace NJS::Class
 		String(std::string val);
 		String(const char* val);
 		// Properties
-		std::string value = "";
+		std::string value;
 		NJS::Type::object_t object;
 		// Methods
 		void Delete() noexcept;

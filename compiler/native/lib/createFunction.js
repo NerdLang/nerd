@@ -122,7 +122,7 @@ function createFunction(_code, _scope)
 							var _formated = `NJS::Type::function_t* ${_genFN} = new NJS::Type::function_t([${_catch}]( ${_parameters} ) -> NJS::VAR ${_fn} ${_return} );`;
 							_formated += _match[1] + "=NJS::VAR(NJS::Enum::Type::Function, " + _genFN + ");";
 							if(CLI.cli["--debug"]) _formated += `((NJS::Class::Function*)${_match[1]}._ptr)->code = R"${__STR_MARKER}(Function ${_match[1]}(${_match[2]}) ${_code.substring(_start, _end )}})${__STR_MARKER}";`
-							else _formated += `((NJS::Class::Function*)${_match[1]}._ptr)->code = R"([Function: ${_match[1]}])";`
+							//else _formated += `((NJS::Class::Function*)${_match[1]}._ptr)->code = R"([Function: ${_match[1]}])";`
 
 							_code = [_code.slice(0, _index), _formated, _code.slice(_end + 1)].join('');
 						}

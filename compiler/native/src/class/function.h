@@ -41,7 +41,11 @@ namespace NJS::Class
 	}
 	Function::operator std::string() const noexcept
 	{
+		#ifdef __NJS_DEBUG
 		return code;
+		#else 
+		return "[native code]";
+		#endif
 	}
 	// Main operators
 	NJS::VAR const Function::operator[](NJS::VAR key) const
@@ -69,7 +73,7 @@ namespace NJS::Class
 		return object[object.size() - 1].second;
 	}
 	
-	NJS::VAR Function::Call(var __NJS_THIS, NJS::VAR* _args, int i)
+	NJS::VAR Function::Call(var& __NJS_THIS, NJS::VAR* _args, int i)
 	{
 		return (*static_cast<NJS::Type::function_t *>(value))(__NJS_THIS, _args, i);
 	}

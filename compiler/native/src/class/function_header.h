@@ -12,7 +12,9 @@ namespace NJS::Class
 		Function(void* val, NJS::VAR bind);
 		// Properties
 		count_t counter = 1;
+		#ifdef __NJS_DEBUG
 		std::string code = "[native code]";
+		#endif
 		NJS::Type::function_t* value = nullptr;
 		var This;
 		//NJS::VAR _this;
@@ -20,8 +22,7 @@ namespace NJS::Class
 		// Methods
 		void Delete() noexcept;
 		
-		NJS::VAR Call(var __NJS_THIS, NJS::VAR* __NJS_VARARGS, int __NJS_VARLENGTH);
-		NJS::VAR Bind(var __NJS_THIS);
+		NJS::VAR Call(var& __NJS_THIS, NJS::VAR* __NJS_VARARGS, int __NJS_VARLENGTH);
 		
 		template <class... Args>
 		NJS::VAR New(Args... args);

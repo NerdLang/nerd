@@ -224,7 +224,7 @@ void __NJS_Object_Construct(NJS::VAR _this, NJS::VAR _prototype)
 		int j = (*_obj).size();
 		for (int _i = 0; _i < j; _i++)
 		{
-			NJS::VAR _tmp =  __NJS_Object_Get((*_obj)[_i].first, _this);
+			NJS::VAR _tmp =  _this[(*_obj)[_i].first];
 			if(_tmp.type == NJS::Enum::Type::Undefined)
 			{
 				_this[(*_obj)[_i].first] = (*_obj)[_i].second;
