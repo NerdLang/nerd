@@ -22,6 +22,7 @@
  
 function StringLiteral(_path)
 {
+	console.log(_path.node);
 	if(_path.node.extra.raw[0] && _path.node.extra.raw[0] == "'")
 	{
 		_path.node.extra.raw = '"' + _path.node.value.replace(/\\/g, '\\\\').replace(/"/g, '\\\"') + '"';
