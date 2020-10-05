@@ -1,6 +1,6 @@
 /*
 	Neural Network example by @wesley1989
-	v1.2
+	v1.3
 */
 
 function sigmoid(x) {
@@ -19,7 +19,7 @@ function derivativeOfSigmoid(y){
       for (let i = 0; i < this.rows; i++) {
           this.data[i] = [];
         for (let j = 0; j < this.cols; j++) {
-          this.data[i][j] = Number(((Math.random() * 2) - 1).toFixed(2)); 
+          this.data[i][j] = (Math.random() * 2) - 1; 
         }
       }           
     }
@@ -47,7 +47,7 @@ function derivativeOfSigmoid(y){
             sum = sum + matrix1.data[i][k] * matrix2.data[k][j];
           }
             result.data[i][j] = sum;
-            result.data[i][j] = Number((result.data[i][j]).toFixed(2))
+            result.data[i][j] = result.data[i][j]
         }
       }
        return result;
@@ -56,7 +56,7 @@ function derivativeOfSigmoid(y){
     static fromArray(arr) {
       let m = new Matrix(arr.length, 1);
       for (let i = 0; i < arr.length; i++) {
-        m.data[i][0] = Number((arr[i]).toFixed(2));
+        m.data[i][0] = arr[i];
       }
       return m;
     }
@@ -66,7 +66,7 @@ function derivativeOfSigmoid(y){
       for (let i = 0; i < result.rows; i++) {
         for (let j = 0; j < result.cols; j++) {
           var sub = a.data[i][j] - b.data[i][j]
-          result.data[i][j] = Number((sub).toFixed(2));
+          result.data[i][j] = sub
         }
       }
       return result;
@@ -76,7 +76,7 @@ function derivativeOfSigmoid(y){
       let result = new Matrix(matrix.rows, matrix.cols);
       for (let i = 0; i < matrix.rows; i++) {
         for (let j = 0; j < matrix.cols; j++) {
-          result.data[i][j] = Number((activation(matrix.data[i][j])).toFixed(2));
+          result.data[i][j] = activation(matrix.data[i][j])
         }
       }
       return result;
@@ -86,7 +86,7 @@ function derivativeOfSigmoid(y){
       let arr = [];
       for (let i = 0; i < this.rows; i++) {
         for (let j = 0; j < this.cols; j++) {
-          arr.push(this.data[i][j]);
+          arr.push(Number((this.data[i][j]).toFixed(2)));
         }
       }
       return arr;
@@ -97,14 +97,14 @@ function derivativeOfSigmoid(y){
         for (let i = 0; i < this.rows; i++) {
           for (let j = 0; j < this.cols; j++) {
             this.data[i][j] = this.data[i][j] + n.data[i][j];
-            this.data[i][j] = Number((this.data[i][j]).toFixed(2))
+            this.data[i][j] = this.data[i][j]
           }
         }
       } else {
         for (let i = 0; i < this.rows; i++) {
           for (let j = 0; j < this.cols; j++) {
             this.data[i][j] =this.data[i][j] + n;
-            this.data[i][j] = Number((this.data[i][j]).toFixed(2))
+            this.data[i][j] = this.data[i][j]
           }
         }
       }
@@ -116,14 +116,14 @@ function derivativeOfSigmoid(y){
         for (let i = 0; i < this.rows; i++) {
           for (let j = 0; j < this.cols; j++) {
             this.data[i][j] = this.data[i][j] * n.data[i][j];
-            this.data[i][j] = Number((this.data[i][j]).toFixed(2))
+            this.data[i][j] = this.data[i][j]
           }
         }
       } else {
         for (let i = 0; i < this.rows; i++) {
           for (let j = 0; j <  this.cols; j++) {
             this.data[i][j] = this.data[i][j] * n;
-            this.data[i][j] = Number((this.data[i][j]).toFixed(2))
+            this.data[i][j] = this.data[i][j]
           }
         }
       }
@@ -132,7 +132,7 @@ function derivativeOfSigmoid(y){
     map(otherFunction) {
       for (let i = 0; i < this.rows; i++) {
         for (let j = 0; j < this.cols; j++) {
-          this.data[i][j] = Number((otherFunction(this.data[i][j])).toFixed(2));
+          this.data[i][j] = otherFunction(this.data[i][j])
         }
       }
     }
