@@ -66,11 +66,14 @@ function createFunction(_code, _scope)
 			{
 				for(var i = 0; i < _match[2].length; i++)
 				{
-					if(_match[2][i].length > 0 && i <= COMPILER.INFO.SCOPE[_match[1]].param.length)
+					if(_match[2][i].length > 0)
 					{
-						_getVar += `var ${_match[2][i]} = __NJS_VARARGS[${i}];`;
+						if(i <= COMPILER.INFO.SCOPE[_match[1]].param.length)
+						{
+							_getVar += `var ${_match[2][i]} = __NJS_VARARGS[${i}];`;
+						}
+						else _getVar += `var ${_match[2][i]}; if(__NJS_VARLENGTH > ${i}) ${_match[2][i]} = __NJS_VARARGS[${i}];`;
 					}
-					else _getVar += `var ${_match[2][i]}; if(__NJS_VARLENGTH > ${i}) ${_match[2][i]} = __NJS_VARARGS[${i}];`;
 				}
 			}
 			else 
