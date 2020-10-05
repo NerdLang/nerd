@@ -10,7 +10,6 @@ namespace NJS::Class
 		Boolean();
 		Boolean(bool val);
 		// Properties
-		count_t counter = 1;
 		NJS::Type::object_t object;
 		bool value = false;
 		// Methods
@@ -62,5 +61,7 @@ namespace NJS::Class
 		Boolean operator>>=(const Boolean &_v1);
 		Boolean operator<<=(const Boolean &_v1);
 		// TODO: ">>>" and ">>>=" operators
+		NJS::VAR toString(NJS::VAR* _args, int _length) const;
+		NJS::VAR valueOf(NJS::VAR* _args, int _length) const;
 	};
 } // namespace NJS::Class

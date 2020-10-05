@@ -46,17 +46,7 @@ namespace NJS::Class
 	// Main operators
 	NJS::VAR const Function::operator[](NJS::VAR key) const
 	{
-		auto &obj = this->object;
-		auto index = (std::string)key;
-		int _j = obj.size();
-		for (int _i = 0; _i < _j; _i++)
-		{
-			if (index.compare(obj[_i].first) == 0)
-			{
-				return obj[_i].second;
-			}
-		}
-		return NJS::VAR();
+		return undefined;
 	}
 	NJS::VAR &Function::operator[](NJS::VAR key)
 	{
@@ -70,55 +60,26 @@ namespace NJS::Class
 		
 		__NJS_Object_Lazy_Loader("prototype");
 		
-		if(((std::string)key).compare("toString") == 0  || ((std::string)key).compare("toLocaleString") == 0)
-		{
-			object.push_back(NJS::Type::pair_t((std::string)key, __NJS_Create_Var_Scoped_Anon( return (std::string)*this;)));
-		}
-		else if(((std::string)key).compare("valueOf") == 0)
-		{
-			object.push_back(NJS::Type::pair_t((std::string)key, __NJS_Create_Var_Scoped_Anon( return this; )));
-		}
-		else if(((std::string)key).compare("call") == 0)
-		{
-			object.push_back(NJS::Type::pair_t((std::string)key, __NJS_Create_Var_Scoped_Anon(
-				counter++;
-				NJS::VAR __THIS;
-				if(__NJS_VARARGS.size() > 0)
-				{
-					__THIS = __NJS_VARARGS[0];
-					__NJS_VARARGS.erase(__NJS_VARARGS.begin());
-				}
-				return Call(__THIS, __NJS_VARARGS);
-			)));
-		}
-		else if(((std::string)key).compare("bind") == 0)
-		{
-			object.push_back(NJS::Type::pair_t((std::string)key, __NJS_Create_Var_Scoped_Anon(
-				counter++;
-			var _bind;
-			if(__NJS_VARARGS.size() > 0)
-			{
-				_bind = __NJS_VARARGS[0];
-			}
-			var _binded = new NJS::Class::Function(value, _bind);
-			return _binded;
-			)));
-		}
-		else object.push_back(NJS::Type::pair_t((std::string)key, __NJS_VAR()));
+		__NJS_Method_Lazy_Loader("toString", toString);
+		__NJS_Method_Lazy_Loader("valueOf", valueOf);
+		__NJS_Method_Lazy_Loader("bind", bind);
+		__NJS_Method_Lazy_Loader("call", call);
 		
+		object.push_back(NJS::Type::pair_t((std::string)key, __NJS_VAR()));
 		return object[object.size() - 1].second;
 	}
 	
-	NJS::VAR Function::Call(var __NJS_THIS, NJS::Type::vector_t __NJS_VARARGS)
+	NJS::VAR Function::Call(var __NJS_THIS, NJS::VAR* _args, int i)
 	{
-		return (*static_cast<std::function<NJS::VAR(var, NJS::Type::vector_t)> *>(value))(__NJS_THIS, __NJS_VARARGS);
+		return (*static_cast<NJS::Type::function_t *>(value))(__NJS_THIS, _args, i);
 	}
 	
 	
 	template <class... Args>
 	NJS::VAR Function::New(Args... args)
 	{
-		NJS::Type::vector_t _args = NJS::Type::vector_t{(NJS::VAR)args...};
+		NJS::VAR _args[] = {args...};
+		int i = sizeof...(args);
 		
 		NJS::VAR _this = __NJS_Create_Object();
 		NJS::Type::object_t object = ((NJS::Class::Object*)(*this)["prototype"]._ptr)->object;
@@ -128,7 +89,7 @@ namespace NJS::Class
 			_this[search.first] = search.second;
 		}
 
-		var _ret = this->Call(_this, _args);
+		var _ret = this->Call(_this, _args, i);
 		((NJS::Class::Object*)_this._ptr)->counter = 1;
 		((NJS::Class::Object*)_ret._ptr)->counter = 1;
 		
@@ -150,8 +111,9 @@ namespace NJS::Class
 	template <class... Args>
 	NJS::VAR Function::operator()(Args... args)
 	{
-		NJS::Type::vector_t _args = NJS::Type::vector_t{(NJS::VAR)args...};
-		return (*static_cast<std::function<NJS::VAR(var, NJS::Type::vector_t)> *>(value))(This, _args);
+		NJS::VAR _args[] = {args...};
+		int i = sizeof...(args);
+		return (*static_cast<NJS::Type::function_t *>(value))(This, _args, i);
 	}
 	// Comparation operators
 	Function Function::operator!() const 
@@ -321,4 +283,39 @@ namespace NJS::Class
 		#endif
 	}
 	// TODO: ">>>" and ">>>=" operators
+	NJS::VAR Function::toString(NJS::VAR* _args, int _length) const
+	{
+		return (std::string)*this;
+	}
+	
+	NJS::VAR Function::valueOf(NJS::VAR* _args, int _length) const
+	{
+		// TODO return this
+		return undefined;
+	}
+	NJS::VAR Function::bind(NJS::VAR* _args, int _length)
+	{
+			var _bind;
+			if(_length > 0)
+			{
+				_bind = _args[0];
+			}
+			var _binded = new NJS::Class::Function(value, _bind);
+			return _binded;
+	}
+	
+	NJS::VAR Function::call(NJS::VAR* _args, int _length)
+	{
+		counter++;
+		NJS::VAR __THIS;
+		if(_length > 0)
+		{
+			__THIS = _args[0];
+			_length--;
+		}
+		NJS::VAR _newArgs[_length];
+		for(int i = 1; i < _length; i++) _newArgs[i-1] = _args[i];
+		
+		return Call(__THIS, _newArgs, _length);
+	}
 } // namespace NJS::Class

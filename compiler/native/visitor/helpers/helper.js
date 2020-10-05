@@ -91,7 +91,7 @@ VISITOR.disableFastFunction = function()
 {
 	if(COMPILER.INFO.SCOPE[VISITOR.Function_STATE[VISITOR.CURRENT_Function]])
 	{
-		COMPILER.INFO.SCOPE[VISITOR.Function_STATE[VISITOR.CURRENT_Function]].fast = false;
+		//COMPILER.INFO.SCOPE[VISITOR.Function_STATE[VISITOR.CURRENT_Function]].fast = false;
 	}
 }
 

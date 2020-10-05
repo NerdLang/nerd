@@ -9,10 +9,10 @@ namespace NJS::Class
 	// Methods
 	void Undefined::Delete() noexcept
 	{
-		if (--counter < 1)
-		{
+		//if (--counter < 1)
+		//{
 			delete this;
-		}
+		//}
 	}
 	// Native cast
 	Undefined::operator bool() const noexcept { return false; }

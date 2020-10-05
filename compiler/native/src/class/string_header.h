@@ -11,7 +11,6 @@ namespace NJS::Class
 		String(std::string val);
 		String(const char* val);
 		// Properties
-		count_t counter = 1;
 		std::string value = "";
 		NJS::Type::object_t object;
 		// Methods
@@ -65,14 +64,14 @@ namespace NJS::Class
 		String operator<<=(const String &_v1);
 		// TODO: ">>>" and ">>>=" operators
 		/*** STRING METHODS ***/
-		NJS::VAR toString(NJS::Type::vector_t args) const;
-		NJS::VAR split(NJS::Type::vector_t args) const;
-		NJS::VAR indexOf(NJS::Type::vector_t args) const;
-		NJS::VAR lastIndexOf(NJS::Type::vector_t args) const;
-		NJS::VAR search(NJS::Type::vector_t args) const;
-		NJS::VAR slice(NJS::Type::vector_t args) const;
-		NJS::VAR substr(NJS::Type::vector_t args) const;
-		NJS::VAR replace(NJS::Type::vector_t args) const;
+		NJS::VAR toString(NJS::VAR* _args, int _length) const;
+		NJS::VAR split(NJS::VAR* _args, int _length) const;
+		NJS::VAR indexOf(NJS::VAR* _args, int _length) const;
+		NJS::VAR lastIndexOf(NJS::VAR* _args, int _length) const;
+		NJS::VAR search(NJS::VAR* _args, int _length) const;
+		NJS::VAR slice(NJS::VAR* _args, int _length) const;
+		NJS::VAR substr(NJS::VAR* _args, int _length) const;
+		NJS::VAR replace(NJS::VAR* _args, int _length) const;
 		/* END STRING METHODS */
 	};
 } // namespace NJS::Class

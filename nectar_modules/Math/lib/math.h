@@ -155,8 +155,8 @@ function __NJS_MATH_HYPOT()
 {
 	double max = 0;
 	double s = 0;
-	for (var arg : __NJS_VARARGS) {
-		double x = std::abs((double)(arg));
+	for (int i = 0; i < __NJS_VARLENGTH; i++) {
+		double x = std::abs((double)(__NJS_VARARGS[i]));
 		if (x > max) {
 			s *= (max / x) * (max / x);
 			max = x;
@@ -194,8 +194,8 @@ function __NJS_MATH_LOG10(x)
 function __NJS_MATH_MAX()
 {
 	double max = -INFINITY;
-	for (var x : __NJS_VARARGS) {
-		double n = (double)(x);
+	for (int i = 0; i < __NJS_VARLENGTH; i++) {
+		double n = (double)(__NJS_VARARGS[i]);
 		if (n > max) {
 			max = n;
 		}
@@ -206,8 +206,8 @@ function __NJS_MATH_MAX()
 function __NJS_MATH_MIN()
 {
 	double min = INFINITY;
-	for (var x : __NJS_VARARGS) {
-		double n = (double)(x);
+	for (int i = 0; i < __NJS_VARLENGTH; i++) {
+		double n = (double)(__NJS_VARARGS[i]);
 		if (n < min) {
 			min = n;
 		}

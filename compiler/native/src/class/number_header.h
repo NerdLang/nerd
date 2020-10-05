@@ -29,7 +29,6 @@ namespace NJS::Class
 		//Number(const Number* val);
 		Number(const NJS::VAR& val);
 		// Properties
-		count_t counter = 1;
 		NumberValue value = {.i = 0};
 		NJS::Type::object_t object;
 		// Methods
@@ -87,5 +86,8 @@ namespace NJS::Class
 		Number operator>>=(const Number &_v1);
 		Number operator<<=(const Number &_v1);
 		// TODO: ">>>" and ">>>=" operators
+		NJS::VAR toString(NJS::VAR* _args, int _length) const;
+		NJS::VAR valueOf(NJS::VAR* _args, int _length) const;
+		NJS::VAR toFixed(NJS::VAR* _args, int _length) const;
 	};
 } // namespace NJS::Class

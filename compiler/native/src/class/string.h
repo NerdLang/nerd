@@ -21,10 +21,7 @@ namespace NJS::Class
 	// Methods
 	void String::Delete() noexcept
 	{
-		if (--counter < 1)
-		{
-			delete this;
-		}
+		delete this;
 	}
 	// Native cast
 	String::operator bool() const noexcept { return value.size() > 0; }
@@ -305,15 +302,15 @@ namespace NJS::Class
 	}
 	// TODO: ">>>" and ">>>=" operators
 	/*** STRING METHODS ***/
-	NJS::VAR String::toString(std::vector<NJS::VAR> _args) const
+	NJS::VAR String::toString(NJS::VAR* _args, int _length) const
 	{
 		return value;
 	}
 	
-	NJS::VAR String::split(std::vector<NJS::VAR> _args) const
+	NJS::VAR String::split(NJS::VAR* _args, int _length) const
 	{
 		var _needle;
-		if (_args.size() > 0)
+		if (_length > 0)
 			_needle = _args[0];
 		else
 			return NJS::VAR(this->value);
@@ -341,10 +338,10 @@ namespace NJS::Class
 		return _arr;
 	}
 	
-	NJS::VAR String::indexOf(std::vector<NJS::VAR> _args) const
+	NJS::VAR String::indexOf(NJS::VAR* _args, int _length) const
 	{
 		var _needle;
-		if (_args.size() > 0)
+		if (_length > 0)
 			_needle = _args[0];
 		else
 			return NJS::VAR(-1);
@@ -357,10 +354,10 @@ namespace NJS::Class
 		return NJS::VAR(-1);
 	}
 	
-	NJS::VAR String::lastIndexOf(std::vector<NJS::VAR> _args) const
+	NJS::VAR String::lastIndexOf(NJS::VAR* _args, int _length) const
 	{
 		var _needle;
-		if (_args.size() > 0)
+		if (_length > 0)
 			_needle = _args[0];
 		else
 			return NJS::VAR(-1);
@@ -373,10 +370,10 @@ namespace NJS::Class
 		return NJS::VAR(-1);
 	}
 	
-	NJS::VAR String::search(std::vector<NJS::VAR> _args) const
+	NJS::VAR String::search(NJS::VAR* _args, int _length) const
 	{
 		var _needle;
-		if (_args.size() > 0)
+		if (_length > 0)
 			_needle = _args[0];
 		else
 			return NJS::VAR(-1);
@@ -389,15 +386,15 @@ namespace NJS::Class
 		return NJS::VAR(-1);
 	}
 	
-	NJS::VAR String::slice(std::vector<NJS::VAR> _args) const
+	NJS::VAR String::slice(NJS::VAR* _args, int _length) const
 	{
 		var _start;
 		var _end;
-		if (_args.size() > 0)
+		if (_length > 0)
 			_start = _args[0];
 		else
 			return NJS::VAR(this->value);
-		if (_args.size() > 1)
+		if (_length > 1)
 			_end = _args[1];
 
 		if (_end.type == NJS::Enum::Type::Undefined)
@@ -406,15 +403,15 @@ namespace NJS::Class
 		return NJS::VAR(this->value.substr((int)_start, _endIndex));
 	}
 	
-	NJS::VAR String::substr(std::vector<NJS::VAR> _args) const
+	NJS::VAR String::substr(NJS::VAR* _args, int _length) const
 	{
 		var _start;
 		var _end;
-		if (_args.size() > 0)
+		if (_length > 0)
 			_start = _args[0];
 		else
 			return NJS::VAR(this->value);
-		if (_args.size() > 1)
+		if (_length > 1)
 			_end = _args[1];
 
 		if (_end.type == NJS::Enum::Type::Undefined)
@@ -422,15 +419,15 @@ namespace NJS::Class
 		return NJS::VAR(this->value.substr((int)_start, (int)_end));
 	}
 		
-	NJS::VAR String::replace(std::vector<NJS::VAR> _args) const
+	NJS::VAR String::replace(NJS::VAR* _args, int _length) const
 	{
 		var _search;
 		var _replace;
-		if (_args.size() > 0)
+		if (_length > 0)
 			_search = _args[0];
 		else
 			return NJS::VAR(this->value);
-		if (_args.size() > 1)
+		if (_length > 1)
 			_replace = _args[1];
 
 		size_t start_pos = this->value.find((std::string)_search);

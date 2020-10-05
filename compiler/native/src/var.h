@@ -55,8 +55,7 @@ namespace NJS
 		}
 		else if (_v.type == NJS::Enum::Type::Boolean)
 		{
-			_ptr = _v._ptr;
-			((NJS::Class::Boolean*)_ptr)->counter++;
+			_ptr = new NJS::Class::Boolean(((NJS::Class::Boolean*)_v._ptr)->value);
 		}
 		else if (_v.type == NJS::Enum::Type::Undefined)
 		{
@@ -138,8 +137,7 @@ namespace NJS
 	VAR::VAR(NJS::Class::Boolean *_value)
 	{
 		type = NJS::Enum::Type::Boolean;
-		_value->counter++;
-		_ptr = _value;
+		_ptr = new NJS::Class::Boolean( _value->value);
 	}
 	
 	VAR::VAR(NJS::Class::Function *_value)
@@ -172,7 +170,6 @@ namespace NJS
 	{
 		type = NJS::Enum::Type::Number;
 		_ptr = _value;
-		_value->counter++;
 	}
 	
 	VAR::VAR(NJS::Class::Native *_value)
@@ -195,7 +192,7 @@ namespace NJS
 		((NJS::Class::Function*)_ptr)->This = _this;
 	}
 
-	VAR::VAR(std::function<NJS::VAR(NJS::Type::vector_t)> &_value)
+	VAR::VAR(std::function<NJS::VAR(NJS::VAR*, int)> &_value)
 	{
 		type = NJS::Enum::Type::Function;
 		_ptr = new NJS::Class::Function(&_value);
@@ -289,8 +286,7 @@ namespace NJS
 		}
 		else if (_v.type == NJS::Enum::Type::Boolean)
 		{
-			_ptr = _v._ptr;
-			((NJS::Class::Boolean*)_ptr)->counter++;
+			_ptr = new NJS::Class::Boolean( ((NJS::Class::Boolean*)_v._ptr)->value);
 		}
 		else if (_v.type == NJS::Enum::Type::Undefined)
 		{

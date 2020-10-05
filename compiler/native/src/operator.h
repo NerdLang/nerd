@@ -87,16 +87,16 @@ NJS::VAR __NJS_Log_Console(NJS::VAR _var)
 	return NJS::VAR();
 }
 
-NJS::VAR __NJS_Log_Console(NJS::Type::vector_t _var)
+NJS::VAR __NJS_Log_Console(NJS::VAR* _var, int _length)
 {
 #ifdef __NJS_ARDUINO
 
 #else
 	bool first = false;
-	for(auto _v:_var)
+	for(int i = 0; i < _length; i++)
 	{
 		if(first) std::cout << " ";
-		std::cout << _v;
+		std::cout << _var[i];
 		if(!first) first = true;
 	}
 	std::cout << std::endl;

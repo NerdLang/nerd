@@ -20,7 +20,7 @@ namespace NJS::Class
 		// Methods
 		void Delete() noexcept;
 		
-		NJS::VAR Call(var __NJS_THIS, NJS::Type::vector_t __NJS_VARARGS);
+		NJS::VAR Call(var __NJS_THIS, NJS::VAR* __NJS_VARARGS, int __NJS_VARLENGTH);
 		NJS::VAR Bind(var __NJS_THIS);
 		
 		template <class... Args>
@@ -73,5 +73,9 @@ namespace NJS::Class
 		Function operator>>=(const Function &_v1);
 		Function operator<<=(const Function &_v1);
 		// TODO: ">>>" and ">>>=" operators
+		NJS::VAR toString(NJS::VAR* _args, int _length) const;
+		NJS::VAR valueOf(NJS::VAR* _args, int _length) const;
+		NJS::VAR bind(NJS::VAR* _args, int _length);
+		NJS::VAR call(NJS::VAR* _args, int _length);
 	};
 } // namespace NJS::Class

@@ -11,10 +11,7 @@ namespace NJS::Class
 	// Methods
 	void Boolean::Delete() noexcept
 	{
-		if (--counter < 1)
-		{
-			delete this;
-		}
+		delete this;
 	}
 	// Native cast
 	Boolean::operator bool() const noexcept { return value; }
@@ -36,20 +33,10 @@ namespace NJS::Class
 			}
 		}
 
-		if(((std::string)key).compare("toString") == 0  || ((std::string)key).compare("toLocaleString") == 0)
-		{
-			object.push_back(NJS::Type::pair_t((std::string)key, __NJS_Create_Var_Scoped_Anon( return __NJS_Object_Stringify(this);)));
-		}
-		else if(((std::string)key).compare("valueOf") == 0)
-		{
-			object.push_back(NJS::Type::pair_t((std::string)key, __NJS_Create_Var_Scoped_Anon( return this; )));
-		}
-		else 
-		{
-			object.push_back(NJS::Type::pair_t((std::string)key, __NJS_VAR()));
-		}
+		__NJS_Method_Lazy_Loader("toString", toString);
+		__NJS_Method_Lazy_Loader("valueOf", valueOf);
 
-		return object[object.size() - 1].second;
+		return object.back().second;
 	}
 	template <class... Args>
 	NJS::VAR Boolean::operator()(Args... args) const 
@@ -221,4 +208,13 @@ namespace NJS::Class
 		#endif
 	}
 	// TODO: ">>>" and ">>>=" operators
+	NJS::VAR Boolean::toString(NJS::VAR* _args, int _length) const
+	{
+		return (std::string)*this;
+	}
+	
+	NJS::VAR Boolean::valueOf(NJS::VAR* _args, int _length) const
+	{
+		return value;
+	}
 } // namespace NJS::Class

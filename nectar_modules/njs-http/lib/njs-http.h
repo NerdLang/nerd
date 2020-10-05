@@ -54,7 +54,7 @@ var __NJS_HTTP_LISTEN(var _host, var _port, var _cb, var _opt)
 	var __f_NJS_HTTP_RES_END = __NJS_Create_Var_Scoped_Anon(
 	{
 		var _str = "";
-		if(__NJS_VARARGS.size() == 1) _str = __NJS_VARARGS[0];
+		if(__NJS_VARLENGTH == 1) _str = __NJS_VARARGS[0];
 		response.set_content(__NJS_Get_String(_str), "text/plain");
 		return var();
 	});

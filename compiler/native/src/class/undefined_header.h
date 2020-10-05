@@ -10,7 +10,6 @@ namespace NJS::Class
 		// Constructors
 		Undefined();
 		// Properties
-		count_t counter = 1;
 		Empty value;
 		// Methods
 		void Delete() noexcept;

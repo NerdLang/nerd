@@ -90,10 +90,9 @@ namespace NJS::Class
 	// Methods
 	void Number::Delete() noexcept
 	{
-		if (--counter < 1)
-		{
+
 			delete this;
-		}
+
 	}
 	// Native cast
 	Number::operator bool() const noexcept { return getInt(); }
@@ -151,22 +150,10 @@ namespace NJS::Class
 	// Main operators
 	NJS::VAR const Number::operator[](NJS::VAR key) const
 	{
-		auto &obj = this->object;
-		auto index = (std::string)key;
-		int _j = obj.size();
-		for (int _i = 0; _i < _j; _i++)
-		{
-			if (index.compare(obj[_i].first) == 0)
-			{
-				return obj[_i].second;
-			}
-		}
-		return NJS::VAR();
+		return undefined;
 	}
 	NJS::VAR &Number::operator[](NJS::VAR key)
-	{
-		static NJS::VAR _retUndefined;
-		
+	{		
 		for (auto & search : object)
 		{
 			if (((std::string)key).compare(search.first) == 0)
@@ -175,35 +162,11 @@ namespace NJS::Class
 			}
 		}
 		
-		if(((std::string)key).compare("toString") == 0  || ((std::string)key).compare("toLocaleString") == 0)
-		{
-			object.push_back(NJS::Type::pair_t((std::string)key, __NJS_Create_Var_Scoped_Anon( return __NJS_Object_Stringify(this);)));
-			return object.back().second;
-		}
-		else if(((std::string)key).compare("valueOf") == 0)
-		{
-			object.push_back(NJS::Type::pair_t((std::string)key, __NJS_Create_Var_Scoped_Anon( return this; )));
-			return object.back().second;
-		}
-		else if(((std::string)key).compare("toFixed") == 0)
-		{
-			object.push_back(NJS::Type::pair_t((std::string)key, __NJS_Create_Var_Scoped_Anon( 
-				
-				int precision;
-				if(__NJS_VARARGS.size() > 0)
-				{
-					precision = __NJS_VARARGS[0];
-				}
-				else precision = 0;
-				std::ostringstream strout ;
-				strout << std::fixed << std::setprecision(precision) << (double)*this ;
-				std::string str = strout.str() ;
-				return str;
-			)));
-			return object.back().second;
-		}
+		__NJS_Method_Lazy_Loader("toString", toString);
+		__NJS_Method_Lazy_Loader("valueOf", valueOf);
+		__NJS_Method_Lazy_Loader("toFixed", toFixed);
 
-		return _retUndefined;
+		return undefined;
 	}
 	template <class... Args>
 	NJS::VAR Number::operator()(Args... args) const 
@@ -538,4 +501,29 @@ namespace NJS::Class
 		return *this;
 	}
 	// TODO: ">>>" and ">>>=" operators
+	
+	NJS::VAR Number::toString(NJS::VAR* _args, int _length) const
+	{
+		return (std::string)*this;
+	}
+	
+	NJS::VAR Number::valueOf(NJS::VAR* _args, int _length) const
+	{
+		return value.d;
+	}
+	
+	NJS::VAR Number::toFixed(NJS::VAR* _args, int _length) const
+	{
+		int precision;
+		if(_length > 0)
+		{
+			precision = _args[0];
+		}
+		else precision = 0;
+		std::ostringstream strout ;
+		strout << std::fixed << std::setprecision(precision) << (double)*this ;
+		std::string str = strout.str() ;
+		return str;
+	}
+	
 } // namespace NJS::Class
