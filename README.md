@@ -231,15 +231,25 @@ NectarJS already supports more than 80% of ES3.
 <details>
 <summary>String</summary>
 <br>
+
 * .length
+
 * .toString()
+
 * .indexOf(needle)
+
 * .lastIndexOf(needle)
+
 * .search(needle)
+
 * .slice(start, end)
+
 * .substring(start, end)
+
 * .substr(start, end)
+
 * .replace(needle, str)
+
 </details>
 
 <details>
