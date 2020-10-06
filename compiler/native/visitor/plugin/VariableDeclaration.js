@@ -46,7 +46,24 @@ function VariableDeclaration(_path)
 				}
 			}
 		}
+		if(_path.node.declarations.length == 1 && _path.node.declarations[0].init && _path.node.declarations[0].init.type == "NumericLiteral")
+		{
+			if(_path.parent.type == "ForStatement")
+			{
+				
+				_path.node.kind = "int";
 
+				if(_path.parentPath.node.test && _path.parentPath.node.test.type == "BinaryExpression")
+				{
+						var _new_int = "__NJS_LOOP_INT" + RND();
+						COMPILER.DECL.push("int " + _new_int);
+						COMPILER.GLOBAL.push(_new_int);
+						_path.parentPath.insertBefore(babel.parse(_new_int + " = " + babel.generate(_path.parentPath.node.test.right).code));
+						_path.parentPath.node.test = babel.parse( "(" +  babel.generate(_path.parentPath.node.test.left).code + _path.parentPath.node.test.operator + _new_int + ")").program.body[0].expression;
+				}
+				
+			}
+		}
 		if(!(_path.node.declarations[d].init)) _path.node.declarations[d].init = babel.parse("__NJS_VAR()");
 	  }
   }
