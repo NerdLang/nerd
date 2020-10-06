@@ -61,7 +61,7 @@ function createAnon(_code, _scope)
 					if(_scope) _catch = "&";
 					if(_code.indexOf("\"SCOPED_FUNCTION\";") > -1) 
 					{
-						_code = _code.replace(/'SCOPED_FUNCTION';/g, "                  ");
+						_code = _code.replace(/"SCOPED_FUNCTION";/g, "                  ");
 						_catch = "&";
 					}
 					if(_code.indexOf("'__NJS_CLASS_ANON__';") > -1) 

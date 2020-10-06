@@ -158,7 +158,6 @@ namespace NJS::Class
 		__NJS_Method_Lazy_Loader("lastIndexOf", lastIndexOf);
 		__NJS_Method_Lazy_Loader("map", map);
 		__NJS_Method_Lazy_Loader("pop", pop);
-		__NJS_Method_Lazy_Loader("push", push);
 		__NJS_Method_Lazy_Loader("reduce", reduce);
 		__NJS_Method_Lazy_Loader("reduceRight", reduceRight);
 		__NJS_Method_Lazy_Loader("reverse", reverse);
@@ -171,6 +170,7 @@ namespace NJS::Class
 		__NJS_Method_Lazy_Loader("toString", toString);
 		__NJS_Method_Lazy_Loader("unshift", unshift);
 		__NJS_Method_Lazy_Loader("values", values);
+		
 
 		object.push_back(NJS::Type::pair_t((std::string)key, __NJS_VAR()));
 		return object[object.size() - 1].second;

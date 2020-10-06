@@ -29,14 +29,7 @@ namespace NJS
 		}
 		else if (_v.type == NJS::Enum::Type::Number)
 		{
-			if(((NJS::Class::Number*)_v._ptr)->isInt)
-			{
-				_ptr = new NJS::Class::Number(((NJS::Class::Number*)_v._ptr)->getInt());
-			}
-			else 
-			{
-				_ptr = new NJS::Class::Number(((NJS::Class::Number*)_v._ptr)->getDouble());
-			}
+			_ptr = new NJS::Class::Number(((NJS::Class::Number*)_v._ptr)->getDouble());
 		}
 		else if (_v.type == NJS::Enum::Type::Function)
 		{
@@ -243,7 +236,7 @@ namespace NJS
 	/*** END CONSTRUCTOR ***/
 
 	/*** OPERATOR ***/
-	VAR VAR::operator=(const VAR &_v)
+	void VAR::operator=(const VAR &_v)
 	{
 		((NJS::Class::Base*)_ptr)->Delete();
 
@@ -260,14 +253,7 @@ namespace NJS
 		}
 		else if (_v.type == NJS::Enum::Type::Number)
 		{
-			if(((NJS::Class::Number*)_v._ptr)->isInt)
-			{
-				_ptr = new NJS::Class::Number(((NJS::Class::Number*)_v._ptr)->getInt());
-			}
-			else 
-			{
-				_ptr = new NJS::Class::Number(((NJS::Class::Number*)_v._ptr)->getDouble());
-			}
+			_ptr = new NJS::Class::Number(((NJS::Class::Number*)_v._ptr)->getDouble());
 		}
 		else if (_v.type == NJS::Enum::Type::Function)
 		{
@@ -305,24 +291,18 @@ namespace NJS
 			_ptr = _v._ptr;
 		}
 
-		return *this;
+		//return *this;
 	}
 
 	/// Unary VAR::operators
 	VAR VAR::operator+()
 	{
-		if (type == NJS::Enum::Type::Number)
-			return *this;
-		else
-			return (double)*this;
+		return (double)*this;
 	}
 	
 	VAR VAR::operator-()
 	{
-		if (type == NJS::Enum::Type::Number)
-			return -((*(NJS::Class::Number*)_ptr));
-		else
-			return -(double)*this;
+		return -(double)*this;
 	}
 	VAR VAR::operator!() { return !(bool)*this; };
 
@@ -346,7 +326,7 @@ namespace NJS
 	{
 		return __NJS_Concat_To_Str((std::string)*this, _v1);
 	}
-	VAR VAR::operator+=(const VAR &_v1)
+	void VAR::operator+=(const VAR &_v1)
 	{
 		if(type == NJS::Enum::Type::Number) 
 			(*((NJS::Class::Number*)_ptr)) += _v1;
@@ -359,7 +339,6 @@ namespace NJS
 			_ptr = new NJS::Class::String("");
 			((NJS::Class::String*)_ptr)->value += _s + (std::string)_v1;
 		}
-		return *this;
 	}
 	VAR VAR::operator-(const VAR &_v1)
 	{	
@@ -386,11 +365,10 @@ namespace NJS
 			return (*((NJS::Class::Number*)_ptr)) * _v1;
 		return VAR();
 	}
-	VAR VAR::operator*=(const VAR &_v1)
+	void VAR::operator*=(const VAR &_v1)
 	{
 		if(type == NJS::Enum::Type::Number) 
 			(*((NJS::Class::Number*)_ptr)) *= _v1;
-		return VAR();
 	}
 	VAR VAR::operator/(const VAR &_v1)
 	{
@@ -398,11 +376,10 @@ namespace NJS
 			return (*((NJS::Class::Number*)_ptr)) / _v1;
 		return VAR();
 	}
-	VAR VAR::operator/=(const VAR &_v1)
+	void VAR::operator/=(const VAR &_v1)
 	{
 		if(type == NJS::Enum::Type::Number) 
 			(*((NJS::Class::Number*)_ptr)) /= _v1;
-		return VAR();
 	}
 	VAR VAR::operator%(const VAR &_v1)
 	{
@@ -431,36 +408,34 @@ namespace NJS
 	{
 		if (type == NJS::Enum::Type::Number)
 		{
-			return (*((NJS::Class::Number*)_ptr))++;
+			(*((NJS::Class::Number*)_ptr))++;
 		}
-		return (*this);
+		return *this;
 	}
 	// ++var
-	VAR VAR::operator++()
+	void VAR::operator++()
 	{
 		if (type == NJS::Enum::Type::Number)
 		{
 			++(*((NJS::Class::Number*)_ptr));
 		}
-		return *this;
 	}
 	// var--
 	VAR VAR::operator--(const int _v1)
 	{
 		if (type == NJS::Enum::Type::Number)
 		{
-			return (*((NJS::Class::Number*)_ptr))--;
+			(*((NJS::Class::Number*)_ptr))--;
 		}
 		return *this;
 	}
 	// --var
-	VAR VAR::operator--()
+	void VAR::operator--()
 	{
 		if (type == NJS::Enum::Type::Number)
 		{
 			--(*((NJS::Class::Number*)_ptr));
 		}
-		return *this;
 	}
 
 	/// Comparison VAR::operators

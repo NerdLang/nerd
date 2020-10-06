@@ -47,7 +47,6 @@ function derivativeOfSigmoid(y){
             sum = sum + matrix1.data[i][k] * matrix2.data[k][j];
           }
             result.data[i][j] = sum;
-            result.data[i][j] = result.data[i][j]
         }
       }
        return result;
@@ -96,15 +95,13 @@ function derivativeOfSigmoid(y){
       if (n instanceof Matrix) {
         for (let i = 0; i < this.rows; i++) {
           for (let j = 0; j < this.cols; j++) {
-            this.data[i][j] = this.data[i][j] + n.data[i][j];
-            this.data[i][j] = this.data[i][j]
+            this.data[i][j] += n.data[i][j];
           }
         }
       } else {
         for (let i = 0; i < this.rows; i++) {
           for (let j = 0; j < this.cols; j++) {
-            this.data[i][j] =this.data[i][j] + n;
-            this.data[i][j] = this.data[i][j]
+            this.data[i][j] += n;
           }
         }
       }
@@ -115,15 +112,13 @@ function derivativeOfSigmoid(y){
       if (n instanceof Matrix) {
         for (let i = 0; i < this.rows; i++) {
           for (let j = 0; j < this.cols; j++) {
-            this.data[i][j] = this.data[i][j] * n.data[i][j];
-            this.data[i][j] = this.data[i][j]
+            this.data[i][j] *= n.data[i][j];
           }
         }
       } else {
         for (let i = 0; i < this.rows; i++) {
           for (let j = 0; j <  this.cols; j++) {
-            this.data[i][j] = this.data[i][j] * n;
-            this.data[i][j] = this.data[i][j]
+            this.data[i][j] *= n;
           }
         }
       }

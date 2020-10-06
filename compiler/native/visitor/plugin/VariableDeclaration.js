@@ -46,10 +46,7 @@ function VariableDeclaration(_path)
 				}
 			}
 		}
-		if(_path.node.declarations.length == 1 && _path.node.declarations[0].init && _path.node.declarations[0].init.type == "NumericLiteral")
-		{
-			if(_path.parent.type == "ForStatement") _path.node.kind = "int";
-		}
+
 		if(!(_path.node.declarations[d].init)) _path.node.declarations[d].init = babel.parse("__NJS_VAR()");
 	  }
   }

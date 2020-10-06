@@ -283,7 +283,7 @@ namespace NJS::Class
 		}
 		return old;
 	}
-	Number Number::operator++()
+	void Number::operator++()
 	{
 		if (isInt)
 		{
@@ -295,7 +295,6 @@ namespace NJS::Class
 			double v = getDouble();
 			setDouble(++v);
 		}
-		return *this;
 	}
 	Number Number::operator--(const int _v1)
 	{
@@ -312,7 +311,7 @@ namespace NJS::Class
 		}
 		return old;
 	}
-	Number Number::operator--()
+	void Number::operator--()
 	{
 		if (isInt)
 		{
@@ -324,7 +323,6 @@ namespace NJS::Class
 			double v = getDouble();
 			setDouble(--v);
 		}
-		return *this;
 	}
 	Number Number::operator+(const Number &_v1) const
 	{
@@ -341,21 +339,20 @@ namespace NJS::Class
 		
 		return ((double)*this) + (double)_v1;
 	}
-	Number Number::operator+=(const Number &_v1)
+	void Number::operator+=(const Number &_v1)
 	{
 		if (isInt && _v1.isInt)
 		{
-			int a = (int)*this;
-			int b = (int)_v1;
+			int a = value.i;
+			int b = _v1.value.i;
 			int c;
 			if (!__builtin_add_overflow(a, b, &c))
 			{
 				setInt(c);
-				return *this;
+				return;
 			}
 		}
 		setDouble((double)*this + (double)_v1);
-		return *this;
 	}
 	Number Number::operator-(const Number &_v1) const
 	{
@@ -401,7 +398,7 @@ namespace NJS::Class
 		}
 		return ((double)*this) * (double)_v1;
 	}
-	Number Number::operator*=(const Number &_v1)
+	void Number::operator*=(const Number &_v1)
 	{
 		if (isInt && _v1.isInt)
 		{
@@ -411,11 +408,10 @@ namespace NJS::Class
 			if (!__builtin_mul_overflow(a, b, &c))
 			{
 				setInt(c);
-				return *this;
+				return;
 			}
 		}
 		setDouble(((double)*this) * (double)_v1);
-		return *this;
 	}
 	// TODO: "**" and "**=" operators
 	Number Number::operator/(const Number &_v1) const
@@ -431,7 +427,7 @@ namespace NJS::Class
 		}
 		return ((double)*this) / (double)_v1;
 	}
-	Number Number::operator/=(const Number &_v1)
+	void Number::operator/=(const Number &_v1)
 	{
 		if (isInt && _v1.isInt)
 		{
@@ -440,11 +436,10 @@ namespace NJS::Class
 			if (a % b == 0)
 			{
 				setInt(a / b);
-				return Number();
+				return;
 			}
 		}
 		setDouble( ((double)*this) / (double)_v1);
-		return *this;
 	}
 	Number Number::operator%(const Number &_v1) const
 	{

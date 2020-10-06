@@ -61,10 +61,10 @@ function genMetaFunction(_code)
                     {
                         var _fn = "{" + _getVar + _code.substring(_start + 1, _end);
                         var _catch = "";
-                        if(_code.indexOf("'SCOPED_Function';") > -1) 
+                        if(_code.indexOf("\"SCOPED_FUNCTION\";") > -1) 
 						{
-							_code = _code.replace(/"SCOPED_FUNCTION";/g, "                  ");
-							_catch = "=";
+							_code = _code.replace(/"SCOPED_FUNCTION";/g, "                 ");
+							_catch = "&";
 						}
 
                         var _formated = "NJS::Type::function_t* " + _genFN +" = new NJS::Type::function_t([" + _catch + "](var __NJS_THIS, NJS::VAR* __NJS_VARARGS, int __NJS_VARLENGTH) -> NJS::VAR" + _fn + _return + ");";
