@@ -29,7 +29,14 @@ namespace NJS
 		}
 		else if (_v.type == NJS::Enum::Type::Number)
 		{
-			_ptr = new NJS::Class::Number(((NJS::Class::Number*)_v._ptr)->getDouble());
+			if(((NJS::Class::Number*)_v._ptr)->isInt)
+			{
+				_ptr = new NJS::Class::Number(((NJS::Class::Number*)_v._ptr)->getInt());
+			}
+			else 
+			{
+				_ptr = new NJS::Class::Number(((NJS::Class::Number*)_v._ptr)->getDouble());
+			}
 		}
 		else if (_v.type == NJS::Enum::Type::Function)
 		{
@@ -253,7 +260,14 @@ namespace NJS
 		}
 		else if (_v.type == NJS::Enum::Type::Number)
 		{
-			_ptr = new NJS::Class::Number(((NJS::Class::Number*)_v._ptr)->getDouble());
+			if(((NJS::Class::Number*)_v._ptr)->isInt)
+			{
+				_ptr = new NJS::Class::Number(((NJS::Class::Number*)_v._ptr)->getInt());
+			}
+			else 
+			{
+				_ptr = new NJS::Class::Number(((NJS::Class::Number*)_v._ptr)->getDouble());
+			}
 		}
 		else if (_v.type == NJS::Enum::Type::Function)
 		{
