@@ -57,6 +57,23 @@ namespace NJS::Class
 	{
 		return undefined;
 	}
+	
+	#ifdef __NJS__OBJECT_HASHMAP
+	NJS::VAR &Function::operator[](NJS::VAR key)
+	{
+		NJS::VAR& _obj = object[(std::string)key];
+		if(_obj) return _obj; 
+		
+		__NJS_Object_Lazy_Loader("prototype");
+		
+		__NJS_Method_Lazy_Loader("toString", toString);
+		__NJS_Method_Lazy_Loader("valueOf", valueOf);
+		__NJS_Method_Lazy_Loader("bind", bind);
+		__NJS_Method_Lazy_Loader("call", call);
+		
+		return _obj;
+	}
+	#else
 	NJS::VAR &Function::operator[](NJS::VAR key)
 	{
 		for (auto & search : object)
@@ -77,6 +94,7 @@ namespace NJS::Class
 		object.push_back(NJS::Type::pair_t((std::string)key, __NJS_VAR()));
 		return object[object.size() - 1].second;
 	}
+	#endif
 	
 	NJS::VAR Function::Call(var& __NJS_THIS, NJS::VAR* _args, int i)
 	{

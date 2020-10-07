@@ -105,7 +105,6 @@ NJS::VAR __NJS_Log_Console(NJS::VAR* _var, int _length)
 	return NJS::VAR();
 }
 
-
 NJS::VAR __NJS_Object_Keys(NJS::VAR _var)
 {
 	if (_var.type != NJS::Enum::Type::Object)
@@ -113,11 +112,21 @@ NJS::VAR __NJS_Object_Keys(NJS::VAR _var)
 	var _res = __NJS_Create_Array();
 
 	NJS::Type::object_t *_obj = &((NJS::Class::Object*)_var._ptr)->object;
+	
+	#ifdef __NJS__OBJECT_HASHMAP
+	int _i = 0;
+	for (auto _el: *_obj)
+	{
+		_res[_i] = _el.first;
+		_i++;
+	}
+	#else
 	int _j = (*_obj).size();
 	for (int _i = 0; _i < _j; _i++)
 	{
 		_res[_i] = (*_obj)[_i].first;
 	}
+	#endif
 	return _res;
 }
 
@@ -161,6 +170,18 @@ NJS::VAR __NJS_Object_Stringify(NJS::VAR _var, bool _bracket)
 		var _res = "";
 		NJS::Type::object_t *_obj = &((NJS::Class::Object*)_var._ptr)->object;
 		_res = "{";
+		#ifdef __NJS__OBJECT_HASHMAP
+		int _i = 0;
+		for (auto _el: *_obj)
+		{
+			if (_i > 0)
+				_res += ", ";
+			_res += var("\"") + _el.first + "\"";
+			_res += ":";
+			_res += __NJS_Object_Stringify(_el.second);
+			_i++;
+		}
+		#else
 		int j = (*_obj).size();
 		for (int _i = 0; _i < j; _i++)
 		{
@@ -170,6 +191,7 @@ NJS::VAR __NJS_Object_Stringify(NJS::VAR _var, bool _bracket)
 			_res += ":";
 			_res += __NJS_Object_Stringify((*_obj)[_i].second);
 		}
+		#endif
 		_res += "}";
 		return _res;
 	}
@@ -204,11 +226,18 @@ NJS::VAR __NJS_Object_Clone(NJS::VAR _var)
 		{
 			var _res = __NJS_Create_Object();
 			NJS::Type::object_t *_obj = &((NJS::Class::Object*)_var._ptr)->object;
+			#ifdef __NJS__OBJECT_HASHMAP
+			for (auto _el: *_obj)
+			{
+				_res[_el.first] = __NJS_Object_Clone(_el.second);
+			}
+			#else
 			int j = (*_obj).size();
 			for (int _i = 0; _i < j; _i++)
 			{
 				_res[(*_obj)[_i].first] = __NJS_Object_Clone((*_obj)[_i].second);
 			}
+			#endif
 			return _res;
 		}
 		default:
@@ -221,6 +250,17 @@ void __NJS_Object_Construct(NJS::VAR _this, NJS::VAR _prototype)
 	if(_this.type == NJS::Enum::Type::Object && _prototype.type == NJS::Enum::Type::Object)
 	{
 		NJS::Type::object_t *_obj = &((NJS::Class::Object*)_prototype._ptr)->object;
+		
+		#ifdef __NJS__OBJECT_HASHMAP
+		for (auto _el: *_obj)
+		{
+			NJS::VAR _tmp =  _this[_el.first];
+			if(_tmp.type == NJS::Enum::Type::Undefined)
+			{
+				_this[_el.first] = _el.second;
+			}
+		}
+		#else
 		int j = (*_obj).size();
 		for (int _i = 0; _i < j; _i++)
 		{
@@ -230,6 +270,7 @@ void __NJS_Object_Construct(NJS::VAR _this, NJS::VAR _prototype)
 				_this[(*_obj)[_i].first] = (*_obj)[_i].second;
 			}
 		}
+		#endif
 	}
 	
 }

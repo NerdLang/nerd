@@ -27,6 +27,17 @@
 #define __NJS_FAST_INT constexpr double
 #define __NJS_CreateMethodToClass(_name, _fn) __NJS_Object_Set(_name, __NJS_Create_Var_Scoped_Anon( return _fn(__NJS_VARARGS, __NJS_VARLENGTH); ), &object);
 #define __NJS_NEW(_fn) ((NJS::Class::Function*)_fn._ptr)->New
+
+#ifdef __NJS__OBJECT_HASHMAP
+#define __NJS_Method_Lazy_Loader(_name, _fn) \
+if(((std::string)key).compare(_name) == 0) { \
+object[(std::string)key] = __NJS_Create_Var_Scoped_Anon( return _fn(__NJS_VARARGS, __NJS_VARLENGTH); ); \
+return object[(std::string)key];}
+#define __NJS_Object_Lazy_Loader(_name) \
+if(((std::string)key).compare(_name) == 0) { \
+object[(std::string)key] = __NJS_Create_Object(); \
+return object[(std::string)key];}
+#else
 #define __NJS_Method_Lazy_Loader(_name, _fn) \
 if(((std::string)key).compare(_name) == 0) { \
 object.push_back(NJS::Type::pair_t((std::string)key, __NJS_Create_Var_Scoped_Anon( return _fn(__NJS_VARARGS, __NJS_VARLENGTH); ))); \
@@ -35,5 +46,7 @@ return object.back().second;}
 if(((std::string)key).compare(_name) == 0) { \
 object.push_back(NJS::Type::pair_t((std::string)key, __NJS_Create_Object())); \
 return object.back().second;}
+#endif
+
 #define __NJS_EXIT exit
 /* END HELPERS */

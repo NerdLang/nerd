@@ -45,20 +45,13 @@ namespace NJS::Class
 	// Main operators
 	NJS::VAR const Native::operator[](NJS::VAR key) const
 	{
-		auto &obj = this->object;
-		auto index = (std::string)key;
-		int _j = obj.size();
-		for (int _i = 0; _i < _j; _i++)
-		{
-			if (index.compare(obj[_i].first) == 0)
-			{
-				return obj[_i].second;
-			}
-		}
-		return NJS::VAR();
+		return undefined;
 	}
 	NJS::VAR &Native::operator[](NJS::VAR key)
 	{
+		#ifdef __NJS__OBJECT_HASHMAP
+		return object[(std::string)key];
+		#else
 		for (auto & search : object)
 		{
 			if (((std::string)key).compare(search.first) == 0)
@@ -69,6 +62,7 @@ namespace NJS::Class
 
 		object.push_back(NJS::Type::pair_t((std::string)key, __NJS_VAR()));
 		return object[object.size() - 1].second;
+		#endif
 	}
 	
 	template <class... Args>

@@ -156,6 +156,13 @@ namespace NJS::Class
 	}
 	NJS::VAR &Number::operator[](NJS::VAR key)
 	{		
+		#ifdef __NJS__OBJECT_HASHMAP
+		
+		NJS::VAR& _obj = object[(std::string)key];
+		if(_obj) return object[_obj];
+		
+		#else
+			
 		for (auto & search : object)
 		{
 			if (((std::string)key).compare(search.first) == 0)
@@ -163,6 +170,8 @@ namespace NJS::Class
 				return search.second;
 			}
 		}
+		
+		#endif
 		
 		__NJS_Method_Lazy_Loader("toString", toString);
 		__NJS_Method_Lazy_Loader("valueOf", valueOf);

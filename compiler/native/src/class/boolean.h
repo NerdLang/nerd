@@ -27,6 +27,18 @@ namespace NJS::Class
 		return value ? "true" : "false";
 	}
 	// Main operators
+	#ifdef __NJS__OBJECT_HASHMAP
+	NJS::VAR &Boolean::operator[](NJS::VAR key)
+	{
+		NJS::VAR& _obj = object[(std::string)key];
+		if(_obj) return object[_obj]; 
+
+		__NJS_Method_Lazy_Loader("toString", toString);
+		__NJS_Method_Lazy_Loader("valueOf", valueOf);
+
+		return object[(std::string)key];
+	}
+	#else
 	NJS::VAR &Boolean::operator[](NJS::VAR key)
 	{
 		for (auto & search : object)
@@ -42,6 +54,8 @@ namespace NJS::Class
 
 		return object.back().second;
 	}
+	#endif
+	
 	template <class... Args>
 	NJS::VAR Boolean::operator()(Args... args) const 
 	{ 

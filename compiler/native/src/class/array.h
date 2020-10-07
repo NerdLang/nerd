@@ -87,23 +87,79 @@ namespace NJS::Class
 			}
 		}
 		
-		if(((std::string)key).compare("length") == 0)
+		return undefined;
+	}
+	
+	#ifdef __NJS__OBJECT_HASHMAP
+	NJS::VAR &Array::operator[](NJS::VAR key)
+	{	
+		if (key.type == NJS::Enum::Type::Number)
 		{
-			return (int)value.size();
+			auto i = (int)key;
+			
+			if (i < 0)
+			{
+				return undefined;
+			}
+			else 
+			{
+				if (i >= value.size())
+				{
+					
+					value.reserve(i + 1);
+					value.resize(i + 1);
+				}
+			}
+			return value[i];
 		}
 		
-		auto &obj = this->object;
-		auto index = (std::string)key;
-		int _j = obj.size();
-		for (int _i = 0; _i < _j; _i++)
+		if(((std::string)key).compare("length") == 0)
 		{
-			if (index.compare(obj[_i].first) == 0)
-			{
-				return obj[_i].second;
-			}
+			length = (int)value.size();
+			return length;
 		}
-		return NJS::VAR();
+		
+		NJS::VAR& _obj = object[(std::string)key];
+		if(_obj) return _obj; 
+		
+		__NJS_Method_Lazy_Loader("push", push);
+		__NJS_Method_Lazy_Loader("@@iterator", __iterator);
+		__NJS_Method_Lazy_Loader("@@unscopables", __unscopables);
+		__NJS_Method_Lazy_Loader("concat", concat);
+		__NJS_Method_Lazy_Loader("copyWithin", copyWithin);
+		__NJS_Method_Lazy_Loader("entries", entries);
+		__NJS_Method_Lazy_Loader("every", every);
+		__NJS_Method_Lazy_Loader("fill", fill);
+		__NJS_Method_Lazy_Loader("filter", filter);
+		__NJS_Method_Lazy_Loader("find", find);
+		__NJS_Method_Lazy_Loader("findIndex", findIndex);
+		__NJS_Method_Lazy_Loader("flat", flat);
+		__NJS_Method_Lazy_Loader("flatMap", flatMap);
+		__NJS_Method_Lazy_Loader("forEach", forEach);
+		__NJS_Method_Lazy_Loader("includes", includes);
+		__NJS_Method_Lazy_Loader("indexOf", indexOf);
+		__NJS_Method_Lazy_Loader("join", join);
+		__NJS_Method_Lazy_Loader("keys", keys);
+		__NJS_Method_Lazy_Loader("lastIndexOf", lastIndexOf);
+		__NJS_Method_Lazy_Loader("map", map);
+		__NJS_Method_Lazy_Loader("pop", pop);
+		__NJS_Method_Lazy_Loader("push", push);
+		__NJS_Method_Lazy_Loader("reduce", reduce);
+		__NJS_Method_Lazy_Loader("reduceRight", reduceRight);
+		__NJS_Method_Lazy_Loader("reverse", reverse);
+		__NJS_Method_Lazy_Loader("shift", shift);
+		__NJS_Method_Lazy_Loader("slice", slice);
+		__NJS_Method_Lazy_Loader("some", some);
+		__NJS_Method_Lazy_Loader("sort", sort);
+		__NJS_Method_Lazy_Loader("splice", splice);
+		__NJS_Method_Lazy_Loader("toLocaleString", toLocaleString);
+		__NJS_Method_Lazy_Loader("toString", toString);
+		__NJS_Method_Lazy_Loader("unshift", unshift);
+		__NJS_Method_Lazy_Loader("values", values);
+		
+		return _obj;
 	}
+	#else
 	NJS::VAR &Array::operator[](NJS::VAR key)
 	{
 		static NJS::VAR _retUndefined;
@@ -180,6 +236,8 @@ namespace NJS::Class
 		object.push_back(NJS::Type::pair_t((std::string)key, __NJS_VAR()));
 		return object[object.size() - 1].second;
 	}
+	#endif
+	
 	template <class... Args>
 	NJS::VAR Array::operator()(Args... args) const 
 	{ 

@@ -91,6 +91,9 @@ var STD =
             else if(preset == "speed") return `${compiler}  ${_stack} "${_in}" /D __NJS_REGISTER_SIZE=${COMPILER.REGISTER} /std:c++14 /D CL_WINDOWS=1 /Ox /I "${CONFIG.win_inc_ucrt}" "${CONFIG.win_lib_um}\\Uuid.Lib" "${CONFIG.win_lib_um}\\kernel32.Lib" "${CONFIG.win_lib_ucrt}\\libucrt.lib" /EHsc ${COMPILER.LIBS} /o  "${out}"`;
         }
 
+		var _hashmap = "-D__NJS__OBJECT_HASHMAP";
+		if(CLI.cli['--no-object-hashmap']) _hashmap = "";
+		
         if(_stack) _stack = "-Wl,--stack," + _stack;
         else _stack = "";
         
@@ -99,11 +102,11 @@ var STD =
 
         if(preset == "none")
         {
-            return `${compiler} ${_stack} -std=c++17 "${_in}" -O1 -s ${COMPILER.LIBS} -o "${out}" ${_sysVNetLibs}`;
+            return `${compiler} ${_hashmap} ${_stack} -std=c++17 "${_in}" -O1 -s ${COMPILER.LIBS} -o "${out}" ${_sysVNetLibs}`;
         }
         else if(preset == "size")
         {
-            return `${compiler} ${_stack} -std=c++17 "${_in}" -Os -fno-rtti -fno-stack-protector -fomit-frame-pointer -s ${COMPILER.LIBS} -o "${out}" ${_sysVNetLibs}`;
+            return `${compiler} ${_hashmap} ${_stack} -std=c++17 "${_in}" -Os -fno-rtti -fno-stack-protector -fomit-frame-pointer -s ${COMPILER.LIBS} -o "${out}" ${_sysVNetLibs}`;
         }
         else
         {   
@@ -111,7 +114,7 @@ var STD =
             if(os.platform() == "darwin" || compiler.indexOf("clang") > -1) _opt += "3";
             else _opt += "fast";
 
-            return `${compiler} ${_stack} -std=c++17 "${_in}" ${_opt} -s ${COMPILER.LIBS}  -o "${out}" ${_sysVNetLibs}`;
+            return `${compiler} ${_hashmap} ${_stack} -std=c++17 "${_in}" ${_opt} -s ${COMPILER.LIBS}  -o "${out}" ${_sysVNetLibs}`;
         }
     }
 

@@ -33,6 +33,22 @@ NJS::VAR __NJS_instanceof(NJS::VAR _left, NJS::VAR _right)
 }
 
 /*** ***/
+#ifdef __NJS__OBJECT_HASHMAP
+NJS::VAR __NJS_Object_Set(std::string _index, NJS::VAR _value, NJS::Type::object_t *_obj)
+{
+	
+	if (_value.type == NJS::Enum::Type::String)
+	{
+		(*_obj)[_index] = new NJS::Class::String((std::string)_value);
+	}
+	else
+	{
+		(*_obj)[_index]._ptr = _value._ptr;
+	}
+		
+	return NJS::VAR();
+}
+#else
 NJS::VAR __NJS_Object_Set(std::string _index, NJS::VAR _value, NJS::Type::object_t *_obj)
 {
 	int _j = (*_obj).size();
@@ -57,6 +73,7 @@ NJS::VAR __NJS_Object_Set(std::string _index, NJS::VAR _value, NJS::Type::object
 	(*_obj).push_back(NJS::Type::pair_t(_index, _value));
 	return NJS::VAR();
 }
+#endif
 /**/
 
 NJS::VAR __NJS_Object_Set(NJS::VAR _index, NJS::VAR _value, NJS::VAR _array)

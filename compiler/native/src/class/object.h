@@ -40,18 +40,40 @@ namespace NJS::Class
 	// Main operators
 	NJS::VAR const Object::operator[](NJS::VAR key) const
 	{
-		auto &obj = this->object;
-		auto index = (std::string)key;
-		int _j = obj.size();
-		for (int _i = 0; _i < _j; _i++)
+		return undefined;
+	}
+	#ifdef __NJS__OBJECT_HASHMAP
+	NJS::VAR &Object::operator[](NJS::VAR key)
+	{
+		NJS::VAR& _obj = object[(std::string)key];
+		if(_obj)
 		{
-			if (index.compare(obj[_i].first) == 0)
+			if(!prototype)
 			{
-				return obj[_i].second;
+				return _obj;
+			}
+			else 
+			{
+				if((_obj).type == NJS::Enum::Type::Function)
+				{
+					((NJS::Class::Function*)_obj._ptr)->This = this;
+				}
+				return _obj;
 			}
 		}
-		return NJS::VAR();
+
+		if(((std::string)key).compare("toString") == 0  || ((std::string)key).compare("toLocaleString") == 0)
+		{
+			object[(std::string)key] = __NJS_Create_Var_Scoped_Anon( return __NJS_Object_Stringify(this););
+		}
+		else if(((std::string)key).compare("valueOf") == 0)
+		{
+			object[(std::string)key] = __NJS_Create_Var_Scoped_Anon( return this; );
+		}
+
+		return _obj;
 	}
+	#else
 	NJS::VAR &Object::operator[](NJS::VAR key)
 	{
 		static NJS::VAR _retUndefined;
@@ -107,8 +129,8 @@ namespace NJS::Class
 		}
 
 		return object[object.size() - 1].second;
-
 	}
+	#endif
 	template <class... Args>
 	NJS::VAR Object::operator()(Args... args) const 
 	{

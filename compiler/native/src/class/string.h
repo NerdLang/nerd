@@ -80,22 +80,13 @@ namespace NJS::Class
 			return (int)value.size();
 		}
 		
-		auto &obj = this->object;
-		auto index = (std::string)key;
-		int _j = obj.size();
-		for (int _i = 0; _i < _j; _i++)
-		{
-			if (index.compare(obj[_i].first) == 0)
-			{
-				return obj[_i].second;
-			}
-		}
-		return NJS::VAR();
+		return undefined;
 	}
+	#ifdef __NJS__OBJECT_HASHMAP
 	NJS::VAR &String::operator[](NJS::VAR key)
 	{
 		static NJS::VAR _char;
-		static NJS::VAR _retLength;
+		static NJS::VAR _length;
 		
 		if (key.type == NJS::Enum::Type::Number)
 		{
@@ -112,12 +103,46 @@ namespace NJS::Class
 			return _char;
 		}
 		
+		NJS::VAR& _obj = object[(std::string)key];
+		if(_obj) return _obj; 
+		
+		__NJS_Method_Lazy_Loader("toString", toString);
+		__NJS_Method_Lazy_Loader("split", split);
+		__NJS_Method_Lazy_Loader("indexOf", indexOf);
+		__NJS_Method_Lazy_Loader("lastIndexOf", lastIndexOf);
+		__NJS_Method_Lazy_Loader("search", search);
+		__NJS_Method_Lazy_Loader("slice", slice);
+		__NJS_Method_Lazy_Loader("substr", substr);
+		__NJS_Method_Lazy_Loader("replace", replace);
+		
 		if(((std::string)key).compare("length") == 0)
 		{
-			_retLength = (int)value.size();
-			return _retLength;
+			_length = (int)value.size();
+			return _length;
 		}
+
+		return undefined;
+	}
+	#else
+	NJS::VAR &String::operator[](NJS::VAR key)
+	{
+		static NJS::VAR _char;
+		static NJS::VAR _length;
 		
+		if (key.type == NJS::Enum::Type::Number)
+		{
+			auto i = (int)key;
+			if (i >= 0)
+			{
+				if (i >= value.size())
+				{
+					value.resize(i + 1);
+				}
+				_char = value.at(i);
+			}
+			else _char = "";
+			return _char;
+		}
 		
 		
 		for (auto & search : object)
@@ -137,9 +162,17 @@ namespace NJS::Class
 		__NJS_Method_Lazy_Loader("substr", substr);
 		__NJS_Method_Lazy_Loader("replace", replace);
 
+		if(((std::string)key).compare("length") == 0)
+		{
+			_length = (int)value.size();
+			return _length;
+		}
+		
 		object.push_back(NJS::Type::pair_t(((std::string)*this).c_str(), __NJS_VAR()));
 		return object[object.size() - 1].second;
 	}
+	#endif
+	
 	template <class... Args>
 	NJS::VAR String::operator()(Args... args) const 
 	{
