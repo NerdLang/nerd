@@ -28,3 +28,5 @@
 * Use <filesystem> for fs module
 
 * Add arguments in function scope
+
+* Function.prototype.apply
