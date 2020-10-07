@@ -1,3 +1,6 @@
+#ifdef __NJS__OBJECT_HASHMAP
+#include <unordered_map>
+#endif
 namespace NJS
 {
 	namespace Type
