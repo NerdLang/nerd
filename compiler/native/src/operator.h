@@ -279,20 +279,10 @@ void __NJS_Object_Construct(NJS::VAR _this, NJS::VAR _prototype)
 inline NJS::Class::Object* __NJS_Create_Object()
 {
 	return new NJS::Class::Object();
-	/*
-	NJS::Class::Object *_obj = new NJS::Class::Object();
-	_obj->counter--;
-	return NJS::VAR(_obj);
-	*/
 }
 inline NJS::Class::Array* __NJS_Create_Array()
 {
 	return new NJS::Class::Array();
-	/*
-	NJS::Class::Array *_arr = new NJS::Class::Array();
-	_arr->counter--;
-	return NJS::VAR(_arr);
-	*/
 }
 
 
