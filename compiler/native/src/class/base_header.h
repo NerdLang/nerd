@@ -7,6 +7,7 @@ namespace NJS::Class
 	{
 	public:
 		virtual void Delete() noexcept{};
+		virtual void* Copy() noexcept{ return nullptr; };
 		virtual explicit operator bool() const noexcept{ return 1;};
 		virtual explicit operator std::string() const noexcept{ return "";};
 		virtual explicit operator int() const noexcept {return 0;};

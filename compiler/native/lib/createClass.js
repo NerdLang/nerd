@@ -23,7 +23,7 @@
 function createClass(_code, _scope)
 {	
 	var _matchThis = new RegExp(/(| |{|,)__NJS_THIS([\.(";)]|$)/);
-	var _return = ";return __NJS_Create_Undefined();}";
+	var _return = ";return undefined;}";
 	var _returnThis = ";return __NJS_THIS;}";
 	var _searchFN = new RegExp(/function +__NJS_CLASS_(.[a-zA-Z0-9_\-]*) *\((.*)\)/);
 	var _index = _code.search(_searchFN);

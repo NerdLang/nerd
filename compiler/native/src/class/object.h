@@ -7,12 +7,17 @@ namespace NJS::Class
 	// Constructors
 	Object::Object() { }
 	// Methods
-	void Object::Delete() noexcept
+	inline void Object::Delete() noexcept
 	{
 		if (--counter < 1)
 		{
 			delete this;
 		}
+	}
+	inline void* Object::Copy() noexcept
+	{
+		counter++;
+		return this;
 	}
 	// Native cast
 	Object::operator bool() const noexcept { return true; }

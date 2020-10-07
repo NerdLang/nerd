@@ -12,69 +12,15 @@ namespace NJS
 		((NJS::Class::Base*)_ptr)->Delete();
 	}
 
-	/**/
+	/*** COPY ***/
 	VAR::VAR(VAR const &_v)
 	{
 		
 		type = _v.type;
-
-		if (_v.type == NJS::Enum::Type::Object)
-		{
-			_ptr = _v._ptr;
-			((NJS::Class::Object*)_ptr)->counter++;
-		}
-		else if (_v.type == NJS::Enum::Type::String)
-		{
-			_ptr = new NJS::Class::String((std::string)_v);
-		}
-		else if (_v.type == NJS::Enum::Type::Number)
-		{
-			if(((NJS::Class::Number*)_v._ptr)->isInt)
-			{
-				_ptr = new NJS::Class::Number(((NJS::Class::Number*)_v._ptr)->getInt());
-			}
-			else 
-			{
-				_ptr = new NJS::Class::Number(((NJS::Class::Number*)_v._ptr)->getDouble());
-			}
-		}
-		else if (_v.type == NJS::Enum::Type::Function)
-		{
-			_ptr = _v._ptr;
-			((NJS::Class::Function*)_ptr)->counter++;
-		}
-		else if (_v.type == NJS::Enum::Type::Array)
-		{
-			_ptr = _v._ptr;
-			((NJS::Class::Array*)_ptr)->counter++;
-		}
-		else if (_v.type == NJS::Enum::Type::Native)
-		{
-			_ptr = _v._ptr;
-			((NJS::Class::Native*)_ptr)->counter++;
-		}
-		else if (_v.type == NJS::Enum::Type::Boolean)
-		{
-			_ptr = new NJS::Class::Boolean(((NJS::Class::Boolean*)_v._ptr)->value);
-		}
-		else if (_v.type == NJS::Enum::Type::Undefined)
-		{
-			_ptr = new NJS::Class::Undefined();
-		}
-		else if (_v.type == NJS::Enum::Type::ISNULL)
-		{
-			_ptr = new NJS::Class::Number(((NJS::Class::Number*)_v._ptr)->getInt());
-		}
-		else if (_v.type == NJS::Enum::Type::ISNAN)
-		{
-			_ptr = new NJS::Class::Number(((NJS::Class::Number*)_v._ptr)->getDouble());
-		}
-		else
-		{
-			_ptr = _v._ptr;
-		}
+		_ptr = ((NJS::Class::Base*)_v._ptr)->Copy();
+		
 	}
-	/**/
+	/* END COPY */
 	
 	/*** CONSTRUCTOR ***/
 
@@ -248,64 +194,8 @@ namespace NJS
 		((NJS::Class::Base*)_ptr)->Delete();
 
 		type = _v.type;
+		_ptr = ((NJS::Class::Base*)_v._ptr)->Copy();
 
-		if (_v.type == NJS::Enum::Type::Object)
-		{
-			_ptr = _v._ptr;
-			((NJS::Class::Object*)_ptr)->counter++;
-		}
-		else if (_v.type == NJS::Enum::Type::String)
-		{
-			_ptr = new NJS::Class::String((std::string)_v);
-		}
-		else if (_v.type == NJS::Enum::Type::Number)
-		{
-			if(((NJS::Class::Number*)_v._ptr)->isInt)
-			{
-				_ptr = new NJS::Class::Number(((NJS::Class::Number*)_v._ptr)->getInt());
-			}
-			else 
-			{
-				_ptr = new NJS::Class::Number(((NJS::Class::Number*)_v._ptr)->getDouble());
-			}
-		}
-		else if (_v.type == NJS::Enum::Type::Function)
-		{
-			_ptr = _v._ptr;
-			((NJS::Class::Function*)_ptr)->counter++;
-		}
-		else if (_v.type == NJS::Enum::Type::Array)
-		{
-			_ptr = _v._ptr;
-			((NJS::Class::Array*)_ptr)->counter++;
-		}
-		else if (_v.type == NJS::Enum::Type::Native)
-		{
-			_ptr = _v._ptr;
-			((NJS::Class::Native*)_ptr)->counter++;
-		}
-		else if (_v.type == NJS::Enum::Type::Boolean)
-		{
-			_ptr = new NJS::Class::Boolean( ((NJS::Class::Boolean*)_v._ptr)->value);
-		}
-		else if (_v.type == NJS::Enum::Type::Undefined)
-		{
-			_ptr = new NJS::Class::Undefined();
-		}
-		else if (_v.type == NJS::Enum::Type::ISNULL)
-		{
-			_ptr = new NJS::Class::Number(((NJS::Class::Number*)_v._ptr)->getInt());
-		}
-		else if (_v.type == NJS::Enum::Type::ISNAN)
-		{
-			_ptr = new NJS::Class::Number(((NJS::Class::Number*)_v._ptr)->getDouble());
-		}
-		else
-		{
-			_ptr = _v._ptr;
-		}
-
-		//return *this;
 	}
 
 	/// Unary VAR::operators
@@ -327,12 +217,12 @@ namespace NJS
 	/// Arithmetic VAR::operators
 	VAR VAR::operator+(const VAR &_v1)
 	{
-		if (type == NJS::Enum::Type::String || type == NJS::Enum::Type::Array || type == NJS::Enum::Type::Object || _v1.type == NJS::Enum::Type::String)
-			return __NJS_Concat_To_Str((std::string) * this, (std::string)_v1);
-		else if (type == NJS::Enum::Type::Number)
+		if (type == NJS::Enum::Type::Number)
 		{
 			return ((*(NJS::Class::Number*)_ptr)) + _v1;
 		}
+		else if (type == NJS::Enum::Type::String || type == NJS::Enum::Type::Array || type == NJS::Enum::Type::Object || _v1.type == NJS::Enum::Type::String)
+			return __NJS_Concat_To_Str((std::string) * this, (std::string)_v1);
 		else return VAR();
 		
 	}

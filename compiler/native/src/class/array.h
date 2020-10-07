@@ -15,12 +15,17 @@ namespace NJS::Class
 		value = vec;
 	}
 	// Methods
-	void Array::Delete() noexcept
+	inline void Array::Delete() noexcept
 	{
 		if (--counter < 1)
 		{
 			delete this;
 		}
+	}
+	inline void* Array::Copy() noexcept
+	{
+		counter++;
+		return this;
 	}
 	// Native cast
 	Array::operator bool() const noexcept { return true; }

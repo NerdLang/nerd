@@ -9,9 +9,13 @@ namespace NJS::Class
 		value = val;
 	}
 	// Methods
-	void Boolean::Delete() noexcept
+	inline void Boolean::Delete() noexcept
 	{
 		delete this;
+	}
+	inline void* Boolean::Copy() noexcept
+	{
+		return new Boolean();
 	}
 	// Native cast
 	Boolean::operator bool() const noexcept { return value; }

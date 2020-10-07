@@ -17,13 +17,18 @@ namespace NJS::Class
 		value = (NJS::Type::function_t*)val;
 	}
 	// Methods
-	void Function::Delete() noexcept
+	inline void Function::Delete() noexcept
 	{
 		if (--counter < 1)
 		{
 			delete (NJS::Type::function_t*)value;
 			delete this;
 		}
+	}
+	inline void* Function::Copy() noexcept
+	{
+		counter++;
+		return this;
 	}
 	// Native cast
 	Function::operator bool() const noexcept { return true; }

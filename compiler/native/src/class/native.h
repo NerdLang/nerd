@@ -12,12 +12,17 @@ namespace NJS::Class
 		value = val;
 	}
 	// Methods
-	void Native::Delete() noexcept
+	inline void Native::Delete() noexcept
 	{
 		if (--counter < 1)
 		{
 			delete this;
 		}
+	}
+	inline void* Native::Copy() noexcept
+	{
+		counter++;
+		return this;
 	}
 	// Native cast
 	Native::operator bool() const noexcept { return true; }

@@ -13,7 +13,8 @@ namespace NJS::Class
 		NJS::Type::object_t object;
 		bool value = false;
 		// Methods
-		void Delete() noexcept;
+		inline void Delete() noexcept;
+		inline void* Copy() noexcept;
 		// Native cast
 		explicit operator bool() const noexcept;
 		explicit operator double() const noexcept;

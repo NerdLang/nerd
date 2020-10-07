@@ -88,11 +88,13 @@ namespace NJS::Class
 		}
 	}
 	// Methods
-	void Number::Delete() noexcept
+	inline void Number::Delete() noexcept
 	{
-
-			delete this;
-
+		delete this;
+	}
+	inline void* Number::Copy() noexcept
+	{
+		return new Number(this);
 	}
 	// Native cast
 	Number::operator bool() const noexcept { return getInt(); }

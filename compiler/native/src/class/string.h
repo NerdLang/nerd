@@ -19,9 +19,13 @@ namespace NJS::Class
 		value = val;
 	}
 	// Methods
-	void String::Delete() noexcept
+	inline void String::Delete() noexcept
 	{
 		delete this;
+	}
+	inline void* String::Copy() noexcept
+	{
+		return new String(value);
 	}
 	// Native cast
 	String::operator bool() const noexcept { return value.size() > 0; }

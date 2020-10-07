@@ -23,6 +23,11 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <fstream>
+#include <dirent.h>
+
+#ifndef WIN32
+    #include <sys/types.h>
+#endif
 
 function __NJS_fs_readFileSync(_name)
 { 

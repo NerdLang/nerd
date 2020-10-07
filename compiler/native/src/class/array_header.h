@@ -15,7 +15,8 @@ namespace NJS::Class
 		NJS::Type::vector_t value;
 		NJS::Type::object_t object;
 		// Methods
-		void Delete() noexcept;
+		inline void Delete() noexcept;
+		inline void* Copy() noexcept;
 		// Native cast
 		explicit operator bool() const noexcept;
 		explicit operator double() const noexcept;

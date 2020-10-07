@@ -32,6 +32,7 @@ var fs =
   removeSync : __NJS_fs_removeSync,
   renameSync: __NJS_fs_renameSync,
   mkdirSync: __NJS_fs_mkdirSync,
+  readdirSync: "TODO",
 };
 
 module.exports = fs;

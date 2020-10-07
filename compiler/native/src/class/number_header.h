@@ -35,7 +35,8 @@ namespace NJS::Class
 		bool isInt = true;
 		inline int getInt() const noexcept;
 		inline double getDouble() const noexcept;
-		void Delete() noexcept;
+		inline void Delete() noexcept;
+		inline void* Copy() noexcept;
 		// Native cast
 		explicit operator bool() const noexcept;
 		explicit operator double() const noexcept;

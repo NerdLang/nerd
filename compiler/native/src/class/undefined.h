@@ -7,12 +7,13 @@ namespace NJS::Class
 	// Constructors
 	Undefined::Undefined() { }
 	// Methods
-	void Undefined::Delete() noexcept
+	inline void Undefined::Delete() noexcept
 	{
-		//if (--counter < 1)
-		//{
-			delete this;
-		//}
+		delete this;
+	}
+	inline void* Undefined::Copy() noexcept
+	{
+		return new Undefined();
 	}
 	// Native cast
 	Undefined::operator bool() const noexcept { return false; }
