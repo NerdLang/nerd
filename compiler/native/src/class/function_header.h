@@ -79,5 +79,6 @@ namespace NJS::Class
 		NJS::VAR valueOf(NJS::VAR* _args, int _length) const;
 		NJS::VAR bind(NJS::VAR* _args, int _length);
 		NJS::VAR call(NJS::VAR* _args, int _length);
+		NJS::VAR apply(NJS::VAR* _args, int _length);
 	};
 } // namespace NJS::Class

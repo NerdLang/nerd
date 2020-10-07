@@ -29,4 +29,3 @@
 
 * Add arguments in function scope
 
-* Function.prototype.apply

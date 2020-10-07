@@ -70,6 +70,7 @@ namespace NJS::Class
 		__NJS_Method_Lazy_Loader("valueOf", valueOf);
 		__NJS_Method_Lazy_Loader("bind", bind);
 		__NJS_Method_Lazy_Loader("call", call);
+		__NJS_Method_Lazy_Loader("apply", apply);
 		
 		return _obj;
 	}
@@ -90,6 +91,7 @@ namespace NJS::Class
 		__NJS_Method_Lazy_Loader("valueOf", valueOf);
 		__NJS_Method_Lazy_Loader("bind", bind);
 		__NJS_Method_Lazy_Loader("call", call);
+		__NJS_Method_Lazy_Loader("apply", apply);
 		
 		object.push_back(NJS::Type::pair_t((std::string)key, __NJS_VAR()));
 		return object[object.size() - 1].second;
@@ -322,18 +324,20 @@ namespace NJS::Class
 	}
 	NJS::VAR Function::bind(NJS::VAR* _args, int _length)
 	{
-			var _bind;
-			if(_length > 0)
-			{
-				_bind = _args[0];
-			}
-			var _binded = new NJS::Class::Function(value, _bind);
-			return _binded;
+		return __NJS_Create_Var_Scoped_Anon(
+		counter++;
+		var _bind;
+		if(_length > 0)
+		{
+			_bind = _args[0];
+		}
+		var _binded = new NJS::Class::Function(value, _bind);
+		return _binded;
+		);
 	}
 	
 	NJS::VAR Function::call(NJS::VAR* _args, int _length)
 	{
-		counter++;
 		NJS::VAR __THIS;
 		if(_length > 0)
 		{
@@ -344,5 +348,35 @@ namespace NJS::Class
 		for(int i = 1; i < _length; i++) _newArgs[i-1] = _args[i];
 		
 		return Call(__THIS, _newArgs, _length);
+	}
+	
+	NJS::VAR Function::apply(NJS::VAR* _args, int _length)
+	{
+		NJS::VAR __THIS;
+		if(_length > 0)
+		{
+			__THIS = _args[0];
+			_length--;
+		}
+		
+		if(_length > 0)
+		{
+			NJS::VAR _arr = _args[1];
+			if(_arr.type == NJS::Enum::Type::Array)
+			{
+				NJS::Type::vector_t _v = ((NJS::Class::Array*)_arr._ptr)->value;
+				NJS::VAR __ARGS[_v.size()];
+				int i = 0;
+				for( auto _var: _v)
+				{
+					__ARGS[i] = _var;
+					i++;
+				}
+				return Call(__THIS, __ARGS, i);
+			}
+		}
+		
+		NJS::VAR __ARGS[0];
+		return Call(__THIS, __ARGS, 0);
 	}
 } // namespace NJS::Class
