@@ -54,6 +54,7 @@ namespace NJS
 	struct VAR;
 	namespace Class
 	{
+		class Base;
 		class Number;
 		class Undefined;
 		class Boolean;
@@ -67,12 +68,13 @@ namespace NJS
 
 #include "var_header.h"
 #include "type.h"
+#include "values.h"
 #include "classes_header.h"
 #include "functions.h"
 #include "this.h"
 #include "var.h"
 
-#include "values.h"
+
 
 #include "objmgmt.h"
 #include "classes.h"

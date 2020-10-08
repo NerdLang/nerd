@@ -8,11 +8,11 @@ namespace NJS::Class
 	public:
 		virtual void Delete() noexcept{};
 		virtual void* Copy() noexcept{ return nullptr; };
-		virtual explicit operator bool() const noexcept{ return 1;};
+		virtual explicit operator bool() const noexcept{ return false;};
 		virtual explicit operator std::string() const noexcept{ return "";};
 		virtual explicit operator int() const noexcept {return 0;};
 		virtual explicit operator double() const noexcept {return 0.0;};
 		virtual explicit operator long long() const noexcept {return 0;};
-		virtual NJS::VAR &operator[](NJS::VAR key){static NJS::VAR _ret; return _ret;};
+		virtual NJS::VAR &operator[](NJS::VAR key){return undefined;};
 	};
 }

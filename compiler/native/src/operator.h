@@ -296,12 +296,6 @@ NJS::VAR __NJS_Create_Native(void *_native)
 	return NJS::VAR(NJS::Enum::Type::Undefined, _native);
 }
 
-/*
-void* __NJS_Get_Function(NJS::VAR _fn)
-{
-  return _fn.get().f;
-}
-*/
 
 std::function<var(NJS::Type::vector_t)> *__NJS_Get_Function(NJS::VAR _v)
 {
