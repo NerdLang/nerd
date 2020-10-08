@@ -81,7 +81,7 @@ function createAnon(_code, _scope)
 						if(_match[1]) COMPILER.DECL.push(`var ${_match[2]};`);
 						if(_match[2]) _formated += _match[2] + " = ";
 						_formated += "NJS::VAR(NJS::Enum::Type::Function, new NJS::Type::function_t ([" + _catch + "](var __NJS_THIS, NJS::VAR* __NJS_VARARGS, int __NJS_VARLENGTH) -> NJS::VAR" + _fn + os.EOL + _return + "), __NJS_THIS);";
-						_code = [_code.slice(0, _index), _formated, _code.slice(_end + 1)].join('');		
+						_code = [_code.slice(0, _index), ' ', _formated, _code.slice(_end + 1)].join('');		
 						break;
 					}
 				}
