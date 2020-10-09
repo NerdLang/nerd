@@ -21,7 +21,6 @@
  */
 
 var genInclude = require("./genInclude.js");
-var strip = require("strip-comments");
 module.exports = genRequire;
 var fs = require("fs");
 var CACHE = {};

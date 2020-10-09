@@ -20,6 +20,7 @@
  *
  */
  
+global.strip = require("strip-comments");
 global.babel = require( '@babel/core' );
 babel.generate = require( '@babel/generator' ).default;
 
@@ -187,7 +188,7 @@ function Compiler()
 	/*** METHODS ***/
 	this.Parse = function(_code)
 	{
-		
+		_code = strip(_code);
 		if(CLI.cli["--preset"] && CLI.cli["--preset"].argument == "speed") 
 		{
 			_code = babel.transformSync(_code, 
@@ -243,25 +244,6 @@ function Compiler()
 	  
 	this.Prepare = function(_folder)
 	{
-		COMPILER.REGISTER = 1000000;
-		if(this.ENV.name == "arduino")
-		{
-			COMPILER.REGISTER = 250;
-			if(!this.TARGET)
-			{
-				this.TARGET = "nano"
-			}
-			if(this.TARGET.substring(0, 4) == "nano") COMPILER.REGISTER = 50;
-		}
-		else if(this.ENV.name == "stm32")
-		{
-			COMPILER.REGISTER = 1000;
-		}
-
-
-		if(CLI.cli["--register"]) setRegister(CLI.cli["--register"].argument);
-		if(CLI.cli["-r"]) setRegister(CLI.cli["-r"].argument);
-
 		copyDirSync(path.join(__dirname, "src"), _folder, true);
 	};
 

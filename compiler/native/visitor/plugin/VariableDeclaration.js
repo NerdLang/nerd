@@ -24,6 +24,7 @@ function VariableDeclaration(_path)
 {
   if(_path.node.declarations)
   {
+	  var _hoisting = false;
 	  for(var d = 0; d < _path.node.declarations.length; d++)
 	  {
 		if(_path.node.declarations[d].id && _path.node.declarations[d].id.name)
@@ -45,7 +46,20 @@ function VariableDeclaration(_path)
 					COMPILER.INFO.HOISTING.push(_path.node.declarations[d].id.name);
 				}
 			}
+			else if(_path.parent.type != "ForStatement" && (_path.node.kind == "var" || _path.node.kind == "const"))
+			{
+				const fnParent = _path.findParent(p => p && (p.type === 'Program' || p.type.includes('Function')));
+				if(fnParent.node.VAR)
+				{
+					if(!_hoisting) _hoisting = true;
+					if(_path.node.kind == "var")
+						fnParent.node.VAR.var.push(_path.node.declarations[d].id.name);
+					else
+						fnParent.node.VAR.const.push(_path.node.declarations[d].id.name);
+				}
+			}
 		}
+		
 		if(_path.node.declarations.length == 1 && _path.node.declarations[0].init && _path.node.declarations[0].init.type == "NumericLiteral")
 		{
 			if(_path.parent.type == "ForStatement")
@@ -66,6 +80,7 @@ function VariableDeclaration(_path)
 		}
 		if(!(_path.node.declarations[d].init)) _path.node.declarations[d].init = babel.parse("__NJS_VAR()");
 	  }
+	  if(_hoisting) _path.node.kind = "";
   }
 }
 module.exports = VariableDeclaration;
