@@ -76,14 +76,13 @@ namespace NJS::Class
 	#else
 	NJS::VAR &Object::operator[](NJS::VAR key)
 	{
-		static NJS::VAR _retUndefined;
 		if (key.type == NJS::Enum::Type::Number)
 		{
 			auto i = (int)key;
 			
 			if (i < 0)
 			{
-				return _retUndefined;
+				return undefined;
 			}
 			else 
 			{

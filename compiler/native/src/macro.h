@@ -24,7 +24,7 @@
 #define finally ;
 #define __NJS_Boolean_TRUE __NJS_Create_Boolean(true)
 #define __NJS_Boolean_FALSE __NJS_Create_Boolean(false)
-#define __NJS_FAST_INT constexpr double
+#define __NJS_FAST_INT double
 #define __NJS_CreateMethodToClass(_name, _fn) __NJS_Object_Set(_name, __NJS_Create_Var_Scoped_Anon( return _fn(__NJS_VARARGS, __NJS_VARLENGTH); ), &object);
 #define __NJS_NEW(_fn) ((NJS::Class::Function*)_fn._ptr)->New
 

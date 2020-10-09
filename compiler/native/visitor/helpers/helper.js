@@ -30,6 +30,18 @@ VISITOR.pushDeclVar = function(_name, _index)
 	else COMPILER.VAR_STATE[_index].push(_name);
 }
 
+VISITOR.getDeclVar = function(_name, _index)
+{
+	var _state;
+	if(_index == undefined)
+	{
+		var currentScope = VISITOR.CURRENT_Function + 1;
+		_state = COMPILER.VAR_STATE[currentScope].push(_name);
+	}
+	else _state =COMPILER.VAR_STATE[_index].push(_name);
+	console.log(_state);
+}
+
 VISITOR.checkUndefVar = function(_name)
 {
 	var currentScope = VISITOR.CURRENT_Function + 1;
