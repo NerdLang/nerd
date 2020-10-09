@@ -37,6 +37,8 @@ namespace NJS
 		VAR(std::function<VAR(NJS::VAR*, int)> &_value);
 		template <class... Args>
 		VAR operator() (Args... args);
+		template <class... Args>
+		VAR operator() (Args... args) const;
 		
 		/* END CALL OVERLOAD */
 

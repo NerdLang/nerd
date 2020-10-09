@@ -157,6 +157,19 @@ namespace NJS
 		else return (*(NJS::Class::Function*)_ptr)((VAR)(args)...);
 	}
 	
+	template <class... Args>
+	VAR VAR::operator() (Args... args) const
+	{
+		if (this->type != NJS::Enum::Type::Function)
+		{
+	#ifndef __NJS_ARDUINO
+			throw NJS::VAR("TypeError: object is not a function");
+	#endif
+			exit(1);
+		}
+		else return (*(NJS::Class::Function*)_ptr)((VAR)(args)...);
+	}
+	
 	/* END CALL OVERLOAD */
 
 	VAR & VAR::operator[] (VAR _index)
