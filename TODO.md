@@ -25,7 +25,5 @@
 
 * Add delete keyword
 
-* Use <filesystem> for fs module
-
 * Add arguments in function scope
 
