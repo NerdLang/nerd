@@ -12,6 +12,7 @@ namespace NJS::Class
 		// Properties
 		NJS::Type::object_t object;
 		bool value = false;
+		count_t counter = 1;
 		// Methods
 		inline void Delete() noexcept;
 		inline void* Copy() noexcept;

@@ -66,7 +66,7 @@ NJS::VAR parseInt(NJS::VAR _str)
 	if (_str.type == NJS::Enum::Type::String)
 	{
 #ifdef __NJS_ARDUINO
-		return NJS::VAR();
+		return undefined;
 #else
 		return __NJS_Create_Number((double)(*(NJS::Class::String*)_str._ptr));
 #endif
@@ -84,7 +84,7 @@ NJS::VAR __NJS_Log_Console(NJS::VAR _var)
 	std::cout << std::endl;
 #endif
 
-	return NJS::VAR();
+	return undefined;
 }
 
 NJS::VAR __NJS_Log_Console(NJS::VAR* _var, int _length)
@@ -102,7 +102,7 @@ NJS::VAR __NJS_Log_Console(NJS::VAR* _var, int _length)
 	std::cout << std::endl;
 #endif
 
-	return NJS::VAR();
+	return undefined;
 }
 
 NJS::VAR __NJS_Object_Keys(NJS::VAR _var)
@@ -241,7 +241,7 @@ NJS::VAR __NJS_Object_Clone(NJS::VAR _var)
 			return _res;
 		}
 		default:
-			return NJS::VAR();
+			return undefined;
 	}
 }
 

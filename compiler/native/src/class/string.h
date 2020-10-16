@@ -21,7 +21,10 @@ namespace NJS::Class
 	// Methods
 	inline void String::Delete() noexcept
 	{
-		delete this;
+		if(--counter == 0)
+		{
+			delete this;
+		}
 	}
 	inline void* String::Copy() noexcept
 	{
@@ -168,7 +171,7 @@ namespace NJS::Class
 			return _length;
 		}
 		
-		object.push_back(NJS::Type::pair_t(((std::string)*this).c_str(), __NJS_VAR()));
+		object.push_back(NJS::Type::pair_t(((std::string)*this).c_str(), undefined));
 		return object[object.size() - 1].second;
 	}
 	#endif

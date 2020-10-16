@@ -46,7 +46,7 @@ NJS::VAR __NJS_Object_Set(std::string _index, NJS::VAR _value, NJS::Type::object
 		(*_obj)[_index]._ptr = _value._ptr;
 	}
 		
-	return NJS::VAR();
+	return undefined;
 }
 #else
 NJS::VAR __NJS_Object_Set(std::string _index, NJS::VAR _value, NJS::Type::object_t *_obj)
@@ -66,12 +66,12 @@ NJS::VAR __NJS_Object_Set(std::string _index, NJS::VAR _value, NJS::Type::object
 				(*_obj)[_i].second._ptr = _value._ptr;
 			}
 
-			return NJS::VAR();
+			return undefined;
 		}
 	}
 
 	(*_obj).push_back(NJS::Type::pair_t(_index, _value));
-	return NJS::VAR();
+	return undefined;
 }
 #endif
 /**/
@@ -90,7 +90,7 @@ NJS::VAR __NJS_Object_Set(NJS::VAR _index, NJS::VAR _value, NJS::VAR _array)
 
 		((NJS::Class::Array*)_array._ptr)->value.at( (int)(*(NJS::Class::Number*)_index._ptr) ) = _value;
 		
-		return NJS::VAR();
+		return undefined;
 	}
 	else if (_array.type == NJS::Enum::Type::Object || _array.type == NJS::Enum::Type::String || _array.type == NJS::Enum::Type::Function || _array.type == NJS::Enum::Type::Array || _array.type == NJS::Enum::Type::Native)
 	{
@@ -104,10 +104,10 @@ NJS::VAR __NJS_Object_Set(NJS::VAR _index, NJS::VAR _value, NJS::VAR _array)
 		else if (_array.type == NJS::Enum::Type::Function)
 			_obj = &((NJS::Class::Function*)_array._ptr)->object;
 		else
-			return NJS::VAR();
+			return undefined;
 
 		return __NJS_Object_Set((std::string)_index, _value, _obj);
 	}
 
-	return NJS::VAR();
+	return undefined;
 }

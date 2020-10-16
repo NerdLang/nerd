@@ -9,11 +9,10 @@ namespace NJS::Class
 	// Methods
 	inline void Undefined::Delete() noexcept
 	{
-		delete this;
 	}
 	inline void* Undefined::Copy() noexcept
 	{
-		return new Undefined();
+		return this;
 	}
 	// Native cast
 	Undefined::operator bool() const noexcept { return false; }

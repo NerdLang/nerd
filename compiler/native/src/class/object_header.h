@@ -9,7 +9,7 @@ namespace NJS::Class
 		// Constructors
 		Object();
 		// Properties
-		count_t counter = 1;
+		count_t counter = 0;
 		NJS::Type::object_t object;
 		bool prototype = false;
 		NJS::Type::vector_p instance;

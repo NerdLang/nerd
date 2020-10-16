@@ -9,17 +9,19 @@ namespace NJS::Class
 	Function::Function(){}
 	Function::Function(void *val)
 	{
+		counter++;
 		value = (NJS::Type::function_t*)val;
 	}
 	Function::Function(void *val, NJS::VAR bind)
 	{
+		counter++;
 		This = bind;
 		value = (NJS::Type::function_t*)val;
 	}
 	// Methods
 	inline void Function::Delete() noexcept
 	{
-		if (--counter < 1)
+		if (--counter == 0)
 		{
 			delete (NJS::Type::function_t*)value;
 			delete this;
@@ -93,7 +95,7 @@ namespace NJS::Class
 		__NJS_Method_Lazy_Loader("call", call);
 		__NJS_Method_Lazy_Loader("apply", apply);
 		
-		object.push_back(NJS::Type::pair_t((std::string)key, __NJS_VAR()));
+		object.push_back(NJS::Type::pair_t((std::string)key, undefined));
 		return object[object.size() - 1].second;
 	}
 	#endif
@@ -110,18 +112,11 @@ namespace NJS::Class
 		NJS::VAR _args[] = {args...};
 		int i = sizeof...(args);
 		
-		NJS::VAR _this = __NJS_Create_Object();
-		NJS::Type::object_t object = ((NJS::Class::Object*)(*this)["prototype"]._ptr)->object;
+		NJS::VAR _this = __NJS_Object_Clone((*this)["prototype"]);
+		if(_this.type == NJS::Enum::Type::Undefined) _this = __NJS_Create_Object();
 		
-		for (auto & search : object)
-		{
-			_this[search.first] = search.second;
-		}
-
 		var _ret = this->Call(_this, _args, i);
-		((NJS::Class::Object*)_this._ptr)->counter = 1;
-		((NJS::Class::Object*)_ret._ptr)->counter = 1;
-		
+
 		if(_ret.type == NJS::Enum::Type::Object)
 		{
 			((NJS::Class::Object*)_ret._ptr)->prototype = true;

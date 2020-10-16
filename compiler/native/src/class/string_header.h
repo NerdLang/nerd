@@ -13,6 +13,7 @@ namespace NJS::Class
 		// Properties
 		std::string value;
 		NJS::Type::object_t object;
+		count_t counter = 1;
 		// Methods
 		inline void Delete() noexcept;
 		inline void* Copy() noexcept;

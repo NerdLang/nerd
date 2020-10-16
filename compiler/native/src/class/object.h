@@ -9,7 +9,7 @@ namespace NJS::Class
 	// Methods
 	inline void Object::Delete() noexcept
 	{
-		if (--counter < 1)
+		if (--counter == 0)
 		{
 			delete this;
 		}
@@ -56,7 +56,8 @@ namespace NJS::Class
 			{
 				if((_obj).type == NJS::Enum::Type::Function)
 				{
-					((NJS::Class::Function*)_obj._ptr)->This = this;
+					((NJS::Class::Function*)_obj._ptr)->This.type = NJS::Enum::Type::Object;
+					((NJS::Class::Function*)_obj._ptr)->This._ptr = this;
 				}
 				return _obj;
 			}
@@ -107,8 +108,10 @@ namespace NJS::Class
 				{
 					if(search.second.type == NJS::Enum::Type::Function)
 					{
-						((NJS::Class::Function*)search.second._ptr)->This = this;
+						((NJS::Class::Function*)search.second._ptr)->This.type = NJS::Enum::Type::Object;
+						((NJS::Class::Function*)search.second._ptr)->This._ptr = this;				
 					}
+					
 					return search.second;
 				}
 			}
@@ -124,7 +127,7 @@ namespace NJS::Class
 		}
 		else 
 		{
-			object.push_back(NJS::Type::pair_t((std::string)key, __NJS_VAR()));
+			object.push_back(NJS::Type::pair_t((std::string)key, undefined));
 		}
 
 		return object[object.size() - 1].second;

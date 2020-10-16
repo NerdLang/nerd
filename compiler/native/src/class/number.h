@@ -90,7 +90,10 @@ namespace NJS::Class
 	// Methods
 	inline void Number::Delete() noexcept
 	{
-		delete this;
+		if(--counter == 0)
+		{
+			delete this;
+		}
 	}
 	inline void* Number::Copy() noexcept
 	{

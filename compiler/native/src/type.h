@@ -13,6 +13,6 @@ namespace NJS
 		#else
 		typedef std::vector<pair_t> object_t;
 		#endif
-		typedef std::function<NJS::VAR (VAR, VAR*, int)> function_t;
+		typedef std::function<NJS::VAR (VAR&, VAR*, int)> function_t;
 	}
 }

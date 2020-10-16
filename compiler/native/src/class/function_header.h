@@ -11,13 +11,12 @@ namespace NJS::Class
 		Function(void* val);
 		Function(void* val, NJS::VAR bind);
 		// Properties
-		count_t counter = 1;
+		count_t counter = 0;
 		#ifdef __NJS_DEBUG
 		std::string code = "[native code]";
 		#endif
 		NJS::Type::function_t* value = nullptr;
 		var This;
-		//NJS::VAR _this;
 		NJS::Type::object_t object;
 		// Methods
 		inline void Delete() noexcept;

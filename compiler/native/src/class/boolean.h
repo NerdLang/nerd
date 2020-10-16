@@ -11,7 +11,10 @@ namespace NJS::Class
 	// Methods
 	inline void Boolean::Delete() noexcept
 	{
-		delete this;
+		if(--counter == 0)
+		{
+			delete this;
+		}
 	}
 	inline void* Boolean::Copy() noexcept
 	{

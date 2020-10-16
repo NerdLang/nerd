@@ -4,7 +4,8 @@ namespace NJS
 	VAR::VAR()
 	{
 		type = NJS::Enum::Type::Undefined;
-		_ptr = new NJS::Class::Undefined();
+		//_ptr = new NJS::Class::Undefined();
+		_ptr = undefined._ptr;
 	}
 
 	VAR::~VAR()
@@ -83,7 +84,7 @@ namespace NJS
 	VAR::VAR(NJS::Class::Boolean *_value)
 	{
 		type = NJS::Enum::Type::Boolean;
-		_ptr = new NJS::Class::Boolean( _value->value);
+		_ptr =_value;
 	}
 	
 	VAR::VAR(NJS::Class::Function *_value)
@@ -125,6 +126,12 @@ namespace NJS
 		_ptr = _value;
 	}
 	
+	VAR::VAR(NJS::Class::Undefined *_value)
+	{
+		type = NJS::Enum::Type::Undefined;
+		_ptr = _value;
+	}
+	
 	VAR::VAR(NJS::Enum::Type _type, void *_value)
 	{
 		type = _type;
@@ -135,13 +142,11 @@ namespace NJS
 	{
 		type = _type;
 		_ptr = new NJS::Class::Function(_value);
-		((NJS::Class::Function*)_ptr)->This = _this;
-	}
+		if(_this._ptr == ::__NJS_THIS._ptr) ((NJS::Class::Object*)_this._ptr)->counter++;
 
-	VAR::VAR(std::function<NJS::VAR(NJS::VAR*, int)> &_value)
-	{
-		type = NJS::Enum::Type::Function;
-		_ptr = new NJS::Class::Function(&_value);
+		((NJS::Class::Function*)_ptr)->This._ptr = _this._ptr;
+		((NJS::Class::Function*)_ptr)->This.type = _this.type;
+
 	}
 
 	template <class... Args>

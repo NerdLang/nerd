@@ -68,14 +68,11 @@ namespace NJS
 
 #include "var_header.h"
 #include "type.h"
-#include "values.h"
 #include "classes_header.h"
+#include "values.h"
 #include "functions.h"
 #include "this.h"
 #include "var.h"
-
-
-
 #include "objmgmt.h"
 #include "classes.h"
 #include "operator.h"

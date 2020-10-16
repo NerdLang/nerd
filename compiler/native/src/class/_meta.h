@@ -6,7 +6,7 @@ namespace NJS::Class
 #ifdef __NJS_ARDUINO
 	typedef uint16_t count_t;
 #else
-	typedef uint32_t count_t;
+	typedef int count_t;
 #endif
 	class InvalidTypeException : public std::exception
 	{

@@ -10,7 +10,6 @@ namespace NJS::Class
 		// Constructors
 		Undefined();
 		// Properties
-		Empty value;
 		// Methods
 		inline void Delete() noexcept;
 		inline void* Copy() noexcept;

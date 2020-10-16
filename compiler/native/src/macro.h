@@ -7,11 +7,7 @@
 #define __NJS_Create_Boolean(_value) NJS::VAR(new NJS::Class::Boolean(_value))
 #define __NJS_Create_Number(_value) NJS::VAR(_value)
 #define __NJS_Create_Function(_value) NJS::VAR(NJS::Enum::Type::Function, _value)
-#define __NJS_Create_Undefined() undefined
-#define __NJS_DECL_Function std::function
-#define __NJS_RETURN_Undefined \
-	var __undef = NJS::VAR(); \
-	return __undef;
+#define __NJS_Create_Undefined() NJS::VAR()
 #define __NJS_Create_String(_value) NJS::VAR(_value)
 #define __NJS_Create_Infinity() NJS::VAR(NJS::Enum::Type::ISINFINITY, 0)
 #define __NJS_Create_Null() NJS::VAR(NJS::Enum::Type::ISNULL, 0)

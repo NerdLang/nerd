@@ -13,6 +13,6 @@ namespace NJS::Class
 		virtual explicit operator int() const noexcept {return 0;};
 		virtual explicit operator double() const noexcept {return 0.0;};
 		virtual explicit operator long long() const noexcept {return 0;};
-		virtual NJS::VAR &operator[](NJS::VAR key){return undefined;};
+		virtual NJS::VAR &operator[](NJS::VAR key){static var _ret = NJS::VAR(); return _ret;};
 	};
 }
