@@ -52,5 +52,17 @@ function UnaryExpression(_path)
 		VISITOR.pushDeclVar(_rnd);
 		_path.replaceWithSourceString(`${_rnd}()`);
 	}
+	else if(_path.node.operator == "delete")
+	{
+		if (_path.node.argument.type == "MemberExpression")
+		{
+			VISITOR.memberExpression(_path.node.argument);
+			_path.replaceWithSourceString("__NJS_delete(" + babel.generate(_path.node.argument).code + ")");
+		}
+		else 
+		{
+			_path.replaceWithSourceString("__NJS_Boolean_FALSE");
+		}
+	}
 }
 module.exports = UnaryExpression;

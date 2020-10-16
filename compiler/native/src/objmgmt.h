@@ -32,6 +32,11 @@ NJS::VAR __NJS_instanceof(NJS::VAR _left, NJS::VAR _right)
 	return __NJS_Boolean_FALSE;
 }
 
+NJS::VAR __NJS_delete(NJS::VAR _var)
+{
+	return __NJS_Boolean_FALSE;
+}
+
 /*** ***/
 #ifdef __NJS__OBJECT_HASHMAP
 NJS::VAR __NJS_Object_Set(std::string _index, NJS::VAR _value, NJS::Type::object_t *_obj)
