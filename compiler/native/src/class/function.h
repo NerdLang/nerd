@@ -27,6 +27,21 @@ namespace NJS::Class
 			delete this;
 		}
 	}
+	inline void Function::jsDelete(const std::string _key) noexcept
+	{
+		#ifdef __NJS__OBJECT_HASHMAP
+			object.erase(_key);
+		#else
+			for (NJS::Type::object_t::iterator it = object.begin() ; it != object.end(); ++it)
+			{
+				if (_key.compare(it->first) == 0)
+				{
+					object.erase(it);
+					return;
+				}
+			}
+		#endif
+	}
 	inline void* Function::Copy() noexcept
 	{
 		counter++;

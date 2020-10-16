@@ -20,6 +20,7 @@ namespace NJS::Class
 		NJS::Type::object_t object;
 		// Methods
 		inline void Delete() noexcept;
+		inline void jsDelete(std::string _key) noexcept;
 		inline void* Copy() noexcept;
 		
 		NJS::VAR Call(var& __NJS_THIS, NJS::VAR* __NJS_VARARGS, int __NJS_VARLENGTH);

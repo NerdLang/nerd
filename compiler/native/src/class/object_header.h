@@ -15,6 +15,8 @@ namespace NJS::Class
 		NJS::Type::vector_p instance;
 		// Methods
 		inline void Delete() noexcept;
+		inline void jsDelete(const std::string _key) noexcept;
+		
 		inline void* Copy() noexcept;
 		// Native cast
 		explicit operator bool() const noexcept;

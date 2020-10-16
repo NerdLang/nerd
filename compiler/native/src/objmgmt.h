@@ -32,8 +32,18 @@ NJS::VAR __NJS_instanceof(NJS::VAR _left, NJS::VAR _right)
 	return __NJS_Boolean_FALSE;
 }
 
-NJS::VAR __NJS_delete(NJS::VAR _var)
+NJS::VAR __NJS_delete(NJS::VAR _left, std::string _right)
 {
+	if(_left.type == NJS::Enum::Type::Object)
+	{
+		((NJS::Class::Object*)_left._ptr)->jsDelete(_right);
+		return __NJS_Boolean_TRUE;
+	}
+	else if(_left.type == NJS::Enum::Type::Function)
+	{
+		((NJS::Class::Function*)_left._ptr)->jsDelete(_right);
+		return __NJS_Boolean_TRUE;
+	}
 	return __NJS_Boolean_FALSE;
 }
 
