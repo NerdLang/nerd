@@ -29,6 +29,7 @@
 #include <sstream>
 #include <memory>
 #include <vector>
+#include <iomanip>
 #define _USE_MATH_DEFINES
 #include <stdarg.h>
 
@@ -40,10 +41,21 @@
 #include <new.h>
 #include <time.h>
 #include <nonstd-function.h>
-#include <cmath>
+#include <math.h>
+namespace std
+{
+	double fmod(double __x, double __y)
+	{
+		return fmod(__x, __y);
+	}
+}
+#undef max
+#undef min
 #include <limits>
 #else
 #include <functional>
+#include <cmath>
+#include <limits>
 #endif
 
 #include "enum.h"

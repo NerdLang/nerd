@@ -1,8 +1,5 @@
 #pragma once
 #include "number_header.h"
-#include <cmath>
-#include <limits>
-#include <iomanip>
 
 namespace NJS::Class
 {

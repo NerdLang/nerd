@@ -173,6 +173,7 @@ function genRequire(from, src)
 				  if(pkg.nectar.expose)
 				  {
 					COMPILER.EXPOSE = COMPILER.EXPOSE.concat(pkg.nectar.expose);
+					COMPILER.GLOBAL = COMPILER.GLOBAL.concat(pkg.nectar.expose);
 				  }
 
 				  if(pkg.nectar.lib)

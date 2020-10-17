@@ -36,6 +36,15 @@
   {
     "env": ["arduino"],
     "target": ["uno", "mega", "mega2560", "mega1280", "nano", "nano2", "nano3"],
+	"lib":
+	[
+		"{__EXTERN__}/stlarduino/func_exception.cpp",
+		"{__EXTERN__}/stlarduino/char_traits.cpp",
+		"{__EXTERN__}/stlarduino/new_op.cpp",
+		"{__EXTERN__}/stlarduino/del_op.cpp",
+		"{__EXTERN__}/stlarduino/del_ops.cpp",
+		"{__EXTERN__}/stlarduino/ostream_helpers.cpp"
+	],
     "read_only": ["HIGH", "LOW", "INPUT", "OUTPUT", "LED_BUILTIN"],
     "expose": ["arduino_delayMS", "arduino_delay", "arduino_delaySeconds", "arduino_millis", "arduino_seconds", "arduino_pinMode", "arduino_digitalWrite", "HIGH", "LOW", "INPUT", "OUTPUT",
                 "arduino_HIGH", "arduino_LOW", "arduino_INPUT", "arduino_OUTPUT", "arduino_LED_BUILTIN", "INPUT", "OUTPUT", "HIGH", "LOW", "LED_BUILTIN"]
