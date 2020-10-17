@@ -23,7 +23,5 @@
 
 * Finish ES3
 
-* Add delete keyword
-
 * Add arguments in function scope
 
