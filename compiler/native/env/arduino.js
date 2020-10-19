@@ -25,6 +25,7 @@ var OPTIONS =
 	"mega": { preset: "-DF_CPU=16000000UL -mmcu=atmega2560", variant: "mega"},
 	"mega2560": { preset: "-DF_CPU=16000000UL -mmcu=atmega2560", variant: "mega"},
 	"mega1280": { preset: "-DF_CPU=16000000UL -mmcu=atmega1280", variant: "mega"},
+	"mega328p": { preset: "-DF_CPU=16000000UL -mmcu=atmega328p", variant: "standard"},
 	"uno": { preset: "-DF_CPU=16000000UL -mmcu=atmega328p", variant: "standard"},
 	"nano": { preset: "-DF_CPU=16000000UL -mmcu=atmega328p", variant: "standard"},
 	"nano2": { preset: "-DF_CPU=16000000UL -mmcu=atmega168", variant: "standard"},

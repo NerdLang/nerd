@@ -35,7 +35,7 @@
   "nectar":
   {
     "env": ["arduino"],
-    "target": ["uno", "mega", "mega2560", "mega1280", "nano", "nano2", "nano3"],
+    "target": ["uno", "mega", "mega2560", "mega1280", "mega328p", "nano", "nano2", "nano3"],
 	"lib":
 	[
 		"{__EXTERN__}/stlarduino/func_exception.cpp",
