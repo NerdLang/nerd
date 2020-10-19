@@ -39,10 +39,10 @@ namespace NJS::Class
 		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
 		try
 		{
-			res = std::stoi(value, &end, 10);
+			res = std::stod(value, &end);
 		}catch(...){}
 		#else
-			res = std::stoi(value, &end, 10);
+			res = std::stod(value, &end);
 		#endif
 		
 		return end == value.size() ? res : std::numeric_limits<double>::quiet_NaN();
@@ -69,10 +69,10 @@ namespace NJS::Class
 		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
 		try
 		{
-			res = std::stoi(value, &end, 10);
+			res = std::stoll(value, &end, 10);
 		}catch(...){}
 		#else
-			res = std::stoi(value, &end, 10);
+			res = std::stoll(value, &end, 10);
 		#endif
 
 		return end == value.size() ? res : std::numeric_limits<long long>::quiet_NaN();
