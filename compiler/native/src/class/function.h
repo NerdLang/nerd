@@ -49,7 +49,7 @@ namespace NJS::Class
 	}
 	inline NJS::VAR Function::Async(NJS::VAR _var)
 	{
-		return std::async(std::launch::async, [&]{return _var();}).get();
+		return _var();
 	}
 	// Native cast
 	Function::operator bool() const noexcept { return true; }
