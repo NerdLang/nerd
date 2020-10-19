@@ -112,7 +112,7 @@ namespace NJS
 		explicit operator std::string() const;
 		operator std::string();
 		explicit operator const char*() const;	
-		explicit operator const long long() const;
+		explicit operator long long() const;
 		
 	};
 } // namespace NJS

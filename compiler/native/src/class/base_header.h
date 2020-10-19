@@ -6,6 +6,9 @@ namespace NJS::Class
 	class Base
 	{
 	public:
+		#ifdef __NJS_ESP32
+		virtual ~Base() { }
+		#endif
 		virtual void Delete() noexcept{};
 		virtual void* Copy() noexcept{ return nullptr; };
 		virtual explicit operator bool() const noexcept{ return false;};

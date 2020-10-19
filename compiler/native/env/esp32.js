@@ -63,11 +63,12 @@ var ESP32 =
     },
     cli: function(compiler, preset, out, _in, option)
     {
-        return `${compiler} build`;
+		var bin =  path.join(COMPILER.TMP_FOLDER, "build", "njs.bin");
+        return `${compiler} build && cp ${bin} ${out}`;
     },
     out: function(_name)
     {
-        return _name + ".bind";
+        return _name + ".bin";
     },
     init: function(_folder)
     {

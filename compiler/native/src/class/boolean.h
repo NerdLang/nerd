@@ -39,7 +39,7 @@ namespace NJS::Class
 		__NJS_Method_Lazy_Loader("toString", toString);
 		__NJS_Method_Lazy_Loader("valueOf", valueOf);
 
-		return object[(std::string)key];
+		return undefined;
 	}
 	#else
 	NJS::VAR &Boolean::operator[](NJS::VAR key)
@@ -55,16 +55,17 @@ namespace NJS::Class
 		__NJS_Method_Lazy_Loader("toString", toString);
 		__NJS_Method_Lazy_Loader("valueOf", valueOf);
 
-		return object.back().second;
+		return undefined;
 	}
 	#endif
 	
 	template <class... Args>
 	NJS::VAR Boolean::operator()(Args... args) const 
 	{ 
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
 		throw InvalidTypeException(); 
 		#endif
+		return undefined;
 	}
 	// Comparation operators
 	Boolean Boolean::operator!() const { return !value; }
@@ -79,154 +80,179 @@ namespace NJS::Class
 	// Numeric operators
 	Boolean Boolean::operator+() const 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Boolean();
 	}
 	Boolean Boolean::operator-() const 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Boolean();
 	}
 	Boolean Boolean::operator++(const int _v1) 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Boolean();
 	}
 	Boolean Boolean::operator--(const int _v1) 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Boolean();
 	}
 	Boolean Boolean::operator+(const Boolean &_v1) const 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Boolean();
 	}
 	Boolean Boolean::operator+=(const Boolean &_v1) 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Boolean();
 	}
 	Boolean Boolean::operator-(const Boolean &_v1) const 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Boolean();
 	}
 	Boolean Boolean::operator-=(const Boolean &_v1) 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Boolean();
 	}
 	Boolean Boolean::operator*(const Boolean &_v1) const 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Boolean();
 	}
 	Boolean Boolean::operator*=(const Boolean &_v1) 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Boolean();
 	}
 	// TODO: "**" and "**=" operators
 	Boolean Boolean::operator/(const Boolean &_v1) const 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Boolean();
 	}
 	Boolean Boolean::operator/=(const Boolean &_v1) 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Boolean();
 	}
 	Boolean Boolean::operator%(const Boolean &_v1) const 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Boolean();
 	}
 	Boolean Boolean::operator%=(const Boolean &_v1) 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Boolean();
 	}
 	Boolean Boolean::operator&(const Boolean &_v1) const 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Boolean();
 	}
 	Boolean Boolean::operator|(const Boolean &_v1) const 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Boolean();
 	}
 	Boolean Boolean::operator^(const Boolean &_v1) const 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Boolean();
 	}
 	Boolean Boolean::operator~() const 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Boolean();
 	}
 	Boolean Boolean::operator>>(const Boolean &_v1) const 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Boolean();
 	}
 	Boolean Boolean::operator<<(const Boolean &_v1) const 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Boolean();
 	}
 	Boolean Boolean::operator&=(const Boolean &_v1) 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Boolean();
 	}
 	Boolean Boolean::operator|=(const Boolean &_v1) 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Boolean();
 	}
 	Boolean Boolean::operator^=(const Boolean &_v1) 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Boolean();
 	}
 	Boolean Boolean::operator>>=(const Boolean &_v1) 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Boolean();
 	}
 	Boolean Boolean::operator<<=(const Boolean &_v1) 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Boolean();
 	}
 	// TODO: ">>>" and ">>>=" operators
 	NJS::VAR Boolean::toString(NJS::VAR* _args, int _length) const

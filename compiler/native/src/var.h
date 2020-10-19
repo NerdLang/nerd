@@ -501,7 +501,7 @@ namespace NJS
 		return (std::string)(*(NJS::Class::Base*)_ptr);
 	}
 
-	VAR::operator const long long() const
+	VAR::operator long long() const
 	{
 		return (long long)((double)*this);
 	}

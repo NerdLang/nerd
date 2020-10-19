@@ -241,16 +241,18 @@ namespace NJS::Class
 	template <class... Args>
 	NJS::VAR Array::operator()(Args... args) const 
 	{ 
-		#ifndef __NJS_ARDUINO
+		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
 		throw InvalidTypeException(); 
 		#endif
+		return undefined;
 	}
 	// Comparation operators
 	Array Array::operator!() const 
 	{ 
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
 		throw InvalidTypeException(); 
 		#endif
+		return Array();
 	}
 	
 	template <typename t>
@@ -276,154 +278,179 @@ namespace NJS::Class
 	// Numeric operators
 	Array Array::operator+() const
 	{ 
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32) 
 		throw InvalidTypeException(); 
 		#endif
+		return Array();
 	}
 	Array Array::operator-() const
 	{ 
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32) 
 		throw InvalidTypeException(); 
 		#endif
+		return Array();
 	}
 	Array Array::operator++(const int _v1)
 	{ 
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32) 
 		throw InvalidTypeException(); 
 		#endif
+		return Array();
 	}
 	Array Array::operator--(const int _v1)
 	{ 
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32) 
 		throw InvalidTypeException(); 
 		#endif
+		return Array();
 	}
 	Array Array::operator+(const Array &_v1) const 
 	{ 
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32) 
 		throw InvalidTypeException(); 
 		#endif
+		return Array();
 	}
 	Array Array::operator+=(const Array &_v1) 
 	{ 
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32) 
 		throw InvalidTypeException(); 
 		#endif
+		return Array();
 	}
 	Array Array::operator-(const Array &_v1) const 
 	{ 
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32) 
 		throw InvalidTypeException(); 
 		#endif
+		return Array();
 	}
 	Array Array::operator-=(const Array &_v1) 
 	{ 
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32) 
 		throw InvalidTypeException(); 
 		#endif
+		return Array();
 	}
 	Array Array::operator*(const Array &_v1) const 
 	{ 
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32) 
 		throw InvalidTypeException(); 
 		#endif
+		return Array();
 	}
 	Array Array::operator*=(const Array &_v1) 
 	{ 
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32) 
 		throw InvalidTypeException(); 
 		#endif
+		return Array();
 	}
 	// TODO: "**" and "**=" operators
 	Array Array::operator/(const Array &_v1) const 
 	{ 
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32) 
 		throw InvalidTypeException(); 
 		#endif
+		return Array();
 	}
 	Array Array::operator/=(const Array &_v1) 
 	{ 
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32) 
 		throw InvalidTypeException(); 
 		#endif
+		return Array();
 	}
 	Array Array::operator%(const Array &_v1) const 
 	{ 
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32) 
 		throw InvalidTypeException(); 
 		#endif
+		return Array();
 	}
 	Array Array::operator%=(const Array &_v1) 
 	{ 
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32) 
 		throw InvalidTypeException(); 
 		#endif
+		return Array();
 	}
 	Array Array::operator&(const Array &_v1) const 
 	{ 
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32) 
 		throw InvalidTypeException(); 
 		#endif
+		return Array();
 	}
 	Array Array::operator|(const Array &_v1) const 
 	{ 
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32) 
 		throw InvalidTypeException(); 
 		#endif
+		return Array();
 	}
 	Array Array::operator^(const Array &_v1) const 
 	{ 
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32) 
 		throw InvalidTypeException(); 
 		#endif
+		return Array();
 	}
 	Array Array::operator~() const 
 	{ 
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32) 
 		throw InvalidTypeException(); 
 		#endif
+		return Array();
 	}
 	Array Array::operator>>(const Array &_v1) const 
 	{ 
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32) 
 		throw InvalidTypeException(); 
 		#endif
+		return Array();
 	}
 	Array Array::operator<<(const Array &_v1) const 
 	{ 
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32) 
 		throw InvalidTypeException(); 
 		#endif
+		return Array();
 	}
 	Array Array::operator&=(const Array &_v1) 
 	{ 
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32) 
 		throw InvalidTypeException(); 
 		#endif
+		return Array();
 	}
 	Array Array::operator|=(const Array &_v1) 
 	{ 
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32) 
 		throw InvalidTypeException(); 
 		#endif
+		return Array();
 	}
 	Array Array::operator^=(const Array &_v1) 
 	{ 
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32) 
 		throw InvalidTypeException(); 
 		#endif
+		return Array();
 	}
 	Array Array::operator>>=(const Array &_v1) 
 	{ 
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32) 
 		throw InvalidTypeException(); 
 		#endif
+		return Array();
 	}
 	Array Array::operator<<=(const Array &_v1) 
 	{ 
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32) 
 		throw InvalidTypeException(); 
 		#endif
+		return Array();
 	}
 	// TODO: ">>>" and ">>>=" operators
 	

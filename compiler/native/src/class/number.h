@@ -182,16 +182,18 @@ namespace NJS::Class
 	template <class... Args>
 	NJS::VAR Number::operator()(Args... args) const 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return undefined;
 	}
 	// Comparation operators
 	Number Number::operator!() const 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Number();
 	}
 	bool Number::operator==(const Number &_v1) const
 	{
@@ -264,9 +266,10 @@ namespace NJS::Class
 	// Numeric operators
 	Number Number::operator+() const 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Number();
 	}
 	Number Number::operator-() const 
 	{ 
