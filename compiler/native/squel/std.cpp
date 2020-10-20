@@ -32,8 +32,10 @@
  #include <vector>
  #include <memory>
 
+
+ #define __NJS_ENV_STD
  #include "njs.h"
- 
+
  var __NJS_ENV = "std";
  var __NJS_PLATFORM = "{{__PLATFORM__}}";
  
@@ -60,6 +62,8 @@ int main(int argc, char* argv[])
 		#endif
 		{
 			{CODE}
+
+			NJS::Event::Loop();
 		}
 		
 	}

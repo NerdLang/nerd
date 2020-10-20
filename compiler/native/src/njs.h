@@ -85,6 +85,7 @@ namespace NJS
 #include "this.h"
 #include "var.h"
 #include "objmgmt.h"
+#include "event.h"
 #include "classes.h"
 #include "operator.h"
 #include "native.h"
