@@ -3,8 +3,6 @@
 #ifndef __NJS_ENV_ARDUINO
 	#include <chrono>
 	#include <thread>
-#else
-	#include "tuple.h"
 #endif
 
 namespace NJS::Event

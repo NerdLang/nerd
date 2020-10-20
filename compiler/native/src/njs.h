@@ -32,6 +32,7 @@
 #include <iomanip>
 #define _USE_MATH_DEFINES
 #include <stdarg.h>
+#include <tuple>
 
 #ifdef __NJS_ENV_ARDUINO
 #include <util/delay.h>
