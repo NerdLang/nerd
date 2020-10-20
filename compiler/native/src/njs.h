@@ -33,7 +33,7 @@
 #define _USE_MATH_DEFINES
 #include <stdarg.h>
 
-#ifdef __NJS_ARDUINO
+#ifdef __NJS_ENV_ARDUINO
 #include <util/delay.h>
 #include <string.h>
 #include <WString.h>

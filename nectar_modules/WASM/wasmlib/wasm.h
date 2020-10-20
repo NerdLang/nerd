@@ -23,7 +23,7 @@
 #include <emscripten.h>
 #include <emscripten/bind.h>
 
-vector<pair<string, __NJS_VAR>> __NJS_INTERNAL_BIND;
+std::vector<std::pair<std::string, __NJS_VAR>> __NJS_INTERNAL_BIND;
 
 function __NJS_WASM_RUN_SCRIPT(_script)
 {
@@ -35,20 +35,20 @@ function __NJS_WASM_BIND(_name, _function)
 	__NJS_INTERNAL_BIND.push_back(std::make_pair(__NJS_Get_String(_name), _function));
 }
 
-string __NJS_EM_BIND(string _name, string _data) 
+std::string __NJS_EM_BIND(std::string _name, std::string _data) 
 {
     for (auto it = begin (__NJS_INTERNAL_BIND); it != end (__NJS_INTERNAL_BIND); ++it) 
 	{
 		if(it->first.compare(_name) == 0)
 		{
-			return (string)(it->second(_data));
+			return (std::string)(it->second(_data));
 			break;
 		}
 	}
 	return "undefined";
 }
 
-int __NJS_EM_BIND_INT(string _name, int _data) 
+int __NJS_EM_BIND_INT(std::string _name, int _data) 
 {
     for (auto it = begin (__NJS_INTERNAL_BIND); it != end (__NJS_INTERNAL_BIND); ++it) 
 	{

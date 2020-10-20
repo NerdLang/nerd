@@ -151,7 +151,7 @@ namespace NJS::Class
 	template <class... Args>
 	NJS::VAR Object::operator()(Args... args) const 
 	{
-		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return undefined;
@@ -159,7 +159,7 @@ namespace NJS::Class
 	// Comparation operators
 	Object Object::operator!() const 
 	{
-		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Object();
@@ -175,70 +175,70 @@ namespace NJS::Class
 	// Numeric operators
 	Object Object::operator+() const 
 	{
-		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Object();
 	}
 	Object Object::operator-() const 
 	{
-		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Object();
 	}
 	Object Object::operator++(const int _v1) 
 	{
-		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Object();
 	}
 	Object Object::operator--(const int _v1) 
 	{
-		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Object();
 	}
 	Object Object::operator+(const Object &_v1) const 
 	{
-		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Object();
 	}
 	Object Object::operator+=(const Object &_v1) 
 	{
-		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Object();
 	}
 	Object Object::operator-(const Object &_v1) const 
 	{
-		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Object();
 	}
 	Object Object::operator-=(const Object &_v1) 
 	{
-		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Object();
 	}
 	Object Object::operator*(const Object &_v1) const 
 	{
-		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Object();
 	}
 	Object Object::operator*=(const Object &_v1) 
 	{
-		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Object();
@@ -246,105 +246,105 @@ namespace NJS::Class
 	// TODO: "**" and "**=" operators
 	Object Object::operator/(const Object &_v1) const 
 	{
-		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Object();
 	}
 	Object Object::operator/=(const Object &_v1) 
 	{
-		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Object();
 	}
 	Object Object::operator%(const Object &_v1) const 
 	{
-		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Object();
 	}
 	Object Object::operator%=(const Object &_v1) 
 	{
-		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Object();
 	}
 	Object Object::operator&(const Object &_v1) const 
 	{
-		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Object();
 	}
 	Object Object::operator|(const Object &_v1) const 
 	{
-		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Object();
 	}
 	Object Object::operator^(const Object &_v1) const 
 	{
-		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Object();
 	}
 	Object Object::operator~() const 
 	{
-		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Object();
 	}
 	Object Object::operator>>(const Object &_v1) const 
 	{
-		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Object();
 	}
 	Object Object::operator<<(const Object &_v1) const 
 	{
-		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Object();
 	}
 	Object Object::operator&=(const Object &_v1) 
 	{
-		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Object();
 	}
 	Object Object::operator|=(const Object &_v1) 
 	{
-		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Object();
 	}
 	Object Object::operator^=(const Object &_v1) 
 	{
-		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Object();
 	}
 	Object Object::operator>>=(const Object &_v1) 
 	{
-		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Object();
 	}
 	Object Object::operator<<=(const Object &_v1) 
 	{
-		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Object();

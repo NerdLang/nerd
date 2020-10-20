@@ -23,14 +23,14 @@ namespace NJS::Class
 	// Main operators
 	NJS::VAR const Undefined::operator[](NJS::VAR key) const
 	{
-		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw NJS::VAR("TypeError: Cannot read property '" + (std::string)key + "' of undefined ");
 		#endif
 		return undefined;
 	}
 	NJS::VAR &Undefined::operator[](NJS::VAR key)
 	{
-		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw NJS::VAR("TypeError: Cannot read property '" + (std::string)key + "' of undefined ");
 		#endif
 		return undefined;
@@ -38,7 +38,7 @@ namespace NJS::Class
 	template <class... Args>
 	NJS::VAR Undefined::operator()(Args... args) const 
 	{
-		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return undefined;
@@ -46,7 +46,7 @@ namespace NJS::Class
 	// Comparation operators
 	Undefined Undefined::operator!() const 
 	{
-		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Undefined();
@@ -62,70 +62,70 @@ namespace NJS::Class
 	// Numeric operators
 	Undefined Undefined::operator+() const 
 	{
-		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Undefined();
 	}
 	Undefined Undefined::operator-() const 
 	{
-		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Undefined();
 	}
 	Undefined Undefined::operator++(const int _v1) 
 	{
-		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Undefined();
 	}
 	Undefined Undefined::operator--(const int _v1) 
 	{
-		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Undefined();
 	}
 	Undefined Undefined::operator+(const Undefined &_v1) const 
 	{
-		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Undefined();
 	}
 	Undefined Undefined::operator+=(const Undefined &_v1) 
 	{
-		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Undefined();
 	}
 	Undefined Undefined::operator-(const Undefined &_v1) const 
 	{
-		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Undefined();
 	}
 	Undefined Undefined::operator-=(const Undefined &_v1) 
 	{
-		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Undefined();
 	}
 	Undefined Undefined::operator*(const Undefined &_v1) const 
 	{
-		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Undefined();
 	}
 	Undefined Undefined::operator*=(const Undefined &_v1) 
 	{
-		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Undefined();
@@ -133,105 +133,105 @@ namespace NJS::Class
 	// TODO: "**" and "**=" operators
 	Undefined Undefined::operator/(const Undefined &_v1) const 
 	{
-		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Undefined();
 	}
 	Undefined Undefined::operator/=(const Undefined &_v1) 
 	{
-		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Undefined();
 	}
 	Undefined Undefined::operator%(const Undefined &_v1) const 
 	{
-		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Undefined();
 	}
 	Undefined Undefined::operator%=(const Undefined &_v1) 
 	{
-		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Undefined();
 	}
 	Undefined Undefined::operator&(const Undefined &_v1) const 
 	{
-		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Undefined();
 	}
 	Undefined Undefined::operator|(const Undefined &_v1) const 
 	{
-		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Undefined();
 	}
 	Undefined Undefined::operator^(const Undefined &_v1) const 
 	{
-		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Undefined();
 	}
 	Undefined Undefined::operator~() const 
 	{
-		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Undefined();
 	}
 	Undefined Undefined::operator>>(const Undefined &_v1) const 
 	{
-		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Undefined();
 	}
 	Undefined Undefined::operator<<(const Undefined &_v1) const 
 	{
-		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Undefined();
 	}
 	Undefined Undefined::operator&=(const Undefined &_v1) 
 	{
-		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Undefined();
 	}
 	Undefined Undefined::operator|=(const Undefined &_v1) 
 	{
-		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Undefined();
 	}
 	Undefined Undefined::operator^=(const Undefined &_v1) 
 	{
-		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Undefined();
 	}
 	Undefined Undefined::operator>>=(const Undefined &_v1) 
 	{
-		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Undefined();
 	}
 	Undefined Undefined::operator<<=(const Undefined &_v1) 
 	{
-		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Undefined();

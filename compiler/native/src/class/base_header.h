@@ -6,7 +6,7 @@ namespace NJS::Class
 	class Base
 	{
 	public:
-		#ifdef __NJS_ESP32
+		#ifdef __NJS_ENV_ESP32
 		virtual ~Base() { }
 		#endif
 		virtual void Delete() noexcept{};

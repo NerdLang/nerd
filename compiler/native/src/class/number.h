@@ -182,7 +182,7 @@ namespace NJS::Class
 	template <class... Args>
 	NJS::VAR Number::operator()(Args... args) const 
 	{
-		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return undefined;
@@ -190,7 +190,7 @@ namespace NJS::Class
 	// Comparation operators
 	Number Number::operator!() const 
 	{
-		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Number();
@@ -266,7 +266,7 @@ namespace NJS::Class
 	// Numeric operators
 	Number Number::operator+() const 
 	{
-		#if !defined(__NJS_ARDUINO) && !defined(__NJS_ESP32)
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Number();

@@ -5,7 +5,8 @@
 #include "esp_system.h"
 #include "esp_spi_flash.h"
 
-#define __NJS_ESP32
+#define __NJS_ENV_ESP32
+#define __NJS_NO_EXCEPT
 
 #include "njs.h"
 

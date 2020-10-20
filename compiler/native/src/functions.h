@@ -9,7 +9,7 @@ NJS::VAR __NJS_Object_Set(std::string _index, NJS::VAR _value, NJS::Type::object
 
 /*** String MANIPULATION ***/
 
-#ifdef __NJS_ARDUINO
+#ifdef __NJS_ENV_ARDUINO
 namespace std
 {
 	template <typename m>
