@@ -47,10 +47,6 @@ namespace NJS::Class
 		counter++;
 		return this;
 	}
-	inline NJS::VAR Function::Async(NJS::VAR _var)
-	{
-		return _var();
-	}
 	// Native cast
 	Function::operator bool() const noexcept { return true; }
 	Function::operator double() const noexcept

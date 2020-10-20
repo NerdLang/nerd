@@ -22,7 +22,6 @@ namespace NJS::Class
 		inline void Delete() noexcept;
 		inline void jsDelete(std::string _key) noexcept;
 		inline void* Copy() noexcept;
-		inline static NJS::VAR Async(NJS::VAR);
 		NJS::VAR Call(var& __NJS_THIS, NJS::VAR* __NJS_VARARGS, int __NJS_VARLENGTH);
 		
 		template <class... Args>
