@@ -155,12 +155,9 @@ namespace NJS::Class
 		return (*static_cast<NJS::Type::function_t *>(value))(This, _args, i);
 	}
 	// Comparation operators
-	Function Function::operator!() const 
+	NJS::VAR Function::operator!() const 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
-		throw InvalidTypeException();
-		#endif
-		return Function();
+		return __NJS_Boolean_FALSE;
 	}
 	bool Function::operator==(const Function &_v1) const { return false; }
 	// === emulated with __NJS_EQUAL_VALUE_AND_TYPE

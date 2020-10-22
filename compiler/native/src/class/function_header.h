@@ -37,7 +37,7 @@ namespace NJS::Class
 		NJS::VAR &operator[](NJS::VAR key);
 		template <class... Args> NJS::VAR operator()(Args... args);
 		// Comparation operators
-		Function operator!() const;
+		NJS::VAR operator!() const;
 		bool operator==(const Function &_v1) const;
 		// === emulated with __NJS_EQUAL_VALUE_AND_TYPE
 		// !== emulated with __NJS_NOT_EQUAL_VALUE_AND_TYPE

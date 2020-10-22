@@ -64,8 +64,7 @@ function derivativeOfSigmoid(y){
       let result = new Matrix(a.rows, a.cols);
       for (let i = 0; i < result.rows; i++) {
         for (let j = 0; j < result.cols; j++) {
-          var sub = a.data[i][j] - b.data[i][j]
-          result.data[i][j] = sub
+          result.data[i][j] = a.data[i][j] - b.data[i][j]
         }
       }
       return result;
