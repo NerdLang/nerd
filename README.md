@@ -57,11 +57,15 @@ No VM. No Bytecode. No packaging. No Garbage Collector. Fully compiled to native
 
 Some benchmarks with the file example/fibo.js and differents fibos arguments:
 
-|          | NodeJS v12.8.1 | QuickJS 2020-07-05 | NectarJS v0.6.104     |
-|----------|----------------|--------------------|-----------------------|
-| fibo(30) | 0.15s / 7.0Mb  | 0.20s / 1.1Mb      | **0.04s / 1.0Mb**     |
-| fibo(40) | 1.80s / 7.0Mb  | 21.06s / 1.1Mb     | **0.04s / 1.0Mb**     |
-| fibo(45) | 19.44s / 7.0Mb | 238.85s / 1.1Mb    | **0.04s / 1.0Mb**     |
+|           | NodeJS v12.8.1 | QuickJS 2020-07-05 | NectarJS v0.6.104 |
+|-----------|----------------|--------------------|-------------------|
+| fibo(40) [No preset]                                                |
+| - Time:   |      1.80s     |      21.06s        |     **0.04s***    |
+| - Memory: |      7.0Mb     |       1.1Mb        |     **1.0Mb**     |
+|- Filesize:|     29.3Mb     |       0.9Mb        |     **0.7Mb***    |
+
+* Some code can be evaluated compile-time
+
 
 # EcmaScript Support
 
