@@ -36,7 +36,7 @@
   "nectar":
   {
     "env": ["arduino"],
-    "target": ["uno", "mega", "mega2560", "mega1280", "nano", "nano2", "nano3"],
+    "target": ["uno", "mega", "mega2560", "mega1280", "mega328p", "nano", "nano2", "nano3"],
     "read_only": ["SPI_MODE0", "SPI_MODE1", "SPI_MODE2", "SPI_MODE3", "MSBFIRST"],
     "expose": ["__NJS_BEGIN_TRANSACTION", "__NJS_END_TRANSACTION", "__NJS_TRANSFER", "SPI_MODE0", "SPI_MODE1", "SPI_MODE2", "SPI_MODE3", "MSBFIRST"],
     "lib": [ "__MODULE__/lib/spi.cpp" ]

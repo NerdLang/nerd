@@ -6,18 +6,17 @@ namespace NJS::Class
 	class Array : public virtual Base
 	{
 	public:
-		// Constants
-		const char *name = "array";
-		const NJS::Enum::Type type = NJS::Enum::Type::Array;
 		// Constructors
 		Array();
 		Array(NJS::Type::vector_t vec);
 		// Properties
 		count_t counter = 0;
+		NJS::VAR length;
 		NJS::Type::vector_t value;
 		NJS::Type::object_t object;
 		// Methods
-		void Delete() noexcept;
+		inline void Delete() noexcept;
+		inline void* Copy() noexcept;
 		// Native cast
 		explicit operator bool() const noexcept;
 		explicit operator double() const noexcept;
@@ -80,38 +79,38 @@ namespace NJS::Class
 		Array operator<<=(const Array &_v1);
 		// TODO: ">>>" and ">>>=" operators
 		
-		NJS::VAR __iterator(NJS::Type::vector_t args) const;
-		NJS::VAR __unscopables(NJS::Type::vector_t args) const;
-		NJS::VAR concat(NJS::Type::vector_t args) const;
-		NJS::VAR copyWithin(NJS::Type::vector_t args);
-		NJS::VAR entries(NJS::Type::vector_t args) const;
-		NJS::VAR every(NJS::Type::vector_t args) const;
-		NJS::VAR fill(NJS::Type::vector_t args) const;
-		NJS::VAR filter(NJS::Type::vector_t args) const;
-		NJS::VAR find(NJS::Type::vector_t args) const;
-		NJS::VAR findIndex(NJS::Type::vector_t args) const;
-		NJS::VAR flat(NJS::Type::vector_t args) const;
-		NJS::VAR flatMap(NJS::Type::vector_t args) const;
-		NJS::VAR forEach(NJS::Type::vector_t args) const;
-		NJS::VAR includes(NJS::Type::vector_t args) const;
-		NJS::VAR indexOf(NJS::Type::vector_t args) const;
-		NJS::VAR join(NJS::Type::vector_t args) const;
-		NJS::VAR keys(NJS::Type::vector_t args) const;
-		NJS::VAR lastIndexOf(NJS::Type::vector_t args) const;
-		NJS::VAR map(NJS::Type::vector_t args) const;
-		NJS::VAR pop(NJS::Type::vector_t args);
-		NJS::VAR push(NJS::Type::vector_t args);
-		NJS::VAR reduce(NJS::Type::vector_t args) const;
-		NJS::VAR reduceRight(NJS::Type::vector_t args) const;
-		NJS::VAR reverse(NJS::Type::vector_t args);
-		NJS::VAR shift(NJS::Type::vector_t args);
-		NJS::VAR slice(NJS::Type::vector_t args) const;
-		NJS::VAR some(NJS::Type::vector_t args) const;
-		NJS::VAR sort(NJS::Type::vector_t args) const;
-		NJS::VAR splice(NJS::Type::vector_t args);
-		NJS::VAR toLocaleString(NJS::Type::vector_t args) const;
-		NJS::VAR toString(NJS::Type::vector_t args) const;
-		NJS::VAR unshift(NJS::Type::vector_t values);
-		NJS::VAR values(NJS::Type::vector_t args) const;
+		NJS::VAR __iterator(NJS::VAR* args, int _length) const;
+		NJS::VAR __unscopables(NJS::VAR* args, int _length) const;
+		NJS::VAR concat(NJS::VAR* args, int _length) const;
+		NJS::VAR copyWithin(NJS::VAR* args, int _length);
+		NJS::VAR entries(NJS::VAR* args, int _length) const;
+		NJS::VAR every(NJS::VAR* args, int _length) const;
+		NJS::VAR fill(NJS::VAR* args, int _length) const;
+		NJS::VAR filter(NJS::VAR* args, int _length) const;
+		NJS::VAR find(NJS::VAR* args, int _length) const;
+		NJS::VAR findIndex(NJS::VAR* args, int _length) const;
+		NJS::VAR flat(NJS::VAR* args, int _length) const;
+		NJS::VAR flatMap(NJS::VAR* args, int _length) const;
+		NJS::VAR forEach(NJS::VAR* args, int _length) const;
+		NJS::VAR includes(NJS::VAR* args, int _length) const;
+		NJS::VAR indexOf(NJS::VAR* args, int _length) const;
+		NJS::VAR join(NJS::VAR* args, int _length) const;
+		NJS::VAR keys(NJS::VAR* args, int _length) const;
+		NJS::VAR lastIndexOf(NJS::VAR* args, int _length) const;
+		NJS::VAR map(NJS::VAR* args, int _length) const;
+		NJS::VAR pop(NJS::VAR* args, int _length);
+		NJS::VAR push(NJS::VAR* args, int _length);
+		NJS::VAR reduce(NJS::VAR* args, int _length) const;
+		NJS::VAR reduceRight(NJS::VAR* args, int _length) const;
+		NJS::VAR reverse(NJS::VAR* args, int _length);
+		NJS::VAR shift(NJS::VAR* args, int _length);
+		NJS::VAR slice(NJS::VAR* args, int _length) const;
+		NJS::VAR some(NJS::VAR* args, int _length) const;
+		NJS::VAR sort(NJS::VAR* args, int _length) const;
+		NJS::VAR splice(NJS::VAR* args, int _length);
+		NJS::VAR toLocaleString(NJS::VAR* args, int _length) const;
+		NJS::VAR toString(NJS::VAR* args, int _length) const;
+		NJS::VAR unshift(NJS::VAR* args, int _length);
+		NJS::VAR values(NJS::VAR* args, int _length) const;
 	};
 } // namespace NJS::Class

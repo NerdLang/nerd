@@ -25,6 +25,7 @@ var OPTIONS =
 	"mega": { preset: "-DF_CPU=16000000UL -mmcu=atmega2560", variant: "mega"},
 	"mega2560": { preset: "-DF_CPU=16000000UL -mmcu=atmega2560", variant: "mega"},
 	"mega1280": { preset: "-DF_CPU=16000000UL -mmcu=atmega1280", variant: "mega"},
+	"mega328p": { preset: "-DF_CPU=16000000UL -mmcu=atmega328p", variant: "standard"},
 	"uno": { preset: "-DF_CPU=16000000UL -mmcu=atmega328p", variant: "standard"},
 	"nano": { preset: "-DF_CPU=16000000UL -mmcu=atmega328p", variant: "standard"},
 	"nano2": { preset: "-DF_CPU=16000000UL -mmcu=atmega168", variant: "standard"},
@@ -63,8 +64,8 @@ var ARDUINO =
 		  console.log("[!] No target selected, switching to 'uno'");
 		  target = "uno";
 	  }
-	  var _cli = `${compiler} -D__NJS_REGISTER_SIZE=${COMPILER.REGISTER} ${OPTIONS[target].preset} -DARDUINO_ARCH_AVR -w -Os -fno-exceptions -fno-rtti -fno-stack-protector -fomit-frame-pointer -ffunction-sections -fdata-sections -Wl,--gc-sections \
-	  -I ${extern}/avr -I ${extern}/arduino/avr/variants/${OPTIONS[target].variant}/ -I ${extern}/arduino/avr/cores/arduino  -I ${extern}/avr/include -I ${extern}/stlarduino  ${extern}/arduino/avr/cores/arduino/abi.cpp -fno-threadsafe-statics -lm ${COMPILER.LIBS} -o ${out} ${_in}`;
+	  var _cli = `${compiler} ${OPTIONS[target].preset} -DARDUINO_ARCH_AVR -w -Os -fno-exceptions -fno-rtti -fno-stack-protector -fomit-frame-pointer -ffunction-sections -fdata-sections -Wl,--gc-sections \
+	  -I ${extern}/avr -I ${extern}/arduino/avr/variants/${OPTIONS[target].variant}/ -I ${extern}/arduino/avr/cores/arduino  -I ${extern}/avr/include -I ${extern}/stlarduino ${extern}/stlarduino/ios.cpp  ${extern}/arduino/avr/cores/arduino/abi.cpp -fno-threadsafe-statics -lm ${COMPILER.LIBS} -o ${out} ${_in}`;
 	  
  	  if(!OPT.elf) _cli += `&& avr-objcopy -O ihex -R .eeprom ${out}`;
 	if(OPT.cli) console.log("[*]" + _cli);
@@ -90,7 +91,7 @@ var ARDUINO =
 			"indent": "off",
 			"linebreak-style": "off",
 			"no-unused-vars": ["warn", { "vars": "all", "args": "after-used", "varsIgnorePattern": "setup|loop", "ignoreRestSiblings": false }],
-			"no-redeclare": ["error", { "builtinGlobals": false }],
+			"no-const-assign": "error",
 		},
 		"globals":
 		{

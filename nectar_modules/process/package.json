@@ -1,0 +1,40 @@
+{
+  "name": "process",
+  "description": "NectarJS NodeJS base process module",
+  "main": "index.js",
+  "bugs":
+  {
+    "url": "https://github.com/NectarJS/nectarjs/issues"
+  },
+
+  "directories":
+  {
+    "root": "."
+  },
+  "homepage": "https://github.com/NectarJS/nectarjs#readme",
+  "keywords":
+  [
+    "nectarjs",
+    "nodejs",
+    "process",
+    "argv",
+    "arguments"
+  ],
+  "license": "GPL-3.0-or-later",
+  "licenses": [
+    {
+      "type": "GPL",
+      "url": "https://github.com/nectarjs/nectarjs/blob/master/LICENSE"
+    }
+  ],
+  "repository":
+  {
+    "type": "git",
+    "url": "git+ssh://git@github.com/NectarJS/nectarjs.git"
+  },
+  "version": "0.0.1",
+  "nectar":
+  {
+    "env": ["std", "node"]
+  }
+}

@@ -22,8 +22,8 @@
  
 function __NJS_NATIVE_LOG_CONSOLE()
 {
-	if(__NJS_VARARGS.size() == 0) __NJS_Log_Console("");
-	else __NJS_Log_Console(__NJS_VARARGS);
+	if(__NJS_VARLENGTH == 0) __NJS_Log_Console("");
+	else __NJS_Log_Console(__NJS_VARARGS, __NJS_VARLENGTH);
 	return var();
 };
 

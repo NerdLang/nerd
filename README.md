@@ -67,6 +67,17 @@ Some benchmarks with the file example/fibo.js and differents fibos arguments:
 
 NectarJS already supports more than 80% of ES3.
 
+
+<details>
+<summary>Prototype</summary>
+<br>
+ 
+* .call()
+
+* .bind()
+
+</details>
+
 <details>
 <summary>Array</summary>
 <br>
@@ -220,15 +231,25 @@ NectarJS already supports more than 80% of ES3.
 <details>
 <summary>String</summary>
 <br>
+
 * .length
+
 * .toString()
+
 * .indexOf(needle)
+
 * .lastIndexOf(needle)
+
 * .search(needle)
+
 * .slice(start, end)
+
 * .substring(start, end)
+
 * .substr(start, end)
+
 * .replace(needle, str)
+
 </details>
 
 <details>
@@ -291,9 +312,11 @@ You can also test ES3 support with `npm run es3_test`
 
 ## Windows
 
-You can install Mingw for Windows here : https://osdn.net/projects/mingw/downloads/68260/mingw-get-setup.exe/
+You can install Mingw for Windows here : https://osdn.net/projects/mingw/downloads/68260/mingw-get-setup.exe/ or Clang here: https://releases.llvm.org/
 
 You can also install Linux for Windows and use a linux system on Windows
+
+You need MinGW with POSIX threads
 
 ## Linux / FreeBSD
 
@@ -441,6 +464,8 @@ You can select a preset (speed or size) with:
 `--preset speed` or `--preset size`
 
 # Compatibility targets/platforms
+
+Tests are made with GCC 7 and Clang 6
 
 * All supported GCC platforms
 

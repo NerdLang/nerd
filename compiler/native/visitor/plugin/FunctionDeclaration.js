@@ -19,11 +19,12 @@
  * along with NectarJS.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
- 
+
 var FunctionDeclaration=
 {
 	enter(_path)
 	{
+		_path.node.VAR = {var:[], const:[]};
 		if(_path.node.id)
 		{
 			COMPILER.VAR_STATE.push([]);
@@ -41,15 +42,21 @@ var FunctionDeclaration=
 					VISITOR.addFunctionVarInit(_path.node.params[i].name);
 				}
 			}
-			if(VISITOR.CURRENT_Function > 0)
-			{
-			
-			}
 		}
 		
 	},
 	exit(_path)
 	{
+		var _hoistingVar = "";
+		for(var i = 0; i < _path.node.VAR.var.length; i++)
+		{
+			_hoistingVar += "var " + _path.node.VAR.var[i] + ";";
+		}
+		for(var i = 0; i < _path.node.VAR.const.length; i++)
+		{
+			_hoistingVar += "__NJS_CONST " + _path.node.VAR.const[i] + ";";
+		}
+		if(_hoistingVar.length > 0) _path.node.body.body.splice(0, 0, babel.parse(_hoistingVar));
 		if(_path.node.id)
 		{
 			VISITOR.CURRENT_Function--;

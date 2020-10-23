@@ -23,6 +23,11 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <fstream>
+#include <dirent.h>
+
+#ifndef WIN32
+    #include <sys/types.h>
+#endif
 
 function __NJS_fs_readFileSync(_name)
 { 
@@ -94,3 +99,17 @@ function __NJS_fs_removeSync(_name)
   remove(__NJS_Get_String(_name));
   return __NJS_Create_Boolean(1);
 };
+
+function __NJS_fs_renameSync(_old, _new)
+{
+  rename(__NJS_Get_String(_old), __NJS_Get_String(_new));
+  return __NJS_Create_Boolean(1);
+};
+
+function __NJS_fs_mkdirSync(_path)
+{
+	#ifndef __linux__ 
+	mkdir( ((std::string)_path).c_str() );
+	#endif
+	return __NJS_Create_Boolean(1);
+}

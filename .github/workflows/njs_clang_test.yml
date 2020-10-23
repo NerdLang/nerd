@@ -15,10 +15,13 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Install and run
+    - name: Install
       run: | 
         sudo apt install g++ clang
         wget -qO- https://deb.nodesource.com/setup_12.x | sudo -E bash
         sudo apt install -y nodejs
         npm i
+        clang++ -v
+    - name: run
+      run: | 
         npm run njs_clang_test

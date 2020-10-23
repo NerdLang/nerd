@@ -22,7 +22,7 @@
  
 function createAnon(_code, _scope)
 {	
-	var _return = "return __NJS_Create_Undefined();}";
+	var _return = "return undefined;}";
 	var _searchAnonFN = new RegExp(/(var)* *([\[\]a-zA-Z0-9_"]*) *= *function +\(([a-zA-Z0-9_\-, ]*)\)/);
 	var _index = _code.search(_searchAnonFN);
 
@@ -38,11 +38,12 @@ function createAnon(_code, _scope)
 		var _match = _searchAnonFN.exec(_code);
 		_match[3] = _match[3].split(",");
 		var _getVar = "";
+		
 		for(var i = 0; i < _match[3].length; i++)
 		{
 			if(_match[3][i].length > 0)
 			{
-				_getVar += `var ${_match[3][i]}; if(__NJS_VARARGS.size() > ${i}) ${_match[3][i]} = __NJS_VARARGS[${i}];`;
+				_getVar += `var ${_match[3][i]}; if(__NJS_VARLENGTH > ${i}) ${_match[3][i]} = __NJS_VARARGS[${i}];`;
 			}
 		}
 
@@ -58,9 +59,9 @@ function createAnon(_code, _scope)
 					var _catch = "";
 					var _classAnon = false;
 					if(_scope) _catch = "&";
-					else if(_code.indexOf("'SCOPED_Function';") > -1) 
+					if(_code.indexOf("\"SCOPED_FUNCTION\";") > -1) 
 					{
-						_code = _code.replace(/'SCOPED_Function';/g, "                  ");
+						_code = _code.replace(/"SCOPED_FUNCTION";/g, "                  ");
 						_catch = "&";
 					}
 					if(_code.indexOf("'__NJS_CLASS_ANON__';") > -1) 
@@ -79,8 +80,8 @@ function createAnon(_code, _scope)
 
 						if(_match[1]) COMPILER.DECL.push(`var ${_match[2]};`);
 						if(_match[2]) _formated += _match[2] + " = ";
-						_formated += "NJS::VAR(NJS::Enum::Type::Function, new std::function<NJS::VAR (var, NJS::Type::vector_t)> ([" + _catch + "](var __NJS_THIS, NJS::Type::vector_t __NJS_VARARGS) -> NJS::VAR" + _fn + os.EOL + _return + "), __NJS_THIS);";
-						_code = [_code.slice(0, _index), _formated, _code.slice(_end + 1)].join('');		
+						_formated += "NJS::VAR(NJS::Enum::Type::Function, new NJS::Type::function_t ([" + _catch + "](var __NJS_THIS, NJS::VAR* __NJS_VARARGS, int __NJS_VARLENGTH) -> NJS::VAR" + _fn + os.EOL + _return + "), __NJS_THIS)";
+						_code = [_code.slice(0, _index), ' ', _formated, _code.slice(_end + 1)].join('');		
 						break;
 					}
 				}

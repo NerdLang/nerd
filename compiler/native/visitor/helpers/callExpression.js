@@ -20,7 +20,7 @@
  *
  */
  
-function callExpression(_path)
+function callExpression(_path, _main)
 {
 	
 	if(!_path.callee || !_path.callee.name)
@@ -59,6 +59,14 @@ function callExpression(_path)
 				var _arr = VISITOR.arrayExpression(_path.arguments[i]);
 
 				COMPILER.DECL.push(_arr.setter);
+			}
+			else if(_path.arguments[i].type == "FunctionExpression")
+			{
+				var _tmp = "__NJS_TMP_LAMBDA" + RND();
+				var _gen = `${_tmp} = ${babel.generate(_path.arguments[i]).code}`;
+				_main.insertBefore(babel.parse(_gen));
+				_path.arguments[i].type = "Identifier";
+				_path.arguments[i].name = _tmp;
 			}
 		}
 	}

@@ -22,7 +22,7 @@
  
 function createFunction(_code, _scope)
 {	
-	var _return = ";return __NJS_Create_Undefined();}";
+	var _return = ";return undefined;}";
 	var _searchFN = new RegExp(/function +(.[a-zA-Z0-9_\-]*) *\((.*)\)/);
 	var _index = _code.search(_searchFN);
 	while(_index > -1)
@@ -43,7 +43,7 @@ function createFunction(_code, _scope)
 
 		var _FAST = false;
 
-		if(COMPILER.INFO.SCOPE[_match[1]] && COMPILER.INFO.SCOPE[_match[1]].fast == true && COMPILER.INFO.SCOPE[_match[1]].param.length == 1 && COMPILER.INFO.SCOPE[_match[1]].param[0] == _match[2].length)
+		if(!CLI.cli["--no-fast-function"] && COMPILER.INFO.SCOPE[_match[1]] && COMPILER.INFO.SCOPE[_match[1]].fast == true && COMPILER.INFO.SCOPE[_match[1]].param.length == 1 && COMPILER.INFO.SCOPE[_match[1]].param[0] == _match[2].length)
 		{
 			_FAST = true;
 			for(var i = 0; i < _match[2].length; i++)
@@ -58,13 +58,32 @@ function createFunction(_code, _scope)
 		}
 		else
 		{
+			
 			_variadic = true;
-			_parameters = "var __NJS_THIS, NJS::Type::vector_t __NJS_VARARGS";
-			for(var i = 0; i < _match[2].length; i++)
+			_parameters = "var __NJS_THIS, NJS::VAR* __NJS_VARARGS, int __NJS_VARLENGTH";
+
+			if(COMPILER.INFO.SCOPE[_match[1]].param.length == 1)
 			{
-				if(_match[2][i].length > 0)
+				for(var i = 0; i < _match[2].length; i++)
 				{
-					_getVar += `var ${_match[2][i]}; if(__NJS_VARARGS.size() > ${i}) ${_match[2][i]} = __NJS_VARARGS[${i}];`;
+					if(_match[2][i].length > 0)
+					{
+						if(i <= COMPILER.INFO.SCOPE[_match[1]].param.length)
+						{
+							_getVar += `var ${_match[2][i]} = __NJS_VARARGS[${i}];`;
+						}
+						else _getVar += `var ${_match[2][i]}; if(__NJS_VARLENGTH > ${i}) ${_match[2][i]} = __NJS_VARARGS[${i}];`;
+					}
+				}
+			}
+			else 
+			{
+				for(var i = 0; i < _match[2].length; i++)
+				{
+					if(_match[2][i].length > 0)
+					{
+						_getVar += `var ${_match[2][i]}; if(__NJS_VARLENGTH > ${i}) ${_match[2][i]} = __NJS_VARARGS[${i}];`;
+					}
 				}
 			}
 		}
@@ -88,7 +107,7 @@ function createFunction(_code, _scope)
 						{
 							var _catch = "";
 							if(_scope) _catch = "&";
-							else if(_code.indexOf("'SCOPED_Function';") > -1) 
+							if(_code.indexOf("\"SCOPED_FUNCTION\";") > -1) 
 							{
 								_code = _code.replace(/'SCOPED_Function';/g, "                  ");
 								_catch = "&";
@@ -100,10 +119,10 @@ function createFunction(_code, _scope)
 							COMPILER.DECL.push("var " + _match[1] +";");
 							
 							var __STR_MARKER = "__LIT" + RND();
-							var _formated = `__NJS_DECL_Function<NJS::VAR (${_parameters})>* ${_genFN} = new __NJS_DECL_Function<NJS::VAR (${_parameters})>([${_catch}]( ${_parameters} ) -> NJS::VAR ${_fn} ${_return} );`;
+							var _formated = `NJS::Type::function_t* ${_genFN} = new NJS::Type::function_t([${_catch}]( ${_parameters} ) -> NJS::VAR ${_fn} ${_return} );`;
 							_formated += _match[1] + "=NJS::VAR(NJS::Enum::Type::Function, " + _genFN + ");";
 							if(CLI.cli["--debug"]) _formated += `((NJS::Class::Function*)${_match[1]}._ptr)->code = R"${__STR_MARKER}(Function ${_match[1]}(${_match[2]}) ${_code.substring(_start, _end )}})${__STR_MARKER}";`
-							else _formated += `((NJS::Class::Function*)${_match[1]}._ptr)->code = R"([Function: ${_match[1]}])";`
+							//else _formated += `((NJS::Class::Function*)${_match[1]}._ptr)->code = R"([Function: ${_match[1]}])";`
 
 							_code = [_code.slice(0, _index), _formated, _code.slice(_end + 1)].join('');
 						}

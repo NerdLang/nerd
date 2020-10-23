@@ -65,8 +65,8 @@ NJS::VAR parseInt(NJS::VAR _str)
 {
 	if (_str.type == NJS::Enum::Type::String)
 	{
-#ifdef __NJS_ARDUINO
-		return NJS::VAR();
+#ifdef __NJS_ENV_ARDUINO
+		return undefined;
 #else
 		return __NJS_Create_Number((double)(*(NJS::Class::String*)_str._ptr));
 #endif
@@ -77,34 +77,33 @@ NJS::VAR parseInt(NJS::VAR _str)
 
 NJS::VAR __NJS_Log_Console(NJS::VAR _var)
 {
-#ifdef __NJS_ARDUINO
+#ifdef __NJS_ENV_ARDUINO
 
 #else
 	std::cout << _var;
 	std::cout << std::endl;
 #endif
 
-	return NJS::VAR();
+	return undefined;
 }
 
-NJS::VAR __NJS_Log_Console(NJS::Type::vector_t _var)
+NJS::VAR __NJS_Log_Console(NJS::VAR* _var, int _length)
 {
-#ifdef __NJS_ARDUINO
+#ifdef __NJS_ENV_ARDUINO
 
 #else
 	bool first = false;
-	for(auto _v:_var)
+	for(int i = 0; i < _length; i++)
 	{
 		if(first) std::cout << " ";
-		std::cout << _v;
+		std::cout << _var[i];
 		if(!first) first = true;
 	}
 	std::cout << std::endl;
 #endif
 
-	return NJS::VAR();
+	return undefined;
 }
-
 
 NJS::VAR __NJS_Object_Keys(NJS::VAR _var)
 {
@@ -113,11 +112,21 @@ NJS::VAR __NJS_Object_Keys(NJS::VAR _var)
 	var _res = __NJS_Create_Array();
 
 	NJS::Type::object_t *_obj = &((NJS::Class::Object*)_var._ptr)->object;
+	
+	#ifdef __NJS__OBJECT_HASHMAP
+	int _i = 0;
+	for (auto _el: *_obj)
+	{
+		_res[_i] = _el.first;
+		_i++;
+	}
+	#else
 	int _j = (*_obj).size();
 	for (int _i = 0; _i < _j; _i++)
 	{
 		_res[_i] = (*_obj)[_i].first;
 	}
+	#endif
 	return _res;
 }
 
@@ -144,7 +153,7 @@ NJS::VAR __NJS_Object_Stringify(NJS::VAR _var, bool _bracket)
 	{
 		var _res = "";
 		std::vector<NJS::VAR> *_arr = &((NJS::Class::Array*)_var._ptr)->value;
-		if(_bracket) _res += "[";
+		if(_bracket) _res += " [ ";
 		int j = (*_arr).size();
 		for (int i = 0; i < j; i++)
 		{
@@ -152,7 +161,7 @@ NJS::VAR __NJS_Object_Stringify(NJS::VAR _var, bool _bracket)
 				_res += ",";
 			_res += __NJS_Object_Stringify((*_arr)[i], _bracket);
 		}
-		if(_bracket) _res += "]";
+		if(_bracket) _res += " ] ";
 
 		return _res;
 	}
@@ -161,6 +170,18 @@ NJS::VAR __NJS_Object_Stringify(NJS::VAR _var, bool _bracket)
 		var _res = "";
 		NJS::Type::object_t *_obj = &((NJS::Class::Object*)_var._ptr)->object;
 		_res = "{";
+		#ifdef __NJS__OBJECT_HASHMAP
+		int _i = 0;
+		for (auto _el: *_obj)
+		{
+			if (_i > 0)
+				_res += ", ";
+			_res += var("\"") + _el.first + "\"";
+			_res += ":";
+			_res += __NJS_Object_Stringify(_el.second);
+			_i++;
+		}
+		#else
 		int j = (*_obj).size();
 		for (int _i = 0; _i < j; _i++)
 		{
@@ -170,6 +191,7 @@ NJS::VAR __NJS_Object_Stringify(NJS::VAR _var, bool _bracket)
 			_res += ":";
 			_res += __NJS_Object_Stringify((*_obj)[_i].second);
 		}
+		#endif
 		_res += "}";
 		return _res;
 	}
@@ -204,15 +226,22 @@ NJS::VAR __NJS_Object_Clone(NJS::VAR _var)
 		{
 			var _res = __NJS_Create_Object();
 			NJS::Type::object_t *_obj = &((NJS::Class::Object*)_var._ptr)->object;
+			#ifdef __NJS__OBJECT_HASHMAP
+			for (auto _el: *_obj)
+			{
+				_res[_el.first] = __NJS_Object_Clone(_el.second);
+			}
+			#else
 			int j = (*_obj).size();
 			for (int _i = 0; _i < j; _i++)
 			{
 				_res[(*_obj)[_i].first] = __NJS_Object_Clone((*_obj)[_i].second);
 			}
+			#endif
 			return _res;
 		}
 		default:
-			return NJS::VAR();
+			return undefined;
 	}
 }
 
@@ -221,32 +250,41 @@ void __NJS_Object_Construct(NJS::VAR _this, NJS::VAR _prototype)
 	if(_this.type == NJS::Enum::Type::Object && _prototype.type == NJS::Enum::Type::Object)
 	{
 		NJS::Type::object_t *_obj = &((NJS::Class::Object*)_prototype._ptr)->object;
+		
+		#ifdef __NJS__OBJECT_HASHMAP
+		for (auto _el: *_obj)
+		{
+			NJS::VAR _tmp =  _this[_el.first];
+			if(_tmp.type == NJS::Enum::Type::Undefined)
+			{
+				_this[_el.first] = _el.second;
+			}
+		}
+		#else
 		int j = (*_obj).size();
 		for (int _i = 0; _i < j; _i++)
 		{
-			NJS::VAR _tmp =  __NJS_Object_Get((*_obj)[_i].first, _this);
+			NJS::VAR _tmp =  _this[(*_obj)[_i].first];
 			if(_tmp.type == NJS::Enum::Type::Undefined)
 			{
 				_this[(*_obj)[_i].first] = (*_obj)[_i].second;
 			}
 		}
+		#endif
 	}
 	
 }
 
 
-inline NJS::VAR __NJS_Create_Object()
+inline NJS::Class::Object* __NJS_Create_Object()
 {
-	NJS::Class::Object *_obj = new NJS::Class::Object();
-	_obj->counter--;
-	return NJS::VAR(_obj);
+	return new NJS::Class::Object();
 }
-inline NJS::VAR __NJS_Create_Array()
+inline NJS::Class::Array* __NJS_Create_Array()
 {
-	NJS::Class::Array *_arr = new NJS::Class::Array();
-	_arr->counter--;
-	return NJS::VAR(_arr);
+	return new NJS::Class::Array();
 }
+
 
 NJS::VAR __NJS_CREATE_Function(void *_fn)
 {
@@ -258,12 +296,6 @@ NJS::VAR __NJS_Create_Native(void *_native)
 	return NJS::VAR(NJS::Enum::Type::Undefined, _native);
 }
 
-/*
-void* __NJS_Get_Function(NJS::VAR _fn)
-{
-  return _fn.get().f;
-}
-*/
 
 std::function<var(NJS::Type::vector_t)> *__NJS_Get_Function(NJS::VAR _v)
 {

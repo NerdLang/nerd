@@ -34,9 +34,11 @@ namespace NJS
 		VAR(NJS::Class::Undefined *_value);
 		VAR(NJS::Enum::Type _type, void *_value);
 		VAR(NJS::Enum::Type _type, void *_value, var _this);
-		VAR(std::function<VAR(std::vector<var>)> &_value);
+		VAR(std::function<VAR(NJS::VAR*, int)> &_value);
 		template <class... Args>
 		VAR operator() (Args... args);
+		template <class... Args>
+		VAR operator() (Args... args) const;
 		
 		/* END CALL OVERLOAD */
 
@@ -50,7 +52,7 @@ namespace NJS
 		/*** END CONSTRUCTOR ***/
 
 		/*** OPERATOR ***/
-		VAR operator=(const VAR &_v);
+		void operator=(const VAR &_v);
 
 		/// Unary operators
 		VAR operator+();
@@ -65,20 +67,20 @@ namespace NJS
 		/// Arithmetic operators
 		VAR operator+(const VAR &_v1);
 		VAR operator+(const char _v1[]);
-		VAR operator+=(const VAR &_v1);
+		void operator+=(const VAR &_v1);
 		VAR operator-(const VAR &_v1);
 		VAR operator-=(const VAR &_v1);
 		VAR operator*(const VAR &_v1);
-		VAR operator*=(const VAR &_v1);
+		void operator*=(const VAR &_v1);
 		VAR operator/(const VAR &_v1);
-		VAR operator/=(const VAR &_v1);
+		void operator/=(const VAR &_v1);
 		VAR operator%(const VAR &_v1);
 		VAR operator%=(const VAR &_v1);
 		// TODO: "**" and "**=" operators
 		VAR operator++(const int _v1);
-		VAR operator++();
+		void operator++();
 		VAR operator--(const int _v1);
-		VAR operator--();
+		void operator--();
 		/// Comparison operators
 		VAR operator==(const VAR &_v1);
 		// === emulated with __NJS_EQUAL_VALUE_AND_TYPE
@@ -110,7 +112,7 @@ namespace NJS
 		explicit operator std::string() const;
 		operator std::string();
 		explicit operator const char*() const;	
-		explicit operator const long long() const;
+		explicit operator long long() const;
 		
 	};
 } // namespace NJS

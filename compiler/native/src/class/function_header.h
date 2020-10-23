@@ -6,22 +6,23 @@ namespace NJS::Class
 	class Function : public virtual Base
 	{
 	public:
-		// Constants
-		const NJS::Enum::Type type = NJS::Enum::Type::Function;
-		std::string code = "[native code]";
 		// Constructors
 		Function();
 		Function(void* val);
+		Function(void* val, NJS::VAR bind);
 		// Properties
 		count_t counter = 0;
+		#ifdef __NJS_DEBUG
+		std::string code = "[native code]";
+		#endif
 		NJS::Type::function_t* value = nullptr;
 		var This;
-		//NJS::VAR _this;
 		NJS::Type::object_t object;
 		// Methods
-		void Delete() noexcept;
-		
-		NJS::VAR Call(var __NJS_THIS, NJS::Type::vector_t __NJS_VARARGS);
+		inline void Delete() noexcept;
+		inline void jsDelete(std::string _key) noexcept;
+		inline void* Copy() noexcept;
+		NJS::VAR Call(var& __NJS_THIS, NJS::VAR* __NJS_VARARGS, int __NJS_VARLENGTH);
 		
 		template <class... Args>
 		NJS::VAR New(Args... args);
@@ -36,7 +37,7 @@ namespace NJS::Class
 		NJS::VAR &operator[](NJS::VAR key);
 		template <class... Args> NJS::VAR operator()(Args... args);
 		// Comparation operators
-		Function operator!() const;
+		NJS::VAR operator!() const;
 		bool operator==(const Function &_v1) const;
 		// === emulated with __NJS_EQUAL_VALUE_AND_TYPE
 		// !== emulated with __NJS_NOT_EQUAL_VALUE_AND_TYPE
@@ -73,5 +74,10 @@ namespace NJS::Class
 		Function operator>>=(const Function &_v1);
 		Function operator<<=(const Function &_v1);
 		// TODO: ">>>" and ">>>=" operators
+		NJS::VAR toString(NJS::VAR* _args, int _length) const;
+		NJS::VAR valueOf(NJS::VAR* _args, int _length) const;
+		NJS::VAR bind(NJS::VAR* _args, int _length);
+		NJS::VAR call(NJS::VAR* _args, int _length);
+		NJS::VAR apply(NJS::VAR* _args, int _length);
 	};
 } // namespace NJS::Class

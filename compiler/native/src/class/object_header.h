@@ -6,9 +6,6 @@ namespace NJS::Class
 	class Object : public virtual Base
 	{
 	public:
-		// Constants
-		const char *name = "object";
-		const NJS::Enum::Type type = NJS::Enum::Type::Object;
 		// Constructors
 		Object();
 		// Properties
@@ -17,7 +14,10 @@ namespace NJS::Class
 		bool prototype = false;
 		NJS::Type::vector_p instance;
 		// Methods
-		void Delete() noexcept;
+		inline void Delete() noexcept;
+		inline void jsDelete(const std::string _key) noexcept;
+		
+		inline void* Copy() noexcept;
 		// Native cast
 		explicit operator bool() const noexcept;
 		explicit operator double() const noexcept;

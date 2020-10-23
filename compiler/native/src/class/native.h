@@ -6,19 +6,23 @@
 namespace NJS::Class
 {
 	// Constructors
-	Native::Native() { counter++; }
+	Native::Native() {}
 	Native::Native(void *val)
 	{
-		counter++;
 		value = val;
 	}
 	// Methods
-	void Native::Delete() noexcept
+	inline void Native::Delete() noexcept
 	{
 		if (--counter < 1)
 		{
 			delete this;
 		}
+	}
+	inline void* Native::Copy() noexcept
+	{
+		counter++;
+		return this;
 	}
 	// Native cast
 	Native::operator bool() const noexcept { return true; }
@@ -41,20 +45,13 @@ namespace NJS::Class
 	// Main operators
 	NJS::VAR const Native::operator[](NJS::VAR key) const
 	{
-		auto &obj = this->object;
-		auto index = (std::string)key;
-		int _j = obj.size();
-		for (int _i = 0; _i < _j; _i++)
-		{
-			if (index.compare(obj[_i].first) == 0)
-			{
-				return obj[_i].second;
-			}
-		}
-		return NJS::VAR();
+		return undefined;
 	}
 	NJS::VAR &Native::operator[](NJS::VAR key)
 	{
+		#ifdef __NJS__OBJECT_HASHMAP
+		return object[(std::string)key];
+		#else
 		for (auto & search : object)
 		{
 			if (((std::string)key).compare(search.first) == 0)
@@ -65,6 +62,7 @@ namespace NJS::Class
 
 		object.push_back(NJS::Type::pair_t((std::string)key, __NJS_VAR()));
 		return object[object.size() - 1].second;
+		#endif
 	}
 	
 	template <class... Args>
@@ -76,9 +74,10 @@ namespace NJS::Class
 	// Comparation operators
 	Native Native::operator!() const 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Native();
 	}
 	bool Native::operator==(const Native &_v1) const { return false; }
 	// === emulated with __NJS_EQUAL_VALUE_AND_TYPE
@@ -91,154 +90,179 @@ namespace NJS::Class
 	// Numeric operators
 	Native Native::operator+() const 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Native();
 	}
 	Native Native::operator-() const 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Native();
 	}
 	Native Native::operator++(const int _v1) 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Native();
 	}
 	Native Native::operator--(const int _v1) 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Native();
 	}
 	Native Native::operator+(const Native &_v1) const 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Native();
 	}
 	Native Native::operator+=(const Native &_v1) 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Native();
 	}
 	Native Native::operator-(const Native &_v1) const 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Native();
 	}
 	Native Native::operator-=(const Native &_v1) 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Native();
 	}
 	Native Native::operator*(const Native &_v1) const 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Native();
 	}
 	Native Native::operator*=(const Native &_v1) 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Native();
 	}
 	// TODO: "**" and "**=" operators
 	Native Native::operator/(const Native &_v1) const 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Native();
 	}
 	Native Native::operator/=(const Native &_v1) 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Native();
 	}
 	Native Native::operator%(const Native &_v1) const 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Native();
 	}
 	Native Native::operator%=(const Native &_v1) 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Native();
 	}
 	Native Native::operator&(const Native &_v1) const 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Native();
 	}
 	Native Native::operator|(const Native &_v1) const 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Native();
 	}
 	Native Native::operator^(const Native &_v1) const 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Native();
 	}
 	Native Native::operator~() const 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Native();
 	}
 	Native Native::operator>>(const Native &_v1) const 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Native();
 	}
 	Native Native::operator<<(const Native &_v1) const 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Native();
 	}
 	Native Native::operator&=(const Native &_v1) 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Native();
 	}
 	Native Native::operator|=(const Native &_v1) 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Native();
 	}
 	Native Native::operator^=(const Native &_v1) 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Native();
 	}
 	Native Native::operator>>=(const Native &_v1) 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Native();
 	}
 	Native Native::operator<<=(const Native &_v1) 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Native();
 	}
 	// TODO: ">>>" and ">>>=" operators
 } // namespace NJS::Class

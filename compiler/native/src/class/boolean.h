@@ -3,19 +3,22 @@
 namespace NJS::Class
 {
 	// Constructors
-	Boolean::Boolean() { counter++; }
+	Boolean::Boolean() { }
 	Boolean::Boolean(bool val)
 	{
-		counter++;
 		value = val;
 	}
 	// Methods
-	void Boolean::Delete() noexcept
+	inline void Boolean::Delete() noexcept
 	{
-		if (--counter < 1)
+		if(--counter == 0)
 		{
 			delete this;
 		}
+	}
+	inline void* Boolean::Copy() noexcept
+	{
+		return new Boolean();
 	}
 	// Native cast
 	Boolean::operator bool() const noexcept { return value; }
@@ -27,6 +30,18 @@ namespace NJS::Class
 		return value ? "true" : "false";
 	}
 	// Main operators
+	#ifdef __NJS__OBJECT_HASHMAP
+	NJS::VAR &Boolean::operator[](NJS::VAR key)
+	{
+		NJS::VAR& _obj = object[(std::string)key];
+		if(_obj) return object[_obj]; 
+
+		__NJS_Method_Lazy_Loader("toString", toString);
+		__NJS_Method_Lazy_Loader("valueOf", valueOf);
+
+		return undefined;
+	}
+	#else
 	NJS::VAR &Boolean::operator[](NJS::VAR key)
 	{
 		for (auto & search : object)
@@ -37,27 +52,20 @@ namespace NJS::Class
 			}
 		}
 
-		if(((std::string)key).compare("toString") == 0  || ((std::string)key).compare("toLocaleString") == 0)
-		{
-			object.push_back(NJS::Type::pair_t((std::string)key, __NJS_Create_Var_Scoped_Anon( return __NJS_Object_Stringify(this);)));
-		}
-		else if(((std::string)key).compare("valueOf") == 0)
-		{
-			object.push_back(NJS::Type::pair_t((std::string)key, __NJS_Create_Var_Scoped_Anon( return this; )));
-		}
-		else 
-		{
-			object.push_back(NJS::Type::pair_t((std::string)key, __NJS_VAR()));
-		}
+		__NJS_Method_Lazy_Loader("toString", toString);
+		__NJS_Method_Lazy_Loader("valueOf", valueOf);
 
-		return object[object.size() - 1].second;
+		return undefined;
 	}
+	#endif
+	
 	template <class... Args>
 	NJS::VAR Boolean::operator()(Args... args) const 
 	{ 
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException(); 
 		#endif
+		return undefined;
 	}
 	// Comparation operators
 	Boolean Boolean::operator!() const { return !value; }
@@ -72,154 +80,188 @@ namespace NJS::Class
 	// Numeric operators
 	Boolean Boolean::operator+() const 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Boolean();
 	}
 	Boolean Boolean::operator-() const 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Boolean();
 	}
 	Boolean Boolean::operator++(const int _v1) 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Boolean();
 	}
 	Boolean Boolean::operator--(const int _v1) 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Boolean();
 	}
 	Boolean Boolean::operator+(const Boolean &_v1) const 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Boolean();
 	}
 	Boolean Boolean::operator+=(const Boolean &_v1) 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Boolean();
 	}
 	Boolean Boolean::operator-(const Boolean &_v1) const 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Boolean();
 	}
 	Boolean Boolean::operator-=(const Boolean &_v1) 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Boolean();
 	}
 	Boolean Boolean::operator*(const Boolean &_v1) const 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Boolean();
 	}
 	Boolean Boolean::operator*=(const Boolean &_v1) 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Boolean();
 	}
 	// TODO: "**" and "**=" operators
 	Boolean Boolean::operator/(const Boolean &_v1) const 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Boolean();
 	}
 	Boolean Boolean::operator/=(const Boolean &_v1) 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Boolean();
 	}
 	Boolean Boolean::operator%(const Boolean &_v1) const 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Boolean();
 	}
 	Boolean Boolean::operator%=(const Boolean &_v1) 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Boolean();
 	}
 	Boolean Boolean::operator&(const Boolean &_v1) const 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Boolean();
 	}
 	Boolean Boolean::operator|(const Boolean &_v1) const 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Boolean();
 	}
 	Boolean Boolean::operator^(const Boolean &_v1) const 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Boolean();
 	}
 	Boolean Boolean::operator~() const 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Boolean();
 	}
 	Boolean Boolean::operator>>(const Boolean &_v1) const 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Boolean();
 	}
 	Boolean Boolean::operator<<(const Boolean &_v1) const 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Boolean();
 	}
 	Boolean Boolean::operator&=(const Boolean &_v1) 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Boolean();
 	}
 	Boolean Boolean::operator|=(const Boolean &_v1) 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Boolean();
 	}
 	Boolean Boolean::operator^=(const Boolean &_v1) 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Boolean();
 	}
 	Boolean Boolean::operator>>=(const Boolean &_v1) 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Boolean();
 	}
 	Boolean Boolean::operator<<=(const Boolean &_v1) 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Boolean();
 	}
 	// TODO: ">>>" and ">>>=" operators
+	NJS::VAR Boolean::toString(NJS::VAR* _args, int _length) const
+	{
+		return (std::string)*this;
+	}
+	
+	NJS::VAR Boolean::valueOf(NJS::VAR* _args, int _length) const
+	{
+		return value;
+	}
 } // namespace NJS::Class

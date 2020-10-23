@@ -6,18 +6,16 @@ namespace NJS::Class
 	class Native : public virtual Base
 	{
 	public:
-		// Constants
-		const char *name = "native";
-		const NJS::Enum::Type type = NJS::Enum::Type::Native;
 		// Constructors
 		Native();
 		Native(void* val);
 		// Properties
-		count_t counter = 0;
+		count_t counter = 1;
 		void* value = nullptr;
 		NJS::Type::object_t object;
 		// Methods
-		void Delete() noexcept;
+		inline void Delete() noexcept;
+		inline void* Copy() noexcept;
 		// Native cast
 		explicit operator bool() const noexcept;
 		explicit operator double() const noexcept;

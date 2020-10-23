@@ -24,7 +24,7 @@ global.RND = function() { return "__META_" + Math.random().toString(36).substrin
 
 function genMetaFunction(_code)
 {	
-    var _return = ";return __NJS_Create_Undefined();}";
+    var _return = ";return undefined;}";
     var _searchFN = new RegExp(/function (.[a-zA-Z0-9_\-]*) *\((.*)\)/);
     var _index = _code.search(_searchFN);
     while(_index > -1)
@@ -42,7 +42,7 @@ function genMetaFunction(_code)
         {
             if(_match[2][i].length > 0)
             {
-                _getVar += `var ${_match[2][i]}; if(__NJS_VARARGS.size() > ${i}) ${_match[2][i]} = __NJS_VARARGS[${i}];`;
+                _getVar += `var ${_match[2][i]}; if(__NJS_VARLENGTH > ${i}) ${_match[2][i]} = __NJS_VARARGS[${i}];`;
             }
         }
         for(var i = _index; i < _code.length; i++)
@@ -61,13 +61,13 @@ function genMetaFunction(_code)
                     {
                         var _fn = "{" + _getVar + _code.substring(_start + 1, _end);
                         var _catch = "";
-                        if(_code.indexOf("'SCOPED_Function';") > -1) 
+                        if(_code.indexOf("\"SCOPED_FUNCTION\";") > -1) 
 						{
-							_code = _code.replace(/'SCOPED_Function';/g, "                  ");
-							_catch = "=";
+							_code = _code.replace(/"SCOPED_FUNCTION";/g, "                 ");
+							_catch = "&";
 						}
 
-                        var _formated = "__NJS_DECL_Function<NJS::VAR (var, NJS::Type::vector_t)>* " + _genFN +" = new __NJS_DECL_Function<NJS::VAR (var, NJS::Type::vector_t)>([" + _catch + "](var __NJS_THIS, NJS::Type::vector_t __NJS_VARARGS ) -> NJS::VAR" + _fn + _return + ");";
+                        var _formated = "NJS::Type::function_t* " + _genFN +" = new NJS::Type::function_t([" + _catch + "](var __NJS_THIS, NJS::VAR* __NJS_VARARGS, int __NJS_VARLENGTH) -> NJS::VAR" + _fn + _return + ");";
                         _formated += "var " + _match[1] + "=NJS::VAR(NJS::Enum::Type::Function, " + _genFN + ");";                        
 
 						_code = [_code.slice(0, _index), _formated, _code.slice(_end + 1)].join('');

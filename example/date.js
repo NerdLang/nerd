@@ -1,4 +1,3 @@
-var date = require("Date");
 
-console.log("TS: " + date.now());
-console.log("UTC: " + date.now("UTC"));
+console.log("TS: " + _date.now());
+console.log("UTC: " + _date.now("UTC"));

@@ -1,7 +1,5 @@
 * Add import
 
-* Add babel visitors for missing
-
 * Add NectarJS REPL
 
 * put back project management
@@ -17,6 +15,9 @@
 
 * Add async support
 
+  - ~~setTimeout, setInterval, setImmediate~~
+  - async keyword support
+
 * add wildcard for multiple compilation at the same time : nectar *.js
 
 * add std NodeJS module for node env
@@ -25,7 +26,5 @@
 
 * Finish ES3
 
-* Add .bind to functions
-
-* Add delete keyword
+* Add arguments in function scope
 

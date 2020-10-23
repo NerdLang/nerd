@@ -20,8 +20,6 @@ namespace NJS::Class
 		inline bool isNegative() const noexcept;
 
 	public:
-		// Constants
-		const NJS::Enum::Type type = NJS::Enum::Type::Number;
 		// Constructors
 		Number();
 		Number(int val);
@@ -31,14 +29,15 @@ namespace NJS::Class
 		//Number(const Number* val);
 		Number(const NJS::VAR& val);
 		// Properties
-		count_t counter = 0;
 		NumberValue value = {.i = 0};
 		NJS::Type::object_t object;
+		count_t counter = 1;
 		// Methods
 		bool isInt = true;
 		inline int getInt() const noexcept;
 		inline double getDouble() const noexcept;
-		void Delete() noexcept;
+		inline void Delete() noexcept;
+		inline void* Copy() noexcept;
 		// Native cast
 		explicit operator bool() const noexcept;
 		explicit operator double() const noexcept;
@@ -63,18 +62,18 @@ namespace NJS::Class
 		Number operator+() const;
 		Number operator-() const;
 		Number operator++(const int _v1);
-		Number operator++();
+		void operator++();
 		Number operator--(const int _v1);
-		Number operator--();
+		void operator--();
 		Number operator+(const Number &_v1) const;
-		Number operator+=(const Number &_v1);
+		void operator+=(const Number &_v1);
 		Number operator-(const Number &_v1) const;
 		Number operator-=(const Number &_v1);
 		Number operator*(const Number &_v1) const;
-		Number operator*=(const Number &_v1);
+		void operator*=(const Number &_v1);
 		// TODO: "**" and "**=" operators
 		Number operator/(const Number &_v1) const;
-		Number operator/=(const Number &_v1);
+		void operator/=(const Number &_v1);
 		Number operator%(const Number &_v1) const;
 		Number operator%=(const Number &_v1);
 		Number operator&(const Number &_v1) const;
@@ -89,5 +88,8 @@ namespace NJS::Class
 		Number operator>>=(const Number &_v1);
 		Number operator<<=(const Number &_v1);
 		// TODO: ">>>" and ">>>=" operators
+		NJS::VAR toString(NJS::VAR* _args, int _length) const;
+		NJS::VAR valueOf(NJS::VAR* _args, int _length) const;
+		NJS::VAR toFixed(NJS::VAR* _args, int _length) const;
 	};
 } // namespace NJS::Class

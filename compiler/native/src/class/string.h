@@ -2,66 +2,79 @@
 #include "string_header.h"
 #include <string>
 #include <limits>
-#define __NJS_Class_String_Init()\
-counter++; \
-__NJS_CreateMethodToClass("toString", toString); \
-__NJS_CreateMethodToClass("split", split); \
-__NJS_CreateMethodToClass("indexOf", indexOf); \
-__NJS_CreateMethodToClass("lastIndexOf", lastIndexOf); \
-__NJS_CreateMethodToClass("search", search); \
-__NJS_CreateMethodToClass("slice", slice); \
-__NJS_CreateMethodToClass("substr", substr); \
-__NJS_CreateMethodToClass("replace", replace);
 
 namespace NJS::Class
 {
 	// Constructors
 	String::String()
 	{ 
-		__NJS_Class_String_Init();
+
 	}
 	String::String(std::string val)
 	{
-		__NJS_Class_String_Init();
 		value = val;
 	}
 	String::String(const char* val)
 	{
-		__NJS_Class_String_Init();
 		value = val;
 	}
 	// Methods
-	void String::Delete() noexcept
+	inline void String::Delete() noexcept
 	{
-		if (--counter < 1)
+		if(--counter == 0)
 		{
 			delete this;
 		}
+	}
+	inline void* String::Copy() noexcept
+	{
+		return new String(value);
 	}
 	// Native cast
 	String::operator bool() const noexcept { return value.size() > 0; }
 	String::operator double() const noexcept
 	{
 		std::string::size_type end;
-		auto res = std::stod(value, &end);
+		double res;
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		try
+		{
+			res = std::stod(value, &end);
+		}catch(...){}
+		#else
+			res = std::stod(value, &end);
+		#endif
+		
 		return end == value.size() ? res : std::numeric_limits<double>::quiet_NaN();
 	}
 	String::operator int() const noexcept
 	{
 		std::string::size_type end;
-		std::cout << value << std::endl;
 		int res;
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		try
 		{
 			res = std::stoi(value, &end, 10);
-		}catch(std::invalid_argument e){}
+		}catch(...){}
+		#else
+			res = std::stoi(value, &end, 10);
+		#endif
 		
 		return end == value.size() ? res : std::numeric_limits<int>::quiet_NaN();
 	}
 	String::operator long long() const noexcept
 	{
 		std::string::size_type end;
-		auto res = std::stoll(value, &end, 10);
+		long long res;
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		try
+		{
+			res = std::stoll(value, &end, 10);
+		}catch(...){}
+		#else
+			res = std::stoll(value, &end, 10);
+		#endif
+
 		return end == value.size() ? res : std::numeric_limits<long long>::quiet_NaN();
 	}
 	String::operator std::string() const noexcept { return value; }
@@ -83,22 +96,14 @@ namespace NJS::Class
 			return (int)value.size();
 		}
 		
-		auto &obj = this->object;
-		auto index = (std::string)key;
-		int _j = obj.size();
-		for (int _i = 0; _i < _j; _i++)
-		{
-			if (index.compare(obj[_i].first) == 0)
-			{
-				return obj[_i].second;
-			}
-		}
-		return NJS::VAR();
+		return undefined;
 	}
+	#ifdef __NJS__OBJECT_HASHMAP
 	NJS::VAR &String::operator[](NJS::VAR key)
 	{
 		static NJS::VAR _char;
-		static NJS::VAR _retLength;
+		static NJS::VAR _length;
+		
 		if (key.type == NJS::Enum::Type::Number)
 		{
 			auto i = (int)key;
@@ -114,11 +119,47 @@ namespace NJS::Class
 			return _char;
 		}
 		
+		NJS::VAR& _obj = object[(std::string)key];
+		if(_obj) return _obj; 
+		
+		__NJS_Method_Lazy_Loader("toString", toString);
+		__NJS_Method_Lazy_Loader("split", split);
+		__NJS_Method_Lazy_Loader("indexOf", indexOf);
+		__NJS_Method_Lazy_Loader("lastIndexOf", lastIndexOf);
+		__NJS_Method_Lazy_Loader("search", search);
+		__NJS_Method_Lazy_Loader("slice", slice);
+		__NJS_Method_Lazy_Loader("substr", substr);
+		__NJS_Method_Lazy_Loader("replace", replace);
+		
 		if(((std::string)key).compare("length") == 0)
 		{
-			_retLength = (int)value.size();
-			return _retLength;
+			_length = (int)value.size();
+			return _length;
 		}
+
+		return undefined;
+	}
+	#else
+	NJS::VAR &String::operator[](NJS::VAR key)
+	{
+		static NJS::VAR _char;
+		static NJS::VAR _length;
+		
+		if (key.type == NJS::Enum::Type::Number)
+		{
+			auto i = (int)key;
+			if (i >= 0)
+			{
+				if (i >= value.size())
+				{
+					value.resize(i + 1);
+				}
+				_char = value.at(i);
+			}
+			else _char = "";
+			return _char;
+		}
+		
 		
 		for (auto & search : object)
 		{
@@ -127,23 +168,42 @@ namespace NJS::Class
 				return search.second;
 			}
 		}
+		
+		__NJS_Method_Lazy_Loader("toString", toString);
+		__NJS_Method_Lazy_Loader("split", split);
+		__NJS_Method_Lazy_Loader("indexOf", indexOf);
+		__NJS_Method_Lazy_Loader("lastIndexOf", lastIndexOf);
+		__NJS_Method_Lazy_Loader("search", search);
+		__NJS_Method_Lazy_Loader("slice", slice);
+		__NJS_Method_Lazy_Loader("substr", substr);
+		__NJS_Method_Lazy_Loader("replace", replace);
 
-		object.push_back(NJS::Type::pair_t(((std::string)*this).c_str(), __NJS_VAR()));
+		if(((std::string)key).compare("length") == 0)
+		{
+			_length = (int)value.size();
+			return _length;
+		}
+		
+		object.push_back(NJS::Type::pair_t(((std::string)*this).c_str(), undefined));
 		return object[object.size() - 1].second;
 	}
+	#endif
+	
 	template <class... Args>
 	NJS::VAR String::operator()(Args... args) const 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return undefined;
 	}
 	// Comparation operators
 	String String::operator!() const 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return String();
 	}
 	bool String::operator==(const String &_v1) const { return value.compare(_v1.value) == 0; }
 	// === emulated with __NJS_EQUAL_VALUE_AND_TYPE
@@ -156,156 +216,179 @@ namespace NJS::Class
 	// Numeric operators
 	String String::operator+() const 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return String();
 	}
 	String String::operator-() const 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return String();
 	}
 	String String::operator++(const int _v1) 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return String();
 	}
 	String String::operator--(const int _v1) 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return String();
 	}
 	String String::operator+(const String &_v1) const { return value + _v1.value; }
 	String String::operator+=(const String &_v1) { value += _v1.value; return *this; }
 	String String::operator-(const String &_v1) const 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return String();
 	}
 	String String::operator-=(const String &_v1) 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return String();
 	}
 	String String::operator*(const String &_v1) const 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return String();
 	}
 	String String::operator*=(const String &_v1) 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return String();
 	}
 	// TODO: "**" and "**=" operators
 	String String::operator/(const String &_v1) const 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return String();
 	}
 	String String::operator/=(const String &_v1) 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return String();
 	}
 	String String::operator%(const String &_v1) const 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return String();
 	}
 	String String::operator%=(const String &_v1) 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return String();
 	}
 	String String::operator&(const String &_v1) const 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return String();
 	}
 	String String::operator|(const String &_v1) const 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return String();
 	}
 	String String::operator^(const String &_v1) const 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return String();
 	}
 	String String::operator~() const 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return String();
 	}
 	String String::operator>>(const String &_v1) const 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return String();
 	}
 	String String::operator<<(const String &_v1) const 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return String();
 	}
 	String String::operator&=(const String &_v1) 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return String();
 	}
 	String String::operator|=(const String &_v1) 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return String();
 	}
 	String String::operator^=(const String &_v1) 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return String();
 	}
 	String String::operator>>=(const String &_v1) 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return String();
 	}
 	String String::operator<<=(const String &_v1) 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return String();
 	}
 	// TODO: ">>>" and ">>>=" operators
 	/*** STRING METHODS ***/
-	NJS::VAR String::toString(std::vector<NJS::VAR> _args) const
+	NJS::VAR String::toString(NJS::VAR* _args, int _length) const
 	{
 		return value;
 	}
 	
-	NJS::VAR String::split(std::vector<NJS::VAR> _args) const
+	NJS::VAR String::split(NJS::VAR* _args, int _length) const
 	{
 		var _needle;
-		if (_args.size() > 0)
+		if (_length > 0)
 			_needle = _args[0];
 		else
 			return NJS::VAR(this->value);
@@ -333,10 +416,10 @@ namespace NJS::Class
 		return _arr;
 	}
 	
-	NJS::VAR String::indexOf(std::vector<NJS::VAR> _args) const
+	NJS::VAR String::indexOf(NJS::VAR* _args, int _length) const
 	{
 		var _needle;
-		if (_args.size() > 0)
+		if (_length > 0)
 			_needle = _args[0];
 		else
 			return NJS::VAR(-1);
@@ -349,10 +432,10 @@ namespace NJS::Class
 		return NJS::VAR(-1);
 	}
 	
-	NJS::VAR String::lastIndexOf(std::vector<NJS::VAR> _args) const
+	NJS::VAR String::lastIndexOf(NJS::VAR* _args, int _length) const
 	{
 		var _needle;
-		if (_args.size() > 0)
+		if (_length > 0)
 			_needle = _args[0];
 		else
 			return NJS::VAR(-1);
@@ -365,10 +448,10 @@ namespace NJS::Class
 		return NJS::VAR(-1);
 	}
 	
-	NJS::VAR String::search(std::vector<NJS::VAR> _args) const
+	NJS::VAR String::search(NJS::VAR* _args, int _length) const
 	{
 		var _needle;
-		if (_args.size() > 0)
+		if (_length > 0)
 			_needle = _args[0];
 		else
 			return NJS::VAR(-1);
@@ -381,15 +464,15 @@ namespace NJS::Class
 		return NJS::VAR(-1);
 	}
 	
-	NJS::VAR String::slice(std::vector<NJS::VAR> _args) const
+	NJS::VAR String::slice(NJS::VAR* _args, int _length) const
 	{
 		var _start;
 		var _end;
-		if (_args.size() > 0)
+		if (_length > 0)
 			_start = _args[0];
 		else
 			return NJS::VAR(this->value);
-		if (_args.size() > 1)
+		if (_length > 1)
 			_end = _args[1];
 
 		if (_end.type == NJS::Enum::Type::Undefined)
@@ -398,15 +481,15 @@ namespace NJS::Class
 		return NJS::VAR(this->value.substr((int)_start, _endIndex));
 	}
 	
-	NJS::VAR String::substr(std::vector<NJS::VAR> _args) const
+	NJS::VAR String::substr(NJS::VAR* _args, int _length) const
 	{
 		var _start;
 		var _end;
-		if (_args.size() > 0)
+		if (_length > 0)
 			_start = _args[0];
 		else
 			return NJS::VAR(this->value);
-		if (_args.size() > 1)
+		if (_length > 1)
 			_end = _args[1];
 
 		if (_end.type == NJS::Enum::Type::Undefined)
@@ -414,15 +497,15 @@ namespace NJS::Class
 		return NJS::VAR(this->value.substr((int)_start, (int)_end));
 	}
 		
-	NJS::VAR String::replace(std::vector<NJS::VAR> _args) const
+	NJS::VAR String::replace(NJS::VAR* _args, int _length) const
 	{
 		var _search;
 		var _replace;
-		if (_args.size() > 0)
+		if (_length > 0)
 			_search = _args[0];
 		else
 			return NJS::VAR(this->value);
-		if (_args.size() > 1)
+		if (_length > 1)
 			_replace = _args[1];
 
 		size_t start_pos = this->value.find((std::string)_search);

@@ -24,6 +24,7 @@ function VariableDeclaration(_path)
 {
   if(_path.node.declarations)
   {
+	  var _hoisting = false;
 	  for(var d = 0; d < _path.node.declarations.length; d++)
 	  {
 		if(_path.node.declarations[d].id && _path.node.declarations[d].id.name)
@@ -32,20 +33,54 @@ function VariableDeclaration(_path)
 			VISITOR.readOnlyVar(_path.node.declarations[d].id.name);
 			if(COMPILER.ENV.name == "android" && COMPILER.STATE == "CODE")
 			{
-				//_path.node.kind = "";
+				if(VISITOR.CURRENT_Function < 0) _path.node.kind = "";
 				COMPILER.DECL.push(" var " + _path.node.declarations[d].id.name + ";");
 			}
 			else if(VISITOR.CURRENT_Function < 0)
 			{
-				//_path.node.kind = "";
+				if(_path.node.kind == "const")_path.node.kind = "__NJS_CONST";
+				else if(VISITOR.CURRENT_Function < 0) _path.node.kind = "";
+				
 				if(COMPILER.INFO.HOISTING.indexOf(_path.node.declarations[d].id.name) < 0)
 				{
 					COMPILER.INFO.HOISTING.push(_path.node.declarations[d].id.name);
 				}
-			}	
+			}
+			else if(_path.parent.type != "ForStatement" && (_path.node.kind == "var" || _path.node.kind == "const"))
+			{
+				const fnParent = _path.findParent(p => p && (p.type === 'Program' || p.type.includes('Function')));
+				if(fnParent.node.VAR)
+				{
+					if(!_hoisting) _hoisting = true;
+					if(_path.node.kind == "var")
+						fnParent.node.VAR.var.push(_path.node.declarations[d].id.name);
+					else
+						fnParent.node.VAR.const.push(_path.node.declarations[d].id.name);
+				}
+			}
+		}
+		
+		if(_path.node.declarations.length == 1 && _path.node.declarations[0].init && _path.node.declarations[0].init.type == "NumericLiteral")
+		{
+			if(_path.parent.type == "ForStatement")
+			{
+				
+				_path.node.kind = "int";
+
+				if(_path.parentPath.node.test && _path.parentPath.node.test.type == "BinaryExpression")
+				{
+						var _new_int = "__NJS_LOOP_INT" + RND();
+						COMPILER.DECL.push("int " + _new_int + ";");
+						COMPILER.GLOBAL.push(_new_int);
+						_path.parentPath.insertBefore(babel.parse(_new_int + " = " + babel.generate(_path.parentPath.node.test.right).code));
+						_path.parentPath.node.test = babel.parse( "(" +  babel.generate(_path.parentPath.node.test.left).code + _path.parentPath.node.test.operator + _new_int + ")").program.body[0].expression;
+				}
+				
+			}
 		}
 		if(!(_path.node.declarations[d].init)) _path.node.declarations[d].init = babel.parse("__NJS_VAR()");
 	  }
+	  if(_hoisting) _path.node.kind = "";
   }
 }
 module.exports = VariableDeclaration;

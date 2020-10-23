@@ -36,6 +36,14 @@ function arrayExpression(_path)
 			COMPILER.DECL.push(_a.setter);
 			_setter += `${_rnd}[${i}] =  ${_a.getter}();`;
 		}
+		else if (_path.elements[i].type == "StringLiteral")
+		{
+			if(_path.elements[i].extra.raw[0] && _path.elements[i].extra.raw[0] == "'")
+			{
+				_path.elements[i].extra.raw = '"' + _path.elements[i].value.replace(/\\/g, '\\\\').replace(/"/g, '\\\"') + '"';
+			}
+			_setter += `${_rnd}[${i}] = ${babel.generate(_path.elements[i]).code};`;
+		}
 		else _setter += `${_rnd}[${i}] = ${babel.generate(_path.elements[i]).code};`;
 	}
 	_setter += `return ${_rnd};}`;

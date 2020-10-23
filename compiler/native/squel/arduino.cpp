@@ -38,7 +38,8 @@
  
  #include <nonstd-function.h>
 
- #define __NJS_ARDUINO 1
+ #define __NJS_ENV_ARDUINO
+ #define __NJS_NO_EXCEPT
 
  #include "njs.h"
 

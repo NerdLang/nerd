@@ -1,8 +1,5 @@
 #pragma once
 #include "number_header.h"
-#include <cmath>
-#include <limits>
-#include <iomanip>
 
 namespace NJS::Class
 {
@@ -41,17 +38,15 @@ namespace NJS::Class
 	}
 
 	// Constructors
-	Number::Number() { counter++; setInt(0); }
+	Number::Number() { setInt(0); }
 	Number::Number(int val)
 	{
 		isInt = true;
-		counter++;
 		setInt(val);
 	}
 
 	Number::Number(double val)
 	{
-		counter++;
 		double dummy;
 		if (modf(val, &dummy) == 0.0 && val < SMI_MAX && val > SMI_MIN)
 		{
@@ -67,7 +62,6 @@ namespace NJS::Class
 	Number::Number(long long val)
 	{
 		isInt = false;
-		counter++;
 		setDouble(val);
 	}
 	
@@ -79,7 +73,6 @@ namespace NJS::Class
 
 	Number::Number(const NJS::VAR& val)
 	{
-		counter++;
 		isInt = ((NJS::Class::Number*)val._ptr)->isInt;
 		switch(val.type)
 		{
@@ -92,12 +85,16 @@ namespace NJS::Class
 		}
 	}
 	// Methods
-	void Number::Delete() noexcept
+	inline void Number::Delete() noexcept
 	{
-		if (--counter < 1)
+		if(--counter == 0)
 		{
 			delete this;
 		}
+	}
+	inline void* Number::Copy() noexcept
+	{
+		return new Number(this);
 	}
 	// Native cast
 	Number::operator bool() const noexcept { return getInt(); }
@@ -155,20 +152,17 @@ namespace NJS::Class
 	// Main operators
 	NJS::VAR const Number::operator[](NJS::VAR key) const
 	{
-		auto &obj = this->object;
-		auto index = (std::string)key;
-		int _j = obj.size();
-		for (int _i = 0; _i < _j; _i++)
-		{
-			if (index.compare(obj[_i].first) == 0)
-			{
-				return obj[_i].second;
-			}
-		}
-		return NJS::VAR();
+		return undefined;
 	}
 	NJS::VAR &Number::operator[](NJS::VAR key)
-	{
+	{		
+		#ifdef __NJS__OBJECT_HASHMAP
+		
+		NJS::VAR& _obj = object[(std::string)key];
+		if(_obj) return object[_obj];
+		
+		#else
+			
 		for (auto & search : object)
 		{
 			if (((std::string)key).compare(search.first) == 0)
@@ -177,50 +171,29 @@ namespace NJS::Class
 			}
 		}
 		
-		if(((std::string)key).compare("toString") == 0  || ((std::string)key).compare("toLocaleString") == 0)
-		{
-			object.push_back(NJS::Type::pair_t((std::string)key, __NJS_Create_Var_Scoped_Anon( return __NJS_Object_Stringify(this);)));
-		}
-		else if(((std::string)key).compare("valueOf") == 0)
-		{
-			object.push_back(NJS::Type::pair_t((std::string)key, __NJS_Create_Var_Scoped_Anon( return this; )));
-		}
-		else if(((std::string)key).compare("toFixed") == 0)
-		{
-			object.push_back(NJS::Type::pair_t((std::string)key, __NJS_Create_Var_Scoped_Anon( 
-				
-				int precision;
-				if(__NJS_VARARGS.size() > 0)
-				{
-					precision = __NJS_VARARGS[0];
-				}
-				else precision = 0;
-				std::ostringstream strout ;
-				strout << std::fixed << std::setprecision(precision) << value.d ;
-				std::string str = strout.str() ;
-				return str;
-			)));
-		}
-		else 
-		{
-			object.push_back(NJS::Type::pair_t((std::string)key, __NJS_VAR()));
-		}
+		#endif
+		
+		__NJS_Method_Lazy_Loader("toString", toString);
+		__NJS_Method_Lazy_Loader("valueOf", valueOf);
+		__NJS_Method_Lazy_Loader("toFixed", toFixed);
 
-		return object[object.size() - 1].second;
+		return undefined;
 	}
 	template <class... Args>
 	NJS::VAR Number::operator()(Args... args) const 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return undefined;
 	}
 	// Comparation operators
 	Number Number::operator!() const 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Number();
 	}
 	bool Number::operator==(const Number &_v1) const
 	{
@@ -230,7 +203,7 @@ namespace NJS::Class
 		}
 		else
 		{
-			return value.d == (double)_v1;
+			return (double)*this == (double)_v1;
 		}
 	}
 	// === emulated with __NJS_EQUAL_VALUE_AND_TYPE
@@ -243,7 +216,7 @@ namespace NJS::Class
 		}
 		else
 		{
-			return value.d != (double)_v1;
+			return (double)*this != (double)_v1;
 		}
 	}
 	bool Number::operator<(const Number &_v1) const
@@ -254,7 +227,7 @@ namespace NJS::Class
 		}
 		else
 		{
-			return value.d < (double)_v1;
+			return (double)*this < (double)_v1;
 		}
 	}
 	bool Number::operator<=(const Number &_v1) const
@@ -265,7 +238,7 @@ namespace NJS::Class
 		}
 		else
 		{
-			return value.d <= (double)_v1;
+			return (double)*this <= (double)_v1;
 		}
 	}
 	bool Number::operator>(const Number &_v1) const
@@ -276,7 +249,7 @@ namespace NJS::Class
 		}
 		else
 		{
-			return value.d > (double)_v1;
+			return (double)*this > (double)_v1;
 		}
 	}
 	bool Number::operator>=(const Number &_v1) const
@@ -287,17 +260,28 @@ namespace NJS::Class
 		}
 		else
 		{
-			return value.d >= (double)_v1;
+			return (double)*this >= (double)_v1;
 		}
 	}
 	// Numeric operators
 	Number Number::operator+() const 
 	{
-		#ifndef __NJS_ARDUINO 
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
+		return Number();
 	}
-	Number Number::operator-() const { if(isInt) return (int)-getInt() ; else return (double)-getDouble(); }
+	Number Number::operator-() const 
+	{ 
+		if(isInt)
+		{
+			return -getInt(); 
+		}
+		else
+		{
+			return (double)-getDouble();
+		}
+	}
 	Number Number::operator++(const int _v1)
 	{
 		Number old(*this);
@@ -313,7 +297,7 @@ namespace NJS::Class
 		}
 		return old;
 	}
-	Number Number::operator++()
+	void Number::operator++()
 	{
 		if (isInt)
 		{
@@ -325,7 +309,6 @@ namespace NJS::Class
 			double v = getDouble();
 			setDouble(++v);
 		}
-		return *this;
 	}
 	Number Number::operator--(const int _v1)
 	{
@@ -342,7 +325,7 @@ namespace NJS::Class
 		}
 		return old;
 	}
-	Number Number::operator--()
+	void Number::operator--()
 	{
 		if (isInt)
 		{
@@ -354,7 +337,6 @@ namespace NJS::Class
 			double v = getDouble();
 			setDouble(--v);
 		}
-		return *this;
 	}
 	Number Number::operator+(const Number &_v1) const
 	{
@@ -371,21 +353,20 @@ namespace NJS::Class
 		
 		return ((double)*this) + (double)_v1;
 	}
-	Number Number::operator+=(const Number &_v1)
+	void Number::operator+=(const Number &_v1)
 	{
 		if (isInt && _v1.isInt)
 		{
-			int a = (int)*this;
-			int b = (int)_v1;
+			int a = value.i;
+			int b = _v1.value.i;
 			int c;
 			if (!__builtin_add_overflow(a, b, &c))
 			{
 				setInt(c);
-				return *this;
+				return;
 			}
 		}
 		setDouble((double)*this + (double)_v1);
-		return *this;
 	}
 	Number Number::operator-(const Number &_v1) const
 	{
@@ -399,7 +380,7 @@ namespace NJS::Class
 				return c;
 			}
 		}
-		return value.d - (double)_v1;
+		return (double)*this - (double)_v1;
 	}
 	Number Number::operator-=(const Number &_v1)
 	{
@@ -431,7 +412,7 @@ namespace NJS::Class
 		}
 		return ((double)*this) * (double)_v1;
 	}
-	Number Number::operator*=(const Number &_v1)
+	void Number::operator*=(const Number &_v1)
 	{
 		if (isInt && _v1.isInt)
 		{
@@ -441,11 +422,10 @@ namespace NJS::Class
 			if (!__builtin_mul_overflow(a, b, &c))
 			{
 				setInt(c);
-				return *this;
+				return;
 			}
 		}
 		setDouble(((double)*this) * (double)_v1);
-		return *this;
 	}
 	// TODO: "**" and "**=" operators
 	Number Number::operator/(const Number &_v1) const
@@ -461,7 +441,7 @@ namespace NJS::Class
 		}
 		return ((double)*this) / (double)_v1;
 	}
-	Number Number::operator/=(const Number &_v1)
+	void Number::operator/=(const Number &_v1)
 	{
 		if (isInt && _v1.isInt)
 		{
@@ -470,11 +450,10 @@ namespace NJS::Class
 			if (a % b == 0)
 			{
 				setInt(a / b);
-				return Number();
+				return;
 			}
 		}
 		setDouble( ((double)*this) / (double)_v1);
-		return *this;
 	}
 	Number Number::operator%(const Number &_v1) const
 	{
@@ -531,4 +510,29 @@ namespace NJS::Class
 		return *this;
 	}
 	// TODO: ">>>" and ">>>=" operators
+	
+	NJS::VAR Number::toString(NJS::VAR* _args, int _length) const
+	{
+		return (std::string)*this;
+	}
+	
+	NJS::VAR Number::valueOf(NJS::VAR* _args, int _length) const
+	{
+		return value.d;
+	}
+	
+	NJS::VAR Number::toFixed(NJS::VAR* _args, int _length) const
+	{
+		int precision;
+		if(_length > 0)
+		{
+			precision = _args[0];
+		}
+		else precision = 0;
+		std::ostringstream strout ;
+		strout << std::fixed << std::setprecision(precision) << (double)*this ;
+		std::string str = strout.str() ;
+		return str;
+	}
+	
 } // namespace NJS::Class

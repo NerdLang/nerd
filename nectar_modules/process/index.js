@@ -22,7 +22,12 @@
  
 var process = 
 {
-	argv: __NJS_ARGS
+	argv: __NJS_ARGS,
+	exit: function(_code)
+	{
+		if(_code) _code = 0;
+		__NJS_EXIT(_code);
+	}
 };
 
 module.exports = process;

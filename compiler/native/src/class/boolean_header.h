@@ -6,18 +6,16 @@ namespace NJS::Class
 	class Boolean : public virtual Base
 	{
 	public:
-		// Constants
-		const char *name = "boolean";
-		const NJS::Enum::Type type = NJS::Enum::Type::Boolean;
 		// Constructors
 		Boolean();
 		Boolean(bool val);
 		// Properties
-		count_t counter = 0;
 		NJS::Type::object_t object;
 		bool value = false;
+		count_t counter = 1;
 		// Methods
-		void Delete() noexcept;
+		inline void Delete() noexcept;
+		inline void* Copy() noexcept;
 		// Native cast
 		explicit operator bool() const noexcept;
 		explicit operator double() const noexcept;
@@ -65,5 +63,7 @@ namespace NJS::Class
 		Boolean operator>>=(const Boolean &_v1);
 		Boolean operator<<=(const Boolean &_v1);
 		// TODO: ">>>" and ">>>=" operators
+		NJS::VAR toString(NJS::VAR* _args, int _length) const;
+		NJS::VAR valueOf(NJS::VAR* _args, int _length) const;
 	};
 } // namespace NJS::Class
