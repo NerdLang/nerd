@@ -1,3 +1,5 @@
+#include <bitset>
+
 namespace NJS
 {
 
@@ -5,7 +7,8 @@ namespace NJS
 	{
 		NJS::Enum::Type type;
 		void* _ptr;
-
+		std::bitset<3> property; // writable, configurable, enumarable
+		
 		VAR();
 		~VAR();
 

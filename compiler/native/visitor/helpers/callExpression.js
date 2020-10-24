@@ -39,7 +39,6 @@ function callExpression(_path, _main)
 
 	var _fName = _path.callee.name;
 
-
 	if(!COMPILER.INFO.CALL[_fName]) COMPILER.INFO.CALL[_fName] = [];
 	VISITOR.addFunctionVarParam(_fName, _path.arguments.length);
 	

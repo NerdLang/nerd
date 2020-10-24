@@ -24,3 +24,12 @@ function __NJS_NATIVE_OBJECT_KEYS(_obj)
 {
 	return __NJS_Object_Keys(_obj);
 };
+
+function __NJS_NATIVE_OBJECT_FREEZE(_obj)
+{
+	if(_obj)
+	{
+		_obj.property.set(0, 1);
+		return _obj;
+	}
+};

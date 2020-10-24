@@ -4,7 +4,6 @@ namespace NJS
 	VAR::VAR()
 	{
 		type = NJS::Enum::Type::Undefined;
-		//_ptr = new NJS::Class::Undefined();
 		_ptr = undefined._ptr;
 	}
 
@@ -16,7 +15,12 @@ namespace NJS
 	/*** COPY ***/
 	VAR::VAR(VAR const &_v)
 	{
+		if(property[0] != 0)
+		{
+			return;
+		}
 		
+		property = _v.property;
 		type = _v.type;
 		_ptr = ((NJS::Class::Base*)_v._ptr)->Copy();
 		
@@ -209,8 +213,13 @@ namespace NJS
 	/*** OPERATOR ***/
 	void VAR::operator=(const VAR &_v)
 	{
+		if(property[0] != 0)
+		{
+			return;
+		}
 		((NJS::Class::Base*)_ptr)->Delete();
 
+		property = _v.property;
 		type = _v.type;
 		_ptr = ((NJS::Class::Base*)_v._ptr)->Copy();
 
