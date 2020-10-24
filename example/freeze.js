@@ -1,7 +1,7 @@
-var a = "Frozen";
+var a = {value: "Frozen" };
 
-a = Object.freeze(a);
+Object.freeze(a);
 
-a = "Let it go";
+a.value = "Let it go";
 
-console.log(a);
+console.log(a.value);

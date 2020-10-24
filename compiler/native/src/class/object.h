@@ -4,6 +4,7 @@
 
 namespace NJS::Class
 {
+	NJS::VAR __proxy;
 	// Constructors
 	Object::Object() { }
 	// Methods
@@ -57,6 +58,7 @@ namespace NJS::Class
 	{
 		return undefined;
 	}
+	
 	#ifdef __NJS__OBJECT_HASHMAP
 	NJS::VAR &Object::operator[](NJS::VAR key)
 	{
@@ -65,7 +67,13 @@ namespace NJS::Class
 		{
 			if(!prototype)
 			{
-				return _obj;
+				if(!property[0]) return _obj;
+				else 
+				{
+					__proxy = _obj;
+					return __proxy;
+				}
+				
 			}
 			else 
 			{
@@ -74,7 +82,12 @@ namespace NJS::Class
 					((NJS::Class::Function*)_obj._ptr)->This.type = NJS::Enum::Type::Object;
 					((NJS::Class::Function*)_obj._ptr)->This._ptr = this;
 				}
-				return _obj;
+				if(!property[0]) return _obj;
+				else 
+				{
+					__proxy = _obj;
+					return __proxy;
+				}
 			}
 		}
 
@@ -87,7 +100,9 @@ namespace NJS::Class
 			object[(std::string)key] = __NJS_Create_Var_Scoped_Anon( return this; );
 		}
 
-		return _obj;
+		if(!property[0]) return _obj;
+		__proxy = undefined;
+		return __proxy;
 	}
 	#else
 	NJS::VAR &Object::operator[](NJS::VAR key)
