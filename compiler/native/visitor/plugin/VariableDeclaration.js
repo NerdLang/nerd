@@ -38,7 +38,11 @@ function VariableDeclaration(_path)
 			}
 			else if(VISITOR.CURRENT_Function < 0)
 			{
-				if(_path.node.kind == "const")_path.node.kind = "__NJS_CONST";
+				if(_path.node.kind == "const")
+				{
+					_path.node.kind = "__NJS_CONST";
+					_path.insertAfter( babel.parse(`__NJS_SET_CONST(${_path.node.declarations[d].id.name});`));
+				}
 				else if(VISITOR.CURRENT_Function < 0) _path.node.kind = "";
 				
 				if(COMPILER.INFO.HOISTING.indexOf(_path.node.declarations[d].id.name) < 0)

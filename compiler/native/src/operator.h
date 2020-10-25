@@ -412,65 +412,95 @@ NJS::VAR __NJS_NOT_EQUAL_VALUE_AND_TYPE(NJS::VAR _left, NJS::VAR _right)
 template<class T>
 NJS::VAR operator+ (NJS::VAR _left, T right)
 {
-	return _left + NJS::VAR(right);
+	return (double)_left + right;
 }
 
 template<class T>
 NJS::VAR operator* (NJS::VAR _left, T right)
 {
-	return _left * NJS::VAR(right);
+	return (double)_left * right;
 }
 
 template<class T>
 NJS::VAR operator- (NJS::VAR _left, T right)
 {
-	return _left - NJS::VAR(right);
+	return (double)_left - right;
 }
 
 template<class T>
 NJS::VAR operator/ (NJS::VAR _left, T right)
 {
-	return _left / NJS::VAR(right);
+	return (double)_left / right;
 }
 
 template<class T>
 NJS::VAR operator> (NJS::VAR _left, T right)
 {
-	return _left > NJS::VAR(right);
+	return (double)_left > right;
 }
 
 template<class T>
 NJS::VAR operator>= (NJS::VAR _left, T right)
 {
-	return _left >= NJS::VAR(right);
+	return (double)_left >= right;
 }
 
 template<class T>
 NJS::VAR operator< (NJS::VAR _left, T right)
 {
-	return _left < NJS::VAR(right);
+	return (double)_left < right;
 }
 
 template<class T>
 NJS::VAR operator<= (NJS::VAR _left, T right)
 {
-	return _left <= NJS::VAR(right);
+	return (double)_left <= right;
 }
 
 template<class T>
 NJS::VAR operator% (NJS::VAR _left, T right)
 {
-	return _left % NJS::VAR(right);
+	return (int)_left % right;
 }
 
 template<class T>
 NJS::VAR operator== (NJS::VAR _left, T right)
 {
-	return _left == NJS::VAR(right);
+	return (double)_left == right;
 }
 
 template<class T>
 NJS::VAR operator!= (NJS::VAR _left, T right)
 {
-	return _left != NJS::VAR(right);
+	return (double)_left != right;
+}
+
+template<class T>
+NJS::VAR operator|(NJS::VAR _left, T right)
+{
+	return (int)_left | right;
+}
+
+template<class T>
+NJS::VAR operator^(NJS::VAR _left, T right)
+{
+	return (int)_left ^ right;
+}
+
+template<class T>
+NJS::VAR operator&(NJS::VAR _left, T right)
+{
+	return (int)_left & right;
+}
+
+template<class T>
+NJS::VAR operator<<(NJS::VAR _left, T right)
+{
+	return (int)_left << right;
+}
+
+template<class T>
+NJS::VAR operator>>(NJS::VAR _left, T right)
+{
+	return (int)_left >> right;
 }

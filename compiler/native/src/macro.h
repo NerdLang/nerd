@@ -3,7 +3,7 @@
 #define __NJS_VAR NJS::VAR
 #define var NJS::VAR
 #define let NJS::VAR
-#define __NJS_CONST const NJS::VAR
+#define __NJS_CONST NJS::VAR
 #define __NJS_Create_Boolean(_value) NJS::VAR(new NJS::Class::Boolean(_value))
 #define __NJS_Create_Number(_value) NJS::VAR(_value)
 #define __NJS_Create_Function(_value) NJS::VAR(NJS::Enum::Type::Function, _value)
@@ -23,6 +23,7 @@
 #define __NJS_FAST_INT double
 #define __NJS_CreateMethodToClass(_name, _fn) __NJS_Object_Set(_name, __NJS_Create_Var_Scoped_Anon( return _fn(__NJS_VARARGS, __NJS_VARLENGTH); ), &object);
 #define __NJS_NEW(_fn) ((NJS::Class::Function*)_fn._ptr)->New
+#define __NJS_SET_CONST(_var) _var.property.set(0,1)
 
 #ifdef __NJS__OBJECT_HASHMAP
 #define __NJS_Method_Lazy_Loader(_name, _fn) \
