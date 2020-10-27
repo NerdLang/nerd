@@ -22,7 +22,7 @@
 #define __NJS_Boolean_FALSE __NJS_Create_Boolean(false)
 #define __NJS_FAST_INT double
 #define __NJS_CreateMethodToClass(_name, _fn) __NJS_Object_Set(_name, __NJS_Create_Var_Scoped_Anon( return _fn(__NJS_VARARGS, __NJS_VARLENGTH); ), &object);
-#define __NJS_NEW(_fn) ((NJS::Class::Function*)_fn._ptr)->New
+#define __NJS_NEW(_fn) ((NJS::Class::Function*)_fn.data.ptr)->New
 #define __NJS_SET_CONST(_var) _var.property.set(0,1)
 
 #ifdef __NJS__OBJECT_HASHMAP

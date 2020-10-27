@@ -31,7 +31,7 @@ function __NJS_NATIVE_OBJECT_FREEZE(_obj)
 	{
 		if(_obj.type == NJS::Enum::Type::Object)
 		{
-			((NJS::Class::Object*)_obj._ptr)->property.set(0, 1);
+			((NJS::Class::Object*)_obj.data.ptr)->property.set(0, 1);
 			return _obj;
 		}
 	}

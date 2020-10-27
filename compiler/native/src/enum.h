@@ -1,6 +1,6 @@
 namespace NJS::Enum
 {
-	enum Type
+	enum Type:uint8_t
 	{
 		Undefined = 1,
 		Number,

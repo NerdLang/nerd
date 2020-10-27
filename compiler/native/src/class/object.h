@@ -79,8 +79,8 @@ namespace NJS::Class
 			{
 				if((_obj).type == NJS::Enum::Type::Function)
 				{
-					((NJS::Class::Function*)_obj._ptr)->This.type = NJS::Enum::Type::Object;
-					((NJS::Class::Function*)_obj._ptr)->This._ptr = this;
+					((NJS::Class::Function*)_obj.data.ptr)->This.type = NJS::Enum::Type::Object;
+					((NJS::Class::Function*)_obj.data.ptr)->This.data.ptr = this;
 				}
 				if(!property[0]) return _obj;
 				else 
@@ -138,8 +138,8 @@ namespace NJS::Class
 				{
 					if(search.second.type == NJS::Enum::Type::Function)
 					{
-						((NJS::Class::Function*)search.second._ptr)->This.type = NJS::Enum::Type::Object;
-						((NJS::Class::Function*)search.second._ptr)->This._ptr = this;				
+						((NJS::Class::Function*)search.second.data.ptr)->This.type = NJS::Enum::Type::Object;
+						((NJS::Class::Function*)search.second.data.ptr)->This.data.ptr = this;				
 					}
 					
 					return search.second;

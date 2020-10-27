@@ -57,7 +57,7 @@ namespace NJS::Event
 					{
 						if(!_b) timeQ.erase(it);
 						_ev();
-						if(!_b) ((NJS::Class::Base*)_ev._ptr)->Delete();
+						if(!_b) ((NJS::Class::Base*)_ev.data.ptr)->Delete();
 						else it++;
 					}
 					else
@@ -77,7 +77,7 @@ namespace NJS::Event
 				NJS::VAR _ev = evQ.front();
 				evQ.pop_front();
 				_ev();
-				((NJS::Class::Base*)_ev._ptr)->Delete();
+				((NJS::Class::Base*)_ev.data.ptr)->Delete();
 			}
 		}
 	}
