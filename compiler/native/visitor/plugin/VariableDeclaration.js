@@ -69,19 +69,23 @@ function VariableDeclaration(_path)
 			if(_path.parent.type == "ForStatement")
 			{
 				
-				_path.node.kind = "double";
-				var _kind = "double"
+				_path.node.kind = "int";
+				var _kind = "int"
 				var _right = babel.generate(_path.parentPath.node.test.right).code;
 				try 
 				{
 					var _nbr = parseInt(_right);
-					if(_nbr < 2147483647 && _nbr > -2147483646)
+					if(_nbr > 2147483647 && _nbr < -2147483646)
 					{
-						_path.node.kind = "int";
-						_kind = "int"
+						_path.node.kind = "var";
+						_kind = "var"
 					}
 				}
-				catch(e){}
+				catch(e)
+				{
+					_path.node.kind = "var";
+					_kind = "var"
+				}
 				if(_path.parentPath.node.test && _path.parentPath.node.test.type == "BinaryExpression")
 				{
 						var _new_int = "__NJS_LOOP_INT" + RND();
