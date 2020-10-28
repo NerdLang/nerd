@@ -78,7 +78,6 @@ namespace NJS::Class
 	// Main operators
 	NJS::VAR const Array::operator[](NJS::VAR key) const
 	{
-		std::cout << "ICI" << std::endl;
 		if (key.type == NJS::Enum::Type::Number)
 		{
 			auto i = (int)key;
@@ -106,7 +105,6 @@ namespace NJS::Class
 			{
 				if (i >= value.size())
 				{
-					value.reserve(i + 1);
 					value.resize(i + 1);
 				}
 			}
@@ -176,8 +174,6 @@ namespace NJS::Class
 			{
 				if (i >= value.size())
 				{
-					
-					value.reserve(i + 1);
 					value.resize(i + 1);
 				}
 			}

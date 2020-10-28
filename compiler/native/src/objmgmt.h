@@ -98,8 +98,6 @@ NJS::VAR __NJS_Object_Set(NJS::VAR _index, NJS::VAR _value, NJS::VAR _array)
 
 		if (((NJS::Class::Array*)_array.data.ptr)->value.size() <= (int)_index.data.number)
 		{
-
-			((NJS::Class::Array*)_array.data.ptr)->value.reserve( (int)_index.data.number + 1);
 			((NJS::Class::Array*)_array.data.ptr)->value.resize( (int)_index.data.number + 1);
 		}
 
