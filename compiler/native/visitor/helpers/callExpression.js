@@ -39,7 +39,6 @@ function callExpression(_path, _main)
 
 	var _fName = _path.callee.name;
 
-
 	if(!COMPILER.INFO.CALL[_fName]) COMPILER.INFO.CALL[_fName] = [];
 	VISITOR.addFunctionVarParam(_fName, _path.arguments.length);
 	
@@ -64,7 +63,7 @@ function callExpression(_path, _main)
 			{
 				var _tmp = "__NJS_TMP_LAMBDA" + RND();
 				var _gen = `${_tmp} = ${babel.generate(_path.arguments[i]).code}`;
-				_main.insertBefore(babel.parse(_gen));
+				_main.insertBefore(babel.parse(_gen).program.body[0].expression);
 				_path.arguments[i].type = "Identifier";
 				_path.arguments[i].name = _tmp;
 			}

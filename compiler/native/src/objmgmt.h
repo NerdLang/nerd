@@ -1,13 +1,13 @@
 int __NJS_Get_Int(NJS::VAR _v)
 {
-	return (int)(*(NJS::Class::Number*)_v._ptr);
+	return (int)_v.data.number;
 }
 
 const char *__NJS_Get_String(NJS::VAR _v)
 {
 	if (_v.type != NJS::Enum::Type::String)
 		return "";
-	return ((NJS::Class::String*)_v._ptr)->value.c_str();
+	return ((NJS::Class::String*)_v.data.ptr)->value.c_str();
 }
 
 NJS::VAR __NJS_typeof(NJS::VAR _var)
@@ -23,11 +23,11 @@ NJS::VAR __NJS_instanceof(NJS::VAR _left, NJS::VAR _right)
 	var protoRight = _right["prototype"];
 	if(!protoRight) return __NJS_Boolean_FALSE;
 	
-	NJS::Type::vector_p vLeft = ((NJS::Class::Object*)_left._ptr)->instance;
+	NJS::Type::vector_p vLeft = ((NJS::Class::Object*)_left.data.ptr)->instance;
 		
 	for (auto searchLeft : vLeft)
 	{
-		if(searchLeft == protoRight._ptr) return __NJS_Boolean_TRUE;
+		if(searchLeft == protoRight.data.ptr) return __NJS_Boolean_TRUE;
 	}
 	return __NJS_Boolean_FALSE;
 }
@@ -36,12 +36,12 @@ NJS::VAR __NJS_delete(NJS::VAR _left, std::string _right)
 {
 	if(_left.type == NJS::Enum::Type::Object)
 	{
-		((NJS::Class::Object*)_left._ptr)->jsDelete(_right);
+		((NJS::Class::Object*)_left.data.ptr)->jsDelete(_right);
 		return __NJS_Boolean_TRUE;
 	}
 	else if(_left.type == NJS::Enum::Type::Function)
 	{
-		((NJS::Class::Function*)_left._ptr)->jsDelete(_right);
+		((NJS::Class::Function*)_left.data.ptr)->jsDelete(_right);
 		return __NJS_Boolean_TRUE;
 	}
 	return __NJS_Boolean_FALSE;
@@ -58,7 +58,7 @@ NJS::VAR __NJS_Object_Set(std::string _index, NJS::VAR _value, NJS::Type::object
 	}
 	else
 	{
-		(*_obj)[_index]._ptr = _value._ptr;
+		(*_obj)[_index].data.ptr = _value.data.ptr;
 	}
 		
 	return undefined;
@@ -78,7 +78,7 @@ NJS::VAR __NJS_Object_Set(std::string _index, NJS::VAR _value, NJS::Type::object
 			}
 			else
 			{
-				(*_obj)[_i].second._ptr = _value._ptr;
+				(*_obj)[_i].second.data.ptr = _value.data.ptr;
 			}
 
 			return undefined;
@@ -96,14 +96,12 @@ NJS::VAR __NJS_Object_Set(NJS::VAR _index, NJS::VAR _value, NJS::VAR _array)
 	if (_array.type == NJS::Enum::Type::Array && _index.type == NJS::Enum::Type::Number)
 	{
 
-		if (((NJS::Class::Array*)_array._ptr)->value.size() <= (int)(*(NJS::Class::Number*)_index._ptr))
+		if (((NJS::Class::Array*)_array.data.ptr)->value.size() <= (int)_index.data.number)
 		{
-
-			((NJS::Class::Array*)_array._ptr)->value.reserve( (int)(*(NJS::Class::Number*)_index._ptr) + 1);
-			((NJS::Class::Array*)_array._ptr)->value.resize( (int)(*(NJS::Class::Number*)_index._ptr) + 1);
+			((NJS::Class::Array*)_array.data.ptr)->value.resize( (int)_index.data.number + 1);
 		}
 
-		((NJS::Class::Array*)_array._ptr)->value.at( (int)(*(NJS::Class::Number*)_index._ptr) ) = _value;
+		((NJS::Class::Array*)_array.data.ptr)->value.at( (int)_index.data.number ) = _value;
 		
 		return undefined;
 	}
@@ -111,13 +109,13 @@ NJS::VAR __NJS_Object_Set(NJS::VAR _index, NJS::VAR _value, NJS::VAR _array)
 	{
 		NJS::Type::object_t *_obj;
 		if (_array.type == NJS::Enum::Type::Object)
-			_obj = &((NJS::Class::Object*)_array._ptr)->object;
+			_obj = &((NJS::Class::Object*)_array.data.ptr)->object;
 		else if (_array.type == NJS::Enum::Type::Array)
-			_obj = &((NJS::Class::Array*)_array._ptr)->object;
+			_obj = &((NJS::Class::Array*)_array.data.ptr)->object;
 		else if (_array.type == NJS::Enum::Type::String)
-			_obj = &((NJS::Class::String*)_array._ptr)->object;
+			_obj = &((NJS::Class::String*)_array.data.ptr)->object;
 		else if (_array.type == NJS::Enum::Type::Function)
-			_obj = &((NJS::Class::Function*)_array._ptr)->object;
+			_obj = &((NJS::Class::Function*)_array.data.ptr)->object;
 		else
 			return undefined;
 

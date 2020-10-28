@@ -36,7 +36,7 @@ function __NJS_RegExp_StringMatch(_search, _re)
 	std::smatch m;
  	while(std::regex_search ( s, m, std::regex((string)_re, std::regex::ECMAScript) ))
 	{
-		for(auto x:m) ((NJS::Class::Array*)_res._ptr)->value.push_back((string)x);
+		for(auto x:m) ((NJS::Class::Array*)_res.data.ptr)->value.push_back((string)x);
 		s = m.suffix().str();
 	}
 	return _res;

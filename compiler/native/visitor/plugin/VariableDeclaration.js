@@ -38,7 +38,11 @@ function VariableDeclaration(_path)
 			}
 			else if(VISITOR.CURRENT_Function < 0)
 			{
-				if(_path.node.kind == "const")_path.node.kind = "__NJS_CONST";
+				if(_path.node.kind == "const")
+				{
+					_path.node.kind = "__NJS_CONST";
+					_path.insertAfter( babel.parse(`__NJS_SET_CONST(${_path.node.declarations[d].id.name});`));
+				}
 				else if(VISITOR.CURRENT_Function < 0) _path.node.kind = "";
 				
 				if(COMPILER.INFO.HOISTING.indexOf(_path.node.declarations[d].id.name) < 0)
@@ -66,11 +70,26 @@ function VariableDeclaration(_path)
 			{
 				
 				_path.node.kind = "int";
-
+				var _kind = "int"
+				var _right = babel.generate(_path.parentPath.node.test.right).code;
+				try 
+				{
+					var _nbr = parseInt(_right);
+					if(_nbr > 2147483647 && _nbr < -2147483646)
+					{
+						_path.node.kind = "var";
+						_kind = "var"
+					}
+				}
+				catch(e)
+				{
+					_path.node.kind = "var";
+					_kind = "var"
+				}
 				if(_path.parentPath.node.test && _path.parentPath.node.test.type == "BinaryExpression")
 				{
 						var _new_int = "__NJS_LOOP_INT" + RND();
-						COMPILER.DECL.push("int " + _new_int + ";");
+						COMPILER.DECL.push(_kind + " " + _new_int + ";");
 						COMPILER.GLOBAL.push(_new_int);
 						_path.parentPath.insertBefore(babel.parse(_new_int + " = " + babel.generate(_path.parentPath.node.test.right).code));
 						_path.parentPath.node.test = babel.parse( "(" +  babel.generate(_path.parentPath.node.test.left).code + _path.parentPath.node.test.operator + _new_int + ")").program.body[0].expression;

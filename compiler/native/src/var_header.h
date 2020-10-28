@@ -1,11 +1,17 @@
 namespace NJS
 {
-
+	union Data
+	{
+		void* ptr;
+		double number;
+	};
+	
 	struct VAR
 	{
 		NJS::Enum::Type type;
-		void* _ptr;
-
+		std::bitset<3> property;
+		Data data;
+		
 		VAR();
 		~VAR();
 
@@ -28,8 +34,6 @@ namespace NJS
 		VAR(NJS::Class::Function *_value);
 		VAR(NJS::Class::Object *_value);
 		VAR(NJS::Class::String *_value);
-		VAR(NJS::Class::Number _value);
-		VAR(NJS::Class::Number *_value);
 		VAR(NJS::Class::Native *_value);
 		VAR(NJS::Class::Undefined *_value);
 		VAR(NJS::Enum::Type _type, void *_value);
@@ -56,7 +60,6 @@ namespace NJS
 
 		/// Unary operators
 		VAR operator+();
-		
 		VAR operator-();
 		VAR operator!();
 

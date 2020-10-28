@@ -193,7 +193,9 @@ function Compiler()
 		{
 			_code = babel.transformSync(_code, 
 			{
-			  plugins: [path.join(NECTAR_PATH, "node_modules", "babel-plugin-remove-unused-vars"), path.join(NECTAR_PATH, "node_modules", "babel-plugin-minify-dead-code-elimination"),path.join(NECTAR_PATH, "node_modules",  "babel-plugin-minify-guarded-expressions")],
+			  plugins: [path.join(NECTAR_PATH, "node_modules", "babel-plugin-remove-unused-vars"),
+						path.join(NECTAR_PATH, "node_modules", "babel-plugin-minify-dead-code-elimination"),
+						path.join(NECTAR_PATH, "node_modules",  "babel-plugin-minify-guarded-expressions")],
 			}).code;
 		}
 

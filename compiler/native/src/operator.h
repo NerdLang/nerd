@@ -1,12 +1,12 @@
 NJS::VAR __NJS_Boolean_Result(NJS::VAR _v)
 {
 	if (_v.type == NJS::Enum::Type::Number)
-		return ((NJS::Class::Number*)_v._ptr);
+		return _v.data.number;
 	else if (_v.type == NJS::Enum::Type::Boolean)
-		return ((NJS::Class::Boolean*)_v._ptr);
+		return ((NJS::Class::Boolean*)_v.data.ptr);
 	else if (_v.type == NJS::Enum::Type::String)
 	{
-		if (strlen(((NJS::Class::String*)_v._ptr)->value.c_str()) > 0)
+		if (strlen(((NJS::Class::String*)_v.data.ptr)->value.c_str()) > 0)
 			return true;
 		else
 			return false;
@@ -17,21 +17,43 @@ NJS::VAR __NJS_Boolean_Result(NJS::VAR _v)
 		return false;
 }
 
+std::string __NJS_DOUBLE_TO_STRING(double _var)
+{
+	std::ostringstream strout ;
+	strout << std::fixed << std::setprecision(14) << _var;
+	std::string str = strout.str() ;
+	
+	size_t end = str.find_last_not_of( '0' ) + 1 ;
+	str = str.erase( end ) ;
+	
+	end = str.find_last_not_of( '.' ) + 1 ;
+	str = str.erase( end ) ;
+	
+	int exp = str.length();
+	if(exp > 20)
+	{
+		std::string first = str.substr(0, 1);
+		std::string second = str.substr(1, 15);
+		str = first + "." + second + "e+" + std::to_string(exp-1);
+	}
+	return str;
+}
+
 std::ostream &operator<<(std::ostream &os, const NJS::VAR &_v)
 {
 	switch (_v.type)
 	{
 	case NJS::Enum::Type::Undefined:
-		os << (std::string)(*(NJS::Class::Undefined*)_v._ptr);
+		os << (std::string)(*(NJS::Class::Undefined*)_v.data.ptr);
 		break;
 	case NJS::Enum::Type::Boolean:
-		os << (std::string)(*(NJS::Class::Boolean*)_v._ptr);
+		os << (std::string)(*(NJS::Class::Boolean*)_v.data.ptr);
 		break;
 	case NJS::Enum::Type::Number:
-		os << (std::string)(*(NJS::Class::Number*)_v._ptr);
+		os << __NJS_DOUBLE_TO_STRING(_v.data.number);
 		break;
 	case NJS::Enum::Type::String:
-		os << (std::string)(*(NJS::Class::String*)_v._ptr);
+		os << (std::string)(*(NJS::Class::String*)_v.data.ptr);
 		break;
 	case NJS::Enum::Type::Object:
 		os << __NJS_Object_Stringify(_v);
@@ -46,7 +68,7 @@ std::ostream &operator<<(std::ostream &os, const NJS::VAR &_v)
 		os << "NaN";
 		break;
 	case NJS::Enum::Type::Function:
-		os << (std::string)(*(NJS::Class::Function*)_v._ptr);
+		os << (std::string)(*(NJS::Class::Function*)_v.data.ptr);
 		break;
 	case NJS::Enum::Type::ISINFINITY:
 		os << "Infinity";
@@ -68,7 +90,7 @@ NJS::VAR parseInt(NJS::VAR _str)
 #ifdef __NJS_ENV_ARDUINO
 		return undefined;
 #else
-		return __NJS_Create_Number((double)(*(NJS::Class::String*)_str._ptr));
+		return __NJS_Create_Number((double)(*(NJS::Class::String*)_str.data.ptr));
 #endif
 	}
 	else
@@ -111,7 +133,7 @@ NJS::VAR __NJS_Object_Keys(NJS::VAR _var)
 		return 0;
 	var _res = __NJS_Create_Array();
 
-	NJS::Type::object_t *_obj = &((NJS::Class::Object*)_var._ptr)->object;
+	NJS::Type::object_t *_obj = &((NJS::Class::Object*)_var.data.ptr)->object;
 	
 	#ifdef __NJS__OBJECT_HASHMAP
 	int _i = 0;
@@ -148,11 +170,11 @@ NJS::VAR __NJS_Object_Stringify(NJS::VAR _var, bool _bracket)
 	else if (_t == NJS::Enum::Type::String)
 		return var("\"") + _var + "\"";
 	else if (_t == NJS::Enum::Type::Function)
-		return var("\"") + (std::string)(*(NJS::Class::Function*)_var._ptr) + "\"";
+		return var("\"") + (std::string)(*(NJS::Class::Function*)_var.data.ptr) + "\"";
 	else if (_t == NJS::Enum::Type::Array)
 	{
 		var _res = "";
-		std::vector<NJS::VAR> *_arr = &((NJS::Class::Array*)_var._ptr)->value;
+		std::vector<NJS::VAR> *_arr = &((NJS::Class::Array*)_var.data.ptr)->value;
 		if(_bracket) _res += " [ ";
 		int j = (*_arr).size();
 		for (int i = 0; i < j; i++)
@@ -168,7 +190,7 @@ NJS::VAR __NJS_Object_Stringify(NJS::VAR _var, bool _bracket)
 	else if (_t == NJS::Enum::Type::Object)
 	{
 		var _res = "";
-		NJS::Type::object_t *_obj = &((NJS::Class::Object*)_var._ptr)->object;
+		NJS::Type::object_t *_obj = &((NJS::Class::Object*)_var.data.ptr)->object;
 		_res = "{";
 		#ifdef __NJS__OBJECT_HASHMAP
 		int _i = 0;
@@ -213,7 +235,7 @@ NJS::VAR __NJS_Object_Clone(NJS::VAR _var)
 		case NJS::Enum::Type::Array:
 		{
 			var _res = __NJS_Create_Array();
-			std::vector<NJS::VAR> *_arr = &((NJS::Class::Array*)_var._ptr)->value;
+			std::vector<NJS::VAR> *_arr = &((NJS::Class::Array*)_var.data.ptr)->value;
 
 			int j = (*_arr).size();
 			for (int i = 0; i < j; i++)
@@ -225,7 +247,7 @@ NJS::VAR __NJS_Object_Clone(NJS::VAR _var)
 		case NJS::Enum::Type::Object:
 		{
 			var _res = __NJS_Create_Object();
-			NJS::Type::object_t *_obj = &((NJS::Class::Object*)_var._ptr)->object;
+			NJS::Type::object_t *_obj = &((NJS::Class::Object*)_var.data.ptr)->object;
 			#ifdef __NJS__OBJECT_HASHMAP
 			for (auto _el: *_obj)
 			{
@@ -249,7 +271,7 @@ void __NJS_Object_Construct(NJS::VAR _this, NJS::VAR _prototype)
 {
 	if(_this.type == NJS::Enum::Type::Object && _prototype.type == NJS::Enum::Type::Object)
 	{
-		NJS::Type::object_t *_obj = &((NJS::Class::Object*)_prototype._ptr)->object;
+		NJS::Type::object_t *_obj = &((NJS::Class::Object*)_prototype.data.ptr)->object;
 		
 		#ifdef __NJS__OBJECT_HASHMAP
 		for (auto _el: *_obj)
@@ -299,12 +321,12 @@ NJS::VAR __NJS_Create_Native(void *_native)
 
 std::function<var(NJS::Type::vector_t)> *__NJS_Get_Function(NJS::VAR _v)
 {
-	return (std::function<var(NJS::Type::vector_t)> *)((NJS::Class::Function*)_v._ptr)->value;
+	return (std::function<var(NJS::Type::vector_t)> *)((NJS::Class::Function*)_v.data.ptr)->value;
 }
 
 void *__NJS_Get_Native(NJS::VAR _native)
 {
-	return ((NJS::Class::Function*)_native._ptr);
+	return ((NJS::Class::Function*)_native.data.ptr);
 }
 
 /*** REDIFINING STD OPERATORS ***/
@@ -412,65 +434,109 @@ NJS::VAR __NJS_NOT_EQUAL_VALUE_AND_TYPE(NJS::VAR _left, NJS::VAR _right)
 template<class T>
 NJS::VAR operator+ (NJS::VAR _left, T right)
 {
-	return _left + NJS::VAR(right);
+	return (double)_left + right;
+}
+
+template<class T>
+void operator+= (NJS::VAR& _left, T right)
+{
+	if(_left.type == NJS::Enum::Type::Number) _left.data.number += right;
+	else _left += right;
+}
+
+template<class T>
+void operator-= (NJS::VAR& _left, T right)
+{
+	if(_left.type == NJS::Enum::Type::Number) _left.data.number -= right;
+	else _left -= right;
 }
 
 template<class T>
 NJS::VAR operator* (NJS::VAR _left, T right)
 {
-	return _left * NJS::VAR(right);
+	return (double)_left * right;
 }
 
 template<class T>
 NJS::VAR operator- (NJS::VAR _left, T right)
 {
-	return _left - NJS::VAR(right);
+	return (double)_left - right;
 }
 
 template<class T>
 NJS::VAR operator/ (NJS::VAR _left, T right)
 {
-	return _left / NJS::VAR(right);
+	return (double)_left / right;
 }
 
 template<class T>
 NJS::VAR operator> (NJS::VAR _left, T right)
 {
-	return _left > NJS::VAR(right);
+	return (double)_left > right;
 }
 
 template<class T>
 NJS::VAR operator>= (NJS::VAR _left, T right)
 {
-	return _left >= NJS::VAR(right);
+	return (double)_left >= right;
 }
 
 template<class T>
 NJS::VAR operator< (NJS::VAR _left, T right)
 {
-	return _left < NJS::VAR(right);
+	return (_left.data.number < right);
 }
 
 template<class T>
 NJS::VAR operator<= (NJS::VAR _left, T right)
 {
-	return _left <= NJS::VAR(right);
+	return (double)_left <= right;
 }
 
 template<class T>
 NJS::VAR operator% (NJS::VAR _left, T right)
 {
-	return _left % NJS::VAR(right);
+	return (int)_left % right;
 }
 
 template<class T>
 NJS::VAR operator== (NJS::VAR _left, T right)
 {
-	return _left == NJS::VAR(right);
+	return (double)_left == right;
 }
 
 template<class T>
 NJS::VAR operator!= (NJS::VAR _left, T right)
 {
-	return _left != NJS::VAR(right);
+	return (double)_left != right;
+}
+
+template<class T>
+NJS::VAR operator|(NJS::VAR _left, T right)
+{
+	return (int)_left | right;
+}
+
+template<class T>
+NJS::VAR operator^(NJS::VAR _left, T right)
+{
+	return (int)_left ^ right;
+}
+
+template<class T>
+NJS::VAR operator&(NJS::VAR _left, T right)
+{
+	return (int)_left & right;
+}
+
+template<class T>
+NJS::VAR operator<<(NJS::VAR _left, T right)
+{
+	return (int)_left << right;
+}
+
+template<class T>
+NJS::VAR operator>>(NJS::VAR _left, T right)
+{
+	return (int)_left >> right;
 }

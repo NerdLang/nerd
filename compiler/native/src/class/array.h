@@ -96,7 +96,7 @@ namespace NJS::Class
 		if (key.type == NJS::Enum::Type::Number)
 		{
 			auto i = (int)key;
-			
+
 			if (i < 0)
 			{
 				return undefined;
@@ -105,8 +105,6 @@ namespace NJS::Class
 			{
 				if (i >= value.size())
 				{
-					
-					value.reserve(i + 1);
 					value.resize(i + 1);
 				}
 			}
@@ -176,8 +174,6 @@ namespace NJS::Class
 			{
 				if (i >= value.size())
 				{
-					
-					value.reserve(i + 1);
 					value.resize(i + 1);
 				}
 			}

@@ -1064,7 +1064,7 @@ private:
   POINT m_minsz = POINT { 0, 0 };
   POINT m_maxsz = POINT { 0, 0 };
   DWORD m_main_thread = GetCurrentThreadId();
-  std::unique_ptr<webview::browser> m_browser =
+  std::uniquedata.ptr<webview::browser> m_browser =
       std::make_unique<webview::edge_chromium>();
 };
 

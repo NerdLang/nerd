@@ -14,6 +14,7 @@ namespace NJS::Class
 	}
 	Function::Function(void *val, NJS::VAR bind)
 	{
+		std::cout << "BIND[CTOR]" << std::endl;
 		counter++;
 		This = bind;
 		value = (NJS::Type::function_t*)val;
@@ -134,14 +135,14 @@ namespace NJS::Class
 
 		if(_ret.type == NJS::Enum::Type::Object)
 		{
-			((NJS::Class::Object*)_ret._ptr)->prototype = true;
-			((NJS::Class::Object*)_ret._ptr)->instance.push_back((*this)["prototype"]._ptr);
+			((NJS::Class::Object*)_ret.data.ptr)->prototype = true;
+			((NJS::Class::Object*)_ret.data.ptr)->instance.push_back((*this)["prototype"].data.ptr);
 			return _ret;
 		}
 		else
 		{
-			((NJS::Class::Object*)_this._ptr)->prototype = true;
-			((NJS::Class::Object*)_this._ptr)->instance.push_back((*this)["prototype"]._ptr);
+			((NJS::Class::Object*)_this.data.ptr)->prototype = true;
+			((NJS::Class::Object*)_this.data.ptr)->instance.push_back((*this)["prototype"].data.ptr);
 			return _this;
 		}
 
@@ -397,7 +398,7 @@ namespace NJS::Class
 			NJS::VAR _arr = _args[1];
 			if(_arr.type == NJS::Enum::Type::Array)
 			{
-				NJS::Type::vector_t _v = ((NJS::Class::Array*)_arr._ptr)->value;
+				NJS::Type::vector_t _v = ((NJS::Class::Array*)_arr.data.ptr)->value;
 				NJS::VAR __ARGS[_v.size()];
 				int i = 0;
 				for( auto _var: _v)

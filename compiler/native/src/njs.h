@@ -33,6 +33,7 @@
 #define _USE_MATH_DEFINES
 #include <stdarg.h>
 #include <tuple>
+#include <bitset>
 
 #ifdef __NJS_ENV_ARDUINO
 #include <util/delay.h>
@@ -67,7 +68,6 @@ namespace NJS
 	namespace Class
 	{
 		class Base;
-		class Number;
 		class Undefined;
 		class Boolean;
 		class String;
@@ -81,13 +81,15 @@ namespace NJS
 #include "var_header.h"
 #include "type.h"
 #include "classes_header.h"
+#include "native.h"
 #include "values.h"
 #include "functions.h"
 #include "this.h"
+#include "class/number_header.h"
 #include "var.h"
 #include "objmgmt.h"
 #include "event.h"
 #include "classes.h"
 #include "operator.h"
-#include "native.h"
+
 #include "std_global_js.h"

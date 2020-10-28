@@ -127,7 +127,7 @@ NJS::Type::function_t* __NJS_FN___5po78g = new NJS::Type::function_t([](var __IN
 	int r;
 	int j = 0;
 	var __RESULT;
-	const char* JSON_STRING = ((NJS::Class::String*)__json._ptr)->value.c_str();
+	const char* JSON_STRING = ((NJS::Class::String*)__json.data.ptr)->value.c_str();
 	jsmn_parser p;
 	jsmntok_t *tok = (jsmntok_t*)malloc(sizeof(*tok) * tokcount);
 

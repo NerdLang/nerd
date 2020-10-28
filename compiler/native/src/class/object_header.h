@@ -9,6 +9,7 @@ namespace NJS::Class
 		// Constructors
 		Object();
 		// Properties
+		std::bitset<3> property; // writable, configurable, enumarable
 		count_t counter = 0;
 		NJS::Type::object_t object;
 		bool prototype = false;
