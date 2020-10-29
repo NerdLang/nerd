@@ -1,6 +1,6 @@
 	
 	auto undefined = NJS::VAR(new NJS::Class::Undefined());
-	auto null = NJS::VAR();
-	auto Infinity = NJS::VAR();
-	auto NaN = NJS::VAR();
+	auto null = __NJS_Create_Null();
+	auto Infinity = __NJS_Create_Infinity();
+	NJS::VAR NaN = "NaN";
 

@@ -90,20 +90,22 @@ namespace NJS::Class
 			}
 			else return undefined;
 		}
+		std::string _str = ((std::string)key);
+		std::string_view _sview = _str;
 		
-		if(((std::string)key).compare("length") == 0)
+		if(_sview.compare("length") == 0)
 		{
 			return (int)value.size();
 		}
 		
 		return undefined;
 	}
+	static NJS::VAR _char;
+	static NJS::VAR _length;
+		
 	#ifdef __NJS__OBJECT_HASHMAP
 	NJS::VAR &String::operator[](NJS::VAR key)
 	{
-		static NJS::VAR _char;
-		static NJS::VAR _length;
-		
 		if (key.type == NJS::Enum::Type::Number)
 		{
 			auto i = (int)key;
@@ -119,7 +121,10 @@ namespace NJS::Class
 			return _char;
 		}
 		
-		NJS::VAR& _obj = object[(std::string)key];
+		std::string _str = ((std::string)key);
+		std::string_view _sview = _str;
+		
+		NJS::VAR& _obj = object[_str];
 		if(_obj) return _obj; 
 		
 		__NJS_Method_Lazy_Loader("toString", toString);
@@ -131,20 +136,17 @@ namespace NJS::Class
 		__NJS_Method_Lazy_Loader("substr", substr);
 		__NJS_Method_Lazy_Loader("replace", replace);
 		
-		if(((std::string)key).compare("length") == 0)
+		if(_sview.compare("length") == 0)
 		{
 			_length = (int)value.size();
 			return _length;
 		}
 
-		return undefined;
+		return _obj;
 	}
 	#else
 	NJS::VAR &String::operator[](NJS::VAR key)
-	{
-		static NJS::VAR _char;
-		static NJS::VAR _length;
-		
+	{		
 		if (key.type == NJS::Enum::Type::Number)
 		{
 			auto i = (int)key;
@@ -160,10 +162,11 @@ namespace NJS::Class
 			return _char;
 		}
 		
-		
+		std::string _str = ((std::string)key);
+		std::string_view _sview = ((std::string)key);
 		for (auto & search : object)
 		{
-			if (((std::string)key).compare(search.first) == 0)
+			if (_sview.compare(search.first) == 0)
 			{
 				return search.second;
 			}
@@ -178,13 +181,13 @@ namespace NJS::Class
 		__NJS_Method_Lazy_Loader("substr", substr);
 		__NJS_Method_Lazy_Loader("replace", replace);
 
-		if(((std::string)key).compare("length") == 0)
+		if(_sview.compare("length") == 0)
 		{
 			_length = (int)value.size();
 			return _length;
 		}
 		
-		object.push_back(NJS::Type::pair_t(((std::string)*this).c_str(), undefined));
+		object.push_back(NJS::Type::pair_t(((std::string)*this), undefined));
 		return object[object.size() - 1].second;
 	}
 	#endif

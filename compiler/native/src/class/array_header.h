@@ -26,7 +26,7 @@ namespace NJS::Class
 		// Main operators
 		NJS::VAR const operator[](NJS::VAR key) const;
 		NJS::VAR &operator[](NJS::VAR key);
-		template <class... Args> NJS::VAR operator()(Args... args) const;
+
 		// Comparation operators
 		Array operator!() const;
 		

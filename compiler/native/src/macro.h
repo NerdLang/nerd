@@ -27,21 +27,21 @@
 
 #ifdef __NJS__OBJECT_HASHMAP
 #define __NJS_Method_Lazy_Loader(_name, _fn) \
-if(((std::string)key).compare(_name) == 0) { \
-object[(std::string)key] = __NJS_Create_Var_Scoped_Anon( return _fn(__NJS_VARARGS, __NJS_VARLENGTH); ); \
-return object[(std::string)key];}
+if(_sview.compare(_name) == 0) { \
+object[_str] = __NJS_Create_Var_Scoped_Anon( return _fn(__NJS_VARARGS, __NJS_VARLENGTH); ); \
+return object[_str];}
 #define __NJS_Object_Lazy_Loader(_name) \
-if(((std::string)key).compare(_name) == 0) { \
-object[(std::string)key] = __NJS_Create_Object(); \
-return object[(std::string)key];}
+if(_sview.compare(_name) == 0) { \
+object[_str] = __NJS_Create_Object(); \
+return object[_str];}
 #else
 #define __NJS_Method_Lazy_Loader(_name, _fn) \
-if(((std::string)key).compare(_name) == 0) { \
-object.push_back(NJS::Type::pair_t((std::string)key, __NJS_Create_Var_Scoped_Anon( return _fn(__NJS_VARARGS, __NJS_VARLENGTH); ))); \
+if(_sview.compare(_name) == 0) { \
+object.push_back(NJS::Type::pair_t(_str, __NJS_Create_Var_Scoped_Anon( return _fn(__NJS_VARARGS, __NJS_VARLENGTH); ))); \
 return object.back().second;}
 #define __NJS_Object_Lazy_Loader(_name) \
-if(((std::string)key).compare(_name) == 0) { \
-object.push_back(NJS::Type::pair_t((std::string)key, __NJS_Create_Object())); \
+if(_sview.compare(_name) == 0) { \
+object.push_back(NJS::Type::pair_t(_str, __NJS_Create_Object())); \
 return object.back().second;}
 #endif
 

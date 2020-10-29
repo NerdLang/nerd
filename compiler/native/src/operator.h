@@ -221,7 +221,7 @@ NJS::VAR __NJS_Object_Stringify(NJS::VAR _var, bool _bracket)
 		return "";
 }
 
-NJS::VAR __NJS_Object_Clone(NJS::VAR _var)
+NJS::VAR __NJS_Object_Clone(NJS::VAR& _var)
 {
 	NJS::Enum::Type _t = _var.type;
 	switch(_t)
@@ -246,7 +246,7 @@ NJS::VAR __NJS_Object_Clone(NJS::VAR _var)
 		}
 		case NJS::Enum::Type::Object:
 		{
-			var _res = __NJS_Create_Object();
+			const var _res = __NJS_Create_Object();
 			NJS::Type::object_t *_obj = &((NJS::Class::Object*)_var.data.ptr)->object;
 			#ifdef __NJS__OBJECT_HASHMAP
 			for (auto _el: *_obj)
@@ -316,12 +316,6 @@ NJS::VAR __NJS_CREATE_Function(void *_fn)
 NJS::VAR __NJS_Create_Native(void *_native)
 {
 	return NJS::VAR(NJS::Enum::Type::Undefined, _native);
-}
-
-
-std::function<var(NJS::Type::vector_t)> *__NJS_Get_Function(NJS::VAR _v)
-{
-	return (std::function<var(NJS::Type::vector_t)> *)((NJS::Class::Function*)_v.data.ptr)->value;
 }
 
 void *__NJS_Get_Native(NJS::VAR _native)

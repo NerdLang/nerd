@@ -4,7 +4,7 @@ NJS::VAR __NJS_Object_Stringify(NJS::VAR _var);
 NJS::VAR __NJS_Object_Stringify(NJS::VAR _var, bool _bracket);
 NJS::Class::Object* __NJS_Create_Object();
 NJS::Class::Array* __NJS_Create_Array();
-NJS::VAR __NJS_Object_Clone(NJS::VAR _var);
+NJS::VAR __NJS_Object_Clone(NJS::VAR& _var);
 NJS::VAR __NJS_Object_Set(std::string _index, NJS::VAR _value, NJS::Type::object_t *_obj);
 std::string __NJS_DOUBLE_TO_STRING(double _var);
 /*** String MANIPULATION ***/

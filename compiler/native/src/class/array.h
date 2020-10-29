@@ -111,13 +111,16 @@ namespace NJS::Class
 			return value[i];
 		}
 		
-		if(((std::string)key).compare("length") == 0)
+		std::string _str = ((std::string)key);
+		std::string_view _sview = _str;
+		
+		if(_sview.compare("length") == 0)
 		{
 			length = (int)value.size();
 			return length;
 		}
 		
-		NJS::VAR& _obj = object[(std::string)key];
+		NJS::VAR& _obj = object[_str];
 		if(_obj) return _obj; 
 		
 		__NJS_Method_Lazy_Loader("push", push);
@@ -160,15 +163,13 @@ namespace NJS::Class
 	#else
 	NJS::VAR &Array::operator[](NJS::VAR key)
 	{
-		static NJS::VAR _retUndefined;
-
 		if (key.type == NJS::Enum::Type::Number)
 		{
 			auto i = (int)key;
 			
 			if (i < 0)
 			{
-				return _retUndefined;
+				return undefined;
 			}
 			else 
 			{
@@ -180,7 +181,10 @@ namespace NJS::Class
 			return value[i];
 		}
 		
-		if(((std::string)key).compare("length") == 0)
+		std::string _str = ((std::string)key);
+		std::string_view _sview = _str;
+		
+		if(_sview.compare("length") == 0)
 		{
 			length = (int)value.size();
 			return length;
@@ -188,7 +192,7 @@ namespace NJS::Class
 		
 		for (auto & search : object)
 		{
-			if (((std::string)key).compare(search.first) == 0)
+			if (_sview.compare(search.first) == 0)
 			{
 				return search.second;
 			}
@@ -229,19 +233,11 @@ namespace NJS::Class
 		__NJS_Method_Lazy_Loader("values", values);
 		
 
-		object.push_back(NJS::Type::pair_t((std::string)key, undefined));
+		object.push_back(NJS::Type::pair_t(_str, undefined));
 		return object[object.size() - 1].second;
 	}
 	#endif
 	
-	template <class... Args>
-	NJS::VAR Array::operator()(Args... args) const 
-	{ 
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
-		throw InvalidTypeException(); 
-		#endif
-		return undefined;
-	}
 	// Comparation operators
 	Array Array::operator!() const 
 	{ 

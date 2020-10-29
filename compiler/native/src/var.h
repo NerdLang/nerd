@@ -10,11 +10,11 @@ namespace NJS
 
 	VAR::~VAR()
 	{
-		if(type != NJS::Enum::Type::Number) ((NJS::Class::Base*)data.ptr)->Delete();
+		if(type > NJS::Enum::Type::Number) ((NJS::Class::Base*)data.ptr)->Delete();
 	}
 
 	/*** COPY ***/
-	VAR::VAR(VAR const &_v)
+	 VAR::VAR(VAR const &_v)
 	{
 		if(property[0] != 0) return;
 		
@@ -29,6 +29,19 @@ namespace NJS
 		
 	}
 	/* END COPY */
+	
+	/*** MOVE ***/
+	VAR::VAR(VAR const &&_v)
+	{
+		property = _v.property;
+		type = _v.type;
+		if(type == NJS::Enum::Type::Number)
+		{
+			data.number = _v.data.number;
+		}
+		else data.ptr = ((NJS::Class::Base*)_v.data.ptr)->Copy();
+	}
+	/* END MOVE */
 	
 	/*** CONSTRUCTOR ***/
 
@@ -147,7 +160,7 @@ namespace NJS
 	template <class... Args>
 	VAR VAR::operator() (Args... args)
 	{
-		if (this->type != NJS::Enum::Type::Function)
+		if (type != NJS::Enum::Type::Function)
 		{
 	#ifndef __NJS_NO_EXCEPT
 			throw NJS::VAR("TypeError: object is not a function");
@@ -160,7 +173,7 @@ namespace NJS
 	template <class... Args>
 	VAR VAR::operator() (Args... args) const
 	{
-		if (this->type != NJS::Enum::Type::Function)
+		if (type != NJS::Enum::Type::Function)
 		{
 	#ifndef __NJS_NO_EXCEPT
 			throw NJS::VAR("TypeError: object is not a function");

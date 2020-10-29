@@ -33,7 +33,10 @@ namespace NJS::Class
 	#ifdef __NJS__OBJECT_HASHMAP
 	NJS::VAR &Boolean::operator[](NJS::VAR key)
 	{
-		NJS::VAR& _obj = object[(std::string)key];
+		std::string _str = ((std::string)key);
+		std::string_view _sview = _str;
+		
+		NJS::VAR& _obj = object[_str];
 		if(_obj) return object[_obj]; 
 
 		__NJS_Method_Lazy_Loader("toString", toString);
@@ -44,9 +47,12 @@ namespace NJS::Class
 	#else
 	NJS::VAR &Boolean::operator[](NJS::VAR key)
 	{
+		std::string _str = ((std::string)key);
+		std::string_view _sview = _str;
+		
 		for (auto & search : object)
 		{
-			if (((std::string)key).compare(search.first) == 0)
+			if (_sview.compare(search.first) == 0)
 			{
 				return search.second;
 			}

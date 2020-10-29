@@ -9,7 +9,7 @@ namespace NJS
 	struct VAR
 	{
 		NJS::Enum::Type type;
-		std::bitset<3> property;
+		std::bitset<1> property;
 		Data data;
 		
 		VAR();
@@ -17,6 +17,7 @@ namespace NJS
 
 		/**/
 		VAR(VAR const &_v);
+		VAR(VAR const &&_v);
 		/**/
 		
 		/*** CONSTRUCTOR ***/
