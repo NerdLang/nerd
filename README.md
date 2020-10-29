@@ -312,7 +312,7 @@ You can also test ES3 support with `npm run es3_test`
 
 ## Windows
 
-You can install Mingw for Windows here : https://osdn.net/projects/mingw/downloads/68260/mingw-get-setup.exe/ or Clang here: https://releases.llvm.org/
+You can install Mingw and Clang for Windows here : http://winlibs.com/ or Clang here: https://releases.llvm.org/
 
 You can also install Linux for Windows and use a linux system on Windows
 
