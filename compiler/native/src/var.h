@@ -22,8 +22,9 @@ namespace NJS
 		type = _v.type;
 		if(type == NJS::Enum::Type::Number)
 		{
-			if(type == _v.type) data.number = _v.data.number;
-			else data.number = (double)_v;
+			data.number = (double)_v;
+			//if(type == _v.type) data.number = _v.data.number;
+			//else data.number = (double)_v;
 		}
 		else data.ptr = ((NJS::Class::Base*)_v.data.ptr)->Copy();
 		
@@ -46,6 +47,12 @@ namespace NJS
 	/*** CONSTRUCTOR ***/
 
 	VAR::VAR(NJS::Enum::Type _type, int _value)
+	{
+		this->type = _type;
+		data.number = _value;
+	}
+	
+	VAR::VAR(NJS::Enum::Type _type, double _value)
 	{
 		this->type = _type;
 		data.number = _value;
@@ -228,8 +235,9 @@ namespace NJS
 		type = _v.type;
 		if(type == NJS::Enum::Type::Number)
 		{
-			if(type == _v.type) data.number = _v.data.number;
-			else data.number = (double)_v;
+			data.number = (double)_v;
+			//if(type == _v.type) data.number = _v.data.number;
+			//else data.number = (double)_v;
 		}
 		else data.ptr = ((NJS::Class::Base*)_v.data.ptr)->Copy();
 	}

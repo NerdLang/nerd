@@ -36,15 +36,19 @@ var TEST =
         else if(preset == "size") return `${compiler} ${_in} /std:c++17 /D CL_WINDOWS=1 /O1 /I "${CONFIG.win_inc_ucrt}" "${CONFIG.win_lib_um}\\Uuid.Lib" "${CONFIG.win_lib_um}\\kernel32.Lib" "${CONFIG.win_lib_ucrt}\\libucrt.lib" /EHsc ${COMPILER.LIBS} /o  ${out}`;
         else if(preset == "speed") return `${compiler} ${_in} /std:c++17 /D CL_WINDOWS=1 /Ox /I "${CONFIG.win_inc_ucrt}" "${CONFIG.win_lib_um}\\Uuid.Lib" "${CONFIG.win_lib_um}\\kernel32.Lib" "${CONFIG.win_lib_ucrt}\\libucrt.lib" /EHsc ${COMPILER.LIBS} /o  ${out}`;
     }
+	
+	var _cliOption = "";
+	if(CLI.cli["--option"]) _cliOption = CLI.cli["--option"].argument;
+	
 	  if(preset == "none")
 	  {
-		  return `${compiler} -std=c++17 "${_in}" ${option} -I ${extern}/lib/ -s ${COMPILER.LIBS} -o ${out}`;
+		  return `${compiler} -std=c++17 "${_in}" ${option} -I ${extern}/lib/ -s ${COMPILER.LIBS} -o ${out} ${_cliOption}`;
 	  }
 	  else if(preset == "size")
 	  {
-		  return `${compiler} -std=c++17 "${_in}" ${option} -I ${extern}/lib/ -fno-rtti -fno-stack-protector -fomit-frame-pointer -s ${COMPILER.LIBS}  -o ${out}`;
+		  return `${compiler} -std=c++17 "${_in}" ${option} -I ${extern}/lib/ -fno-rtti -fno-stack-protector -fomit-frame-pointer -s ${COMPILER.LIBS}  -o ${out} ${_cliOption}`;
 	  }
-	  else return `${compiler} -std=c++17 "${_in}" -I ${extern}/lib/ ${option} -s ${COMPILER.LIBS} -o ${out}`;
+	  else return `${compiler} -std=c++17 "${_in}" -I ${extern}/lib/ ${option} -s ${COMPILER.LIBS} -o ${out} ${_cliOption}`;
   },
   check: {
     "env": {

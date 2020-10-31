@@ -88,11 +88,14 @@ function VariableDeclaration(_path)
 				}
 				if(_path.parentPath.node.test && _path.parentPath.node.test.type == "BinaryExpression")
 				{
-						var _new_int = "__NJS_LOOP_INT" + RND();
+					var _new_int = "__NJS_LOOP_INT" + RND();
+					try 
+					{
+						_path.parentPath.insertBefore(babel.parse(_new_int + " = " + babel.generate(_path.parentPath.node.test.right).code).program.body);
+						_path.parentPath.node.test = babel.parse( "(" +  babel.generate(_path.parentPath.node.test.left).code + _path.parentPath.node.test.operator + _new_int + ")").program.body[0].expression;
 						COMPILER.DECL.push(_kind + " " + _new_int + ";");
 						COMPILER.GLOBAL.push(_new_int);
-						_path.parentPath.insertBefore(babel.parse(_new_int + " = " + babel.generate(_path.parentPath.node.test.right).code));
-						_path.parentPath.node.test = babel.parse( "(" +  babel.generate(_path.parentPath.node.test.left).code + _path.parentPath.node.test.operator + _new_int + ")").program.body[0].expression;
+					}catch(e){}
 				}
 				
 			}

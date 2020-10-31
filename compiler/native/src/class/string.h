@@ -163,7 +163,7 @@ namespace NJS::Class
 		}
 		
 		std::string _str = ((std::string)key);
-		std::string_view _sview = ((std::string)key);
+		std::string_view _sview = _str;
 		for (auto & search : object)
 		{
 			if (_sview.compare(search.first) == 0)

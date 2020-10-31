@@ -533,8 +533,14 @@ function Build(prepare)
 		if(ext == "ts") _code = compileTS(_code, _in);
 		COMPILER.Parse(_code);
     
-    if(COMPILER.ENV.write) COMPILER.ENV.write(COMPILER.MAIN);
-		else fs.writeFileSync(_cout, COMPILER.MAIN);
+		if(COMPILER.ENV.write) COMPILER.ENV.write(COMPILER.MAIN);
+		else
+		{
+			if(CLI.cli["--profile"] && CLI.cli["--profile"].argument != "use")
+			{
+				fs.writeFileSync(_cout, COMPILER.MAIN);
+			}
+		}
 
 		if(CLI.cli["--generate"])
 		{

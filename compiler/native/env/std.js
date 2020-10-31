@@ -82,12 +82,8 @@ var STD =
         }
         if(compiler == "cl" || compiler.indexOf("cl ") == 0)
         {
-            if(_stack) _stack = "/F " + _stack;
-            else _stack = "";
-
-            if(preset == "none") return `${compiler} ${_stack} "${_in}" /D __NJS_REGISTER_SIZE=${COMPILER.REGISTER} /std:c++14 /D CL_WINDOWS=1 /I "${CONFIG.win_inc_ucrt}" "${CONFIG.win_lib_um}\\Uuid.Lib" "${CONFIG.win_lib_um}\\kernel32.Lib" "${CONFIG.win_lib_ucrt}\\libucrt.lib" /EHsc  ${COMPILER.LIBS} /o  "${out}"`;
-            else if(preset == "size") return `${compiler}  ${_stack} "${_in}" /D __NJS_REGISTER_SIZE=${COMPILER.REGISTER} /std:c++14 /D CL_WINDOWS=1 /O1 /I "${CONFIG.win_inc_ucrt}" "${CONFIG.win_lib_um}\\Uuid.Lib" "${CONFIG.win_lib_um}\\kernel32.Lib" "${CONFIG.win_lib_ucrt}\\libucrt.lib" /EHsc ${COMPILER.LIBS} /o  "${out}"`;
-            else if(preset == "speed") return `${compiler}  ${_stack} "${_in}" /D __NJS_REGISTER_SIZE=${COMPILER.REGISTER} /std:c++14 /D CL_WINDOWS=1 /Ox /I "${CONFIG.win_inc_ucrt}" "${CONFIG.win_lib_um}\\Uuid.Lib" "${CONFIG.win_lib_um}\\kernel32.Lib" "${CONFIG.win_lib_ucrt}\\libucrt.lib" /EHsc ${COMPILER.LIBS} /o  "${out}"`;
+			console.log("[!] cl is not supported, please use g++, clang++, em++ or avr-g++");
+			process.exit(1);
         }
 
 		var _hashmap = "-D__NJS__OBJECT_HASHMAP";
@@ -99,21 +95,44 @@ var STD =
         var _sysVNetLibs = "";
         if(os.platform() == "sunos") _sysVNetLibs = "-lsocket -lnsl";
 
+		var _cliOption = "";
+		if(CLI.cli["--option"]) _cliOption = CLI.cli["--option"].argument;
+		
+		
+		if(CLI.cli["--profile"])
+		{
+			if(!CLI.cli["--conserve"]) CLI.cli["--conserve"] = true;
+			if(CLI.cli["--profile"].argument == "gen")
+			{
+				_cliOption += " -fprofile-generate";
+				console.log("[*] Profiling data will be stored in: " + COMPILER.TMP_FOLDER);
+			}
+			else if(CLI.cli["--profile"].argument == "use")
+			{
+				_cliOption += " -fprofile-use";
+				console.log("[*] Using profile data from: " + COMPILER.TMP_FOLDER);
+			}
+			else 
+			{
+				console.log("[!] Please use --profile with gen or use");
+			}
+		}
+		
         if(preset == "none")
         {
-            return `${compiler} ${_hashmap} ${_stack} -std=c++17 "${_in}" -O1 -s ${COMPILER.LIBS} -o "${out}" ${_sysVNetLibs}`;
+            return `${compiler} ${_hashmap} ${_stack} -std=c++17 "${_in}" -O1 -s ${COMPILER.LIBS} -o "${out}" ${_sysVNetLibs} ${_cliOption}`;
         }
         else if(preset == "size")
         {
-            return `${compiler} ${_hashmap} ${_stack} -std=c++17 "${_in}" -Os -fno-rtti -fno-stack-protector -fomit-frame-pointer -s ${COMPILER.LIBS} -o "${out}" ${_sysVNetLibs}`;
+            return `${compiler} ${_hashmap} ${_stack} -std=c++17 "${_in}" -Os -fno-rtti -fno-stack-protector -fomit-frame-pointer -s ${COMPILER.LIBS} -o "${out}" ${_sysVNetLibs} ${_cliOption}`;
         }
         else
         {   
             var _opt = "-O";
             if(os.platform() == "darwin" || compiler.indexOf("clang") > -1) _opt += "3";
             else _opt += "fast";
-
-            return `${compiler} ${_hashmap} ${_stack} -std=c++17 "${_in}" ${_opt} -s ${COMPILER.LIBS}  -o "${out}" ${_sysVNetLibs}`;
+			
+			return `${compiler} ${_hashmap} ${_stack} -std=c++17 "${_in}" ${_opt} -s ${COMPILER.LIBS}  -o "${out}" ${_sysVNetLibs} ${_cliOption}`;
         }
     }
 

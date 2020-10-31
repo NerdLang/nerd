@@ -23,6 +23,7 @@ namespace NJS
 		/*** CONSTRUCTOR ***/
 
 		VAR(NJS::Enum::Type _type, int _value);
+		VAR(NJS::Enum::Type _type, double _value);
 		VAR(int _value);
 		VAR(double _value);
 		VAR(long long _value);
