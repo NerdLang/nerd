@@ -250,7 +250,7 @@ function Compiler()
 	  
 	this.Prepare = function(_folder)
 	{
-		if(CLI.cli["--profile"] && CLI.cli["--profile"].argument != "use")
+		if((!CLI.cli["--profile"]) || CLI.cli["--profile"].argument != "use")
 		{
 			copyDirSync(path.join(__dirname, "src"), _folder, true);
 		}

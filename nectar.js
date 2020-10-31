@@ -536,7 +536,7 @@ function Build(prepare)
 		if(COMPILER.ENV.write) COMPILER.ENV.write(COMPILER.MAIN);
 		else
 		{
-			if(CLI.cli["--profile"] && CLI.cli["--profile"].argument != "use")
+			if((!CLI.cli["--profile"]) || CLI.cli["--profile"].argument != "use")
 			{
 				fs.writeFileSync(_cout, COMPILER.MAIN);
 			}
