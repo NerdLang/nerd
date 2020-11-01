@@ -28,6 +28,7 @@ No VM. No Bytecode. No packaging. No Garbage Collector. Fully compiled to native
 * [Arduino Compilation](#arduino-compilation)
 * [STM32 Compilation](#stm32-compilation)
 * [Compatibility Targets / Platforms](#compatibility-targetsplatforms)
+* [Optimization](#optimization)
 * [Stores](#stores)
 * [Actively Tested For](#actively-tested-for)
 
@@ -472,6 +473,19 @@ Tests are made with GCC 7 and Clang 6
 * All supported Clang platforms
 
 * All supported AVR-GCC platforms
+
+# Optimization
+
+ ## Profiling
+ 
+ Profiling is a functionnality that improve the speed of your app by detecting the hot spots and improving their compilation. You have to compile your app twice: once before executing, and once after executing.
+ 
+ These are the steps:
+ 
+ 1. Compile your app with the flags: `--profile gen --tmp perf`. --tmp value could be what you want, it's the target folder.
+ 2. Execute your app
+ 3. Recompile your app with the flags: `--profile use --tmp perf`. --tmp has to be the same value as step 1.
+ 4. Enjoy your app 15% faster.
 
 # Stores 
 
