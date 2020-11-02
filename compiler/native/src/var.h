@@ -207,13 +207,19 @@ namespace NJS
 	VAR & VAR::operator[] (int _index) const
 	{
 		if(type < NJS::Enum::Type::String) return undefined;
-		return (*(NJS::Class::Base*)data.ptr)[NJS::VAR(_index)];
+		return (*(NJS::Class::Base*)data.ptr)[_index];
 	}
 	
 	VAR & VAR::operator[] (int _index)
 	{
 		if(type < NJS::Enum::Type::String) return undefined;
-		return (*(NJS::Class::Base*)data.ptr)[NJS::VAR(_index)];
+		return (*(NJS::Class::Base*)data.ptr)[_index];
+	}
+	
+	VAR & VAR::operator[] (double _index)
+	{
+		if(type < NJS::Enum::Type::String) return undefined;
+		return (*(NJS::Class::Base*)data.ptr)[_index];
 	}
 	
 	VAR & VAR::operator[] (const char* _index)

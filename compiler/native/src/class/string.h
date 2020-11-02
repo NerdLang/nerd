@@ -192,6 +192,35 @@ namespace NJS::Class
 	}
 	#endif
 	
+	NJS::VAR &String::operator[](int key)
+	{		
+		if (key >= 0)
+		{
+			if (key >= value.size())
+			{
+				value.resize(key + 1);
+			}
+			_char = value.at(key);
+		}
+		else _char = "";
+		return _char;
+	}
+	
+	NJS::VAR &String::operator[](double key)
+	{		
+		if (key >= 0)
+		{
+			if (key >= value.size())
+			{
+				value.resize(key + 1);
+			}
+			_char = value.at(key);
+		}
+		else _char = "";
+		return _char;
+	}
+
+	
 	#ifdef __NJS__OBJECT_HASHMAP
 	NJS::VAR &String::operator[](const char* key)
 	{

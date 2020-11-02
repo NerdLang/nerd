@@ -89,6 +89,15 @@ namespace NJS::Class
 		
 		return undefined;
 	}
+	NJS::VAR const Array::operator[](int key) const
+	{
+		if (key >= 0 && key <= value.size())
+		{
+			return value.at(key);
+		}
+		
+		return undefined;
+	}
 	
 	#ifdef __NJS__OBJECT_HASHMAP
 	NJS::VAR &Array::operator[](NJS::VAR key)
@@ -237,6 +246,38 @@ namespace NJS::Class
 		return object[object.size() - 1].second;
 	}
 	#endif
+	
+	NJS::VAR &Array::operator[](int key)
+	{
+		if (key < 0)
+		{
+			return undefined;
+		}
+		else 
+		{
+			if (key >= value.size())
+			{
+				value.resize(key + 1);
+			}
+		}
+		return value[key];
+	}
+	
+	NJS::VAR &Array::operator[](double key)
+	{
+		if (key < 0)
+		{
+			return undefined;
+		}
+		else 
+		{
+			if (key >= value.size())
+			{
+				value.resize(key + 1);
+			}
+		}
+		return value[key];
+	}
 	
 	#ifdef __NJS__OBJECT_HASHMAP
 	NJS::VAR &Array::operator[](const char* key)

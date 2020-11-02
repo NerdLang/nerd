@@ -35,6 +35,20 @@ namespace NJS::Class
 		#endif
 		return undefined;
 	}
+	NJS::VAR &Undefined::operator[](int key)
+	{
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		throw NJS::VAR("TypeError: Cannot read property " + std::to_string(key) + " of undefined ");
+		#endif
+		return undefined;
+	}
+	NJS::VAR &Undefined::operator[](double key)
+	{
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		throw NJS::VAR("TypeError: Cannot read property " + std::to_string(key) + " of undefined ");
+		#endif
+		return undefined;
+	}
 	NJS::VAR &Undefined::operator[](const char* key)
 	{
 		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)

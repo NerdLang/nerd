@@ -25,7 +25,10 @@ namespace NJS::Class
 		explicit operator std::string() const noexcept;
 		// Main operators
 		NJS::VAR const operator[](NJS::VAR key) const;
+		NJS::VAR const operator[](int key) const;
 		NJS::VAR &operator[](NJS::VAR key);
+		NJS::VAR &operator[](int key);
+		NJS::VAR &operator[](double key);
 		NJS::VAR &operator[](const char* key);
 
 		// Comparation operators
