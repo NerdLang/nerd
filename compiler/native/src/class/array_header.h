@@ -26,6 +26,7 @@ namespace NJS::Class
 		// Main operators
 		NJS::VAR const operator[](NJS::VAR key) const;
 		NJS::VAR &operator[](NJS::VAR key);
+		NJS::VAR &operator[](const char* key);
 
 		// Comparation operators
 		Array operator!() const;

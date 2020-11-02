@@ -192,6 +192,66 @@ namespace NJS::Class
 	}
 	#endif
 	
+	#ifdef __NJS__OBJECT_HASHMAP
+	NJS::VAR &String::operator[](const char* key)
+	{
+		std::string _str = key;
+		std::string_view _sview = _str;
+		
+		NJS::VAR& _obj = object[_str];
+		if(_obj) return _obj; 
+		
+		__NJS_Method_Lazy_Loader("toString", toString);
+		__NJS_Method_Lazy_Loader("split", split);
+		__NJS_Method_Lazy_Loader("indexOf", indexOf);
+		__NJS_Method_Lazy_Loader("lastIndexOf", lastIndexOf);
+		__NJS_Method_Lazy_Loader("search", search);
+		__NJS_Method_Lazy_Loader("slice", slice);
+		__NJS_Method_Lazy_Loader("substr", substr);
+		__NJS_Method_Lazy_Loader("replace", replace);
+		
+		if(_sview.compare("length") == 0)
+		{
+			_length = (int)value.size();
+			return _length;
+		}
+
+		return _obj;
+	}
+	#else
+	NJS::VAR &String::operator[](const char* key)
+	{		
+		std::string _str = key;
+		std::string_view _sview = _str;
+		for (auto & search : object)
+		{
+			if (_sview.compare(search.first) == 0)
+			{
+				return search.second;
+			}
+		}
+		
+		__NJS_Method_Lazy_Loader("toString", toString);
+		__NJS_Method_Lazy_Loader("split", split);
+		__NJS_Method_Lazy_Loader("indexOf", indexOf);
+		__NJS_Method_Lazy_Loader("lastIndexOf", lastIndexOf);
+		__NJS_Method_Lazy_Loader("search", search);
+		__NJS_Method_Lazy_Loader("slice", slice);
+		__NJS_Method_Lazy_Loader("substr", substr);
+		__NJS_Method_Lazy_Loader("replace", replace);
+
+		if(_sview.compare("length") == 0)
+		{
+			_length = (int)value.size();
+			return _length;
+		}
+		
+		object.push_back(NJS::Type::pair_t(((std::string)*this), undefined));
+		return object[object.size() - 1].second;
+	}
+	#endif
+	
+	
 	template <class... Args>
 	NJS::VAR String::operator()(Args... args) const 
 	{

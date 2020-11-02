@@ -169,6 +169,100 @@ namespace NJS::Class
 		return object[object.size() - 1].second;
 	}
 	#endif
+	
+	#ifdef __NJS__OBJECT_HASHMAP
+	NJS::VAR &Object::operator[](const char* key)
+	{
+		std::string _str = key;
+		std::string_view _sview = _str;
+		
+		NJS::VAR& _obj = object[_str];
+		if(_obj.type != NJS::Enum::Type::Undefined) 
+		{
+			if(!property[1])
+			{
+				if(!property[0]) return _obj;
+				else 
+				{
+					__proxy = _obj;
+					return __proxy;
+				}
+				
+			}
+			else 
+			{
+				if(_obj.type == NJS::Enum::Type::Function)
+				{
+					((NJS::Class::Function*)_obj.data.ptr)->This.type = NJS::Enum::Type::Object;
+					((NJS::Class::Function*)_obj.data.ptr)->This.data.ptr = this;
+				}
+				if(!property[0]) return _obj;
+				else 
+				{
+					__proxy = _obj;
+					return __proxy;
+				}
+			}
+		}
+
+		if(_sview.compare("toString") == 0  || _sview.compare("toLocaleString") == 0)
+		{
+			object[_str] = __NJS_Create_Var_Scoped_Anon( return __NJS_Object_Stringify(this););
+		}
+		else if(_sview.compare("valueOf") == 0)
+		{
+			object[_str] = __NJS_Create_Var_Scoped_Anon( return this; );
+		}
+
+		if(!property[0]) return _obj;
+		__proxy = undefined;
+		return __proxy;
+	}
+	#else
+	NJS::VAR &Object::operator[](const char* key)
+	{
+		std::string _str = key;
+		std::string_view _sview = _str;
+
+		for (auto & search : object)
+		{
+			if (_sview.compare(search.first) == 0)
+			{
+				if(!property[1])
+				{
+					return search.second;
+				}
+				else 
+				{
+					if(search.second.type == NJS::Enum::Type::Function)
+					{
+						((NJS::Class::Function*)search.second.data.ptr)->This.type = NJS::Enum::Type::Object;
+						((NJS::Class::Function*)search.second.data.ptr)->This.data.ptr = this;				
+					}
+					
+					return search.second;
+				}
+			}
+		}
+
+		if(_sview.compare("toString") == 0  || _sview.compare("toLocaleString") == 0)
+		{
+			object.push_back(NJS::Type::pair_t(_str, __NJS_Create_Var_Scoped_Anon( return __NJS_Object_Stringify(this);)));
+		}
+		else if(_sview.compare("valueOf") == 0)
+		{
+			object.push_back(NJS::Type::pair_t(_str, __NJS_Create_Var_Scoped_Anon( return this; )));
+		}
+		else 
+		{
+			object.push_back(NJS::Type::pair_t(_str, undefined));
+		}
+
+		return object[object.size() - 1].second;
+	}
+	#endif
+	
+	
 	template <class... Args>
 	NJS::VAR Object::operator()(Args... args) const 
 	{

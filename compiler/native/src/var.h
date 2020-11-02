@@ -219,7 +219,7 @@ namespace NJS
 	VAR & VAR::operator[] (const char* _index)
 	{
 		if(type < NJS::Enum::Type::String) return NJS::Class::NUMBER::Accessor(*this, NJS::VAR(_index));
-		return (*(NJS::Class::Base*)data.ptr)[NJS::VAR(_index)];
+		return (*(NJS::Class::Base*)data.ptr)[_index];
 	}
 	
 	/* END ACCESS OVERLOAD */

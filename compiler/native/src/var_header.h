@@ -4,6 +4,8 @@ namespace NJS
 	{
 		void* ptr;
 		double number;
+		char* str;
+		
 	};
 	
 	struct VAR
