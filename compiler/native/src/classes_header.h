@@ -3,7 +3,6 @@
 
 #include "./class/base_header.h"
 #include "./class/array_header.h"
-#include "./class/boolean_header.h"
 #include "./class/function_header.h"
 #include "./class/native_header.h"
 #include "./class/object_header.h"

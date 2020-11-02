@@ -3,7 +3,7 @@ NJS::VAR __NJS_Boolean_Result(NJS::VAR _v)
 	if (_v.type == NJS::Enum::Type::Number)
 		return _v.data.number;
 	else if (_v.type == NJS::Enum::Type::Boolean)
-		return ((NJS::Class::Boolean*)_v.data.ptr);
+		return _v.data.number;
 	else if (_v.type == NJS::Enum::Type::String)
 	{
 		if (strlen(((NJS::Class::String*)_v.data.ptr)->value.c_str()) > 0)
@@ -47,7 +47,8 @@ std::ostream &operator<<(std::ostream &os, const NJS::VAR &_v)
 		os << (std::string)(*(NJS::Class::Undefined*)_v.data.ptr);
 		break;
 	case NJS::Enum::Type::Boolean:
-		os << (std::string)(*(NJS::Class::Boolean*)_v.data.ptr);
+		if(_v.data.number) os << "true";
+		else os << "false";
 		break;
 	case NJS::Enum::Type::Number:
 		os << __NJS_DOUBLE_TO_STRING(_v.data.number);

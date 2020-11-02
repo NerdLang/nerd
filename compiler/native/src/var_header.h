@@ -32,7 +32,7 @@ namespace NJS
 		VAR(const char *_value);
 		VAR(NJS::Class::Array *_value);
 		VAR(const NJS::Class::Array *_value);
-		VAR(NJS::Class::Boolean *_value);
+		VAR(bool _value);
 		VAR(NJS::Class::Function *_value);
 		VAR(NJS::Class::Object *_value);
 		VAR(NJS::Class::String *_value);
