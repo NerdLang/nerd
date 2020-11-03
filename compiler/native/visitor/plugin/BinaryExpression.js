@@ -22,6 +22,14 @@
  
 function BinaryExpression(_path)
 {
+	if(_path.node.right.type == "StringLiteral" && _path.node.left.type == "NumericLiteral")
+	{
+		var _rnd = "__NJS_TMP_NUMLIT" + RND();
+		COMPILER.DECL.push("var " + _rnd + " = \"" + _path.node.left.value + "\";");
+		_path.node.left.type = "Identifier";
+		_path.node.left.name = _rnd;
+	}
+		
 	if(_path.node.operator == "===")
 	{
 		var _eq = "__NJS_EQUAL_VALUE_AND_TYPE(";

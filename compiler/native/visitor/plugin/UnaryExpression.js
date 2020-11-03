@@ -25,24 +25,18 @@ function UnaryExpression(_path)
 	// typeof
 	if (_path.node.operator == "typeof")
 	{
-		if(_path.node.argument.type == "Identifier")	
-		{
-			_path.replaceWithSourceString("__NJS_typeof(" + _path.node.argument.name + ")");
-		}
-		else if(_path.node.argument.extra)
-		{
-			_path.replaceWithSourceString("__NJS_typeof(" + _path.node.argument.extra.raw + ")");
-		}
-		else if (_path.node.argument.type == "MemberExpression")
+		if (_path.node.argument.type == "MemberExpression")
 		{
 			VISITOR.memberExpression(_path.node.argument);
 			_path.replaceWithSourceString("__NJS_typeof(" + babel.generate(_path.node.argument).code + ")");
 		}
-		else if (_path.node.argument.type == "CallExpression")
+		else
 		{
 			_path.replaceWithSourceString("__NJS_typeof(" + babel.generate(_path.node.argument).code + ")");
 		}
-		_path.skip();
+		
+		
+		//_path.skip();
 	}
 	// void
 	else if(_path.node.operator == "void")

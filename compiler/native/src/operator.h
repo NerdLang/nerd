@@ -51,7 +51,7 @@ std::ostream &operator<<(std::ostream &os, const NJS::VAR &_v)
 		else os << "false";
 		break;
 	case NJS::Enum::Type::Number:
-		os << __NJS_DOUBLE_TO_STRING(_v.data.number);
+		os << (std::string)_v;
 		break;
 	case NJS::Enum::Type::String:
 		os << (std::string)(*(NJS::Class::String*)_v.data.ptr);
@@ -65,16 +65,10 @@ std::ostream &operator<<(std::ostream &os, const NJS::VAR &_v)
 	case NJS::Enum::Type::Native:
 		os << "[Native]";
 		break;
-	case NJS::Enum::Type::ISNAN:
-		os << "NaN";
-		break;
 	case NJS::Enum::Type::Function:
 		os << (std::string)(*(NJS::Class::Function*)_v.data.ptr);
 		break;
-	case NJS::Enum::Type::ISINFINITY:
-		os << "Infinity";
-		break;
-	case NJS::Enum::Type::ISNULL:
+	case NJS::Enum::Type::Null:
 		os << "null";
 		break;
 	default:
@@ -164,8 +158,6 @@ NJS::VAR __NJS_Object_Stringify(NJS::VAR _var, bool _bracket)
 
 	if (_t == NJS::Enum::Type::Undefined)
 		return "undefined";
-	else if (_t == NJS::Enum::Type::ISNAN)
-		return "NaN";
 	else if (_t == NJS::Enum::Type::Number)
 		return var("") + _var;
 	else if (_t == NJS::Enum::Type::String)
@@ -228,7 +220,6 @@ NJS::VAR __NJS_Object_Clone(NJS::VAR& _var)
 	switch(_t)
 	{
 		case NJS::Enum::Type::Undefined:
-		case NJS::Enum::Type::ISNAN:
 		case NJS::Enum::Type::Number:
 		case NJS::Enum::Type::String:
 		case NJS::Enum::Type::Function:
@@ -426,6 +417,19 @@ NJS::VAR __NJS_NOT_EQUAL_VALUE_AND_TYPE(NJS::VAR _left, NJS::VAR _right)
 	return __NJS_Create_Boolean(0);
 }
 
+
+NJS::VAR operator+ (NJS::VAR _left, int right)
+{
+	if (_left.type == NJS::Enum::Type::String) return (std::string)_left + __NJS_DOUBLE_TO_STRING(right);
+	else return (double)_left + right;
+}
+
+NJS::VAR operator+ (NJS::VAR _left, double right)
+{
+	if (_left.type == NJS::Enum::Type::String) return (std::string)_left + __NJS_DOUBLE_TO_STRING(right);
+	else return (double)_left + right;
+}
+
 template<class T>
 NJS::VAR operator+ (NJS::VAR _left, T right)
 {
@@ -446,16 +450,31 @@ void operator-= (NJS::VAR& _left, T right)
 	else _left -= right;
 }
 
+NJS::VAR operator* (NJS::VAR _left, const char* right)
+{
+	return _left * std::string(right);
+}
+
 template<class T>
 NJS::VAR operator* (NJS::VAR _left, T right)
 {
 	return (double)_left * right;
 }
 
+NJS::VAR operator- (NJS::VAR _left, const char* right)
+{
+	return _left - std::string(right);
+}
+
 template<class T>
 NJS::VAR operator- (NJS::VAR _left, T right)
 {
 	return (double)_left - right;
+}
+
+NJS::VAR operator/ (NJS::VAR _left, const char* right)
+{
+	return _left / std::string(right);
 }
 
 template<class T>

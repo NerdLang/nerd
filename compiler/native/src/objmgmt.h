@@ -10,7 +10,7 @@ const char *__NJS_Get_String(NJS::VAR _v)
 	return ((NJS::Class::String*)_v.data.ptr)->value.c_str();
 }
 
-const std::string _array[] = {"NaN", "Infinity", "null", "undefined", "number", "boolean", "string", "native", "array", "object", "function" };
+const std::string _array[] = {"undefined", "object", "boolean", "number", "string", "native", "array", "object", "function" };
 NJS::VAR __NJS_typeof(NJS::VAR _var)
 {
 	return __NJS_Create_String(_array[_var.type]);

@@ -1,6 +1,7 @@
-inline double operator+(int _i, NJS::VAR _v)
+inline NJS::VAR operator+(int _i, NJS::VAR _v)
 {
-	return _i + (double)_v;
+	if(_v.type == NJS::Enum::Type::String) return __NJS_DOUBLE_TO_STRING(_i) + (std::string)_v;
+	else return _i + (double)_v;
 }
 
 void operator+=(int& _i, NJS::VAR _v)

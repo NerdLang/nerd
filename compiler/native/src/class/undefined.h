@@ -16,9 +16,9 @@ namespace NJS::Class
 	}
 	// Native cast
 	Undefined::operator bool() const noexcept { return false; }
-	Undefined::operator double() const noexcept { return 0.0; }
-	Undefined::operator int() const noexcept { return 0; }
-	Undefined::operator long long() const noexcept { return 0L; }
+	Undefined::operator double() const noexcept { return std::numeric_limits<double>::quiet_NaN(); }
+	Undefined::operator int() const noexcept { return std::numeric_limits<int>::quiet_NaN(); }
+	Undefined::operator long long() const noexcept { return std::numeric_limits<long long>::quiet_NaN(); }
 	Undefined::operator std::string() const noexcept { return "undefined"; }
 	// Main operators
 	NJS::VAR const Undefined::operator[](NJS::VAR key) const

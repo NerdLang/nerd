@@ -20,7 +20,7 @@ namespace NJS
 		
 		property = _v.property;
 		type = _v.type;
-		if(type < NJS::Enum::Type::String)
+		if(type > NJS::Enum::Type::Undefined && type < NJS::Enum::Type::String)
 		{
 			data.number = (double)_v;
 		}
@@ -34,7 +34,7 @@ namespace NJS
 	{
 		property = _v.property;
 		type = _v.type;
-		if(type < NJS::Enum::Type::String)
+		if(type > NJS::Enum::Type::Undefined && type < NJS::Enum::Type::String)
 		{
 			data.number = _v.data.number;
 		}
@@ -192,37 +192,37 @@ namespace NJS
 
 	VAR & VAR::operator[] (VAR _index)
 	{
-		if(type < NJS::Enum::Type::String) return NJS::Class::NUMBER::Accessor(*this, _index);
+		if(type > NJS::Enum::Type::Undefined && type < NJS::Enum::Type::String) return NJS::Class::NUMBER::Accessor(*this, _index);
 		return (*(NJS::Class::Base*)data.ptr)[_index];
 	}
 	
 	VAR & VAR::operator[] (VAR _index) const
 	{
-		if(type < NJS::Enum::Type::String) return NJS::Class::NUMBER::Accessor(*this, _index);
+		if(type > NJS::Enum::Type::Undefined && type < NJS::Enum::Type::String) return NJS::Class::NUMBER::Accessor(*this, _index);
 		return (*(NJS::Class::Base*)data.ptr)[_index];
 	}
 	
 	VAR & VAR::operator[] (int _index) const
 	{
-		if(type < NJS::Enum::Type::String) return undefined;
+		if(type > NJS::Enum::Type::Undefined && type < NJS::Enum::Type::String) return undefined;
 		return (*(NJS::Class::Base*)data.ptr)[_index];
 	}
 	
 	VAR & VAR::operator[] (int _index)
 	{
-		if(type < NJS::Enum::Type::String) return undefined;
+		if(type > NJS::Enum::Type::Undefined && type < NJS::Enum::Type::String) return undefined;
 		return (*(NJS::Class::Base*)data.ptr)[_index];
 	}
 	
 	VAR & VAR::operator[] (double _index)
 	{
-		if(type < NJS::Enum::Type::String) return undefined;
+		if(type > NJS::Enum::Type::Undefined && type < NJS::Enum::Type::String) return undefined;
 		return (*(NJS::Class::Base*)data.ptr)[_index];
 	}
 	
 	VAR & VAR::operator[] (const char* _index)
 	{
-		if(type < NJS::Enum::Type::String) return NJS::Class::NUMBER::Accessor(*this, NJS::VAR(_index));
+		if(type > NJS::Enum::Type::Undefined && type < NJS::Enum::Type::String) return NJS::Class::NUMBER::Accessor(*this, NJS::VAR(_index));
 		return (*(NJS::Class::Base*)data.ptr)[_index];
 	}
 	
@@ -237,7 +237,7 @@ namespace NJS
 		
 		property = _v.property;
 		type = _v.type;
-		if(type < NJS::Enum::Type::String)
+		if(type > NJS::Enum::Type::Undefined && type < NJS::Enum::Type::String)
 		{
 			data.number = (double)_v;
 			//if(type == _v.type) data.number = _v.data.number;
@@ -249,18 +249,18 @@ namespace NJS
 	/// Unary VAR::operators
 	VAR VAR::operator+()
 	{
-		if(type < NJS::Enum::Type::String) return data.number;
+		if(type > NJS::Enum::Type::Undefined && type < NJS::Enum::Type::String) return data.number;
 		return (double)*this;
 	}
 	
 	VAR VAR::operator-()
 	{
-		if(type < NJS::Enum::Type::String) return -data.number;
+		if(type > NJS::Enum::Type::Undefined && type < NJS::Enum::Type::String) return -data.number;
 		return -(double)*this;
 	}
 	VAR VAR::operator!() 
 	{ 
-		if(type < NJS::Enum::Type::String) return !data.number;
+		if(type > NJS::Enum::Type::Undefined && type < NJS::Enum::Type::String) return !data.number;
 		return !(bool)*this; 
 	};
 
@@ -273,8 +273,11 @@ namespace NJS
 	{
 		if (type < NJS::Enum::Type::String) return data.number + _v1;
 		else if (type == NJS::Enum::Type::String || type == NJS::Enum::Type::Array || type == NJS::Enum::Type::Object || _v1.type == NJS::Enum::Type::String)
-			return __NJS_Concat_To_Str((std::string) * this, (std::string)_v1);
-		else return VAR();
+		{
+			if(_v1.type == NJS::Enum::Type::Null) return ((std::string)*this) + "null";
+			else return __NJS_Concat_To_Str((std::string)*this, (std::string)_v1);
+		}
+		else return NaN;
 		
 	}
 	VAR VAR::operator+(const char _v1[])
@@ -284,7 +287,7 @@ namespace NJS
 	
 	void VAR::operator+=(const VAR &_v1)
 	{
-		if(type < NJS::Enum::Type::String) data.number += _v1;
+		if(type > NJS::Enum::Type::Undefined && type < NJS::Enum::Type::String) data.number += _v1;
 		else if(type == NJS::Enum::Type::String) 
 			((NJS::Class::String*)data.ptr)->value += (std::string)_v1;
 		else 
@@ -298,35 +301,37 @@ namespace NJS
 	VAR VAR::operator-(const VAR &_v1)
 	{	
 		if (type < NJS::Enum::Type::String ) return data.number - _v1;
-		else return "NaN";
+		else return NaN;
 	}
+	
 	VAR VAR::operator-=(const VAR &_v1)
 	{
-		if(type < NJS::Enum::Type::String) data.number -= _v1;
+		if(type > NJS::Enum::Type::Undefined && type < NJS::Enum::Type::String) data.number -= _v1;
 		else 
 		{
-			type = NJS::Enum::Type::ISNAN;
-			data.ptr = new NJS::Class::String("NaN");
+			return NaN;
 		}
 		return *this;
 	}
 	VAR VAR::operator*(const VAR &_v1)
 	{
-		if(type < NJS::Enum::Type::String) return data.number * _v1;
-		return VAR();
+		if(type > NJS::Enum::Type::Undefined && type < NJS::Enum::Type::String) return data.number * _v1;
+		return NaN;
 	}
+
 	void VAR::operator*=(const VAR &_v1)
 	{
-		if(type < NJS::Enum::Type::String) data.number *= _v1;
+		if(type > NJS::Enum::Type::Undefined && type < NJS::Enum::Type::String) data.number *= _v1;
 	}
 	VAR VAR::operator/(const VAR &_v1)
 	{
 		if (type < NJS::Enum::Type::String) return data.number / _v1;
-		return VAR();
+		return NaN;
 	}
+
 	void VAR::operator/=(const VAR &_v1)
 	{
-		if(type < NJS::Enum::Type::String) 
+		if(type > NJS::Enum::Type::Undefined && type < NJS::Enum::Type::String) 
 			data.number /= _v1;
 	}
 	VAR VAR::operator%(const VAR &_v1)
@@ -399,15 +404,13 @@ namespace NJS
 				return __NJS_Create_Boolean((bool)data.number == (bool)_v1);
 			case NJS::Enum::Type::String:
 				return __NJS_Create_Boolean((((NJS::Class::String*)data.ptr)->value).compare((std::string)_v1) == 0);
-			case NJS::Enum::Type::ISINFINITY:
-			case NJS::Enum::Type::ISNULL:
+			case NJS::Enum::Type::Null:
 			case NJS::Enum::Type::Undefined:
 				return __NJS_Create_Boolean(true);
 			case NJS::Enum::Type::Array:
 			case NJS::Enum::Type::Native:
 			case NJS::Enum::Type::Function:
 			case NJS::Enum::Type::Object:
-			case NJS::Enum::Type::ISNAN:
 			default:
 				return __NJS_Create_Boolean(false);
 			}
@@ -517,25 +520,25 @@ namespace NJS
 
 	VAR::operator int() const
 	{
-		if(type < NJS::Enum::Type::String) return data.number;
+		if(type > NJS::Enum::Type::Undefined && type < NJS::Enum::Type::String) return data.number;
 		return (int)(*(NJS::Class::Base*)data.ptr);
 	}
 	
 	VAR::operator int()
 	{
-		if(type < NJS::Enum::Type::String) return data.number;
+		if(type > NJS::Enum::Type::Undefined && type < NJS::Enum::Type::String) return data.number;
 		return (int)(*(NJS::Class::Base*)data.ptr);
 	}
 
 	VAR::operator double() const
 	{
-		if(type < NJS::Enum::Type::String) return data.number;
+		if(type > NJS::Enum::Type::Undefined && type < NJS::Enum::Type::String) return data.number;
 		return (double)(*(NJS::Class::Base*)data.ptr);
 	}
 	
 	VAR::operator double()
 	{
-		if(type < NJS::Enum::Type::String) return data.number;
+		if(type > NJS::Enum::Type::Undefined && type < NJS::Enum::Type::String) return data.number;
 		return (double)(*(NJS::Class::Base*)data.ptr);
 	}
 
@@ -555,19 +558,19 @@ namespace NJS
 
 	VAR::operator std::string() const
 	{
-		if(type < NJS::Enum::Type::String) return __NJS_DOUBLE_TO_STRING(data.number);
+		if(type > NJS::Enum::Type::Undefined && type < NJS::Enum::Type::String) return __NJS_DOUBLE_TO_STRING(data.number);
 		return (std::string)(*(NJS::Class::Base*)data.ptr);
 	}
 	
 	VAR::operator std::string()
 	{
-		if(type < NJS::Enum::Type::String) return __NJS_DOUBLE_TO_STRING(data.number);
+		if(type > NJS::Enum::Type::Undefined && type < NJS::Enum::Type::String) return __NJS_DOUBLE_TO_STRING(data.number);
 		return (std::string)(*(NJS::Class::Base*)data.ptr);
 	}
 
 	VAR::operator long long() const
 	{
-		if(type < NJS::Enum::Type::String) return data.number;
+		if(type > NJS::Enum::Type::Undefined && type < NJS::Enum::Type::String) return data.number;
 		return (long long)((double)*this);
 	}
 
