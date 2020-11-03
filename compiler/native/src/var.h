@@ -23,8 +23,6 @@ namespace NJS
 		if(type < NJS::Enum::Type::String)
 		{
 			data.number = (double)_v;
-			//if(type == _v.type) data.number = _v.data.number;
-			//else data.number = (double)_v;
 		}
 		else data.ptr = ((NJS::Class::Base*)_v.data.ptr)->Copy();
 		
@@ -337,7 +335,7 @@ namespace NJS
 			return data.number % _v1;
 		else
 		{
-			return remainder((int)data.number, (int)_v1);
+			return remainder((double)data.number, (double)_v1);
 		}
 	}
 	VAR VAR::operator%=(const VAR &_v1)
