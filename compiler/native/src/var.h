@@ -541,14 +541,16 @@ namespace NJS
 
 	VAR::operator bool() const
 	{
-		if(type < NJS::Enum::Type::String) return data.number;
-		return (bool)(*(NJS::Class::Base*)data.ptr);
+		if(type == NJS::Enum::Type::Undefined) return false;
+		else if(type == NJS::Enum::Type::Boolean || type == NJS::Enum::Type::Number) return data.number;
+		else return (bool)(*(NJS::Class::Base*)data.ptr);
 	}
 	
 	VAR::operator bool()
 	{
-		if(type < NJS::Enum::Type::String) return data.number;
-		return (bool)(*(NJS::Class::Base*)data.ptr);
+		if(type == NJS::Enum::Type::Undefined) return false;
+		else if(type == NJS::Enum::Type::Boolean || type == NJS::Enum::Type::Number) return data.number;
+		else return (bool)(*(NJS::Class::Base*)data.ptr);
 	}
 
 	VAR::operator std::string() const
