@@ -31,7 +31,7 @@ namespace NJS::Class
 	Array::operator bool() const noexcept { return true; }
 	Array::operator double() const noexcept
 	{
-		if (value.size() < 2)
+		if (value.size() == 1)
 		{
 			return (double)value[0];
 		}
@@ -42,7 +42,7 @@ namespace NJS::Class
 	}
 	Array::operator int() const noexcept
 	{
-		if (value.size() < 2)
+		if (value.size() == 1)
 		{
 			return (int)value[0];
 		}
@@ -53,7 +53,7 @@ namespace NJS::Class
 	}
 	Array::operator long long() const noexcept
 	{
-		if (value.size() < 2)
+		if (value.size() == 1)
 		{
 			return (long long)value[0];
 		}
