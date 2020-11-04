@@ -75,20 +75,20 @@ namespace NJS
 		/// Arithmetic operators
 		VAR operator+(const VAR &_v1);
 		VAR operator+(const char _v1[]);
-		void operator+=(const VAR &_v1);
+		VAR& operator+=(const VAR &_v1);
 		VAR operator-(const VAR &_v1);
-		VAR operator-=(const VAR &_v1);
+		VAR& operator-=(const VAR &_v1);
 		VAR operator*(const VAR &_v1);
-		void operator*=(const VAR &_v1);
+		VAR& operator*=(const VAR &_v1);
 		VAR operator/(const VAR &_v1);
-		void operator/=(const VAR &_v1);
+		VAR& operator/=(const VAR &_v1);
 		VAR operator%(const VAR &_v1);
-		VAR operator%=(const VAR &_v1);
+		VAR& operator%=(const VAR &_v1);
 		// TODO: "**" and "**=" operators
-		VAR operator++(const int _v1);
-		void operator++();
-		VAR operator--(const int _v1);
-		void operator--();
+		VAR& operator++(const int _v1);
+		VAR& operator++();
+		VAR& operator--(const int _v1);
+		VAR& operator--();
 		/// Comparison operators
 		VAR operator==(const VAR &_v1);
 		// === emulated with __NJS_EQUAL_VALUE_AND_TYPE
@@ -100,7 +100,7 @@ namespace NJS
 		VAR operator>=(const VAR &_v1);
 		/// Bitwise operators
 		VAR operator&(const VAR &_v1);
-		VAR operator&=(const VAR &_v1);
+		VAR& operator&=(const VAR &_v1);
 		VAR operator|(const VAR &_v1);
 		VAR operator|=(const VAR &_v1);
 		VAR operator^(const VAR &_v1);
