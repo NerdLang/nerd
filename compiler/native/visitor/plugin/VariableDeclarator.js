@@ -39,6 +39,7 @@ var VariableDeclarator =
 			  {
 				_value = _el[i].name;
 			  }
+			  else if(_el[i].type == "NullLiteral") _value = "null";
 			  else if(_el[i].extra) _value = _el[i].extra.raw;
 			  else if(_el[i].type == "ObjectProperty")
 			  {
@@ -100,6 +101,7 @@ var VariableDeclarator =
 			  {
 				_value = _el[i].value.name;
 			  }
+			  else if(_el[i].type == "NullLiteral") _value = "null";
 			  else if(_el[i].type == "ObjectProperty")
 			  {
 				 _o = true;

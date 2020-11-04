@@ -4,12 +4,14 @@ namespace NJS
 	{
 		void* ptr;
 		double number;
+		char* str;
+		
 	};
 	
 	struct VAR
 	{
 		NJS::Enum::Type type;
-		std::bitset<3> property;
+		std::bitset<1> property;
 		Data data;
 		
 		VAR();
@@ -17,11 +19,13 @@ namespace NJS
 
 		/**/
 		VAR(VAR const &_v);
+		VAR(VAR const &&_v);
 		/**/
 		
 		/*** CONSTRUCTOR ***/
 
 		VAR(NJS::Enum::Type _type, int _value);
+		VAR(NJS::Enum::Type _type, double _value);
 		VAR(int _value);
 		VAR(double _value);
 		VAR(long long _value);
@@ -30,7 +34,7 @@ namespace NJS
 		VAR(const char *_value);
 		VAR(NJS::Class::Array *_value);
 		VAR(const NJS::Class::Array *_value);
-		VAR(NJS::Class::Boolean *_value);
+		VAR(bool _value);
 		VAR(NJS::Class::Function *_value);
 		VAR(NJS::Class::Object *_value);
 		VAR(NJS::Class::String *_value);
@@ -50,6 +54,7 @@ namespace NJS
 		VAR & operator[] (VAR _index) const;
 		VAR & operator[] (int _index) const;
 		VAR & operator[] (int _index);
+		VAR & operator[] (double _index);
 		VAR & operator[] (const char* _index);
 		/* END ACCESS OVERLOAD */
 

@@ -9,10 +9,9 @@ namespace NJS::Class
 		// Constructors
 		Object();
 		// Properties
-		std::bitset<3> property; // writable, configurable, enumarable
+		std::bitset<4> property; // writable, prototype, configurable, enumarable
 		count_t counter = 0;
 		NJS::Type::object_t object;
-		bool prototype = false;
 		NJS::Type::vector_p instance;
 		// Methods
 		inline void Delete() noexcept;
@@ -28,6 +27,9 @@ namespace NJS::Class
 		// Main operators
 		NJS::VAR const operator[](NJS::VAR key) const;
 		NJS::VAR &operator[](NJS::VAR key);
+		NJS::VAR &operator[](int key);
+		NJS::VAR &operator[](double key);
+		NJS::VAR &operator[](const char* key);
 		template <class... Args> NJS::VAR operator()(Args... args) const;
 		// Comparation operators
 		Object operator!() const;

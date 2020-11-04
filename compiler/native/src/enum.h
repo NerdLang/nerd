@@ -2,16 +2,14 @@ namespace NJS::Enum
 {
 	enum Type:uint8_t
 	{
-		Undefined = 1,
-		Number,
-		Object,
+		Undefined = 0,
+		Null,
 		Boolean,
+		Number,
 		String,
 		Native,
-		Function,
 		Array,
-		ISNAN,
-		ISINFINITY,
-		ISNULL,
+		Object,
+		Function,
 	};
 }

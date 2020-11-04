@@ -188,6 +188,10 @@ function Compiler()
 	/*** METHODS ***/
 	this.Parse = function(_code)
 	{
+		if(CLI.cli["--profile"] && CLI.cli["--profile"].argument == "use")
+		{
+			return;
+		}
 		_code = strip(_code);
 		if(CLI.cli["--preset"] && CLI.cli["--preset"].argument == "speed") 
 		{
@@ -246,7 +250,10 @@ function Compiler()
 	  
 	this.Prepare = function(_folder)
 	{
-		copyDirSync(path.join(__dirname, "src"), _folder, true);
+		if((!CLI.cli["--profile"]) || CLI.cli["--profile"].argument != "use")
+		{
+			copyDirSync(path.join(__dirname, "src"), _folder, true);
+		}
 	};
 
 	this.Out = function(_name)
@@ -267,8 +274,6 @@ function Compiler()
 	  
 	this.Compile = function(_folder, _file)
 	{
-		
-		fs.writeFileSync(_file, _handler.MAIN);
 		process.chdir(_folder);
 		var _exec = _handler.CLI(_handler.COMPILER, _handler.OUT, _file, _handler.OPTION);
 		execSync(_exec);

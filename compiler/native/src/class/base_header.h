@@ -17,5 +17,8 @@ namespace NJS::Class
 		virtual explicit operator double() const noexcept {return 0.0;};
 		virtual explicit operator long long() const noexcept {return 0;};
 		virtual NJS::VAR &operator[](NJS::VAR key){static var _ret = NJS::VAR(); return _ret;};
+		virtual NJS::VAR &operator[](int key){static var _ret = NJS::VAR(); return _ret;};
+		virtual NJS::VAR &operator[](double key){static var _ret = NJS::VAR(); return _ret;};
+		virtual NJS::VAR &operator[](const char* key){static var _ret = NJS::VAR(); return _ret;};
 	};
 }

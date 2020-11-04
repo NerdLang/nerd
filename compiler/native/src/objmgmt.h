@@ -10,15 +10,15 @@ const char *__NJS_Get_String(NJS::VAR _v)
 	return ((NJS::Class::String*)_v.data.ptr)->value.c_str();
 }
 
+const std::string _array[] = {"undefined", "object", "boolean", "number", "string", "native", "array", "object", "function" };
 NJS::VAR __NJS_typeof(NJS::VAR _var)
 {
-	const char *_array[] = {"", "undefined", "number", "object", "boolean", "string", "native", "function", "array", "NaN", "number", "object"};
 	return __NJS_Create_String(_array[_var.type]);
 }
 
 NJS::VAR __NJS_instanceof(NJS::VAR _left, NJS::VAR _right)
 {
-	if(_left.type != NJS::Enum::Type::Object || _right.type != NJS::Enum::Type::Function) return __NJS_Boolean_FALSE;
+	if(_left.type < NJS::Enum::Type::Object) return __NJS_Boolean_FALSE;
 	
 	var protoRight = _right["prototype"];
 	if(!protoRight) return __NJS_Boolean_FALSE;

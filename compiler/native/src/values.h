@@ -1,6 +1,6 @@
 	
 	auto undefined = NJS::VAR(new NJS::Class::Undefined());
-	auto null = NJS::VAR();
-	auto Infinity = NJS::VAR();
-	auto NaN = NJS::VAR();
+	NJS::VAR null = __NJS_Create_Null();
+	NJS::VAR Infinity = std::numeric_limits<double>::infinity;
+	NJS::VAR NaN = std::numeric_limits<double>::quiet_NaN();
 

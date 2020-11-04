@@ -95,14 +95,16 @@ var NODE =
 	
 	if(_stack) _stack = "-Wl,--stack," + _stack;
     else _stack = "";
-
+	var _cliOption = "";
+	if(CLI.cli["--option"]) _cliOption = CLI.cli["--option"].argument;
+	
 	  if(preset == "none")
 	  {
-		  return `${compiler} ${_hashmap} -D__NJS_REGISTER_SIZE=${COMPILER.REGISTER} ${_stack} -std=c++17 ${_uvParam} ${_in} -O1 -s ${COMPILER.LIBS} ${_uvLib} -o a.exe && mv a.exe ${out}`;
+		  return `${compiler} ${_hashmap} -D__NJS_REGISTER_SIZE=${COMPILER.REGISTER} ${_stack} -std=c++17 ${_uvParam} ${_in} -O1 -s ${COMPILER.LIBS} ${_uvLib} -o a.exe && mv a.exe ${out} ${_cliOption}`;
 	  }
 	  else if(preset == "size")
 	  {
-		  return `${compiler} ${_hashmap} -D__NJS_REGISTER_SIZE=${COMPILER.REGISTER} ${_stack} -std=c++17 ${_uvParam} ${_in} -Os -fno-rtti -fno-stack-protector -fomit-frame-pointer -s ${COMPILER.LIBS}  ${_uvLib} -o a.exe && mv a.exe ${out}`;
+		  return `${compiler} ${_hashmap} -D__NJS_REGISTER_SIZE=${COMPILER.REGISTER} ${_stack} -std=c++17 ${_uvParam} ${_in} -Os -fno-rtti -fno-stack-protector -fomit-frame-pointer -s ${COMPILER.LIBS}  ${_uvLib} -o a.exe && mv a.exe ${out} ${_cliOption}`;
 	  }
 	  else
 	  {
@@ -110,7 +112,7 @@ var NODE =
             if(os.platform() == "darwin" || compiler.indexOf("clang") > -1) _opt += "3";
             else _opt += "fast";
 
-            return `${compiler} ${_hashmap} -D__NJS_REGISTER_SIZE=${COMPILER.REGISTER} ${_stack} -std=c++17 ${_uvParam} ${_in} ${_opt} -s ${COMPILER.LIBS}  ${_uvLib} -o a.exe && mv a.exe ${out}`;
+            return `${compiler} ${_hashmap} -D__NJS_REGISTER_SIZE=${COMPILER.REGISTER} ${_stack} -std=c++17 ${_uvParam} ${_in} ${_opt} -s ${COMPILER.LIBS}  ${_uvLib} -o a.exe && mv a.exe ${out} ${_cliOption}`;
 	  }
   }
 }

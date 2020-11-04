@@ -3,7 +3,7 @@ NJS::VAR __NJS_Boolean_Result(NJS::VAR _v)
 	if (_v.type == NJS::Enum::Type::Number)
 		return _v.data.number;
 	else if (_v.type == NJS::Enum::Type::Boolean)
-		return ((NJS::Class::Boolean*)_v.data.ptr);
+		return _v.data.number;
 	else if (_v.type == NJS::Enum::Type::String)
 	{
 		if (strlen(((NJS::Class::String*)_v.data.ptr)->value.c_str()) > 0)
@@ -47,10 +47,11 @@ std::ostream &operator<<(std::ostream &os, const NJS::VAR &_v)
 		os << (std::string)(*(NJS::Class::Undefined*)_v.data.ptr);
 		break;
 	case NJS::Enum::Type::Boolean:
-		os << (std::string)(*(NJS::Class::Boolean*)_v.data.ptr);
+		if(_v.data.number) os << "true";
+		else os << "false";
 		break;
 	case NJS::Enum::Type::Number:
-		os << __NJS_DOUBLE_TO_STRING(_v.data.number);
+		os << (std::string)_v;
 		break;
 	case NJS::Enum::Type::String:
 		os << (std::string)(*(NJS::Class::String*)_v.data.ptr);
@@ -64,16 +65,10 @@ std::ostream &operator<<(std::ostream &os, const NJS::VAR &_v)
 	case NJS::Enum::Type::Native:
 		os << "[Native]";
 		break;
-	case NJS::Enum::Type::ISNAN:
-		os << "NaN";
-		break;
 	case NJS::Enum::Type::Function:
 		os << (std::string)(*(NJS::Class::Function*)_v.data.ptr);
 		break;
-	case NJS::Enum::Type::ISINFINITY:
-		os << "Infinity";
-		break;
-	case NJS::Enum::Type::ISNULL:
+	case NJS::Enum::Type::Null:
 		os << "null";
 		break;
 	default:
@@ -163,8 +158,6 @@ NJS::VAR __NJS_Object_Stringify(NJS::VAR _var, bool _bracket)
 
 	if (_t == NJS::Enum::Type::Undefined)
 		return "undefined";
-	else if (_t == NJS::Enum::Type::ISNAN)
-		return "NaN";
 	else if (_t == NJS::Enum::Type::Number)
 		return var("") + _var;
 	else if (_t == NJS::Enum::Type::String)
@@ -221,13 +214,12 @@ NJS::VAR __NJS_Object_Stringify(NJS::VAR _var, bool _bracket)
 		return "";
 }
 
-NJS::VAR __NJS_Object_Clone(NJS::VAR _var)
+NJS::VAR __NJS_Object_Clone(NJS::VAR& _var)
 {
 	NJS::Enum::Type _t = _var.type;
 	switch(_t)
 	{
 		case NJS::Enum::Type::Undefined:
-		case NJS::Enum::Type::ISNAN:
 		case NJS::Enum::Type::Number:
 		case NJS::Enum::Type::String:
 		case NJS::Enum::Type::Function:
@@ -246,7 +238,7 @@ NJS::VAR __NJS_Object_Clone(NJS::VAR _var)
 		}
 		case NJS::Enum::Type::Object:
 		{
-			var _res = __NJS_Create_Object();
+			const var _res = __NJS_Create_Object();
 			NJS::Type::object_t *_obj = &((NJS::Class::Object*)_var.data.ptr)->object;
 			#ifdef __NJS__OBJECT_HASHMAP
 			for (auto _el: *_obj)
@@ -316,12 +308,6 @@ NJS::VAR __NJS_CREATE_Function(void *_fn)
 NJS::VAR __NJS_Create_Native(void *_native)
 {
 	return NJS::VAR(NJS::Enum::Type::Undefined, _native);
-}
-
-
-std::function<var(NJS::Type::vector_t)> *__NJS_Get_Function(NJS::VAR _v)
-{
-	return (std::function<var(NJS::Type::vector_t)> *)((NJS::Class::Function*)_v.data.ptr)->value;
 }
 
 void *__NJS_Get_Native(NJS::VAR _native)
@@ -431,6 +417,19 @@ NJS::VAR __NJS_NOT_EQUAL_VALUE_AND_TYPE(NJS::VAR _left, NJS::VAR _right)
 	return __NJS_Create_Boolean(0);
 }
 
+
+NJS::VAR operator+ (NJS::VAR _left, int right)
+{
+	if (_left.type == NJS::Enum::Type::String) return (std::string)_left + __NJS_DOUBLE_TO_STRING(right);
+	else return (double)_left + right;
+}
+
+NJS::VAR operator+ (NJS::VAR _left, double right)
+{
+	if (_left.type == NJS::Enum::Type::String) return (std::string)_left + __NJS_DOUBLE_TO_STRING(right);
+	else return (double)_left + right;
+}
+
 template<class T>
 NJS::VAR operator+ (NJS::VAR _left, T right)
 {
@@ -451,16 +450,31 @@ void operator-= (NJS::VAR& _left, T right)
 	else _left -= right;
 }
 
+NJS::VAR operator* (NJS::VAR _left, const char* right)
+{
+	return _left * std::string(right);
+}
+
 template<class T>
 NJS::VAR operator* (NJS::VAR _left, T right)
 {
 	return (double)_left * right;
 }
 
+NJS::VAR operator- (NJS::VAR _left, const char* right)
+{
+	return _left - std::string(right);
+}
+
 template<class T>
 NJS::VAR operator- (NJS::VAR _left, T right)
 {
 	return (double)_left - right;
+}
+
+NJS::VAR operator/ (NJS::VAR _left, const char* right)
+{
+	return _left / std::string(right);
 }
 
 template<class T>

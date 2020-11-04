@@ -14,7 +14,6 @@ namespace NJS::Class
 	}
 	Function::Function(void *val, NJS::VAR bind)
 	{
-		std::cout << "BIND[CTOR]" << std::endl;
 		counter++;
 		This = bind;
 		value = (NJS::Type::function_t*)val;
@@ -79,8 +78,11 @@ namespace NJS::Class
 	#ifdef __NJS__OBJECT_HASHMAP
 	NJS::VAR &Function::operator[](NJS::VAR key)
 	{
-		NJS::VAR& _obj = object[(std::string)key];
-		if(_obj) return _obj; 
+		std::string _str = ((std::string)key);
+		std::string_view _sview = _str;
+		
+		NJS::VAR& _obj = object[_str];
+		if(_obj.type != NJS::Enum::Type::Undefined) return _obj; 		
 		
 		__NJS_Object_Lazy_Loader("prototype");
 		
@@ -95,9 +97,12 @@ namespace NJS::Class
 	#else
 	NJS::VAR &Function::operator[](NJS::VAR key)
 	{
+		std::string _str = ((std::string)key);
+		std::string_view _sview = _str;
+		
 		for (auto & search : object)
 		{
-			if (((std::string)key).compare(search.first) == 0)
+			if (_sview.compare(search.first) == 0)
 			{
 				return search.second;
 			}
@@ -111,12 +116,150 @@ namespace NJS::Class
 		__NJS_Method_Lazy_Loader("call", call);
 		__NJS_Method_Lazy_Loader("apply", apply);
 		
-		object.push_back(NJS::Type::pair_t((std::string)key, undefined));
+		object.push_back(NJS::Type::pair_t(_str, undefined));
 		return object[object.size() - 1].second;
 	}
 	#endif
 	
-	NJS::VAR Function::Call(var& __NJS_THIS, NJS::VAR* _args, int i)
+	#ifdef __NJS__OBJECT_HASHMAP
+	NJS::VAR &Function::operator[](int key)
+	{
+		std::string _str = std::to_string(key);
+		std::string_view _sview = _str;
+		
+		NJS::VAR& _obj = object[_str];
+		if(_obj.type != NJS::Enum::Type::Undefined) return _obj; 		
+		
+		__NJS_Object_Lazy_Loader("prototype");
+		
+		__NJS_Method_Lazy_Loader("toString", toString);
+		__NJS_Method_Lazy_Loader("valueOf", valueOf);
+		__NJS_Method_Lazy_Loader("bind", bind);
+		__NJS_Method_Lazy_Loader("call", call);
+		__NJS_Method_Lazy_Loader("apply", apply);
+		
+		return _obj;
+	}
+	#else
+	NJS::VAR &Function::operator[](int key)
+	{
+		std::string _str = std::to_string(key);
+		std::string_view _sview = _str;
+		
+		for (auto & search : object)
+		{
+			if (_sview.compare(search.first) == 0)
+			{
+				return search.second;
+			}
+		}
+		
+		__NJS_Object_Lazy_Loader("prototype");
+		
+		__NJS_Method_Lazy_Loader("toString", toString);
+		__NJS_Method_Lazy_Loader("valueOf", valueOf);
+		__NJS_Method_Lazy_Loader("bind", bind);
+		__NJS_Method_Lazy_Loader("call", call);
+		__NJS_Method_Lazy_Loader("apply", apply);
+		
+		object.push_back(NJS::Type::pair_t(_str, undefined));
+		return object[object.size() - 1].second;
+	}
+	#endif
+	
+	#ifdef __NJS__OBJECT_HASHMAP
+	NJS::VAR &Function::operator[](double key)
+	{
+		std::string _str = std::to_string(key);
+		std::string_view _sview = _str;
+		
+		NJS::VAR& _obj = object[_str];
+		if(_obj.type != NJS::Enum::Type::Undefined) return _obj; 		
+		
+		__NJS_Object_Lazy_Loader("prototype");
+		
+		__NJS_Method_Lazy_Loader("toString", toString);
+		__NJS_Method_Lazy_Loader("valueOf", valueOf);
+		__NJS_Method_Lazy_Loader("bind", bind);
+		__NJS_Method_Lazy_Loader("call", call);
+		__NJS_Method_Lazy_Loader("apply", apply);
+		
+		return _obj;
+	}
+	#else
+	NJS::VAR &Function::operator[](double key)
+	{
+		std::string _str = std::to_string(key);
+		std::string_view _sview = _str;
+		
+		for (auto & search : object)
+		{
+			if (_sview.compare(search.first) == 0)
+			{
+				return search.second;
+			}
+		}
+		
+		__NJS_Object_Lazy_Loader("prototype");
+		
+		__NJS_Method_Lazy_Loader("toString", toString);
+		__NJS_Method_Lazy_Loader("valueOf", valueOf);
+		__NJS_Method_Lazy_Loader("bind", bind);
+		__NJS_Method_Lazy_Loader("call", call);
+		__NJS_Method_Lazy_Loader("apply", apply);
+		
+		object.push_back(NJS::Type::pair_t(_str, undefined));
+		return object[object.size() - 1].second;
+	}
+	#endif
+	
+	#ifdef __NJS__OBJECT_HASHMAP
+	NJS::VAR &Function::operator[](const char* key)
+	{
+		std::string _str = key;
+		std::string_view _sview = _str;
+		
+		NJS::VAR& _obj = object[_str];
+		if(_obj.type != NJS::Enum::Type::Undefined) return _obj; 		
+		
+		__NJS_Object_Lazy_Loader("prototype");
+		
+		__NJS_Method_Lazy_Loader("toString", toString);
+		__NJS_Method_Lazy_Loader("valueOf", valueOf);
+		__NJS_Method_Lazy_Loader("bind", bind);
+		__NJS_Method_Lazy_Loader("call", call);
+		__NJS_Method_Lazy_Loader("apply", apply);
+		
+		return _obj;
+	}
+	#else
+	NJS::VAR &Function::operator[](const char* key)
+	{
+		std::string _str = key;
+		std::string_view _sview = _str;
+		
+		for (auto & search : object)
+		{
+			if (_sview.compare(search.first) == 0)
+			{
+				return search.second;
+			}
+		}
+		
+		__NJS_Object_Lazy_Loader("prototype");
+		
+		__NJS_Method_Lazy_Loader("toString", toString);
+		__NJS_Method_Lazy_Loader("valueOf", valueOf);
+		__NJS_Method_Lazy_Loader("bind", bind);
+		__NJS_Method_Lazy_Loader("call", call);
+		__NJS_Method_Lazy_Loader("apply", apply);
+		
+		object.push_back(NJS::Type::pair_t(_str, undefined));
+		return object[object.size() - 1].second;
+	}
+	#endif
+	
+	inline NJS::VAR Function::Call(var& __NJS_THIS, NJS::VAR* _args, int i)
 	{
 		return (*static_cast<NJS::Type::function_t *>(value))(__NJS_THIS, _args, i);
 	}
@@ -135,13 +278,13 @@ namespace NJS::Class
 
 		if(_ret.type == NJS::Enum::Type::Object)
 		{
-			((NJS::Class::Object*)_ret.data.ptr)->prototype = true;
+			((NJS::Class::Object*)_ret.data.ptr)->property.set(1,1);
 			((NJS::Class::Object*)_ret.data.ptr)->instance.push_back((*this)["prototype"].data.ptr);
 			return _ret;
 		}
 		else
 		{
-			((NJS::Class::Object*)_this.data.ptr)->prototype = true;
+			((NJS::Class::Object*)_this.data.ptr)->property.set(1,1);
 			((NJS::Class::Object*)_this.data.ptr)->instance.push_back((*this)["prototype"].data.ptr);
 			return _this;
 		}

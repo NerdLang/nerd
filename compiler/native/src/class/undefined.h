@@ -16,9 +16,9 @@ namespace NJS::Class
 	}
 	// Native cast
 	Undefined::operator bool() const noexcept { return false; }
-	Undefined::operator double() const noexcept { return 0.0; }
-	Undefined::operator int() const noexcept { return 0; }
-	Undefined::operator long long() const noexcept { return 0L; }
+	Undefined::operator double() const noexcept { return std::numeric_limits<double>::quiet_NaN(); }
+	Undefined::operator int() const noexcept { return std::numeric_limits<int>::quiet_NaN(); }
+	Undefined::operator long long() const noexcept { return std::numeric_limits<long long>::quiet_NaN(); }
 	Undefined::operator std::string() const noexcept { return "undefined"; }
 	// Main operators
 	NJS::VAR const Undefined::operator[](NJS::VAR key) const
@@ -29,6 +29,27 @@ namespace NJS::Class
 		return undefined;
 	}
 	NJS::VAR &Undefined::operator[](NJS::VAR key)
+	{
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		throw NJS::VAR("TypeError: Cannot read property '" + (std::string)key + "' of undefined ");
+		#endif
+		return undefined;
+	}
+	NJS::VAR &Undefined::operator[](int key)
+	{
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		throw NJS::VAR("TypeError: Cannot read property " + std::to_string(key) + " of undefined ");
+		#endif
+		return undefined;
+	}
+	NJS::VAR &Undefined::operator[](double key)
+	{
+		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		throw NJS::VAR("TypeError: Cannot read property " + std::to_string(key) + " of undefined ");
+		#endif
+		return undefined;
+	}
+	NJS::VAR &Undefined::operator[](const char* key)
 	{
 		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw NJS::VAR("TypeError: Cannot read property '" + (std::string)key + "' of undefined ");

@@ -65,6 +65,64 @@ namespace NJS::Class
 		#endif
 	}
 	
+	NJS::VAR &Native::operator[](int key)
+	{
+		#ifdef __NJS__OBJECT_HASHMAP
+		return object[std::to_string(key)];
+		#else
+		std::string _str = std::to_string(key);
+		for (auto & search : object)
+		{
+			if (_str.compare(search.first) == 0)
+			{
+				return search.second;
+			}
+		}
+
+		object.push_back(NJS::Type::pair_t(_str, __NJS_VAR()));
+		return object[object.size() - 1].second;
+		#endif
+	}
+	
+	NJS::VAR &Native::operator[](double key)
+	{
+		#ifdef __NJS__OBJECT_HASHMAP
+		return object[std::to_string(key)];
+		#else
+		std::string _str = std::to_string(key);
+		for (auto & search : object)
+		{
+			if (_str.compare(search.first) == 0)
+			{
+				return search.second;
+			}
+		}
+
+		object.push_back(NJS::Type::pair_t(_str, __NJS_VAR()));
+		return object[object.size() - 1].second;
+		#endif
+	}
+	
+	
+	NJS::VAR &Native::operator[](const char* key)
+	{
+		std::string str = key;
+		#ifdef __NJS__OBJECT_HASHMAP
+		return object[str];
+		#else
+		for (auto & search : object)
+		{
+			if (str.compare(search.first) == 0)
+			{
+				return search.second;
+			}
+		}
+
+		object.push_back(NJS::Type::pair_t(str, __NJS_VAR()));
+		return object[object.size() - 1].second;
+		#endif
+	}
+	
 	template <class... Args>
 	NJS::VAR Native::operator()(Args... args) const
 	{

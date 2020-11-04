@@ -58,14 +58,16 @@ var ARDUINO =
   cli: function(compiler, preset, out, _in, option, target, spec)
   {
 	  var OPT = getOptions();		
-	  
+	  var _cliOption = "";
+	  if(CLI.cli["--option"]) _cliOption = CLI.cli["--option"].argument;
+		
 	  if(!target || !OPTIONS[target])
 	  {
 		  console.log("[!] No target selected, switching to 'uno'");
 		  target = "uno";
 	  }
 	  var _cli = `${compiler} ${OPTIONS[target].preset} -DARDUINO_ARCH_AVR -w -Os -fno-exceptions -fno-rtti -fno-stack-protector -fomit-frame-pointer -ffunction-sections -fdata-sections -Wl,--gc-sections \
-	  -I ${extern}/avr -I ${extern}/arduino/avr/variants/${OPTIONS[target].variant}/ -I ${extern}/arduino/avr/cores/arduino  -I ${extern}/avr/include -I ${extern}/stlarduino ${extern}/stlarduino/ios.cpp  ${extern}/arduino/avr/cores/arduino/abi.cpp -fno-threadsafe-statics -lm ${COMPILER.LIBS} -o ${out} ${_in}`;
+	  -I ${extern}/avr -I ${extern}/arduino/avr/variants/${OPTIONS[target].variant}/ -I ${extern}/arduino/avr/cores/arduino  -I ${extern}/avr/include -I ${extern}/stlarduino ${extern}/stlarduino/ios.cpp  ${extern}/arduino/avr/cores/arduino/abi.cpp -fno-threadsafe-statics -lm ${COMPILER.LIBS} -o ${out} ${_in} ${_cliOption}`;
 	  
  	  if(!OPT.elf) _cli += `&& avr-objcopy -O ihex -R .eeprom ${out}`;
 	if(OPT.cli) console.log("[*]" + _cli);

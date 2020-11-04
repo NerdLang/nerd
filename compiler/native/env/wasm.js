@@ -72,17 +72,20 @@ var WASM =
   },
   cli: function(compiler, preset, out, _in, option)
   {
+	  var _cliOption = "";
+	  if(CLI.cli["--option"]) _cliOption = CLI.cli["--option"].argument;
+		
 		if(preset == "none")
 		{
-			return `${compiler} -D__NJS_REGISTER_SIZE=${COMPILER.REGISTER} ${_in} -O1 -w -s TOTAL_MEMORY=33554432 ${COMPILER.LIBS} -o ${out}`;
+			return `${compiler} -D__NJS_REGISTER_SIZE=${COMPILER.REGISTER} ${_in} -O1 -w -s TOTAL_MEMORY=33554432 ${COMPILER.LIBS} -o ${out} ${_cliOption}`;
 		}
 		else if(preset == "size")
 		{
-			return `${compiler} -D__NJS_REGISTER_SIZE=${COMPILER.REGISTER} ${_in} -Os -fno-exceptions -fno-rtti -fno-stack-protector -fomit-frame-pointer -w -s TOTAL_MEMORY=33554432 ${COMPILER.LIBS} -o ${out}`;
+			return `${compiler} -D__NJS_REGISTER_SIZE=${COMPILER.REGISTER} ${_in} -Os -fno-exceptions -fno-rtti -fno-stack-protector -fomit-frame-pointer -w -s TOTAL_MEMORY=33554432 ${COMPILER.LIBS} -o ${out} ${_cliOption}`;
 		}
 		else
 		{
-			return `${compiler} -D__NJS_REGISTER_SIZE=${COMPILER.REGISTER} ${_in} -O3 -w -s TOTAL_MEMORY=33554432 ${COMPILER.LIBS} -o ${out}`;
+			return `${compiler} -D__NJS_REGISTER_SIZE=${COMPILER.REGISTER} ${_in} -O3 -w -s TOTAL_MEMORY=33554432 ${COMPILER.LIBS} -o ${out} ${_cliOption}`;
 		}
   }
 }
