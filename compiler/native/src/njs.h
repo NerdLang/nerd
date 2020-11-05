@@ -57,6 +57,9 @@ namespace std
 #include <functional>
 #include <cmath>
 #include <limits>
+#include <mutex>
+#include <chrono>
+#include <thread>
 #endif
 
 #include "enum.h"

@@ -1,10 +1,5 @@
 #include <deque>
 
-#ifndef __NJS_ENV_ARDUINO
-	#include <chrono>
-	#include <thread>
-#endif
-
 namespace NJS::Event
 {
 	std::deque<NJS::VAR> evQ = {};

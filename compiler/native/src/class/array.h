@@ -734,7 +734,10 @@ namespace NJS::Class
 		else return new NJS::Class::Array(value);
 	}
 	NJS::VAR Array::some(NJS::VAR* args, int _length) const { return undefined; }
-	NJS::VAR Array::sort(NJS::VAR* args, int _length) const { return undefined; }
+	NJS::VAR Array::sort(NJS::VAR* args, int _length) const 
+	{ 
+		return undefined; 
+	}
 	NJS::VAR Array::splice(NJS::VAR* args, int _length)
 	{ 
 		NJS::VAR _ret = slice(args, _length);
