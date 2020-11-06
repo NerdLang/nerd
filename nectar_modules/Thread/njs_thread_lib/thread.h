@@ -21,18 +21,25 @@
  */
 
 std::unordered_map<std::string, std::mutex> __NJS_Thread_mutexList;
+std::vector<std::thread> __NJS_Thread_List;
 
 void __NJS_THREADED_CALL(NJS::VAR _fn)
 {
-    _fn();
+	try
+	{
+		_fn();
+	}
+	catch(NJS::VAR e)
+	{
+		__NJS_Log_Console(e);
+	}
 }
  
 function __NJS_NATIVE_THREAD_RUN(_cb)
 {
 	if(_cb)
 	{
-		std::thread _thread(&__NJS_THREADED_CALL, _cb);
-		_thread.join();
+		__NJS_Thread_List.emplace_back(__NJS_THREADED_CALL, _cb);
 	}
 };
 
@@ -40,5 +47,13 @@ function __NJS_NATIVE_LOCK_GUARD(_key)
 {
 	if(!_key) _key = "default";
 	std::lock_guard<std::mutex> guard(__NJS_Thread_mutexList[(std::string)_key]);
+};
+
+function __NJS_NATIVE_WAIT_FOR_ALL()
+{
+	for(auto& _thread: __NJS_Thread_List)
+	{
+		_thread.join();
+	}
 };
 

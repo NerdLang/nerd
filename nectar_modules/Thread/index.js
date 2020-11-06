@@ -26,6 +26,7 @@ var _Thread =
 {
   run: __NJS_NATIVE_THREAD_RUN,
   lock: __NJS_NATIVE_LOCK_GUARD,
+  waitForAll: __NJS_NATIVE_WAIT_FOR_ALL,
 };
 
 module.exports = _Thread;
