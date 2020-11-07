@@ -134,6 +134,14 @@ var STD =
 			
 			return `${compiler} ${_hashmap} ${_stack} -std=c++17 "${_in}" ${_opt} -s ${COMPILER.LIBS}  -o "${out}" ${_sysVNetLibs} ${_cliOption}`;
         }
+    },
+	write: function(_content, _in)
+    {
+		if(CLI.cli["--profile"] && CLI.cli["--profile"].argument == "use")
+		{
+			return;
+		}
+        fs.writeFileSync(_in, _content);
     }
 
 }

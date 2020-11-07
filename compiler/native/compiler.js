@@ -188,10 +188,6 @@ function Compiler()
 	/*** METHODS ***/
 	this.Parse = function(_code)
 	{
-		if(CLI.cli["--profile"] && CLI.cli["--profile"].argument == "use")
-		{
-			return;
-		}
 		_code = strip(_code);
 		if(CLI.cli["--preset"] && CLI.cli["--preset"].argument == "speed") 
 		{

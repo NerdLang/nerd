@@ -25,6 +25,10 @@ var _SEARCHCINC = new RegExp(/#include *\"(.*)\"/g);
 
 function genInclude(from, src, full)
 {
+	if(CLI.cli["--profile"] && CLI.cli["--profile"].argument == "use")
+	{
+		return src;
+	}
   var _match = src.match(_SEARCH);
   while(_match)
   {
