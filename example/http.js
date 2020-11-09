@@ -19,3 +19,5 @@ var options =
 
 console.log("Listening on " + host + ":" + port);
 http.listen(host, port, cb, options);
+
+setInterval(function(){}, 10000);
