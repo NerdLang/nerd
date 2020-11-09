@@ -71,10 +71,10 @@ var __NJS_HTTP_LISTEN(var _host, var _port, var _cb, var _opt)
 	}
 	_req["get"] = _query;
 
-	var _res = __NJS_Create_Object();
-	_res["end"] = __f_NJS_HTTP_RES_END;
+	var _njs_res = __NJS_Create_Object();
+	_njs_res["end"] = __f_NJS_HTTP_RES_END;
 
-	_cb(_req, _res);
+	_cb(_req, _njs_res);
 	return var();
   });
   
@@ -135,10 +135,10 @@ var __NJS_HTTP_LISTEN(var _host, var _port, var _cb, var _opt)
     }
     
     
-    var _res = __NJS_Create_Object();
-	_res["end"] = __f_NJS_HTTP_RES_END;
+    var _njs_res = __NJS_Create_Object();
+	_njs_res["end"] = __f_NJS_HTTP_RES_END;
     
-    _cb(_req, _res);
+    _cb(_req, _njs_res);
     return var();
   });
   
@@ -199,10 +199,10 @@ var __NJS_HTTP_LISTEN(var _host, var _port, var _cb, var _opt)
       _req["data"] = body;
     }
     
-    var _res = __NJS_Create_Object();
-	_res["end"] = __f_NJS_HTTP_RES_END;
+    var _njs_res = __NJS_Create_Object();
+	_njs_res["end"] = __f_NJS_HTTP_RES_END;
     
-    _cb(_req, _res);
+    _cb(_req, _njs_res);
     return var();
   });
   
@@ -222,10 +222,10 @@ var __NJS_HTTP_LISTEN(var _host, var _port, var _cb, var _opt)
 	_req["method"] = "DELETE";
 	_req["url"] = request.path;
     
-    var _res = __NJS_Create_Object();
-	_res["end"] = __f_NJS_HTTP_RES_END;
+    var _njs_res = __NJS_Create_Object();
+	_njs_res["end"] = __f_NJS_HTTP_RES_END;
 
-    _cb(_req, _res);
+    _cb(_req, _njs_res);
     return var();
   });
   
