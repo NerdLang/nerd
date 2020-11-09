@@ -623,6 +623,7 @@ function Build(prepare)
         var _binexec = child_process.spawnSync(_binoutput, 
         [],
         {
+		  detached: false,
           stdio: [process.stdin, process.stdout, process.stderr],
           cwd: process.cwd(),
           env: process.env
