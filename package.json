@@ -1,6 +1,6 @@
 {
   "name": "nectarjs",
-  "version": "0.7.99",
+  "version": "0.7.100",
   "description": "Javascript's God Mode. No VM. No Bytecode. No GC. Just native binaries.",
   "main": "nectar",
   "bin": {
@@ -68,11 +68,11 @@
   "homepage": "https://nectarjs.com",
   "dependencies": {
     "@babel/core": "^7.12.3",
-    "@babel/generator": "^7.12.1",
+    "@babel/generator": "^7.12.5",
     "babel-plugin-minify-dead-code-elimination": "^0.5.1",
     "babel-plugin-minify-guarded-expressions": "^0.4.4",
     "babel-plugin-remove-unused-vars": "^2.2.0",
-    "eslint": "^7.12.0",
+    "eslint": "^7.13.0",
     "strip-comments": "^2.0.1",
     "typescript": "^3.9.7"
   }

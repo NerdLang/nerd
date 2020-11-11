@@ -1,5 +1,7 @@
-var fs = require("fs-std");
+var fs = require("fs");
 
+fs.readFile("nectar.js");
+/*
 var file = "fs.txt";
 
 var write = fs.writeFileSync(file, "Some content");
@@ -20,3 +22,4 @@ else
 {
 	console.log("[!] couldn't write '" + file + "'");
 }
+*/

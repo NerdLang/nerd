@@ -19,16 +19,17 @@
  * along with NectarJS.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
- 
-#include <iostream>
+#define _USE_MATH_DEFINES
+#include <cmath>
 #include <string>
+#include <iostream>
 #include <cstring>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sstream>
-#include <memory>
 #include <vector>
+#include <memory>
 #include <iomanip>
 #define _USE_MATH_DEFINES
 #include <stdarg.h>
@@ -37,7 +38,6 @@
 
 #ifdef __NJS_ENV_ARDUINO
 #include <util/delay.h>
-#include <string.h>
 #include <WString.h>
 #include <new.h>
 #include <time.h>

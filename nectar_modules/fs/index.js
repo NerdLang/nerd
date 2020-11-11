@@ -24,6 +24,16 @@
 
 var fs =
 {
+  readFile : __NJS_fs_readFile,
+  writeFile : __NJS_fs_writeFile,
+  appendFile : __NJS_fs_appendFile,
+  unlink : __NJS_fs_unlink,
+  rmdir : __NJS_fs_rmdir,
+  remove : __NJS_fs_remove,
+  rename: __NJS_fs_rename,
+  mkdir: __NJS_fs_mkdir,
+  readdir: "TODO",
+  
   readFileSync : __NJS_fs_readFileSync,
   writeFileSync : __NJS_fs_writeFileSync,
   appendFileSync : __NJS_fs_appendFileSync,

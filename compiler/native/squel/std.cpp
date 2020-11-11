@@ -19,20 +19,7 @@
  * along with NectarJS.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
- #define _USE_MATH_DEFINES
- #include <cmath>
- #include <string>
- #include <iostream>
- #include <string>
- #include <cstring>
- #include <stdio.h>
- #include <stdlib.h>
- #include <string.h>
- #include <sstream>
- #include <vector>
- #include <memory>
-
-
+ 
  #define __NJS_ENV_STD
  #include "njs.h"
 

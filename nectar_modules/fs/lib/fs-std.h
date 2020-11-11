@@ -29,6 +29,7 @@
     #include <sys/types.h>
 #endif
 
+/*** Sync ***/
 function __NJS_fs_readFileSync(_name)
 { 
 	FILE* fp;
@@ -113,3 +114,98 @@ function __NJS_fs_mkdirSync(_path)
 	#endif
 	return __NJS_Create_Boolean(1);
 }
+/* END SYNC */
+
+/*** Async ***/
+function __NJS_fs_readFile(_name, _cb)
+{ 
+	FILE* fp;
+
+  int resultat = 1;
+
+  fp = fopen(__NJS_Get_String(_name), "r");
+
+  if(fp == NULL)
+  {
+	if(_cb) _cb(null, "");
+    return undefined;
+  }
+
+  fseek(fp, 0L, SEEK_END);
+  long fsize = ftell(fp);
+  fseek(fp, SEEK_SET, 0);
+
+  char* buffer = (char*)malloc((fsize + 1) * sizeof(char));
+
+  size_t _ret = fread(buffer, fsize+1, 1, fp);
+
+  buffer[fsize] = '\0';
+  fclose(fp);
+  if(_cb) _cb(null, __NJS_Create_String(buffer));
+};
+
+
+function __NJS_fs_writeFile(_name, _content, _cb)
+{
+  std::ofstream myfile(__NJS_Get_String(_name), std::ios::out | std::ios::trunc | std::ios::binary);
+  if(!myfile)
+  {
+	if(_cb) _cb(null, __NJS_Boolean_FALSE);
+    return undefined;
+  }
+  myfile.write(((NJS::Class::String*)_content.data.ptr)->value.c_str(), ((NJS::Class::String*)_content.data.ptr)->value.size());
+  myfile.close();
+
+  if(_cb) _cb(null, __NJS_Boolean_TRUE);
+};
+
+function __NJS_fs_appendFile(_name, _content, _cb)
+{
+  std::ofstream myfile(__NJS_Get_String(_name), std::ios::out | std::ios::app | std::ios::binary);
+  if(!myfile)
+  {
+	if(_cb) _cb(null, __NJS_Boolean_FALSE);
+    return undefined;
+  }
+  myfile.write(((NJS::Class::String*)_content.data.ptr)->value.c_str(), ((NJS::Class::String*)_content.data.ptr)->value.size());
+  myfile.close();
+
+  if(_cb) _cb(null, __NJS_Boolean_TRUE);
+};
+
+function __NJS_fs_unlink(_name, _cb)
+{
+  unlink(__NJS_Get_String(_name));
+  
+  if(_cb) _cb(null, __NJS_Boolean_TRUE);
+};
+
+function __NJS_fs_rmdir(_name, _cb)
+{
+  rmdir(__NJS_Get_String(_name));
+  
+  if(_cb) _cb(null, __NJS_Boolean_TRUE);
+};
+
+function __NJS_fs_remove(_name, _cb)
+{
+  remove(__NJS_Get_String(_name));
+  
+  if(_cb) _cb(null, __NJS_Boolean_TRUE);
+};
+
+function __NJS_fs_rename(_old, _new, _cb)
+{
+  rename(__NJS_Get_String(_old), __NJS_Get_String(_new));
+  
+  if(_cb) _cb(null, __NJS_Boolean_TRUE);
+};
+
+function __NJS_fs_mkdir(_path, _cb)
+{
+	#ifndef __linux__ 
+	mkdir( ((std::string)_path).c_str() );
+	#endif
+	if(_cb) _cb(null, __NJS_Boolean_TRUE);
+}
+/* END ASYNC */
