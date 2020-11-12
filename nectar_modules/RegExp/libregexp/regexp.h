@@ -22,10 +22,32 @@
  
 #include <regex>
 
-function __NJS_RegExp_Test(_search, _re)
+function __NJS_RegExp_Test(_search)
 {
- 	if( std::regex_match ( (std::string)_search, std::regex((std::string)_re, std::regex::ECMAScript) ) ) return __NJS_Boolean_TRUE;
+ 	if( std::regex_match ( (std::string)_search, std::regex((std::string)__NJS_THIS["__NJS_Internal_Expression"], std::regex::ECMAScript) ) ) return __NJS_Boolean_TRUE;
 	else return __NJS_Boolean_FALSE;
+}
+
+function __NJS_RegExp_Exec(_search)
+{
+	var _res = __NJS_Create_Array();
+	std::string s = (std::string)_search;
+	std::smatch m;
+ 	while(std::regex_search ( s, m, std::regex((std::string)__NJS_THIS["__NJS_Internal_Expression"], std::regex::ECMAScript) ))
+	{
+		int i = 0;
+		for(auto x:m)
+		{
+			_res[i] = (std::string)x;
+			i++;
+		}
+		_res["index"] = (double)m.position();
+		_res["input"] = _search;
+		_res["groups"] = undefined;
+		
+		s = m.suffix().str();
+	}
+	return _res;
 }
 
 /*

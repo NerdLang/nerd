@@ -38,12 +38,10 @@ int main(int argc, char* argv[])
 	var __NJS_ARGS = __NJS_Create_Array();
 	for( int i = 0; i < argc; i++)
 	{
-		__NJS_Object_Set(i, NJS::VAR(argv[i]), __NJS_ARGS);
+		__NJS_ARGS[i] = argv[i];
 	}
 
 	{INIT}
-
-	
 
 	{
 		{CODE};

@@ -157,25 +157,35 @@ NJS::VAR __NJS_Object_Stringify(NJS::VAR _var, bool _bracket)
 	NJS::Enum::Type _t = _var.type;
 
 	if (_t == NJS::Enum::Type::Undefined)
-		return "undefined";
+		return "\e[90mundefined\e[0m";
 	else if (_t == NJS::Enum::Type::Number)
-		return var("") + _var;
+		return var("\e[33m") + _var + "\e[0m";
 	else if (_t == NJS::Enum::Type::String)
-		return var("\"") + _var + "\"";
+		return var("\e[32m\"") + _var + "\"\e[0m";
 	else if (_t == NJS::Enum::Type::Function)
 		return var("\"") + (std::string)(*(NJS::Class::Function*)_var.data.ptr) + "\"";
 	else if (_t == NJS::Enum::Type::Array)
 	{
 		var _res = "";
-		std::vector<NJS::VAR> *_arr = &((NJS::Class::Array*)_var.data.ptr)->value;
+		NJS::Type::vector_t *_arr = &((NJS::Class::Array*)_var.data.ptr)->value;
+		NJS::Type::object_t *_obj = &((NJS::Class::Array*)_var.data.ptr)->object;
 		if(_bracket) _res += " [ ";
+		int i = 0;
 		int j = (*_arr).size();
-		for (int i = 0; i < j; i++)
+		for (i; i < j; i++)
 		{
 			if (i > 0)
-				_res += ",";
+				_res += ", ";
 			_res += __NJS_Object_Stringify((*_arr)[i], _bracket);
 		}
+		for(auto& o: (*_obj))
+		{
+			if (i > 0)
+				_res += ", ";
+			_res += o.first + ":" + ((std::string)__NJS_Object_Stringify(o.second, _bracket));
+			i++;
+		}
+		
 		if(_bracket) _res += " ] ";
 
 		return _res;
