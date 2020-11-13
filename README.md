@@ -30,7 +30,7 @@ No VM. No Bytecode. No packaging. No Garbage Collector. Fully compiled to native
 * [Compatibility Targets / Platforms](#compatibility-targetsplatforms)
 * [Linking C/C++ librariesr](#linking-cc-libraries)
   - [Meta functions in C++ libs](#meta-functions-in-c-libs)
-  - [Adding external lib and .c/.cpp files](#windows)
+  - [Adding external lib and .c/.cpp files](#adding-external-lib-and-ccpp-files)
 * [Optimization](#optimization)
 * [Stores](#stores)
 * [Actively Tested For](#actively-tested-for)
