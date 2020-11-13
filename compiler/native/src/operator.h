@@ -124,28 +124,47 @@ NJS::VAR __NJS_Log_Console(NJS::VAR* _var, int _length)
 
 NJS::VAR __NJS_Object_Keys(NJS::VAR _var)
 {
-	if (_var.type != NJS::Enum::Type::Object && _var.type != NJS::Enum::Type::Object)
-		return 0;
 	var _res = __NJS_Create_Array();
+	
+	if (_var.type != NJS::Enum::Type::Object && _var.type != NJS::Enum::Type::Array)
+	{
+		return _res;
+	}
 
-	NJS::Type::object_t *_obj = &((NJS::Class::Object*)_var.data.ptr)->object;
+	if(_var.type == NJS::Enum::Type::Array)
+	{
+		NJS::Type::vector_t *_arr = &((NJS::Class::Array*)_var.data.ptr)->value;
+		int _j = (*_arr).size();
+		int _i = 0;
+		for (_i; _i < _j; _i++)
+		{
+
+			if(!(*_arr)[_i].property[1])
+			{
+				_res["push"](std::to_string(_i));
+			}
+		}
+	}
+
+	NJS::Type::object_t *_obj;
+	if(_var.type == NJS::Enum::Type::Array) _obj = &((NJS::Class::Array*)_var.data.ptr)->object;
+	else _obj = &((NJS::Class::Object*)_var.data.ptr)->object;
 	
 	#ifdef __NJS__OBJECT_HASHMAP
-	int _i = 0;
 	for (auto _el: *_obj)
 	{
 		if(!_var.property[1])
 		{
-			_res[_i] = _el.first;
+			_res["push"](_el.first);
 		}
 	}
 	#else
 	int _j = (*_obj).size();
-	for (int _i = 0; _i < _j; _i++)
+	for (int _k = 0; _k < _j; _k++)
 	{
 		if(!_var.property[1])
 		{
-			_res[_i] = (*_obj)[_i].first;
+			_res["push"]((*_obj)[_i].first);
 		}
 	}
 	#endif
@@ -166,9 +185,9 @@ NJS::VAR __NJS_Object_Stringify(NJS::VAR _var, bool _bracket)
 	else if (_t == NJS::Enum::Type::Number)
 		return var("\e[33m") + _var + "\e[0m";
 	else if (_t == NJS::Enum::Type::String)
-		return var("\e[32m\"") + _var + "\"\e[0m";
+		return var("\e[32m'") + _var + "'\e[0m";
 	else if (_t == NJS::Enum::Type::Function)
-		return var("\"") + (std::string)(*(NJS::Class::Function*)_var.data.ptr) + "\"";
+		return var("'") + (std::string)(*(NJS::Class::Function*)_var.data.ptr) + "'";
 	else if (_t == NJS::Enum::Type::Array)
 	{
 		var _res = "";

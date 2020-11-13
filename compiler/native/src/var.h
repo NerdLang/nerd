@@ -4,6 +4,7 @@ namespace NJS
 	
 	VAR::VAR()
 	{
+		property.set(1,1);
 		type = NJS::Enum::Type::Undefined;
 		data.ptr = undefined.data.ptr;
 	}
@@ -141,6 +142,7 @@ namespace NJS
 	
 	VAR::VAR(NJS::Class::Undefined *_value)
 	{
+		property.set(1, 1);
 		type = NJS::Enum::Type::Undefined;
 		data.ptr = _value;
 	}
