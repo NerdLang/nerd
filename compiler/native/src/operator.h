@@ -124,7 +124,7 @@ NJS::VAR __NJS_Log_Console(NJS::VAR* _var, int _length)
 
 NJS::VAR __NJS_Object_Keys(NJS::VAR _var)
 {
-	if (_var.type != NJS::Enum::Type::Object)
+	if (_var.type != NJS::Enum::Type::Object && _var.type != NJS::Enum::Type::Object)
 		return 0;
 	var _res = __NJS_Create_Array();
 
@@ -134,14 +134,19 @@ NJS::VAR __NJS_Object_Keys(NJS::VAR _var)
 	int _i = 0;
 	for (auto _el: *_obj)
 	{
-		_res[_i] = _el.first;
-		_i++;
+		if(!_var.property[1])
+		{
+			_res[_i] = _el.first;
+		}
 	}
 	#else
 	int _j = (*_obj).size();
 	for (int _i = 0; _i < _j; _i++)
 	{
-		_res[_i] = (*_obj)[_i].first;
+		if(!_var.property[1])
+		{
+			_res[_i] = (*_obj)[_i].first;
+		}
 	}
 	#endif
 	return _res;
@@ -153,7 +158,7 @@ NJS::VAR __NJS_Object_Stringify(NJS::VAR _var)
 }
 NJS::VAR __NJS_Object_Stringify(NJS::VAR _var, bool _bracket)
 {
-
+	if(_var.property[1]) return "";
 	NJS::Enum::Type _t = _var.type;
 
 	if (_t == NJS::Enum::Type::Undefined)
@@ -180,10 +185,13 @@ NJS::VAR __NJS_Object_Stringify(NJS::VAR _var, bool _bracket)
 		}
 		for(auto& o: (*_obj))
 		{
-			if (i > 0)
-				_res += ", ";
-			_res += o.first + ":" + ((std::string)__NJS_Object_Stringify(o.second, _bracket));
-			i++;
+			if(!o.second.property[1])
+			{
+				if (i > 0) _res += ", ";
+			
+				_res += o.first + ":" + ((std::string)__NJS_Object_Stringify(o.second, _bracket));
+				i++;
+			}
 		}
 		
 		if(_bracket) _res += " ] ";
@@ -199,22 +207,26 @@ NJS::VAR __NJS_Object_Stringify(NJS::VAR _var, bool _bracket)
 		int _i = 0;
 		for (auto _el: *_obj)
 		{
-			if (_i > 0)
-				_res += ", ";
-			_res += var("\"") + _el.first + "\"";
-			_res += ":";
-			_res += __NJS_Object_Stringify(_el.second);
-			_i++;
+			if(!_el.second.property[1])
+			{
+				if (_i > 0) _res += ", ";
+				_res += var("\"") + _el.first + "\"";
+				_res += ":";
+				_res += __NJS_Object_Stringify(_el.second);
+				_i++;
+			}
 		}
 		#else
 		int j = (*_obj).size();
 		for (int _i = 0; _i < j; _i++)
 		{
-			if (_i > 0)
-				_res += ", ";
-			_res += var("\"") + (*_obj)[_i].first + "\"";
-			_res += ":";
-			_res += __NJS_Object_Stringify((*_obj)[_i].second);
+			if(!(*_obj)[_i].second.property[1])
+			{
+				if (_i > 0) _res += ", ";
+				_res += var("\"") + (*_obj)[_i].first + "\"";
+				_res += ":";
+				_res += __NJS_Object_Stringify((*_obj)[_i].second);
+			}
 		}
 		#endif
 		_res += "}";

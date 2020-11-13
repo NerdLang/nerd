@@ -11,7 +11,7 @@ namespace NJS
 	struct VAR
 	{
 		NJS::Enum::Type type;
-		std::bitset<1> property;
+		std::bitset<2> property; // const, enumerable
 		Data data;
 		
 		VAR();
