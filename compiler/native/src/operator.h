@@ -196,20 +196,48 @@ NJS::VAR __NJS_Object_Stringify(NJS::VAR _var, bool _bracket)
 		if(_bracket) _res += " [ ";
 		int i = 0;
 		int j = (*_arr).size();
-		for (i; i < j; i++)
+		int k = 0;
+		int l = 0;
+		for (int i = 0; i < j; i++)
 		{
-			if (i > 0)
-				_res += ", ";
-			_res += __NJS_Object_Stringify((*_arr)[i], _bracket);
+			if((*_arr)[i].property[1])
+			{
+				k++;
+			}
+			else
+			{
+				if (l > 0) _res += ", ";
+				if(k > 0)
+				{
+					if(k == 1)
+						_res += "\e[90m<1 empty item>\e[0m, ";
+					else
+						_res += "\e[90m<" + std::to_string(k) + " empty items>\e[0m, ";
+					k = 0;
+				}
+				_res += __NJS_Object_Stringify((*_arr)[i], _bracket);
+				l++;
+			}
 		}
+		
+		if(k > 0)
+		{
+			if (l > 0) _res += ", ";
+			if(k == 1)
+				_res += "\e[90m<1 empty item>\e[0m";
+			else
+				_res += "\e[90m<" + std::to_string(k) + " empty items>\e[0m";
+			l++;
+		}
+		
 		for(auto& o: (*_obj))
 		{
 			if(!o.second.property[1])
 			{
-				if (i > 0) _res += ", ";
+				if (l > 0) _res += ", ";
 			
 				_res += o.first + ":" + ((std::string)__NJS_Object_Stringify(o.second, _bracket));
-				i++;
+				l++;
 			}
 		}
 		
