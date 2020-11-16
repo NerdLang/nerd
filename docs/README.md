@@ -5,17 +5,18 @@
 <br>
 
 Javascript's God Mode: one language to rule them all.
+
 Code everything, everywhere, for everything, in JavaScript.
 
-No VM. No Bytecode. No packaging. No Garbage Collector. ompiled to native binaries.
+No VM. No Bytecode. No packaging. No Garbage Collector. Fully compiled to native binaries.
 
 # Table of contents
 
 * [What is NectarJS](#what-is-nectarjs)
 * [Efficiency](#efficiency)
-* [EcmaScript Support](#ecmascript-support)
-* [Main objectives](#main-objectives)
 * [Install](#install)
+* [Main objectives](#main-objectives)
+* [EcmaScript Support](#ecmascript-support)
 * [Using Native Compiler](#using-native-compiler)
   - [Testing Your Installation](#testing-your-installation)
   - [Windows](#windows)
@@ -37,21 +38,17 @@ No VM. No Bytecode. No packaging. No Garbage Collector. ompiled to native binari
 
 # What is NectarJS
 
-**NectarJS** is a **JavaScript native compiler**.
+**NectarJS** is a **JavaScript native compiler** aiming to make JavaScript universal, NectarJS is able to compile native apps for Windows, Mac, Linux, iOS, Android, Raspberry, STM32 and more.
 
-**NectarJS** is able to compile native apps for: Windows, Mac, Linux, iOS, Android, Raspberry, STM32 and more.
+> **NectarJS** is in active development, join us on [Discord](https://discord.gg/cpe2UuN) or [IRC](https://kiwiirc.com/client/irc.freenode.net/#nectarjs) if you need more information.
 
-**NectarJS** aims to make JavaScript universal.
+- [Roadmap on Trello](https://trello.com/invite/b/6F4rvEj2/9d7677f9dc6b5bf2f5b33e45fc794182/nectarjs)
 
-**NectarJS** is in active development, join us on [Discord](https://discord.gg/cpe2UuN) on [IRC](https://kiwiirc.com/client/irc.freenode.net/#nectarjs) if you need more information.
+- [Quick Start](https://nectarjs.com/docs/nectarjs/quick-start/)
 
-**NectarJS** roadmap is on [Trello](https://trello.com/invite/b/6F4rvEj2/9d7677f9dc6b5bf2f5b33e45fc794182/nectarjs)
+- [Quick Hack](https://nectarjs.com/docs/contribute/quick-hack/)
 
-**NectarJS** [Quick Start](https://nectarjs.com/docs/nectarjs/quick-start/) documentation
-
-**NectarJS** [Quick Hack](https://nectarjs.com/docs/contribute/quick-hack/) documentation
-
-**NectarJS** Full documentation is here (WIP) : [NectarJS Doc](https://nectarjs.com/documentation/)
+- [NectarJS Documentation (WIP)](https://nectarjs.com/documentation/)
 
 </p>
 
@@ -61,40 +58,24 @@ Some benchmarks with the file example/fibo.js and differents fibos arguments:
 
 |           | NodeJS v12.8.1 | QuickJS 2020-07-05 | NectarJS v0.6.104 |
 |-----------|----------------|--------------------|-------------------|
-| fibo(40) [No preset]                                                |
-| - Time:   |      1.80s     |      21.06s        |     **0.04s***    |
-| - Memory: |      7.0Mb     |       1.1Mb        |     **1.0Mb**     |
-|- Filesize:|     29.3Mb     |       0.9Mb        |     **0.7Mb***    |
-
-|           | NodeJS v12.8.1 | QuickJS 2020-07-05 | NectarJS v0.6.104 |
-|-----------|----------------|--------------------|-------------------|
-| fibo(40) [No preset]                                                |
-| - Time:   |      1.80s     |      21.06s        |     **0.04s**     |
-| - Memory: |      7.0Mb     |       1.1Mb        |     **1.0Mb**     |
-|- Filesize:|     28.6Mb     |       0.9Mb        |     **0.7Mb**     |
 | sort(1e6) [No preset]                                               |
 | - Time:   |      0.33s     |         -          |     **0.33s**     |
 | - Memory: |      7.0Mb     |         -          |     **1.0Mb**     |
-|- Filesize:|     28.6Mb     |         -          |     **0.4Mb**     |
-| sort(1e6) [Size-optimized preset]                                   |
-|- Filesize:|     28.6Mb     |         -          |     **0.2Mb**     |
-| sort(1e6) [Speed-optimized preset]                                  |
-| - Time:   |      0.33s     |         -          |     **0.21s**     |
+|- Filesize:|     28.6Mb     |         -          |     **424Kb**     |
+| sort(1e6) [+Size preset]                                            |
+|- Filesize:|     28.6Mb     |         -          |     **260Kb**     |
+| sort(1e6) [+Speed preset]                                           |
+| - Time:   |      0.33s     |         -          |     **0.20s**     |
 | matrix(256) [No preset]                                             |
 | - Time:   |      0.33s     |         -          |     **0.21s**     |
 | - Memory: |      7.0Mb     |         -          |     **1.0Mb**     |
-|- Filesize:|     28.6Mb     |         -          |     **0.4Mb**     |
+|- Filesize:|     28.6Mb     |         -          |     **405Kb**     |
+| matrix(256) [+Size preset]                                          |
+|- Filesize:|     28.6Mb     |         -          |     **251Kb**     |
+| matrix(1e6) [+Speed preset]                                         |
+| - Time:   |      0.33s     |         -          |     **0.11s**     |
 
-sort1e6.js: 424ko
-matrix: 425ko
-with preset: speed
-matrix with preset size: 260ko
-sort1e6.js with preset speed: 260ko
-sort1e6.js exec time with preset size: 0.33s
-matrix.js exec time with preset size: 0.11s
-
-* Some code can be evaluated compile-time
-
+* _Some code can be evaluated compile-time_
 
 # EcmaScript Support
 
@@ -155,91 +136,7 @@ NectarJS already supports more than 80% of ES3.
 <summary>Math</summary>
 <br>
  
-* .E
-
-* .LN2
-
-* .LOG2E
-
-* .LOG10E
-
-* .PI
-
-* .SQRT1_2
-
-* .SQRT2
-
-* .abs
-
-* .acos
-
-* .acosh
-
-* .asin
-
-* .asinh
-
-* .atan
-
-* .atanh
-
-* .atan2
-
-* .cbrt
-
-* .ceil
-
-* .clz32
-
-* .cos
-
-* .cosh
-
-* .exp
-
-* .expm1
-
-* .floor
-
-* .fround
-
-* .hypot
-
-* .imul
-
-* .log
-
-* .log1p
-
-* .log10
-
-* .log2
-
-* .max
-
-* .min
-
-* .pow
-
-* .random
-
-* .round
-
-* .sign
-
-* .sin
-
-* .sinh
-
-* .sqrt
-
-* .tan
-
-* .tanh
-
-* .trunc
-
-* .toString
+* [All static methods and constants]
 
 </details>
 
@@ -335,7 +232,7 @@ npm install -g nectarjs
 
 # Using native compiler
 
-* You need to have GCC installed on your machine and registered in your path to compile.
+* You need to have GCC installed on your machine and registered in your PATH to compile.
 
 ## Testing your installation
 
