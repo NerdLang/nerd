@@ -25,6 +25,10 @@ var _SEARCHCINC = new RegExp(/#include *\"(.*)\"/g);
 
 function genInclude(from, src, full)
 {
+	if(CLI.cli["--profile"] && CLI.cli["--profile"].argument == "use")
+	{
+		return src;
+	}
   var _match = src.match(_SEARCH);
   while(_match)
   {
@@ -33,7 +37,7 @@ function genInclude(from, src, full)
     copyRecursiveSync(path.resolve(path.join(from, _match[1])), path.join(COMPILER.TMP_FOLDER, _match[1]));
     var _include = fs.readFileSync(path.resolve(path.join(COMPILER.TMP_FOLDER, _match[1]))).toString();
     _include = genMetaFunction(_include);
-	  _include = genInclude(path.dirname(path.resolve(path.join(from, _match[1]))), _include, path.dirname(path.resolve(path.join(COMPILER.TMP_FOLDER, _match[1]))));
+	 _include = genInclude(path.dirname(path.resolve(path.join(from, _match[1]))), _include, path.dirname(path.resolve(path.join(COMPILER.TMP_FOLDER, _match[1]))));
     fs.writeFileSync(path.resolve(path.join(COMPILER.TMP_FOLDER, _match[1])), _include);
     src = src.replace(/['"]!_ffi_include *(.*)['"]/, "");	
     _match = src.match(_SEARCH);
@@ -53,6 +57,11 @@ function genInclude(from, src, full)
         if(fs.existsSync(_incFile))
         {
           copyRecursiveSync(_incFile, path.join(full, _cfile[1]));
+		   var _include = fs.readFileSync(path.resolve(path.join(full, _cfile[1]))).toString();
+		  _include = genMetaFunction(_include);
+		   _include = genInclude(path.dirname(path.resolve(path.join(full, _cfile[1]))), _include, path.dirname(path.resolve(path.join(full, _cfile[1]))));
+		  fs.writeFileSync(path.resolve(path.join(full, _cfile[1])), _include);
+		  _cmatch = src.match(_SEARCHCINC);
         }
       }
     }

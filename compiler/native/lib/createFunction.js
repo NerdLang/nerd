@@ -22,7 +22,7 @@
  
 function createFunction(_code, _scope)
 {	
-	var _return = ";return undefined;}";
+	var _return = ";return NJS::Global::undefined;}";
 	var _searchFN = new RegExp(/function +(.[a-zA-Z0-9_\-]*) *\((.*)\)/);
 	var _index = _code.search(_searchFN);
 	while(_index > -1)

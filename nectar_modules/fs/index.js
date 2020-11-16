@@ -20,20 +20,29 @@
  *
  */
 
- #include "SPI.h"
+'!_ffi_include lib/fs.h';
 
- function __NJS_BEGIN_TRANSACTION (NJS::VAR _v1, NJS::VAR _v2, NJS::VAR _v3)
-{ 
-	SPI.beginTransaction(SPISettings(__NJS_Get_Int(_v1), __NJS_Get_Int(_v2), __NJS_Get_Int(_v3)));
-	return NJS::VAR();
-};
- 
- function __NJS_END_TRANSACTION (NJS::VAR _v1, NJS::VAR _v2, NJS::VAR _v3)
-{ 
-	return NJS::VAR();
+var fs =
+{
+  readFile : __NJS_fs_readFile,
+  writeFile : __NJS_fs_writeFile,
+  appendFile : __NJS_fs_appendFile,
+  unlink : __NJS_fs_unlink,
+  rmdir : __NJS_fs_rmdir,
+  remove : __NJS_fs_remove,
+  rename: __NJS_fs_rename,
+  mkdir: __NJS_fs_mkdir,
+  readdir: "TODO",
+  
+  readFileSync : __NJS_fs_readFileSync,
+  writeFileSync : __NJS_fs_writeFileSync,
+  appendFileSync : __NJS_fs_appendFileSync,
+  unlinkSync : __NJS_fs_unlinkSync,
+  rmdirSync : __NJS_fs_rmdirSync,
+  removeSync : __NJS_fs_removeSync,
+  renameSync: __NJS_fs_renameSync,
+  mkdirSync: __NJS_fs_mkdirSync,
+  readdirSync: "TODO",
 };
 
- function __NJS_TRANSFER (NJS::VAR _v1, NJS::VAR _v2, NJS::VAR _v3)
-{ 
-	return NJS::VAR();
-};
+module.exports = fs;

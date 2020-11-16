@@ -9,6 +9,10 @@
 #define __NJS_NO_EXCEPT
 
 #include "njs.h"
+using namespace NJS::Global;
+
+var __NJS_ENV = "esp32";
+var __NJS_PLATFORM = "{{__PLATFORM__}}";
 
  {INCLUDE}
  

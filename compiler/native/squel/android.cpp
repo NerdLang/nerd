@@ -35,7 +35,11 @@
  #include <jni.h>
 
  #include "njs.h"
+ using namespace NJS::Global;
  #include "httplib.h"
+ 
+ var __NJS_ENV = "android";
+ var __NJS_PLATFORM = "{{__PLATFORM__}}";
  
 JNIEnv* globalEnv;
 jobject mainObject;

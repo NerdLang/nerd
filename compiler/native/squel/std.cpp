@@ -19,23 +19,12 @@
  * along with NectarJS.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
- #define _USE_MATH_DEFINES
- #include <cmath>
- #include <string>
- #include <iostream>
- #include <string>
- #include <cstring>
- #include <stdio.h>
- #include <stdlib.h>
- #include <string.h>
- #include <sstream>
- #include <vector>
- #include <memory>
-
-
+ 
  #define __NJS_ENV_STD
  #include "njs.h"
 
+ using namespace NJS::Global;
+ 
  var __NJS_ENV = "std";
  var __NJS_PLATFORM = "{{__PLATFORM__}}";
  
@@ -49,7 +38,7 @@ int main(int argc, char* argv[])
 	
 	for( int i = 0; i < argc; i++)
 	{
-		__NJS_Object_Set(i, NJS::VAR(argv[i]), __NJS_ARGS);
+		__NJS_ARGS[i] = argv[i];
 	}
 
 	try 

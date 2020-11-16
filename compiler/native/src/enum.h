@@ -2,7 +2,6 @@ namespace NJS::Enum
 {
 	enum Type:uint8_t
 	{
-		Undefined = 0,
 		Null,
 		Boolean,
 		Number,
@@ -11,5 +10,6 @@ namespace NJS::Enum
 		Array,
 		Object,
 		Function,
+		Undefined,
 	};
 }

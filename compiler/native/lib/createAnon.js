@@ -22,7 +22,7 @@
  
 function createAnon(_code, _scope)
 {	
-	var _return = "return undefined;}";
+	var _return = "return NJS::Global::undefined;}";
 	var _searchAnonFN = new RegExp(/(var)* *([\[\]a-zA-Z0-9_"]*) *= *function +\(([a-zA-Z0-9_\-, ]*)\)/);
 	var _index = _code.search(_searchAnonFN);
 
@@ -80,7 +80,7 @@ function createAnon(_code, _scope)
 
 						if(_match[1]) COMPILER.DECL.push(`var ${_match[2]};`);
 						if(_match[2]) _formated += _match[2] + " = ";
-						_formated += "NJS::VAR(NJS::Enum::Type::Function, new NJS::Type::function_t ([" + _catch + "](var __NJS_THIS, NJS::VAR* __NJS_VARARGS, int __NJS_VARLENGTH) -> NJS::VAR" + _fn + os.EOL + _return + "), __NJS_THIS)";
+						_formated += "NJS::VAR(NJS::Enum::Type::Function, new NJS::Type::function_t ([" + _catch + "](var __NJS_THIS, NJS::VAR* __NJS_VARARGS, int __NJS_VARLENGTH) -> NJS::VAR" + _fn + os.EOL + _return + "), __NJS_THIS);";
 						_code = [_code.slice(0, _index), ' ', _formated, _code.slice(_end + 1)].join('');		
 						break;
 					}

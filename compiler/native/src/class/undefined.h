@@ -26,35 +26,35 @@ namespace NJS::Class
 		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw NJS::VAR("TypeError: Cannot read property '" + (std::string)key + "' of undefined ");
 		#endif
-		return undefined;
+		return NJS::Global::undefined;
 	}
 	NJS::VAR &Undefined::operator[](NJS::VAR key)
 	{
 		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw NJS::VAR("TypeError: Cannot read property '" + (std::string)key + "' of undefined ");
 		#endif
-		return undefined;
+		return NJS::Global::undefined;
 	}
 	NJS::VAR &Undefined::operator[](int key)
 	{
 		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw NJS::VAR("TypeError: Cannot read property " + std::to_string(key) + " of undefined ");
 		#endif
-		return undefined;
+		return NJS::Global::undefined;
 	}
 	NJS::VAR &Undefined::operator[](double key)
 	{
 		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw NJS::VAR("TypeError: Cannot read property " + std::to_string(key) + " of undefined ");
 		#endif
-		return undefined;
+		return NJS::Global::undefined;
 	}
 	NJS::VAR &Undefined::operator[](const char* key)
 	{
 		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw NJS::VAR("TypeError: Cannot read property '" + (std::string)key + "' of undefined ");
 		#endif
-		return undefined;
+		return NJS::Global::undefined;
 	}
 	template <class... Args>
 	NJS::VAR Undefined::operator()(Args... args) const 
@@ -62,7 +62,7 @@ namespace NJS::Class
 		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
-		return undefined;
+		return NJS::Global::undefined;
 	}
 	// Comparation operators
 	Undefined Undefined::operator!() const 

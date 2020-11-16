@@ -42,7 +42,10 @@
  #define __NJS_NO_EXCEPT
 
  #include "njs.h"
-
+ using namespace NJS::Global;
+ 
+ var __NJS_ENV = "arduino";
+ var __NJS_PLATFORM = "{{__PLATFORM__}}";
  
  // Declared weak in Arduino.h to allow user redefinitions.
 int atexit(void (* /*func*/ )()) { return 0; }

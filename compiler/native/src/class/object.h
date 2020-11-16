@@ -56,14 +56,14 @@ namespace NJS::Class
 	// Main operators
 	NJS::VAR const Object::operator[](NJS::VAR key) const
 	{
-		return undefined;
+		return NJS::Global::undefined;
 	}
 	
 	#ifdef __NJS__OBJECT_HASHMAP
 	NJS::VAR &Object::operator[](NJS::VAR key)
 	{
 		std::string _str = ((std::string)key);
-		std::string_view _sview = _str;
+		NJS::Type::StringView _sview = _str;
 		
 		NJS::VAR& _obj = object[_str];
 		if(_obj.type != NJS::Enum::Type::Undefined) 
@@ -104,14 +104,14 @@ namespace NJS::Class
 		}
 
 		if(!property[0]) return _obj;
-		__proxy = undefined;
+		__proxy = NJS::Global::undefined;
 		return __proxy;
 	}
 	#else
 	NJS::VAR &Object::operator[](NJS::VAR key)
 	{
 		std::string _str = ((std::string)key);
-		std::string_view _sview = _str;
+		NJS::Type::StringView _sview = _str;
 		
 		if (key.type == NJS::Enum::Type::Number)
 		{
@@ -119,7 +119,7 @@ namespace NJS::Class
 			
 			if (i < 0)
 			{
-				return undefined;
+				return NJS::Global::undefined;
 			}
 			else 
 			{
@@ -163,7 +163,7 @@ namespace NJS::Class
 		}
 		else 
 		{
-			object.push_back(NJS::Type::pair_t(_str, undefined));
+			object.push_back(NJS::Type::pair_t(_str, NJS::Global::undefined));
 		}
 
 		return object[object.size() - 1].second;
@@ -174,7 +174,7 @@ namespace NJS::Class
 	NJS::VAR &Object::operator[](int key)
 	{
 		std::string _str = std::to_string(key);
-		std::string_view _sview = _str;
+		NJS::Type::StringView _sview = _str;
 		
 		NJS::VAR& _obj = object[_str];
 		if(_obj.type != NJS::Enum::Type::Undefined) 
@@ -215,14 +215,14 @@ namespace NJS::Class
 		}
 
 		if(!property[0]) return _obj;
-		__proxy = undefined;
+		__proxy = NJS::Global::undefined;
 		return __proxy;
 	}
 	#else
 	NJS::VAR &Object::operator[](int key)
 	{
 		std::string _str = std::to_string(key);
-		std::string_view _sview = _str;
+		NJS::Type::StringView _sview = _str;
 		
 		for (auto & search : object)
 		{
@@ -255,7 +255,7 @@ namespace NJS::Class
 		}
 		else 
 		{
-			object.push_back(NJS::Type::pair_t(_str, undefined));
+			object.push_back(NJS::Type::pair_t(_str, NJS::Global::undefined));
 		}
 
 		return object[object.size() - 1].second;
@@ -266,7 +266,7 @@ namespace NJS::Class
 	NJS::VAR &Object::operator[](double key)
 	{
 		std::string _str = std::to_string(key);
-		std::string_view _sview = _str;
+		NJS::Type::StringView _sview = _str;
 		
 		NJS::VAR& _obj = object[_str];
 		if(_obj.type != NJS::Enum::Type::Undefined) 
@@ -306,14 +306,14 @@ namespace NJS::Class
 		}
 
 		if(!property[0]) return _obj;
-		__proxy = undefined;
+		__proxy = NJS::Global::undefined;
 		return __proxy;
 	}
 	#else
 	NJS::VAR &Object::operator[](double key)
 	{
 		std::string _str = std::to_string(key);
-		std::string_view _sview = _str;
+		NJS::Type::StringView _sview = _str;
 		
 		for (auto & search : object)
 		{
@@ -346,7 +346,7 @@ namespace NJS::Class
 		}
 		else 
 		{
-			object.push_back(NJS::Type::pair_t(_str, undefined));
+			object.push_back(NJS::Type::pair_t(_str, NJS::Global::undefined));
 		}
 
 		return object[object.size() - 1].second;
@@ -357,7 +357,7 @@ namespace NJS::Class
 	NJS::VAR &Object::operator[](const char* key)
 	{
 		std::string _str = key;
-		std::string_view _sview = _str;
+		NJS::Type::StringView _sview = _str;
 		
 		NJS::VAR& _obj = object[_str];
 		if(_obj.type != NJS::Enum::Type::Undefined) 
@@ -397,14 +397,14 @@ namespace NJS::Class
 		}
 
 		if(!property[0]) return _obj;
-		__proxy = undefined;
+		__proxy = NJS::Global::undefined;
 		return __proxy;
 	}
 	#else
 	NJS::VAR &Object::operator[](const char* key)
 	{
 		std::string _str = key;
-		std::string_view _sview = _str;
+		NJS::Type::StringView _sview = _str;
 
 		for (auto & search : object)
 		{
@@ -437,7 +437,7 @@ namespace NJS::Class
 		}
 		else 
 		{
-			object.push_back(NJS::Type::pair_t(_str, undefined));
+			object.push_back(NJS::Type::pair_t(_str, NJS::Global::undefined));
 		}
 
 		return object[object.size() - 1].second;
@@ -451,7 +451,7 @@ namespace NJS::Class
 		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
-		return undefined;
+		return NJS::Global::undefined;
 	}
 	// Comparation operators
 	Object Object::operator!() const 

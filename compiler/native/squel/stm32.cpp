@@ -35,7 +35,8 @@
  #include <memory>
  #include "mbed.h"
  #include "njs.h"
-
+ using namespace NJS::Global;
+ 
  var __NJS_ENV = "stm32";
  var __NJS_PLATFORM = "{{__PLATFORM__}}";
  

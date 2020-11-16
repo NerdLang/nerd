@@ -14,5 +14,11 @@ namespace NJS
 		typedef std::vector<pair_t> object_t;
 		#endif
 		typedef std::function<NJS::VAR (VAR&, VAR*, int)> function_t;
+		
+		#ifdef __NJS_ENV_ARDUINO
+		typedef std::string StringView;
+		#else 
+		typedef std::string_view StringView;
+		#endif
 	}
 }

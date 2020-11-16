@@ -28,10 +28,8 @@ function _regexp(_expression, _flag)
 {
 	this.__NJS_Internal_Expression = _expression;
 	this.flag = _flag;
-	this.test = function(_search)
-	{
-		return __NJS_RegExp_Test(_search, this.__NJS_Internal_Expression);
-	}
+	this.test = __NJS_RegExp_Test;
+	this.exec = __NJS_RegExp_Exec;
 };
 
 module.exports = _regexp;

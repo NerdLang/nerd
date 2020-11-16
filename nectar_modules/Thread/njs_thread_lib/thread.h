@@ -20,19 +20,40 @@
  *
  */
 
-'!_ffi_include lib/fs.h';
+std::unordered_map<std::string, std::mutex> __NJS_Thread_mutexList;
+std::vector<std::thread> __NJS_Thread_List;
 
-var fs =
+void __NJS_THREADED_CALL(NJS::VAR _fn)
 {
-  readFileSync : __NJS_fs_readFileSync,
-  writeFileSync : __NJS_fs_writeFileSync,
-  appendFileSync : __NJS_fs_appendFileSync,
-  unlinkSync : __NJS_fs_unlinkSync,
-  rmdirSync : __NJS_fs_rmdirSync,
-  removeSync : __NJS_fs_removeSync,
-  renameSync: __NJS_fs_renameSync,
-  mkdirSync: __NJS_fs_mkdirSync,
-  readdirSync: "TODO",
+	try
+	{
+		_fn();
+	}
+	catch(NJS::VAR e)
+	{
+		__NJS_Log_Console(e);
+	}
+}
+ 
+function __NJS_NATIVE_THREAD_RUN(_cb)
+{
+	if(_cb)
+	{
+		__NJS_Thread_List.emplace_back(__NJS_THREADED_CALL, _cb);
+	}
 };
 
-module.exports = fs;
+function __NJS_NATIVE_LOCK_GUARD(_key)
+{
+	if(!_key) _key = "default";
+	std::lock_guard<std::mutex> guard(__NJS_Thread_mutexList[(std::string)_key]);
+};
+
+function __NJS_NATIVE_WAIT_FOR_ALL()
+{
+	for(auto& _thread: __NJS_Thread_List)
+	{
+		_thread.join();
+	}
+};
+

@@ -19,49 +19,39 @@
  * along with NectarJS.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
- #define _USE_MATH_DEFINES
- #include <cmath>
- #include <string>
- #include <iostream>
- #include <string>
- #include <cstring>
- #include <stdio.h>
- #include <stdlib.h>
- #include <string.h>
- #include <sstream>
- #include <vector>
- #include <memory>
+ #define __NJS_ENV_NODE
  #include "uv.h"
-
  #include "njs.h"
+ using namespace NJS::Global;
  
  var __NJS_ENV = "node";
  var __NJS_PLATFORM = "{{__PLATFORM__}}"; 
+ 
+ uv_loop_t *__NJS_UV_DEFAULT_LOOP = (uv_loop_t *)malloc(sizeof(uv_loop_t));
+ 
  {INCLUDE}
  
  {DECL}
 
 int main(int argc, char* argv[])
 {
+	uv_loop_init(__NJS_UV_DEFAULT_LOOP);
 	var __NJS_ARGS = __NJS_Create_Array();
 	for( int i = 0; i < argc; i++)
 	{
-		__NJS_Object_Set(i, NJS::VAR(argv[i]), __NJS_ARGS);
+		__NJS_ARGS[i] = argv[i];
 	}
 
 	{INIT}
-
-	uv_loop_t *loop = (uv_loop_t *)malloc(sizeof(uv_loop_t));
-    uv_loop_init(loop);
 
 	{
 		{CODE};
 	}
 	
-    uv_run(loop, UV_RUN_DEFAULT);
+    uv_run(__NJS_UV_DEFAULT_LOOP, UV_RUN_DEFAULT);
 
-    uv_loop_close(loop);
-    free(loop);
+    uv_loop_close(__NJS_UV_DEFAULT_LOOP);
+    free(__NJS_UV_DEFAULT_LOOP);
     return 0;
 	
 	return 0;

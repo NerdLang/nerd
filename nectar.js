@@ -533,7 +533,10 @@ function Build(prepare)
 		if(ext == "ts") _code = compileTS(_code, _in);
 		COMPILER.Parse(_code);
     
-		if(COMPILER.ENV.write) COMPILER.ENV.write(COMPILER.MAIN);
+		if(COMPILER.ENV.write)
+		{
+			COMPILER.ENV.write(COMPILER.MAIN, _cout);
+		}
 		else
 		{
 			if((!CLI.cli["--profile"]) || CLI.cli["--profile"].argument != "use")
@@ -620,6 +623,7 @@ function Build(prepare)
         var _binexec = child_process.spawnSync(_binoutput, 
         [],
         {
+		  detached: false,
           stdio: [process.stdin, process.stdout, process.stderr],
           cwd: process.cwd(),
           env: process.env

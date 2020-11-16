@@ -34,12 +34,12 @@ var __NJS_HTTP_LISTEN(var _host, var _port, var _cb, var _opt)
 {
 	Server __NJS_HTTP_SRV;
 	
-	if(_opt.type == __NJS_OBJECT)
+	if(_opt.type == NJS::Enum::Type::Object)
 	{
-		var _static = __NJS_Object_Get("static", _opt);
-		if(_static.type == __NJS_STRING) 
+		var _static = _opt["static"];
+		if(_static.type == NJS::Enum::Type::String) 
 		{
-			auto ret = __NJS_HTTP_SRV.set_mount_point("/", __NJS_Get_String(_static));
+			auto ret = __NJS_HTTP_SRV.set_mount_point("/", ((std::string)_static).c_str());
 			if (!ret) 
 			{
 			  __NJS_Log_Console("Warning: path " + _static + " doesn't exist");
@@ -55,45 +55,44 @@ var __NJS_HTTP_LISTEN(var _host, var _port, var _cb, var _opt)
 	{
 		var _str = "";
 		if(__NJS_VARLENGTH == 1) _str = __NJS_VARARGS[0];
-		response.set_content(__NJS_Get_String(_str), "text/plain");
+		response.set_content((std::string)_str, "text/plain");
 		return var();
 	});
 	
 
 	var _req = __NJS_Create_Object();
-	__NJS_Object_Set("method", "GET", _req);
-	__NJS_Object_Set("url", request.path, _req);
+	_req["method"] = "GET";
+	_req["url"] = request.path;
     
 	var _query = __NJS_Create_Object();
 	for (auto it = request.params.begin(); it != request.params.end(); ++it)
 	{
 	  __NJS_Object_Set(it->first, it->second, _query);
 	}
-	__NJS_Object_Set("get", _query, _req);
-	  
-	var _res = __NJS_Create_Object();
-	__NJS_Object_Set((char*)"end", __f_NJS_HTTP_RES_END, _res);
-	
-	_cb(_req, _res);
+	_req["get"] = _query;
+
+	var _njs_res = __NJS_Create_Object();
+	_njs_res["end"] = __f_NJS_HTTP_RES_END;
+
+	_cb(_req, _njs_res);
 	return var();
   });
   
   /*** LOAD POST ***/
   __NJS_HTTP_SRV.Post(".*", [&](const Request& request, Response& response, const ContentReader &content_reader)
   {
-	function<var (vector<var>)>* __NJS_HTTP_RES_END = new function<var (vector<var>)>([&](vector<var> __args)
+	NJS::Type::function_t* __NJS_HTTP_RES_END = new NJS::Type::function_t([&](NJS::VAR& __NJS_THIS, NJS::VAR* _args, int _length)
 	{
 		var _str = "";
-		if(__args.size() == 1) _str = __args[0];
-		response.set_content(__NJS_Get_String(_str), "text/plain");
+		if(_length == 1) _str = _args[0];
+		response.set_content((std::string)_str, "text/plain");
 		return var();
 	});
 	var __f_NJS_HTTP_RES_END = __NJS_Create_Function(__NJS_HTTP_RES_END);
 
     var _req = __NJS_Create_Object();
-    __NJS_Object_Set("method", "POST", _req);
-    __NJS_Object_Set("url", request.path, _req);
-    
+	_req["method"] = "POST";
+	_req["url"] = request.path;
     
     // GET DATA
     if (request.is_multipart_form_data()) 
@@ -117,53 +116,52 @@ var __NJS_HTTP_LISTEN(var _host, var _port, var _cb, var _opt)
       for (const auto &file : files)
       {
         var _file = __NJS_Create_Object();
-        __NJS_Object_Set("body", file.content, _file);
-        __NJS_Object_Set("mime", file.content_type, _file);
-        
-        __NJS_Object_Set(file.name, _file, _multi);
+		_file["body"] = file.content;
+		_file["mime"] = file.content_type;
+		_multi[file.name] = _file;
       }
-      __NJS_Object_Set("data", _multi, _req);
+	  _req["data"] = _multi;
     } 
     else 
     {
-		__NJS_Object_Set("isMultipart", false, _req);
-      string body;
+		_req["isMultipart"] = false;
+      std::string body;
       content_reader([&](const char *data, size_t data_length) 
       {
         body.append(data, data_length);
         return true;
       });
-      __NJS_Object_Set("data", body, _req);
+      _req["data"] = body;
     }
     
     
-    var _res = __NJS_Create_Object();
-    __NJS_Object_Set("end", __f_NJS_HTTP_RES_END, _res);
+    var _njs_res = __NJS_Create_Object();
+	_njs_res["end"] = __f_NJS_HTTP_RES_END;
     
-    _cb(_req, _res);
+    _cb(_req, _njs_res);
     return var();
   });
   
   /*** LOAD PUT ***/
   __NJS_HTTP_SRV.Put(".*", [&](const Request& request, Response& response, const ContentReader &content_reader)
   {
-	function<var (vector<var>)>* __NJS_HTTP_RES_END = new function<var (vector<var>)>([&](vector<var> __args)
+	NJS::Type::function_t* __NJS_HTTP_RES_END = new NJS::Type::function_t([&](NJS::VAR& __NJS_THIS, NJS::VAR* _args, int _length)
 	{
 		var _str = "";
-		if(__args.size() == 1) _str = __args[0];
-		response.set_content(__NJS_Get_String(_str), "text/plain");
+		if(_length == 1) _str = _args[0];
+		response.set_content((std::string)_str, "text/plain");
 		return var();
 	});
 	var __f_NJS_HTTP_RES_END = __NJS_Create_Function(__NJS_HTTP_RES_END);
 
     var _req = __NJS_Create_Object();
-    __NJS_Object_Set("method", "PUT", _req);
-    __NJS_Object_Set("url", request.path, _req);
+	_req["method"] = "PUT";
+	_req["url"] = request.path;
     
     // GET DATA
     if (request.is_multipart_form_data()) 
     {
-      __NJS_Object_Set("isMultipart", true, _req);
+		_req["isMultipart"] = true;
       var _multi = __NJS_Create_Object();
 
       MultipartFormDataItems files;
@@ -183,57 +181,55 @@ var __NJS_HTTP_LISTEN(var _host, var _port, var _cb, var _opt)
       for (const auto &file : files)
       {
         var _file = __NJS_Create_Object();
-        __NJS_Object_Set("body", file.content, _file);
-        __NJS_Object_Set("mime", file.content_type, _file);
-        
-        __NJS_Object_Set(file.name, _file, _multi);
+		_file["body"] = file.content;
+		_file["mime"] = file.content_type;
+		_multi[file.name] = _file;
       }
-      __NJS_Object_Set("data", _multi, _req);
+	  _req["data"] = _multi;
     } 
     else 
     {
-		__NJS_Object_Set("isMultipart", false, _req);
-      string body;
+		_req["isMultipart"] = false;
+      std::string body;
       content_reader([&](const char *data, size_t data_length) 
       {
         body.append(data, data_length);
         return true;
       });
-      __NJS_Object_Set("data", body, _req);
+      _req["data"] = body;
     }
     
-    var _res = __NJS_Create_Object();
-    __NJS_Object_Set("end", __f_NJS_HTTP_RES_END, _res);
+    var _njs_res = __NJS_Create_Object();
+	_njs_res["end"] = __f_NJS_HTTP_RES_END;
     
-    _cb(_req, _res);
+    _cb(_req, _njs_res);
     return var();
   });
   
   /*** LOAD DELETE ***/
   __NJS_HTTP_SRV.Delete(".*", [&](const Request& request, Response& response)
   {
-	function<var (vector<var>)>* __NJS_HTTP_RES_END = new function<var (vector<var>)>([&](vector<var> __args)
+	NJS::Type::function_t* __NJS_HTTP_RES_END = new NJS::Type::function_t([&](NJS::VAR& __NJS_THIS, NJS::VAR* _args, int _length)
 	{
 		var _str = "";
-		if(__args.size() == 1) _str = __args[0];
-		response.set_content(__NJS_Get_String(_str), "text/plain");
+		if(_length == 1) _str = _args[0];
+		response.set_content((std::string)_str, "text/plain");
 		return var();
 	});
 	var __f_NJS_HTTP_RES_END = __NJS_Create_Function(__NJS_HTTP_RES_END);
 
     var _req = __NJS_Create_Object();
-    __NJS_Object_Set("method", "DELETE", _req);
-    __NJS_Object_Set("url", request.path, _req);
+	_req["method"] = "DELETE";
+	_req["url"] = request.path;
     
-    var _res = __NJS_Create_Object();
+    var _njs_res = __NJS_Create_Object();
+	_njs_res["end"] = __f_NJS_HTTP_RES_END;
 
-    __NJS_Object_Set("end", __f_NJS_HTTP_RES_END, _res);
-    
-    _cb(_req, _res);
+    _cb(_req, _njs_res);
     return var();
   });
   
-  __NJS_HTTP_SRV.listen(__NJS_Get_String(_host), __NJS_Get_Int(_port));
+  __NJS_HTTP_SRV.listen(((std::string)_host).c_str(), (int)_port);
   return var();
 }
 

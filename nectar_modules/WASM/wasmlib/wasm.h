@@ -23,7 +23,7 @@
 #include <emscripten.h>
 #include <emscripten/bind.h>
 
-std::vector<std::pair<std::string, __NJS_VAR>> __NJS_INTERNAL_BIND;
+std::vector<std::pair<std::string, NJS::VAR>> __NJS_INTERNAL_BIND;
 
 function __NJS_WASM_RUN_SCRIPT(_script)
 {

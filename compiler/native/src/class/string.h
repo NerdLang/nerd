@@ -88,17 +88,17 @@ namespace NJS::Class
 			{
 				return value.at(i);
 			}
-			else return undefined;
+			else return NJS::Global::undefined;
 		}
 		std::string _str = ((std::string)key);
-		std::string_view _sview = _str;
+		NJS::Type::StringView _sview = _str;
 		
 		if(_sview.compare("length") == 0)
 		{
 			return (int)value.size();
 		}
 		
-		return undefined;
+		return NJS::Global::undefined;
 	}
 	static NJS::VAR _char;
 	static NJS::VAR _length;
@@ -122,7 +122,7 @@ namespace NJS::Class
 		}
 		
 		std::string _str = ((std::string)key);
-		std::string_view _sview = _str;
+		NJS::Type::StringView _sview = _str;
 		
 		NJS::VAR& _obj = object[_str];
 		if(_obj) return _obj; 
@@ -163,7 +163,7 @@ namespace NJS::Class
 		}
 		
 		std::string _str = ((std::string)key);
-		std::string_view _sview = _str;
+		NJS::Type::StringView _sview = _str;
 		for (auto & search : object)
 		{
 			if (_sview.compare(search.first) == 0)
@@ -187,7 +187,7 @@ namespace NJS::Class
 			return _length;
 		}
 		
-		object.push_back(NJS::Type::pair_t(((std::string)*this), undefined));
+		object.push_back(NJS::Type::pair_t(((std::string)*this), NJS::Global::undefined));
 		return object[object.size() - 1].second;
 	}
 	#endif
@@ -225,7 +225,7 @@ namespace NJS::Class
 	NJS::VAR &String::operator[](const char* key)
 	{
 		std::string _str = key;
-		std::string_view _sview = _str;
+		NJS::Type::StringView _sview = _str;
 		
 		NJS::VAR& _obj = object[_str];
 		if(_obj) return _obj; 
@@ -251,7 +251,7 @@ namespace NJS::Class
 	NJS::VAR &String::operator[](const char* key)
 	{		
 		std::string _str = key;
-		std::string_view _sview = _str;
+		NJS::Type::StringView _sview = _str;
 		for (auto & search : object)
 		{
 			if (_sview.compare(search.first) == 0)
@@ -275,7 +275,7 @@ namespace NJS::Class
 			return _length;
 		}
 		
-		object.push_back(NJS::Type::pair_t(((std::string)*this), undefined));
+		object.push_back(NJS::Type::pair_t(((std::string)*this), NJS::Global::undefined));
 		return object[object.size() - 1].second;
 	}
 	#endif
@@ -287,7 +287,7 @@ namespace NJS::Class
 		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
-		return undefined;
+		return NJS::Global::undefined;
 	}
 	// Comparation operators
 	String String::operator!() const 
@@ -479,7 +479,7 @@ namespace NJS::Class
 	
 	NJS::VAR String::split(NJS::VAR* _args, int _length) const
 	{
-		var _needle;
+		NJS::VAR _needle;
 		if (_length > 0)
 			_needle = _args[0];
 		else
@@ -510,7 +510,7 @@ namespace NJS::Class
 	
 	NJS::VAR String::indexOf(NJS::VAR* _args, int _length) const
 	{
-		var _needle;
+		NJS::VAR _needle;
 		if (_length > 0)
 			_needle = _args[0];
 		else
@@ -526,7 +526,7 @@ namespace NJS::Class
 	
 	NJS::VAR String::lastIndexOf(NJS::VAR* _args, int _length) const
 	{
-		var _needle;
+		NJS::VAR _needle;
 		if (_length > 0)
 			_needle = _args[0];
 		else
@@ -542,7 +542,7 @@ namespace NJS::Class
 	
 	NJS::VAR String::search(NJS::VAR* _args, int _length) const
 	{
-		var _needle;
+		NJS::VAR _needle;
 		if (_length > 0)
 			_needle = _args[0];
 		else
@@ -558,8 +558,8 @@ namespace NJS::Class
 	
 	NJS::VAR String::slice(NJS::VAR* _args, int _length) const
 	{
-		var _start;
-		var _end;
+		NJS::VAR _start;
+		NJS::VAR _end;
 		if (_length > 0)
 			_start = _args[0];
 		else
@@ -575,8 +575,8 @@ namespace NJS::Class
 	
 	NJS::VAR String::substr(NJS::VAR* _args, int _length) const
 	{
-		var _start;
-		var _end;
+		NJS::VAR _start;
+		NJS::VAR _end;
 		if (_length > 0)
 			_start = _args[0];
 		else
@@ -591,8 +591,8 @@ namespace NJS::Class
 		
 	NJS::VAR String::replace(NJS::VAR* _args, int _length) const
 	{
-		var _search;
-		var _replace;
+		NJS::VAR _search;
+		NJS::VAR _replace;
 		if (_length > 0)
 			_search = _args[0];
 		else
@@ -603,11 +603,11 @@ namespace NJS::Class
 		size_t start_pos = this->value.find((std::string)_search);
 		if (start_pos == std::string::npos)
 		{
-			return var(value);
+			return NJS::VAR(value);
 		}
 		
 		std::string _new = value;
-		return var(_new.replace(start_pos, ((std::string)_search).length(), (std::string)_replace));
+		return NJS::VAR(_new.replace(start_pos, ((std::string)_search).length(), (std::string)_replace));
 	}
 	/* END STRING METHODS */
 } // namespace NJS::Class

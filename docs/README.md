@@ -30,6 +30,9 @@ No VM. No Bytecode. No packaging. No Garbage Collector. Fully compiled to native
 * [Arduino Compilation](#arduino-compilation)
 * [STM32 Compilation](#stm32-compilation)
 * [Compatibility Targets / Platforms](#compatibility-targetsplatforms)
+* [Linking C/C++ librariesr](#linking-cc-libraries)
+  - [Meta functions in C++ libs](#meta-functions-in-c-libs)
+  - [Adding external lib and .c/.cpp files](#adding-external-lib-and-ccpp-files)
 * [Optimization](#optimization)
 * [Stores](#stores)
 * [Actively Tested For](#actively-tested-for)
@@ -402,6 +405,57 @@ Tests are made with GCC 7 and Clang 6
 * All supported Clang platforms
 
 * All supported AVR-GCC platforms
+
+# Linking C/C++ libraries
+
+C/C++ libraries linking can be done with this statement in your JS code :
+
+`"!_ffi_include my/lib.h";`
+
+NectarJS will then import your lib into the compilation folder.
+
+## Meta functions in C++ libs 
+
+In your C++ code, you can create functions as if you were in a JS env :
+
+``` function cppMeta(arg1, arg2)
+{
+	return arg1 + arg2;
+}
+```
+
+As in a JS env, NectarJS will create a variadic var function for you. It means that calling your function like this will be possible:
+
+```
+cppMeta()
+cppMeta(1)
+cppMeta(1,2)
+cppMeta("a", "b", "c", "d")
+``` 
+
+## Adding external lib and .c/.cpp files
+
+To add files to compile to GCC, or libraries, you will need to create a module and to fill the `lib` propery of `nectar` in your package.json file.
+
+An example:
+
+```
+{
+  "name": "my_module",
+  "description": "My module",
+  "main": "index.js",
+  "nectar":
+  {
+    "env": ["std", "node", "arduino", "whatever..."],
+	"lib":
+	[
+		"my/file1.cpp",
+		"my/file2.cpp",
+		"-lmylib"
+	]
+  }
+}
+```
 
 # Optimization
 

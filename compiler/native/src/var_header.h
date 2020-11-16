@@ -11,7 +11,7 @@ namespace NJS
 	struct VAR
 	{
 		NJS::Enum::Type type;
-		std::bitset<1> property;
+		std::bitset<2> property; // const, enumerable
 		Data data;
 		
 		VAR();
@@ -41,7 +41,7 @@ namespace NJS
 		VAR(NJS::Class::Native *_value);
 		VAR(NJS::Class::Undefined *_value);
 		VAR(NJS::Enum::Type _type, void *_value);
-		VAR(NJS::Enum::Type _type, void *_value, var _this);
+		VAR(NJS::Enum::Type _type, void *_value, VAR _this);
 		VAR(std::function<VAR(NJS::VAR*, int)> &_value);
 		template <class... Args>
 		VAR operator() (Args... args);
@@ -75,20 +75,20 @@ namespace NJS
 		/// Arithmetic operators
 		VAR operator+(const VAR &_v1);
 		VAR operator+(const char _v1[]);
-		void operator+=(const VAR &_v1);
+		VAR& operator+=(const VAR &_v1);
 		VAR operator-(const VAR &_v1);
-		VAR operator-=(const VAR &_v1);
+		VAR& operator-=(const VAR &_v1);
 		VAR operator*(const VAR &_v1);
-		void operator*=(const VAR &_v1);
+		VAR& operator*=(const VAR &_v1);
 		VAR operator/(const VAR &_v1);
-		void operator/=(const VAR &_v1);
+		VAR& operator/=(const VAR &_v1);
 		VAR operator%(const VAR &_v1);
-		VAR operator%=(const VAR &_v1);
+		VAR& operator%=(const VAR &_v1);
 		// TODO: "**" and "**=" operators
-		VAR operator++(const int _v1);
-		void operator++();
-		VAR operator--(const int _v1);
-		void operator--();
+		VAR& operator++(const int _v1);
+		VAR& operator++();
+		VAR& operator--(const int _v1);
+		VAR& operator--();
 		/// Comparison operators
 		VAR operator==(const VAR &_v1);
 		// === emulated with __NJS_EQUAL_VALUE_AND_TYPE
@@ -100,7 +100,7 @@ namespace NJS
 		VAR operator>=(const VAR &_v1);
 		/// Bitwise operators
 		VAR operator&(const VAR &_v1);
-		VAR operator&=(const VAR &_v1);
+		VAR& operator&=(const VAR &_v1);
 		VAR operator|(const VAR &_v1);
 		VAR operator|=(const VAR &_v1);
 		VAR operator^(const VAR &_v1);

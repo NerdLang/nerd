@@ -20,20 +20,13 @@
  *
  */
 
- #include "SPI.h"
+"!_ffi_include njs_thread_lib/thread.h";
 
- function __NJS_BEGIN_TRANSACTION (NJS::VAR _v1, NJS::VAR _v2, NJS::VAR _v3)
-{ 
-	SPI.beginTransaction(SPISettings(__NJS_Get_Int(_v1), __NJS_Get_Int(_v2), __NJS_Get_Int(_v3)));
-	return NJS::VAR();
-};
- 
- function __NJS_END_TRANSACTION (NJS::VAR _v1, NJS::VAR _v2, NJS::VAR _v3)
-{ 
-	return NJS::VAR();
+var _Thread =
+{
+  run: __NJS_NATIVE_THREAD_RUN,
+  lock: __NJS_NATIVE_LOCK_GUARD,
+  waitForAll: __NJS_NATIVE_WAIT_FOR_ALL,
 };
 
- function __NJS_TRANSFER (NJS::VAR _v1, NJS::VAR _v2, NJS::VAR _v3)
-{ 
-	return NJS::VAR();
-};
+module.exports = _Thread;

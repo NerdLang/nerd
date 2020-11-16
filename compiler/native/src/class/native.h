@@ -45,7 +45,7 @@ namespace NJS::Class
 	// Main operators
 	NJS::VAR const Native::operator[](NJS::VAR key) const
 	{
-		return undefined;
+		return NJS::Global::undefined;
 	}
 	NJS::VAR &Native::operator[](NJS::VAR key)
 	{
@@ -60,7 +60,7 @@ namespace NJS::Class
 			}
 		}
 
-		object.push_back(NJS::Type::pair_t((std::string)key, __NJS_VAR()));
+		object.push_back(NJS::Type::pair_t((std::string)key, NJS::VAR()));
 		return object[object.size() - 1].second;
 		#endif
 	}
@@ -79,7 +79,7 @@ namespace NJS::Class
 			}
 		}
 
-		object.push_back(NJS::Type::pair_t(_str, __NJS_VAR()));
+		object.push_back(NJS::Type::pair_t(_str, NJS::VAR()));
 		return object[object.size() - 1].second;
 		#endif
 	}
@@ -98,7 +98,7 @@ namespace NJS::Class
 			}
 		}
 
-		object.push_back(NJS::Type::pair_t(_str, __NJS_VAR()));
+		object.push_back(NJS::Type::pair_t(_str, NJS::VAR()));
 		return object[object.size() - 1].second;
 		#endif
 	}
@@ -118,7 +118,7 @@ namespace NJS::Class
 			}
 		}
 
-		object.push_back(NJS::Type::pair_t(str, __NJS_VAR()));
+		object.push_back(NJS::Type::pair_t(str, NJS::VAR()));
 		return object[object.size() - 1].second;
 		#endif
 	}

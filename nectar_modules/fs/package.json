@@ -1,5 +1,5 @@
 {
-  "name": "fs-std",
+  "name": "fs",
   "description": "NectarJS Standard FS module",
   "main": "index.js",
   "bugs":

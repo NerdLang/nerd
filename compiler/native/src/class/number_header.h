@@ -47,6 +47,6 @@ namespace NJS::Class::NUMBER
 			return _fn;
 		}
 		
-		return undefined;
+		return NJS::Global::undefined;
 	}
 }

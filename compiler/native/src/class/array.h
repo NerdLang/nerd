@@ -31,7 +31,7 @@ namespace NJS::Class
 	Array::operator bool() const noexcept { return true; }
 	Array::operator double() const noexcept
 	{
-		if (value.size() < 2)
+		if (value.size() == 1)
 		{
 			return (double)value[0];
 		}
@@ -42,7 +42,7 @@ namespace NJS::Class
 	}
 	Array::operator int() const noexcept
 	{
-		if (value.size() < 2)
+		if (value.size() == 1)
 		{
 			return (int)value[0];
 		}
@@ -53,7 +53,7 @@ namespace NJS::Class
 	}
 	Array::operator long long() const noexcept
 	{
-		if (value.size() < 2)
+		if (value.size() == 1)
 		{
 			return (long long)value[0];
 		}
@@ -87,7 +87,7 @@ namespace NJS::Class
 			}
 		}
 		
-		return undefined;
+		return NJS::Global::undefined;
 	}
 	NJS::VAR const Array::operator[](int key) const
 	{
@@ -96,7 +96,7 @@ namespace NJS::Class
 			return value.at(key);
 		}
 		
-		return undefined;
+		return NJS::Global::undefined;
 	}
 	
 	#ifdef __NJS__OBJECT_HASHMAP
@@ -108,7 +108,7 @@ namespace NJS::Class
 
 			if (i < 0)
 			{
-				return undefined;
+				return NJS::Global::undefined;
 			}
 			else 
 			{
@@ -121,7 +121,7 @@ namespace NJS::Class
 		}
 		
 		std::string _str = ((std::string)key);
-		std::string_view _sview = _str;
+		NJS::Type::StringView _sview = _str;
 		
 		if(_sview.compare("length") == 0)
 		{
@@ -178,7 +178,7 @@ namespace NJS::Class
 			
 			if (i < 0)
 			{
-				return undefined;
+				return NJS::Global::undefined;
 			}
 			else 
 			{
@@ -191,7 +191,7 @@ namespace NJS::Class
 		}
 		
 		std::string _str = ((std::string)key);
-		std::string_view _sview = _str;
+		NJS::Type::StringView _sview = _str;
 		
 		if(_sview.compare("length") == 0)
 		{
@@ -242,7 +242,7 @@ namespace NJS::Class
 		__NJS_Method_Lazy_Loader("values", values);
 		
 
-		object.push_back(NJS::Type::pair_t(_str, undefined));
+		object.push_back(NJS::Type::pair_t(_str, NJS::Global::undefined));
 		return object[object.size() - 1].second;
 	}
 	#endif
@@ -251,7 +251,7 @@ namespace NJS::Class
 	{
 		if (key < 0)
 		{
-			return undefined;
+			return NJS::Global::undefined;
 		}
 		else 
 		{
@@ -267,7 +267,7 @@ namespace NJS::Class
 	{
 		if (key < 0)
 		{
-			return undefined;
+			return NJS::Global::undefined;
 		}
 		else 
 		{
@@ -283,7 +283,7 @@ namespace NJS::Class
 	NJS::VAR &Array::operator[](const char* key)
 	{		
 		std::string _str = key;
-		std::string_view _sview = _str;
+		NJS::Type::StringView _sview = _str;
 		
 		if(_sview.compare("length") == 0)
 		{
@@ -335,7 +335,7 @@ namespace NJS::Class
 	NJS::VAR &Array::operator[](const char* key)
 	{
 		std::string _str = key;
-		std::string_view _sview = _str;
+		NJS::Type::StringView _sview = _str;
 		
 		if(_sview.compare("length") == 0)
 		{
@@ -386,7 +386,7 @@ namespace NJS::Class
 		__NJS_Method_Lazy_Loader("values", values);
 		
 
-		object.push_back(NJS::Type::pair_t(_str, undefined));
+		object.push_back(NJS::Type::pair_t(_str, NJS::Global::undefined));
 		return object[object.size() - 1].second;
 	}
 	#endif
@@ -600,8 +600,8 @@ namespace NJS::Class
 	// TODO: ">>>" and ">>>=" operators
 	
 	
-	NJS::VAR Array::__iterator(NJS::VAR* args, int _length) const { return undefined; }
-	NJS::VAR Array::__unscopables(NJS::VAR* args, int _length) const { return undefined; }
+	NJS::VAR Array::__iterator(NJS::VAR* args, int _length) const { return NJS::Global::undefined; }
+	NJS::VAR Array::__unscopables(NJS::VAR* args, int _length) const { return NJS::Global::undefined; }
 	NJS::VAR Array::concat(NJS::VAR* args, int _length) const
 	{
 		/*
@@ -614,7 +614,7 @@ namespace NJS::Class
 		}
 		return res;
 		*/
-		return undefined;
+		return NJS::Global::undefined;
 	}
 	NJS::VAR Array::copyWithin(NJS::VAR* args, int _length)
 	{
@@ -635,30 +635,30 @@ namespace NJS::Class
 		}
 		std::copy(vec.begin() + target, vec.begin() + end, vec.begin() + start);
 		return *this;*/
-		return undefined;
+		return NJS::Global::undefined;
 	}
-	NJS::VAR Array::entries(NJS::VAR* args, int _length) const { return undefined; }
-	NJS::VAR Array::every(NJS::VAR* args, int _length) const { return undefined; }
+	NJS::VAR Array::entries(NJS::VAR* args, int _length) const { return NJS::Global::undefined; }
+	NJS::VAR Array::every(NJS::VAR* args, int _length) const { return NJS::Global::undefined; }
 	NJS::VAR Array::fill(NJS::VAR* args, int _length) const
 	{
 		/*
-		NJS::VAR value = _length ? args[0] : undefined;
+		NJS::VAR value = _length ? args[0] : NJS::Global::undefined;
 		value.assign(value.size(), value);
 		return *this;
 		*/
-		return undefined;
+		return NJS::Global::undefined;
 	};
-	NJS::VAR Array::filter(NJS::VAR* args, int _length) const { return undefined; }
-	NJS::VAR Array::find(NJS::VAR* args, int _length) const { return undefined; }
-	NJS::VAR Array::findIndex(NJS::VAR* args, int _length) const { return undefined; }
-	NJS::VAR Array::flat(NJS::VAR* args, int _length) const { return undefined; }
-	NJS::VAR Array::flatMap(NJS::VAR* args, int _length) const { return undefined; }
-	NJS::VAR Array::forEach(NJS::VAR* args, int _length) const { return undefined; }
-	NJS::VAR Array::includes(NJS::VAR* args, int _length) const { return undefined; }
-	NJS::VAR Array::indexOf(NJS::VAR* args, int _length) const { return undefined; }
+	NJS::VAR Array::filter(NJS::VAR* args, int _length) const { return NJS::Global::undefined; }
+	NJS::VAR Array::find(NJS::VAR* args, int _length) const { return NJS::Global::undefined; }
+	NJS::VAR Array::findIndex(NJS::VAR* args, int _length) const { return NJS::Global::undefined; }
+	NJS::VAR Array::flat(NJS::VAR* args, int _length) const { return NJS::Global::undefined; }
+	NJS::VAR Array::flatMap(NJS::VAR* args, int _length) const { return NJS::Global::undefined; }
+	NJS::VAR Array::forEach(NJS::VAR* args, int _length) const { return NJS::Global::undefined; }
+	NJS::VAR Array::includes(NJS::VAR* args, int _length) const { return NJS::Global::undefined; }
+	NJS::VAR Array::indexOf(NJS::VAR* args, int _length) const { return NJS::Global::undefined; }
 	NJS::VAR Array::join(NJS::VAR* args, int _length) const
 	{
-		auto _str = (std::string)(_length ? args[0] : undefined);
+		auto _str = (std::string)(_length ? args[0] : NJS::Global::undefined);
 		int l = value.size();
 		if (l == 0)
 			return "";
@@ -670,13 +670,13 @@ namespace NJS::Class
 		}
 		return stream.str();
 	};
-	NJS::VAR Array::keys(NJS::VAR* args, int _length) const { return undefined; }
-	NJS::VAR Array::lastIndexOf(NJS::VAR* args, int _length) const { return undefined; }
-	NJS::VAR Array::map(NJS::VAR* args, int _length) const { return undefined; }
+	NJS::VAR Array::keys(NJS::VAR* args, int _length) const { return NJS::Global::undefined; }
+	NJS::VAR Array::lastIndexOf(NJS::VAR* args, int _length) const { return NJS::Global::undefined; }
+	NJS::VAR Array::map(NJS::VAR* args, int _length) const { return NJS::Global::undefined; }
 	NJS::VAR Array::pop(NJS::VAR* args, int _length) 
 	{ 
 		value.pop_back();
-		return undefined; 
+		return NJS::Global::undefined; 
 	}
 	NJS::VAR Array::push(NJS::VAR* args, int _length)
 	{
@@ -686,13 +686,13 @@ namespace NJS::Class
 		}
 		return this;
 	};
-	NJS::VAR Array::reduce(NJS::VAR* args, int _length) const { return undefined; }
-	NJS::VAR Array::reduceRight(NJS::VAR* args, int _length) const { return undefined; }
+	NJS::VAR Array::reduce(NJS::VAR* args, int _length) const { return NJS::Global::undefined; }
+	NJS::VAR Array::reduceRight(NJS::VAR* args, int _length) const { return NJS::Global::undefined; }
 	NJS::VAR Array::reverse(NJS::VAR* args, int _length) {
 		std::reverse(value.begin(), value.end());
 		return this;
 	}
-	NJS::VAR Array::shift(NJS::VAR* args, int _length) { return undefined; }
+	NJS::VAR Array::shift(NJS::VAR* args, int _length) { return NJS::Global::undefined; }
 	NJS::VAR Array::slice(NJS::VAR* args, int _length) const 
 	{ 
 		if(_length == 1)
@@ -733,8 +733,11 @@ namespace NJS::Class
 		}
 		else return new NJS::Class::Array(value);
 	}
-	NJS::VAR Array::some(NJS::VAR* args, int _length) const { return undefined; }
-	NJS::VAR Array::sort(NJS::VAR* args, int _length) const { return undefined; }
+	NJS::VAR Array::some(NJS::VAR* args, int _length) const { return NJS::Global::undefined; }
+	NJS::VAR Array::sort(NJS::VAR* args, int _length) const 
+	{ 
+		return NJS::Global::undefined; 
+	}
 	NJS::VAR Array::splice(NJS::VAR* args, int _length)
 	{ 
 		NJS::VAR _ret = slice(args, _length);
@@ -811,6 +814,6 @@ namespace NJS::Class
 	{
 		return this;
 	}
-	NJS::VAR Array::values(NJS::VAR* args, int _length) const { return undefined; }
+	NJS::VAR Array::values(NJS::VAR* args, int _length) const { return NJS::Global::undefined; }
 	
 } // namespace NJS::Class

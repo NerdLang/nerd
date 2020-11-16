@@ -1,2 +1,4 @@
-var expression = new RegExp("(hello)(.*)");
-console.log(expression.test("hello world!"));
+var re = new RegExp("world", "g");
+var text = "Hello world!";
+
+console.log(re.exec(text));
