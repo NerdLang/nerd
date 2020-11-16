@@ -32,7 +32,7 @@ var __FFI_SIMPLE_MSGBOX()
 	#else 
 		cout << "this platform is not compatible with MessageBox" << "\n";
 	#endif
-	return __NJS_VAR();
+	return NJS::VAR();
 };
 
 function __WIN_MESSAGE_BOX(_message, _title)

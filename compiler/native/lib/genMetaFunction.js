@@ -24,7 +24,7 @@ global.RND = function() { return "__META_" + Math.random().toString(36).substrin
 
 function genMetaFunction(_code)
 {	
-    var _return = ";return undefined;}";
+    var _return = ";return NJS::Global::undefined;}";
     var _searchFN = new RegExp(/function (.[a-zA-Z0-9_\-]*) *\((.*)\)/);
     var _index = _code.search(_searchFN);
     while(_index > -1)

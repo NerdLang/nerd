@@ -43,7 +43,7 @@ function __NJS_RegExp_Exec(_search)
 		}
 		_res["index"] = (double)m.position();
 		_res["input"] = _search;
-		_res["groups"] = undefined;
+		_res["groups"] = NJS::Global::undefined;
 		
 		s = m.suffix().str();
 	}

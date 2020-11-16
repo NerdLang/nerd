@@ -100,7 +100,7 @@ function VariableDeclaration(_path)
 				
 			}
 		}
-		if(!(_path.node.declarations[d].init)) _path.node.declarations[d].init = babel.parse("__NJS_VAR()");
+		if(!(_path.node.declarations[d].init)) _path.node.declarations[d].init = babel.parse("__NJS_InitVar()");
 	  }
 	  if(_hoisting) _path.node.kind = "";
   }

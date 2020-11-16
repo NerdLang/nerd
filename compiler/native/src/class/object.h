@@ -56,7 +56,7 @@ namespace NJS::Class
 	// Main operators
 	NJS::VAR const Object::operator[](NJS::VAR key) const
 	{
-		return undefined;
+		return NJS::Global::undefined;
 	}
 	
 	#ifdef __NJS__OBJECT_HASHMAP
@@ -104,7 +104,7 @@ namespace NJS::Class
 		}
 
 		if(!property[0]) return _obj;
-		__proxy = undefined;
+		__proxy = NJS::Global::undefined;
 		return __proxy;
 	}
 	#else
@@ -119,7 +119,7 @@ namespace NJS::Class
 			
 			if (i < 0)
 			{
-				return undefined;
+				return NJS::Global::undefined;
 			}
 			else 
 			{
@@ -163,7 +163,7 @@ namespace NJS::Class
 		}
 		else 
 		{
-			object.push_back(NJS::Type::pair_t(_str, undefined));
+			object.push_back(NJS::Type::pair_t(_str, NJS::Global::undefined));
 		}
 
 		return object[object.size() - 1].second;
@@ -215,7 +215,7 @@ namespace NJS::Class
 		}
 
 		if(!property[0]) return _obj;
-		__proxy = undefined;
+		__proxy = NJS::Global::undefined;
 		return __proxy;
 	}
 	#else
@@ -255,7 +255,7 @@ namespace NJS::Class
 		}
 		else 
 		{
-			object.push_back(NJS::Type::pair_t(_str, undefined));
+			object.push_back(NJS::Type::pair_t(_str, NJS::Global::undefined));
 		}
 
 		return object[object.size() - 1].second;
@@ -306,7 +306,7 @@ namespace NJS::Class
 		}
 
 		if(!property[0]) return _obj;
-		__proxy = undefined;
+		__proxy = NJS::Global::undefined;
 		return __proxy;
 	}
 	#else
@@ -346,7 +346,7 @@ namespace NJS::Class
 		}
 		else 
 		{
-			object.push_back(NJS::Type::pair_t(_str, undefined));
+			object.push_back(NJS::Type::pair_t(_str, NJS::Global::undefined));
 		}
 
 		return object[object.size() - 1].second;
@@ -397,7 +397,7 @@ namespace NJS::Class
 		}
 
 		if(!property[0]) return _obj;
-		__proxy = undefined;
+		__proxy = NJS::Global::undefined;
 		return __proxy;
 	}
 	#else
@@ -437,7 +437,7 @@ namespace NJS::Class
 		}
 		else 
 		{
-			object.push_back(NJS::Type::pair_t(_str, undefined));
+			object.push_back(NJS::Type::pair_t(_str, NJS::Global::undefined));
 		}
 
 		return object[object.size() - 1].second;
@@ -451,7 +451,7 @@ namespace NJS::Class
 		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
-		return undefined;
+		return NJS::Global::undefined;
 	}
 	// Comparation operators
 	Object Object::operator!() const 

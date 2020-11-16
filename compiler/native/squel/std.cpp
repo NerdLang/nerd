@@ -23,6 +23,8 @@
  #define __NJS_ENV_STD
  #include "njs.h"
 
+ using namespace NJS::Global;
+ 
  var __NJS_ENV = "std";
  var __NJS_PLATFORM = "{{__PLATFORM__}}";
  

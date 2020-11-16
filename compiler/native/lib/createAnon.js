@@ -22,7 +22,7 @@
  
 function createAnon(_code, _scope)
 {	
-	var _return = "return undefined;}";
+	var _return = "return NJS::Global::undefined;}";
 	var _searchAnonFN = new RegExp(/(var)* *([\[\]a-zA-Z0-9_"]*) *= *function +\(([a-zA-Z0-9_\-, ]*)\)/);
 	var _index = _code.search(_searchAnonFN);
 

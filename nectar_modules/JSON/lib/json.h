@@ -27,16 +27,16 @@
 
 #include "jsmn.h"
 
-__NJS_VAR to_int(char const *s)
+NJS::VAR to_int(char const *s)
 {
 	bool _float = false;
 	if(strchr(s, '.'))
 	{
-		return __NJS_VAR(std::stod(s));
+		return NJS::VAR(std::stod(s));
 	}
 	else 
 	{
-		return __NJS_VAR(std::stoi(s));
+		return NJS::VAR(std::stoi(s));
 	}
 } 
 
@@ -122,7 +122,7 @@ int dump(const char *js, jsmntok_t *t, size_t count, int indent, var& _res)
 }
 
 NJS::Type::function_t* __NJS_FN___5po78g = new NJS::Type::function_t([](var __INJECTED_THIS, NJS::VAR* __NJS_VARARGS, int __NJS_VARLENGTH) -> NJS::VAR{var __json; if(__NJS_VARLENGTH > 0) __json = __NJS_VARARGS[0];
-	if(!__json) return undefined;
+	if(!__json) return NJS::Global::undefined;
 	size_t tokcount = 32;
 	int r;
 	int j = 0;

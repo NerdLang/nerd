@@ -10,7 +10,7 @@ const char *__NJS_Get_String(NJS::VAR _v)
 	return ((NJS::Class::String*)_v.data.ptr)->value.c_str();
 }
 
-const std::string _array[] = {"object", "boolean", "number", "string", "native", "array", "object", "function", "undefined" };
+const std::string _array[] = {"object", "boolean", "number", "string", "native", "array", "object", "function", "NJS::Global::undefined" };
 NJS::VAR __NJS_typeof(NJS::VAR _var)
 {
 	return __NJS_Create_String(_array[_var.type]);
@@ -20,7 +20,7 @@ NJS::VAR __NJS_instanceof(NJS::VAR _left, NJS::VAR _right)
 {
 	if(_left.type < NJS::Enum::Type::Object) return __NJS_Boolean_FALSE;
 	
-	var protoRight = _right["prototype"];
+	NJS::VAR protoRight = _right["prototype"];
 	if(!protoRight) return __NJS_Boolean_FALSE;
 	
 	NJS::Type::vector_p vLeft = ((NJS::Class::Object*)_left.data.ptr)->instance;
@@ -61,7 +61,7 @@ NJS::VAR __NJS_Object_Set(std::string _index, NJS::VAR _value, NJS::Type::object
 		(*_obj)[_index].data.ptr = _value.data.ptr;
 	}
 		
-	return undefined;
+	return NJS::Global::undefined;
 }
 #else
 NJS::VAR __NJS_Object_Set(std::string _index, NJS::VAR _value, NJS::Type::object_t *_obj)
@@ -81,12 +81,12 @@ NJS::VAR __NJS_Object_Set(std::string _index, NJS::VAR _value, NJS::Type::object
 				(*_obj)[_i].second.data.ptr = _value.data.ptr;
 			}
 
-			return undefined;
+			return NJS::Global::undefined;
 		}
 	}
 
 	(*_obj).push_back(NJS::Type::pair_t(_index, _value));
-	return undefined;
+	return NJS::Global::undefined;
 }
 #endif
 /**/
@@ -103,7 +103,7 @@ NJS::VAR __NJS_Object_Set(NJS::VAR _index, NJS::VAR _value, NJS::VAR _array)
 
 		((NJS::Class::Array*)_array.data.ptr)->value.at( (int)_index.data.number ) = _value;
 		
-		return undefined;
+		return NJS::Global::undefined;
 	}
 	else if (_array.type == NJS::Enum::Type::Object || _array.type == NJS::Enum::Type::String || _array.type == NJS::Enum::Type::Function || _array.type == NJS::Enum::Type::Array || _array.type == NJS::Enum::Type::Native)
 	{
@@ -117,10 +117,10 @@ NJS::VAR __NJS_Object_Set(NJS::VAR _index, NJS::VAR _value, NJS::VAR _array)
 		else if (_array.type == NJS::Enum::Type::Function)
 			_obj = &((NJS::Class::Function*)_array.data.ptr)->object;
 		else
-			return undefined;
+			return NJS::Global::undefined;
 
 		return __NJS_Object_Set((std::string)_index, _value, _obj);
 	}
 
-	return undefined;
+	return NJS::Global::undefined;
 }

@@ -128,7 +128,7 @@ function __NJS_fs_readFile(_name, _cb)
   if(fp == NULL)
   {
 	if(_cb) _cb(null, "");
-    return undefined;
+    return NJS::Global::undefined;
   }
 
   fseek(fp, 0L, SEEK_END);
@@ -151,7 +151,7 @@ function __NJS_fs_writeFile(_name, _content, _cb)
   if(!myfile)
   {
 	if(_cb) _cb(null, __NJS_Boolean_FALSE);
-    return undefined;
+    return NJS::Global::undefined;
   }
   myfile.write(((NJS::Class::String*)_content.data.ptr)->value.c_str(), ((NJS::Class::String*)_content.data.ptr)->value.size());
   myfile.close();
@@ -165,7 +165,7 @@ function __NJS_fs_appendFile(_name, _content, _cb)
   if(!myfile)
   {
 	if(_cb) _cb(null, __NJS_Boolean_FALSE);
-    return undefined;
+    return NJS::Global::undefined;
   }
   myfile.write(((NJS::Class::String*)_content.data.ptr)->value.c_str(), ((NJS::Class::String*)_content.data.ptr)->value.size());
   myfile.close();

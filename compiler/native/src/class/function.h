@@ -72,7 +72,7 @@ namespace NJS::Class
 	// Main operators
 	NJS::VAR const Function::operator[](NJS::VAR key) const
 	{
-		return undefined;
+		return NJS::Global::undefined;
 	}
 	
 	#ifdef __NJS__OBJECT_HASHMAP
@@ -116,7 +116,7 @@ namespace NJS::Class
 		__NJS_Method_Lazy_Loader("call", call);
 		__NJS_Method_Lazy_Loader("apply", apply);
 		
-		object.push_back(NJS::Type::pair_t(_str, undefined));
+		object.push_back(NJS::Type::pair_t(_str, NJS::Global::undefined));
 		return object[object.size() - 1].second;
 	}
 	#endif
@@ -162,7 +162,7 @@ namespace NJS::Class
 		__NJS_Method_Lazy_Loader("call", call);
 		__NJS_Method_Lazy_Loader("apply", apply);
 		
-		object.push_back(NJS::Type::pair_t(_str, undefined));
+		object.push_back(NJS::Type::pair_t(_str, NJS::Global::undefined));
 		return object[object.size() - 1].second;
 	}
 	#endif
@@ -208,7 +208,7 @@ namespace NJS::Class
 		__NJS_Method_Lazy_Loader("call", call);
 		__NJS_Method_Lazy_Loader("apply", apply);
 		
-		object.push_back(NJS::Type::pair_t(_str, undefined));
+		object.push_back(NJS::Type::pair_t(_str, NJS::Global::undefined));
 		return object[object.size() - 1].second;
 	}
 	#endif
@@ -254,12 +254,12 @@ namespace NJS::Class
 		__NJS_Method_Lazy_Loader("call", call);
 		__NJS_Method_Lazy_Loader("apply", apply);
 		
-		object.push_back(NJS::Type::pair_t(_str, undefined));
+		object.push_back(NJS::Type::pair_t(_str, NJS::Global::undefined));
 		return object[object.size() - 1].second;
 	}
 	#endif
 	
-	inline NJS::VAR Function::Call(var& __NJS_THIS, NJS::VAR* _args, int i)
+	inline NJS::VAR Function::Call(NJS::VAR& __NJS_THIS, NJS::VAR* _args, int i)
 	{
 		return (*static_cast<NJS::Type::function_t *>(value))(__NJS_THIS, _args, i);
 	}
@@ -274,7 +274,7 @@ namespace NJS::Class
 		NJS::VAR _this = __NJS_Object_Clone((*this)["prototype"]);
 		if(_this.type == NJS::Enum::Type::Undefined) _this = __NJS_Create_Object();
 		
-		var _ret = this->Call(_this, _args, i);
+		NJS::VAR _ret = this->Call(_this, _args, i);
 
 		if(_ret.type == NJS::Enum::Type::Object)
 		{
@@ -497,18 +497,18 @@ namespace NJS::Class
 	NJS::VAR Function::valueOf(NJS::VAR* _args, int _length) const
 	{
 		// TODO return this
-		return undefined;
+		return NJS::Global::undefined;
 	}
 	NJS::VAR Function::bind(NJS::VAR* _args, int _length)
 	{
 		return __NJS_Create_Var_Scoped_Anon(
 		counter++;
-		var _bind;
+		NJS::VAR _bind;
 		if(_length > 0)
 		{
 			_bind = _args[0];
 		}
-		var _binded = new NJS::Class::Function(value, _bind);
+		NJS::VAR _binded = new NJS::Class::Function(value, _bind);
 		return _binded;
 		);
 	}
