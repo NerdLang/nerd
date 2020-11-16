@@ -4,9 +4,10 @@
 
 <br>
 
-Javascript's God Mode : one language to rule them all. Code everything, everywhere, for everything, in JavaScript.
+Javascript's God Mode: one language to rule them all.
+Code everything, everywhere, for everything, in JavaScript.
 
-No VM. No Bytecode. No packaging. No Garbage Collector. Fully compiled to native binaries.
+No VM. No Bytecode. No packaging. No Garbage Collector. ompiled to native binaries.
 
 # Table of contents
 
@@ -64,6 +65,33 @@ Some benchmarks with the file example/fibo.js and differents fibos arguments:
 | - Time:   |      1.80s     |      21.06s        |     **0.04s***    |
 | - Memory: |      7.0Mb     |       1.1Mb        |     **1.0Mb**     |
 |- Filesize:|     29.3Mb     |       0.9Mb        |     **0.7Mb***    |
+
+|           | NodeJS v12.8.1 | QuickJS 2020-07-05 | NectarJS v0.6.104 |
+|-----------|----------------|--------------------|-------------------|
+| fibo(40) [No preset]                                                |
+| - Time:   |      1.80s     |      21.06s        |     **0.04s**     |
+| - Memory: |      7.0Mb     |       1.1Mb        |     **1.0Mb**     |
+|- Filesize:|     28.6Mb     |       0.9Mb        |     **0.7Mb**     |
+| sort(1e6) [No preset]                                               |
+| - Time:   |      0.33s     |         -          |     **0.33s**     |
+| - Memory: |      7.0Mb     |         -          |     **1.0Mb**     |
+|- Filesize:|     28.6Mb     |         -          |     **0.4Mb**     |
+| sort(1e6) [Size-optimized preset]                                   |
+|- Filesize:|     28.6Mb     |         -          |     **0.2Mb**     |
+| sort(1e6) [Speed-optimized preset]                                  |
+| - Time:   |      0.33s     |         -          |     **0.21s**     |
+| matrix(256) [No preset]                                             |
+| - Time:   |      0.33s     |         -          |     **0.21s**     |
+| - Memory: |      7.0Mb     |         -          |     **1.0Mb**     |
+|- Filesize:|     28.6Mb     |         -          |     **0.4Mb**     |
+
+sort1e6.js: 424ko
+matrix: 425ko
+with preset: speed
+matrix with preset size: 260ko
+sort1e6.js with preset speed: 260ko
+sort1e6.js exec time with preset size: 0.33s
+matrix.js exec time with preset size: 0.11s
 
 * Some code can be evaluated compile-time
 
