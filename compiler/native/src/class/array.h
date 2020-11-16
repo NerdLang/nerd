@@ -121,7 +121,7 @@ namespace NJS::Class
 		}
 		
 		std::string _str = ((std::string)key);
-		std::string_view _sview = _str;
+		NJS::Type::StringView _sview = _str;
 		
 		if(_sview.compare("length") == 0)
 		{
@@ -191,7 +191,7 @@ namespace NJS::Class
 		}
 		
 		std::string _str = ((std::string)key);
-		std::string_view _sview = _str;
+		NJS::Type::StringView _sview = _str;
 		
 		if(_sview.compare("length") == 0)
 		{
@@ -283,7 +283,7 @@ namespace NJS::Class
 	NJS::VAR &Array::operator[](const char* key)
 	{		
 		std::string _str = key;
-		std::string_view _sview = _str;
+		NJS::Type::StringView _sview = _str;
 		
 		if(_sview.compare("length") == 0)
 		{
@@ -335,7 +335,7 @@ namespace NJS::Class
 	NJS::VAR &Array::operator[](const char* key)
 	{
 		std::string _str = key;
-		std::string_view _sview = _str;
+		NJS::Type::StringView _sview = _str;
 		
 		if(_sview.compare("length") == 0)
 		{

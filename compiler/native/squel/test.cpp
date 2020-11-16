@@ -33,8 +33,9 @@
  #include <memory>
 
  #include "njs.h"
+ using namespace NJS::Global;
  
- var __NJS_ENV = "std";
+ var __NJS_ENV = "test";
  var __NJS_PLATFORM = "{{__PLATFORM__}}";
  
 /*** $ERROR ***/

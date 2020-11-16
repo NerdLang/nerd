@@ -22,6 +22,7 @@
  #define __NJS_ENV_NODE
  #include "uv.h"
  #include "njs.h"
+ using namespace NJS::Global;
  
  var __NJS_ENV = "node";
  var __NJS_PLATFORM = "{{__PLATFORM__}}"; 

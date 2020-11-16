@@ -91,7 +91,7 @@ namespace NJS::Class
 			else return NJS::Global::undefined;
 		}
 		std::string _str = ((std::string)key);
-		std::string_view _sview = _str;
+		NJS::Type::StringView _sview = _str;
 		
 		if(_sview.compare("length") == 0)
 		{
@@ -122,7 +122,7 @@ namespace NJS::Class
 		}
 		
 		std::string _str = ((std::string)key);
-		std::string_view _sview = _str;
+		NJS::Type::StringView _sview = _str;
 		
 		NJS::VAR& _obj = object[_str];
 		if(_obj) return _obj; 
@@ -163,7 +163,7 @@ namespace NJS::Class
 		}
 		
 		std::string _str = ((std::string)key);
-		std::string_view _sview = _str;
+		NJS::Type::StringView _sview = _str;
 		for (auto & search : object)
 		{
 			if (_sview.compare(search.first) == 0)
@@ -225,7 +225,7 @@ namespace NJS::Class
 	NJS::VAR &String::operator[](const char* key)
 	{
 		std::string _str = key;
-		std::string_view _sview = _str;
+		NJS::Type::StringView _sview = _str;
 		
 		NJS::VAR& _obj = object[_str];
 		if(_obj) return _obj; 
@@ -251,7 +251,7 @@ namespace NJS::Class
 	NJS::VAR &String::operator[](const char* key)
 	{		
 		std::string _str = key;
-		std::string_view _sview = _str;
+		NJS::Type::StringView _sview = _str;
 		for (auto & search : object)
 		{
 			if (_sview.compare(search.first) == 0)

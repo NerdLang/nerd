@@ -43,13 +43,6 @@
 #include <time.h>
 #include <nonstd-function.h>
 #include <math.h>
-namespace std
-{
-	double fmod(double __x, double __y)
-	{
-		return fmod(__x, __y);
-	}
-}
 #undef max
 #undef min
 #include <limits>

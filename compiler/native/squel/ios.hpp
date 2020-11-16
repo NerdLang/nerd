@@ -34,9 +34,12 @@
 
 
  #include "njs.h"
+ using namespace NJS::Global;
  #include "httplib.h"
 
-
+var __NJS_ENV = "iOS";
+var __NJS_PLATFORM = "{{__PLATFORM__}}";
+ 
  WKWebView * globalWK;
 
 void launchServer()

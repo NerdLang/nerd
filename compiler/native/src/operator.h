@@ -270,7 +270,7 @@ NJS::VAR __NJS_Object_Stringify(NJS::VAR _var, bool _bracket)
 			if(!(*_obj)[_i].second.property[1])
 			{
 				if (_i > 0) _res += ", ";
-				_res += var("\"") + (*_obj)[_i].first + "\"";
+				_res += NJS::VAR("\"") + (*_obj)[_i].first + "\"";
 				_res += ":";
 				_res += __NJS_Object_Stringify((*_obj)[_i].second);
 			}

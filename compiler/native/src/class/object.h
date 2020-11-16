@@ -63,7 +63,7 @@ namespace NJS::Class
 	NJS::VAR &Object::operator[](NJS::VAR key)
 	{
 		std::string _str = ((std::string)key);
-		std::string_view _sview = _str;
+		NJS::Type::StringView _sview = _str;
 		
 		NJS::VAR& _obj = object[_str];
 		if(_obj.type != NJS::Enum::Type::Undefined) 
@@ -111,7 +111,7 @@ namespace NJS::Class
 	NJS::VAR &Object::operator[](NJS::VAR key)
 	{
 		std::string _str = ((std::string)key);
-		std::string_view _sview = _str;
+		NJS::Type::StringView _sview = _str;
 		
 		if (key.type == NJS::Enum::Type::Number)
 		{
@@ -174,7 +174,7 @@ namespace NJS::Class
 	NJS::VAR &Object::operator[](int key)
 	{
 		std::string _str = std::to_string(key);
-		std::string_view _sview = _str;
+		NJS::Type::StringView _sview = _str;
 		
 		NJS::VAR& _obj = object[_str];
 		if(_obj.type != NJS::Enum::Type::Undefined) 
@@ -222,7 +222,7 @@ namespace NJS::Class
 	NJS::VAR &Object::operator[](int key)
 	{
 		std::string _str = std::to_string(key);
-		std::string_view _sview = _str;
+		NJS::Type::StringView _sview = _str;
 		
 		for (auto & search : object)
 		{
@@ -266,7 +266,7 @@ namespace NJS::Class
 	NJS::VAR &Object::operator[](double key)
 	{
 		std::string _str = std::to_string(key);
-		std::string_view _sview = _str;
+		NJS::Type::StringView _sview = _str;
 		
 		NJS::VAR& _obj = object[_str];
 		if(_obj.type != NJS::Enum::Type::Undefined) 
@@ -313,7 +313,7 @@ namespace NJS::Class
 	NJS::VAR &Object::operator[](double key)
 	{
 		std::string _str = std::to_string(key);
-		std::string_view _sview = _str;
+		NJS::Type::StringView _sview = _str;
 		
 		for (auto & search : object)
 		{
@@ -357,7 +357,7 @@ namespace NJS::Class
 	NJS::VAR &Object::operator[](const char* key)
 	{
 		std::string _str = key;
-		std::string_view _sview = _str;
+		NJS::Type::StringView _sview = _str;
 		
 		NJS::VAR& _obj = object[_str];
 		if(_obj.type != NJS::Enum::Type::Undefined) 
@@ -404,7 +404,7 @@ namespace NJS::Class
 	NJS::VAR &Object::operator[](const char* key)
 	{
 		std::string _str = key;
-		std::string_view _sview = _str;
+		NJS::Type::StringView _sview = _str;
 
 		for (auto & search : object)
 		{
