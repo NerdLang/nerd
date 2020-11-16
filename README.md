@@ -28,6 +28,9 @@ No VM. No Bytecode. No packaging. No Garbage Collector. Fully compiled to native
 * [Arduino Compilation](#arduino-compilation)
 * [STM32 Compilation](#stm32-compilation)
 * [Compatibility Targets / Platforms](#compatibility-targetsplatforms)
+* [Linking C/C++ librariesr](#linking-cc-libraries)
+  - [Meta functions in C++ libs](#meta-functions-in-c-libs)
+  - [Adding external lib and .c/.cpp files](#adding-external-lib-and-ccpp-files)
 * [Optimization](#optimization)
 * [Stores](#stores)
 * [Actively Tested For](#actively-tested-for)
@@ -489,7 +492,8 @@ In your C++ code, you can create functions as if you were in a JS env :
 ``` function cppMeta(arg1, arg2)
 {
 	return arg1 + arg2;
-}```
+}
+```
 
 As in a JS env, NectarJS will create a variadic var function for you. It means that calling your function like this will be possible:
 
