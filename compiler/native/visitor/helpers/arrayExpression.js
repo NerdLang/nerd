@@ -26,7 +26,7 @@ function arrayExpression(_path)
 	var _rnd = RND();
 	var _set = "__NJS_RND_" + RND();
 
-	var _setter = `inline __NJS_VAR ${_set}() { __NJS_VAR ${_rnd} = __NJS_Create_Array();`;
+	var _setter = `inline NJS::VAR ${_set}() { NJS::VAR ${_rnd} = __NJS_Create_Array();`;
 	for(var i = 0; i < _path.elements.length; i++)
 	{
 		if(_path.elements[i].type == "NumericLiteral") _setter += `${_rnd}[${i}] =  ${_path.elements[i].extra.raw};`;

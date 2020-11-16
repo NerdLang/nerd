@@ -42,7 +42,7 @@ function UnaryExpression(_path)
 	else if(_path.node.operator == "void")
 	{
 		var _rnd = "__NJS_VOID_" + RND();
-		COMPILER.DECL.push(`__NJS_VAR ${_rnd}() { ${babel.generate(_path.node.arguments).code} return NJS::Global::undefined;};`);
+		COMPILER.DECL.push(`NJS::VAR ${_rnd}() { ${babel.generate(_path.node.arguments).code} return NJS::Global::undefined;};`);
 		VISITOR.pushDeclVar(_rnd);
 		_path.replaceWithSourceString(`${_rnd}()`);
 	}
