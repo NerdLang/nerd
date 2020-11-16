@@ -5,6 +5,8 @@
 * Update Fast Functions
 * Refactoring
 * Add Object.toString(), .toLocaleString(), .valueOf()
+* Add simple event loop for std env
+* Add --profile option
 
 ## VERSION 0.6.X
 * Add Variadic function support
