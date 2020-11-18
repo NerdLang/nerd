@@ -20,6 +20,7 @@
  *
  */
  var structManagement = require("./structManagement.js");
+ var nativeManagement = require("./nativeManagement.js");
 function callExpression(_path, _main)
 {
 	
@@ -71,6 +72,67 @@ function callExpression(_path, _main)
 					var _res = structManagement.initStruct(_name);
 					_main.replaceWithSourceString(_res);
 				}
+			}
+			else if(_obj.property.name == "initInt")
+			{
+				var _args = _path.arguments;
+				if(_args.length < 1 || _args.length < 2)
+				{
+					console.log("[!] Error: initInt requires 1 or 2 parameters: name, value");
+					process.exit(1);
+				}
+				
+				nativeManagement.validateName(_args[0], "initInt");
+				
+				if(_args[1] && _args[1].type == "StringLiteral")
+				{
+					console.log("[!] Error: initInt value parameter cannot be a String Literal");
+					process.exit(1);
+				}
+				_main.insertBefore(babel.parse(nativeManagement.initInt(_args[0].value, _args[1].value)));
+				_main.replaceWithSourceString("__NJS_Boolean_TRUE");
+			}
+			else if(_obj.property.name == "initDouble")
+			{
+				var _args = _path.arguments;
+				if(_args.length < 1 || _args.length < 2)
+				{
+					console.log("[!] Error: initInt requires 1 or 2 parameters: name, value");
+					process.exit(1);
+				}
+				
+				nativeManagement.validateName(_args[0], "initDouble");
+				
+				if(_args[1] && _args[1].type == "StringLiteral")
+				{
+					console.log("[!] Error: initInt value parameter cannot be a String Literal");
+					process.exit(1);
+				}
+				_main.insertBefore(babel.parse(nativeManagement.initDouble(_args[0].value, _args[1].value)));
+				_main.replaceWithSourceString("__NJS_Boolean_TRUE");
+			}
+			else if(_obj.property.name == "initString")
+			{
+				var _args = _path.arguments;
+				if(_args.length < 1 || _args.length < 2)
+				{
+					console.log("[!] Error: initInt requires 1 or 2 parameters: name, value");
+					process.exit(1);
+				}
+				
+				nativeManagement.validateName(_args[0], "initString");
+				
+				if(_args[1] && _args[1].type == "NumericLiteral")
+				{
+					console.log("[!] Error: initInt value parameter cannot be a Numeric Literal");
+					process.exit(1);
+				}
+				if(_args[1] && _args[1].type == "StringLiteral")
+				{
+					_args[1].value = `"${_args[1].value}"`;
+				}
+				_main.insertBefore(babel.parse(nativeManagement.initString(_args[0].value, _args[1].value)));
+				_main.replaceWithSourceString("__NJS_Boolean_TRUE");
 			}
 		}
 	}

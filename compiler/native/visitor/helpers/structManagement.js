@@ -1,3 +1,25 @@
+/*
+ * This file is part of NectarJS
+ * Copyright (c) 2017 - 2020 Adrien THIERRY
+ * http://nectarjs.com - https://seraum.com/
+ *
+ * sources : https://github.com/nectarjs/nectarjs
+ * 
+ * NectarJS is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * NectarJS is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with NectarJS.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+ 
 var warning = false;
 function sayExperimental()
 {
@@ -43,16 +65,29 @@ function createStruct(_name, _members)
 	sayExperimental();
 	structShouldntExist(_name);
 	
+	var _mOnly = [];
+	for(var i = 0; i < _members.length; i++)
+	{
+		_mOnly.push( _members[i].split(":")[0]);
+	}
+	
 	StructList[_name] =
 	{
-		members: _members,
+		members: _mOnly,
 		key: Key,
 	}
 	Key++;
 	var _m = "";
 	for(var i = 0; i < _members.length; i++)
 	{
-		_m += `var ${_members[i]};`
+		if(_members[i].indexOf(":") > 0)
+		{
+			_members[i] = _members[i].split(":");
+			var _v = _members[i].splice(0,1);
+			_members[i] = _members[i].join(":");
+			_m += `${_members[i]} ${_v};`
+		}
+		else _m += `var ${_members[i]};`
 	}
 	COMPILER.DECL.push(`struct __NJS_STRUCT_${StructList[_name].key} { ${_m} };`);
 	return `true`;

@@ -27,9 +27,10 @@ function StringLiteral(_path)
 		_path.node.extra.raw = '"' + _path.node.value.replace(/\\/g, '\\\\').replace(/"/g, '\\\"') + '"';
 	}
 
-	if(_path.parent.type == "MemberExpression" || _path.parent.type == "CallExpression")
+	if(_path.parent.type == "MemberExpression" || _path.parent.type == "CallExpression" 
+	|| _path.parent.type == "AssignmentExpression" || _path.parent.type == "VariableDeclarator")
 	{
-		//
+		//nothing to do
 	}
 	else 
 	{

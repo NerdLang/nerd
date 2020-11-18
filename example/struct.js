@@ -1,4 +1,4 @@
-Nectar.createStruct("test", "a", "b", "c");
+Nectar.createStruct("test", "a:std::string", "b", "c");
 
 function Test()
 {

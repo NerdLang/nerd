@@ -17,6 +17,9 @@
 #define __NJS_Create_Ptr_Unscoped_Anon(__CONTENT__) new NJS::Type::function_t([](NJS::VAR __NJS_THIS, NJS::VAR* __NJS_VARARGS, int __NJS_VARLENGTH){ __CONTENT__ })
 #define __NJS_Create_Var_Scoped_Anon(__CONTENT__) NJS::VAR(NJS::Enum::Type::Function, __NJS_Create_Ptr_Scoped_Anon(__CONTENT__))
 #define __NJS_Create_Var_Unscoped_Anon(__CONTENT__) NJS::VAR(NJS::Enum::Type::Function, __NJS_Create_Ptr_Unscoped_Anon(__CONTENT__))
+#define __NJS_Init_Int(_name, _value) int _name = _value
+#define __NJS_Init_Double(_name, _value) double _name = _value
+#define __NJS_Init_String(_name, _value) std::string _name = _value
 #define __NJS_EXCEPTION_PARAMETER NJS::VAR &e
 #define finally ;
 #define __NJS_Boolean_TRUE __NJS_Create_Boolean(true)
