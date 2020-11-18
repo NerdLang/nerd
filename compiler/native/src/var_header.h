@@ -40,6 +40,7 @@ namespace NJS
 		VAR(NJS::Class::String *_value);
 		VAR(NJS::Class::Native *_value);
 		VAR(NJS::Class::Undefined *_value);
+		VAR(void *_value, void* fn);
 		VAR(NJS::Enum::Type _type, void *_value);
 		VAR(NJS::Enum::Type _type, void *_value, VAR _this);
 		VAR(std::function<VAR(NJS::VAR*, int)> &_value);

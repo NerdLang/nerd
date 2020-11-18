@@ -146,7 +146,11 @@ namespace NJS
 		type = NJS::Enum::Type::Undefined;
 		data.ptr = _value;
 	}
-	
+	VAR::VAR(void *_value, void* fn)
+	{
+		type = NJS::Enum::Type::Struct;
+		data.ptr = new NJS::Class::Struct(_value, (NJS::Type::clean_struct*)fn);
+	}
 	VAR::VAR(NJS::Enum::Type _type, void *_value)
 	{
 		type = _type;

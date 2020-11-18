@@ -62,8 +62,11 @@ std::ostream &operator<<(std::ostream &os, const NJS::VAR &_v)
 	case NJS::Enum::Type::Array:
 		os << __NJS_Object_Stringify(_v);
 		break;
+	case NJS::Enum::Type::Struct:
+		os << (std::string)(*(NJS::Class::Struct*)_v.data.ptr);
+		break;
 	case NJS::Enum::Type::Native:
-		os << "[Native]";
+		os << (std::string)(*(NJS::Class::Native*)_v.data.ptr);
 		break;
 	case NJS::Enum::Type::Function:
 		os << (std::string)(*(NJS::Class::Function*)_v.data.ptr);
@@ -72,7 +75,7 @@ std::ostream &operator<<(std::ostream &os, const NJS::VAR &_v)
 		os << "null";
 		break;
 	default:
-		os << "NJS::Global::undefined";
+		os << "undefined";
 		break;
 	}
 	return os;
@@ -181,7 +184,7 @@ NJS::VAR __NJS_Object_Stringify(NJS::VAR _var, bool _bracket)
 	NJS::Enum::Type _t = _var.type;
 
 	if (_t == NJS::Enum::Type::Undefined)
-		return "\e[90mNJS::Global::undefined\e[0m";
+		return "\e[90mundefined\e[0m";
 	else if (_t == NJS::Enum::Type::Number)
 		return NJS::VAR("\e[33m") + _var + "\e[0m";
 	else if (_t == NJS::Enum::Type::String)

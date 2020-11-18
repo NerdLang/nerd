@@ -24,8 +24,8 @@ function NumericLiteral(_path)
 {
 	if(_path.parent.type == "MemberExpression")
 	{
-		_path.replaceWithSourceString("__NJS_InitVar(" + _path.node.extra.raw + ")");
-		_path.skip();
+		//_path.replaceWithSourceString("__NJS_InitVar(" + _path.node.extra.raw + ")");
+		//_path.skip();
 	}
 	else if(_path.parent.type == "BinaryExpression")
 	{

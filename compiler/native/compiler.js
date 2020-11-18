@@ -201,7 +201,7 @@ function Compiler()
 
 		if(!CLI.cli["--no-check"]) LINT(_code, this.IN);
 
-		_code = hoistingFunction(_code);
+		
 		
 		_code = genRequire(_handler.PATH, COMPILER.STD) + genRequire(_handler.PATH, _code);
 		
@@ -213,9 +213,9 @@ function Compiler()
 		COMPILER.REQUIRE = createAnon(COMPILER.REQUIRE);
 
 		COMPILER.STATE = "CODE";
-		
-		_handler.CODE = babel.transformSync(_code, visitor).code;
 
+		_handler.CODE = babel.transformSync(_code, visitor).code;
+		_code = hoistingFunction(_code);
 		checkFastFunction();
 		_handler.CODE = createClass(_handler.CODE, true);
 		
