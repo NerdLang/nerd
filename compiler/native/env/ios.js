@@ -20,32 +20,29 @@
  *
  */
 
-var os = require("os");
-
-var IOS =
-{
+module.exports = {
     name: "ios",
     main: "ios.hpp",
     compiler: "xcodebuild",
-    stdlib: [{bind: "Nectar", module: "iOS"}, "console", "Object", "Math", "JSON" ],
-    check: 
-    {
-        "env": 
-        {
+    stdlib: [{ bind: "Nectar", module: "iOS" }, "console", "Object", "Math", "JSON" ],
+    check: {
+        "env": {
             "es6": true
         },
         "extends": "eslint:recommended",
-        "rules": 
-        {
+        "rules": {
             "strict": "global",
             "no-console": "off",
             "indent": "off",
             "linebreak-style": "off",
-            "no-unused-vars": ["warn", { "vars": "all", "args": "after-used", "ignoreRestSiblings": false }],
+            "no-unused-vars": ["warn", {
+                "vars": "all",
+                "args": "after-used",
+                "ignoreRestSiblings": false
+            }],
 			"no-const-assign": "error",
         },
-        "globals":
-        {
+        "globals": {
 			"undefined": false,
 			"eval": false,
             "__njs_typeof": false,
@@ -62,68 +59,36 @@ var IOS =
             "__NJS_PLATFORM": false,
             "JSON": false,
             "Object": false,
-        },
-    },
-    out: function(_name)
-    {
-        return _name + ".app";
-    },
-    init: function(_folder)
-    {
-        copyDirSync(path.join(COMPILER.MAIN_PATH, "platform", "ios"), _folder, true);
-    },
-    write: function(code)
-    {
-        fs.writeFileSync(path.join(COMPILER.TMP_FOLDER, "ios.hpp"), code);
-    },
-    post: function()
-    {
-        try 
-		{
-            fs.mkdirSync(COMPILER.OUT);
         }
-        catch(e){}
-        copyDirSync (`${COMPILER.TMP_FOLDER}/build/NectarIOS.app`, COMPILER.OUT, true);
     },
-    run: function()
-    {
-        var device;
-        if(CLI.cli["--target"]) device = '--devicetypeid \'' + CLI.cli["--target"].argument + '\'';
-        else 
-        {
-            console.log('Please, specify a target with --run on ios env');
+    cli: function (compiler, preset, out, _in, option) {
+        let device = 'generic/platform=iOS';
+        if (CLI.cli["--target"]) {
+            const [ name, os ] = CLI.cli["--target"].argument.split(", ");
+            device = `-destination 'platform=iOS Simulator,name=${name.split("-").join(" ")},OS=${os}'`;
+        }
+        return `${compiler} build -scheme NectarIOS -destination ${device} CONFIGURATION_BUILD_DIR="${COMPILER.TMP_FOLDER}/build/" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGN_ENTITLEMENTS="" CODE_SIGNING_ALLOWED="NO"`;
+    },
+    out: name => `${name}.app`,
+    init: dir => copyDirSync(path.join(COMPILER.MAIN_PATH, "platform", "ios"), dir, true),
+    prepare: function (dir) {
+		const _www = path.join(path.resolve(path.dirname(COMPILER.IN)), "www");
+		if(fs.existsSync(_www)) {
+			copyDirSync(_www, path.join(dir, "NectarIOS", "raw"), true);
+		}
+		return path.join(dir, "NectarIOS");
+	},
+    write: content => fs.writeFileSync(path.join(COMPILER.TMP_FOLDER, "ios.hpp"), content),
+    run: function () {
+        if (!CLI.cli["--target"]) {
+            console.log('[!] Please, specify a target with --run on ios env');
             process.exit(1);
         }
-        var runit = 'ios-sim launch ' + COMPILER.OUT + ' ' + device ;
-        
-        try 
-		{
-            child_process.execSync(runit);
-        }
-        catch(e){}
+        const device = `--devicetypeid '${CLI.cli["--target"].argument}'`;
+        try { child_process.execSync(`ios-sim launch ${COMPILER.OUT} ${device}`); } catch (e) {}
     },
-	prepare: function(_folder)
-	{
-		var _www = path.join(path.resolve(path.dirname(COMPILER.IN)), "www");
-		if(fs.existsSync(_www))
-		{
-			copyDirSync(_www, path.join(_folder, "NectarIOS", "raw"), true);
-		}
-		
-		return path.join(_folder, "NectarIOS");
-	},
-    cli: function(compiler, preset, out, _in, option)
-    {
-        var device = '';
-        if(CLI.cli["--target"])
-        {
-            var info = CLI.cli["--target"].argument.split(", ");
-            device = '-destination \'platform=iOS Simulator,name=' + info[0].split("-").join(" ") + ',OS=' + info[1] + '\'';
-        }
-        else device = '-destination generic/platform=iOS';
-        return `${compiler} build -scheme NectarIOS ${device} CONFIGURATION_BUILD_DIR="${COMPILER.TMP_FOLDER}/build/" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGN_ENTITLEMENTS="" CODE_SIGNING_ALLOWED="NO"`;
+    post: function () {
+        try { fs.mkdirSync(COMPILER.OUT); } catch (e) {}
+        copyDirSync(`${COMPILER.TMP_FOLDER}/build/NectarIOS.app`, COMPILER.OUT, true);
     }
-
 }
-
-module.exports = IOS;

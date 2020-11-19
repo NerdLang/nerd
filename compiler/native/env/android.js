@@ -20,32 +20,33 @@
  *
  */
 
-var os = require("os");
+const { platform } = require("os");
+const fs = require("fs");
+const dir = require("path");
 
-var ANDROID =
-{
+module.exports = {
     name: "android",
     main: "android.cpp",
     compiler: "gradlew",
-    stdlib: [{bind: "Nectar", module: "android"}, "Object", "Math", "JSON"],
-    check: 
-    {
-        "env": 
-        {
+    stdlib: [{ bind: "Nectar", module: "android" }, "Object", "Math", "JSON"],
+    check: {
+        "env": {
             "es6": true
         },
         "extends": "eslint:recommended",
-        "rules": 
-        {
+        "rules": {
             "strict": "global",
             "no-console": "off",
             "indent": "off",
             "linebreak-style": "off",
-            "no-unused-vars": ["warn", { "vars": "all", "args": "after-used", "ignoreRestSiblings": false }],
+            "no-unused-vars": ["warn", {
+                "vars": "all",
+                "args": "after-used",
+                "ignoreRestSiblings": false
+            }],
 			"no-const-assign": "error",
         },
-        "globals":
-        {
+        "globals": {
 			"undefined": false,
 			"eval": false,
             "__njs_typeof": false,
@@ -58,64 +59,29 @@ var ANDROID =
             "__NJS_Call_Function": false,
             "JSON": false,
             "Object": false,
-        },
-    },
-    cli: function(compiler, preset, out, _in, option)
-    {
-
-        var _pre = "./";
-        if(os.platform() == "win32") _pre = "";
-        var apkOut = "";
-        
-        if(CLI.cli["--target"] && CLI.cli["--target"].argument)
-        {
-            if(CLI.cli["--target"].argument == "release")
-            {
-                apkOut =  path.join(COMPILER.TMP_FOLDER, "app", "build", "outputs", "apk", "release", "app-release-unsigned.apk");
-            }
-            else if(CLI.cli["--target"].argument == "debug")
-            {
-                apkOut =  path.join(COMPILER.TMP_FOLDER, "app", "build", "outputs", "apk", "debug", "app-debug.apk");
-            }
-            else 
-            {
-                console.log("[!] Error: accepted target are: debug or release");
-            }
-
         }
-       else 
-       {
-        apkOut =  path.join(COMPILER.TMP_FOLDER, "app", "build", "outputs", "apk", "debug", "app-debug.apk");
-       }
-
-        return `${_pre}${compiler} build && cp ${apkOut} ${out}`;
     },
-    out: function(_name)
-    {
-        return _name + ".apk";
+    cli: function(compiler, preset, output, _input, option) {
+        const prefix = platform() === "win32" ? "./" : "";
+        const target = CLI.cli["--target"] ? CLI.cli["--target"].argument : "debug";
+        if (target !== "release" && target !== "debug") {
+            console.log("[!] Error: accepted target are: debug or release");
+        }
+        const apkOut = path.join(COMPILER.TMP_FOLDER, "app", "build", "outputs", "apk", target, `app-${target}-unsigned.apk`);
+        return `${prefix}${compiler} build && cp ${apkOut} ${output}`;
     },
-    init: function(_folder)
-    {
-        copyDirSync(path.join(COMPILER.MAIN_PATH, "platform", "android"), _folder, true);
-    },
-    prepare: function(_folder)
-    {
-		var _www = path.join(path.resolve(path.dirname(COMPILER.IN)), "www");
+    out: name => `${name}.apk`,
+    init: dir => copyDirSync(path.join(COMPILER.MAIN_PATH, "platform", "android"), dir, true),
+    prepare: function(dir) {
+		const _www = path.join(path.resolve(path.dirname(COMPILER.IN)), "www");
 		if(fs.existsSync(_www))
 		{
-			copyDirSync(_www, path.join(_folder, "app", "src", "main", "assets", "raw"), true);
+			copyDirSync(_www, path.join(dir, "app", "src", "main", "assets", "raw"), true);
 		}
-        var _name = path.basename(COMPILER.IN).split(".")[0];
-        fs.writeFileSync(path.join(_folder, "local.properties"), `ndk.dir=${CONFIG.ndk}\nsdk.dir=${CONFIG.sdk}\ngradle=build -x lint -x lintVitalRelease\n`);
-        fs.writeFileSync(path.join(_folder, "settings.gradle"), `rootProject.name='nectar_android_app'\ninclude ':app'\n`);
-        
-        return path.join(_folder, "app", "src", "main", "cpp");
+        // var _name = path.basename(COMPILER.IN).split(".")[0];
+        fs.writeFileSync(path.join(dir, "local.properties"), `ndk.dir=${CONFIG.ndk}\nsdk.dir=${CONFIG.sdk}\ngradle=build -x lint -x lintVitalRelease\n`);
+        fs.writeFileSync(path.join(dir, "settings.gradle"), `rootProject.name='nectar_android_app'\ninclude ':app'\n`);
+        return path.join(dir, "app", "src", "main", "cpp");
     },
-    write: function(_content)
-    {
-        fs.writeFileSync(path.join(COMPILER.TMP_FOLDER, "app", "src", "main", "cpp", "native-lib.cpp"), _content);
-    }
-
-}
-
-module.exports = ANDROID;
+    write: content => fs.writeFileSync(path.join(COMPILER.TMP_FOLDER, "app", "src", "main", "cpp", "native-lib.cpp"), content)
+};

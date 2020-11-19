@@ -20,34 +20,35 @@
  *
  */
 
-var os = require("os");
+const fs = require("fs");
+const path = require("path");
 
-var ESP32 =
-{
+module.exports = {
     name: "esp32",
     main: "esp32.cpp",
     compiler: "idf.py",
     stdlib: [],
-    check: 
-    {
-        "env": 
-        {
+    check: {
+        "env": {
             "es6": true
         },
         "extends": "eslint:recommended",
-        "rules": 
-        {
+        "rules": {
             "strict": "global",
             "no-console": "off",
             "indent": "off",
             "linebreak-style": "off",
-            "no-unused-vars": ["warn", { "vars": "all", "args": "after-used", "ignoreRestSiblings": false }],
-			"no-const-assign": "error",
+            "no-unused-vars": ["warn", {
+                "vars": "all",
+                "args": "after-used",
+                "ignoreRestSiblings": false
+            }],
+            "no-const-assign": "error",
         },
         "globals":
         {
-			"undefined": false,
-			"eval": false,
+            "undefined": false,
+            "eval": false,
             "__njs_typeof": false,
             "Nectar": false,
             "module": false,
@@ -58,26 +59,13 @@ var ESP32 =
             "__NJS_Call_Function": false,
             "JSON": false,
             "Object": false,
-        },
+        }
     },
-    cli: function(compiler, preset, out, _in, option)
-    {
-		var bin =  path.join(COMPILER.TMP_FOLDER, "build", "njs.bin");
+    cli: function (compiler, preset, out, _in, option) {
+        const bin = path.join(COMPILER.TMP_FOLDER, "build", "njs.bin");
         return `${compiler} build && cp ${bin} ${out}`;
     },
-    out: function(_name)
-    {
-        return _name + ".bin";
-    },
-    init: function(_folder)
-    {
-        copyDirSync(path.join(COMPILER.MAIN_PATH, "platform", "esp32"), _folder, true);
-    },
-    write: function(_content)
-    {
-        fs.writeFileSync(path.join(COMPILER.TMP_FOLDER, "esp32.cpp"), _content);
-    }
-
-}
-
-module.exports = ESP32;
+    out: name => `${name}.bin`,
+    init: dir => copyDirSync(path.join(COMPILER.MAIN_PATH, "platform", "esp32"), dir, true),
+    write: content => fs.writeFileSync(path.join(COMPILER.TMP_FOLDER, "esp32.cpp"), content)
+};

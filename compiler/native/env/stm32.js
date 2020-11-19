@@ -20,57 +20,51 @@
  *
  */
 
-var STM32 =
-{
-  name: "stm32",
-  main: "stm32.cpp",
-  cli: function(compiler, preset, out, _in, option)
-  {
-    if(!COMPILER.TARGET) 
-    {
-      console.log("[!] Error: please specify a target with --target");
-      process.exit(1);
-    }
-    
-    var _mbosSrc = path.join(extern, "stm32", "mbed-os", "nectar");
-    copyDirSync(COMPILER.TMP_FOLDER, _mbosSrc, true);
+const path = require('path')
 
-    var _profile = "SIZE";
-    if(COMPILER.preset == "speed") _profile = "SPEED";
+module.exports = {
+    name: "stm32",
+    main: "stm32.cpp",
+    compiler: "mbed",
+    stdlib: [{ bind: "Nectar", module: "stm32" }],
+    check: {
+        "env": {
+            "node": true
+        },
+        "extends": "eslint:recommended",
+        "rules": {
+            "no-console": "off",
+            "indent": "off",
+            "linebreak-style": "off",
+            "no-unused-vars": ["warn", {
+                "vars": "all",
+                "args": "after-used",
+                "ignoreRestSiblings": false
+            }],
+            "no-const-assign": "error",
+        },
+        "globals": {
+            "undefined": false,
+            "eval": false,
+            "__njs_typeof": false,
+            "Nectar": false,
+            "module": false,
+            "__NJS_Object_Keys": false,
+            "__NJS_Call_Function": false,
+            "__NJS_Log_Console": false,
+        }
+    },
+    cli: function (compiler, preset, out, _in, option) {
+        if (!COMPILER.TARGET) {
+            console.log("[!] Error: please specify a target with --target");
+            process.exit(1);
+        }
+        copyDirSync(COMPILER.TMP_FOLDER, path.join(extern, "stm32", "mbed-os", "nectar"), true);
 
-	  return `cd ${path.join(extern, "stm32")} && ${compiler} compile -m ${COMPILER.TARGET} --profile ${path.join(extern, "stm32", "profile", _profile + ".json")} -t GCC_ARM > stm32_debug_res.txt && mv ${path.join(extern, "stm32", "BUILD", COMPILER.TARGET, "GCC_ARM-" + _profile)}/stm32.bin ${out}`;
-  },
-  clean: function()
-  {
-    var _mbosSrc = path.join(extern, "stm32", "mbed-os", "nectar");
-    rmdir(_mbosSrc);
-  },
-  compiler: "mbed",
-  stdlib:[{bind: "Nectar", module: "stm32"}],
-  check: {
-      "env": {
-          "node": true
-      },
-      "extends": "eslint:recommended",
-      "rules": {
-          "no-console": "off",
-          "indent": "off",
-          "linebreak-style": "off",
-          "no-unused-vars": ["warn", { "vars": "all", "args": "after-used", "ignoreRestSiblings": false }],
-		  "no-const-assign": "error",
-      },
-      "globals":
-      {
-		"undefined": false,
-		"eval": false,
-        "__njs_typeof":false,
-        "Nectar": false,
-        "module": false,
-        "__NJS_Object_Keys": false,
-        "__NJS_Call_Function": false,
-        "__NJS_Log_Console": false,
-      }
-  }
+        const _profile = preset == "speed" ? "SPEED" : "SIZE";
+        return `cd ${path.join(extern, "stm32")} && ${compiler} compile -m ${COMPILER.TARGET} --profile ${path.join(extern, "stm32", "profile", _profile + ".json")} -t GCC_ARM > stm32_debug_res.txt && mv ${path.join(extern, "stm32", "BUILD", COMPILER.TARGET, "GCC_ARM-" + _profile)}/stm32.bin ${out}`;
+    },
+    clean: () => rmdir(path.join(extern, "stm32", "mbed-os", "nectar"))
 }
 
 module.exports = STM32;

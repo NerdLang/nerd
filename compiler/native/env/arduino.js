@@ -20,71 +20,35 @@
  *
  */
 
-var OPTIONS = 
-{
-	"mega": { preset: "-DF_CPU=16000000UL -mmcu=atmega2560", variant: "mega"},
-	"mega2560": { preset: "-DF_CPU=16000000UL -mmcu=atmega2560", variant: "mega"},
-	"mega1280": { preset: "-DF_CPU=16000000UL -mmcu=atmega1280", variant: "mega"},
-	"mega328p": { preset: "-DF_CPU=16000000UL -mmcu=atmega328p", variant: "standard"},
-	"uno": { preset: "-DF_CPU=16000000UL -mmcu=atmega328p", variant: "standard"},
-	"nano": { preset: "-DF_CPU=16000000UL -mmcu=atmega328p", variant: "standard"},
-	"nano2": { preset: "-DF_CPU=16000000UL -mmcu=atmega168", variant: "standard"},
-	"nano3": { preset: "-DF_CPU=16000000UL -mmcu=atmega328p", variant: "standard"}
+const TARGETS = {
+	"mega": { args: "-DF_CPU=16000000UL -mmcu=atmega2560", variant: "mega" },
+	"mega2560": { args: "-DF_CPU=16000000UL -mmcu=atmega2560", variant: "mega" },
+	"mega1280": { args: "-DF_CPU=16000000UL -mmcu=atmega1280", variant: "mega" },
+	"mega328p": { args: "-DF_CPU=16000000UL -mmcu=atmega328p", variant: "standard" },
+	"uno": { args: "-DF_CPU=16000000UL -mmcu=atmega328p", variant: "standard" },
+	"nano": { args: "-DF_CPU=16000000UL -mmcu=atmega328p", variant: "standard" },
+	"nano2": { args: "-DF_CPU=16000000UL -mmcu=atmega168", variant: "standard" },
+	"nano3": { args: "-DF_CPU=16000000UL -mmcu=atmega328p", variant: "standard" }
 }
 
-function getOptions()
-{
-	var OPT = 
-	{
-		elf: false,
-		cli: false,
-	};
-
-	if(CLI.cli["--option"] && CLI.cli["--option"].argument)
-	{
-		var _args = CLI.cli["--option"].argument.split(",");
-		for(var i = 0; i < _args.length; i++)
-		{
-			OPT[_args[i]] = true;
+function getOptions (args) {
+	const opts = { elf: false, cli: false };
+	if (args["--option"] && args["--option"].argument) {
+		for (const opt of args["--option"].argument.split(",")) {
+			opts[opt] = true;
 		}
 	}
-	return OPT;
+	return opts;
 }
 
-var ARDUINO =
-{
-  name: "arduino",
-  main: "arduino.cpp",
-  cli: function(compiler, preset, out, _in, option, target, spec)
-  {
-	  var OPT = getOptions();		
-	  var _cliOption = "";
-	  if(CLI.cli["--option"]) _cliOption = CLI.cli["--option"].argument;
-		
-	  if(!target || !OPTIONS[target])
-	  {
-		  console.log("[!] No target selected, switching to 'uno'");
-		  target = "uno";
-	  }
-	  var _cli = `${compiler} ${OPTIONS[target].preset} -DARDUINO_ARCH_AVR -w -Os -fno-exceptions -fno-rtti -fno-stack-protector -fomit-frame-pointer -ffunction-sections -fdata-sections -Wl,--gc-sections \
-	  -I ${extern}/avr -I ${extern}/arduino/avr/variants/${OPTIONS[target].variant}/ -I ${extern}/arduino/avr/cores/arduino  -I ${extern}/avr/include -I ${extern}/stlarduino ${extern}/stlarduino/ios.cpp  ${extern}/arduino/avr/cores/arduino/abi.cpp -fno-threadsafe-statics -lm ${COMPILER.LIBS} -o ${out} ${_in} ${_cliOption}`;
-	  
- 	  if(!OPT.elf) _cli += `&& avr-objcopy -O ihex -R .eeprom ${out}`;
-	if(OPT.cli) console.log("[*]" + _cli);
-	return _cli;
-  },
-  compiler: "avr-g++ -std=c++17",
-  stdlib:[],
-  out: function(_name)
-  {
-	var OPT = getOptions();
-	if(OPT.elf) _name += ".elf";
-	else _name += ".hex";
-	return _name;
-  },
-  check: {
+module.exports = {
+	name: "arduino",
+	main: "arduino.cpp",
+	compiler: "avr-g++ -std=c++17",
+	stdlib: [],
+	check: {
 		"env": {
-		"es6": true
+			"es6": true
 		},
 		"extends": "eslint:recommended",
 		"rules": {
@@ -92,20 +56,46 @@ var ARDUINO =
 			"no-console": "error",
 			"indent": "off",
 			"linebreak-style": "off",
-			"no-unused-vars": ["warn", { "vars": "all", "args": "after-used", "varsIgnorePattern": "setup|loop", "ignoreRestSiblings": false }],
+			"no-unused-vars": ["warn", {
+				"vars": "all",
+				"args": "after-used",
+				"varsIgnorePattern": "setup|loop",
+				"ignoreRestSiblings": false
+			}],
 			"no-const-assign": "error",
 		},
-		"globals":
-		{
+		"globals": {
 			"undefined": false,
 			"eval": false,
 			"__njs_typeof": false,
 			"require": false,
 			"module": false,
 			"__NJS_Object_Keys": false,
-            "__NJS_Call_Function": false,
+			"__NJS_Call_Function": false,
 		}
-	}
-}
+	},
+	cli: function (compiler, preset, output, input, option, target, spec) {
+		const { elf, cli } = getOptions(CLI.cli)
+		const optionArg = CLI.cli["--option"] ? CLI.cli["--option"].argument : "";
 
-module.exports = ARDUINO;
+		if (!TARGETS[target]) {
+			console.log("[!] No target selected, switching to 'uno'");
+			target = "uno";
+		}
+		const { args, variant } = TARGETS[target];
+
+		let _cli = `${compiler} ${args} -DARDUINO_ARCH_AVR -w \
+		-Os -fno-exceptions -fno-rtti -fno-stack-protector -fomit-frame-pointer \
+		-ffunction-sections -fdata-sections -Wl,--gc-sections -I ${extern}/avr \
+		-I ${extern}/arduino/avr/variants/${variant}/ \
+		-I ${extern}/arduino/avr/cores/arduino \
+		-I ${extern}/avr/include -I ${extern}/stlarduino \
+		${extern}/stlarduino/ios.cpp ${extern}/arduino/avr/cores/arduino/abi.cpp \
+		-fno-threadsafe-statics -lm ${COMPILER.LIBS} -o ${output} ${input} ${optionArg}`;
+
+		if (!elf) _cli += `&& avr-objcopy -O ihex -R .eeprom ${output}`;
+		if (cli) console.log("[*]" + _cli);
+		return _cli;
+	},
+	out: name => `${name}.${getOptions().elf ? "elf" : "hex"}`
+};

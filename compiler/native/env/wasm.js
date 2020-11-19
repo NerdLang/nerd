@@ -20,74 +20,72 @@
  *
  */
 
-var WASM =
-{
-  name: "wasm",
-  main: "std.cpp",
-  compiler: "em++",
-  stdlib: [{bind: "Nectar", module: "WASM"},"console", "Math", "JSON"],
-  check: {
-		"env": {
-			"node": true,
-			"es6": true
-		},
-		"extends": "eslint:recommended",
-		"rules": {
-			"no-console": "off",
-			"indent": "off",
-			"linebreak-style": "off",
-			"no-unused-vars": ["warn", { "vars": "all", "args": "after-used", "ignoreRestSiblings": false }],
-			"no-const-assign": "error",
-		},
-		"globals":
-		{
-			"undefined": false,
-			"eval": false,
-			"Nectar": false,
-			"__njs_typeof": false,
-			"console": false,
-			"module": false,
-			"require": false,
-			"__NJS_Log_Console": false,
-			"__NJS_Object_Keys": false,
-			"__NJS_ARGS": false,
+const FLAGS = {
+	none: ["O1"],
+	size: ["Os", "fno-exceptions", "fno-rtti", "fno-stack-protector", "fomit-frame-pointer"],
+	speed: ["O3"]
+}
+
+module.exports = {
+    name: "wasm",
+    main: "std.cpp",
+    compiler: "em++",
+    stdlib: [{ bind: "Nectar", module: "WASM" }, "console", "Math", "JSON"],
+    check: {
+        "env": {
+            "node": true,
+            "es6": true
+        },
+        "extends": "eslint:recommended",
+        "rules": {
+            "no-console": "off",
+            "indent": "off",
+            "linebreak-style": "off",
+            "no-unused-vars": ["warn", {
+                "vars": "all",
+                "args": "after-used",
+                "ignoreRestSiblings": false
+            }],
+            "no-const-assign": "error",
+        },
+        "globals": {
+            "undefined": false,
+            "eval": false,
+            "Nectar": false,
+            "__njs_typeof": false,
+            "console": false,
+            "module": false,
+            "require": false,
+            "__NJS_Log_Console": false,
+            "__NJS_Object_Keys": false,
+            "__NJS_ARGS": false,
             "__NJS_Call_Function": false,
-			"JSON": false,
-		}
-	},
-	out: function(_name)
-  {
-		if(CLI.cli["--target"])
-		{
-			if(CLI.cli["--target"].argument == "js")  return _name + ".asm.js";
-			else if(CLI.cli["--target"].argument == "wasm") return _name + ".wasm";
-			else if(CLI.cli["--target"].argument == "html") return _name + ".html";
-			else 
-			{
-				console.log("[!] Invalid target, expected js, wasm, html");
-				process.exit(1);
-			}
-		}
-	    return _name + ".wasm";
-  },
-  cli: function(compiler, preset, out, _in, option)
-  {
-	  var _cliOption = "";
-	  if(CLI.cli["--option"]) _cliOption = CLI.cli["--option"].argument;
-		
-		if(preset == "none")
-		{
-			return `${compiler} -D__NJS_REGISTER_SIZE=${COMPILER.REGISTER} ${_in} -O1 -w -s TOTAL_MEMORY=33554432 ${COMPILER.LIBS} -o ${out} ${_cliOption}`;
-		}
-		else if(preset == "size")
-		{
-			return `${compiler} -D__NJS_REGISTER_SIZE=${COMPILER.REGISTER} ${_in} -Os -fno-exceptions -fno-rtti -fno-stack-protector -fomit-frame-pointer -w -s TOTAL_MEMORY=33554432 ${COMPILER.LIBS} -o ${out} ${_cliOption}`;
-		}
-		else
-		{
-			return `${compiler} -D__NJS_REGISTER_SIZE=${COMPILER.REGISTER} ${_in} -O3 -w -s TOTAL_MEMORY=33554432 ${COMPILER.LIBS} -o ${out} ${_cliOption}`;
-		}
-  }
+            "JSON": false,
+        }
+    },
+    out: function (name) {
+        if (!CLI.cli["--target"]) return `${name}.wasm`;
+        const target = ;
+        switch (CLI.cli["--target"] && CLI.cli["--target"].argument) {
+            case undefined:
+            case "wasm":
+                return `${name}.wasm`;
+            case "js":
+                return `${name}.asm.js`;
+            case "html":
+                return `${name}.html`;
+            default: {
+                console.log("[!] Invalid target, expected js, wasm, html");
+                process.exit(1);
+            }
+        }
+    },
+    cli: function (compiler, preset, out, _in, option) {
+        var _cliOption = "";
+        if (CLI.cli["--option"]) _cliOption = CLI.cli["--option"].argument;
+        const opts = (FLAGS[preset] || []).map(v => `-${v}`).join(" ");
+        return `${compiler} -D__NJS_REGISTER_SIZE=${COMPILER.REGISTER} ${_in} ${opts} -w -s TOTAL_MEMORY=33554432 ${COMPILER.LIBS} -o ${out} ${_cliOption}`;
+    }
 }
 
 module.exports = WASM;

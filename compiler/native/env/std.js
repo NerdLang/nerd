@@ -20,32 +20,37 @@
  *
  */
 
-var os = require("os");
+const { platform } = require("os")
 
-var STD =
-{
+const FLAGS = {
+	none: ["O1"],
+	size: ["Os", "fno-rtti", "fno-stack-protector", "fomit-frame-pointer"],
+	speed: ["O3"]
+}
+
+module.exports = {
     name: "std",
     main: "std.cpp",
     compiler: "g++",
-    stdlib: ["console", {bind:"performance", module:"Performance"}, "RegExp", "Number", "Object", "Math", "JSON", "Array", "Date"],
-    check: 
-    {
-        "env": 
-        {
+    stdlib: ["console", { bind: "performance", module: "Performance" }, "RegExp", "Number", "Object", "Math", "JSON", "Array", "Date"],
+    check: {
+        "env": {
             "es6": true
         },
         "extends": "eslint:recommended",
-        "rules": 
-        {
+        "rules": {
             "strict": "global",
             "no-console": "off",
             "indent": "off",
             "linebreak-style": "off",
-            "no-unused-vars": ["warn", { "vars": "all", "args": "after-used", "ignoreRestSiblings": false }],
+            "no-unused-vars": ["warn", {
+                "vars": "all",
+                "args": "after-used",
+                "ignoreRestSiblings": false
+            }],
 			"no-const-assign": "error",
         },
-        "globals":
-        {
+        "globals": {
 			"undefined": false,
 			"eval": false,
             "__njs_typeof": false,
@@ -65,83 +70,42 @@ var STD =
 			"Array": false,
         },
     },
-    cli: function(compiler, preset, out, _in, option)
-    {
-        var _stack = 0;
-        if(CLI.cli["--stack"])
-        {
-            try 
-            {
-                _stack = parseInt(CLI.cli["--stack"].argument);
-            }
-            catch(e)
-            {
-                console.log("[!] Error: --stack flags required a number, received -> " + CLI.cli["--stack"].argument);
-                process.exit(1);
-            }
+    cli: function(compiler, preset, out, _in, option) {
+        const stackSize = CLI.cli["--stack"] ? +CLI.cli["--stack"].argument : 0;
+		if (isNaN(stackSize)) {
+			console.log("[!] Error: --stack flags required a number, received -> " + CLI.cli["--stack"].argument);
+			process.exit(1);
         }
-        if(compiler == "cl" || compiler.indexOf("cl ") == 0)
-        {
+        if (compiler == "cl" || compiler.indexOf("cl ") == 0) {
 			console.log("[!] cl is not supported, please use g++, clang++, em++ or avr-g++");
 			process.exit(1);
         }
 
-		var _hashmap = "-D__NJS__OBJECT_HASHMAP";
-		if(CLI.cli['--no-object-hashmap']) _hashmap = "";
+		const _hashmap = CLI.cli['--no-object-hashmap'] ? "" : "-D__NJS__OBJECT_HASHMAP";
+        const _stack = stackSize ? `-Wl,--stack,${stackSize}` : "";
+		const _sysVNetLibs = os.platform() === "sunos" ? "-lsocket -lnsl" : "";
+        const _cliOption = CLI.cli["--option"] ? CLI.cli["--option"].argument : "";
 		
-        if(_stack) _stack = "-Wl,--stack," + _stack;
-        else _stack = "";
-        
-        var _sysVNetLibs = "";
-        if(os.platform() == "sunos") _sysVNetLibs = "-lsocket -lnsl";
-
-		var _cliOption = "";
-		if(CLI.cli["--option"]) _cliOption = CLI.cli["--option"].argument;
-		
-		
-		if(CLI.cli["--profile"])
-		{
-			if(!CLI.cli["--conserve"]) CLI.cli["--conserve"] = true;
-			if(CLI.cli["--profile"].argument == "gen")
-			{
+		if (CLI.cli["--profile"]) {
+            const profile = CLI.cli["--profile"].argument;
+			if (!CLI.cli["--conserve"]) CLI.cli["--conserve"] = true;
+			if (profile === "gen") {
 				_cliOption += " -fprofile-generate";
-				console.log("[*] Profiling data will be stored in: " + COMPILER.TMP_FOLDER);
-			}
-			else if(CLI.cli["--profile"].argument == "use")
-			{
+				console.log(`[*] Profiling data will be stored in: ${COMPILER.TMP_FOLDER}`);
+			} else if(profile === "use") {
 				_cliOption += " -fprofile-use";
-				console.log("[*] Using profile data from: " + COMPILER.TMP_FOLDER);
-			}
-			else 
-			{
+				console.log(`[*] Using profile data from: ${COMPILER.TMP_FOLDER}`);
+			} else {
 				console.log("[!] Please use --profile with gen or use");
 			}
-		}
-		
-        if(preset == "none")
-        {
-            return `${compiler} ${_hashmap} ${_stack} -std=c++17 "${_in}" -O1 -s ${COMPILER.LIBS} -o "${out}" ${_sysVNetLibs} ${_cliOption}`;
         }
-        else if(preset == "size")
-        {
-            return `${compiler} ${_hashmap} ${_stack} -std=c++17 "${_in}" -Os -fno-rtti -fno-stack-protector -fomit-frame-pointer -s ${COMPILER.LIBS} -o "${out}" ${_sysVNetLibs} ${_cliOption}`;
-        }
-        else
-        {   
-            var _opt = "-O";
-            if(os.platform() == "darwin" || compiler.indexOf("clang") > -1) _opt += "3";
-            else _opt += "fast";
-			
-			return `${compiler} ${_hashmap} ${_stack} -std=c++17 "${_in}" ${_opt} -s ${COMPILER.LIBS}  -o "${out}" ${_sysVNetLibs} ${_cliOption}`;
-        }
+
+        const opt = (FLAGS[preset] || []).map(v => `-${v}`).join(" ");
+		return `${compiler} ${_hashmap} ${_stack} -std=c++17 "${_in}" ${opt} -s ${COMPILER.LIBS} -o "${out}" ${_sysVNetLibs} ${_cliOption}`
     },
-	write: function(_content, _in)
-    {
-		if(CLI.cli["--profile"] && CLI.cli["--profile"].argument == "use")
-		{
-			return;
-		}
-        fs.writeFileSync(_in, _content);
+	write: function(content, input) {
+		if (CLI.cli["--profile"] && CLI.cli["--profile"].argument == "use") return;
+        fs.writeFileSync(input, content);
     }
 
 }

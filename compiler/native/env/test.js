@@ -20,63 +20,53 @@
  *
  */
 
-var os = require("os");
-
-var TEST =
-{
-  name: "std",
-  main: "test.cpp",
-  compiler: "g++",
-  stdlib: [],
-  cli: function(compiler, preset, out, _in, option)
-  {
-    if(compiler == "cl" || compiler.indexOf("cl ") == 0)
-    {
-        if(preset == "none") return `${compiler} ${_in} /std:c++17 /D CL_WINDOWS=1 /I "${CONFIG.win_inc_ucrt}" "${CONFIG.win_lib_um}\\Uuid.Lib" "${CONFIG.win_lib_um}\\kernel32.Lib" "${CONFIG.win_lib_ucrt}\\libucrt.lib" /EHsc  ${COMPILER.LIBS} /o  ${out}`;
-        else if(preset == "size") return `${compiler} ${_in} /std:c++17 /D CL_WINDOWS=1 /O1 /I "${CONFIG.win_inc_ucrt}" "${CONFIG.win_lib_um}\\Uuid.Lib" "${CONFIG.win_lib_um}\\kernel32.Lib" "${CONFIG.win_lib_ucrt}\\libucrt.lib" /EHsc ${COMPILER.LIBS} /o  ${out}`;
-        else if(preset == "speed") return `${compiler} ${_in} /std:c++17 /D CL_WINDOWS=1 /Ox /I "${CONFIG.win_inc_ucrt}" "${CONFIG.win_lib_um}\\Uuid.Lib" "${CONFIG.win_lib_um}\\kernel32.Lib" "${CONFIG.win_lib_ucrt}\\libucrt.lib" /EHsc ${COMPILER.LIBS} /o  ${out}`;
-    }
-	
-	var _cliOption = "";
-	if(CLI.cli["--option"]) _cliOption = CLI.cli["--option"].argument;
-	
-	  if(preset == "none")
-	  {
-		  return `${compiler} -std=c++17 "${_in}" ${option} -I ${extern}/lib/ -s ${COMPILER.LIBS} -o ${out} ${_cliOption}`;
-	  }
-	  else if(preset == "size")
-	  {
-		  return `${compiler} -std=c++17 "${_in}" ${option} -I ${extern}/lib/ -fno-rtti -fno-stack-protector -fomit-frame-pointer -s ${COMPILER.LIBS}  -o ${out} ${_cliOption}`;
-	  }
-	  else return `${compiler} -std=c++17 "${_in}" -I ${extern}/lib/ ${option} -s ${COMPILER.LIBS} -o ${out} ${_cliOption}`;
-  },
-  check: {
-    "env": {
-        "es6": true
-    },
-    "extends": "eslint:recommended",
-    "rules": {
-        "strict": "global",
-        "no-console": "off",
-        "indent": "off",
-        "linebreak-style": "off",
-        "no-unused-vars": ["warn", { "vars": "all", "args": "after-used", "ignoreRestSiblings": false }],
-		"no-const-assign": "error",
-    },
-    "globals":
-    {
-		"undefined": false,
-		"eval": false,
-        "__njs_typeof": false,
-        "module": false,
-        "require": false,
-        "__NJS_Log_Console": false,
-        "__NJS_Object_Keys": false,
-        "__NJS_ARGS": false,
-        "__NJS_Call_Function": false,
-		"$ERROR": false,
-    }
-}
+const FLAGS = {
+	size: ["Os", "fno-rtti", "fno-stack-protector", "fomit-frame-pointer"],
+	speed: ["O3"]
 }
 
-module.exports = TEST;
+module.exports = {
+    name: "std",
+    main: "test.cpp",
+    compiler: "g++",
+    stdlib: [],
+    check: {
+        "env": {
+            "es6": true
+        },
+        "extends": "eslint:recommended",
+        "rules": {
+            "strict": "global",
+            "no-console": "off",
+            "indent": "off",
+            "linebreak-style": "off",
+            "no-unused-vars": ["warn", {
+                "vars": "all",
+                "args": "after-used",
+                "ignoreRestSiblings": false
+            }],
+            "no-const-assign": "error",
+        },
+        "globals": {
+            "undefined": false,
+            "eval": false,
+            "__njs_typeof": false,
+            "module": false,
+            "require": false,
+            "__NJS_Log_Console": false,
+            "__NJS_Object_Keys": false,
+            "__NJS_ARGS": false,
+            "__NJS_Call_Function": false,
+            "$ERROR": false,
+        }
+    },
+    cli: function (compiler, preset, out, _in, option) {
+        if (compiler == "cl" || compiler.indexOf("cl ") == 0) {
+            const opt = (FLAGS[preset] || [])[0] || "";
+            return `${compiler} ${_in} /std:c++17 /D CL_WINDOWS=1 ${opt} /I "${CONFIG.win_inc_ucrt}" "${CONFIG.win_lib_um}\\Uuid.Lib" "${CONFIG.win_lib_um}\\kernel32.Lib" "${CONFIG.win_lib_ucrt}\\libucrt.lib" /EHsc  ${COMPILER.LIBS} /o  ${out}`;
+        }
+        const _cliOption = CLI.cli["--option"] ? CLI.cli["--option"].argument : "";
+        const opts = (FLAGS[preset] || []).slice(1).map(v => `-${v}`).join(" ");
+        return `${compiler} -std=c++17 "${_in}" ${option} -I ${extern}/lib/ ${opts} -s ${COMPILER.LIBS} -o ${out} ${_cliOption}`;
+    }
+}
