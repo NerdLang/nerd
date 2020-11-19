@@ -19,7 +19,7 @@
  * along with NectarJS.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
- 
+var supportedType = ["int", "double", "string"];
 var warning = false;
 function sayExperimental()
 {
@@ -55,9 +55,9 @@ function memberExists(_name, _member)
 	structShouldExist(_name)
 	if(StructList[_name].members.indexOf(_member) < 0)
 	{
-		console.log(`[!] Error: member '${_member}' doesn't exist in Struct '${_name}'`);
-		process.exit(1);
+		return false;
 	}
+	else return true;
 }
 
 function createStruct(_name, _members)
@@ -85,6 +85,12 @@ function createStruct(_name, _members)
 			_members[i] = _members[i].split(":");
 			var _v = _members[i].splice(0,1);
 			_members[i] = _members[i].join(":");
+			if(supportedType.indexOf(_members[i]) < 0)
+			{
+				console.log(`[!] Error: unsupported struct type '${_members[i]}', supported are: ${supportedType}`);
+				process.exit(1);
+			}
+			if(_members[i] == "string") _members[i] = "std::string";
 			_m += `${_members[i]} ${_v};`
 		}
 		else _m += `var ${_members[i]};`
@@ -102,8 +108,14 @@ function initStruct(_name)
 
 function accessStruct(_exp, _name, _member)
 {
-	memberExists(_name, _member)
-	return `__NJS_Access_Struct(${_exp}, __NJS_STRUCT_${StructList[_name].key})`
+	if(memberExists(_name, _member))
+	{
+		return {code: `__NJS_Access_Struct(${_exp}, __NJS_STRUCT_${StructList[_name].key})`, struct:true};
+	}
+	else 
+	{
+		return {code: _exp, struct:false};
+	}
 }
 
 function verifyArguments(_arguments)

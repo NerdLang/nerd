@@ -1,4 +1,4 @@
-Nectar.createStruct("test", "a:std::string", "b", "c");
+Nectar.createStruct("test", "a:string", "b:int", "c:double");
 
 function Test()
 {
@@ -11,3 +11,7 @@ function Test()
 var retStruct = Test();
 retStruct.NStruct("test").a = "After return";
 console.log(retStruct.NStruct("test").a);
+
+// access to non struct member fall back on hashmap
+retStruct.NStruct("test").x = "Fallback";
+console.log(retStruct.NStruct("test").x);

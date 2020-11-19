@@ -162,14 +162,28 @@ function callExpression(_path, _main)
 		if(_main.container.property)
 		{
 			var _member = _main.container.property.name;
-			_main.replaceWithSourceString(structManagement.accessStruct(exp, _args[0], _member));
+			var sAccess = structManagement.accessStruct(exp, _args[0], _member);
+			if(sAccess.struct)
+			{
+				_main.replaceWithSourceString(sAccess.code);
+				return;
+			}
+			else 
+			{
+				// struct member does not exist
+				// we fall back on hashmap
+				_main.replaceWithSourceString(sAccess.code);
+				_main.container.property.type = "StringLiteral";
+				_main.container.property.extra = { rawValue: _main.container.property.name, raw: '"' + _main.container.property.name +'"'};
+				_main.container.property.value = _main.container.property.name;
+				_main.container.computed = true;
+			}
 		}
 		else 
 		{
 			console.log("[!] Error: NStruct() call needs to be followed by a member accessor");
 			process.exit(1);
 		}
-		return;
 	}
 	
 	if(_obj.name) VISITOR.checkUndefVar(_obj.name);
