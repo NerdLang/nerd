@@ -93,6 +93,13 @@ namespace NJS
 		data.ptr = new NJS::Class::String(_value);
 	}
 
+	VAR::VAR(NJS::Class::FixedArray *_value)
+	{
+		type = NJS::Enum::Type::FixedArray;
+		_value->counter++;
+		data.ptr = _value;
+	}
+
 	VAR::VAR(NJS::Class::Array *_value)
 	{
 		type = NJS::Enum::Type::Array;
@@ -586,6 +593,12 @@ namespace NJS
 	{
 		if(type < NJS::Enum::Type::String) return __NJS_DOUBLE_TO_STRING(data.number);
 		return (std::string)(*(NJS::Class::Base*)data.ptr);
+	}
+
+	VAR::operator long long()
+	{
+		if(type < NJS::Enum::Type::String) return data.number;
+		return (long long)((double)*this);
 	}
 
 	VAR::operator long long() const

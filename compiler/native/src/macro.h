@@ -12,6 +12,7 @@
 #define __NJS_Create_Infinity() NJS::VAR(std::numeric_limits<double>::infinity)
 #define __NJS_Create_Null() NJS::VAR(NJS::Enum::Type::Null, 0)
 #define __NJS_Create_Struct(_value) NJS::VAR(new _value(), new NJS::Type::clean_struct([](void* _ptr){ delete (_value*)_ptr;}))
+#define __NJS_Create_FixedArray(_length) NJS::VAR(new NJS::Class::FixedArray(_length))
 #define __NJS_Create_Lambda(name) NJS::Type::function_t* name = new NJS::Type::function_t([](NJS::VAR __NJS_THIS, NJS::VAR* __NJS_VARARGS, int __NJS_VARLENGTH)
 #define __NJS_Create_Ptr_Scoped_Anon(__CONTENT__) new NJS::Type::function_t([&](NJS::VAR __NJS_THIS, NJS::VAR* __NJS_VARARGS, int __NJS_VARLENGTH){ __CONTENT__ })
 #define __NJS_Create_Ptr_Unscoped_Anon(__CONTENT__) new NJS::Type::function_t([](NJS::VAR __NJS_THIS, NJS::VAR* __NJS_VARARGS, int __NJS_VARLENGTH){ __CONTENT__ })

@@ -21,6 +21,7 @@
  */
  var structManagement = require("./structManagement.js");
  var nativeManagement = require("./nativeManagement.js");
+ var fixedArrayManagement = require("./fixedArrayManagement.js");
 function callExpression(_path, _main)
 {
 	
@@ -133,6 +134,18 @@ function callExpression(_path, _main)
 				}
 				_main.insertBefore(babel.parse(nativeManagement.initString(_args[0].value, _args[1].value)));
 				_main.replaceWithSourceString("__NJS_Boolean_TRUE");
+			}
+			else if(_obj.property.name == "fixedArray")
+			{
+				var _args = _path.arguments;
+				if(_args.length != 1)
+				{
+					console.log("[!] Error: fixedArray requires 1 parameter: size");
+					process.exit(1);
+				}
+				
+				fixedArrayManagement.validateLength(_args[0]);
+				_main.replaceWithSourceString(fixedArrayManagement.initFixedArray(_args[0].value));
 			}
 		}
 	}

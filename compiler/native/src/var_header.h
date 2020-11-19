@@ -32,6 +32,7 @@ namespace NJS
 		VAR(char *_value);
 		VAR(std::string _value);
 		VAR(const char *_value);
+		VAR(NJS::Class::FixedArray *_value);
 		VAR(NJS::Class::Array *_value);
 		VAR(const NJS::Class::Array *_value);
 		VAR(bool _value);
@@ -120,7 +121,8 @@ namespace NJS
 		operator bool();
 		explicit operator std::string() const;
 		operator std::string();
-		explicit operator const char*() const;	
+		explicit operator const char*() const;
+		explicit operator long long();
 		explicit operator long long() const;
 		
 	};
