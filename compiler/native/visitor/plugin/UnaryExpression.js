@@ -51,11 +51,9 @@ function UnaryExpression(_path)
 		if (_path.node.argument.type == "MemberExpression")
 		{
 			VISITOR.memberExpression(_path.node.argument);
-			var _left = babel.generate(_path.node.argument).code.split("[\"");
-			var _right = _left.splice(-1).join();
-			_right = "\"" + _right.substring(0, _right.length - 1);
-			_left = _left.join("[\"");
-
+			
+			var _left = babel.generate(_path.node.argument.object).code;
+			var _right = _path.node.argument.property.extra.raw;
 			_path.replaceWithSourceString(`__NJS_delete(${_left}, ${_right})`);
 		}
 		else 
