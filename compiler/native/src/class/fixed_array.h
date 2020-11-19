@@ -9,7 +9,7 @@ namespace NJS::Class
 	FixedArray::FixedArray() 
 	{ 
 		length = 8;
-		value = new NJS::VAR[_length];
+		value = new NJS::VAR[8];
 	}
 	FixedArray::FixedArray(int _length)
 	{

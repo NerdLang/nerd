@@ -33,6 +33,7 @@ global.replaceObjAddr = require("./lib/replaceObjAddr.js");
 
 var createFunction = require("./lib/createFunction.js");
 var createAnon = require("./lib/createAnon.js");
+var createReturnAnon = require("./lib/createReturnAnon.js");
 var createClass = require("./lib/createClass.js");
 var hoistingFunction = require("./lib/hoistingFunction.js");
 
@@ -211,6 +212,7 @@ function Compiler()
 		COMPILER.REQUIRE = createClass(COMPILER.REQUIRE);
 		COMPILER.REQUIRE = createFunction(COMPILER.REQUIRE);
 		COMPILER.REQUIRE = createAnon(COMPILER.REQUIRE);
+		COMPILER.REQUIRE = createReturnAnon(COMPILER.REQUIRE);
 
 		COMPILER.STATE = "CODE";
 
@@ -221,6 +223,7 @@ function Compiler()
 		
 		_handler.CODE = createFunction(_handler.CODE, true);
 		_handler.CODE = createAnon(_handler.CODE, true);
+		_handler.CODE = createReturnAnon(_handler.CODE, true);
 
 		var _hoisting = "";
 		for(var i = 0; i < COMPILER.INFO.HOISTING.length; i++)
