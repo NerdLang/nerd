@@ -8,7 +8,7 @@ namespace NJS::Class
 	public:
 		// Constructors
 		FixedArray();
-		FixedArray(int length);
+		FixedArray(NJS::VAR length);
 		// Properties
 		count_t counter = 0;
 		NJS::VAR length;

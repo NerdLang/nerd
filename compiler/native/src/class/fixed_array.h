@@ -11,10 +11,10 @@ namespace NJS::Class
 		length = 8;
 		value = new NJS::VAR[8];
 	}
-	FixedArray::FixedArray(int _length)
+	FixedArray::FixedArray(NJS::VAR _length)
 	{
 		length = _length;
-		value = new NJS::VAR[_length];
+		value = new NJS::VAR[(int)_length];
 	}
 	// Methods
 	inline void FixedArray::Delete() noexcept
