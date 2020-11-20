@@ -58,13 +58,15 @@ Init();
 readConfig();
 
 var parseCLI = require('./base/cli/cliParser.js');
-var coreHttp = require('./base/util/httpUtils.js');
+global.coreHttp = require('./base/util/httpUtils.js');
 var getExt = require('./base/util/getExt.js');
 var getTips = require('./base/util/getTips.js');
 var Flash = require('./base/util/flash.js');
+var installModule = require('./base/util/installModule.js');
 global.rmdir = require("./base/util/rmdir.js");
 global.copyRecursiveSync = require("./base/util/copyRecursive.js");
 global.copyDirSync = require("./base/util/copyDirSync.js");
+global.Zip = require("./base/util/adm-zip/");
 var CURRENT = process.cwd();
 var TARGET = require('./base/compiler/target.js');
 global.LINT = require("./base/util/lint.js");
@@ -89,6 +91,7 @@ if(CLI.cli["--install_external"]) ACTION = "installExternal";
 else if(CLI.cli["--help"] || CLI.cli["-h"]) ACTION = "help";
 else if(CLI.cli["--example"] || CLI.cli["--examples"]) ACTION = "example";
 else if(CLI.cli["--version"] || CLI.cli["-v"]) ACTION = "version";
+else if(CLI.cli["--install"] || CLI.cli["-i"]) ACTION = "install";
 else if(CLI.cli["--project"]) ACTION = "showproject";
 else if(CLI.cli["--clean"] || CLI.cli["--purge"]) ACTION = "clean";
 else if(CLI.cli["--setauthor"] || CLI.cli["--setid"] || CLI.cli["--setkey"] || CLI.cli["--sethash"] || CLI.cli["--setsdk"] || CLI.cli["--setndk"] || CLI.cli["--setwin_inc_ucrt"] || CLI.cli["--setwin_lib_ucrt"] || CLI.cli["--setwin_lib_um"] || CLI.cli["--setapi"] || CLI.cli["--setport"] || CLI.cli["--setxcode"]) ACTION = "setconfig";
@@ -130,6 +133,10 @@ switch(ACTION)
 
   case "build":
     Build();
+    break;
+
+  case "install":
+    Install();
     break;
 
   case "clean":
@@ -672,4 +679,12 @@ function Help()
   console.log("[*] Clean project :\nnectar [--clean] [--purge] [path_to_project.json]\n");
   console.log("[*] Copy example files :\nnectar --example\n");
   console.log("[*] Nectar version :\nnectar --version\n");
+}
+
+function Install()
+{
+	var _module = "";
+	if(CLI.cli["--install"]) _module = CLI.cli["--install"].argument;
+	else _module = CLI.cli["-i"].argument;
+	installModule(_module);
 }
