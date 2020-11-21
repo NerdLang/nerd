@@ -24,7 +24,7 @@ const FLAGS = {
 	none: ["O1"],
 	size: ["Os", "fno-exceptions", "fno-rtti", "fno-stack-protector", "fomit-frame-pointer"],
 	speed: ["O3"]
-}
+};
 
 module.exports = {
     name: "wasm",
@@ -65,7 +65,6 @@ module.exports = {
     },
     out: function (name) {
         if (!CLI.cli["--target"]) return `${name}.wasm`;
-        const target = ;
         switch (CLI.cli["--target"] && CLI.cli["--target"].argument) {
             case undefined:
             case "wasm":
