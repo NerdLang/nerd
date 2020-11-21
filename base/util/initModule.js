@@ -24,7 +24,13 @@ function initModule(_author, _name)
 {
 	try 
 	{
-		fs.mkdirSync(_name);
+		fs.mkdirSync("nectar_modules");
+	} catch(e){}
+	
+	var _dest = path.join("nectar_modules", _name);
+	try 
+	{
+		fs.mkdirSync(_dest);
 	}
 	catch(e)
 	{
@@ -37,9 +43,9 @@ function initModule(_author, _name)
 	
 	_pkg = _pkg.replace(/{{AUTHOR}}/g, _author).replace(/{{MODULE_NAME}}/g, _name)
 
-	fs.writeFileSync(path.join(_name, "package.json"), _pkg);
-	fs.appendFileSync(path.join(_name, "index.js"), "// Write your module code here");
-	console.log("[+] Module " + _name + " correctly initialized");
+	fs.writeFileSync(path.join(_dest, "package.json"), _pkg);
+	fs.appendFileSync(path.join(_dest, "index.js"), "// Write your module code here");
+	console.log("[+] Module " + _name + " correctly initialized in " + _dest);
 }
 
 module.exports = initModule;
