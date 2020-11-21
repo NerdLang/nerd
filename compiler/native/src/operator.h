@@ -643,6 +643,13 @@ NJS::VAR operator% (NJS::VAR _left, T right)
 }
 
 template<class T>
+NJS::VAR operator|| (NJS::VAR _left, T right)
+{
+	if(_left.type != NJS::Enum::Type::Undefined) return _left;
+	else return right;
+}
+
+template<class T>
 NJS::VAR operator== (NJS::VAR _left, T right)
 {
 	return (double)_left == right;

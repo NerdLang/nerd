@@ -63,12 +63,12 @@ function addModuleLib(_lib, modSource)
 	{
 		for(var l = 0; l < _lib.length; l++ )
 		{
-		  COMPILER.LIBS += _lib[l].replace("__MODULE__", modSource).replace(/{__ARCH__}/g, os.arch()).replace(/{__EXTERN__}/g, extern) + " ";
+		  COMPILER.LIBS += _lib[l].replace(/{__MODULE__}/g, path.resolve(modSource)).replace(/{__ARCH__}/g, os.arch()).replace(/{__EXTERN__}/g, extern) + " ";
 		}
 	}
 	else if(typeof _lib == "string")
 	{
-	  COMPILER.LIBS += _lib.replace("__MODULE__", modSource).replace(/{__ARCH__}/g, os.arch()) + " ";
+	  COMPILER.LIBS += _lib.replace(/{__MODULE__}/g, modSource).replace(/{__ARCH__}/g, os.arch()).replace(/{__EXTERN__}/g, extern) + " ";
 	}
 	else if(typeof _lib == "object")
 	{
@@ -76,6 +76,10 @@ function addModuleLib(_lib, modSource)
 		if(_lib[PLATFORM]) _platform = PLATFORM;
 		else if(_lib["default"]) _platform = "default";
 		
+		if(_lib[_platform] && Array.isArray(_lib[_platform]))
+		{
+			addModuleLib(_lib[_platform], modSource);
+		}
 		if(_lib[_platform] && typeof _lib[_platform] == "object")
 		{
 			var currentCompiler =  COMPILER.COMPILER.split(" ")[0];

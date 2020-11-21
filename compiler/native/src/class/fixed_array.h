@@ -148,7 +148,7 @@ namespace NJS::Class
 			{
 				if (i >= (int)length)
 				{
-					value.resize(i + 1);
+					return NJS::Global::undefined;
 				}
 			}
 			return value[i];
