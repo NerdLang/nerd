@@ -63,6 +63,7 @@ var getExt = require('./base/util/getExt.js');
 var getTips = require('./base/util/getTips.js');
 var Flash = require('./base/util/flash.js');
 var installModule = require('./base/util/installModule.js');
+var initModule = require('./base/util/initModule.js');
 global.rmdir = require("./base/util/rmdir.js");
 global.copyRecursiveSync = require("./base/util/copyRecursive.js");
 global.copyDirSync = require("./base/util/copyDirSync.js");
@@ -92,6 +93,7 @@ else if(CLI.cli["--help"] || CLI.cli["-h"]) ACTION = "help";
 else if(CLI.cli["--example"] || CLI.cli["--examples"]) ACTION = "example";
 else if(CLI.cli["--version"] || CLI.cli["-v"]) ACTION = "version";
 else if(CLI.cli["--install"] || CLI.cli["-i"]) ACTION = "install";
+else if(CLI.cli["--init-module"]) ACTION = "initModule";
 else if(CLI.cli["--project"]) ACTION = "showproject";
 else if(CLI.cli["--clean"] || CLI.cli["--purge"]) ACTION = "clean";
 else if(CLI.cli["--setauthor"] || CLI.cli["--setid"] || CLI.cli["--setkey"] || CLI.cli["--sethash"] || CLI.cli["--setsdk"] || CLI.cli["--setndk"] || CLI.cli["--setwin_inc_ucrt"] || CLI.cli["--setwin_lib_ucrt"] || CLI.cli["--setwin_lib_um"] || CLI.cli["--setapi"] || CLI.cli["--setport"] || CLI.cli["--setxcode"]) ACTION = "setconfig";
@@ -137,6 +139,10 @@ switch(ACTION)
 
   case "install":
     Install();
+    break;
+
+  case "initModule":
+    InitModule();
     break;
 
   case "clean":
@@ -687,4 +693,14 @@ function Install()
 	if(CLI.cli["--install"]) _module = CLI.cli["--install"].argument;
 	else _module = CLI.cli["-i"].argument;
 	installModule(_module);
+}
+
+function InitModule()
+{
+	var _module = CLI.cli["--init-module"].argument;
+	var _author = "undefined";
+
+	if(CLI.cli["--author"]) _name = CLI.cli["--author"].argument;
+
+	initModule(_author, _module);
 }

@@ -123,6 +123,18 @@ Changing the stack size (usefull on Windows):
 nectar --stack 10000000 flood.js
 ```
 
+You can install a module with:
+```
+nectar -i module_name
+```
+
+You can see the module list and participate in their development here: https://github.com/NectarJS/nectar_modules
+
+You can initialize an empty module with the command:
+```
+nectar --init-module module_name --author me
+```
+
 For more informations about compilation output, use `--verbose`
 
 For help, use `--help`
