@@ -30,7 +30,6 @@ module.exports.httpsUtil = new httpUtil(https);
  * httpUtil Catalog of standard http call
  * @class httpUtil
  * @name httpUtil
- * @memberof WF
  *
 */
 function httpUtil(httpHandler)
@@ -39,7 +38,6 @@ function httpUtil(httpHandler)
     /**
      * Send a http request.
      * @memberof httpUtil
-     * @example wf.httpUtil.httpReq(opt, cbError, cbOk, "utf-8");
      *
     */
     this.httpReq = function(opt, cbError, cbOk, encoding)
@@ -74,7 +72,6 @@ function httpUtil(httpHandler)
     /**
      * Send a http request and redirect output in a pipe, then call a callback when finished.
      * @memberof httpUtil
-     * @example wf.httpUtil.httpReqPipe(opt, cbError, cbPipe, cbOk);
      *
     */
     this.httpReqPipe = function(opt, cbError,cbPipe, cbOk)
