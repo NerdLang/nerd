@@ -86,6 +86,4 @@ module.exports = {
         const opts = (FLAGS[preset] || []).map(v => `-${v}`).join(" ");
         return `${compiler} -D__NJS_REGISTER_SIZE=${COMPILER.REGISTER} ${_in} ${opts} -w -s TOTAL_MEMORY=33554432 ${COMPILER.LIBS} -o ${out} ${_cliOption}`;
     }
-}
-
-module.exports = WASM;
+};

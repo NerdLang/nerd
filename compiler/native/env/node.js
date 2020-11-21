@@ -90,4 +90,4 @@ module.exports = {
 		const opt = (FLAGS[preset] || []).map(v => `-${v}`).join(" ");
 		return `${compiler} ${_hashmap} -D__NJS_REGISTER_SIZE=${COMPILER.REGISTER} ${_stack} -std=c++17 ${_uvParam} ${_in} ${opt} -s ${COMPILER.LIBS} ${_uvLib} -o a.exe && mv a.exe ${out} ${_cliOption}`
 	}
-}
+};

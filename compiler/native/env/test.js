@@ -69,4 +69,4 @@ module.exports = {
         const opts = (FLAGS[preset] || []).slice(1).map(v => `-${v}`).join(" ");
         return `${compiler} -std=c++17 "${_in}" ${option} -I ${extern}/lib/ ${opts} -s ${COMPILER.LIBS} -o ${out} ${_cliOption}`;
     }
-}
+};

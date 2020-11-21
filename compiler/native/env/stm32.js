@@ -20,7 +20,7 @@
  *
  */
 
-const path = require('path')
+const path = require('path');
 
 module.exports = {
     name: "stm32",
@@ -65,6 +65,4 @@ module.exports = {
         return `cd ${path.join(extern, "stm32")} && ${compiler} compile -m ${COMPILER.TARGET} --profile ${path.join(extern, "stm32", "profile", _profile + ".json")} -t GCC_ARM > stm32_debug_res.txt && mv ${path.join(extern, "stm32", "BUILD", COMPILER.TARGET, "GCC_ARM-" + _profile)}/stm32.bin ${out}`;
     },
     clean: () => rmdir(path.join(extern, "stm32", "mbed-os", "nectar"))
-}
-
-module.exports = STM32;
+};
