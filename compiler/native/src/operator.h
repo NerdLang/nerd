@@ -654,6 +654,12 @@ NJS::VAR operator|| (NJS::VAR _left, double right)
 	else return right;
 }
 
+NJS::VAR operator|| (NJS::VAR _left, std::string right)
+{
+	if(_left.type != NJS::Enum::Type::Undefined) return _left;
+	else return right;
+}
+
 NJS::VAR operator|| (NJS::VAR _left, NJS::VAR right)
 {
 	if(_left.type != NJS::Enum::Type::Undefined) return _left;
