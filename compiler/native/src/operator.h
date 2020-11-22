@@ -138,8 +138,7 @@ NJS::VAR __NJS_Object_Keys(NJS::VAR _var)
 	{
 		NJS::Type::vector_t *_arr = &((NJS::Class::Array*)_var.data.ptr)->value;
 		int _j = (*_arr).size();
-		int _i = 0;
-		for (_i; _i < _j; _i++)
+		for (int _i = 0; _i < _j; _i++)
 		{
 
 			if(!(*_arr)[_i].property[1])
