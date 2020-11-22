@@ -641,12 +641,25 @@ NJS::VAR operator% (NJS::VAR _left, T right)
 	return (int)_left % right;
 }
 
-template<class T>
-NJS::VAR operator|| (NJS::VAR _left, T right)
+
+NJS::VAR operator|| (NJS::VAR _left, int right)
 {
 	if(_left.type != NJS::Enum::Type::Undefined) return _left;
 	else return right;
 }
+
+NJS::VAR operator|| (NJS::VAR _left, double right)
+{
+	if(_left.type != NJS::Enum::Type::Undefined) return _left;
+	else return right;
+}
+
+NJS::VAR operator|| (NJS::VAR _left, NJS::VAR right)
+{
+	if(_left.type != NJS::Enum::Type::Undefined) return _left;
+	else return right;
+}
+
 
 template<class T>
 NJS::VAR operator== (NJS::VAR _left, T right)
