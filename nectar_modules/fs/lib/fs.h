@@ -19,7 +19,7 @@
  * along with NectarJS.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#if defined(__NJS_ENV_NODE)
+#if defined(__Nectar_ENV_NODE)
 	#include "fs-node.h"
 #else
 	#include "fs-std.h"

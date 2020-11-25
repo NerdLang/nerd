@@ -34,6 +34,6 @@
   "nectar":
   {
     "env": ["std", "node"],
-	"expose": ["__NJS_fs_readFileSync", "__NJS_fs_writeFileSync", "__NJS_fs_appendFileSync", "__NJS_fs_unlinkSync", "__NJS_fs_rmdirSync", "__NJS_fs_removeSync"]
+	"expose": ["__Nectar_fs_readFileSync", "__Nectar_fs_writeFileSync", "__Nectar_fs_appendFileSync", "__Nectar_fs_unlinkSync", "__Nectar_fs_rmdirSync", "__Nectar_fs_removeSync"]
   }
 }

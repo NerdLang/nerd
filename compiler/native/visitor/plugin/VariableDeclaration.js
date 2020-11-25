@@ -40,8 +40,8 @@ function VariableDeclaration(_path)
 			{
 				if(_path.node.kind == "const")
 				{
-					_path.node.kind = "__NJS_CONST";
-					_path.insertAfter( babel.parse(`__NJS_SET_CONST(${_path.node.declarations[d].id.name});`));
+					_path.node.kind = "__Nectar_CONST";
+					_path.insertAfter( babel.parse(`__Nectar_SET_CONST(${_path.node.declarations[d].id.name});`));
 				}
 				else if(VISITOR.CURRENT_Function < 0) _path.node.kind = "";
 				
@@ -88,7 +88,7 @@ function VariableDeclaration(_path)
 				}
 				if(_path.parentPath.node.test && _path.parentPath.node.test.type == "BinaryExpression")
 				{
-					var _new_int = "__NJS_LOOP_INT" + RND();
+					var _new_int = "__Nectar_LOOP_INT" + RND();
 					try 
 					{
 						_path.parentPath.insertBefore(babel.parse(_new_int + " = " + babel.generate(_path.parentPath.node.test.right).code).program.body);

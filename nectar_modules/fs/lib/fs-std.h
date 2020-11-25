@@ -30,17 +30,17 @@
 #endif
 
 /*** Sync ***/
-function __NJS_fs_readFileSync(_name)
+function __Nectar_fs_readFileSync(_name)
 { 
 	FILE* fp;
 
   int resultat = 1;
 
-  fp = fopen(__NJS_Get_String(_name), "r");
+  fp = fopen(__Nectar_Get_String(_name), "r");
 
   if(fp == NULL)
   {
-    return __NJS_Create_String("");
+    return __Nectar_Create_String("");
   }
 
   fseek(fp, 0L, SEEK_END);
@@ -53,82 +53,82 @@ function __NJS_fs_readFileSync(_name)
 
   buffer[fsize] = '\0';
   fclose(fp);
-  return __NJS_Create_String(buffer);
+  return __Nectar_Create_String(buffer);
 };
 
 
-function __NJS_fs_writeFileSync(_name, _content)
+function __Nectar_fs_writeFileSync(_name, _content)
 {
-  std::ofstream myfile(__NJS_Get_String(_name), std::ios::out | std::ios::trunc | std::ios::binary);
+  std::ofstream myfile(__Nectar_Get_String(_name), std::ios::out | std::ios::trunc | std::ios::binary);
   if(!myfile)
   {
-    return __NJS_Create_Boolean(0);
+    return __Nectar_Create_Boolean(0);
   }
-  myfile.write(((NJS::Class::String*)_content.data.ptr)->value.c_str(), ((NJS::Class::String*)_content.data.ptr)->value.size());
+  myfile.write(((Nectar::Class::String*)_content.data.ptr)->value.c_str(), ((Nectar::Class::String*)_content.data.ptr)->value.size());
   myfile.close();
 
-  return __NJS_Create_Boolean(1);
+  return __Nectar_Create_Boolean(1);
 };
 
-function __NJS_fs_appendFileSync(_name, _content)
+function __Nectar_fs_appendFileSync(_name, _content)
 {
-  std::ofstream myfile(__NJS_Get_String(_name), std::ios::out | std::ios::app | std::ios::binary);
+  std::ofstream myfile(__Nectar_Get_String(_name), std::ios::out | std::ios::app | std::ios::binary);
   if(!myfile)
   {
-    return __NJS_Create_Boolean(0);
+    return __Nectar_Create_Boolean(0);
   }
-  myfile.write(((NJS::Class::String*)_content.data.ptr)->value.c_str(), ((NJS::Class::String*)_content.data.ptr)->value.size());
+  myfile.write(((Nectar::Class::String*)_content.data.ptr)->value.c_str(), ((Nectar::Class::String*)_content.data.ptr)->value.size());
   myfile.close();
 
-  return __NJS_Create_Boolean(1);
+  return __Nectar_Create_Boolean(1);
 };
 
-function __NJS_fs_unlinkSync(_name)
+function __Nectar_fs_unlinkSync(_name)
 {
-  unlink(__NJS_Get_String(_name));
-  return __NJS_Create_Boolean(1);
+  unlink(__Nectar_Get_String(_name));
+  return __Nectar_Create_Boolean(1);
 };
 
-function __NJS_fs_rmdirSync(_name)
+function __Nectar_fs_rmdirSync(_name)
 {
-  rmdir(__NJS_Get_String(_name));
-  return __NJS_Create_Boolean(1);
+  rmdir(__Nectar_Get_String(_name));
+  return __Nectar_Create_Boolean(1);
 };
 
-function __NJS_fs_removeSync(_name)
+function __Nectar_fs_removeSync(_name)
 {
-  remove(__NJS_Get_String(_name));
-  return __NJS_Create_Boolean(1);
+  remove(__Nectar_Get_String(_name));
+  return __Nectar_Create_Boolean(1);
 };
 
-function __NJS_fs_renameSync(_old, _new)
+function __Nectar_fs_renameSync(_old, _new)
 {
-  rename(__NJS_Get_String(_old), __NJS_Get_String(_new));
-  return __NJS_Create_Boolean(1);
+  rename(__Nectar_Get_String(_old), __Nectar_Get_String(_new));
+  return __Nectar_Create_Boolean(1);
 };
 
-function __NJS_fs_mkdirSync(_path)
+function __Nectar_fs_mkdirSync(_path)
 {
 	#ifndef __linux__ 
 	mkdir( ((std::string)_path).c_str() );
 	#endif
-	return __NJS_Create_Boolean(1);
+	return __Nectar_Create_Boolean(1);
 }
 /* END SYNC */
 
 /*** Async ***/
-function __NJS_fs_readFile(_name, _cb)
+function __Nectar_fs_readFile(_name, _cb)
 { 
 	FILE* fp;
 
   int resultat = 1;
 
-  fp = fopen(__NJS_Get_String(_name), "r");
+  fp = fopen(__Nectar_Get_String(_name), "r");
 
   if(fp == NULL)
   {
 	if(_cb) _cb(null, "");
-    return NJS::Global::undefined;
+    return Nectar::Global::undefined;
   }
 
   fseek(fp, 0L, SEEK_END);
@@ -141,71 +141,71 @@ function __NJS_fs_readFile(_name, _cb)
 
   buffer[fsize] = '\0';
   fclose(fp);
-  if(_cb) _cb(null, __NJS_Create_String(buffer));
+  if(_cb) _cb(null, __Nectar_Create_String(buffer));
 };
 
 
-function __NJS_fs_writeFile(_name, _content, _cb)
+function __Nectar_fs_writeFile(_name, _content, _cb)
 {
-  std::ofstream myfile(__NJS_Get_String(_name), std::ios::out | std::ios::trunc | std::ios::binary);
+  std::ofstream myfile(__Nectar_Get_String(_name), std::ios::out | std::ios::trunc | std::ios::binary);
   if(!myfile)
   {
-	if(_cb) _cb(null, __NJS_Boolean_FALSE);
-    return NJS::Global::undefined;
+	if(_cb) _cb(null, __Nectar_Boolean_FALSE);
+    return Nectar::Global::undefined;
   }
-  myfile.write(((NJS::Class::String*)_content.data.ptr)->value.c_str(), ((NJS::Class::String*)_content.data.ptr)->value.size());
+  myfile.write(((Nectar::Class::String*)_content.data.ptr)->value.c_str(), ((Nectar::Class::String*)_content.data.ptr)->value.size());
   myfile.close();
 
-  if(_cb) _cb(null, __NJS_Boolean_TRUE);
+  if(_cb) _cb(null, __Nectar_Boolean_TRUE);
 };
 
-function __NJS_fs_appendFile(_name, _content, _cb)
+function __Nectar_fs_appendFile(_name, _content, _cb)
 {
-  std::ofstream myfile(__NJS_Get_String(_name), std::ios::out | std::ios::app | std::ios::binary);
+  std::ofstream myfile(__Nectar_Get_String(_name), std::ios::out | std::ios::app | std::ios::binary);
   if(!myfile)
   {
-	if(_cb) _cb(null, __NJS_Boolean_FALSE);
-    return NJS::Global::undefined;
+	if(_cb) _cb(null, __Nectar_Boolean_FALSE);
+    return Nectar::Global::undefined;
   }
-  myfile.write(((NJS::Class::String*)_content.data.ptr)->value.c_str(), ((NJS::Class::String*)_content.data.ptr)->value.size());
+  myfile.write(((Nectar::Class::String*)_content.data.ptr)->value.c_str(), ((Nectar::Class::String*)_content.data.ptr)->value.size());
   myfile.close();
 
-  if(_cb) _cb(null, __NJS_Boolean_TRUE);
+  if(_cb) _cb(null, __Nectar_Boolean_TRUE);
 };
 
-function __NJS_fs_unlink(_name, _cb)
+function __Nectar_fs_unlink(_name, _cb)
 {
-  unlink(__NJS_Get_String(_name));
+  unlink(__Nectar_Get_String(_name));
   
-  if(_cb) _cb(null, __NJS_Boolean_TRUE);
+  if(_cb) _cb(null, __Nectar_Boolean_TRUE);
 };
 
-function __NJS_fs_rmdir(_name, _cb)
+function __Nectar_fs_rmdir(_name, _cb)
 {
-  rmdir(__NJS_Get_String(_name));
+  rmdir(__Nectar_Get_String(_name));
   
-  if(_cb) _cb(null, __NJS_Boolean_TRUE);
+  if(_cb) _cb(null, __Nectar_Boolean_TRUE);
 };
 
-function __NJS_fs_remove(_name, _cb)
+function __Nectar_fs_remove(_name, _cb)
 {
-  remove(__NJS_Get_String(_name));
+  remove(__Nectar_Get_String(_name));
   
-  if(_cb) _cb(null, __NJS_Boolean_TRUE);
+  if(_cb) _cb(null, __Nectar_Boolean_TRUE);
 };
 
-function __NJS_fs_rename(_old, _new, _cb)
+function __Nectar_fs_rename(_old, _new, _cb)
 {
-  rename(__NJS_Get_String(_old), __NJS_Get_String(_new));
+  rename(__Nectar_Get_String(_old), __Nectar_Get_String(_new));
   
-  if(_cb) _cb(null, __NJS_Boolean_TRUE);
+  if(_cb) _cb(null, __Nectar_Boolean_TRUE);
 };
 
-function __NJS_fs_mkdir(_path, _cb)
+function __Nectar_fs_mkdir(_path, _cb)
 {
 	#ifndef __linux__ 
 	mkdir( ((std::string)_path).c_str() );
 	#endif
-	if(_cb) _cb(null, __NJS_Boolean_TRUE);
+	if(_cb) _cb(null, __Nectar_Boolean_TRUE);
 }
 /* END ASYNC */

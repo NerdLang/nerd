@@ -37,6 +37,6 @@
   {
     "env": ["stm32"],
     "read_only": [],
-    "expose": ["__NJS_STM32_WAIT"]
+    "expose": ["__Nectar_STM32_WAIT"]
   }
 }

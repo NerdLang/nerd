@@ -24,9 +24,9 @@
 
 using namespace std::chrono;
 
-function __NJS_NATIVE_DATE_NOW()
+function __Nectar_NATIVE_DATE_NOW()
 {
-   return NJS::VAR((double)duration_cast<milliseconds>(
+   return Nectar::VAR((double)duration_cast<milliseconds>(
       system_clock::now().time_since_epoch()
    ).count());
 };

@@ -30,7 +30,7 @@ function callExpression(_path, _main)
 		VISITOR.disableFastFunction(_path.callee.name);
 	}
 	
-	if(_path.callee && _path.callee.name && (VISITOR.NJS_START.indexOf(_path.callee.name.substring(0, 5)) > -1 || VISITOR.NO_MODIFY_CALL.indexOf(_path.callee.name) > -1))
+	if(_path.callee && _path.callee.name && (VISITOR.Nectar_START.indexOf(_path.callee.name.substring(0, 9)) > -1 || VISITOR.NO_MODIFY_CALL.indexOf(_path.callee.name) > -1))
 	{
 	  return "";
 	}
@@ -91,7 +91,7 @@ function callExpression(_path, _main)
 					process.exit(1);
 				}
 				_main.insertBefore(babel.parse(nativeManagement.initInt(_args[0].value, _args[1].value)));
-				_main.replaceWithSourceString("__NJS_Boolean_TRUE");
+				_main.replaceWithSourceString("__Nectar_Boolean_TRUE");
 			}
 			else if(_obj.property.name == "initDouble")
 			{
@@ -110,7 +110,7 @@ function callExpression(_path, _main)
 					process.exit(1);
 				}
 				_main.insertBefore(babel.parse(nativeManagement.initDouble(_args[0].value, _args[1].value)));
-				_main.replaceWithSourceString("__NJS_Boolean_TRUE");
+				_main.replaceWithSourceString("__Nectar_Boolean_TRUE");
 			}
 			else if(_obj.property.name == "initString")
 			{
@@ -133,7 +133,7 @@ function callExpression(_path, _main)
 					_args[1].value = `"${_args[1].value}"`;
 				}
 				_main.insertBefore(babel.parse(nativeManagement.initString(_args[0].value, _args[1].value)));
-				_main.replaceWithSourceString("__NJS_Boolean_TRUE");
+				_main.replaceWithSourceString("__Nectar_Boolean_TRUE");
 			}
 			else if(_obj.property.name == "fixedArray")
 			{
@@ -226,7 +226,7 @@ function callExpression(_path, _main)
 			}
 			else if(_path.arguments[i].type == "FunctionExpression")
 			{
-				var _tmp = "__NJS_TMP_LAMBDA" + RND();
+				var _tmp = "__Nectar_TMP_LAMBDA" + RND();
 				var _gen = `${_tmp} = ${babel.generate(_path.arguments[i]).code}`;
 				_main.insertBefore(babel.parse(_gen).program.body[0].expression);
 				_path.arguments[i].type = "Identifier";

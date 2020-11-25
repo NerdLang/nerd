@@ -28,11 +28,11 @@ function UnaryExpression(_path)
 		if (_path.node.argument.type == "MemberExpression")
 		{
 			VISITOR.memberExpression(_path.node.argument);
-			_path.replaceWithSourceString("__NJS_typeof(" + babel.generate(_path.node.argument).code + ")");
+			_path.replaceWithSourceString("__Nectar_typeof(" + babel.generate(_path.node.argument).code + ")");
 		}
 		else
 		{
-			_path.replaceWithSourceString("__NJS_typeof(" + babel.generate(_path.node.argument).code + ")");
+			_path.replaceWithSourceString("__Nectar_typeof(" + babel.generate(_path.node.argument).code + ")");
 		}
 		
 		
@@ -41,8 +41,8 @@ function UnaryExpression(_path)
 	// void
 	else if(_path.node.operator == "void")
 	{
-		var _rnd = "__NJS_VOID_" + RND();
-		COMPILER.DECL.push(`NJS::VAR ${_rnd}() { ${babel.generate(_path.node.arguments).code} return NJS::Global::undefined;};`);
+		var _rnd = "__Nectar_VOID_" + RND();
+		COMPILER.DECL.push(`Nectar::VAR ${_rnd}() { ${babel.generate(_path.node.arguments).code} return Nectar::Global::undefined;};`);
 		VISITOR.pushDeclVar(_rnd);
 		_path.replaceWithSourceString(`${_rnd}()`);
 	}
@@ -54,11 +54,11 @@ function UnaryExpression(_path)
 			
 			var _left = babel.generate(_path.node.argument.object).code;
 			var _right = _path.node.argument.property.extra.raw;
-			_path.replaceWithSourceString(`__NJS_delete(${_left}, ${_right})`);
+			_path.replaceWithSourceString(`__Nectar_delete(${_left}, ${_right})`);
 		}
 		else 
 		{
-			_path.replaceWithSourceString("__NJS_Boolean_FALSE");
+			_path.replaceWithSourceString("__Nectar_Boolean_FALSE");
 		}
 	}
 }

@@ -47,7 +47,7 @@ and some of them provides global variables and APIs
 
 ## Android
 
-1. Install Android SDK (19+) and Android NDK (21+)
+1. Install Java, Android SDK (19+) and Android NDK (21+)
 
 2. Set path to SDK and NDK:
 

@@ -33,7 +33,7 @@ function sayExperimental()
 function initFixedArray(_length)
 {
 	sayExperimental();
-	return `__NJS_Create_FixedArray(${_length})`;
+	return `__Nectar_Create_FixedArray(${_length})`;
 }
 
 function validateLength(_length)

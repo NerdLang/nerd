@@ -26,7 +26,7 @@
  *
  */
 
-function __NJS_CHILD_PROCESS_EXEC_SYNC(_cmd)
+function __Nectar_CHILD_PROCESS_EXEC_SYNC(_cmd)
 {
   FILE *fp;
   const int pSize = 64;
@@ -42,7 +42,7 @@ function __NJS_CHILD_PROCESS_EXEC_SYNC(_cmd)
   if (fp == NULL)
   {
     printf("Failed to run command\n" );
-    return NJS::VAR();
+    return Nectar::VAR();
   }
 
   while (fgets(pChar, sizeof(pChar), fp) != NULL)
@@ -58,7 +58,7 @@ function __NJS_CHILD_PROCESS_EXEC_SYNC(_cmd)
 
 	pclose(fp);
 
-  NJS::VAR _return = buffer;
+  Nectar::VAR _return = buffer;
   free(buffer);
   return _return;
 }

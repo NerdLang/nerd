@@ -1,52 +1,30 @@
-namespace NJS::Class::NUMBER 
+/*
+ * This file is part of NectarCPP
+ * Copyright (c) 2020 - 2020 Adrien THIERRY
+ * https://nectar-lang.org - https://seraum.com/
+ *
+ * sources : https://github.com/nectar-lang/NectarCPP
+ * 
+ * NectarCPP is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * NectarCPP is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with NectarCPP.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+ 
+namespace Nectar::Class::NUMBER 
 {
-	NJS::VAR _fn;
-	
-	std::string toString(NJS::VAR& __NJS_THIS, NJS::VAR* _args, int _length)
-	{
-		return (std::string)__NJS_THIS;
-	}
-	
-	double valueOf(NJS::VAR& __NJS_THIS, NJS::VAR* _args, int _length)
-	{
-		return __NJS_THIS.data.number;
-	}
-	
-	std::string toFixed(NJS::VAR& __NJS_THIS, NJS::VAR* _args, int _length)
-	{
-		int precision;
-		if(_length > 0)
-		{
-			precision = _args[0];
-		}
-		else precision = 0;
-		std::ostringstream strout ;
-		strout << std::fixed << std::setprecision(precision) << (double)__NJS_THIS ;
-		std::string str = strout.str() ;
-		return str;
-	}
-	
-	inline NJS::VAR& Accessor(NJS::VAR _this, NJS::VAR key)
-	{
-		if(((std::string)key).compare("toFixed") == 0)
-		{
-			_fn = __NJS_Create_Var_Scoped_Anon( return toFixed(__NJS_THIS, __NJS_VARARGS, __NJS_VARLENGTH); );
-			((NJS::Class::Function*)_fn.data.ptr)->This = _this;
-			return _fn;
-		}
-		else if(((std::string)key).compare("toString") == 0)
-		{
-			_fn = __NJS_Create_Var_Scoped_Anon( return toString(__NJS_THIS, __NJS_VARARGS, __NJS_VARLENGTH); );
-			((NJS::Class::Function*)_fn.data.ptr)->This = _this;
-			return _fn;
-		}
-		else if(((std::string)key).compare("valueOf") == 0)
-		{
-			_fn = __NJS_Create_Var_Scoped_Anon( return valueOf(__NJS_THIS, __NJS_VARARGS, __NJS_VARLENGTH); );
-			((NJS::Class::Function*)_fn.data.ptr)->This = _this;
-			return _fn;
-		}
-		
-		return NJS::Global::undefined;
-	}
+	extern Nectar::VAR _fn;
+	std::string toString(Nectar::VAR& __Nectar_THIS, Nectar::VAR* _args, int _length);
+	double valueOf(Nectar::VAR& __Nectar_THIS, Nectar::VAR* _args, int _length);
+	std::string toFixed(Nectar::VAR& __Nectar_THIS, Nectar::VAR* _args, int _length);
+	inline Nectar::VAR& Accessor(Nectar::VAR _this, Nectar::VAR key);
 }

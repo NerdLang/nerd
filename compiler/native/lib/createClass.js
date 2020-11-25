@@ -22,10 +22,10 @@
  
 function createClass(_code, _scope)
 {	
-	var _matchThis = new RegExp(/(| |{|,)__NJS_THIS([\.(";)]|$)/);
-	var _return = ";return NJS::Global::undefined;}";
-	var _returnThis = ";return __NJS_THIS;}";
-	var _searchFN = new RegExp(/function +__NJS_CLASS_(.[a-zA-Z0-9_\-]*) *\((.*)\)/);
+	var _matchThis = new RegExp(/(| |{|,)__Nectar_THIS([\.(";)]|$)/);
+	var _return = ";return Nectar::Global::undefined;}";
+	var _returnThis = ";return __Nectar_THIS;}";
+	var _searchFN = new RegExp(/function +__Nectar_CLASS_(.[a-zA-Z0-9_\-]*) *\((.*)\)/);
 	var _index = _code.search(_searchFN);
 
 	while(_index > -1)
@@ -46,7 +46,7 @@ function createClass(_code, _scope)
 		{
 			if(_match[2][i].length > 0)
 			{
-				_getVar += `var ${_match[2][i]}; if(__NJS_VARLENGTH > ${i}) ${_match[2][i]} = __NJS_VARARGS[${i}];`;
+				_getVar += `var ${_match[2][i]}; if(__Nectar_VARLENGTH > ${i}) ${_match[2][i]} = __Nectar_VARARGS[${i}];`;
 			}
 		}
 		for(var i = _index; i < _code.length; i++)
@@ -74,8 +74,8 @@ function createClass(_code, _scope)
 
 						COMPILER.DECL.push("var " + _match[1] +";");
 
-						var _formated = "NJS::Type::function_t* " + _genFN +" = new NJS::Type::function_t([" + _catch + "](var __NJS_THIS, NJS::VAR* __NJS_VARARGS, int __NJS_VARLENGTH) -> NJS::VAR" + _fn + _return + ");";
-						_formated += _match[1] + "=NJS::VAR(NJS::Enum::Type::Function, " + _genFN + ", __NJS_THIS);";
+						var _formated = "Nectar::Type::function_t* " + _genFN +" = new Nectar::Type::function_t([" + _catch + "](var __Nectar_THIS, Nectar::VAR* __Nectar_VARARGS, int __Nectar_VARLENGTH) -> Nectar::VAR" + _fn + _return + ");";
+						_formated += _match[1] + "=Nectar::VAR(Nectar::Enum::Type::Function, " + _genFN + ", __Nectar_THIS);";
 						
 						_code = [_code.slice(0, _index), _formated, _code.slice(_end + 1)].join('');
 						break;

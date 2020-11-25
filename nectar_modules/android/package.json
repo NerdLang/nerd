@@ -37,6 +37,6 @@
   {
     "env": ["android"],
     "read_only": [],
-    "expose": ["__NJS_ANDROID_DRAW", "__NJS_ANDROID_NAVIGATE"]
+    "expose": ["__Nectar_ANDROID_DRAW", "__Nectar_ANDROID_NAVIGATE"]
   }
 }

@@ -30,31 +30,31 @@
 using namespace httplib;
 
 
-var __NJS_HTTP_LISTEN(var _host, var _port, var _cb, var _opt)
+var __Nectar_HTTP_LISTEN(var _host, var _port, var _cb, var _opt)
 {
-	Server __NJS_HTTP_SRV;
+	Server __Nectar_HTTP_SRV;
 	
-	if(_opt.type == NJS::Enum::Type::Object)
+	if(_opt.type == Nectar::Enum::Type::Object)
 	{
 		var _static = _opt["static"];
-		if(_static.type == NJS::Enum::Type::String) 
+		if(_static.type == Nectar::Enum::Type::String) 
 		{
-			auto ret = __NJS_HTTP_SRV.set_mount_point("/", ((std::string)_static).c_str());
+			auto ret = __Nectar_HTTP_SRV.set_mount_point("/", ((std::string)_static).c_str());
 			if (!ret) 
 			{
-			  __NJS_Log_Console("Warning: path " + _static + " doesn't exist");
+			  __Nectar_Log_Console("Warning: path " + _static + " doesn't exist");
 			}
 		}
 		
 	}
   /*** LOAD GET ***/
-  __NJS_HTTP_SRV.Get(".*", [&](const Request& request, Response& response)
+  __Nectar_HTTP_SRV.Get(".*", [&](const Request& request, Response& response)
   {
 
-	var __f_NJS_HTTP_RES_END = __NJS_Create_Var_Scoped_Anon(
+	var __f_Nectar_HTTP_RES_END = __Nectar_Create_Var_Scoped_Anon(
 	{
 		var _str = "";
-		if(__NJS_VARLENGTH == 1) _str = __NJS_VARARGS[0];
+		if(__Nectar_VARLENGTH == 1) _str = __Nectar_VARARGS[0];
 		response.set_content((std::string)_str, "text/plain");
 		return var();
 	});
@@ -67,28 +67,28 @@ var __NJS_HTTP_LISTEN(var _host, var _port, var _cb, var _opt)
 	var _query = __NJS_Create_Object();
 	for (auto it = request.params.begin(); it != request.params.end(); ++it)
 	{
-	  __NJS_Object_Set(it->first, it->second, _query);
+	  __Nectar_Object_Set(it->first, it->second, _query);
 	}
 	_req["get"] = _query;
 
 	var _njs_res = __NJS_Create_Object();
-	_njs_res["end"] = __f_NJS_HTTP_RES_END;
+	_njs_res["end"] = __f_Nectar_HTTP_RES_END;
 
 	_cb(_req, _njs_res);
 	return var();
   });
   
   /*** LOAD POST ***/
-  __NJS_HTTP_SRV.Post(".*", [&](const Request& request, Response& response, const ContentReader &content_reader)
+  __Nectar_HTTP_SRV.Post(".*", [&](const Request& request, Response& response, const ContentReader &content_reader)
   {
-	NJS::Type::function_t* __NJS_HTTP_RES_END = new NJS::Type::function_t([&](NJS::VAR& __NJS_THIS, NJS::VAR* _args, int _length)
+	Nectar::Type::function_t* __Nectar_HTTP_RES_END = new Nectar::Type::function_t([&](Nectar::VAR& __Nectar_THIS, Nectar::VAR* _args, int _length)
 	{
 		var _str = "";
 		if(_length == 1) _str = _args[0];
 		response.set_content((std::string)_str, "text/plain");
 		return var();
 	});
-	var __f_NJS_HTTP_RES_END = __NJS_Create_Function(__NJS_HTTP_RES_END);
+	var __f_Nectar_HTTP_RES_END = __Nectar_Create_Function(__Nectar_HTTP_RES_END);
 
     var _req = __NJS_Create_Object();
 	_req["method"] = "POST";
@@ -97,7 +97,7 @@ var __NJS_HTTP_LISTEN(var _host, var _port, var _cb, var _opt)
     // GET DATA
     if (request.is_multipart_form_data()) 
     {
-      __NJS_Object_Set("isMultipart", true, _req);
+      __Nectar_Object_Set("isMultipart", true, _req);
       var _multi = __NJS_Create_Object();
 
       MultipartFormDataItems files;
@@ -136,23 +136,23 @@ var __NJS_HTTP_LISTEN(var _host, var _port, var _cb, var _opt)
     
     
     var _njs_res = __NJS_Create_Object();
-	_njs_res["end"] = __f_NJS_HTTP_RES_END;
+	_njs_res["end"] = __f_Nectar_HTTP_RES_END;
     
     _cb(_req, _njs_res);
     return var();
   });
   
   /*** LOAD PUT ***/
-  __NJS_HTTP_SRV.Put(".*", [&](const Request& request, Response& response, const ContentReader &content_reader)
+  __Nectar_HTTP_SRV.Put(".*", [&](const Request& request, Response& response, const ContentReader &content_reader)
   {
-	NJS::Type::function_t* __NJS_HTTP_RES_END = new NJS::Type::function_t([&](NJS::VAR& __NJS_THIS, NJS::VAR* _args, int _length)
+	Nectar::Type::function_t* __Nectar_HTTP_RES_END = new Nectar::Type::function_t([&](Nectar::VAR& __Nectar_THIS, Nectar::VAR* _args, int _length)
 	{
 		var _str = "";
 		if(_length == 1) _str = _args[0];
 		response.set_content((std::string)_str, "text/plain");
 		return var();
 	});
-	var __f_NJS_HTTP_RES_END = __NJS_Create_Function(__NJS_HTTP_RES_END);
+	var __f_Nectar_HTTP_RES_END = __Nectar_Create_Function(__Nectar_HTTP_RES_END);
 
     var _req = __NJS_Create_Object();
 	_req["method"] = "PUT";
@@ -200,36 +200,36 @@ var __NJS_HTTP_LISTEN(var _host, var _port, var _cb, var _opt)
     }
     
     var _njs_res = __NJS_Create_Object();
-	_njs_res["end"] = __f_NJS_HTTP_RES_END;
+	_njs_res["end"] = __f_Nectar_HTTP_RES_END;
     
     _cb(_req, _njs_res);
     return var();
   });
   
   /*** LOAD DELETE ***/
-  __NJS_HTTP_SRV.Delete(".*", [&](const Request& request, Response& response)
+  __Nectar_HTTP_SRV.Delete(".*", [&](const Request& request, Response& response)
   {
-	NJS::Type::function_t* __NJS_HTTP_RES_END = new NJS::Type::function_t([&](NJS::VAR& __NJS_THIS, NJS::VAR* _args, int _length)
+	Nectar::Type::function_t* __Nectar_HTTP_RES_END = new Nectar::Type::function_t([&](Nectar::VAR& __Nectar_THIS, Nectar::VAR* _args, int _length)
 	{
 		var _str = "";
 		if(_length == 1) _str = _args[0];
 		response.set_content((std::string)_str, "text/plain");
 		return var();
 	});
-	var __f_NJS_HTTP_RES_END = __NJS_Create_Function(__NJS_HTTP_RES_END);
+	var __f_Nectar_HTTP_RES_END = __Nectar_Create_Function(__Nectar_HTTP_RES_END);
 
     var _req = __NJS_Create_Object();
 	_req["method"] = "DELETE";
 	_req["url"] = request.path;
     
     var _njs_res = __NJS_Create_Object();
-	_njs_res["end"] = __f_NJS_HTTP_RES_END;
+	_njs_res["end"] = __f_Nectar_HTTP_RES_END;
 
     _cb(_req, _njs_res);
     return var();
   });
   
-  __NJS_HTTP_SRV.listen(((std::string)_host).c_str(), (int)_port);
+  __Nectar_HTTP_SRV.listen(((std::string)_host).c_str(), (int)_port);
   return var();
 }
 

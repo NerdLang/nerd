@@ -20,11 +20,13 @@
  *
  */
 
+const fs = require('fs');
+
 const FLAGS = {
 	//none: ["O1"],
 	size: ["Os", "fno-rtti", "fno-stack-protector", "fomit-frame-pointer"],
 	speed: ["O3"]
-}
+};
 
 module.exports = {
 	name: "node",
@@ -49,27 +51,43 @@ module.exports = {
 			"no-const-assign": "error",
 		},
 		"globals": {
-			"undefined": false,
-			"eval": false,
 			"__njs_typeof": false,
 			"console": false,
 			"module": false,
 			"require": false,
-			"__NJS_Log_Console": false,
-			"__NJS_Object_Keys": false,
-			"__NJS_PLATFORM": false,
-			"__NJS_ENV": false,
-			"__NJS_Call_Function": false,
+			"__Nectar_Log_Console": false,
+			"__Nectar_InitVar": false,
+			"__Nectar_Object_Keys": false,
+			"__Nectar_Object_Stringify": false,
+			"__Nectar_Call_Function": false,
 			"__NJS_ARGS": false,
+			"__NJS_ENV": false,
+			"__NJS_PLATFORM": false,
+			"__Nectar_typeof": false,
+			"__Nectar_THIS": false,
+			"__Nectar_instanceof": false,
 			"JSON": false,
 			"Object": false,
+			"isNaN": false,
+			"Array": false
 		}
 	},
 	cli: function (compiler, preset, out, _in, option) {
+		const cachePath = path.join(process.cwd(), "..", `cached_${COMPILER.ENV.name}_${VERSION}`);
+		const precompiled = path.join(cachePath, "nectar.o");
 		const stackSize = CLI.cli["--stack"] ? +CLI.cli["--stack"].argument : 0;
 		if (isNaN(stackSize)) {
 			console.log("[!] Error: --stack flags required a number, received -> " + CLI.cli["--stack"].argument);
 			process.exit(1);
+		}
+
+		if (!fs.existsSync(precompiled)) {
+			console.log(`[+] Creating Nectar binary lib for ${COMPILER.ENV.name + "_" + VERSION}`);
+			try {
+				fs.mkdirSync(cachePath);
+			} catch (e) {}
+			execSync(`${compiler} -std=c++17 -c nectar.cpp -Ofast -o "${_precompiled}"`);
+			console.log("[+] Compiling with precompiled Nectar lib");
 		}
 
 		if (compiler == "cl" || compiler.startsWith("cl ")) {
@@ -81,13 +99,13 @@ module.exports = {
 		const _hashmap = CLI.cli['--no-object-hashmap'] ? "" : "-D__NJS__OBJECT_HASHMAP";
 		const _uvParam = os.platform() === "win32" ? "" : `-D_WIN32_WINNT=0x0600 -Wno-narrowing  -D_GNU_SOURCE -I${extern}/libuv/include/ -I${extern}/libuv/src/ -D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE ${extern}/libuv/src/*.h ${extern}/libuv/src/*.c ${extern}/libuv/src/win/*.h ${extern}/libuv/src/win/*.c`;
 
-		const _uvLib = os.platform() === "win32"
-			? "-lm -ladvapi32 -liphlpapi -lpsapi -lshell32 -luser32 -luserenv -lwsock32 -lws2_32"
-			: "-luv" + (os.platform() === "sunos" ? "-lkstat -lsendfile -lsocket -lnsl" : "");
+		const _uvLib = os.platform() === "win32" ?
+			"-lm -ladvapi32 -liphlpapi -lpsapi -lshell32 -luser32 -luserenv -lwsock32 -lws2_32" :
+			"-luv" + (os.platform() === "sunos" ? "-lkstat -lsendfile -lsocket -lnsl" : "");
 
 		const _stack = stackSize ? `-Wl,--stack,${stackSize}` : "";
 		const _cliOption = CLI.cli["--option"] ? CLI.cli["--option"].argument : "";
 		const opt = (FLAGS[preset] || []).map(v => `-${v}`).join(" ");
-		return `${compiler} ${_hashmap} -D__NJS_REGISTER_SIZE=${COMPILER.REGISTER} ${_stack} -std=c++17 ${_uvParam} ${_in} ${opt} -s ${COMPILER.LIBS} ${_uvLib} -o a.exe && mv a.exe ${out} ${_cliOption}`
+		return `${compiler} ${_hashmap} -D__NJS_REGISTER_SIZE=${COMPILER.REGISTER} ${_stack} -std=c++17 ${_uvParam} ${_in} "${precompiled}" ${opt} -s ${COMPILER.LIBS} ${_uvLib} -o a.exe && mv a.exe ${out} ${_cliOption}`
 	}
 };

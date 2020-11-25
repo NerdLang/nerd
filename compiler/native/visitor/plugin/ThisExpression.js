@@ -22,7 +22,7 @@
 
 function ThisExpression(_path)
 {
-	_path.replaceWithSourceString("__NJS_THIS");
+	_path.replaceWithSourceString("__Nectar_THIS");
 }
 
 module.exports = ThisExpression;

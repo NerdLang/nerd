@@ -26,10 +26,10 @@
 
 function _performance()
 {
-	this.timeOrigin = __NJS_NATIVE_PERFORMANCE_NOW();
+	this.timeOrigin = __Nectar_NATIVE_PERFORMANCE_NOW();
 	this.now = function()
 	{
-		return (__NJS_NATIVE_PERFORMANCE_NOW() - this.timeOrigin) * 1000;
+		return (__Nectar_NATIVE_PERFORMANCE_NOW() - this.timeOrigin) * 1000;
 	};
 	
 };

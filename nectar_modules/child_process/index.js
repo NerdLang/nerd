@@ -29,7 +29,7 @@
 "!_ffi_include child_process/child_process.h"
 var child_process =
 {
-  execSync: __NJS_CHILD_PROCESS_EXEC_SYNC,
+  execSync: __Nectar_CHILD_PROCESS_EXEC_SYNC,
 }
 
 module.exports = child_process;

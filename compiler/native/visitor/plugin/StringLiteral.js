@@ -34,7 +34,7 @@ function StringLiteral(_path)
 	}
 	else 
 	{
-		_path.replaceWithSourceString("__NJS_InitVar(" + _path.node.extra.raw + ")");
+		_path.replaceWithSourceString("__Nectar_InitVar(" + _path.node.extra.raw + ")");
 		_path.skip();
 	}
 }

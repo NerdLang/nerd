@@ -24,9 +24,9 @@
 
 using namespace std::chrono;
 
-NJS::VAR __NJS_NATIVE_PERFORMANCE_NOW()
+Nectar::VAR __Nectar_NATIVE_PERFORMANCE_NOW()
 {
-   return NJS::VAR( (double)duration_cast<microseconds>(
+   return Nectar::VAR( (double)duration_cast<microseconds>(
       system_clock::now().time_since_epoch()
    ).count());
 };

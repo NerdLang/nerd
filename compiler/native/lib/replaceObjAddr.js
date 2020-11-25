@@ -24,8 +24,8 @@ function replaceObjAddr(_code)
 {
 	var Function = [];
 
-	var _searchReg = / *__NJS_Object_Set *\( *([a-zA-Z0-9_\-" ]*) *, *([a-zA-Z0-9_\-\(\)" ]*) *, *([a-zA-Z0-9_\-" ]*) *\)/g;
-	var _searchFN = / *([a-zA-Z0-9_\-" ]*) * = NJS::VAR\(NJS::Enum::Type::Function/g;
+	var _searchReg = / *__Nectar_Object_Set *\( *([a-zA-Z0-9_\-" ]*) *, *([a-zA-Z0-9_\-\(\)" ]*) *, *([a-zA-Z0-9_\-" ]*) *\)/g;
+	var _searchFN = / *([a-zA-Z0-9_\-" ]*) * = Nectar::VAR\(Nectar::Enum::Type::Function/g;
 	
 	var _allFN = _code.match(new RegExp(_searchFN));
 	if(_allFN)
@@ -53,7 +53,7 @@ function replaceObjAddr(_code)
 			{
 				if(_var[1] != "\"exports\"" && Function.indexOf(_var[2]) > -1)
 				{	
-					var _getObject = new RegExp("__NJS_Object_Get\\\(" + _var[1]+ ", " + _var[3] + "\\\)", "gm");
+					var _getObject = new RegExp("__Nectar_Object_Get\\\(" + _var[1]+ ", " + _var[3] + "\\\)", "gm");
 					_code = _code.replace(_getObject, _var[2]);
 				}
 			}

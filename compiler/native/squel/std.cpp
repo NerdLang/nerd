@@ -20,14 +20,18 @@
  *
  */
  
- #define __NJS_ENV_STD
- #include "njs.h"
-
- using namespace NJS::Global;
+ #define __Nectar_ENV_STD
+ #include "nectar.hpp"
+ 
+ using namespace Nectar::Global;
+ using namespace Nectar::Functions;
  
  var __NJS_ENV = "std";
  var __NJS_PLATFORM = "{{__PLATFORM__}}";
  
+ #define __NJS_Create_Object() new Nectar::Class::Object()
+ #define __NJS_Create_Array(_arr) new Nectar::Class::Array(_arr)
+ #define __NJS_InitVar() Nectar::VAR()
  {INCLUDE}
  
  {DECL}
@@ -46,19 +50,19 @@ int main(int argc, char* argv[])
 
 		{INIT}
 		
-		#ifdef __NJS_INIT_RAND_SEED
+		#ifdef __Nectar_INIT_RAND_SEED
 		srand (time(NULL));
 		#endif
 		{
 			{CODE}
 
-			NJS::Event::Loop();
+			Nectar::Event::Loop();
 		}
 		
 	}
-	catch(NJS::VAR __NJS_Global_Exception)
+	catch(Nectar::VAR __Nectar_Global_Exception)
 	{
-		__NJS_Log_Console(__NJS_Global_Exception);
+		__Nectar_Log_Console(__Nectar_Global_Exception);
 		exit(1);
 	}
 	return 0;

@@ -25,9 +25,9 @@
 
 function _date(_date)
 {
-	this.__NJS_Internal_Date = _date;
+	this.__Nectar_Internal_Date = _date;
 };
 
-_date.now = __NJS_NATIVE_DATE_NOW;
+_date.now = __Nectar_NATIVE_DATE_NOW;
 
 module.exports = _date;

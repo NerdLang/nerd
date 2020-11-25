@@ -54,7 +54,7 @@ var FunctionDeclaration=
 		}
 		for(var i = 0; i < _path.node.VAR.const.length; i++)
 		{
-			_hoistingVar += "__NJS_CONST " + _path.node.VAR.const[i] + ";";
+			_hoistingVar += "__Nectar_CONST " + _path.node.VAR.const[i] + ";";
 		}
 		if(_hoistingVar.length > 0) _path.node.body.body.splice(0, 0, babel.parse(_hoistingVar));
 		if(_path.node.id)

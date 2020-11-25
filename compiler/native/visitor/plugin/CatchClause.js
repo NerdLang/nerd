@@ -29,6 +29,6 @@ function CatchClause(_path)
 		process.exit(1);
 	}
 
-	paramPath.replaceWithSourceString("__NJS_EXCEPTION_PARAMETER");
+	paramPath.replaceWithSourceString("__Nectar_EXCEPTION_PARAMETER");
 }
 module.exports = CatchClause;

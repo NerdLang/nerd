@@ -22,13 +22,13 @@
  
 function createFunction(_code, _scope)
 {	
-	var _return = ";return NJS::Global::undefined;}";
+	var _return = ";return Nectar::Global::undefined;}";
 	var _searchFN = new RegExp(/function +(.[a-zA-Z0-9_\-]*) *\((.*)\)/);
 	var _index = _code.search(_searchFN);
 	while(_index > -1)
 	{
 		var _genFN = "__NJS_FN_" + RND();
-		var _genVAR = "NJS::VAR_" + RND();
+		var _genVAR = "Nectar::VAR_" + RND();
 
 		var _var = "";
 		var _count = 0;
@@ -60,7 +60,7 @@ function createFunction(_code, _scope)
 		{
 			
 			_variadic = true;
-			_parameters = "var __NJS_THIS, NJS::VAR* __NJS_VARARGS, int __NJS_VARLENGTH";
+			_parameters = "var __Nectar_THIS, Nectar::VAR* __Nectar_VARARGS, int __Nectar_VARLENGTH";
 
 			if(COMPILER.INFO.SCOPE[_match[1]].param.length == 1)
 			{
@@ -70,9 +70,9 @@ function createFunction(_code, _scope)
 					{
 						if(i <= COMPILER.INFO.SCOPE[_match[1]].param.length)
 						{
-							_getVar += `var ${_match[2][i]} = __NJS_VARARGS[${i}];`;
+							_getVar += `var ${_match[2][i]} = __Nectar_VARARGS[${i}];`;
 						}
-						else _getVar += `var ${_match[2][i]}; if(__NJS_VARLENGTH > ${i}) ${_match[2][i]} = __NJS_VARARGS[${i}];`;
+						else _getVar += `var ${_match[2][i]}; if(__Nectar_VARLENGTH > ${i}) ${_match[2][i]} = __Nectar_VARARGS[${i}];`;
 					}
 				}
 			}
@@ -82,7 +82,7 @@ function createFunction(_code, _scope)
 				{
 					if(_match[2][i].length > 0)
 					{
-						_getVar += `var ${_match[2][i]}; if(__NJS_VARLENGTH > ${i}) ${_match[2][i]} = __NJS_VARARGS[${i}];`;
+						_getVar += `var ${_match[2][i]}; if(__Nectar_VARLENGTH > ${i}) ${_match[2][i]} = __Nectar_VARARGS[${i}];`;
 					}
 				}
 			}
@@ -113,16 +113,16 @@ function createFunction(_code, _scope)
 								_catch = "&";
 							}
 							_catch = "&";
-							var _constructor = `${_match[1]}["prototype"]["constructor"] = __NJS_Create_Var_Scoped_Anon(return __NJS_THIS;);`;
+							var _constructor = `${_match[1]}["prototype"]["constructor"] = __Nectar_Create_Var_Scoped_Anon(return __Nectar_THIS;);`;
 							var _fn = "{" + _getVar + _code.substring(_start + 1, _end);
 
 							COMPILER.DECL.push("var " + _match[1] +";");
 							
 							var __STR_MARKER = "__LIT" + RND();
-							var _formated = `NJS::Type::function_t* ${_genFN} = new NJS::Type::function_t([${_catch}]( ${_parameters} ) -> NJS::VAR ${_fn} ${_return} );`;
-							_formated += _match[1] + "=NJS::VAR(NJS::Enum::Type::Function, " + _genFN + ");";
-							if(CLI.cli["--debug"]) _formated += `((NJS::Class::Function*)${_match[1]}._ptr)->code = R"${__STR_MARKER}(Function ${_match[1]}(${_match[2]}) ${_code.substring(_start, _end )}})${__STR_MARKER}";`
-							//else _formated += `((NJS::Class::Function*)${_match[1]}._ptr)->code = R"([Function: ${_match[1]}])";`
+							var _formated = `Nectar::Type::function_t* ${_genFN} = new Nectar::Type::function_t([${_catch}]( ${_parameters} ) -> Nectar::VAR ${_fn} ${_return} );`;
+							_formated += _match[1] + "=Nectar::VAR(Nectar::Enum::Type::Function, " + _genFN + ");";
+							if(CLI.cli["--debug"]) _formated += `((Nectar::Class::Function*)${_match[1]}._ptr)->code = R"${__STR_MARKER}(Function ${_match[1]}(${_match[2]}) ${_code.substring(_start, _end )}})${__STR_MARKER}";`
+							//else _formated += `((Nectar::Class::Function*)${_match[1]}._ptr)->code = R"([Function: ${_match[1]}])";`
 
 							_code = [_code.slice(0, _index), _formated, _code.slice(_end + 1)].join('');
 						}
@@ -130,7 +130,7 @@ function createFunction(_code, _scope)
 						{
 							// FAST CALL HERE
 							var _fn = _code.substring(_start, _end);
-							COMPILER.DECL.push(`__NJS_FAST_INT ${_match[1]}(${_parameters})${_fn}; return 0;}`);
+							COMPILER.DECL.push(`__Nectar_FAST_INT ${_match[1]}(${_parameters})${_fn}; return 0;}`);
 							_code = [_code.slice(0, _index), _code.slice(_end + 1)].join('');
 						}
 

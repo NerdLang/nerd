@@ -29,7 +29,7 @@ var ClassDeclaration =
 		VISITOR.CURRENT_Function++;
 		VISITOR.Function_STATE.push(_path.node.id.name);
 		if(!COMPILER.INFO.SCOPE[_path.node.id.name]) COMPILER.INFO.SCOPE[_path.node.id.name] = {init:[], use:[], call:[], param: [], fast: true};
-		var _class = " function __NJS_CLASS_" + _path.node.id.name + "(";
+		var _class = " function __Nectar_CLASS_" + _path.node.id.name + "(";
 		var _ctor = "";
 		var _body = "";
 		var _static = "";
@@ -60,7 +60,7 @@ var ClassDeclaration =
 					{
 						_method = _path.node.id.name + "." + _path.node.body.body[o].key.name + "= function(";
 					}
-					else _method = "__NJS_THIS." + _path.node.body.body[o].key.name + "= function(";
+					else _method = "__Nectar_THIS." + _path.node.body.body[o].key.name + "= function(";
 					
 					var _params = "";
 					for(var p = 0; p < _path.node.body.body[o].params.length; p++)

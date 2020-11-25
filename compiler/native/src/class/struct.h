@@ -1,9 +1,31 @@
+/*
+ * This file is part of NectarCPP
+ * Copyright (c) 2020 - 2020 Adrien THIERRY
+ * https://nectar-lang.org - https://seraum.com/
+ *
+ * sources : https://github.com/nectar-lang/NectarCPP
+ * 
+ * NectarCPP is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * NectarCPP is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with NectarCPP.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+ 
 #pragma once
 #include "struct_header.h"
 #include <functional>
 #include <limits>
 
-namespace NJS::Class
+namespace Nectar::Class
 {
 	// Constructors
 	Struct::Struct() {}
@@ -14,14 +36,14 @@ namespace NJS::Class
 	Struct::Struct(void *val, void* fn)
 	{
 		value = val;
-		Clean = (NJS::Type::clean_struct*)fn;
+		Clean = (Nectar::Type::clean_struct*)fn;
 	}
 	// Methods
 	inline void Struct::Delete() noexcept
 	{
 		if (--counter == 0)
 		{
-			(*static_cast<NJS::Type::clean_struct *>(Clean))(value);
+			(*static_cast<Nectar::Type::clean_struct *>(Clean))(value);
 			delete Clean;
 			delete this;
 		}
@@ -51,13 +73,13 @@ namespace NJS::Class
 		return "[native struct]";
 	}
 	// Main operators
-	NJS::VAR const Struct::operator[](NJS::VAR key) const
+	Nectar::VAR const Struct::operator[](Nectar::VAR key) const
 	{
-		return NJS::Global::undefined;
+		return Nectar::Global::undefined;
 	}
-	NJS::VAR &Struct::operator[](NJS::VAR key)
+	Nectar::VAR &Struct::operator[](Nectar::VAR key)
 	{
-		#ifdef __NJS__OBJECT_HASHMAP
+		#ifndef __Nectar__OBJECT_VECTOR
 		return object[(std::string)key];
 		#else
 		for (auto & search : object)
@@ -68,14 +90,14 @@ namespace NJS::Class
 			}
 		}
 
-		object.push_back(NJS::Type::pair_t((std::string)key, NJS::VAR()));
+		object.push_back(Nectar::Type::pair_t((std::string)key, Nectar::VAR()));
 		return object[object.size() - 1].second;
 		#endif
 	}
 	
-	NJS::VAR &Struct::operator[](int key)
+	Nectar::VAR &Struct::operator[](int key)
 	{
-		#ifdef __NJS__OBJECT_HASHMAP
+		#ifndef __Nectar__OBJECT_VECTOR
 		return object[std::to_string(key)];
 		#else
 		std::string _str = std::to_string(key);
@@ -87,14 +109,14 @@ namespace NJS::Class
 			}
 		}
 
-		object.push_back(NJS::Type::pair_t(_str, NJS::VAR()));
+		object.push_back(Nectar::Type::pair_t(_str, Nectar::VAR()));
 		return object[object.size() - 1].second;
 		#endif
 	}
 	
-	NJS::VAR &Struct::operator[](double key)
+	Nectar::VAR &Struct::operator[](double key)
 	{
-		#ifdef __NJS__OBJECT_HASHMAP
+		#ifndef __Nectar__OBJECT_VECTOR
 		return object[std::to_string(key)];
 		#else
 		std::string _str = std::to_string(key);
@@ -106,16 +128,16 @@ namespace NJS::Class
 			}
 		}
 
-		object.push_back(NJS::Type::pair_t(_str, NJS::VAR()));
+		object.push_back(Nectar::Type::pair_t(_str, Nectar::VAR()));
 		return object[object.size() - 1].second;
 		#endif
 	}
 	
 	
-	NJS::VAR &Struct::operator[](const char* key)
+	Nectar::VAR &Struct::operator[](const char* key)
 	{
 		std::string str = key;
-		#ifdef __NJS__OBJECT_HASHMAP
+		#ifndef __Nectar__OBJECT_VECTOR
 		return object[str];
 		#else
 		for (auto & search : object)
@@ -126,209 +148,203 @@ namespace NJS::Class
 			}
 		}
 
-		object.push_back(NJS::Type::pair_t(str, NJS::VAR()));
+		object.push_back(Nectar::Type::pair_t(str, Nectar::VAR()));
 		return object[object.size() - 1].second;
 		#endif
 	}
 	
-	template <class... Args>
-	NJS::VAR Struct::operator()(Args... args) const
-	{
-		auto _args = NJS::Type::vector_t{(NJS::VAR)args...};
-		return (*static_cast<std::function<NJS::VAR(NJS::Type::vector_t)> *>(value))(_args);
-	}
 	// Comparation operators
-	NJS::VAR Struct::operator!() const 
+	Nectar::VAR Struct::operator!() const 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
-		return NJS::VAR();
+		return Nectar::VAR();
 	}
-	bool Struct::operator==(const NJS::VAR &_v1) const { return false; }
-	// === emulated with __NJS_EQUAL_VALUE_AND_TYPE
-	// !== emulated with __NJS_NOT_EQUAL_VALUE_AND_TYPE
-	bool Struct::operator!=(const NJS::VAR &_v1) const { return true; }
-	bool Struct::operator<(const NJS::VAR &_v1) const { return false; }
-	bool Struct::operator<=(const NJS::VAR &_v1) const { return true; }
-	bool Struct::operator>(const NJS::VAR &_v1) const { return false; }
-	bool Struct::operator>=(const NJS::VAR &_v1) const { return true; }
+	bool Struct::operator==(const Nectar::VAR &_v1) const { return false; }
+	// === emulated with __Nectar_EQUAL_VALUE_AND_TYPE
+	// !== emulated with __Nectar_NOT_EQUAL_VALUE_AND_TYPE
+	bool Struct::operator!=(const Nectar::VAR &_v1) const { return true; }
+	bool Struct::operator<(const Nectar::VAR &_v1) const { return false; }
+	bool Struct::operator<=(const Nectar::VAR &_v1) const { return true; }
+	bool Struct::operator>(const Nectar::VAR &_v1) const { return false; }
+	bool Struct::operator>=(const Nectar::VAR &_v1) const { return true; }
 	// Numeric operators
-	NJS::VAR Struct::operator+() const 
+	Nectar::VAR Struct::operator+() const 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
-		return NJS::VAR();
+		return Nectar::VAR();
 	}
-	NJS::VAR Struct::operator-() const 
+	Nectar::VAR Struct::operator-() const 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
-		return NJS::VAR();
+		return Nectar::VAR();
 	}
-	NJS::VAR Struct::operator++(const int _v1) 
+	Nectar::VAR Struct::operator++(const int _v1) 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
-		return NJS::VAR();
+		return Nectar::VAR();
 	}
-	NJS::VAR Struct::operator--(const int _v1) 
+	Nectar::VAR Struct::operator--(const int _v1) 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
-		return NJS::VAR();
+		return Nectar::VAR();
 	}
-	NJS::VAR Struct::operator+(const NJS::VAR &_v1) const 
+	Nectar::VAR Struct::operator+(const Nectar::VAR &_v1) const 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
-		return NJS::VAR();
+		return Nectar::VAR();
 	}
-	NJS::VAR Struct::operator+=(const NJS::VAR &_v1) 
+	Nectar::VAR Struct::operator+=(const Nectar::VAR &_v1) 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
-		return NJS::VAR();
+		return Nectar::VAR();
 	}
-	NJS::VAR Struct::operator-(const NJS::VAR &_v1) const 
+	Nectar::VAR Struct::operator-(const Nectar::VAR &_v1) const 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
-		return NJS::VAR();
+		return Nectar::VAR();
 	}
-	NJS::VAR Struct::operator-=(const NJS::VAR &_v1) 
+	Nectar::VAR Struct::operator-=(const Nectar::VAR &_v1) 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
-		return NJS::VAR();
+		return Nectar::VAR();
 	}
-	NJS::VAR Struct::operator*(const NJS::VAR &_v1) const 
+	Nectar::VAR Struct::operator*(const Nectar::VAR &_v1) const 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
-		return NJS::VAR();
+		return Nectar::VAR();
 	}
-	NJS::VAR Struct::operator*=(const NJS::VAR &_v1) 
+	Nectar::VAR Struct::operator*=(const Nectar::VAR &_v1) 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
-		return NJS::VAR();
+		return Nectar::VAR();
 	}
 	// TODO: "**" and "**=" operators
-	NJS::VAR Struct::operator/(const NJS::VAR &_v1) const 
+	Nectar::VAR Struct::operator/(const Nectar::VAR &_v1) const 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
-		return NJS::VAR();
+		return Nectar::VAR();
 	}
-	NJS::VAR Struct::operator/=(const NJS::VAR &_v1) 
+	Nectar::VAR Struct::operator/=(const Nectar::VAR &_v1) 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
-		return NJS::VAR();
+		return Nectar::VAR();
 	}
-	NJS::VAR Struct::operator%(const NJS::VAR &_v1) const 
+	Nectar::VAR Struct::operator%(const Nectar::VAR &_v1) const 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
-		return NJS::VAR();
+		return Nectar::VAR();
 	}
-	NJS::VAR Struct::operator%=(const NJS::VAR &_v1) 
+	Nectar::VAR Struct::operator%=(const Nectar::VAR &_v1) 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
-		return NJS::VAR();
+		return Nectar::VAR();
 	}
-	NJS::VAR Struct::operator&(const NJS::VAR &_v1) const 
+	Nectar::VAR Struct::operator&(const Nectar::VAR &_v1) const 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
-		return NJS::VAR();
+		return Nectar::VAR();
 	}
-	NJS::VAR Struct::operator|(const NJS::VAR &_v1) const 
+	Nectar::VAR Struct::operator|(const Nectar::VAR &_v1) const 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
-		return NJS::VAR();
+		return Nectar::VAR();
 	}
-	NJS::VAR Struct::operator^(const NJS::VAR &_v1) const 
+	Nectar::VAR Struct::operator^(const Nectar::VAR &_v1) const 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
-		return NJS::VAR();
+		return Nectar::VAR();
 	}
-	NJS::VAR Struct::operator~() const 
+	Nectar::VAR Struct::operator~() const 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
-		return NJS::VAR();
+		return Nectar::VAR();
 	}
-	NJS::VAR Struct::operator>>(const NJS::VAR &_v1) const 
+	Nectar::VAR Struct::operator>>(const Nectar::VAR &_v1) const 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
-		return NJS::VAR();
+		return Nectar::VAR();
 	}
-	NJS::VAR Struct::operator<<(const NJS::VAR &_v1) const 
+	Nectar::VAR Struct::operator<<(const Nectar::VAR &_v1) const 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
-		return NJS::VAR();
+		return Nectar::VAR();
 	}
-	NJS::VAR Struct::operator&=(const NJS::VAR &_v1) 
+	Nectar::VAR Struct::operator&=(const Nectar::VAR &_v1) 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
-		return NJS::VAR();
+		return Nectar::VAR();
 	}
-	NJS::VAR Struct::operator|=(const NJS::VAR &_v1) 
+	Nectar::VAR Struct::operator|=(const Nectar::VAR &_v1) 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
-		return NJS::VAR();
+		return Nectar::VAR();
 	}
-	NJS::VAR Struct::operator^=(const NJS::VAR &_v1) 
+	Nectar::VAR Struct::operator^=(const Nectar::VAR &_v1) 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
-		return NJS::VAR();
+		return Nectar::VAR();
 	}
-	NJS::VAR Struct::operator>>=(const NJS::VAR &_v1) 
+	Nectar::VAR Struct::operator>>=(const Nectar::VAR &_v1) 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
-		return NJS::VAR();
+		return Nectar::VAR();
 	}
-	NJS::VAR Struct::operator<<=(const NJS::VAR &_v1) 
+	Nectar::VAR Struct::operator<<=(const Nectar::VAR &_v1) 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
-		return NJS::VAR();
+		return Nectar::VAR();
 	}
 	// TODO: ">>>" and ">>>=" operators
-} // namespace NJS::Class
+} // namespace Nectar::Class

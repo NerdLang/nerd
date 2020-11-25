@@ -21,11 +21,16 @@
  */
  #define __NJS_ENV_NODE
  #include "uv.h"
- #include "njs.h"
- using namespace NJS::Global;
+ #include "nectar.hpp"
+ 
+ using namespace Nectar::Global;
+ using namespace Nectar::Functions;
  
  var __NJS_ENV = "node";
  var __NJS_PLATFORM = "{{__PLATFORM__}}"; 
+ #define __NJS_Create_Object() new Nectar::Class::Object()
+ #define __NJS_Create_Array(_arr) new Nectar::Class::Array(_arr)
+ #define __NJS_InitVar() Nectar::VAR()
  
  uv_loop_t *__NJS_UV_DEFAULT_LOOP = (uv_loop_t *)malloc(sizeof(uv_loop_t));
  

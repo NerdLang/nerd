@@ -21,12 +21,12 @@
  */
 
 
-function __NJS_IOS_DRAW(_value)
+function __Nectar_IOS_DRAW(_value)
 { 
-	drawNative(__NJS_Get_String(_value));
+	drawNative(__Nectar_Get_String(_value));
 }
 
-function __NJS_IOS_NAVIGATE(_value)
+function __Nectar_IOS_NAVIGATE(_value)
 { 
-	navigateNative(__NJS_Get_String(_value));
+	navigateNative(__Nectar_Get_String(_value));
 }

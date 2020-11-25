@@ -20,19 +20,23 @@
  *
  */
 
-const { platform } = require("os")
+const { platform } = require("os");
+const fs = require("fs");
 
 const FLAGS = {
-	none: ["O1"],
-	size: ["Os", "fno-rtti", "fno-stack-protector", "fomit-frame-pointer"],
-	speed: ["O3"]
-}
+    none: ["O1"],
+    size: ["Os", "fno-rtti", "fno-stack-protector", "fomit-frame-pointer"],
+    speed: ["O3"]
+};
 
 module.exports = {
     name: "std",
     main: "std.cpp",
     compiler: "g++",
-    stdlib: ["console", { bind: "performance", module: "Performance" }, "RegExp", "Number", "Object", "Math", "JSON", "Array", "Date"],
+    stdlib: ["console", {
+        bind: "performance",
+        module: "Performance"
+    }, "RegExp", "Number", "Object", "Math", "JSON", "Array", "Date"],
     check: {
         "env": {
             "es6": true
@@ -48,64 +52,79 @@ module.exports = {
                 "args": "after-used",
                 "ignoreRestSiblings": false
             }],
-			"no-const-assign": "error",
+            "no-const-assign": "error",
         },
         "globals": {
-			"undefined": false,
-			"eval": false,
+            "undefined": false,
+            "eval": false,
             "__njs_typeof": false,
             "console": false,
             "module": false,
             "require": false,
-            "__NJS_Log_Console": false,
-            "__NJS_Object_Keys": false,
-            "__NJS_Object_Stringify": false,
-            "__NJS_Call_Function": false,
+            "__Nectar_Log_Console": false,
+            "__Nectar_InitVar": false,
+            "__Nectar_Object_Keys": false,
+            "__Nectar_Object_Stringify": false,
+            "__Nectar_Call_Function": false,
             "__NJS_ARGS": false,
             "__NJS_ENV": false,
             "__NJS_PLATFORM": false,
+            "__Nectar_typeof": false,
+            "__Nectar_THIS": false,
+            "__Nectar_instanceof": false,
             "JSON": false,
             "Object": false,
             "isNaN": false,
-			"Array": false,
+            "Array": false,
         },
     },
-    cli: function(compiler, preset, out, _in, option) {
+    cli: function (compiler, preset, out, _in, option) {
+        const cachePath = path.join(process.cwd(), "..", `cached_${COMPILER.ENV.name}_${VERSION}`);
+        const precompiled = path.join(cachePath, "nectar.o");
         const stackSize = CLI.cli["--stack"] ? +CLI.cli["--stack"].argument : 0;
-		if (isNaN(stackSize)) {
-			console.log("[!] Error: --stack flags required a number, received -> " + CLI.cli["--stack"].argument);
-			process.exit(1);
-        }
-        if (compiler == "cl" || compiler.indexOf("cl ") == 0) {
-			console.log("[!] cl is not supported, please use g++, clang++, em++ or avr-g++");
-			process.exit(1);
+        if (isNaN(stackSize)) {
+            console.log("[!] Error: --stack flags required a number, received -> " + CLI.cli["--stack"].argument);
+            process.exit(1);
         }
 
-		const _hashmap = CLI.cli['--no-object-hashmap'] ? "" : "-D__NJS__OBJECT_HASHMAP";
+        if (!fs.existsSync(_precompiled)) {
+            console.log(`[+] Creating Nectar binary lib for ${COMPILER.ENV.name + "_" + VERSION}`);
+            try {
+                fs.mkdirSync(_cachePath);
+            } catch (e) {}
+            execSync(`${compiler} -std=c++17 -c nectar.cpp -Ofast -o "${_precompiled}"`);
+            console.log("[+] Compiling with precompiled Nectar lib");
+        }
+
+        if (compiler == "cl" || compiler.indexOf("cl ") == 0) {
+            console.log("[!] cl is not supported, please use g++, clang++, em++ or avr-g++");
+            process.exit(1);
+        }
+
+        const _hashmap = CLI.cli['--no-object-hashmap'] ? "" : "-D__NJS__OBJECT_HASHMAP";
         const _stack = stackSize ? `-Wl,--stack,${stackSize}` : "";
-		const _sysVNetLibs = os.platform() === "sunos" ? "-lsocket -lnsl" : "";
+        const _sysVNetLibs = os.platform() === "sunos" ? "-lsocket -lnsl" : "";
         const _cliOption = CLI.cli["--option"] ? CLI.cli["--option"].argument : "";
-		
-		if (CLI.cli["--profile"]) {
+
+        if (CLI.cli["--profile"]) {
             const profile = CLI.cli["--profile"].argument;
-			if (!CLI.cli["--conserve"]) CLI.cli["--conserve"] = true;
-			if (profile === "gen") {
-				_cliOption += " -fprofile-generate";
-				console.log(`[*] Profiling data will be stored in: ${COMPILER.TMP_FOLDER}`);
-			} else if(profile === "use") {
-				_cliOption += " -fprofile-use";
-				console.log(`[*] Using profile data from: ${COMPILER.TMP_FOLDER}`);
-			} else {
-				console.log("[!] Please use --profile with gen or use");
-			}
+            if (!CLI.cli["--conserve"]) CLI.cli["--conserve"] = true;
+            if (profile === "gen") {
+                _cliOption += " -fprofile-generate";
+                console.log(`[*] Profiling data will be stored in: ${COMPILER.TMP_FOLDER}`);
+            } else if (profile === "use") {
+                _cliOption += " -fprofile-use";
+                console.log(`[*] Using profile data from: ${COMPILER.TMP_FOLDER}`);
+            } else {
+                console.log("[!] Please use --profile with gen or use");
+            }
         }
 
         const opt = (FLAGS[preset] || []).map(v => `-${v}`).join(" ");
-		return `${compiler} ${_hashmap} ${_stack} -std=c++17 "${_in}" ${opt} -s ${COMPILER.LIBS} -o "${out}" ${_sysVNetLibs} ${_cliOption}`
+        return `${compiler} ${_hashmap} ${_stack} -std=c++17 "${_in}" "${precompiled}" ${opt} -s ${COMPILER.LIBS} -o "${out}" ${_sysVNetLibs} ${_cliOption}`
     },
-	write: function(content, input) {
-		if (CLI.cli["--profile"] && CLI.cli["--profile"].argument == "use") return;
+    write: function (content, input) {
+        if (CLI.cli["--profile"] && CLI.cli["--profile"].argument == "use") return;
         fs.writeFileSync(input, content);
     }
-
-}
+};

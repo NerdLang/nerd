@@ -38,6 +38,6 @@
   {
     "env": ["ios"],
     "read_only": [],
-    "expose": ["__NJS_IOS_DRAW", "__NJS_IOS_NAVIGATE"]
+    "expose": ["__Nectar_IOS_DRAW", "__Nectar_IOS_NAVIGATE"]
   }
 }

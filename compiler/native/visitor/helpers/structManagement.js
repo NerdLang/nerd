@@ -95,7 +95,7 @@ function createStruct(_name, _members)
 		}
 		else _m += `var ${_members[i]};`
 	}
-	COMPILER.DECL.push(`struct __NJS_STRUCT_${StructList[_name].key} { ${_m} };`);
+	COMPILER.DECL.push(`struct __Nectar_STRUCT_${StructList[_name].key} { ${_m} };`);
 	return `true`;
 }
 
@@ -103,14 +103,14 @@ function initStruct(_name)
 {
 	sayExperimental();
 	structShouldExist(_name);
-	return `__NJS_Create_Struct(__NJS_STRUCT_${StructList[_name].key})`;
+	return `__Nectar_Create_Struct(__Nectar_STRUCT_${StructList[_name].key})`;
 }
 
 function accessStruct(_exp, _name, _member)
 {
 	if(memberExists(_name, _member))
 	{
-		return {code: `__NJS_Access_Struct(${_exp}, __NJS_STRUCT_${StructList[_name].key})`, struct:true};
+		return {code: `__Nectar_Access_Struct(${_exp}, __Nectar_STRUCT_${StructList[_name].key})`, struct:true};
 	}
 	else 
 	{

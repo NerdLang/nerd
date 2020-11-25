@@ -1,9 +1,31 @@
+/*
+ * This file is part of NectarCPP
+ * Copyright (c) 2020 - 2020 Adrien THIERRY
+ * https://nectar-lang.org - https://seraum.com/
+ *
+ * sources : https://github.com/nectar-lang/NectarCPP
+ * 
+ * NectarCPP is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * NectarCPP is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with NectarCPP.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+ 
 #pragma once
 #include "string_header.h"
 #include <string>
 #include <limits>
 
-namespace NJS::Class
+namespace Nectar::Class
 {
 	// Constructors
 	String::String()
@@ -36,7 +58,7 @@ namespace NJS::Class
 	{
 		std::string::size_type end;
 		double res;
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		try
 		{
 			res = std::stod(value, &end);
@@ -51,7 +73,7 @@ namespace NJS::Class
 	{
 		std::string::size_type end;
 		int res;
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		try
 		{
 			res = std::stoi(value, &end, 10);
@@ -66,7 +88,7 @@ namespace NJS::Class
 	{
 		std::string::size_type end;
 		long long res;
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		try
 		{
 			res = std::stoll(value, &end, 10);
@@ -79,34 +101,34 @@ namespace NJS::Class
 	}
 	String::operator std::string() const noexcept { return value; }
 	// Main operators
-	NJS::VAR const String::operator[](NJS::VAR key) const
+	Nectar::VAR const String::operator[](Nectar::VAR key) const
 	{
-		if (key.type == NJS::Enum::Type::Number)
+		if (key.type == Nectar::Enum::Type::Number)
 		{
 			auto i = (int)key;
 			if (i >= 0 && i <= value.size())
 			{
 				return value.at(i);
 			}
-			else return NJS::Global::undefined;
+			else return Nectar::Global::undefined;
 		}
 		std::string _str = ((std::string)key);
-		NJS::Type::StringView _sview = _str;
+		Nectar::Type::StringView _sview = _str;
 		
 		if(_sview.compare("length") == 0)
 		{
 			return (int)value.size();
 		}
 		
-		return NJS::Global::undefined;
+		return Nectar::Global::undefined;
 	}
-	static NJS::VAR _char;
-	static NJS::VAR _length;
+	static Nectar::VAR _char;
+	static Nectar::VAR _length;
 		
-	#ifdef __NJS__OBJECT_HASHMAP
-	NJS::VAR &String::operator[](NJS::VAR key)
+	#ifndef __Nectar__OBJECT_VECTOR
+	Nectar::VAR &String::operator[](Nectar::VAR key)
 	{
-		if (key.type == NJS::Enum::Type::Number)
+		if (key.type == Nectar::Enum::Type::Number)
 		{
 			auto i = (int)key;
 			if (i >= 0)
@@ -122,19 +144,19 @@ namespace NJS::Class
 		}
 		
 		std::string _str = ((std::string)key);
-		NJS::Type::StringView _sview = _str;
+		Nectar::Type::StringView _sview = _str;
 		
-		NJS::VAR& _obj = object[_str];
+		Nectar::VAR& _obj = object[_str];
 		if(_obj) return _obj; 
 		
-		__NJS_Method_Lazy_Loader("toString", toString);
-		__NJS_Method_Lazy_Loader("split", split);
-		__NJS_Method_Lazy_Loader("indexOf", indexOf);
-		__NJS_Method_Lazy_Loader("lastIndexOf", lastIndexOf);
-		__NJS_Method_Lazy_Loader("search", search);
-		__NJS_Method_Lazy_Loader("slice", slice);
-		__NJS_Method_Lazy_Loader("substr", substr);
-		__NJS_Method_Lazy_Loader("replace", replace);
+		__Nectar_Method_Lazy_Loader("toString", toString);
+		__Nectar_Method_Lazy_Loader("split", split);
+		__Nectar_Method_Lazy_Loader("indexOf", indexOf);
+		__Nectar_Method_Lazy_Loader("lastIndexOf", lastIndexOf);
+		__Nectar_Method_Lazy_Loader("search", search);
+		__Nectar_Method_Lazy_Loader("slice", slice);
+		__Nectar_Method_Lazy_Loader("substr", substr);
+		__Nectar_Method_Lazy_Loader("replace", replace);
 		
 		if(_sview.compare("length") == 0)
 		{
@@ -145,9 +167,9 @@ namespace NJS::Class
 		return _obj;
 	}
 	#else
-	NJS::VAR &String::operator[](NJS::VAR key)
+	Nectar::VAR &String::operator[](Nectar::VAR key)
 	{		
-		if (key.type == NJS::Enum::Type::Number)
+		if (key.type == Nectar::Enum::Type::Number)
 		{
 			auto i = (int)key;
 			if (i >= 0)
@@ -163,7 +185,7 @@ namespace NJS::Class
 		}
 		
 		std::string _str = ((std::string)key);
-		NJS::Type::StringView _sview = _str;
+		Nectar::Type::StringView _sview = _str;
 		for (auto & search : object)
 		{
 			if (_sview.compare(search.first) == 0)
@@ -172,14 +194,14 @@ namespace NJS::Class
 			}
 		}
 		
-		__NJS_Method_Lazy_Loader("toString", toString);
-		__NJS_Method_Lazy_Loader("split", split);
-		__NJS_Method_Lazy_Loader("indexOf", indexOf);
-		__NJS_Method_Lazy_Loader("lastIndexOf", lastIndexOf);
-		__NJS_Method_Lazy_Loader("search", search);
-		__NJS_Method_Lazy_Loader("slice", slice);
-		__NJS_Method_Lazy_Loader("substr", substr);
-		__NJS_Method_Lazy_Loader("replace", replace);
+		__Nectar_Method_Lazy_Loader("toString", toString);
+		__Nectar_Method_Lazy_Loader("split", split);
+		__Nectar_Method_Lazy_Loader("indexOf", indexOf);
+		__Nectar_Method_Lazy_Loader("lastIndexOf", lastIndexOf);
+		__Nectar_Method_Lazy_Loader("search", search);
+		__Nectar_Method_Lazy_Loader("slice", slice);
+		__Nectar_Method_Lazy_Loader("substr", substr);
+		__Nectar_Method_Lazy_Loader("replace", replace);
 
 		if(_sview.compare("length") == 0)
 		{
@@ -187,12 +209,12 @@ namespace NJS::Class
 			return _length;
 		}
 		
-		object.push_back(NJS::Type::pair_t(((std::string)*this), NJS::Global::undefined));
+		object.push_back(Nectar::Type::pair_t(((std::string)*this), Nectar::Global::undefined));
 		return object[object.size() - 1].second;
 	}
 	#endif
 	
-	NJS::VAR &String::operator[](int key)
+	Nectar::VAR &String::operator[](int key)
 	{		
 		if (key >= 0)
 		{
@@ -206,7 +228,7 @@ namespace NJS::Class
 		return _char;
 	}
 	
-	NJS::VAR &String::operator[](double key)
+	Nectar::VAR &String::operator[](double key)
 	{		
 		if (key >= 0)
 		{
@@ -221,23 +243,23 @@ namespace NJS::Class
 	}
 
 	
-	#ifdef __NJS__OBJECT_HASHMAP
-	NJS::VAR &String::operator[](const char* key)
+	#ifndef __Nectar__OBJECT_VECTOR
+	Nectar::VAR &String::operator[](const char* key)
 	{
 		std::string _str = key;
-		NJS::Type::StringView _sview = _str;
+		Nectar::Type::StringView _sview = _str;
 		
-		NJS::VAR& _obj = object[_str];
+		Nectar::VAR& _obj = object[_str];
 		if(_obj) return _obj; 
 		
-		__NJS_Method_Lazy_Loader("toString", toString);
-		__NJS_Method_Lazy_Loader("split", split);
-		__NJS_Method_Lazy_Loader("indexOf", indexOf);
-		__NJS_Method_Lazy_Loader("lastIndexOf", lastIndexOf);
-		__NJS_Method_Lazy_Loader("search", search);
-		__NJS_Method_Lazy_Loader("slice", slice);
-		__NJS_Method_Lazy_Loader("substr", substr);
-		__NJS_Method_Lazy_Loader("replace", replace);
+		__Nectar_Method_Lazy_Loader("toString", toString);
+		__Nectar_Method_Lazy_Loader("split", split);
+		__Nectar_Method_Lazy_Loader("indexOf", indexOf);
+		__Nectar_Method_Lazy_Loader("lastIndexOf", lastIndexOf);
+		__Nectar_Method_Lazy_Loader("search", search);
+		__Nectar_Method_Lazy_Loader("slice", slice);
+		__Nectar_Method_Lazy_Loader("substr", substr);
+		__Nectar_Method_Lazy_Loader("replace", replace);
 		
 		if(_sview.compare("length") == 0)
 		{
@@ -248,10 +270,10 @@ namespace NJS::Class
 		return _obj;
 	}
 	#else
-	NJS::VAR &String::operator[](const char* key)
+	Nectar::VAR &String::operator[](const char* key)
 	{		
 		std::string _str = key;
-		NJS::Type::StringView _sview = _str;
+		Nectar::Type::StringView _sview = _str;
 		for (auto & search : object)
 		{
 			if (_sview.compare(search.first) == 0)
@@ -260,14 +282,14 @@ namespace NJS::Class
 			}
 		}
 		
-		__NJS_Method_Lazy_Loader("toString", toString);
-		__NJS_Method_Lazy_Loader("split", split);
-		__NJS_Method_Lazy_Loader("indexOf", indexOf);
-		__NJS_Method_Lazy_Loader("lastIndexOf", lastIndexOf);
-		__NJS_Method_Lazy_Loader("search", search);
-		__NJS_Method_Lazy_Loader("slice", slice);
-		__NJS_Method_Lazy_Loader("substr", substr);
-		__NJS_Method_Lazy_Loader("replace", replace);
+		__Nectar_Method_Lazy_Loader("toString", toString);
+		__Nectar_Method_Lazy_Loader("split", split);
+		__Nectar_Method_Lazy_Loader("indexOf", indexOf);
+		__Nectar_Method_Lazy_Loader("lastIndexOf", lastIndexOf);
+		__Nectar_Method_Lazy_Loader("search", search);
+		__Nectar_Method_Lazy_Loader("slice", slice);
+		__Nectar_Method_Lazy_Loader("substr", substr);
+		__Nectar_Method_Lazy_Loader("replace", replace);
 
 		if(_sview.compare("length") == 0)
 		{
@@ -275,31 +297,22 @@ namespace NJS::Class
 			return _length;
 		}
 		
-		object.push_back(NJS::Type::pair_t(((std::string)*this), NJS::Global::undefined));
+		object.push_back(Nectar::Type::pair_t(((std::string)*this), Nectar::Global::undefined));
 		return object[object.size() - 1].second;
 	}
 	#endif
 	
-	
-	template <class... Args>
-	NJS::VAR String::operator()(Args... args) const 
-	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
-		throw InvalidTypeException();
-		#endif
-		return NJS::Global::undefined;
-	}
 	// Comparation operators
 	String String::operator!() const 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return String();
 	}
 	bool String::operator==(const String &_v1) const { return value.compare(_v1.value) == 0; }
-	// === emulated with __NJS_EQUAL_VALUE_AND_TYPE
-	// !== emulated with __NJS_NOT_EQUAL_VALUE_AND_TYPE
+	// === emulated with __Nectar_EQUAL_VALUE_AND_TYPE
+	// !== emulated with __Nectar_NOT_EQUAL_VALUE_AND_TYPE
 	bool String::operator!=(const String &_v1) const { return value.compare(_v1.value) != 0; }
 	bool String::operator<(const String &_v1) const { return value.at(0) < _v1.value.at(0); }
 	bool String::operator<=(const String &_v1) const { return value.at(0) <= _v1.value.at(0); }
@@ -308,28 +321,28 @@ namespace NJS::Class
 	// Numeric operators
 	String String::operator+() const 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return String();
 	}
 	String String::operator-() const 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return String();
 	}
 	String String::operator++(const int _v1) 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return String();
 	}
 	String String::operator--(const int _v1) 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return String();
@@ -338,28 +351,28 @@ namespace NJS::Class
 	String String::operator+=(const String &_v1) { value += _v1.value; return *this; }
 	String String::operator-(const String &_v1) const 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return String();
 	}
 	String String::operator-=(const String &_v1) 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return String();
 	}
 	String String::operator*(const String &_v1) const 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return String();
 	}
 	String String::operator*=(const String &_v1) 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return String();
@@ -367,125 +380,125 @@ namespace NJS::Class
 	// TODO: "**" and "**=" operators
 	String String::operator/(const String &_v1) const 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return String();
 	}
 	String String::operator/=(const String &_v1) 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return String();
 	}
 	String String::operator%(const String &_v1) const 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return String();
 	}
 	String String::operator%=(const String &_v1) 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return String();
 	}
 	String String::operator&(const String &_v1) const 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return String();
 	}
 	String String::operator|(const String &_v1) const 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return String();
 	}
 	String String::operator^(const String &_v1) const 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return String();
 	}
 	String String::operator~() const 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return String();
 	}
 	String String::operator>>(const String &_v1) const 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return String();
 	}
 	String String::operator<<(const String &_v1) const 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return String();
 	}
 	String String::operator&=(const String &_v1) 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return String();
 	}
 	String String::operator|=(const String &_v1) 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return String();
 	}
 	String String::operator^=(const String &_v1) 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return String();
 	}
 	String String::operator>>=(const String &_v1) 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return String();
 	}
 	String String::operator<<=(const String &_v1) 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return String();
 	}
 	// TODO: ">>>" and ">>>=" operators
 	/*** STRING METHODS ***/
-	NJS::VAR String::toString(NJS::VAR* _args, int _length) const
+	Nectar::VAR String::toString(Nectar::VAR* _args, int _length) const
 	{
 		return value;
 	}
 	
-	NJS::VAR String::split(NJS::VAR* _args, int _length) const
+	Nectar::VAR String::split(Nectar::VAR* _args, int _length) const
 	{
-		NJS::VAR _needle;
+		Nectar::VAR _needle;
 		if (_length > 0)
 			_needle = _args[0];
 		else
-			return NJS::VAR(this->value);
+			return Nectar::VAR(this->value);
 
-		NJS::VAR _arr = __NJS_Create_Array();
+		Nectar::VAR _arr = new Nectar::Class::Array();
 		char *_v = (char *)malloc(strlen(this->value.c_str()) + 1);
 		strcpy(_v, this->value.c_str());
 		char *delim = (char *)malloc(strlen(((std::string)_needle).c_str()) + 1);
@@ -498,7 +511,7 @@ namespace NJS::Class
 		{
 			_new = (char *)malloc(strlen(ptr) + 1);
 			strcpy(_new, ptr);
-			__NJS_Object_Set(i, _new, _arr);
+			__Nectar_Object_Set(i, _new, _arr);
 			free(_new);
 			ptr = strtok(NULL, delim);
 			i++;
@@ -508,106 +521,106 @@ namespace NJS::Class
 		return _arr;
 	}
 	
-	NJS::VAR String::indexOf(NJS::VAR* _args, int _length) const
+	Nectar::VAR String::indexOf(Nectar::VAR* _args, int _length) const
 	{
-		NJS::VAR _needle;
+		Nectar::VAR _needle;
 		if (_length > 0)
 			_needle = _args[0];
 		else
-			return NJS::VAR(-1);
+			return Nectar::VAR(-1);
 
 		std::string::size_type loc = this->value.find((std::string)_needle, 0);
 		if (loc != std::string::npos)
 		{
-			return NJS::VAR((int)loc);
+			return Nectar::VAR((int)loc);
 		}
-		return NJS::VAR(-1);
+		return Nectar::VAR(-1);
 	}
 	
-	NJS::VAR String::lastIndexOf(NJS::VAR* _args, int _length) const
+	Nectar::VAR String::lastIndexOf(Nectar::VAR* _args, int _length) const
 	{
-		NJS::VAR _needle;
+		Nectar::VAR _needle;
 		if (_length > 0)
 			_needle = _args[0];
 		else
-			return NJS::VAR(-1);
+			return Nectar::VAR(-1);
 
 		std::string::size_type loc = this->value.find_last_of((std::string)_needle, 0);
 		if (loc != std::string::npos)
 		{
-			return NJS::VAR((int)loc);
+			return Nectar::VAR((int)loc);
 		}
-		return NJS::VAR(-1);
+		return Nectar::VAR(-1);
 	}
 	
-	NJS::VAR String::search(NJS::VAR* _args, int _length) const
+	Nectar::VAR String::search(Nectar::VAR* _args, int _length) const
 	{
-		NJS::VAR _needle;
+		Nectar::VAR _needle;
 		if (_length > 0)
 			_needle = _args[0];
 		else
-			return NJS::VAR(-1);
+			return Nectar::VAR(-1);
 
 		std::string::size_type loc = this->value.find((std::string)_needle, 0);
 		if (loc != std::string::npos)
 		{
-			return NJS::VAR((int)loc);
+			return Nectar::VAR((int)loc);
 		}
-		return NJS::VAR(-1);
+		return Nectar::VAR(-1);
 	}
 	
-	NJS::VAR String::slice(NJS::VAR* _args, int _length) const
+	Nectar::VAR String::slice(Nectar::VAR* _args, int _length) const
 	{
-		NJS::VAR _start;
-		NJS::VAR _end;
+		Nectar::VAR _start;
+		Nectar::VAR _end;
 		if (_length > 0)
 			_start = _args[0];
 		else
-			return NJS::VAR(this->value);
+			return Nectar::VAR(this->value);
 		if (_length > 1)
 			_end = _args[1];
 
-		if (_end.type == NJS::Enum::Type::Undefined)
-			return NJS::VAR(this->value.substr((int)_start, std::string::npos));
+		if (_end.type == Nectar::Enum::Type::Undefined)
+			return Nectar::VAR(this->value.substr((int)_start, std::string::npos));
 		int _endIndex = (int)_end - (int)_start;
-		return NJS::VAR(this->value.substr((int)_start, _endIndex));
+		return Nectar::VAR(this->value.substr((int)_start, _endIndex));
 	}
 	
-	NJS::VAR String::substr(NJS::VAR* _args, int _length) const
+	Nectar::VAR String::substr(Nectar::VAR* _args, int _length) const
 	{
-		NJS::VAR _start;
-		NJS::VAR _end;
+		Nectar::VAR _start;
+		Nectar::VAR _end;
 		if (_length > 0)
 			_start = _args[0];
 		else
-			return NJS::VAR(this->value);
+			return Nectar::VAR(this->value);
 		if (_length > 1)
 			_end = _args[1];
 
-		if (_end.type == NJS::Enum::Type::Undefined)
-			return NJS::VAR(this->value.substr((int)_start, std::string::npos));
-		return NJS::VAR(this->value.substr((int)_start, (int)_end));
+		if (_end.type == Nectar::Enum::Type::Undefined)
+			return Nectar::VAR(this->value.substr((int)_start, std::string::npos));
+		return Nectar::VAR(this->value.substr((int)_start, (int)_end));
 	}
 		
-	NJS::VAR String::replace(NJS::VAR* _args, int _length) const
+	Nectar::VAR String::replace(Nectar::VAR* _args, int _length) const
 	{
-		NJS::VAR _search;
-		NJS::VAR _replace;
+		Nectar::VAR _search;
+		Nectar::VAR _replace;
 		if (_length > 0)
 			_search = _args[0];
 		else
-			return NJS::VAR(this->value);
+			return Nectar::VAR(this->value);
 		if (_length > 1)
 			_replace = _args[1];
 
 		size_t start_pos = this->value.find((std::string)_search);
 		if (start_pos == std::string::npos)
 		{
-			return NJS::VAR(value);
+			return Nectar::VAR(value);
 		}
 		
 		std::string _new = value;
-		return NJS::VAR(_new.replace(start_pos, ((std::string)_search).length(), (std::string)_replace));
+		return Nectar::VAR(_new.replace(start_pos, ((std::string)_search).length(), (std::string)_replace));
 	}
 	/* END STRING METHODS */
-} // namespace NJS::Class
+} // namespace Nectar::Class

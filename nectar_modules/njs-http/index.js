@@ -26,7 +26,7 @@ var njs_server = {};
 
 njs_server.listen = function(_host, _port, _cb, _opt)
 {
-  __NJS_HTTP_LISTEN(_host, _port, _cb, _opt);
+  __Nectar_HTTP_LISTEN(_host, _port, _cb, _opt);
 };
 
 

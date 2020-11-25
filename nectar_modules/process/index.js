@@ -26,7 +26,7 @@ var process =
 	exit: function(_code)
 	{
 		if(_code) _code = 0;
-		__NJS_EXIT(_code);
+		__Nectar_EXIT(_code);
 	}
 };
 

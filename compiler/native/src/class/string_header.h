@@ -1,7 +1,29 @@
+/*
+ * This file is part of NectarCPP
+ * Copyright (c) 2020 - 2020 Adrien THIERRY
+ * https://nectar-lang.org - https://seraum.com/
+ *
+ * sources : https://github.com/nectar-lang/NectarCPP
+ * 
+ * NectarCPP is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * NectarCPP is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with NectarCPP.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+ 
 #pragma once
 #include "_meta.h"
 
-namespace NJS::Class
+namespace Nectar::Class
 {
 	class String : public virtual Base
 	{
@@ -12,7 +34,7 @@ namespace NJS::Class
 		String(const char* val);
 		// Properties
 		std::string value;
-		NJS::Type::object_t object;
+		Nectar::Type::object_t object;
 		count_t counter = 1;
 		// Methods
 		inline void Delete() noexcept;
@@ -24,17 +46,26 @@ namespace NJS::Class
 		explicit operator long long() const noexcept;
 		explicit operator std::string() const noexcept;
 		// Main operators
-		NJS::VAR const operator[](NJS::VAR key) const;
-		NJS::VAR &operator[](NJS::VAR key);
-		NJS::VAR &operator[](int key);
-		NJS::VAR &operator[](double key);
-		NJS::VAR &operator[](const char* key);
-		template <class... Args> NJS::VAR operator()(Args... args) const;
+		Nectar::VAR const operator[](Nectar::VAR key) const;
+		Nectar::VAR &operator[](Nectar::VAR key);
+		Nectar::VAR &operator[](int key);
+		Nectar::VAR &operator[](double key);
+		Nectar::VAR &operator[](const char* key);
+		
+		template <class... Args>
+		Nectar::VAR operator()(Args... args) const 
+		{
+			#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
+			throw InvalidTypeException();
+			#endif
+			return Nectar::Global::undefined;
+		}
+		
 		// Comparation operators
 		String operator!() const;
 		bool operator==(const String &_v1) const;
-		// === emulated with __NJS_EQUAL_VALUE_AND_TYPE
-		// !== emulated with __NJS_NOT_EQUAL_VALUE_AND_TYPE
+		// === emulated with __Nectar_EQUAL_VALUE_AND_TYPE
+		// !== emulated with __Nectar_NOT_EQUAL_VALUE_AND_TYPE
 		bool operator!=(const String &_v1) const;
 		bool operator<(const String &_v1) const;
 		bool operator<=(const String &_v1) const;
@@ -69,14 +100,14 @@ namespace NJS::Class
 		String operator<<=(const String &_v1);
 		// TODO: ">>>" and ">>>=" operators
 		/*** STRING METHODS ***/
-		NJS::VAR toString(NJS::VAR* _args, int _length) const;
-		NJS::VAR split(NJS::VAR* _args, int _length) const;
-		NJS::VAR indexOf(NJS::VAR* _args, int _length) const;
-		NJS::VAR lastIndexOf(NJS::VAR* _args, int _length) const;
-		NJS::VAR search(NJS::VAR* _args, int _length) const;
-		NJS::VAR slice(NJS::VAR* _args, int _length) const;
-		NJS::VAR substr(NJS::VAR* _args, int _length) const;
-		NJS::VAR replace(NJS::VAR* _args, int _length) const;
+		Nectar::VAR toString(Nectar::VAR* _args, int _length) const;
+		Nectar::VAR split(Nectar::VAR* _args, int _length) const;
+		Nectar::VAR indexOf(Nectar::VAR* _args, int _length) const;
+		Nectar::VAR lastIndexOf(Nectar::VAR* _args, int _length) const;
+		Nectar::VAR search(Nectar::VAR* _args, int _length) const;
+		Nectar::VAR slice(Nectar::VAR* _args, int _length) const;
+		Nectar::VAR substr(Nectar::VAR* _args, int _length) const;
+		Nectar::VAR replace(Nectar::VAR* _args, int _length) const;
 		/* END STRING METHODS */
 	};
-} // namespace NJS::Class
+} // namespace Nectar::Class
