@@ -20,26 +20,18 @@
  *
  */
  
- #define _USE_MATH_DEFINES
- #include <cmath>
- #include <string>
- #include <iostream>
- #include <functional>
- #include <string>
- #include <string.h>
- #include <cstring>
- #include <stdio.h>
- #include <stdlib.h>
- #include <sstream>
- #include <vector>
- #include <memory>
  #include "mbed.h"
- #include "njs.h"
- using namespace NJS::Global;
+ #include "nectar.cpp"
+ 
+ using namespace NectarCore::Global;
+ using namespace NectarCore::Functions;
  
  var __NJS_ENV = "stm32";
  var __NJS_PLATFORM = "{{__PLATFORM__}}";
  
+ #define __NJS_Create_Object() new NectarCore::Class::Object()
+ #define __NJS_Create_Array(_arr) new NectarCore::Class::Array(_arr)
+ #define __NJS_InitVar() NectarCore::VAR()
  {INCLUDE}
  
  {DECL}
