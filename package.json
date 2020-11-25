@@ -73,6 +73,7 @@
     "babel-plugin-minify-guarded-expressions": "^0.4.4",
     "babel-plugin-remove-unused-vars": "^2.2.0",
     "eslint": "^7.13.0",
+    "nectarjs_external": "^0.7.109",
     "strip-comments": "^2.0.1",
     "typescript": "^4.0.5"
   }

@@ -43,22 +43,32 @@ var NODE =
 		{
 			"undefined": false,
 			"eval": false,
-			"__njs_typeof": false,
-			"console": false,
-			"module": false,
-			"require": false,
-			"__NJS_Log_Console": false,
-			"__NJS_Object_Keys": false,
-			"__NJS_PLATFORM": false,
-			"__NJS_ENV": false,			
-            "__NJS_Call_Function": false,
-			"__NJS_ARGS": false,
-			"JSON": false,
-			"Object": false,
+            "__njs_typeof": false,
+            "console": false,
+            "module": false,
+            "require": false,
+            "__Nectar_Log_Console": false,
+			"__Nectar_InitVar": false,
+            "__Nectar_Object_Keys": false,
+            "__Nectar_Object_Stringify": false,
+            "__Nectar_Call_Function": false,
+            "__NJS_ARGS": false,
+            "__NJS_ENV": false,
+            "__NJS_PLATFORM": false,
+			"__Nectar_typeof": false,
+			"__Nectar_THIS": false,
+			"__Nectar_instanceof": false,
+            "JSON": false,
+            "Object": false,
+            "isNaN": false,
+			"Array": false,
 		}
 	},
   cli: function(compiler, preset, out, _in, option)
   {
+	var _cachePath = path.join(process.cwd(), "..", "cached_" + COMPILER.ENV.name + "_" + VERSION);
+	var _precompiled = path.join(_cachePath, "nectar.o");
+	
 	var _stack = 0;
 
 	if(CLI.cli["--stack"])
@@ -73,6 +83,15 @@ var NODE =
 			process.exit(1);
 		}
 	}
+	
+	if(!fs.existsSync(_precompiled))
+	{
+		console.log(`[+] Creating Nectar binary lib for ${COMPILER.ENV.name + "_" + VERSION}`);
+		try { fs.mkdirSync(_cachePath); } catch(e){};
+		execSync(`${compiler} -std=c++17 -c nectar.cpp -Ofast -o "${_precompiled}"`);
+		console.log("[+] Compiling with precompiled Nectar lib");
+	}
+	
 	if(compiler == "cl" || compiler.indexOf("cl ") == 0)
 	{
 		if(_stack) _stack = "/F " + _stack;
@@ -100,11 +119,11 @@ var NODE =
 	
 	  if(preset == "none")
 	  {
-		  return `${compiler} ${_hashmap} -D__NJS_REGISTER_SIZE=${COMPILER.REGISTER} ${_stack} -std=c++17 ${_uvParam} ${_in} -O1 -s ${COMPILER.LIBS} ${_uvLib} -o a.exe && mv a.exe ${out} ${_cliOption}`;
+		  return `${compiler} ${_hashmap} -D__NJS_REGISTER_SIZE=${COMPILER.REGISTER} ${_stack} -std=c++17 ${_uvParam} ${_in} "${_precompiled}" -O1 -s ${COMPILER.LIBS} ${_uvLib} -o a.exe && mv a.exe ${out} ${_cliOption}`;
 	  }
 	  else if(preset == "size")
 	  {
-		  return `${compiler} ${_hashmap} -D__NJS_REGISTER_SIZE=${COMPILER.REGISTER} ${_stack} -std=c++17 ${_uvParam} ${_in} -Os -fno-rtti -fno-stack-protector -fomit-frame-pointer -s ${COMPILER.LIBS}  ${_uvLib} -o a.exe && mv a.exe ${out} ${_cliOption}`;
+		  return `${compiler} ${_hashmap} -D__NJS_REGISTER_SIZE=${COMPILER.REGISTER} ${_stack} -std=c++17 ${_uvParam} ${_in} "${_precompiled}" -Os -fno-rtti -fno-stack-protector -fomit-frame-pointer -s ${COMPILER.LIBS}  ${_uvLib} -o a.exe && mv a.exe ${out} ${_cliOption}`;
 	  }
 	  else
 	  {
@@ -112,7 +131,7 @@ var NODE =
             if(os.platform() == "darwin" || compiler.indexOf("clang") > -1) _opt += "3";
             else _opt += "fast";
 
-            return `${compiler} ${_hashmap} -D__NJS_REGISTER_SIZE=${COMPILER.REGISTER} ${_stack} -std=c++17 ${_uvParam} ${_in} ${_opt} -s ${COMPILER.LIBS}  ${_uvLib} -o a.exe && mv a.exe ${out} ${_cliOption}`;
+            return `${compiler} ${_hashmap} -D__NJS_REGISTER_SIZE=${COMPILER.REGISTER} ${_stack} -std=c++17 ${_uvParam} ${_in} "${_precompiled}" ${_opt} -s ${COMPILER.LIBS}  ${_uvLib} -o a.exe && mv a.exe ${out} ${_cliOption}`;
 	  }
   }
 }
