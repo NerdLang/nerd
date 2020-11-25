@@ -38,14 +38,21 @@
  
  #include <nonstd-function.h>
 
- #define __NJS_ENV_ARDUINO
- #define __NJS_NO_EXCEPT
+ #define __Nectar_ENV_ARDUINO
+ #define __Nectar_NO_EXCEPT
 
- #include "njs.h"
- using namespace NJS::Global;
+ #include "nectar.cpp"
+
+ using namespace NectarCore::Global;
+ using namespace NectarCore::Functions;
+ #define __NJS_Create_Object() new NectarCore::Class::Object()
+ #define __NJS_Create_Array(_arr) new NectarCore::Class::Array(_arr)
+ #define __NJS_InitVar() NectarCore::VAR()
  
  var __NJS_ENV = "arduino";
  var __NJS_PLATFORM = "{{__PLATFORM__}}";
+ 
+ 
  
  // Declared weak in Arduino.h to allow user redefinitions.
 int atexit(void (* /*func*/ )()) { return 0; }

@@ -24,13 +24,17 @@ namespace NectarCore::Functions
 {
 	NectarCore::VAR println(NectarCore::VAR _var)
 	{
+		#ifndef __Nectar_ENV_ARDUINO
 		std::cout << _var << std::endl;
+		#endif
 		return NectarCore::Global::undefined;
 	}
 	
 	NectarCore::VAR print(NectarCore::VAR _var)
 	{
+		#ifndef __Nectar_ENV_ARDUINO
 		std::cout << _var;
+		#endif
 		return NectarCore::Global::undefined;
 	}
 }

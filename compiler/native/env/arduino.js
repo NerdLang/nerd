@@ -57,6 +57,10 @@ var ARDUINO =
   main: "arduino.cpp",
   cli: function(compiler, preset, out, _in, option, target, spec)
   {
+	  var _cachePath = path.join(process.cwd(), "..", "cached_" + COMPILER.ENV.name + "_" + VERSION);
+	  var _precompiledArduino = path.join(_cachePath, "nectar.o");
+	  var _precompiled = path.join(_cachePath, "nectar.o");
+	  
 	  var OPT = getOptions();		
 	  var _cliOption = "";
 	  if(CLI.cli["--option"]) _cliOption = CLI.cli["--option"].argument;
@@ -66,7 +70,7 @@ var ARDUINO =
 		  console.log("[!] No target selected, switching to 'uno'");
 		  target = "uno";
 	  }
-	  var _cli = `${compiler} ${OPTIONS[target].preset} -DARDUINO_ARCH_AVR -w -Os -fno-exceptions -fno-rtti -fno-stack-protector -fomit-frame-pointer -ffunction-sections -fdata-sections -Wl,--gc-sections \
+	  var _cli = `${compiler} ${OPTIONS[target].preset} -D__Nectar__OBJECT_VECTOR -DARDUINO_ARCH_AVR -w -Os -fno-exceptions -fno-rtti -fno-stack-protector -fomit-frame-pointer -ffunction-sections -fdata-sections -Wl,--gc-sections \
 	  -I ${extern}/avr -I ${extern}/arduino/avr/variants/${OPTIONS[target].variant}/ -I ${extern}/arduino/avr/cores/arduino  -I ${extern}/avr/include -I ${extern}/stlarduino ${extern}/stlarduino/ios.cpp  ${extern}/arduino/avr/cores/arduino/abi.cpp -fno-threadsafe-statics -lm ${COMPILER.LIBS} -o ${out} ${_in} ${_cliOption}`;
 	  
  	  if(!OPT.elf) _cli += `&& avr-objcopy -O ihex -R .eeprom ${out}`;
@@ -99,11 +103,25 @@ var ARDUINO =
 		{
 			"undefined": false,
 			"eval": false,
-			"__njs_typeof": false,
-			"require": false,
-			"module": false,
-			"__NJS_Object_Keys": false,
-            "__NJS_Call_Function": false,
+            "__njs_typeof": false,
+            "console": false,
+            "module": false,
+            "require": false,
+            "__Nectar_Log_Console": false,
+			"__Nectar_InitVar": false,
+            "__Nectar_Object_Keys": false,
+            "__Nectar_Object_Stringify": false,
+            "__Nectar_Call_Function": false,
+            "__NJS_ARGS": false,
+            "__NJS_ENV": false,
+            "__NJS_PLATFORM": false,
+			"__Nectar_typeof": false,
+			"__Nectar_THIS": false,
+			"__Nectar_instanceof": false,
+            "JSON": false,
+            "Object": false,
+            "isNaN": false,
+			"Array": false,
 		}
 	}
 }
