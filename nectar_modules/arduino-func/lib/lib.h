@@ -22,22 +22,22 @@
 
 function arduino_delay(_value)
 { 
-	delay(__NJS_Get_Int(_value));
+	delay(__Nectar_Get_Int(_value));
 }
 
 function arduino_delaySecond(_value)
 { 
-	delay(__NJS_Get_Int(_value) * 1000);
+	delay(__Nectar_Get_Int(_value) * 1000);
 }
 
 function arduino_pinMode(_pin, _mode)
 { 
-	pinMode(__NJS_Get_Int(_pin), __NJS_Get_Int(_mode));
+	pinMode(__Nectar_Get_Int(_pin), __Nectar_Get_Int(_mode));
 }
 
 function arduino_digitalWrite(_pin, _mode)
 { 
-	digitalWrite(__NJS_Get_Int(_pin), __NJS_Get_Int(_mode));
+	digitalWrite(__Nectar_Get_Int(_pin), __Nectar_Get_Int(_mode));
 }
 
 #define arduino_HIGH var(HIGH)

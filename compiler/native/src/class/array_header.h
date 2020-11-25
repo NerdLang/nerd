@@ -1,19 +1,41 @@
+/*
+ * This file is part of NectarCPP
+ * Copyright (c) 2020 - 2020 Adrien THIERRY
+ * https://nectar-lang.org - https://seraum.com/
+ *
+ * sources : https://github.com/nectar-lang/NectarCPP
+ * 
+ * NectarCPP is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * NectarCPP is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with NectarCPP.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+ 
 #pragma once
 #include "_meta.h"
 
-namespace NJS::Class
+namespace Nectar::Class
 {
 	class Array : public virtual Base
 	{
 	public:
 		// Constructors
 		Array();
-		Array(NJS::Type::vector_t vec);
+		Array(Nectar::Type::vector_t vec);
 		// Properties
 		count_t counter = 0;
-		NJS::VAR length;
-		NJS::Type::vector_t value;
-		NJS::Type::object_t object;
+		Nectar::VAR length;
+		Nectar::Type::vector_t value;
+		Nectar::Type::object_t object;
 		// Methods
 		inline void Delete() noexcept;
 		inline void* Copy() noexcept;
@@ -24,36 +46,37 @@ namespace NJS::Class
 		explicit operator long long() const noexcept;
 		explicit operator std::string() const noexcept;
 		// Main operators
-		NJS::VAR const operator[](NJS::VAR key) const;
-		NJS::VAR const operator[](int key) const;
-		NJS::VAR &operator[](NJS::VAR key);
-		NJS::VAR &operator[](int key);
-		NJS::VAR &operator[](double key);
-		NJS::VAR &operator[](const char* key);
+		Nectar::VAR const operator[](Nectar::VAR key) const;
+		Nectar::VAR const operator[](int key) const;
+		Nectar::VAR &operator[](Nectar::VAR key);
+		Nectar::VAR &operator[](int key);
+		Nectar::VAR &operator[](double key);
+		Nectar::VAR &operator[](const char* key);
 
 		// Comparation operators
 		Array operator!() const;
 		
 		template <typename t>
-		bool operator==(const t &_v1) const;
+		bool operator==(const t &_v1) const { return false; }
 		
-		// === emulated with __NJS_EQUAL_VALUE_AND_TYPE
-		// !== emulated with __NJS_NOT_EQUAL_VALUE_AND_TYPE
-		
-		template <typename t>
-		bool operator!=(const t &_v1) const;
+		// === emulated with __Nectar_EQUAL_VALUE_AND_TYPE
+		// !== emulated with __Nectar_NOT_EQUAL_VALUE_AND_TYPE
 		
 		template <typename t>
-		bool operator<(const t &_v1) const;
+		bool operator!=(const t &_v1) const { return true; }
 		
 		template <typename t>
-		bool operator<=(const t &_v1) const;
+		bool operator<(const t &_v1) const { return (*this)[0] < _v1;}
 		
 		template <typename t>
-		bool operator>(const t &_v1) const;
+		bool operator<=(const t &_v1) const { return (*this)[0] <= _v1; }
 		
 		template <typename t>
-		bool operator>=(const t &_v1) const;
+		bool operator>(const t &_v1) const { return (*this)[0] > _v1; }
+		
+		template <typename t>
+		bool operator>=(const t &_v1) const { return (*this)[0] >= _v1; }
+		
 		// Numeric operators
 		Array operator+() const;
 		Array operator-() const;
@@ -83,38 +106,38 @@ namespace NJS::Class
 		Array operator<<=(const Array &_v1);
 		// TODO: ">>>" and ">>>=" operators
 		
-		NJS::VAR __iterator(NJS::VAR* args, int _length) const;
-		NJS::VAR __unscopables(NJS::VAR* args, int _length) const;
-		NJS::VAR concat(NJS::VAR* args, int _length) const;
-		NJS::VAR copyWithin(NJS::VAR* args, int _length);
-		NJS::VAR entries(NJS::VAR* args, int _length) const;
-		NJS::VAR every(NJS::VAR* args, int _length) const;
-		NJS::VAR fill(NJS::VAR* args, int _length) const;
-		NJS::VAR filter(NJS::VAR* args, int _length) const;
-		NJS::VAR find(NJS::VAR* args, int _length) const;
-		NJS::VAR findIndex(NJS::VAR* args, int _length) const;
-		NJS::VAR flat(NJS::VAR* args, int _length) const;
-		NJS::VAR flatMap(NJS::VAR* args, int _length) const;
-		NJS::VAR forEach(NJS::VAR* args, int _length) const;
-		NJS::VAR includes(NJS::VAR* args, int _length) const;
-		NJS::VAR indexOf(NJS::VAR* args, int _length) const;
-		NJS::VAR join(NJS::VAR* args, int _length) const;
-		NJS::VAR keys(NJS::VAR* args, int _length) const;
-		NJS::VAR lastIndexOf(NJS::VAR* args, int _length) const;
-		NJS::VAR map(NJS::VAR* args, int _length) const;
-		NJS::VAR pop(NJS::VAR* args, int _length);
-		NJS::VAR push(NJS::VAR* args, int _length);
-		NJS::VAR reduce(NJS::VAR* args, int _length) const;
-		NJS::VAR reduceRight(NJS::VAR* args, int _length) const;
-		NJS::VAR reverse(NJS::VAR* args, int _length);
-		NJS::VAR shift(NJS::VAR* args, int _length);
-		NJS::VAR slice(NJS::VAR* args, int _length) const;
-		NJS::VAR some(NJS::VAR* args, int _length) const;
-		NJS::VAR sort(NJS::VAR* args, int _length) const;
-		NJS::VAR splice(NJS::VAR* args, int _length);
-		NJS::VAR toLocaleString(NJS::VAR* args, int _length) const;
-		NJS::VAR toString(NJS::VAR* args, int _length) const;
-		NJS::VAR unshift(NJS::VAR* args, int _length);
-		NJS::VAR values(NJS::VAR* args, int _length) const;
+		Nectar::VAR __iterator(Nectar::VAR* args, int _length) const;
+		Nectar::VAR __unscopables(Nectar::VAR* args, int _length) const;
+		Nectar::VAR concat(Nectar::VAR* args, int _length) const;
+		Nectar::VAR copyWithin(Nectar::VAR* args, int _length);
+		Nectar::VAR entries(Nectar::VAR* args, int _length) const;
+		Nectar::VAR every(Nectar::VAR* args, int _length) const;
+		Nectar::VAR fill(Nectar::VAR* args, int _length) const;
+		Nectar::VAR filter(Nectar::VAR* args, int _length) const;
+		Nectar::VAR find(Nectar::VAR* args, int _length) const;
+		Nectar::VAR findIndex(Nectar::VAR* args, int _length) const;
+		Nectar::VAR flat(Nectar::VAR* args, int _length) const;
+		Nectar::VAR flatMap(Nectar::VAR* args, int _length) const;
+		Nectar::VAR forEach(Nectar::VAR* args, int _length) const;
+		Nectar::VAR includes(Nectar::VAR* args, int _length) const;
+		Nectar::VAR indexOf(Nectar::VAR* args, int _length) const;
+		Nectar::VAR join(Nectar::VAR* args, int _length) const;
+		Nectar::VAR keys(Nectar::VAR* args, int _length) const;
+		Nectar::VAR lastIndexOf(Nectar::VAR* args, int _length) const;
+		Nectar::VAR map(Nectar::VAR* args, int _length) const;
+		Nectar::VAR pop(Nectar::VAR* args, int _length);
+		Nectar::VAR push(Nectar::VAR* args, int _length);
+		Nectar::VAR reduce(Nectar::VAR* args, int _length) const;
+		Nectar::VAR reduceRight(Nectar::VAR* args, int _length) const;
+		Nectar::VAR reverse(Nectar::VAR* args, int _length);
+		Nectar::VAR shift(Nectar::VAR* args, int _length);
+		Nectar::VAR slice(Nectar::VAR* args, int _length) const;
+		Nectar::VAR some(Nectar::VAR* args, int _length) const;
+		Nectar::VAR sort(Nectar::VAR* args, int _length) const;
+		Nectar::VAR splice(Nectar::VAR* args, int _length);
+		Nectar::VAR toLocaleString(Nectar::VAR* args, int _length) const;
+		Nectar::VAR toString(Nectar::VAR* args, int _length) const;
+		Nectar::VAR unshift(Nectar::VAR* args, int _length);
+		Nectar::VAR values(Nectar::VAR* args, int _length) const;
 	};
-} // namespace NJS::Class
+} // namespace Nectar::Class

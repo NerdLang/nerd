@@ -20,29 +20,29 @@
  *
  */
  
-function __NJS_DELAY_MS(_value)
+function __Nectar_DELAY_MS(_value)
 { 
-	delay(__NJS_Get_Int(_value)); // to fix
+	delay(__Nectar_Get_Int(_value)); // to fix
 }
 
-function __NJS_DELAY(_value)
+function __Nectar_DELAY(_value)
 { 
-	delay(__NJS_Get_Int(_value));
+	delay(__Nectar_Get_Int(_value));
 }
 
-function __NJS_DELAY_SECOND(_value)
+function __Nectar_DELAY_SECOND(_value)
 {
-	delay(__NJS_Get_Int(_value) * 1000);
+	delay(__Nectar_Get_Int(_value) * 1000);
 }
 
-function __NJS_PIN_MODE( _pin, _mode)
+function __Nectar_PIN_MODE( _pin, _mode)
 { 
-	pinMode(__NJS_Get_Int(_pin), __NJS_Get_Int(_mode));
+	pinMode(__Nectar_Get_Int(_pin), __Nectar_Get_Int(_mode));
 }
 
-function __NJS_DIGITAL_WRITE( _pin, _mode)
+function __Nectar_DIGITAL_WRITE( _pin, _mode)
 { 
-	digitalWrite(__NJS_Get_Int(_pin), __NJS_Get_Int(_mode));
+	digitalWrite(__Nectar_Get_Int(_pin), __Nectar_Get_Int(_mode));
 }
 
 #define arduino_HIGH var(HIGH)

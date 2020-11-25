@@ -24,7 +24,7 @@
 
 var _example = 
 {
-	example: __NJS_NATIVE_EXAMPLE,
+	example: __Nectar_NATIVE_EXAMPLE,
 };
 
 module.exports = _example;

@@ -22,18 +22,18 @@
  
 #include <regex>
 
-function __NJS_RegExp_Test(_search)
+function __Nectar_RegExp_Test(_search)
 {
- 	if( std::regex_match ( (std::string)_search, std::regex((std::string)__NJS_THIS["__NJS_Internal_Expression"], std::regex::ECMAScript) ) ) return __NJS_Boolean_TRUE;
-	else return __NJS_Boolean_FALSE;
+ 	if( std::regex_match ( (std::string)_search, std::regex((std::string)__Nectar_THIS["__Nectar_Internal_Expression"], std::regex::ECMAScript) ) ) return __Nectar_Boolean_TRUE;
+	else return __Nectar_Boolean_FALSE;
 }
 
-function __NJS_RegExp_Exec(_search)
+function __Nectar_RegExp_Exec(_search)
 {
 	var _res = __NJS_Create_Array();
 	std::string s = (std::string)_search;
 	std::smatch m;
- 	while(std::regex_search ( s, m, std::regex((std::string)__NJS_THIS["__NJS_Internal_Expression"], std::regex::ECMAScript) ))
+ 	while(std::regex_search ( s, m, std::regex((std::string)__Nectar_THIS["__Nectar_Internal_Expression"], std::regex::ECMAScript) ))
 	{
 		int i = 0;
 		for(auto x:m)
@@ -43,7 +43,7 @@ function __NJS_RegExp_Exec(_search)
 		}
 		_res["index"] = (double)m.position();
 		_res["input"] = _search;
-		_res["groups"] = NJS::Global::undefined;
+		_res["groups"] = Nectar::Global::undefined;
 		
 		s = m.suffix().str();
 	}
@@ -51,14 +51,14 @@ function __NJS_RegExp_Exec(_search)
 }
 
 /*
-function __NJS_RegExp_StringMatch(_search, _re)
+function __Nectar_RegExp_StringMatch(_search, _re)
 {
 	var _res = __NJS_Create_Array();
 	std::string s = (string)_search;
 	std::smatch m;
  	while(std::regex_search ( s, m, std::regex((string)_re, std::regex::ECMAScript) ))
 	{
-		for(auto x:m) ((NJS::Class::Array*)_res.data.ptr)->value.push_back((string)x);
+		for(auto x:m) ((Nectar::Class::Array*)_res.data.ptr)->value.push_back((string)x);
 		s = m.suffix().str();
 	}
 	return _res;

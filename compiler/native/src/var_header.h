@@ -1,4 +1,26 @@
-namespace NJS
+/*
+ * This file is part of NectarCPP
+ * Copyright (c) 2020 - 2020 Adrien THIERRY
+ * https://nectar-lang.org - https://seraum.com/
+ *
+ * sources : https://github.com/nectar-lang/NectarCPP
+ * 
+ * NectarCPP is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * NectarCPP is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with NectarCPP.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+ 
+namespace Nectar
 {
 	union Data
 	{
@@ -10,7 +32,7 @@ namespace NJS
 	
 	struct VAR
 	{
-		NJS::Enum::Type type;
+		Nectar::Enum::Type type;
 		std::bitset<2> property; // const, enumerable
 		Data data;
 		
@@ -24,31 +46,53 @@ namespace NJS
 		
 		/*** CONSTRUCTOR ***/
 
-		VAR(NJS::Enum::Type _type, int _value);
-		VAR(NJS::Enum::Type _type, double _value);
+		VAR(Nectar::Enum::Type _type, int _value);
+		VAR(Nectar::Enum::Type _type, double _value);
 		VAR(int _value);
 		VAR(double _value);
 		VAR(long long _value);
 		VAR(char *_value);
 		VAR(std::string _value);
 		VAR(const char *_value);
-		VAR(NJS::Class::FixedArray *_value);
-		VAR(NJS::Class::Array *_value);
-		VAR(const NJS::Class::Array *_value);
+		VAR(Nectar::Class::FixedArray *_value);
+		VAR(Nectar::Class::Array *_value);
+		VAR(const Nectar::Class::Array *_value);
 		VAR(bool _value);
-		VAR(NJS::Class::Function *_value);
-		VAR(NJS::Class::Object *_value);
-		VAR(NJS::Class::String *_value);
-		VAR(NJS::Class::Native *_value);
-		VAR(NJS::Class::Undefined *_value);
+		VAR(Nectar::Class::Function *_value);
+		VAR(Nectar::Class::Object *_value);
+		VAR(Nectar::Class::String *_value);
+		VAR(Nectar::Class::Native *_value);
+		VAR(Nectar::Class::Undefined *_value);
 		VAR(void *_value, void* fn);
-		VAR(NJS::Enum::Type _type, void *_value);
-		VAR(NJS::Enum::Type _type, void *_value, VAR _this);
-		VAR(std::function<VAR(NJS::VAR*, int)> &_value);
+		VAR(Nectar::Enum::Type _type, void *_value);
+		VAR(Nectar::Enum::Type _type, void *_value, VAR _this);
+		VAR(std::function<VAR(Nectar::VAR*, int)> &_value);
+		
 		template <class... Args>
-		VAR operator() (Args... args);
+		VAR operator() (Args... args)
+		{
+			if (type != Nectar::Enum::Type::Function)
+			{
+		#ifndef __Nectar_NO_EXCEPT
+				throw VAR("TypeError: object is not a function");
+		#endif
+				exit(1);
+			}
+			else return (*(Nectar::Class::Function*)data.ptr)((VAR)(args)...);
+		}
+		
 		template <class... Args>
-		VAR operator() (Args... args) const;
+		VAR operator() (Args... args) const
+		{
+			if (type != Nectar::Enum::Type::Function)
+			{
+		#ifndef __Nectar_NO_EXCEPT
+				throw VAR("TypeError: object is not a function");
+		#endif
+				exit(1);
+			}
+			else return (*(Nectar::Class::Function*)data.ptr)((VAR)(args)...);
+		}
 		
 		/* END CALL OVERLOAD */
 
@@ -93,9 +137,9 @@ namespace NJS
 		VAR& operator--();
 		/// Comparison operators
 		VAR operator==(const VAR &_v1);
-		// === emulated with __NJS_EQUAL_VALUE_AND_TYPE
+		// === emulated with __Nectar_EQUAL_VALUE_AND_TYPE
 		VAR operator!=(const VAR &_v1);
-		// !== emulated with __NJS_NOT_EQUAL_VALUE_AND_TYPE
+		// !== emulated with __Nectar_NOT_EQUAL_VALUE_AND_TYPE
 		VAR operator<(const VAR &_v1);
 		VAR operator<=(const VAR &_v1);
 		VAR operator>(const VAR &_v1);
@@ -126,4 +170,4 @@ namespace NJS
 		explicit operator long long() const;
 		
 	};
-} // namespace NJS
+} // namespace Nectar

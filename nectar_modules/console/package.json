@@ -36,6 +36,6 @@
   {
     "env": ["std", "android", "ios", "node", "wasm"],
     "read_only": [],
-    "expose": ["__NJS_NATIVE_LOG_CONSOLE"]
+    "expose": ["__Nectar_NATIVE_LOG_CONSOLE"]
   }
 }

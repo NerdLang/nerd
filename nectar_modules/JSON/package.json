@@ -36,6 +36,6 @@
   {
     "env": ["std", "android", "ios", "node", "arduino", "wasm"],
     "read_only": [],
-    "expose": ["__NJS_JSON_PARSE", "__NJS_JSON_STRINGIFY"]
+    "expose": ["__Nectar_JSON_PARSE", "__Nectar_JSON_STRINGIFY"]
   }
 }

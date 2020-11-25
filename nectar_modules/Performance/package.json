@@ -36,6 +36,6 @@
   {
     "env": ["std", "android", "ios", "node", "arduino", "stm32", "wasm"],
     "read_only": [],
-    "expose": ["__NJS_NATIVE_PERFORMANCE_NOW"]
+    "expose": ["__Nectar_NATIVE_PERFORMANCE_NOW"]
   }
 }

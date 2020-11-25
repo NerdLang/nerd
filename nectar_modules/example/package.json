@@ -36,6 +36,6 @@
   {
     "env": ["std", "android", "ios", "node", "arduino", "wasm", "test"],
     "read_only": [],
-    "expose": ["__NJS_NATIVE_EXAMPLE"]
+    "expose": ["__Nectar_NATIVE_EXAMPLE"]
   }
 }

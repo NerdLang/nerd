@@ -46,7 +46,7 @@
 		"{__EXTERN__}/stlarduino/ostream_helpers.cpp"
 	],
     "read_only": ["HIGH", "LOW", "INPUT", "OUTPUT", "LED_BUILTIN"],
-    "expose": ["__NJS_DELAY_MS", "__NJS_DELAY", "__NJS_DELAY_SECOND", "__NJS_MILLIS", "__NJS_SECONDS", "__NJS_PIN_MODE", "__NJS_DIGITAL_WRITE", "HIGH", "LOW", "INPUT", "OUTPUT",
+    "expose": ["__Nectar_DELAY_MS", "__Nectar_DELAY", "__Nectar_DELAY_SECOND", "__Nectar_MILLIS", "__Nectar_SECONDS", "__Nectar_PIN_MODE", "__Nectar_DIGITAL_WRITE", "HIGH", "LOW", "INPUT", "OUTPUT",
                 "arduino_HIGH", "arduino_LOW", "arduino_INPUT", "arduino_OUTPUT", "arduino_LED_BUILTIN", "INPUT", "OUTPUT", "HIGH", "LOW", "LED_BUILTIN"]
   }
 }

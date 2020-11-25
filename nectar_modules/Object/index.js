@@ -24,8 +24,8 @@
 
 var _Object = 
 {
-	keys: __NJS_NATIVE_OBJECT_KEYS,
-	freeze: __NJS_NATIVE_OBJECT_FREEZE,
+	keys: __Nectar_NATIVE_OBJECT_KEYS,
+	freeze: __Nectar_NATIVE_OBJECT_FREEZE,
 };
 
 module.exports = _Object;

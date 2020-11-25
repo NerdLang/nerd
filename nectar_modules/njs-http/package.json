@@ -42,7 +42,7 @@
       }
     },
     "env": ["std", "node"],
-    "expose": ["__NJS_HTTP_GET", "__NJS_HTTP_LISTEN"],
+    "expose": ["__Nectar_HTTP_GET", "__Nectar_HTTP_LISTEN"],
     "lib":
     {
 		"default": "-lpthread",

@@ -1,17 +1,38 @@
-
-namespace NJS
+/*
+ * This file is part of NectarCPP
+ * Copyright (c) 2020 - 2020 Adrien THIERRY
+ * https://nectar-lang.org - https://seraum.com/
+ *
+ * sources : https://github.com/nectar-lang/NectarCPP
+ * 
+ * NectarCPP is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * NectarCPP is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with NectarCPP.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+ 
+namespace Nectar
 {
 	
 	VAR::VAR()
 	{
 		property.set(1,1);
-		type = NJS::Enum::Type::Undefined;
-		data.ptr = NJS::Global::undefined.data.ptr;
+		type = Nectar::Enum::Type::Undefined;
+		data.ptr = Nectar::Global::undefined.data.ptr;
 	}
 
 	VAR::~VAR()
 	{
-		if(type > NJS::Enum::Type::Number) ((NJS::Class::Base*)data.ptr)->Delete();
+		if(type > Nectar::Enum::Type::Number) ((Nectar::Class::Base*)data.ptr)->Delete();
 	}
 
 	/*** COPY ***/
@@ -21,11 +42,11 @@ namespace NJS
 		
 		property = _v.property;
 		type = _v.type;
-		if(type < NJS::Enum::Type::String)
+		if(type < Nectar::Enum::Type::String)
 		{
 			data.number = (double)_v;
 		}
-		else data.ptr = ((NJS::Class::Base*)_v.data.ptr)->Copy();
+		else data.ptr = ((Nectar::Class::Base*)_v.data.ptr)->Copy();
 		
 	}
 	/* END COPY */
@@ -35,23 +56,23 @@ namespace NJS
 	{
 		property = _v.property;
 		type = _v.type;
-		if(type < NJS::Enum::Type::String)
+		if(type < Nectar::Enum::Type::String)
 		{
 			data.number = _v.data.number;
 		}
-		else data.ptr = ((NJS::Class::Base*)_v.data.ptr)->Copy();
+		else data.ptr = ((Nectar::Class::Base*)_v.data.ptr)->Copy();
 	}
 	/* END MOVE */
 	
 	/*** CONSTRUCTOR ***/
 
-	VAR::VAR(NJS::Enum::Type _type, int _value)
+	VAR::VAR(Nectar::Enum::Type _type, int _value)
 	{
 		this->type = _type;
 		data.number = _value;
 	}
 	
-	VAR::VAR(NJS::Enum::Type _type, double _value)
+	VAR::VAR(Nectar::Enum::Type _type, double _value)
 	{
 		this->type = _type;
 		data.number = _value;
@@ -59,184 +80,158 @@ namespace NJS
 
 	VAR::VAR(int _value)
 	{
-		this->type = NJS::Enum::Type::Number;
+		this->type = Nectar::Enum::Type::Number;
 		data.number = _value;
 	}
 
 	VAR::VAR(double _value)
 	{
-		this->type = NJS::Enum::Type::Number;
+		this->type = Nectar::Enum::Type::Number;
 		data.number = _value;
 	}
 	
 	VAR::VAR(long long _value)
 	{
-		this->type = NJS::Enum::Type::Number;
+		this->type = Nectar::Enum::Type::Number;
 		data.number = _value;
 	}
 
 	VAR::VAR(char *_value)
 	{
-		type = NJS::Enum::Type::String;
-		data.ptr = new NJS::Class::String(_value);
+		type = Nectar::Enum::Type::String;
+		data.ptr = new Nectar::Class::String(_value);
 	}
 
 	VAR::VAR(std::string _value)
 	{
-		type = NJS::Enum::Type::String;
-		data.ptr = new NJS::Class::String(_value);
+		type = Nectar::Enum::Type::String;
+		data.ptr = new Nectar::Class::String(_value);
 	}
 
 	VAR::VAR(const char *_value)
 	{
-		type = NJS::Enum::Type::String;
-		data.ptr = new NJS::Class::String(_value);
+		type = Nectar::Enum::Type::String;
+		data.ptr = new Nectar::Class::String(_value);
 	}
 
-	VAR::VAR(NJS::Class::FixedArray *_value)
+	VAR::VAR(Nectar::Class::FixedArray *_value)
 	{
-		type = NJS::Enum::Type::FixedArray;
+		type = Nectar::Enum::Type::FixedArray;
 		_value->counter++;
 		data.ptr = _value;
 	}
 
-	VAR::VAR(NJS::Class::Array *_value)
+	VAR::VAR(Nectar::Class::Array *_value)
 	{
-		type = NJS::Enum::Type::Array;
+		type = Nectar::Enum::Type::Array;
 		_value->counter++;
 		data.ptr = _value;
 	}
 	
-	VAR::VAR(const NJS::Class::Array *_value)
+	VAR::VAR(const Nectar::Class::Array *_value)
 	{
-		type = NJS::Enum::Type::Array;
-		data.ptr = (NJS::Class::Array *)_value;
-		((NJS::Class::Array*)data.ptr)->counter++;
+		type = Nectar::Enum::Type::Array;
+		data.ptr = (Nectar::Class::Array *)_value;
+		((Nectar::Class::Array*)data.ptr)->counter++;
 	}
 	
 	VAR::VAR(bool _value)
 	{
-		type = NJS::Enum::Type::Boolean;
+		type = Nectar::Enum::Type::Boolean;
 		data.number =_value;
 	}
 	
-	VAR::VAR(NJS::Class::Function *_value)
+	VAR::VAR(Nectar::Class::Function *_value)
 	{
-		type = NJS::Enum::Type::Function;
+		type = Nectar::Enum::Type::Function;
 		_value->counter++;
 		data.ptr = _value;
 	}
 	
-	VAR::VAR(NJS::Class::Object *_value)
+	VAR::VAR(Nectar::Class::Object *_value)
 	{
-		type = NJS::Enum::Type::Object;
+		type = Nectar::Enum::Type::Object;
 		_value->counter++;
 		data.ptr = _value;
 	}
 	
-	VAR::VAR(NJS::Class::String *_value)
+	VAR::VAR(Nectar::Class::String *_value)
 	{
-		type = NJS::Enum::Type::String;
-		data.ptr = new NJS::Class::String(_value->value);
+		type = Nectar::Enum::Type::String;
+		data.ptr = new Nectar::Class::String(_value->value);
 	}
 	
-	VAR::VAR(NJS::Class::Native *_value)
+	VAR::VAR(Nectar::Class::Native *_value)
 	{
-		type = NJS::Enum::Type::Native;
+		type = Nectar::Enum::Type::Native;
 		_value->counter++;
 		data.ptr = _value;
 	}
 	
-	VAR::VAR(NJS::Class::Undefined *_value)
+	VAR::VAR(Nectar::Class::Undefined *_value)
 	{
 		property.set(1, 1);
-		type = NJS::Enum::Type::Undefined;
+		type = Nectar::Enum::Type::Undefined;
 		data.ptr = _value;
 	}
 	VAR::VAR(void *_value, void* fn)
 	{
-		type = NJS::Enum::Type::Struct;
-		data.ptr = new NJS::Class::Struct(_value, (NJS::Type::clean_struct*)fn);
+		type = Nectar::Enum::Type::Struct;
+		data.ptr = new Nectar::Class::Struct(_value, (Nectar::Type::clean_struct*)fn);
 	}
-	VAR::VAR(NJS::Enum::Type _type, void *_value)
+	VAR::VAR(Nectar::Enum::Type _type, void *_value)
 	{
 		type = _type;
-		data.ptr = new NJS::Class::Function(_value);
+		data.ptr = new Nectar::Class::Function(_value);
 	}
 	
-	VAR::VAR(NJS::Enum::Type _type, void *_value, NJS::VAR _this)
+	VAR::VAR(Nectar::Enum::Type _type, void *_value, Nectar::VAR _this)
 	{
 		type = _type;
-		data.ptr = new NJS::Class::Function(_value);
-		if(_this.data.ptr == NJS::Global::__NJS_THIS.data.ptr) ((NJS::Class::Object*)_this.data.ptr)->counter++;
+		data.ptr = new Nectar::Class::Function(_value);
+		if(_this.data.ptr == Nectar::Global::__Nectar_THIS.data.ptr) ((Nectar::Class::Object*)_this.data.ptr)->counter++;
 
-		((NJS::Class::Function*)data.ptr)->This.data.ptr = _this.data.ptr;
-		((NJS::Class::Function*)data.ptr)->This.type = _this.type;
+		((Nectar::Class::Function*)data.ptr)->This.data.ptr = _this.data.ptr;
+		((Nectar::Class::Function*)data.ptr)->This.type = _this.type;
 
-	}
-
-	template <class... Args>
-	VAR VAR::operator() (Args... args)
-	{
-		if (type != NJS::Enum::Type::Function)
-		{
-	#ifndef __NJS_NO_EXCEPT
-			throw VAR("TypeError: object is not a function");
-	#endif
-			exit(1);
-		}
-		else return (*(NJS::Class::Function*)data.ptr)((VAR)(args)...);
-	}
-	
-	template <class... Args>
-	VAR VAR::operator() (Args... args) const
-	{
-		if (type != NJS::Enum::Type::Function)
-		{
-	#ifndef __NJS_NO_EXCEPT
-			throw VAR("TypeError: object is not a function");
-	#endif
-			exit(1);
-		}
-		else return (*(NJS::Class::Function*)data.ptr)((VAR)(args)...);
 	}
 	
 	/* END CALL OVERLOAD */
 
 	VAR & VAR::operator[] (VAR _index)
 	{
-		if(type < NJS::Enum::Type::String) return NJS::Class::NUMBER::Accessor(*this, _index);
-		return (*(NJS::Class::Base*)data.ptr)[_index];
+		if(type < Nectar::Enum::Type::String) return Nectar::Class::NUMBER::Accessor(*this, _index);
+		return (*(Nectar::Class::Base*)data.ptr)[_index];
 	}
 	
 	VAR & VAR::operator[] (VAR _index) const
 	{
-		if(type < NJS::Enum::Type::String) return NJS::Class::NUMBER::Accessor(*this, _index);
-		return (*(NJS::Class::Base*)data.ptr)[_index];
+		if(type < Nectar::Enum::Type::String) return Nectar::Class::NUMBER::Accessor(*this, _index);
+		return (*(Nectar::Class::Base*)data.ptr)[_index];
 	}
 	
 	VAR & VAR::operator[] (int _index) const
 	{
-		if(type < NJS::Enum::Type::String) return NJS::Global::undefined;
-		return (*(NJS::Class::Base*)data.ptr)[_index];
+		if(type < Nectar::Enum::Type::String) return Nectar::Global::undefined;
+		return (*(Nectar::Class::Base*)data.ptr)[_index];
 	}
 	
 	VAR & VAR::operator[] (int _index)
 	{
-		if(type < NJS::Enum::Type::String) return NJS::Global::undefined;
-		return (*(NJS::Class::Base*)data.ptr)[_index];
+		if(type < Nectar::Enum::Type::String) return Nectar::Global::undefined;
+		return (*(Nectar::Class::Base*)data.ptr)[_index];
 	}
 	
 	VAR & VAR::operator[] (double _index)
 	{
-		if(type < NJS::Enum::Type::String) return NJS::Global::undefined;
-		return (*(NJS::Class::Base*)data.ptr)[_index];
+		if(type < Nectar::Enum::Type::String) return Nectar::Global::undefined;
+		return (*(Nectar::Class::Base*)data.ptr)[_index];
 	}
 	
 	VAR & VAR::operator[] (const char* _index)
 	{
-		if(type < NJS::Enum::Type::String) return NJS::Class::NUMBER::Accessor(*this, VAR(_index));
-		return (*(NJS::Class::Base*)data.ptr)[_index];
+		if(type < Nectar::Enum::Type::String) return Nectar::Class::NUMBER::Accessor(*this, VAR(_index));
+		return (*(Nectar::Class::Base*)data.ptr)[_index];
 	}
 	
 	/* END ACCESS OVERLOAD */
@@ -247,34 +242,37 @@ namespace NJS
 	void VAR::operator=(const VAR &_v)
 	{
 		if(property[0] != 0) return;
-		
+		if(type > Nectar::Enum::Type::Number) 
+		{
+			((Nectar::Class::Base*)data.ptr)->Delete();
+		}
 		property = _v.property;
 		type = _v.type;
-		if(type < NJS::Enum::Type::String)
+		if(type < Nectar::Enum::Type::String)
 		{
 			data.number = (double)_v;
-			//if(type == _v.type) data.number = _v.data.number;
-			//else data.number = (double)_v;
 		}
-		else data.ptr = ((NJS::Class::Base*)_v.data.ptr)->Copy();
-		
+		else
+		{
+			data.ptr = ((Nectar::Class::Base*)_v.data.ptr)->Copy();
+		}
 	}
 
 	/// Unary VAR::operators
 	VAR VAR::operator+()
 	{
-		if(type < NJS::Enum::Type::String) return data.number;
+		if(type < Nectar::Enum::Type::String) return data.number;
 		return (double)*this;
 	}
 	
 	VAR VAR::operator-()
 	{
-		if(type < NJS::Enum::Type::String) return -data.number;
+		if(type < Nectar::Enum::Type::String) return -data.number;
 		return -(double)*this;
 	}
 	VAR VAR::operator!() 
 	{ 
-		if(type < NJS::Enum::Type::String) return !data.number;
+		if(type < Nectar::Enum::Type::String) return !data.number;
 		return !(bool)*this; 
 	};
 
@@ -285,89 +283,101 @@ namespace NJS
 	/// Arithmetic VAR::operators
 	VAR VAR::operator+(const VAR &_v1)
 	{
-		if (type < NJS::Enum::Type::String) return data.number + _v1;
-		else if (type == NJS::Enum::Type::String || type == NJS::Enum::Type::Array || type == NJS::Enum::Type::Object || _v1.type == NJS::Enum::Type::String)
+		if (type < Nectar::Enum::Type::String)
 		{
-			if(_v1.type == NJS::Enum::Type::Null) return ((std::string)*this) + "null";
-			else return __NJS_Concat_To_Str((std::string)*this, (std::string)_v1);
+			return data.number + _v1;
 		}
-		else return NJS::Global::NaN;
+		else if (type == Nectar::Enum::Type::String || type == Nectar::Enum::Type::Array || type == Nectar::Enum::Type::Object || _v1.type == Nectar::Enum::Type::String)
+		{
+			if(_v1.type == Nectar::Enum::Type::Null) return ((std::string)*this) + "null";
+			else return __Nectar_Concat_To_Str((std::string)*this, (std::string)_v1);
+		}
+		else
+		{
+			return Nectar::Global::NaN;
+		}
 		
 	}
 	VAR VAR::operator+(const char _v1[])
 	{
-		return __NJS_Concat_To_Str((std::string)*this, _v1);
+		return __Nectar_Concat_To_Str((std::string)*this, _v1);
 	}
 	
 	VAR& VAR::operator+=(const VAR &_v1)
 	{
-		if(type < NJS::Enum::Type::String) data.number += _v1;
-		else if(type == NJS::Enum::Type::String) 
-			((NJS::Class::String*)data.ptr)->value += (std::string)_v1;
+		if(type < Nectar::Enum::Type::String)
+		{
+			data.number += _v1;
+		}
+		else if(type == Nectar::Enum::Type::String)
+		{
+			((Nectar::Class::String*)data.ptr)->value += (std::string)_v1;
+		}
 		else 
 		{
 			std::string _s = (std::string)*this;
-			type = NJS::Enum::Type::String;
-			data.ptr = new NJS::Class::String("");
-			((NJS::Class::String*)data.ptr)->value += _s + (std::string)_v1;
+			type = Nectar::Enum::Type::String;
+			data.ptr = new Nectar::Class::String("");
+			((Nectar::Class::String*)data.ptr)->value += _s + (std::string)_v1;
+			
 		}
 		return *this;
 	}
 	VAR VAR::operator-(const VAR &_v1)
 	{	
-		if (type < NJS::Enum::Type::String ) return data.number - _v1;
-		else return NJS::Global::NaN;
+		if (type < Nectar::Enum::Type::String ) return data.number - _v1;
+		else return Nectar::Global::NaN;
 	}
 	
 	VAR& VAR::operator-=(const VAR &_v1)
 	{
-		if(type < NJS::Enum::Type::String) data.number -= _v1;
+		if(type < Nectar::Enum::Type::String) data.number -= _v1;
 		else 
 		{
-			return NJS::Global::NaN;
+			return Nectar::Global::NaN;
 		}
 		return *this;
 	}
 	VAR VAR::operator*(const VAR &_v1)
 	{
-		if(type < NJS::Enum::Type::String) return data.number * _v1;
-		return NJS::Global::NaN;
+		if(type < Nectar::Enum::Type::String) return data.number * _v1;
+		return Nectar::Global::NaN;
 	}
 
 	VAR& VAR::operator*=(const VAR &_v1)
 	{
-		if(type < NJS::Enum::Type::String) data.number *= _v1;
+		if(type < Nectar::Enum::Type::String) data.number *= _v1;
 		return *this;
 	}
 	VAR VAR::operator/(const VAR &_v1)
 	{
-		if (type < NJS::Enum::Type::String) return data.number / _v1;
-		return NJS::Global::NaN;
+		if (type < Nectar::Enum::Type::String) return data.number / _v1;
+		return Nectar::Global::NaN;
 	}
 
 	VAR& VAR::operator/=(const VAR &_v1)
 	{
-		if(type < NJS::Enum::Type::String) data.number /= _v1;
+		if(type < Nectar::Enum::Type::String) data.number /= _v1;
 		return *this;
 	}
 	VAR VAR::operator%(const VAR &_v1)
 	{
-		if (type < NJS::Enum::Type::String && _v1.type < NJS::Enum::Type::String)
+		if (type < Nectar::Enum::Type::String && _v1.type < Nectar::Enum::Type::String)
 		{
 			int _left = (int)_v1;
-			if(_left == 0) return NJS::Global::NaN;
+			if(_left == 0) return Nectar::Global::NaN;
 			return (int)data.number % _left;
 		}
 		else
 		{
 			double _left = (double)_v1;
-			if(_left == 0) return NJS::Global::NaN;
+			if(_left == 0) return Nectar::Global::NaN;
 			return remainder((double)*this, _left);
 		}
 	}
 	VAR& VAR::operator%=(const VAR &_v1)
 	{
-		if (type < NJS::Enum::Type::String)
+		if (type < Nectar::Enum::Type::String)
 		{
 			int _left = (int)data.number;
 			_left %= (int)_v1;
@@ -376,7 +386,7 @@ namespace NJS
 		}
 		else
 		{
-			return NJS::Global::NaN;
+			return Nectar::Global::NaN;
 		}
 		return *this;
 	}
@@ -384,7 +394,7 @@ namespace NJS
 	// var++
 	VAR& VAR::operator++(const int _v1)
 	{
-		if (type < NJS::Enum::Type::String)
+		if (type < Nectar::Enum::Type::String)
 		{
 			data.number++;
 		}
@@ -393,7 +403,7 @@ namespace NJS
 	// ++var
 	VAR& VAR::operator++()
 	{
-		if (type < NJS::Enum::Type::String)
+		if (type < Nectar::Enum::Type::String)
 		{
 			++data.number;
 		}
@@ -402,7 +412,7 @@ namespace NJS
 	// var--
 	VAR& VAR::operator--(const int _v1)
 	{
-		if (type < NJS::Enum::Type::String)
+		if (type < Nectar::Enum::Type::String)
 		{
 			data.number--;
 		}
@@ -411,7 +421,7 @@ namespace NJS
 	// --var
 	VAR& VAR::operator--()
 	{
-		if (type < NJS::Enum::Type::String)
+		if (type < Nectar::Enum::Type::String)
 		{
 			--data.number;
 		}
@@ -425,40 +435,40 @@ namespace NJS
 		{
 			switch (type)
 			{
-			case NJS::Enum::Type::Number:
+			case Nectar::Enum::Type::Number:
 				return (bool)(data.number == _v1);
-			case NJS::Enum::Type::Boolean:
-				return __NJS_Create_Boolean((bool)data.number == (bool)_v1);
-			case NJS::Enum::Type::String:
-				return __NJS_Create_Boolean((((NJS::Class::String*)data.ptr)->value).compare((std::string)_v1) == 0);
-			case NJS::Enum::Type::Null:
-			case NJS::Enum::Type::Undefined:
-				return __NJS_Create_Boolean(true);
-			case NJS::Enum::Type::Array:
-			case NJS::Enum::Type::Native:
-			case NJS::Enum::Type::Function:
-			case NJS::Enum::Type::Object:
+			case Nectar::Enum::Type::Boolean:
+				return __Nectar_Create_Boolean((bool)data.number == (bool)_v1);
+			case Nectar::Enum::Type::String:
+				return __Nectar_Create_Boolean((((Nectar::Class::String*)data.ptr)->value).compare((std::string)_v1) == 0);
+			case Nectar::Enum::Type::Null:
+			case Nectar::Enum::Type::Undefined:
+				return __Nectar_Create_Boolean(true);
+			case Nectar::Enum::Type::Array:
+			case Nectar::Enum::Type::Native:
+			case Nectar::Enum::Type::Function:
+			case Nectar::Enum::Type::Object:
 			default:
-				return __NJS_Create_Boolean(false);
+				return __Nectar_Create_Boolean(false);
 			}
 		}
 		else
 		{
-			if (type == NJS::Enum::Type::String || _v1.type == NJS::Enum::Type::String)
+			if (type == Nectar::Enum::Type::String || _v1.type == Nectar::Enum::Type::String)
 			{
-				return __NJS_Create_Boolean((std::string) * this == (std::string)_v1);
+				return __Nectar_Create_Boolean((std::string) * this == (std::string)_v1);
 			}
 			else
-				return __NJS_Create_Boolean((double)*this == (double)_v1);
+				return __Nectar_Create_Boolean((double)*this == (double)_v1);
 		}
 	}
-	// === emulated with __NJS_EQUAL_VALUE_AND_TYPE
+	// === emulated with __Nectar_EQUAL_VALUE_AND_TYPE
 	VAR VAR::operator!=(const VAR &_v1)
 	{
 		return !(*this == _v1);
 	}
 	
-	// !== emulated with __NJS_NOT_EQUAL_VALUE_AND_TYPE
+	// !== emulated with __Nectar_NOT_EQUAL_VALUE_AND_TYPE
 	VAR VAR::operator<(const VAR &_v1)
 	{
 		return data.number < _v1.data.number;
@@ -480,7 +490,7 @@ namespace NJS
 	VAR VAR::operator&(const VAR &_v1) { return (int)*this & (int)_v1; }
 	VAR& VAR::operator&=(const VAR &_v1)
 	{
-		type = NJS::Enum::Type::Number;
+		type = Nectar::Enum::Type::Number;
 		data.number = (int)*this & (int)_v1;
 		return *this;
 	}
@@ -491,26 +501,26 @@ namespace NJS
 	}
 	VAR VAR::operator|=(const VAR &_v1)
 	{
-		if (type < NJS::Enum::Type::String)
+		if (type < Nectar::Enum::Type::String)
 		{
 			data.number = (int)data.number | (int)_v1;
 		}
 		else
 		{
-			return NJS::Global::NaN;
+			return Nectar::Global::NaN;
 		}
 		return *this;
 	}
 	VAR VAR::operator^(const VAR &_v1) { return (int)*this ^ (int)_v1; }
 	VAR VAR::operator^=(const VAR &_v1)
 	{
-		if (type < NJS::Enum::Type::String)
+		if (type < Nectar::Enum::Type::String)
 		{
 			data.number = (int)data.number ^ (int)_v1;
 		}
 		else
 		{
-			return NJS::Global::NaN;
+			return Nectar::Global::NaN;
 		}
 		return *this;
 	}
@@ -518,13 +528,13 @@ namespace NJS
 	VAR VAR::operator>>(const VAR &_v1) { return (int)*this >> (int)_v1; }
 	VAR VAR::operator>>=(const VAR &_v1)
 	{
-		if (type < NJS::Enum::Type::String)
+		if (type < Nectar::Enum::Type::String)
 		{
 			data.number = (int)data.number >> (int)_v1;
 		}
 		else
 		{
-			return NJS::Global::NaN;
+			return Nectar::Global::NaN;
 		}
 		return *this;
 	}
@@ -534,78 +544,78 @@ namespace NJS
 	}
 	VAR VAR::operator<<=(const VAR &_v1)
 	{
-		if (type < NJS::Enum::Type::String)
+		if (type < Nectar::Enum::Type::String)
 		{
 			data.number = (int)data.number << (int)_v1;
 		}
 		else
 		{
-			return NJS::Global::NaN;
+			return Nectar::Global::NaN;
 		}
 		return *this;
 	}
 
 	VAR::operator int() const
 	{
-		if(type < NJS::Enum::Type::String) return data.number;
-		return (int)(*(NJS::Class::Base*)data.ptr);
+		if(type < Nectar::Enum::Type::String) return data.number;
+		return (int)(*(Nectar::Class::Base*)data.ptr);
 	}
 	
 	VAR::operator int()
 	{
-		if(type < NJS::Enum::Type::String) return data.number;
-		return (int)(*(NJS::Class::Base*)data.ptr);
+		if(type < Nectar::Enum::Type::String) return data.number;
+		return (int)(*(Nectar::Class::Base*)data.ptr);
 	}
 
 	VAR::operator double() const
 	{
-		if(type < NJS::Enum::Type::String) return data.number;
-		return (double)(*(NJS::Class::Base*)data.ptr);
+		if(type < Nectar::Enum::Type::String) return data.number;
+		return (double)(*(Nectar::Class::Base*)data.ptr);
 	}
 	
 	VAR::operator double()
 	{
-		if(type < NJS::Enum::Type::String) return data.number;
-		return (double)(*(NJS::Class::Base*)data.ptr);
+		if(type < Nectar::Enum::Type::String) return data.number;
+		return (double)(*(Nectar::Class::Base*)data.ptr);
 	}
 
 	VAR::operator bool() const
 	{
-		if(type == NJS::Enum::Type::Undefined) return false;
-		else if(type == NJS::Enum::Type::Boolean || type == NJS::Enum::Type::Number) return data.number;
-		else return (bool)(*(NJS::Class::Base*)data.ptr);
+		if(type == Nectar::Enum::Type::Undefined) return false;
+		else if(type == Nectar::Enum::Type::Boolean || type == Nectar::Enum::Type::Number) return data.number;
+		else return (bool)(*(Nectar::Class::Base*)data.ptr);
 	}
 	
 	VAR::operator bool()
 	{
-		if(type == NJS::Enum::Type::Undefined) return false;
-		else if(type == NJS::Enum::Type::Boolean || type == NJS::Enum::Type::Number) return data.number;
-		else return (bool)(*(NJS::Class::Base*)data.ptr);
+		if(type == Nectar::Enum::Type::Undefined) return false;
+		else if(type == Nectar::Enum::Type::Boolean || type == Nectar::Enum::Type::Number) return data.number;
+		else return (bool)(*(Nectar::Class::Base*)data.ptr);
 	}
 
 	VAR::operator std::string() const
 	{
-		if(type < NJS::Enum::Type::String) return __NJS_DOUBLE_TO_STRING(data.number);
-		return (std::string)(*(NJS::Class::Base*)data.ptr);
+		if(type < Nectar::Enum::Type::String) return __Nectar_DOUBLE_TO_STRING(data.number);
+		return (std::string)(*(Nectar::Class::Base*)data.ptr);
 	}
 	
 	VAR::operator std::string()
 	{
-		if(type < NJS::Enum::Type::String) return __NJS_DOUBLE_TO_STRING(data.number);
-		return (std::string)(*(NJS::Class::Base*)data.ptr);
+		if(type < Nectar::Enum::Type::String) return __Nectar_DOUBLE_TO_STRING(data.number);
+		return (std::string)(*(Nectar::Class::Base*)data.ptr);
 	}
 
 	VAR::operator long long()
 	{
-		if(type < NJS::Enum::Type::String) return data.number;
+		if(type < Nectar::Enum::Type::String) return data.number;
 		return (long long)((double)*this);
 	}
 
 	VAR::operator long long() const
 	{
-		if(type < NJS::Enum::Type::String) return data.number;
+		if(type < Nectar::Enum::Type::String) return data.number;
 		return (long long)((double)*this);
 	}
 
 		
-} // namespace NJS
+} // namespace Nectar

@@ -54,9 +54,9 @@ var VariableDeclarator =
 			  }
 			  else if(_el[i].type == "ObjectExpression")
 			  {
-				var _obj = "__NJS_TMP_OBJ_" + RND();
-				var _set = "__NJS_SET_OBJ_" + RND();
-				var _setter = `inline NJS::VAR ${_set}() { var ${_obj} = __NJS_Create_Object();`;
+				var _obj = "__Nectar_TMP_OBJ_" + RND();
+				var _set = "__Nectar_SET_OBJ_" + RND();
+				var _setter = `inline Nectar::VAR ${_set}() { var ${_obj} = __NJS_Create_Object();`;
 				
 				for(var j = 0; j < _el[i].properties.length; j++)
 				{
@@ -124,7 +124,7 @@ var VariableDeclarator =
 	  }
 	  else if(_path.node.init.type == "FunctionExpression")
 	  {
-		_path.node.nectarId = "__NJS_UNKNOWN" + RND();
+		_path.node.nectarId = "__Nectar_UNKNOWN" + RND();
 		COMPILER.VAR_STATE.push([]);
 		VISITOR.pushDeclVar(_path.node.nectarId, 0);
 		VISITOR.CURRENT_Function++;

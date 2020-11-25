@@ -24,8 +24,8 @@
 
 var _ios = 
 {
-	draw: __NJS_IOS_DRAW,
-	navigate: __NJS_IOS_NAVIGATE,
+	draw: __Nectar_IOS_DRAW,
+	navigate: __Nectar_IOS_NAVIGATE,
 	app_path: "http://localhost:12001/",
 };
 

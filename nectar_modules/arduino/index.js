@@ -24,9 +24,9 @@
 
 var _arduino = 
 {
-	delay: __NJS_DELAY,
-	pinMode: __NJS_PIN_MODE,
-	digitalWrite: __NJS_DIGITAL_WRITE,
+	delay: __Nectar_DELAY,
+	pinMode: __Nectar_PIN_MODE,
+	digitalWrite: __Nectar_DIGITAL_WRITE,
 	high: arduino_HIGH,
 	low: arduino_LOW,
 	input: arduino_INPUT,

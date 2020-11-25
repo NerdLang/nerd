@@ -24,7 +24,7 @@
 
 var console =
 {
-  log: __NJS_NATIVE_LOG_CONSOLE,
+  log: __Nectar_NATIVE_LOG_CONSOLE,
 };
 
 module.exports = console;

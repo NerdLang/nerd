@@ -37,6 +37,6 @@
   {
     "env": ["std", "node"],
 	"read_only": [],
-    "expose": ["__NJS_CHILD_PROCESS_EXEC_SYNC"]
+    "expose": ["__Nectar_CHILD_PROCESS_EXEC_SYNC"]
   }
 }

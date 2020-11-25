@@ -38,7 +38,7 @@
   {
     "env": ["wasm"],
     "read_only": [],
-    "expose": ["__NJS_WASM_BIND", "__NJS_WASM_RUN_SCRIPT"],
+    "expose": ["__Nectar_WASM_BIND", "__Nectar_WASM_RUN_SCRIPT"],
 	"lib": ["--bind"]
   }
 }

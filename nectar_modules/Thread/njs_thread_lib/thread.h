@@ -20,38 +20,38 @@
  *
  */
 
-std::unordered_map<std::string, std::mutex> __NJS_Thread_mutexList;
-std::vector<std::thread> __NJS_Thread_List;
+std::unordered_map<std::string, std::mutex> __Nectar_Thread_mutexList;
+std::vector<std::thread> __Nectar_Thread_List;
 
-void __NJS_THREADED_CALL(NJS::VAR _fn)
+void __Nectar_THREADED_CALL(Nectar::VAR _fn)
 {
 	try
 	{
 		_fn();
 	}
-	catch(NJS::VAR e)
+	catch(Nectar::VAR e)
 	{
-		__NJS_Log_Console(e);
+		__Nectar_Log_Console(e);
 	}
 }
  
-function __NJS_NATIVE_THREAD_RUN(_cb)
+function __Nectar_NATIVE_THREAD_RUN(_cb)
 {
 	if(_cb)
 	{
-		__NJS_Thread_List.emplace_back(__NJS_THREADED_CALL, _cb);
+		__Nectar_Thread_List.emplace_back(__Nectar_THREADED_CALL, _cb);
 	}
 };
 
-function __NJS_NATIVE_LOCK_GUARD(_key)
+function __Nectar_NATIVE_LOCK_GUARD(_key)
 {
 	if(!_key) _key = "default";
-	std::lock_guard<std::mutex> guard(__NJS_Thread_mutexList[(std::string)_key]);
+	std::lock_guard<std::mutex> guard(__Nectar_Thread_mutexList[(std::string)_key]);
 };
 
-function __NJS_NATIVE_WAIT_FOR_ALL()
+function __Nectar_NATIVE_WAIT_FOR_ALL()
 {
-	for(auto& _thread: __NJS_Thread_List)
+	for(auto& _thread: __Nectar_Thread_List)
 	{
 		_thread.join();
 	}

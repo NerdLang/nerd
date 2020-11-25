@@ -22,10 +22,10 @@
  
 global.VISITOR = {};
  
-VISITOR.NO_MODIFY_CALL = ["require", "Object"];
-VISITOR.NJS_START = ["__NJS", "__FFI"];
+VISITOR.NO_MODIFY_CALL = ["require", "Object", "Array"];
+VISITOR.Nectar_START = ["__NJS_GEN", "__FFI"];
 
-VISITOR.IGNORE = ["__NJS_Call_Function", "__NJS_Object_Set", "__NJS_Obejct_Get", "__NJS_VAR"];
+VISITOR.IGNORE = ["__Nectar_Call_Function", "__Nectar_Object_Set", "__Nectar_Object_Get", "__Nectar_VAR"];
 VISITOR.Function_STATE = [];
 
 VISITOR.CURRENT_Function = -1;

@@ -24,7 +24,7 @@ global.RND = function() { return "__META_" + Math.random().toString(36).substrin
 
 function genMetaFunction(_code)
 {	
-    var _return = ";return NJS::Global::undefined;}";
+    var _return = ";return Nectar::Global::undefined;}";
     var _searchFN = new RegExp(/function (.[a-zA-Z0-9_\-]*) *\((.*)\)/);
     var _index = _code.search(_searchFN);
     while(_index > -1)
@@ -42,7 +42,7 @@ function genMetaFunction(_code)
         {
             if(_match[2][i].length > 0)
             {
-                _getVar += `var ${_match[2][i]}; if(__NJS_VARLENGTH > ${i}) ${_match[2][i]} = __NJS_VARARGS[${i}];`;
+                _getVar += `var ${_match[2][i]}; if(__Nectar_VARLENGTH > ${i}) ${_match[2][i]} = __Nectar_VARARGS[${i}];`;
             }
         }
         for(var i = _index; i < _code.length; i++)
@@ -67,8 +67,8 @@ function genMetaFunction(_code)
 							_catch = "&";
 						}
 
-                        var _formated = "NJS::Type::function_t* " + _genFN +" = new NJS::Type::function_t([" + _catch + "](var __NJS_THIS, NJS::VAR* __NJS_VARARGS, int __NJS_VARLENGTH) -> NJS::VAR" + _fn + _return + ");";
-                        _formated += "var " + _match[1] + "=NJS::VAR(NJS::Enum::Type::Function, " + _genFN + ");";                        
+                        var _formated = "Nectar::Type::function_t* " + _genFN +" = new Nectar::Type::function_t([" + _catch + "](var __Nectar_THIS, Nectar::VAR* __Nectar_VARARGS, int __Nectar_VARLENGTH) -> Nectar::VAR" + _fn + _return + ");";
+                        _formated += "var " + _match[1] + "=Nectar::VAR(Nectar::Enum::Type::Function, " + _genFN + ");";                        
 
 						_code = [_code.slice(0, _index), _formated, _code.slice(_end + 1)].join('');
                         break;

@@ -36,6 +36,6 @@
   {
     "env": ["std", "android", "ios", "node", "arduino", "stm32", "wasm"],
     "read_only": [],
-    "expose": ["__NJS_RegExp_Test"]
+    "expose": ["__Nectar_RegExp_Test"]
   }
 }

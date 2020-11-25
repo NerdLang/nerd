@@ -1,9 +1,31 @@
+/*
+ * This file is part of NectarCPP
+ * Copyright (c) 2020 - 2020 Adrien THIERRY
+ * https://nectar-lang.org - https://seraum.com/
+ *
+ * sources : https://github.com/nectar-lang/NectarCPP
+ * 
+ * NectarCPP is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * NectarCPP is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with NectarCPP.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+ 
 #pragma once
 #include "native_header.h"
 #include <functional>
 #include <limits>
 
-namespace NJS::Class
+namespace Nectar::Class
 {
 	// Constructors
 	Native::Native() {}
@@ -16,7 +38,7 @@ namespace NJS::Class
 	{
 		if (--counter < 1)
 		{
-			if((*this)["__NJS_On_Destroy"]) (*this)["__NJS_On_Destroy"]();
+			if((*this)["__Nectar_On_Destroy"]) (*this)["__Nectar_On_Destroy"]();
 			delete this;
 		}
 	}
@@ -44,13 +66,13 @@ namespace NJS::Class
 		return "[native code]";
 	}
 	// Main operators
-	NJS::VAR const Native::operator[](NJS::VAR key) const
+	Nectar::VAR const Native::operator[](Nectar::VAR key) const
 	{
-		return NJS::Global::undefined;
+		return Nectar::Global::undefined;
 	}
-	NJS::VAR &Native::operator[](NJS::VAR key)
+	Nectar::VAR &Native::operator[](Nectar::VAR key)
 	{
-		#ifdef __NJS__OBJECT_HASHMAP
+		#ifndef __Nectar__OBJECT_VECTOR
 		return object[(std::string)key];
 		#else
 		for (auto & search : object)
@@ -61,14 +83,14 @@ namespace NJS::Class
 			}
 		}
 
-		object.push_back(NJS::Type::pair_t((std::string)key, NJS::VAR()));
+		object.push_back(Nectar::Type::pair_t((std::string)key, Nectar::VAR()));
 		return object[object.size() - 1].second;
 		#endif
 	}
 	
-	NJS::VAR &Native::operator[](int key)
+	Nectar::VAR &Native::operator[](int key)
 	{
-		#ifdef __NJS__OBJECT_HASHMAP
+		#ifndef __Nectar__OBJECT_VECTOR
 		return object[std::to_string(key)];
 		#else
 		std::string _str = std::to_string(key);
@@ -80,14 +102,14 @@ namespace NJS::Class
 			}
 		}
 
-		object.push_back(NJS::Type::pair_t(_str, NJS::VAR()));
+		object.push_back(Nectar::Type::pair_t(_str, Nectar::VAR()));
 		return object[object.size() - 1].second;
 		#endif
 	}
 	
-	NJS::VAR &Native::operator[](double key)
+	Nectar::VAR &Native::operator[](double key)
 	{
-		#ifdef __NJS__OBJECT_HASHMAP
+		#ifndef __Nectar__OBJECT_VECTOR
 		return object[std::to_string(key)];
 		#else
 		std::string _str = std::to_string(key);
@@ -99,16 +121,16 @@ namespace NJS::Class
 			}
 		}
 
-		object.push_back(NJS::Type::pair_t(_str, NJS::VAR()));
+		object.push_back(Nectar::Type::pair_t(_str, Nectar::VAR()));
 		return object[object.size() - 1].second;
 		#endif
 	}
 	
 	
-	NJS::VAR &Native::operator[](const char* key)
+	Nectar::VAR &Native::operator[](const char* key)
 	{
 		std::string str = key;
-		#ifdef __NJS__OBJECT_HASHMAP
+		#ifndef __Nectar__OBJECT_VECTOR
 		return object[str];
 		#else
 		for (auto & search : object)
@@ -119,28 +141,22 @@ namespace NJS::Class
 			}
 		}
 
-		object.push_back(NJS::Type::pair_t(str, NJS::VAR()));
+		object.push_back(Nectar::Type::pair_t(str, Nectar::VAR()));
 		return object[object.size() - 1].second;
 		#endif
 	}
 	
-	template <class... Args>
-	NJS::VAR Native::operator()(Args... args) const
-	{
-		auto _args = NJS::Type::vector_t{(NJS::VAR)args...};
-		return (*static_cast<std::function<NJS::VAR(NJS::Type::vector_t)> *>(value))(_args);
-	}
 	// Comparation operators
 	Native Native::operator!() const 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Native();
 	}
 	bool Native::operator==(const Native &_v1) const { return false; }
-	// === emulated with __NJS_EQUAL_VALUE_AND_TYPE
-	// !== emulated with __NJS_NOT_EQUAL_VALUE_AND_TYPE
+	// === emulated with __Nectar_EQUAL_VALUE_AND_TYPE
+	// !== emulated with __Nectar_NOT_EQUAL_VALUE_AND_TYPE
 	bool Native::operator!=(const Native &_v1) const { return true; }
 	bool Native::operator<(const Native &_v1) const { return false; }
 	bool Native::operator<=(const Native &_v1) const { return true; }
@@ -149,70 +165,70 @@ namespace NJS::Class
 	// Numeric operators
 	Native Native::operator+() const 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Native();
 	}
 	Native Native::operator-() const 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Native();
 	}
 	Native Native::operator++(const int _v1) 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Native();
 	}
 	Native Native::operator--(const int _v1) 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Native();
 	}
 	Native Native::operator+(const Native &_v1) const 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Native();
 	}
 	Native Native::operator+=(const Native &_v1) 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Native();
 	}
 	Native Native::operator-(const Native &_v1) const 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Native();
 	}
 	Native Native::operator-=(const Native &_v1) 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Native();
 	}
 	Native Native::operator*(const Native &_v1) const 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Native();
 	}
 	Native Native::operator*=(const Native &_v1) 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Native();
@@ -220,108 +236,108 @@ namespace NJS::Class
 	// TODO: "**" and "**=" operators
 	Native Native::operator/(const Native &_v1) const 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Native();
 	}
 	Native Native::operator/=(const Native &_v1) 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Native();
 	}
 	Native Native::operator%(const Native &_v1) const 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Native();
 	}
 	Native Native::operator%=(const Native &_v1) 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Native();
 	}
 	Native Native::operator&(const Native &_v1) const 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Native();
 	}
 	Native Native::operator|(const Native &_v1) const 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Native();
 	}
 	Native Native::operator^(const Native &_v1) const 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Native();
 	}
 	Native Native::operator~() const 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Native();
 	}
 	Native Native::operator>>(const Native &_v1) const 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Native();
 	}
 	Native Native::operator<<(const Native &_v1) const 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Native();
 	}
 	Native Native::operator&=(const Native &_v1) 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Native();
 	}
 	Native Native::operator|=(const Native &_v1) 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Native();
 	}
 	Native Native::operator^=(const Native &_v1) 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Native();
 	}
 	Native Native::operator>>=(const Native &_v1) 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Native();
 	}
 	Native Native::operator<<=(const Native &_v1) 
 	{
-		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
+		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
 		return Native();
 	}
 	// TODO: ">>>" and ">>>=" operators
-} // namespace NJS::Class
+} // namespace Nectar::Class

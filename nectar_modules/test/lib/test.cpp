@@ -32,13 +32,13 @@ var __FFI_SIMPLE_MSGBOX()
 	#else 
 		cout << "this platform is not compatible with MessageBox" << "\n";
 	#endif
-	return NJS::VAR();
+	return Nectar::VAR();
 };
 
 function __WIN_MESSAGE_BOX(_message, _title)
 {
 	#if defined(_WIN32) || defined(__CYGWIN__)
-		int msgboxID = MessageBox(NULL, __NJS_GET_STRING(_message), __NJS_GET_STRING(_title), MB_ICONWARNING | MB_YESNOCANCEL);
+		int msgboxID = MessageBox(NULL, __Nectar_GET_STRING(_message), __Nectar_GET_STRING(_title), MB_ICONWARNING | MB_YESNOCANCEL);
 	#else 
 		cout << "this platform is not compatible with MessageBox" << "\n";
 	#endif

@@ -20,10 +20,10 @@
  *
  */
  
-function __NJS_NATIVE_LOG_CONSOLE()
+function __Nectar_NATIVE_LOG_CONSOLE()
 {
-	if(__NJS_VARLENGTH == 0) __NJS_Log_Console("");
-	else __NJS_Log_Console(__NJS_VARARGS, __NJS_VARLENGTH);
+	if(__Nectar_VARLENGTH == 0) __Nectar_Log_Console("");
+	else __Nectar_Log_Console(__Nectar_VARARGS, __Nectar_VARLENGTH);
 	return var();
 };
 

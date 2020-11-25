@@ -1,13 +1,35 @@
+/*
+ * This file is part of NectarCPP
+ * Copyright (c) 2020 - 2020 Adrien THIERRY
+ * https://nectar-lang.org - https://seraum.com/
+ *
+ * sources : https://github.com/nectar-lang/NectarCPP
+ * 
+ * NectarCPP is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * NectarCPP is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with NectarCPP.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+ 
 #include <deque>
 
-namespace NJS::Event
+namespace Nectar::Event
 {
-	std::deque<NJS::VAR> evQ = {};
-	std::deque<std::tuple<uint64_t,bool,NJS::VAR>> timeQ = {};
+	std::deque<Nectar::VAR> evQ = {};
+	std::deque<std::tuple<uint64_t,bool,Nectar::VAR>> timeQ = {};
 
 	inline uint64_t getMillis()
 	{
-		#ifndef __NJS_ENV_ARDUINO
+		#ifndef __Nectar_ENV_ARDUINO
 			return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 		#else
 			return millis();
@@ -15,14 +37,14 @@ namespace NJS::Event
 	}
 	void sleep(uint64_t _timer)
 	{
-		#ifdef __NJS_ENV_ARDUINO
+		#ifdef __Nectar_ENV_ARDUINO
 			delay(_timer);
 		#else
 			std::this_thread::sleep_for(std::chrono::milliseconds(_timer));
 		#endif
 	}
 
-	void setTimer(NJS::VAR _var, int _timer, bool repeat)
+	void setTimer(Nectar::VAR _var, int _timer, bool repeat)
 	{
 		uint64_t _trigger = getMillis();
 		_trigger += _timer;
@@ -39,20 +61,20 @@ namespace NJS::Event
 				uint64_t _now = getMillis();
 				for(auto it = timeQ.begin(); it != timeQ.end();)
 				{
-					#ifndef __NJS_ENV_ARDUINO
+					#ifndef __Nectar_ENV_ARDUINO
 						uint64_t& _t = std::get<0>(*it);
-						NJS::VAR _ev = std::get<2>(*it);
+						Nectar::VAR _ev = std::get<2>(*it);
 						bool& _b = std::get<1>(*it);
 					#else
 						uint64_t _t = it->get<0>();
-						NJS::VAR _ev = it->get<2>();
+						Nectar::VAR _ev = it->get<2>();
 						bool _b = it->get<1>();
 					#endif
 					if(_t <= _now)
 					{
 						if(!_b) timeQ.erase(it);
 						_ev();
-						if(!_b) ((NJS::Class::Base*)_ev.data.ptr)->Delete();
+						if(!_b) ((Nectar::Class::Base*)_ev.data.ptr)->Delete();
 						else it++;
 					}
 					else
@@ -63,16 +85,16 @@ namespace NJS::Event
 				}
 				if(evQ.size() == 0 && timeQ.size() > 0)
 				{
-					NJS::Event::sleep(min);
+					Nectar::Event::sleep(min);
 				}
 			}
 
 			if(evQ.size())
 			{
-				NJS::VAR _ev = evQ.front();
+				Nectar::VAR _ev = evQ.front();
 				evQ.pop_front();
 				_ev();
-				((NJS::Class::Base*)_ev.data.ptr)->Delete();
+				((Nectar::Class::Base*)_ev.data.ptr)->Delete();
 			}
 		}
 	}

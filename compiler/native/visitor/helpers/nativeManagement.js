@@ -37,7 +37,7 @@ function initInt(_name, _value)
 	{
 		_value = "0";
 	}
-	return `__NJS_Init_Int(${_name}, ${_value})`;
+	return `__Nectar_Init_Int(${_name}, ${_value})`;
 }
 
 function initDouble(_name, _value)
@@ -47,7 +47,7 @@ function initDouble(_name, _value)
 	{
 		_value = "0";
 	}
-	return `__NJS_Init_Double(${_name}, ${_value})`;
+	return `__Nectar_Init_Double(${_name}, ${_value})`;
 }
 
 function initString(_name, _value)
@@ -57,7 +57,7 @@ function initString(_name, _value)
 	{
 		_value = "\"\"";
 	}
-	return `__NJS_Init_String(${_name}, ${_value})`;
+	return `__Nectar_Init_String(${_name}, ${_value})`;
 }
 
 function validateName(_name, fn)

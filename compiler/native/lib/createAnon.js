@@ -22,7 +22,7 @@
  
 function createAnon(_code, _scope)
 {	
-	var _return = "return NJS::Global::undefined;}";
+	var _return = "return Nectar::Global::undefined;}";
 	var _searchAnonFN = new RegExp(/(var)* *([\[\]a-zA-Z0-9_"]*) *= *function +\(([a-zA-Z0-9_\-, ]*)\)/);
 	var _index = _code.search(_searchAnonFN);
 
@@ -33,7 +33,7 @@ function createAnon(_code, _scope)
 		var _start = -1;
 		var _end = -1;
 		var _genFN = "__NJS_FN_" + RND();
-		var _genVAR = "NJS::VAR_" + RND();
+		var _genVAR = "Nectar::VAR_" + RND();
 		
 		var _match = _searchAnonFN.exec(_code);
 		_match[3] = _match[3].split(",");
@@ -43,7 +43,7 @@ function createAnon(_code, _scope)
 		{
 			if(_match[3][i].length > 0)
 			{
-				_getVar += `var ${_match[3][i]}; if(__NJS_VARLENGTH > ${i}) ${_match[3][i]} = __NJS_VARARGS[${i}];`;
+				_getVar += `var ${_match[3][i]}; if(__Nectar_VARLENGTH > ${i}) ${_match[3][i]} = __Nectar_VARARGS[${i}];`;
 			}
 		}
 
@@ -80,7 +80,7 @@ function createAnon(_code, _scope)
 
 						if(_match[1]) COMPILER.DECL.push(`var ${_match[2]};`);
 						if(_match[2]) _formated += _match[2] + " = ";
-						_formated += "NJS::VAR(NJS::Enum::Type::Function, new NJS::Type::function_t ([" + _catch + "](var __NJS_THIS, NJS::VAR* __NJS_VARARGS, int __NJS_VARLENGTH) -> NJS::VAR" + _fn + os.EOL + _return + "), __NJS_THIS);";
+						_formated += "Nectar::VAR(Nectar::Enum::Type::Function, new Nectar::Type::function_t ([" + _catch + "](var __Nectar_THIS, Nectar::VAR* __Nectar_VARARGS, int __Nectar_VARLENGTH) -> Nectar::VAR" + _fn + os.EOL + _return + "), __Nectar_THIS);";
 						_code = [_code.slice(0, _index), ' ', _formated, _code.slice(_end + 1)].join('');		
 						break;
 					}

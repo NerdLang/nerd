@@ -21,22 +21,22 @@
  */
  
 #define JSMN_STRICT
-#ifndef __NJS_ARDUINO
+#ifndef __Nectar_ARDUINO
   #define JSMN_PARENT_LINK
 #endif
 
 #include "jsmn.h"
 
-NJS::VAR to_int(char const *s)
+Nectar::VAR to_int(char const *s)
 {
 	bool _float = false;
 	if(strchr(s, '.'))
 	{
-		return NJS::VAR(std::stod(s));
+		return Nectar::VAR(std::stod(s));
 	}
 	else 
 	{
-		return NJS::VAR(std::stoi(s));
+		return Nectar::VAR(std::stoi(s));
 	}
 } 
 
@@ -99,7 +99,7 @@ int dump(const char *js, jsmntok_t *t, size_t count, int indent, var& _res)
       {
         j += dump(js, t + 1 + j, count - j, indent + 1, _value);
       }
-      __NJS_Object_Set(_key, _value, _res);
+      __Nectar_Object_Set(_key, _value, _res);
     }
     return j+1;
   } 
@@ -114,20 +114,20 @@ int dump(const char *js, jsmntok_t *t, size_t count, int indent, var& _res)
     {
       var _value;  
       j += dump(js, t + 1 + j, count - j, indent + 1, _value);
-      __NJS_Object_Set(i, _value, _res);
+      __Nectar_Object_Set(i, _value, _res);
     }
     return j+1;
   }
   return 0;
 }
 
-NJS::Type::function_t* __NJS_FN___5po78g = new NJS::Type::function_t([](var __INJECTED_THIS, NJS::VAR* __NJS_VARARGS, int __NJS_VARLENGTH) -> NJS::VAR{var __json; if(__NJS_VARLENGTH > 0) __json = __NJS_VARARGS[0];
-	if(!__json) return NJS::Global::undefined;
+Nectar::Type::function_t* __Nectar_FN___5po78g = new Nectar::Type::function_t([](var __INJECTED_THIS, Nectar::VAR* __Nectar_VARARGS, int __Nectar_VARLENGTH) -> Nectar::VAR{var __json; if(__Nectar_VARLENGTH > 0) __json = __Nectar_VARARGS[0];
+	if(!__json) return Nectar::Global::undefined;
 	size_t tokcount = 32;
 	int r;
 	int j = 0;
 	var __RESULT;
-	const char* JSON_STRING = ((NJS::Class::String*)__json.data.ptr)->value.c_str();
+	const char* JSON_STRING = ((Nectar::Class::String*)__json.data.ptr)->value.c_str();
 	jsmn_parser p;
 	jsmntok_t *tok = (jsmntok_t*)malloc(sizeof(*tok) * tokcount);
 
@@ -158,9 +158,9 @@ NJS::Type::function_t* __NJS_FN___5po78g = new NJS::Type::function_t([](var __IN
 	}
 	free(tok);
 	return __RESULT;
-;return __NJS_Create_Undefined();});var __NJS_JSON_PARSE=NJS::VAR(NJS::Enum::Type::Function, __NJS_FN___5po78g);;
+;return __Nectar_Create_Undefined();});var __Nectar_JSON_PARSE=Nectar::VAR(Nectar::Enum::Type::Function, __Nectar_FN___5po78g);;
 
 
-NJS::Type::function_t* __NJS_FN___ylc1k6 = new NJS::Type::function_t([](var __INJECTED_THIS, NJS::VAR* __NJS_VARARGS, int __NJS_VARLENGTH ) -> NJS::VAR{var __object; if(__NJS_VARLENGTH > 0) __object = __NJS_VARARGS[0];
-	return __NJS_Object_Stringify(__object);
-;return __NJS_Create_Undefined();});var __NJS_JSON_STRINGIFY=NJS::VAR(NJS::Enum::Type::Function, __NJS_FN___ylc1k6);;
+Nectar::Type::function_t* __Nectar_FN___ylc1k6 = new Nectar::Type::function_t([](var __INJECTED_THIS, Nectar::VAR* __Nectar_VARARGS, int __Nectar_VARLENGTH ) -> Nectar::VAR{var __object; if(__Nectar_VARLENGTH > 0) __object = __Nectar_VARARGS[0];
+	return __Nectar_Object_Stringify(__object);
+;return __Nectar_Create_Undefined();});var __Nectar_JSON_STRINGIFY=Nectar::VAR(Nectar::Enum::Type::Function, __Nectar_FN___ylc1k6);;

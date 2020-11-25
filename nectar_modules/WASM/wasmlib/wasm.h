@@ -23,21 +23,21 @@
 #include <emscripten.h>
 #include <emscripten/bind.h>
 
-std::vector<std::pair<std::string, NJS::VAR>> __NJS_INTERNAL_BIND;
+std::vector<std::pair<std::string, Nectar::VAR>> __Nectar_INTERNAL_BIND;
 
-function __NJS_WASM_RUN_SCRIPT(_script)
+function __Nectar_WASM_RUN_SCRIPT(_script)
 {
-	emscripten_run_script(__NJS_Get_String(_script));
+	emscripten_run_script(__Nectar_Get_String(_script));
 }
 
-function __NJS_WASM_BIND(_name, _function)
+function __Nectar_WASM_BIND(_name, _function)
 {
-	__NJS_INTERNAL_BIND.push_back(std::make_pair(__NJS_Get_String(_name), _function));
+	__Nectar_INTERNAL_BIND.push_back(std::make_pair(__Nectar_Get_String(_name), _function));
 }
 
-std::string __NJS_EM_BIND(std::string _name, std::string _data) 
+std::string __Nectar_EM_BIND(std::string _name, std::string _data) 
 {
-    for (auto it = begin (__NJS_INTERNAL_BIND); it != end (__NJS_INTERNAL_BIND); ++it) 
+    for (auto it = begin (__Nectar_INTERNAL_BIND); it != end (__Nectar_INTERNAL_BIND); ++it) 
 	{
 		if(it->first.compare(_name) == 0)
 		{
@@ -48,9 +48,9 @@ std::string __NJS_EM_BIND(std::string _name, std::string _data)
 	return "undefined";
 }
 
-int __NJS_EM_BIND_INT(std::string _name, int _data) 
+int __Nectar_EM_BIND_INT(std::string _name, int _data) 
 {
-    for (auto it = begin (__NJS_INTERNAL_BIND); it != end (__NJS_INTERNAL_BIND); ++it) 
+    for (auto it = begin (__Nectar_INTERNAL_BIND); it != end (__Nectar_INTERNAL_BIND); ++it) 
 	{
 		if(it->first.compare(_name) == 0)
 		{
@@ -64,6 +64,6 @@ int __NJS_EM_BIND_INT(std::string _name, int _data)
 
 EMSCRIPTEN_BINDINGS(nectar_module) 
 {
-    emscripten::function("callNectar", &__NJS_EM_BIND);
-	emscripten::function("callNectarInt", &__NJS_EM_BIND_INT);
+    emscripten::function("callNectar", &__Nectar_EM_BIND);
+	emscripten::function("callNectarInt", &__Nectar_EM_BIND_INT);
 }

@@ -24,8 +24,8 @@
 
 var _android = 
 {
-	draw: __NJS_ANDROID_DRAW,
-	navigate: __NJS_ANDROID_NAVIGATE,
+	draw: __Nectar_ANDROID_DRAW,
+	navigate: __Nectar_ANDROID_NAVIGATE,
 	app_path: "http://localhost:12001/",
 };
 

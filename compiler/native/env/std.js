@@ -52,13 +52,17 @@ var STD =
             "console": false,
             "module": false,
             "require": false,
-            "__NJS_Log_Console": false,
-            "__NJS_Object_Keys": false,
-            "__NJS_Object_Stringify": false,
-            "__NJS_Call_Function": false,
+            "__Nectar_Log_Console": false,
+			"__Nectar_InitVar": false,
+            "__Nectar_Object_Keys": false,
+            "__Nectar_Object_Stringify": false,
+            "__Nectar_Call_Function": false,
             "__NJS_ARGS": false,
             "__NJS_ENV": false,
             "__NJS_PLATFORM": false,
+			"__Nectar_typeof": false,
+			"__Nectar_THIS": false,
+			"__Nectar_instanceof": false,
             "JSON": false,
             "Object": false,
             "isNaN": false,
@@ -67,6 +71,9 @@ var STD =
     },
     cli: function(compiler, preset, out, _in, option)
     {
+		var _cachePath = path.join(process.cwd(), "..", "cached_" + COMPILER.ENV.name + "_" + VERSION);
+		var _precompiled = path.join(_cachePath, "nectar.o");
+
         var _stack = 0;
         if(CLI.cli["--stack"])
         {
@@ -80,13 +87,22 @@ var STD =
                 process.exit(1);
             }
         }
+		
+		if(!fs.existsSync(_precompiled))
+		{
+			console.log(`[+] Creating Nectar binary lib for ${COMPILER.ENV.name + "_" + VERSION}`);
+			try { fs.mkdirSync(_cachePath); } catch(e){};
+			execSync(`${compiler} -std=c++17 -c nectar.cpp -Ofast -o "${_precompiled}"`);
+			console.log("[+] Compiling with precompiled Nectar lib");
+		}
+		
         if(compiler == "cl" || compiler.indexOf("cl ") == 0)
         {
 			console.log("[!] cl is not supported, please use g++, clang++, em++ or avr-g++");
 			process.exit(1);
         }
 
-		var _hashmap = "-D__NJS__OBJECT_HASHMAP";
+		var _hashmap = "-D__Nectar__OBJECT_HASHMAP";
 		if(CLI.cli['--no-object-hashmap']) _hashmap = "";
 		
         if(_stack) _stack = "-Wl,--stack," + _stack;
@@ -120,11 +136,11 @@ var STD =
 		
         if(preset == "none")
         {
-            return `${compiler} ${_hashmap} ${_stack} -std=c++17 "${_in}" -O1 -s ${COMPILER.LIBS} -o "${out}" ${_sysVNetLibs} ${_cliOption}`;
+            return `${compiler} ${_stack} -std=c++17 "${_in}" "${_precompiled}" -O1 -s ${COMPILER.LIBS} -lpthread -o "${out}" ${_sysVNetLibs} ${_cliOption}`;
         }
         else if(preset == "size")
         {
-            return `${compiler} ${_hashmap} ${_stack} -std=c++17 "${_in}" -Os -fno-rtti -fno-stack-protector -fomit-frame-pointer -s ${COMPILER.LIBS} -o "${out}" ${_sysVNetLibs} ${_cliOption}`;
+            return `${compiler} ${_stack} -std=c++17 "${_in}" "${_precompiled}" -lpthread -Os -fno-rtti -fno-stack-protector -fomit-frame-pointer -s ${COMPILER.LIBS} -o "${out}" ${_sysVNetLibs} ${_cliOption}`;
         }
         else
         {   
@@ -132,7 +148,7 @@ var STD =
             if(os.platform() == "darwin" || compiler.indexOf("clang") > -1) _opt += "3";
             else _opt += "fast";
 			
-			return `${compiler} ${_hashmap} ${_stack} -std=c++17 "${_in}" ${_opt} -s ${COMPILER.LIBS}  -o "${out}" ${_sysVNetLibs} ${_cliOption}`;
+			return `${compiler} ${_stack} -std=c++17 "${_in}" "${_precompiled}" ${_opt} -lpthread -s ${COMPILER.LIBS}  -o "${out}" ${_sysVNetLibs} ${_cliOption}`;
         }
     },
 	write: function(_content, _in)
@@ -141,6 +157,7 @@ var STD =
 		{
 			return;
 		}
+		
         fs.writeFileSync(_in, _content);
     }
 

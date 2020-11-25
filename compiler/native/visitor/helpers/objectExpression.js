@@ -79,14 +79,14 @@ function objectExpression(_path, _name)
 	{
 		if(_path.value.operator == "===")
 		{
-			var _eq = "__NJS_EQUAL_VALUE_AND_TYPE(";
+			var _eq = "__Nectar_EQUAL_VALUE_AND_TYPE(";
 			_eq += babel.generate(_path.node.left).code + ","
 			_eq += babel.generate(_path.node.right).code + ")";
 			_path.replaceWithSourceString(_eq);
 		}
 		else if(_path.value.operator == "!==")
 		{
-			var _not_eq = "__NJS_NOT_EQUAL_VALUE_AND_TYPE(";
+			var _not_eq = "__Nectar_NOT_EQUAL_VALUE_AND_TYPE(";
 			_not_eq += babel.generate(_path.node.left).code + ","
 			_not_eq += babel.generate(_path.node.right).code + ")";
 			_path.replaceWithSourceString(_not_eq);
