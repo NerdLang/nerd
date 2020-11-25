@@ -24,7 +24,7 @@ var os = require("os");
 
 var TEST =
 {
-  name: "std",
+  name: "test",
   main: "test.cpp",
   compiler: "g++",
   stdlib: [],
