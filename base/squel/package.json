@@ -1,0 +1,47 @@
+{
+  "name": "{{MODULE_NAME}}",
+  "description": "NectarJS {{MODULE_NAME}} module",
+  "main": "index.js",
+  "bugs":
+  {
+    "url": "https://github.com/{{AUTHOR}}/{{MODULE_NAME}}/issues"
+  },
+
+  "directories":
+  {
+    "root": "."
+  },
+  "homepage": "https://github.com/{{AUTHOR}}/{{MODULE_NAME}}#readme",
+  "keywords":
+  [
+    "nectarjs",
+    "js",
+	"javascript"
+  ],
+  "license": "MIT",
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/{{AUTHOR}}/{{MODULE_NAME}}/blob/master/LICENSE"
+    }
+  ],
+  "repository":
+  {
+    "type": "git",
+    "url": "git+ssh://git@github.com/{{AUTHOR}}/{{MODULE_NAME}}.git"
+  },
+  "version": "0.0.1",
+  "nectar":
+  {
+	"comment":
+	{
+
+	},
+    "env": ["std", "android", "ios", "node", "arduino", "wasm", "stm32", "esp32"],
+    "read_only": [],
+    "lib": 
+    {
+
+	}
+  }
+}

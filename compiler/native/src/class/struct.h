@@ -1,54 +1,61 @@
 #pragma once
-#include "native_header.h"
+#include "struct_header.h"
 #include <functional>
 #include <limits>
 
 namespace NJS::Class
 {
 	// Constructors
-	Native::Native() {}
-	Native::Native(void *val)
+	Struct::Struct() {}
+	Struct::Struct(void *val)
 	{
 		value = val;
 	}
-	// Methods
-	inline void Native::Delete() noexcept
+	Struct::Struct(void *val, void* fn)
 	{
-		if (--counter < 1)
+		value = val;
+		Clean = (NJS::Type::clean_struct*)fn;
+	}
+	// Methods
+	inline void Struct::Delete() noexcept
+	{
+		if (--counter == 0)
 		{
-			if((*this)["__NJS_On_Destroy"]) (*this)["__NJS_On_Destroy"]();
+			(*static_cast<NJS::Type::clean_struct *>(Clean))(value);
+			delete Clean;
 			delete this;
 		}
 	}
-	inline void* Native::Copy() noexcept
+	
+	inline void* Struct::Copy() noexcept
 	{
 		counter++;
 		return this;
 	}
 	// Native cast
-	Native::operator bool() const noexcept { return true; }
-	Native::operator double() const noexcept
+	Struct::operator bool() const noexcept { return true; }
+	Struct::operator double() const noexcept
 	{
 		return std::numeric_limits<double>::quiet_NaN();
 	}
-	Native::operator int() const noexcept
+	Struct::operator int() const noexcept
 	{
 		return std::numeric_limits<int>::quiet_NaN();
 	}
-	Native::operator long long() const noexcept
+	Struct::operator long long() const noexcept
 	{
 		return std::numeric_limits<long long>::quiet_NaN();
 	}
-	Native::operator std::string() const noexcept
+	Struct::operator std::string() const noexcept
 	{
-		return "[native code]";
+		return "[native struct]";
 	}
 	// Main operators
-	NJS::VAR const Native::operator[](NJS::VAR key) const
+	NJS::VAR const Struct::operator[](NJS::VAR key) const
 	{
 		return NJS::Global::undefined;
 	}
-	NJS::VAR &Native::operator[](NJS::VAR key)
+	NJS::VAR &Struct::operator[](NJS::VAR key)
 	{
 		#ifdef __NJS__OBJECT_HASHMAP
 		return object[(std::string)key];
@@ -66,7 +73,7 @@ namespace NJS::Class
 		#endif
 	}
 	
-	NJS::VAR &Native::operator[](int key)
+	NJS::VAR &Struct::operator[](int key)
 	{
 		#ifdef __NJS__OBJECT_HASHMAP
 		return object[std::to_string(key)];
@@ -85,7 +92,7 @@ namespace NJS::Class
 		#endif
 	}
 	
-	NJS::VAR &Native::operator[](double key)
+	NJS::VAR &Struct::operator[](double key)
 	{
 		#ifdef __NJS__OBJECT_HASHMAP
 		return object[std::to_string(key)];
@@ -105,7 +112,7 @@ namespace NJS::Class
 	}
 	
 	
-	NJS::VAR &Native::operator[](const char* key)
+	NJS::VAR &Struct::operator[](const char* key)
 	{
 		std::string str = key;
 		#ifdef __NJS__OBJECT_HASHMAP
@@ -125,203 +132,203 @@ namespace NJS::Class
 	}
 	
 	template <class... Args>
-	NJS::VAR Native::operator()(Args... args) const
+	NJS::VAR Struct::operator()(Args... args) const
 	{
 		auto _args = NJS::Type::vector_t{(NJS::VAR)args...};
 		return (*static_cast<std::function<NJS::VAR(NJS::Type::vector_t)> *>(value))(_args);
 	}
 	// Comparation operators
-	Native Native::operator!() const 
+	NJS::VAR Struct::operator!() const 
 	{
 		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
-		return Native();
+		return NJS::VAR();
 	}
-	bool Native::operator==(const Native &_v1) const { return false; }
+	bool Struct::operator==(const NJS::VAR &_v1) const { return false; }
 	// === emulated with __NJS_EQUAL_VALUE_AND_TYPE
 	// !== emulated with __NJS_NOT_EQUAL_VALUE_AND_TYPE
-	bool Native::operator!=(const Native &_v1) const { return true; }
-	bool Native::operator<(const Native &_v1) const { return false; }
-	bool Native::operator<=(const Native &_v1) const { return true; }
-	bool Native::operator>(const Native &_v1) const { return false; }
-	bool Native::operator>=(const Native &_v1) const { return true; }
+	bool Struct::operator!=(const NJS::VAR &_v1) const { return true; }
+	bool Struct::operator<(const NJS::VAR &_v1) const { return false; }
+	bool Struct::operator<=(const NJS::VAR &_v1) const { return true; }
+	bool Struct::operator>(const NJS::VAR &_v1) const { return false; }
+	bool Struct::operator>=(const NJS::VAR &_v1) const { return true; }
 	// Numeric operators
-	Native Native::operator+() const 
+	NJS::VAR Struct::operator+() const 
 	{
 		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
-		return Native();
+		return NJS::VAR();
 	}
-	Native Native::operator-() const 
+	NJS::VAR Struct::operator-() const 
 	{
 		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
-		return Native();
+		return NJS::VAR();
 	}
-	Native Native::operator++(const int _v1) 
+	NJS::VAR Struct::operator++(const int _v1) 
 	{
 		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
-		return Native();
+		return NJS::VAR();
 	}
-	Native Native::operator--(const int _v1) 
+	NJS::VAR Struct::operator--(const int _v1) 
 	{
 		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
-		return Native();
+		return NJS::VAR();
 	}
-	Native Native::operator+(const Native &_v1) const 
+	NJS::VAR Struct::operator+(const NJS::VAR &_v1) const 
 	{
 		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
-		return Native();
+		return NJS::VAR();
 	}
-	Native Native::operator+=(const Native &_v1) 
+	NJS::VAR Struct::operator+=(const NJS::VAR &_v1) 
 	{
 		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
-		return Native();
+		return NJS::VAR();
 	}
-	Native Native::operator-(const Native &_v1) const 
+	NJS::VAR Struct::operator-(const NJS::VAR &_v1) const 
 	{
 		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
-		return Native();
+		return NJS::VAR();
 	}
-	Native Native::operator-=(const Native &_v1) 
+	NJS::VAR Struct::operator-=(const NJS::VAR &_v1) 
 	{
 		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
-		return Native();
+		return NJS::VAR();
 	}
-	Native Native::operator*(const Native &_v1) const 
+	NJS::VAR Struct::operator*(const NJS::VAR &_v1) const 
 	{
 		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
-		return Native();
+		return NJS::VAR();
 	}
-	Native Native::operator*=(const Native &_v1) 
+	NJS::VAR Struct::operator*=(const NJS::VAR &_v1) 
 	{
 		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
-		return Native();
+		return NJS::VAR();
 	}
 	// TODO: "**" and "**=" operators
-	Native Native::operator/(const Native &_v1) const 
+	NJS::VAR Struct::operator/(const NJS::VAR &_v1) const 
 	{
 		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
-		return Native();
+		return NJS::VAR();
 	}
-	Native Native::operator/=(const Native &_v1) 
+	NJS::VAR Struct::operator/=(const NJS::VAR &_v1) 
 	{
 		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
-		return Native();
+		return NJS::VAR();
 	}
-	Native Native::operator%(const Native &_v1) const 
+	NJS::VAR Struct::operator%(const NJS::VAR &_v1) const 
 	{
 		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
-		return Native();
+		return NJS::VAR();
 	}
-	Native Native::operator%=(const Native &_v1) 
+	NJS::VAR Struct::operator%=(const NJS::VAR &_v1) 
 	{
 		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
-		return Native();
+		return NJS::VAR();
 	}
-	Native Native::operator&(const Native &_v1) const 
+	NJS::VAR Struct::operator&(const NJS::VAR &_v1) const 
 	{
 		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
-		return Native();
+		return NJS::VAR();
 	}
-	Native Native::operator|(const Native &_v1) const 
+	NJS::VAR Struct::operator|(const NJS::VAR &_v1) const 
 	{
 		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
-		return Native();
+		return NJS::VAR();
 	}
-	Native Native::operator^(const Native &_v1) const 
+	NJS::VAR Struct::operator^(const NJS::VAR &_v1) const 
 	{
 		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
-		return Native();
+		return NJS::VAR();
 	}
-	Native Native::operator~() const 
+	NJS::VAR Struct::operator~() const 
 	{
 		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
-		return Native();
+		return NJS::VAR();
 	}
-	Native Native::operator>>(const Native &_v1) const 
+	NJS::VAR Struct::operator>>(const NJS::VAR &_v1) const 
 	{
 		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
-		return Native();
+		return NJS::VAR();
 	}
-	Native Native::operator<<(const Native &_v1) const 
+	NJS::VAR Struct::operator<<(const NJS::VAR &_v1) const 
 	{
 		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
-		return Native();
+		return NJS::VAR();
 	}
-	Native Native::operator&=(const Native &_v1) 
+	NJS::VAR Struct::operator&=(const NJS::VAR &_v1) 
 	{
 		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
-		return Native();
+		return NJS::VAR();
 	}
-	Native Native::operator|=(const Native &_v1) 
+	NJS::VAR Struct::operator|=(const NJS::VAR &_v1) 
 	{
 		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
-		return Native();
+		return NJS::VAR();
 	}
-	Native Native::operator^=(const Native &_v1) 
+	NJS::VAR Struct::operator^=(const NJS::VAR &_v1) 
 	{
 		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
-		return Native();
+		return NJS::VAR();
 	}
-	Native Native::operator>>=(const Native &_v1) 
+	NJS::VAR Struct::operator>>=(const NJS::VAR &_v1) 
 	{
 		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
-		return Native();
+		return NJS::VAR();
 	}
-	Native Native::operator<<=(const Native &_v1) 
+	NJS::VAR Struct::operator<<=(const NJS::VAR &_v1) 
 	{
 		#if !defined(__NJS_ENV_ARDUINO) && !defined(__NJS_ENV_ESP32)
 		throw InvalidTypeException();
 		#endif
-		return Native();
+		return NJS::VAR();
 	}
 	// TODO: ">>>" and ">>>=" operators
 } // namespace NJS::Class

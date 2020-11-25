@@ -20,22 +20,40 @@
  *
  */
  
-function NumericLiteral(_path)
+ var warning = false;
+function sayExperimental()
 {
-	if(_path.parent.type == "MemberExpression")
+	if(!warning)
 	{
-		//_path.replaceWithSourceString("__NJS_InitVar(" + _path.node.extra.raw + ")");
-		//_path.skip();
-	}
-	else if(_path.parent.type == "BinaryExpression")
-	{
-		var start = _path.node.start;
-		var end = _path.node.end;
-		if(_path.parent.left.start == start && _path.parent.left.end == end)
-		{
-			//_path.replaceWithSourceString("__NJS_InitVar(" + _path.node.extra.raw + ")");
-			//_path.skip();
-		}
+		warning = true;
+		console.log("[*] NectarJS FixedArray API is experimental and may change, please use it with caution");
 	}
 }
-module.exports = NumericLiteral;
+
+function initFixedArray(_length)
+{
+	sayExperimental();
+	return `__NJS_Create_FixedArray(${_length})`;
+}
+
+function validateLength(_length)
+{
+	if(_length.type == "StringLiteral")
+	{
+		console.log(`[!] Error: ${fn} name parameter can't be a String Literal`);
+		process.exit(1);
+	}
+	if(_length.value <= 0)
+	{
+		console.log(`[!] Error: Fixed Array length must be > 0`);
+		process.exit(1);
+	}
+}
+
+var fixedArrayMgmt = 
+{
+	initFixedArray: initFixedArray,
+	validateLength: validateLength,
+}
+
+module.exports = fixedArrayMgmt;

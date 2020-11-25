@@ -71,6 +71,8 @@ namespace NJS
 		class Object;
 		class Function;
 		class Native;
+		class Struct;
+		class FixedArray;
 	}
 } // namespace NJS
 

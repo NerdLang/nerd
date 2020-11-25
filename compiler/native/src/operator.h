@@ -62,8 +62,11 @@ std::ostream &operator<<(std::ostream &os, const NJS::VAR &_v)
 	case NJS::Enum::Type::Array:
 		os << __NJS_Object_Stringify(_v);
 		break;
+	case NJS::Enum::Type::Struct:
+		os << (std::string)(*(NJS::Class::Struct*)_v.data.ptr);
+		break;
 	case NJS::Enum::Type::Native:
-		os << "[Native]";
+		os << (std::string)(*(NJS::Class::Native*)_v.data.ptr);
 		break;
 	case NJS::Enum::Type::Function:
 		os << (std::string)(*(NJS::Class::Function*)_v.data.ptr);
@@ -72,7 +75,7 @@ std::ostream &operator<<(std::ostream &os, const NJS::VAR &_v)
 		os << "null";
 		break;
 	default:
-		os << "NJS::Global::undefined";
+		os << "undefined";
 		break;
 	}
 	return os;
@@ -135,8 +138,7 @@ NJS::VAR __NJS_Object_Keys(NJS::VAR _var)
 	{
 		NJS::Type::vector_t *_arr = &((NJS::Class::Array*)_var.data.ptr)->value;
 		int _j = (*_arr).size();
-		int _i = 0;
-		for (_i; _i < _j; _i++)
+		for (int _i = 0; _i < _j; _i++)
 		{
 
 			if(!(*_arr)[_i].property[1])
@@ -181,13 +183,70 @@ NJS::VAR __NJS_Object_Stringify(NJS::VAR _var, bool _bracket)
 	NJS::Enum::Type _t = _var.type;
 
 	if (_t == NJS::Enum::Type::Undefined)
-		return "\e[90mNJS::Global::undefined\e[0m";
+		return "\e[90mundefined\e[0m";
 	else if (_t == NJS::Enum::Type::Number)
 		return NJS::VAR("\e[33m") + _var + "\e[0m";
 	else if (_t == NJS::Enum::Type::String)
 		return NJS::VAR("\e[32m'") + _var + "'\e[0m";
 	else if (_t == NJS::Enum::Type::Function)
 		return NJS::VAR("'") + (std::string)(*(NJS::Class::Function*)_var.data.ptr) + "'";
+	else if (_t == NJS::Enum::Type::FixedArray)
+	{
+		NJS::VAR _res = "";
+		NJS::VAR *_arr = ((NJS::Class::FixedArray*)_var.data.ptr)->value;
+		NJS::Type::object_t *_obj = &((NJS::Class::FixedArray*)_var.data.ptr)->object;
+		if(_bracket) _res += " [ ";
+		int i = 0;
+		int j = ((NJS::Class::FixedArray*)_var.data.ptr)->length;
+		int k = 0;
+		int l = 0;
+		for (int i = 0; i < j; i++)
+		{
+			if((*_arr)[i].property[1])
+			{
+				k++;
+			}
+			else
+			{
+				if (l > 0) _res += ", ";
+				if(k > 0)
+				{
+					if(k == 1)
+						_res += "\e[90m<1 empty item>\e[0m, ";
+					else
+						_res += "\e[90m<" + std::to_string(k) + " empty items>\e[0m, ";
+					k = 0;
+				}
+				_res += __NJS_Object_Stringify((*_arr)[i], _bracket);
+				l++;
+			}
+		}
+		
+		if(k > 0)
+		{
+			if (l > 0) _res += ", ";
+			if(k == 1)
+				_res += "\e[90m<1 empty item>\e[0m";
+			else
+				_res += "\e[90m<" + std::to_string(k) + " empty items>\e[0m";
+			l++;
+		}
+		
+		for(auto& o: (*_obj))
+		{
+			if(!o.second.property[1])
+			{
+				if (l > 0) _res += ", ";
+			
+				_res += o.first + ":" + ((std::string)__NJS_Object_Stringify(o.second, _bracket));
+				l++;
+			}
+		}
+		
+		if(_bracket) _res += " ] ";
+
+		return _res;
+	}
 	else if (_t == NJS::Enum::Type::Array)
 	{
 		NJS::VAR _res = "";
@@ -581,6 +640,32 @@ NJS::VAR operator% (NJS::VAR _left, T right)
 {
 	return (int)_left % right;
 }
+
+
+NJS::VAR operator|| (NJS::VAR _left, int right)
+{
+	if(_left.type != NJS::Enum::Type::Undefined) return _left;
+	else return right;
+}
+
+NJS::VAR operator|| (NJS::VAR _left, double right)
+{
+	if(_left.type != NJS::Enum::Type::Undefined) return _left;
+	else return right;
+}
+
+NJS::VAR operator|| (NJS::VAR _left, std::string right)
+{
+	if(_left.type != NJS::Enum::Type::Undefined) return _left;
+	else return right;
+}
+
+NJS::VAR operator|| (NJS::VAR _left, NJS::VAR right)
+{
+	if(_left.type != NJS::Enum::Type::Undefined) return _left;
+	else return right;
+}
+
 
 template<class T>
 NJS::VAR operator== (NJS::VAR _left, T right)

@@ -33,6 +33,7 @@ global.replaceObjAddr = require("./lib/replaceObjAddr.js");
 
 var createFunction = require("./lib/createFunction.js");
 var createAnon = require("./lib/createAnon.js");
+var createReturnAnon = require("./lib/createReturnAnon.js");
 var createClass = require("./lib/createClass.js");
 var hoistingFunction = require("./lib/hoistingFunction.js");
 
@@ -201,7 +202,7 @@ function Compiler()
 
 		if(!CLI.cli["--no-check"]) LINT(_code, this.IN);
 
-		_code = hoistingFunction(_code);
+		
 		
 		_code = genRequire(_handler.PATH, COMPILER.STD) + genRequire(_handler.PATH, _code);
 		
@@ -211,16 +212,18 @@ function Compiler()
 		COMPILER.REQUIRE = createClass(COMPILER.REQUIRE);
 		COMPILER.REQUIRE = createFunction(COMPILER.REQUIRE);
 		COMPILER.REQUIRE = createAnon(COMPILER.REQUIRE);
+		COMPILER.REQUIRE = createReturnAnon(COMPILER.REQUIRE);
 
 		COMPILER.STATE = "CODE";
-		
-		_handler.CODE = babel.transformSync(_code, visitor).code;
 
+		_handler.CODE = babel.transformSync(_code, visitor).code;
+		_code = hoistingFunction(_code);
 		checkFastFunction();
 		_handler.CODE = createClass(_handler.CODE, true);
 		
 		_handler.CODE = createFunction(_handler.CODE, true);
 		_handler.CODE = createAnon(_handler.CODE, true);
+		_handler.CODE = createReturnAnon(_handler.CODE, true);
 
 		var _hoisting = "";
 		for(var i = 0; i < COMPILER.INFO.HOISTING.length; i++)

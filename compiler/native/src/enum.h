@@ -7,6 +7,8 @@ namespace NJS::Enum
 		Number,
 		String,
 		Native,
+		Struct,
+		FixedArray,
 		Array,
 		Object,
 		Function,

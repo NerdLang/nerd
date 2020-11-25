@@ -32,6 +32,7 @@ namespace NJS
 		VAR(char *_value);
 		VAR(std::string _value);
 		VAR(const char *_value);
+		VAR(NJS::Class::FixedArray *_value);
 		VAR(NJS::Class::Array *_value);
 		VAR(const NJS::Class::Array *_value);
 		VAR(bool _value);
@@ -40,6 +41,7 @@ namespace NJS
 		VAR(NJS::Class::String *_value);
 		VAR(NJS::Class::Native *_value);
 		VAR(NJS::Class::Undefined *_value);
+		VAR(void *_value, void* fn);
 		VAR(NJS::Enum::Type _type, void *_value);
 		VAR(NJS::Enum::Type _type, void *_value, VAR _this);
 		VAR(std::function<VAR(NJS::VAR*, int)> &_value);
@@ -119,7 +121,8 @@ namespace NJS
 		operator bool();
 		explicit operator std::string() const;
 		operator std::string();
-		explicit operator const char*() const;	
+		explicit operator const char*() const;
+		explicit operator long long();
 		explicit operator long long() const;
 		
 	};

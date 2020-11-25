@@ -11,11 +11,16 @@
 #define __NJS_Create_String(_value) NJS::VAR(_value)
 #define __NJS_Create_Infinity() NJS::VAR(std::numeric_limits<double>::infinity)
 #define __NJS_Create_Null() NJS::VAR(NJS::Enum::Type::Null, 0)
+#define __NJS_Create_Struct(_value) NJS::VAR(new _value(), new NJS::Type::clean_struct([](void* _ptr){ delete (_value*)_ptr;}))
+#define __NJS_Create_FixedArray(_length) NJS::VAR(new NJS::Class::FixedArray(_length))
 #define __NJS_Create_Lambda(name) NJS::Type::function_t* name = new NJS::Type::function_t([](NJS::VAR __NJS_THIS, NJS::VAR* __NJS_VARARGS, int __NJS_VARLENGTH)
 #define __NJS_Create_Ptr_Scoped_Anon(__CONTENT__) new NJS::Type::function_t([&](NJS::VAR __NJS_THIS, NJS::VAR* __NJS_VARARGS, int __NJS_VARLENGTH){ __CONTENT__ })
 #define __NJS_Create_Ptr_Unscoped_Anon(__CONTENT__) new NJS::Type::function_t([](NJS::VAR __NJS_THIS, NJS::VAR* __NJS_VARARGS, int __NJS_VARLENGTH){ __CONTENT__ })
 #define __NJS_Create_Var_Scoped_Anon(__CONTENT__) NJS::VAR(NJS::Enum::Type::Function, __NJS_Create_Ptr_Scoped_Anon(__CONTENT__))
 #define __NJS_Create_Var_Unscoped_Anon(__CONTENT__) NJS::VAR(NJS::Enum::Type::Function, __NJS_Create_Ptr_Unscoped_Anon(__CONTENT__))
+#define __NJS_Init_Int(_name, _value) int _name = _value
+#define __NJS_Init_Double(_name, _value) double _name = _value
+#define __NJS_Init_String(_name, _value) std::string _name = _value
 #define __NJS_EXCEPTION_PARAMETER NJS::VAR &e
 #define finally ;
 #define __NJS_Boolean_TRUE __NJS_Create_Boolean(true)
@@ -24,6 +29,7 @@
 #define __NJS_CreateMethodToClass(_name, _fn) __NJS_Object_Set(_name, __NJS_Create_Var_Scoped_Anon( return _fn(__NJS_VARARGS, __NJS_VARLENGTH); ), &object);
 #define __NJS_NEW(_fn) ((NJS::Class::Function*)_fn.data.ptr)->New
 #define __NJS_SET_CONST(_var) _var.property.set(0,1)
+#define __NJS_Access_Struct(_exp, _name) (*(_name*)((NJS::Class::Struct*)_exp.data.ptr)->value)
 
 #ifdef __NJS__OBJECT_HASHMAP
 #define __NJS_Method_Lazy_Loader(_name, _fn) \

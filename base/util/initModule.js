@@ -20,22 +20,32 @@
  *
  */
  
-function NumericLiteral(_path)
+function initModule(_author, _name)
 {
-	if(_path.parent.type == "MemberExpression")
+	try 
 	{
-		//_path.replaceWithSourceString("__NJS_InitVar(" + _path.node.extra.raw + ")");
-		//_path.skip();
-	}
-	else if(_path.parent.type == "BinaryExpression")
+		fs.mkdirSync("nectar_modules");
+	} catch(e){}
+	
+	var _dest = path.join("nectar_modules", _name);
+	try 
 	{
-		var start = _path.node.start;
-		var end = _path.node.end;
-		if(_path.parent.left.start == start && _path.parent.left.end == end)
-		{
-			//_path.replaceWithSourceString("__NJS_InitVar(" + _path.node.extra.raw + ")");
-			//_path.skip();
-		}
+		fs.mkdirSync(_dest);
 	}
+	catch(e)
+	{
+		console.log("[!] An error occured while trying to create the module folder: " + _name);
+		console.log(e);
+		process.exit(-1);
+	}
+	
+	var _pkg = fs.readFileSync(path.join(NECTAR_PATH, "base", "squel", "package.json")).toString();
+	
+	_pkg = _pkg.replace(/{{AUTHOR}}/g, _author).replace(/{{MODULE_NAME}}/g, _name)
+
+	fs.writeFileSync(path.join(_dest, "package.json"), _pkg);
+	fs.appendFileSync(path.join(_dest, "index.js"), "// Write your module code here");
+	console.log("[+] Module " + _name + " correctly initialized in " + _dest);
 }
-module.exports = NumericLiteral;
+
+module.exports = initModule;
