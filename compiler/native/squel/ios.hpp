@@ -19,31 +19,25 @@
  * along with NectarJS.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
- #define _USE_MATH_DEFINES
- #include <cmath>
- #include <string>
- #include <iostream>
- #include <string>
- #include <cstring>
- #include <stdio.h>
- #include <stdlib.h>
- #include <string.h>
- #include <sstream>
- #include <vector>
- #include <memory>
-
-
- #include "njs.h"
- using namespace NJS::Global;
- #include "httplib.h"
+ #include "nectar.cpp"
+ 
+ using namespace NectarCore::Global;
+ using namespace NectarCore::Functions;
+ 
+ //#include "httplib.h"
 
 var __NJS_ENV = "iOS";
 var __NJS_PLATFORM = "{{__PLATFORM__}}";
+ 
+ #define __NJS_Create_Object() new NectarCore::Class::Object()
+ #define __NJS_Create_Array(_arr) new NectarCore::Class::Array(_arr)
+ #define __NJS_InitVar() NectarCore::VAR()
  
  WKWebView * globalWK;
 
 void launchServer()
 {
+	/*
     using namespace httplib;
     CFBundleRef mainBundle = CFBundleGetMainBundle();
     CFStringEncoding encodingMethod = CFStringGetSystemEncoding();
@@ -56,6 +50,7 @@ void launchServer()
     Server svr;
     svr.set_mount_point("/", __NJS_Get_String(_path));
     svr.listen("localhost", 12001);
+	*/
 }
 
 void drawNative(char* str)
