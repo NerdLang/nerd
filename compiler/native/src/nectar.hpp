@@ -59,7 +59,7 @@
 #include "enum.h"
 #include "macro.h"
 
-namespace Nectar
+namespace NectarCore
 {
 	struct VAR;
 	namespace Class
@@ -75,7 +75,7 @@ namespace Nectar
 		class Struct;
 		class FixedArray;
 	}
-} // namespace Nectar
+} // namespace NectarCore
 
 #include "var_header.h"
 #include "type_header.h"

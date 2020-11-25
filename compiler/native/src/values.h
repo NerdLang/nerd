@@ -20,12 +20,12 @@
  *
  */
  
-namespace Nectar::Global
+namespace NectarCore::Global
 {	
-	using var = Nectar::VAR;
-	using let = Nectar::VAR;
-	Nectar::VAR undefined = Nectar::VAR(new Nectar::Class::Undefined());
-	Nectar::VAR null = __Nectar_Create_Null();
-	Nectar::VAR Infinity = std::numeric_limits<double>::infinity();
-	Nectar::VAR NaN = std::numeric_limits<double>::quiet_NaN();
+	using var = NectarCore::VAR;
+	using let = NectarCore::VAR;
+	NectarCore::VAR undefined = NectarCore::VAR(new NectarCore::Class::Undefined());
+	NectarCore::VAR null = __Nectar_Create_Null();
+	NectarCore::VAR Infinity = std::numeric_limits<double>::infinity();
+	NectarCore::VAR NaN = std::numeric_limits<double>::quiet_NaN();
 }

@@ -25,18 +25,18 @@
 #include <sstream>
 #include <limits>
 		
-namespace Nectar::Class
+namespace NectarCore::Class
 {
 	// Constructors
 	FixedArray::FixedArray() 
 	{ 
 		length = 8;
-		value = new Nectar::VAR[8];
+		value = new NectarCore::VAR[8];
 	}
-	FixedArray::FixedArray(Nectar::VAR _length)
+	FixedArray::FixedArray(NectarCore::VAR _length)
 	{
 		length = _length;
-		value = new Nectar::VAR[(int)_length];
+		value = new NectarCore::VAR[(int)_length];
 	}
 	// Methods
 	inline void FixedArray::Delete() noexcept
@@ -99,9 +99,9 @@ namespace Nectar::Class
 		return stream.str();
 	}
 	// Main operators
-	Nectar::VAR const FixedArray::operator[](Nectar::VAR key) const
+	NectarCore::VAR const FixedArray::operator[](NectarCore::VAR key) const
 	{
-		if (key.type == Nectar::Enum::Type::Number)
+		if (key.type == NectarCore::Enum::Type::Number)
 		{
 			auto i = (int)key;
 			if (i >= 0 && i <= (int)length)
@@ -110,74 +110,74 @@ namespace Nectar::Class
 			}
 		}
 		
-		return Nectar::Global::undefined;
+		return NectarCore::Global::undefined;
 	}
-	Nectar::VAR const FixedArray::operator[](int key) const
+	NectarCore::VAR const FixedArray::operator[](int key) const
 	{
 		if (key >= 0 && key <= (int)length)
 		{
 			return value[key];
 		}
 		
-		return Nectar::Global::undefined;
+		return NectarCore::Global::undefined;
 	}
 	
 	#ifndef __Nectar__OBJECT_VECTOR
-	Nectar::VAR &FixedArray::operator[](Nectar::VAR key)
+	NectarCore::VAR &FixedArray::operator[](NectarCore::VAR key)
 	{	
-		if (key.type == Nectar::Enum::Type::Number)
+		if (key.type == NectarCore::Enum::Type::Number)
 		{
 			auto i = (int)key;
 
 			if (i < 0)
 			{
-				return Nectar::Global::undefined;
+				return NectarCore::Global::undefined;
 			}
 			else 
 			{
 				if (i >= (int)length)
 				{
-					return Nectar::Global::undefined;
+					return NectarCore::Global::undefined;
 				}
 			}
 			return value[i];
 		}
 		
 		std::string _str = ((std::string)key);
-		Nectar::Type::StringView _sview = _str;
+		NectarCore::Type::StringView _sview = _str;
 		
 		if(_sview.compare("length") == 0)
 		{
 			return length;
 		}
 		
-		Nectar::VAR& _obj = object[_str];
+		NectarCore::VAR& _obj = object[_str];
 				
 		return _obj;
 	}
 	#else
-	Nectar::VAR &FixedArray::operator[](Nectar::VAR key)
+	NectarCore::VAR &FixedArray::operator[](NectarCore::VAR key)
 	{
-		if (key.type == Nectar::Enum::Type::Number)
+		if (key.type == NectarCore::Enum::Type::Number)
 		{
 			auto i = (int)key;
 			
 			if (i < 0)
 			{
-				return Nectar::Global::undefined;
+				return NectarCore::Global::undefined;
 			}
 			else 
 			{
 				if (i >= (int)length)
 				{
-					return Nectar::Global::undefined;
+					return NectarCore::Global::undefined;
 				}
 			}
 			return value[i];
 		}
 		
 		std::string _str = ((std::string)key);
-		Nectar::Type::StringView _sview = _str;
+		NectarCore::Type::StringView _sview = _str;
 		
 		if(_sview.compare("length") == 0)
 		{
@@ -192,62 +192,62 @@ namespace Nectar::Class
 			}
 		}
 		
-		object.push_back(Nectar::Type::pair_t(_str, Nectar::Global::undefined));
+		object.push_back(NectarCore::Type::pair_t(_str, NectarCore::Global::undefined));
 		return object[object.size() - 1].second;
 	}
 	#endif
 	
-	Nectar::VAR &FixedArray::operator[](int key)
+	NectarCore::VAR &FixedArray::operator[](int key)
 	{
 		if (key < 0)
 		{
-			return Nectar::Global::undefined;
+			return NectarCore::Global::undefined;
 		}
 		else 
 		{
 			if (key >= (int)length)
 			{
-				return Nectar::Global::undefined;
+				return NectarCore::Global::undefined;
 			}
 		}
 		return value[key];
 	}
 	
-	Nectar::VAR &FixedArray::operator[](double key)
+	NectarCore::VAR &FixedArray::operator[](double key)
 	{
 		if (key < 0)
 		{
-			return Nectar::Global::undefined;
+			return NectarCore::Global::undefined;
 		}
 		else 
 		{
 			if (key >= (int)length)
 			{
-				return Nectar::Global::undefined;
+				return NectarCore::Global::undefined;
 			}
 		}
 		return value[(int)key];
 	}
 	
 	#ifndef __Nectar__OBJECT_VECTOR
-	Nectar::VAR &FixedArray::operator[](const char* key)
+	NectarCore::VAR &FixedArray::operator[](const char* key)
 	{		
 		std::string _str = key;
-		Nectar::Type::StringView _sview = _str;
+		NectarCore::Type::StringView _sview = _str;
 		
 		if(_sview.compare("length") == 0)
 		{
 			return length;
 		}
 		
-		Nectar::VAR& _obj = object[_str];
+		NectarCore::VAR& _obj = object[_str];
 		return _obj; 
 	}
 	#else
-	Nectar::VAR &FixedArray::operator[](const char* key)
+	NectarCore::VAR &FixedArray::operator[](const char* key)
 	{
 		std::string _str = key;
-		Nectar::Type::StringView _sview = _str;
+		NectarCore::Type::StringView _sview = _str;
 		
 		if(_sview.compare("length") == 0)
 		{
@@ -262,7 +262,7 @@ namespace Nectar::Class
 			}
 		}
 
-		object.push_back(Nectar::Type::pair_t(_str, Nectar::Global::undefined));
+		object.push_back(NectarCore::Type::pair_t(_str, NectarCore::Global::undefined));
 		return object[object.size() - 1].second;
 	}
 	#endif
@@ -455,4 +455,4 @@ namespace Nectar::Class
 	}
 	// TODO: ">>>" and ">>>=" operators
 	
-} // namespace Nectar::Class
+} // namespace NectarCore::Class

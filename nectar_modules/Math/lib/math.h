@@ -62,73 +62,73 @@
 
 
 
-var __Nectar_MATH_E = Nectar::VAR(M_E);
-var __Nectar_MATH_LN2 = Nectar::VAR(M_LN2);
-var __Nectar_MATH_LOG2E = Nectar::VAR(M_LOG2E);
-var __Nectar_MATH_LOG10E = Nectar::VAR(M_LOG10E);
-var __Nectar_MATH_PI = Nectar::VAR(M_PI);
-var __Nectar_MATH_SQRT1_2 = Nectar::VAR(M_SQRT1_2);
-var __Nectar_MATH_SQRT2 = Nectar::VAR(M_SQRT2);
+var __Nectar_MATH_E = NectarCore::VAR(M_E);
+var __Nectar_MATH_LN2 = NectarCore::VAR(M_LN2);
+var __Nectar_MATH_LOG2E = NectarCore::VAR(M_LOG2E);
+var __Nectar_MATH_LOG10E = NectarCore::VAR(M_LOG10E);
+var __Nectar_MATH_PI = NectarCore::VAR(M_PI);
+var __Nectar_MATH_SQRT1_2 = NectarCore::VAR(M_SQRT1_2);
+var __Nectar_MATH_SQRT2 = NectarCore::VAR(M_SQRT2);
 
 function __Nectar_MATH_ABS(x) 
 { 
-	return Nectar::VAR(std::abs((double)(x))); 
+	return NectarCore::VAR(std::abs((double)(x))); 
 };
 
 function __Nectar_MATH_ACOS(x) 
 { 
-	return Nectar::VAR(std::acos((double)(x))); 
+	return NectarCore::VAR(std::acos((double)(x))); 
 };
 
 function __Nectar_MATH_ACOSH(x)
 { 
-	return Nectar::VAR(std::acosh((double)(x))); 
+	return NectarCore::VAR(std::acosh((double)(x))); 
 };
 
 function __Nectar_MATH_ASIN(x) 
 { 
-	return Nectar::VAR(std::asin((double)(x))); 
+	return NectarCore::VAR(std::asin((double)(x))); 
 };
 
 function __Nectar_MATH_ASINH(x) 
 {
-	return Nectar::VAR(std::asinh((double)(x))); 
+	return NectarCore::VAR(std::asinh((double)(x))); 
 };
 function __Nectar_MATH_ATAN(x) 
 { 
-	return Nectar::VAR(std::atan((double)(x))); 
+	return NectarCore::VAR(std::atan((double)(x))); 
 };
 function __Nectar_MATH_ATAN2(x, y) 
 { 
-	return Nectar::VAR(std::atan2((double)(x), (double)(y))); 
+	return NectarCore::VAR(std::atan2((double)(x), (double)(y))); 
 };
 function __Nectar_MATH_ATANH(x) 
 { 
-	return Nectar::VAR(std::atanh((double)(x))); 
+	return NectarCore::VAR(std::atanh((double)(x))); 
 };
 function __Nectar_MATH_CBRT(x) 
 { 
-	return Nectar::VAR(std::cbrt((double)(x))); 
+	return NectarCore::VAR(std::cbrt((double)(x))); 
 };
 function __Nectar_MATH_CEIL(x) 
 { 
-	return Nectar::VAR(std::ceil((double)(x))); 
+	return NectarCore::VAR(std::ceil((double)(x))); 
 };
 
 function __Nectar_MATH_CLZ32(x) 
 {
 	int n = (int)(x);
-	return Nectar::VAR(n > 0 ? (int)(31 - std::log2(n >> 0)) : 32);
+	return NectarCore::VAR(n > 0 ? (int)(31 - std::log2(n >> 0)) : 32);
 };
 
 function __Nectar_MATH_COS(x) 
 { 
-	return Nectar::VAR(std::cos((double)(x))); 
+	return NectarCore::VAR(std::cos((double)(x))); 
 };
 
 function __Nectar_MATH_COSH(x) 
 { 
-	return Nectar::VAR(std::cosh((double)(x))); 
+	return NectarCore::VAR(std::cosh((double)(x))); 
 };
 
 function __Nectar_MATH_EXP(x) 
@@ -138,17 +138,17 @@ function __Nectar_MATH_EXP(x)
 
 function __Nectar_MATH_EXPM1(x) 
 { 
-	return Nectar::VAR(std::expm1((double)(x))); 
+	return NectarCore::VAR(std::expm1((double)(x))); 
 };
 
 function __Nectar_MATH_FLOOR(x) 
 { 
-	return Nectar::VAR((int)(std::floor((double)(x))));
+	return NectarCore::VAR((int)(std::floor((double)(x))));
 };
 
 function __Nectar_MATH_FROUND(x) 
 { 
-	return Nectar::VAR((double)((double)(x))); 
+	return NectarCore::VAR((double)((double)(x))); 
 };
 
 function __Nectar_MATH_HYPOT()
@@ -163,32 +163,32 @@ function __Nectar_MATH_HYPOT()
 		}
 		s += (x == 0 && max == 0) ? 0 : (x / max) * (x / max);
 	}
-	return Nectar::VAR(max == INFINITY ? INFINITY : max * std::sqrt(s));
+	return NectarCore::VAR(max == INFINITY ? INFINITY : max * std::sqrt(s));
 };
 
 function __Nectar_MATH_IMUL(x, y)
 {
-	return Nectar::VAR((int)(x) * (int)(y));
+	return NectarCore::VAR((int)(x) * (int)(y));
 };
 
 function __Nectar_MATH_LOG(x) 
 { 
-	return Nectar::VAR(std::log((double)(x))); 
+	return NectarCore::VAR(std::log((double)(x))); 
 };
 
 function __Nectar_MATH_LOG1P(x) 
 { 
-	return Nectar::VAR(std::log1p((double)(x))); 
+	return NectarCore::VAR(std::log1p((double)(x))); 
 };
 
 function __Nectar_MATH_LOG2(x) 
 { 
-	return Nectar::VAR(std::log2((double)(x))); 
+	return NectarCore::VAR(std::log2((double)(x))); 
 };
 
 function __Nectar_MATH_LOG10(x) 
 { 
-	return Nectar::VAR(std::log10((double)(x))); 
+	return NectarCore::VAR(std::log10((double)(x))); 
 };
 
 function __Nectar_MATH_MAX()
@@ -200,7 +200,7 @@ function __Nectar_MATH_MAX()
 			max = n;
 		}
 	}
-	return Nectar::VAR(max);
+	return NectarCore::VAR(max);
 };
 
 function __Nectar_MATH_MIN()
@@ -212,57 +212,57 @@ function __Nectar_MATH_MIN()
 			min = n;
 		}
 	}
-	return Nectar::VAR(min);
+	return NectarCore::VAR(min);
 };
 
 function __Nectar_MATH_POW(x, x2) 
 { 
-	return Nectar::VAR(std::pow((double)(x), (double)(x2))); 
+	return NectarCore::VAR(std::pow((double)(x), (double)(x2))); 
 };
 
 function __Nectar_MATH_RANDOM() 
 { 
-	return Nectar::VAR((double)(std::rand()) / (double)(RAND_MAX));
+	return NectarCore::VAR((double)(std::rand()) / (double)(RAND_MAX));
 };
 
 function __Nectar_MATH_ROUND(x) 
 { 
-	return Nectar::VAR((int)(std::round((double)(x))));
+	return NectarCore::VAR((int)(std::round((double)(x))));
 };
 
 function __Nectar_MATH_SIGN(x) 
 {
 	double n = (double)(x);
-	if (n == 0) { return Nectar::VAR(0); }
-	else { return Nectar::VAR(n > 0 ? 1 : -1); };
+	if (n == 0) { return NectarCore::VAR(0); }
+	else { return NectarCore::VAR(n > 0 ? 1 : -1); };
 };
 
 function __Nectar_MATH_SIN(x) 
 { 
-	return Nectar::VAR(std::sin((double)(x))); 
+	return NectarCore::VAR(std::sin((double)(x))); 
 };
 
 function __Nectar_MATH_SINH(x) 
 { 
-	return Nectar::VAR(std::sinh((double)(x))); 
+	return NectarCore::VAR(std::sinh((double)(x))); 
 };
 
 function __Nectar_MATH_SQRT(x) 
 { 
-	return Nectar::VAR(std::sqrt((double)(x))); 
+	return NectarCore::VAR(std::sqrt((double)(x))); 
 };
 
 function __Nectar_MATH_TAN(x) 
 { 
-	return Nectar::VAR(std::tan((double)(x))); 
+	return NectarCore::VAR(std::tan((double)(x))); 
 };
 
 function __Nectar_MATH_TANH(x) 
 { 
-	return Nectar::VAR(std::tanh((double)(x))); 
+	return NectarCore::VAR(std::tanh((double)(x))); 
 };
 
 function __Nectar_MATH_TRUNC(x) 
 { 
-	return Nectar::VAR((int)(x)); 
+	return NectarCore::VAR((int)(x)); 
 };

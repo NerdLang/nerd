@@ -24,7 +24,7 @@ global.RND = function() { return "__META_" + Math.random().toString(36).substrin
 
 function genMetaFunction(_code)
 {	
-    var _return = ";return Nectar::Global::undefined;}";
+    var _return = ";return NectarCore::Global::undefined;}";
     var _searchFN = new RegExp(/function (.[a-zA-Z0-9_\-]*) *\((.*)\)/);
     var _index = _code.search(_searchFN);
     while(_index > -1)
@@ -67,8 +67,8 @@ function genMetaFunction(_code)
 							_catch = "&";
 						}
 
-                        var _formated = "Nectar::Type::function_t* " + _genFN +" = new Nectar::Type::function_t([" + _catch + "](var __Nectar_THIS, Nectar::VAR* __Nectar_VARARGS, int __Nectar_VARLENGTH) -> Nectar::VAR" + _fn + _return + ");";
-                        _formated += "var " + _match[1] + "=Nectar::VAR(Nectar::Enum::Type::Function, " + _genFN + ");";                        
+                        var _formated = "NectarCore::Type::function_t* " + _genFN +" = new NectarCore::Type::function_t([" + _catch + "](var __Nectar_THIS, NectarCore::VAR* __Nectar_VARARGS, int __Nectar_VARLENGTH) -> NectarCore::VAR" + _fn + _return + ");";
+                        _formated += "var " + _match[1] + "=NectarCore::VAR(NectarCore::Enum::Type::Function, " + _genFN + ");";                        
 
 						_code = [_code.slice(0, _index), _formated, _code.slice(_end + 1)].join('');
                         break;

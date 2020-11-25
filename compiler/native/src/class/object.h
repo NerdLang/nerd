@@ -24,9 +24,9 @@
 #include "object_header.h"
 #include <limits>
 
-namespace Nectar::Class
+namespace NectarCore::Class
 {
-	Nectar::VAR __proxy;
+	NectarCore::VAR __proxy;
 	// Constructors
 	Object::Object() { }
 	// Methods
@@ -42,7 +42,7 @@ namespace Nectar::Class
 		#ifndef __Nectar__OBJECT_VECTOR
 			object.erase(_key);
 		#else
-			for (Nectar::Type::object_t::iterator it = object.begin() ; it != object.end(); ++it)
+			for (NectarCore::Type::object_t::iterator it = object.begin() ; it != object.end(); ++it)
 			{
 				if (_key.compare(it->first) == 0)
 				{
@@ -76,19 +76,19 @@ namespace Nectar::Class
 		return "[object Object]";
 	}
 	// Main operators
-	Nectar::VAR const Object::operator[](Nectar::VAR key) const
+	NectarCore::VAR const Object::operator[](NectarCore::VAR key) const
 	{
-		return Nectar::Global::undefined;
+		return NectarCore::Global::undefined;
 	}
 	
 	#ifndef __Nectar__OBJECT_VECTOR
-	Nectar::VAR &Object::operator[](Nectar::VAR key)
+	NectarCore::VAR &Object::operator[](NectarCore::VAR key)
 	{
 		std::string _str = ((std::string)key);
-		Nectar::Type::StringView _sview = _str;
+		NectarCore::Type::StringView _sview = _str;
 		
-		Nectar::VAR& _obj = object[_str];
-		if(_obj.type != Nectar::Enum::Type::Undefined) 
+		NectarCore::VAR& _obj = object[_str];
+		if(_obj.type != NectarCore::Enum::Type::Undefined) 
 		{
 			if(!property[1])
 			{
@@ -102,10 +102,10 @@ namespace Nectar::Class
 			}
 			else 
 			{
-				if(_obj.type == Nectar::Enum::Type::Function)
+				if(_obj.type == NectarCore::Enum::Type::Function)
 				{
-					((Nectar::Class::Function*)_obj.data.ptr)->This.type = Nectar::Enum::Type::Object;
-					((Nectar::Class::Function*)_obj.data.ptr)->This.data.ptr = this;
+					((NectarCore::Class::Function*)_obj.data.ptr)->This.type = NectarCore::Enum::Type::Object;
+					((NectarCore::Class::Function*)_obj.data.ptr)->This.data.ptr = this;
 				}
 				if(!property[0]) return _obj;
 				else 
@@ -126,22 +126,22 @@ namespace Nectar::Class
 		}
 
 		if(!property[0]) return _obj;
-		__proxy = Nectar::Global::undefined;
+		__proxy = NectarCore::Global::undefined;
 		return __proxy;
 	}
 	#else
-	Nectar::VAR &Object::operator[](Nectar::VAR key)
+	NectarCore::VAR &Object::operator[](NectarCore::VAR key)
 	{
 		std::string _str = ((std::string)key);
-		Nectar::Type::StringView _sview = _str;
+		NectarCore::Type::StringView _sview = _str;
 		
-		if (key.type == Nectar::Enum::Type::Number)
+		if (key.type == NectarCore::Enum::Type::Number)
 		{
 			auto i = (int)key;
 			
 			if (i < 0)
 			{
-				return Nectar::Global::undefined;
+				return NectarCore::Global::undefined;
 			}
 			else 
 			{
@@ -164,10 +164,10 @@ namespace Nectar::Class
 				}
 				else 
 				{
-					if(search.second.type == Nectar::Enum::Type::Function)
+					if(search.second.type == NectarCore::Enum::Type::Function)
 					{
-						((Nectar::Class::Function*)search.second.data.ptr)->This.type = Nectar::Enum::Type::Object;
-						((Nectar::Class::Function*)search.second.data.ptr)->This.data.ptr = this;				
+						((NectarCore::Class::Function*)search.second.data.ptr)->This.type = NectarCore::Enum::Type::Object;
+						((NectarCore::Class::Function*)search.second.data.ptr)->This.data.ptr = this;				
 					}
 					
 					return search.second;
@@ -177,15 +177,15 @@ namespace Nectar::Class
 
 		if(_sview.compare("toString") == 0  || _sview.compare("toLocaleString") == 0)
 		{
-			object.push_back(Nectar::Type::pair_t(_str, __Nectar_Create_Var_Scoped_Anon( return __Nectar_Object_Stringify(this);)));
+			object.push_back(NectarCore::Type::pair_t(_str, __Nectar_Create_Var_Scoped_Anon( return __Nectar_Object_Stringify(this);)));
 		}
 		else if(_sview.compare("valueOf") == 0)
 		{
-			object.push_back(Nectar::Type::pair_t(_str, __Nectar_Create_Var_Scoped_Anon( return this; )));
+			object.push_back(NectarCore::Type::pair_t(_str, __Nectar_Create_Var_Scoped_Anon( return this; )));
 		}
 		else 
 		{
-			object.push_back(Nectar::Type::pair_t(_str, Nectar::Global::undefined));
+			object.push_back(NectarCore::Type::pair_t(_str, NectarCore::Global::undefined));
 		}
 
 		return object[object.size() - 1].second;
@@ -193,13 +193,13 @@ namespace Nectar::Class
 	#endif
 	
 	#ifndef __Nectar__OBJECT_VECTOR
-	Nectar::VAR &Object::operator[](int key)
+	NectarCore::VAR &Object::operator[](int key)
 	{
 		std::string _str = std::to_string(key);
-		Nectar::Type::StringView _sview = _str;
+		NectarCore::Type::StringView _sview = _str;
 		
-		Nectar::VAR& _obj = object[_str];
-		if(_obj.type != Nectar::Enum::Type::Undefined) 
+		NectarCore::VAR& _obj = object[_str];
+		if(_obj.type != NectarCore::Enum::Type::Undefined) 
 		{
 			if(!property[1])
 			{
@@ -213,10 +213,10 @@ namespace Nectar::Class
 			}
 			else 
 			{
-				if(_obj.type == Nectar::Enum::Type::Function)
+				if(_obj.type == NectarCore::Enum::Type::Function)
 				{
-					((Nectar::Class::Function*)_obj.data.ptr)->This.type = Nectar::Enum::Type::Object;
-					((Nectar::Class::Function*)_obj.data.ptr)->This.data.ptr = this;
+					((NectarCore::Class::Function*)_obj.data.ptr)->This.type = NectarCore::Enum::Type::Object;
+					((NectarCore::Class::Function*)_obj.data.ptr)->This.data.ptr = this;
 				}
 				if(!property[0]) return _obj;
 				else 
@@ -237,14 +237,14 @@ namespace Nectar::Class
 		}
 
 		if(!property[0]) return _obj;
-		__proxy = Nectar::Global::undefined;
+		__proxy = NectarCore::Global::undefined;
 		return __proxy;
 	}
 	#else
-	Nectar::VAR &Object::operator[](int key)
+	NectarCore::VAR &Object::operator[](int key)
 	{
 		std::string _str = std::to_string(key);
-		Nectar::Type::StringView _sview = _str;
+		NectarCore::Type::StringView _sview = _str;
 		
 		for (auto & search : object)
 		{
@@ -256,10 +256,10 @@ namespace Nectar::Class
 				}
 				else 
 				{
-					if(search.second.type == Nectar::Enum::Type::Function)
+					if(search.second.type == NectarCore::Enum::Type::Function)
 					{
-						((Nectar::Class::Function*)search.second.data.ptr)->This.type = Nectar::Enum::Type::Object;
-						((Nectar::Class::Function*)search.second.data.ptr)->This.data.ptr = this;				
+						((NectarCore::Class::Function*)search.second.data.ptr)->This.type = NectarCore::Enum::Type::Object;
+						((NectarCore::Class::Function*)search.second.data.ptr)->This.data.ptr = this;				
 					}
 					
 					return search.second;
@@ -269,15 +269,15 @@ namespace Nectar::Class
 
 		if(_sview.compare("toString") == 0  || _sview.compare("toLocaleString") == 0)
 		{
-			object.push_back(Nectar::Type::pair_t(_str, __Nectar_Create_Var_Scoped_Anon( return __Nectar_Object_Stringify(this);)));
+			object.push_back(NectarCore::Type::pair_t(_str, __Nectar_Create_Var_Scoped_Anon( return __Nectar_Object_Stringify(this);)));
 		}
 		else if(_sview.compare("valueOf") == 0)
 		{
-			object.push_back(Nectar::Type::pair_t(_str, __Nectar_Create_Var_Scoped_Anon( return this; )));
+			object.push_back(NectarCore::Type::pair_t(_str, __Nectar_Create_Var_Scoped_Anon( return this; )));
 		}
 		else 
 		{
-			object.push_back(Nectar::Type::pair_t(_str, Nectar::Global::undefined));
+			object.push_back(NectarCore::Type::pair_t(_str, NectarCore::Global::undefined));
 		}
 
 		return object[object.size() - 1].second;
@@ -285,13 +285,13 @@ namespace Nectar::Class
 	#endif
 	
 	#ifndef __Nectar__OBJECT_VECTOR
-	Nectar::VAR &Object::operator[](double key)
+	NectarCore::VAR &Object::operator[](double key)
 	{
 		std::string _str = std::to_string(key);
-		Nectar::Type::StringView _sview = _str;
+		NectarCore::Type::StringView _sview = _str;
 		
-		Nectar::VAR& _obj = object[_str];
-		if(_obj.type != Nectar::Enum::Type::Undefined) 
+		NectarCore::VAR& _obj = object[_str];
+		if(_obj.type != NectarCore::Enum::Type::Undefined) 
 		{
 			if(!property[1])
 			{
@@ -304,10 +304,10 @@ namespace Nectar::Class
 			}
 			else 
 			{
-				if(_obj.type == Nectar::Enum::Type::Function)
+				if(_obj.type == NectarCore::Enum::Type::Function)
 				{
-					((Nectar::Class::Function*)_obj.data.ptr)->This.type = Nectar::Enum::Type::Object;
-					((Nectar::Class::Function*)_obj.data.ptr)->This.data.ptr = this;
+					((NectarCore::Class::Function*)_obj.data.ptr)->This.type = NectarCore::Enum::Type::Object;
+					((NectarCore::Class::Function*)_obj.data.ptr)->This.data.ptr = this;
 				}
 				if(!property[0]) return _obj;
 				else 
@@ -328,14 +328,14 @@ namespace Nectar::Class
 		}
 
 		if(!property[0]) return _obj;
-		__proxy = Nectar::Global::undefined;
+		__proxy = NectarCore::Global::undefined;
 		return __proxy;
 	}
 	#else
-	Nectar::VAR &Object::operator[](double key)
+	NectarCore::VAR &Object::operator[](double key)
 	{
 		std::string _str = std::to_string(key);
-		Nectar::Type::StringView _sview = _str;
+		NectarCore::Type::StringView _sview = _str;
 		
 		for (auto & search : object)
 		{
@@ -347,10 +347,10 @@ namespace Nectar::Class
 				}
 				else 
 				{
-					if(search.second.type == Nectar::Enum::Type::Function)
+					if(search.second.type == NectarCore::Enum::Type::Function)
 					{
-						((Nectar::Class::Function*)search.second.data.ptr)->This.type = Nectar::Enum::Type::Object;
-						((Nectar::Class::Function*)search.second.data.ptr)->This.data.ptr = this;				
+						((NectarCore::Class::Function*)search.second.data.ptr)->This.type = NectarCore::Enum::Type::Object;
+						((NectarCore::Class::Function*)search.second.data.ptr)->This.data.ptr = this;				
 					}
 					
 					return search.second;
@@ -360,15 +360,15 @@ namespace Nectar::Class
 
 		if(_sview.compare("toString") == 0  || _sview.compare("toLocaleString") == 0)
 		{
-			object.push_back(Nectar::Type::pair_t(_str, __Nectar_Create_Var_Scoped_Anon( return __Nectar_Object_Stringify(this);)));
+			object.push_back(NectarCore::Type::pair_t(_str, __Nectar_Create_Var_Scoped_Anon( return __Nectar_Object_Stringify(this);)));
 		}
 		else if(_sview.compare("valueOf") == 0)
 		{
-			object.push_back(Nectar::Type::pair_t(_str, __Nectar_Create_Var_Scoped_Anon( return this; )));
+			object.push_back(NectarCore::Type::pair_t(_str, __Nectar_Create_Var_Scoped_Anon( return this; )));
 		}
 		else 
 		{
-			object.push_back(Nectar::Type::pair_t(_str, Nectar::Global::undefined));
+			object.push_back(NectarCore::Type::pair_t(_str, NectarCore::Global::undefined));
 		}
 
 		return object[object.size() - 1].second;
@@ -376,13 +376,13 @@ namespace Nectar::Class
 	#endif
 	
 	#ifndef __Nectar__OBJECT_VECTOR
-	Nectar::VAR &Object::operator[](const char* key)
+	NectarCore::VAR &Object::operator[](const char* key)
 	{
 		std::string _str = key;
-		Nectar::Type::StringView _sview = _str;
+		NectarCore::Type::StringView _sview = _str;
 		
-		Nectar::VAR& _obj = object[_str];
-		if(_obj.type != Nectar::Enum::Type::Undefined) 
+		NectarCore::VAR& _obj = object[_str];
+		if(_obj.type != NectarCore::Enum::Type::Undefined) 
 		{
 			if(!property[1])
 			{
@@ -395,10 +395,10 @@ namespace Nectar::Class
 			}
 			else 
 			{
-				if(_obj.type == Nectar::Enum::Type::Function)
+				if(_obj.type == NectarCore::Enum::Type::Function)
 				{
-					((Nectar::Class::Function*)_obj.data.ptr)->This.type = Nectar::Enum::Type::Object;
-					((Nectar::Class::Function*)_obj.data.ptr)->This.data.ptr = this;
+					((NectarCore::Class::Function*)_obj.data.ptr)->This.type = NectarCore::Enum::Type::Object;
+					((NectarCore::Class::Function*)_obj.data.ptr)->This.data.ptr = this;
 				}
 				if(!property[0]) return _obj;
 				else 
@@ -419,14 +419,14 @@ namespace Nectar::Class
 		}
 
 		if(!property[0]) return _obj;
-		__proxy = Nectar::Global::undefined;
+		__proxy = NectarCore::Global::undefined;
 		return __proxy;
 	}
 	#else
-	Nectar::VAR &Object::operator[](const char* key)
+	NectarCore::VAR &Object::operator[](const char* key)
 	{
 		std::string _str = key;
-		Nectar::Type::StringView _sview = _str;
+		NectarCore::Type::StringView _sview = _str;
 
 		for (auto & search : object)
 		{
@@ -438,10 +438,10 @@ namespace Nectar::Class
 				}
 				else 
 				{
-					if(search.second.type == Nectar::Enum::Type::Function)
+					if(search.second.type == NectarCore::Enum::Type::Function)
 					{
-						((Nectar::Class::Function*)search.second.data.ptr)->This.type = Nectar::Enum::Type::Object;
-						((Nectar::Class::Function*)search.second.data.ptr)->This.data.ptr = this;				
+						((NectarCore::Class::Function*)search.second.data.ptr)->This.type = NectarCore::Enum::Type::Object;
+						((NectarCore::Class::Function*)search.second.data.ptr)->This.data.ptr = this;				
 					}
 					
 					return search.second;
@@ -451,15 +451,15 @@ namespace Nectar::Class
 
 		if(_sview.compare("toString") == 0  || _sview.compare("toLocaleString") == 0)
 		{
-			object.push_back(Nectar::Type::pair_t(_str, __Nectar_Create_Var_Scoped_Anon( return __Nectar_Object_Stringify(this);)));
+			object.push_back(NectarCore::Type::pair_t(_str, __Nectar_Create_Var_Scoped_Anon( return __Nectar_Object_Stringify(this);)));
 		}
 		else if(_sview.compare("valueOf") == 0)
 		{
-			object.push_back(Nectar::Type::pair_t(_str, __Nectar_Create_Var_Scoped_Anon( return this; )));
+			object.push_back(NectarCore::Type::pair_t(_str, __Nectar_Create_Var_Scoped_Anon( return this; )));
 		}
 		else 
 		{
-			object.push_back(Nectar::Type::pair_t(_str, Nectar::Global::undefined));
+			object.push_back(NectarCore::Type::pair_t(_str, NectarCore::Global::undefined));
 		}
 
 		return object[object.size() - 1].second;
@@ -660,4 +660,4 @@ namespace Nectar::Class
 		return Object();
 	}
 	// TODO: ">>>" and ">>>=" operators
-} // namespace Nectar::Class
+} // namespace NectarCore::Class

@@ -25,7 +25,7 @@
 #include <functional>
 #include <limits>
 
-namespace Nectar::Class
+namespace NectarCore::Class
 {
 	// Constructors
 	Native::Native() {}
@@ -66,11 +66,11 @@ namespace Nectar::Class
 		return "[native code]";
 	}
 	// Main operators
-	Nectar::VAR const Native::operator[](Nectar::VAR key) const
+	NectarCore::VAR const Native::operator[](NectarCore::VAR key) const
 	{
-		return Nectar::Global::undefined;
+		return NectarCore::Global::undefined;
 	}
-	Nectar::VAR &Native::operator[](Nectar::VAR key)
+	NectarCore::VAR &Native::operator[](NectarCore::VAR key)
 	{
 		#ifndef __Nectar__OBJECT_VECTOR
 		return object[(std::string)key];
@@ -83,12 +83,12 @@ namespace Nectar::Class
 			}
 		}
 
-		object.push_back(Nectar::Type::pair_t((std::string)key, Nectar::VAR()));
+		object.push_back(NectarCore::Type::pair_t((std::string)key, NectarCore::VAR()));
 		return object[object.size() - 1].second;
 		#endif
 	}
 	
-	Nectar::VAR &Native::operator[](int key)
+	NectarCore::VAR &Native::operator[](int key)
 	{
 		#ifndef __Nectar__OBJECT_VECTOR
 		return object[std::to_string(key)];
@@ -102,12 +102,12 @@ namespace Nectar::Class
 			}
 		}
 
-		object.push_back(Nectar::Type::pair_t(_str, Nectar::VAR()));
+		object.push_back(NectarCore::Type::pair_t(_str, NectarCore::VAR()));
 		return object[object.size() - 1].second;
 		#endif
 	}
 	
-	Nectar::VAR &Native::operator[](double key)
+	NectarCore::VAR &Native::operator[](double key)
 	{
 		#ifndef __Nectar__OBJECT_VECTOR
 		return object[std::to_string(key)];
@@ -121,13 +121,13 @@ namespace Nectar::Class
 			}
 		}
 
-		object.push_back(Nectar::Type::pair_t(_str, Nectar::VAR()));
+		object.push_back(NectarCore::Type::pair_t(_str, NectarCore::VAR()));
 		return object[object.size() - 1].second;
 		#endif
 	}
 	
 	
-	Nectar::VAR &Native::operator[](const char* key)
+	NectarCore::VAR &Native::operator[](const char* key)
 	{
 		std::string str = key;
 		#ifndef __Nectar__OBJECT_VECTOR
@@ -141,7 +141,7 @@ namespace Nectar::Class
 			}
 		}
 
-		object.push_back(Nectar::Type::pair_t(str, Nectar::VAR()));
+		object.push_back(NectarCore::Type::pair_t(str, NectarCore::VAR()));
 		return object[object.size() - 1].second;
 		#endif
 	}
@@ -340,4 +340,4 @@ namespace Nectar::Class
 		return Native();
 	}
 	// TODO: ">>>" and ">>>=" operators
-} // namespace Nectar::Class
+} // namespace NectarCore::Class

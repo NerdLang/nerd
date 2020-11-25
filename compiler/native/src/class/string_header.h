@@ -23,7 +23,7 @@
 #pragma once
 #include "_meta.h"
 
-namespace Nectar::Class
+namespace NectarCore::Class
 {
 	class String : public virtual Base
 	{
@@ -34,7 +34,7 @@ namespace Nectar::Class
 		String(const char* val);
 		// Properties
 		std::string value;
-		Nectar::Type::object_t object;
+		NectarCore::Type::object_t object;
 		count_t counter = 1;
 		// Methods
 		inline void Delete() noexcept;
@@ -46,19 +46,19 @@ namespace Nectar::Class
 		explicit operator long long() const noexcept;
 		explicit operator std::string() const noexcept;
 		// Main operators
-		Nectar::VAR const operator[](Nectar::VAR key) const;
-		Nectar::VAR &operator[](Nectar::VAR key);
-		Nectar::VAR &operator[](int key);
-		Nectar::VAR &operator[](double key);
-		Nectar::VAR &operator[](const char* key);
+		NectarCore::VAR const operator[](NectarCore::VAR key) const;
+		NectarCore::VAR &operator[](NectarCore::VAR key);
+		NectarCore::VAR &operator[](int key);
+		NectarCore::VAR &operator[](double key);
+		NectarCore::VAR &operator[](const char* key);
 		
 		template <class... Args>
-		Nectar::VAR operator()(Args... args) const 
+		NectarCore::VAR operator()(Args... args) const 
 		{
 			#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 			throw InvalidTypeException();
 			#endif
-			return Nectar::Global::undefined;
+			return NectarCore::Global::undefined;
 		}
 		
 		// Comparation operators
@@ -100,14 +100,14 @@ namespace Nectar::Class
 		String operator<<=(const String &_v1);
 		// TODO: ">>>" and ">>>=" operators
 		/*** STRING METHODS ***/
-		Nectar::VAR toString(Nectar::VAR* _args, int _length) const;
-		Nectar::VAR split(Nectar::VAR* _args, int _length) const;
-		Nectar::VAR indexOf(Nectar::VAR* _args, int _length) const;
-		Nectar::VAR lastIndexOf(Nectar::VAR* _args, int _length) const;
-		Nectar::VAR search(Nectar::VAR* _args, int _length) const;
-		Nectar::VAR slice(Nectar::VAR* _args, int _length) const;
-		Nectar::VAR substr(Nectar::VAR* _args, int _length) const;
-		Nectar::VAR replace(Nectar::VAR* _args, int _length) const;
+		NectarCore::VAR toString(NectarCore::VAR* _args, int _length) const;
+		NectarCore::VAR split(NectarCore::VAR* _args, int _length) const;
+		NectarCore::VAR indexOf(NectarCore::VAR* _args, int _length) const;
+		NectarCore::VAR lastIndexOf(NectarCore::VAR* _args, int _length) const;
+		NectarCore::VAR search(NectarCore::VAR* _args, int _length) const;
+		NectarCore::VAR slice(NectarCore::VAR* _args, int _length) const;
+		NectarCore::VAR substr(NectarCore::VAR* _args, int _length) const;
+		NectarCore::VAR replace(NectarCore::VAR* _args, int _length) const;
 		/* END STRING METHODS */
 	};
-} // namespace Nectar::Class
+} // namespace NectarCore::Class

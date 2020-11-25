@@ -23,19 +23,19 @@
 #pragma once
 #include "_meta.h"
 
-namespace Nectar::Class
+namespace NectarCore::Class
 {
 	class FixedArray : public virtual Base
 	{
 	public:
 		// Constructors
 		FixedArray();
-		FixedArray(Nectar::VAR length);
+		FixedArray(NectarCore::VAR length);
 		// Properties
 		count_t counter = 0;
-		Nectar::VAR length;
-		Nectar::VAR* value;
-		Nectar::Type::object_t object;
+		NectarCore::VAR length;
+		NectarCore::VAR* value;
+		NectarCore::Type::object_t object;
 		// Methods
 		inline void Delete() noexcept;
 		inline void* Copy() noexcept;
@@ -46,12 +46,12 @@ namespace Nectar::Class
 		explicit operator long long() const noexcept;
 		explicit operator std::string() const noexcept;
 		// Main operators
-		Nectar::VAR const operator[](Nectar::VAR key) const;
-		Nectar::VAR const operator[](int key) const;
-		Nectar::VAR &operator[](Nectar::VAR key);
-		Nectar::VAR &operator[](int key);
-		Nectar::VAR &operator[](double key);
-		Nectar::VAR &operator[](const char* key);
+		NectarCore::VAR const operator[](NectarCore::VAR key) const;
+		NectarCore::VAR const operator[](int key) const;
+		NectarCore::VAR &operator[](NectarCore::VAR key);
+		NectarCore::VAR &operator[](int key);
+		NectarCore::VAR &operator[](double key);
+		NectarCore::VAR &operator[](const char* key);
 
 		// Comparation operators
 		FixedArray operator!() const;
@@ -106,4 +106,4 @@ namespace Nectar::Class
 		FixedArray operator<<=(const FixedArray &_v1);
 		// TODO: ">>>" and ">>>=" operators
 	};
-} // namespace Nectar::Class
+} // namespace NectarCore::Class

@@ -25,7 +25,7 @@ function replaceObjAddr(_code)
 	var Function = [];
 
 	var _searchReg = / *__Nectar_Object_Set *\( *([a-zA-Z0-9_\-" ]*) *, *([a-zA-Z0-9_\-\(\)" ]*) *, *([a-zA-Z0-9_\-" ]*) *\)/g;
-	var _searchFN = / *([a-zA-Z0-9_\-" ]*) * = Nectar::VAR\(Nectar::Enum::Type::Function/g;
+	var _searchFN = / *([a-zA-Z0-9_\-" ]*) * = NectarCore::VAR\(NectarCore::Enum::Type::Function/g;
 	
 	var _allFN = _code.match(new RegExp(_searchFN));
 	if(_allFN)

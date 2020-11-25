@@ -26,7 +26,7 @@ using namespace std::chrono;
 
 function __Nectar_NATIVE_DATE_NOW()
 {
-   return Nectar::VAR((double)duration_cast<milliseconds>(
+   return NectarCore::VAR((double)duration_cast<milliseconds>(
       system_clock::now().time_since_epoch()
    ).count());
 };

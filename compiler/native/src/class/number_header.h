@@ -20,11 +20,11 @@
  *
  */
  
-namespace Nectar::Class::NUMBER 
+namespace NectarCore::Class::NUMBER 
 {
-	extern Nectar::VAR _fn;
-	std::string toString(Nectar::VAR& __Nectar_THIS, Nectar::VAR* _args, int _length);
-	double valueOf(Nectar::VAR& __Nectar_THIS, Nectar::VAR* _args, int _length);
-	std::string toFixed(Nectar::VAR& __Nectar_THIS, Nectar::VAR* _args, int _length);
-	inline Nectar::VAR& Accessor(Nectar::VAR _this, Nectar::VAR key);
+	extern NectarCore::VAR _fn;
+	std::string toString(NectarCore::VAR& __Nectar_THIS, NectarCore::VAR* _args, int _length);
+	double valueOf(NectarCore::VAR& __Nectar_THIS, NectarCore::VAR* _args, int _length);
+	std::string toFixed(NectarCore::VAR& __Nectar_THIS, NectarCore::VAR* _args, int _length);
+	inline NectarCore::VAR& Accessor(NectarCore::VAR _this, NectarCore::VAR key);
 }

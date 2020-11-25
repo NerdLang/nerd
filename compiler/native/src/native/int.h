@@ -20,85 +20,85 @@
  *
  */
  
-inline Nectar::VAR operator+(int _i, Nectar::VAR _v)
+inline NectarCore::VAR operator+(int _i, NectarCore::VAR _v)
 {
-	if(_v.type == Nectar::Enum::Type::String) return __Nectar_DOUBLE_TO_STRING(_i) + (std::string)_v;
+	if(_v.type == NectarCore::Enum::Type::String) return __Nectar_DOUBLE_TO_STRING(_i) + (std::string)_v;
 	else return _i + (double)_v;
 }
 
-void operator+=(int& _i, Nectar::VAR _v)
+void operator+=(int& _i, NectarCore::VAR _v)
 {
 	_i += (double)_v;
 }
 
-inline double operator-(int _i, Nectar::VAR _v)
+inline double operator-(int _i, NectarCore::VAR _v)
 {
 	return _i - (double)_v;
 }
 
-void operator-=(int& _i, Nectar::VAR _v)
+void operator-=(int& _i, NectarCore::VAR _v)
 {
 	_i -= (double)_v;
 }
 
-inline double operator*(int _i, Nectar::VAR _v)
+inline double operator*(int _i, NectarCore::VAR _v)
 {
 	return _i * (double)_v;
 }
 
-void operator*=(int& _i, Nectar::VAR _v)
+void operator*=(int& _i, NectarCore::VAR _v)
 {
 	_i *= _v;
 }
 
-inline double operator/(int _i, Nectar::VAR _v)
+inline double operator/(int _i, NectarCore::VAR _v)
 {
 	return _i / (double)_v;
 }
 
-void operator/=(int& _i, Nectar::VAR _v)
+void operator/=(int& _i, NectarCore::VAR _v)
 {
 	_i /= _v;
 }
 
-inline double operator%(int _i, Nectar::VAR _v)
+inline double operator%(int _i, NectarCore::VAR _v)
 {
 	return (int)_i % (int)_v;
 }
 
-void operator%=(int& _i, Nectar::VAR _v)
+void operator%=(int& _i, NectarCore::VAR _v)
 {
 	_i %= _v;
 }
 
-inline double operator==(int _i, Nectar::VAR _v)
+inline double operator==(int _i, NectarCore::VAR _v)
 {
 	return _i == (double)_v;
 }
 
-inline double operator!=(int _i, Nectar::VAR _v)
+inline double operator!=(int _i, NectarCore::VAR _v)
 {
 	return _i != (double)_v;
 }
 
-inline double operator>(int _i, Nectar::VAR _v)
+inline double operator>(int _i, NectarCore::VAR _v)
 {
 	return _i > (double)_v;
 }
 
-inline double operator>=(int _i, Nectar::VAR _v)
+inline double operator>=(int _i, NectarCore::VAR _v)
 {
 	return _i >= (double)_v;
 }
 
 
-inline double operator<(int _i, Nectar::VAR _v)
+inline double operator<(int _i, NectarCore::VAR _v)
 {
 	return _i < (double)_v;
 }
 
 
-inline double operator<=(int _i, Nectar::VAR _v)
+inline double operator<=(int _i, NectarCore::VAR _v)
 {
 	return _i <= (double)_v;
 }

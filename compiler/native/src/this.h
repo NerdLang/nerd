@@ -20,7 +20,7 @@
  *
  */
  
-namespace Nectar::Global
+namespace NectarCore::Global
 {
-	Nectar::VAR __Nectar_THIS = new Nectar::Class::Object();
+	NectarCore::VAR __Nectar_THIS = new NectarCore::Class::Object();
 }

@@ -23,19 +23,19 @@
 #pragma once
 #include "_meta.h"
 
-namespace Nectar::Class
+namespace NectarCore::Class
 {
 	class Array : public virtual Base
 	{
 	public:
 		// Constructors
 		Array();
-		Array(Nectar::Type::vector_t vec);
+		Array(NectarCore::Type::vector_t vec);
 		// Properties
 		count_t counter = 0;
-		Nectar::VAR length;
-		Nectar::Type::vector_t value;
-		Nectar::Type::object_t object;
+		NectarCore::VAR length;
+		NectarCore::Type::vector_t value;
+		NectarCore::Type::object_t object;
 		// Methods
 		inline void Delete() noexcept;
 		inline void* Copy() noexcept;
@@ -46,12 +46,12 @@ namespace Nectar::Class
 		explicit operator long long() const noexcept;
 		explicit operator std::string() const noexcept;
 		// Main operators
-		Nectar::VAR const operator[](Nectar::VAR key) const;
-		Nectar::VAR const operator[](int key) const;
-		Nectar::VAR &operator[](Nectar::VAR key);
-		Nectar::VAR &operator[](int key);
-		Nectar::VAR &operator[](double key);
-		Nectar::VAR &operator[](const char* key);
+		NectarCore::VAR const operator[](NectarCore::VAR key) const;
+		NectarCore::VAR const operator[](int key) const;
+		NectarCore::VAR &operator[](NectarCore::VAR key);
+		NectarCore::VAR &operator[](int key);
+		NectarCore::VAR &operator[](double key);
+		NectarCore::VAR &operator[](const char* key);
 
 		// Comparation operators
 		Array operator!() const;
@@ -106,38 +106,38 @@ namespace Nectar::Class
 		Array operator<<=(const Array &_v1);
 		// TODO: ">>>" and ">>>=" operators
 		
-		Nectar::VAR __iterator(Nectar::VAR* args, int _length) const;
-		Nectar::VAR __unscopables(Nectar::VAR* args, int _length) const;
-		Nectar::VAR concat(Nectar::VAR* args, int _length) const;
-		Nectar::VAR copyWithin(Nectar::VAR* args, int _length);
-		Nectar::VAR entries(Nectar::VAR* args, int _length) const;
-		Nectar::VAR every(Nectar::VAR* args, int _length) const;
-		Nectar::VAR fill(Nectar::VAR* args, int _length) const;
-		Nectar::VAR filter(Nectar::VAR* args, int _length) const;
-		Nectar::VAR find(Nectar::VAR* args, int _length) const;
-		Nectar::VAR findIndex(Nectar::VAR* args, int _length) const;
-		Nectar::VAR flat(Nectar::VAR* args, int _length) const;
-		Nectar::VAR flatMap(Nectar::VAR* args, int _length) const;
-		Nectar::VAR forEach(Nectar::VAR* args, int _length) const;
-		Nectar::VAR includes(Nectar::VAR* args, int _length) const;
-		Nectar::VAR indexOf(Nectar::VAR* args, int _length) const;
-		Nectar::VAR join(Nectar::VAR* args, int _length) const;
-		Nectar::VAR keys(Nectar::VAR* args, int _length) const;
-		Nectar::VAR lastIndexOf(Nectar::VAR* args, int _length) const;
-		Nectar::VAR map(Nectar::VAR* args, int _length) const;
-		Nectar::VAR pop(Nectar::VAR* args, int _length);
-		Nectar::VAR push(Nectar::VAR* args, int _length);
-		Nectar::VAR reduce(Nectar::VAR* args, int _length) const;
-		Nectar::VAR reduceRight(Nectar::VAR* args, int _length) const;
-		Nectar::VAR reverse(Nectar::VAR* args, int _length);
-		Nectar::VAR shift(Nectar::VAR* args, int _length);
-		Nectar::VAR slice(Nectar::VAR* args, int _length) const;
-		Nectar::VAR some(Nectar::VAR* args, int _length) const;
-		Nectar::VAR sort(Nectar::VAR* args, int _length) const;
-		Nectar::VAR splice(Nectar::VAR* args, int _length);
-		Nectar::VAR toLocaleString(Nectar::VAR* args, int _length) const;
-		Nectar::VAR toString(Nectar::VAR* args, int _length) const;
-		Nectar::VAR unshift(Nectar::VAR* args, int _length);
-		Nectar::VAR values(Nectar::VAR* args, int _length) const;
+		NectarCore::VAR __iterator(NectarCore::VAR* args, int _length) const;
+		NectarCore::VAR __unscopables(NectarCore::VAR* args, int _length) const;
+		NectarCore::VAR concat(NectarCore::VAR* args, int _length) const;
+		NectarCore::VAR copyWithin(NectarCore::VAR* args, int _length);
+		NectarCore::VAR entries(NectarCore::VAR* args, int _length) const;
+		NectarCore::VAR every(NectarCore::VAR* args, int _length) const;
+		NectarCore::VAR fill(NectarCore::VAR* args, int _length) const;
+		NectarCore::VAR filter(NectarCore::VAR* args, int _length) const;
+		NectarCore::VAR find(NectarCore::VAR* args, int _length) const;
+		NectarCore::VAR findIndex(NectarCore::VAR* args, int _length) const;
+		NectarCore::VAR flat(NectarCore::VAR* args, int _length) const;
+		NectarCore::VAR flatMap(NectarCore::VAR* args, int _length) const;
+		NectarCore::VAR forEach(NectarCore::VAR* args, int _length) const;
+		NectarCore::VAR includes(NectarCore::VAR* args, int _length) const;
+		NectarCore::VAR indexOf(NectarCore::VAR* args, int _length) const;
+		NectarCore::VAR join(NectarCore::VAR* args, int _length) const;
+		NectarCore::VAR keys(NectarCore::VAR* args, int _length) const;
+		NectarCore::VAR lastIndexOf(NectarCore::VAR* args, int _length) const;
+		NectarCore::VAR map(NectarCore::VAR* args, int _length) const;
+		NectarCore::VAR pop(NectarCore::VAR* args, int _length);
+		NectarCore::VAR push(NectarCore::VAR* args, int _length);
+		NectarCore::VAR reduce(NectarCore::VAR* args, int _length) const;
+		NectarCore::VAR reduceRight(NectarCore::VAR* args, int _length) const;
+		NectarCore::VAR reverse(NectarCore::VAR* args, int _length);
+		NectarCore::VAR shift(NectarCore::VAR* args, int _length);
+		NectarCore::VAR slice(NectarCore::VAR* args, int _length) const;
+		NectarCore::VAR some(NectarCore::VAR* args, int _length) const;
+		NectarCore::VAR sort(NectarCore::VAR* args, int _length) const;
+		NectarCore::VAR splice(NectarCore::VAR* args, int _length);
+		NectarCore::VAR toLocaleString(NectarCore::VAR* args, int _length) const;
+		NectarCore::VAR toString(NectarCore::VAR* args, int _length) const;
+		NectarCore::VAR unshift(NectarCore::VAR* args, int _length);
+		NectarCore::VAR values(NectarCore::VAR* args, int _length) const;
 	};
-} // namespace Nectar::Class
+} // namespace NectarCore::Class

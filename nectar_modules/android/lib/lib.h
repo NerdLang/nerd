@@ -23,10 +23,10 @@
 
 function __Nectar_ANDROID_DRAW(_value)
 { 
-	drawJNI(__Nectar_Get_String(_value));
+	drawJNI(((std::string)_value).c_str());
 }
 
 function __Nectar_ANDROID_NAVIGATE(_value)
 { 
-	navigateJNI(__Nectar_Get_String(_value));
+	navigateJNI(((std::string)_value).c_str());
 }

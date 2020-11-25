@@ -29,9 +29,9 @@ function __Nectar_NATIVE_OBJECT_FREEZE(_obj)
 {
 	if(_obj)
 	{
-		if(_obj.type == Nectar::Enum::Type::Object)
+		if(_obj.type == NectarCore::Enum::Type::Object)
 		{
-			((Nectar::Class::Object*)_obj.data.ptr)->property.set(0, 1);
+			((NectarCore::Class::Object*)_obj.data.ptr)->property.set(0, 1);
 			return _obj;
 		}
 	}

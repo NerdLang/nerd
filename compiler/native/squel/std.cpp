@@ -23,15 +23,15 @@
  #define __Nectar_ENV_STD
  #include "nectar.hpp"
  
- using namespace Nectar::Global;
- using namespace Nectar::Functions;
+ using namespace NectarCore::Global;
+ using namespace NectarCore::Functions;
  
  var __NJS_ENV = "std";
  var __NJS_PLATFORM = "{{__PLATFORM__}}";
  
- #define __NJS_Create_Object() new Nectar::Class::Object()
- #define __NJS_Create_Array(_arr) new Nectar::Class::Array(_arr)
- #define __NJS_InitVar() Nectar::VAR()
+ #define __NJS_Create_Object() new NectarCore::Class::Object()
+ #define __NJS_Create_Array(_arr) new NectarCore::Class::Array(_arr)
+ #define __NJS_InitVar() NectarCore::VAR()
  {INCLUDE}
  
  {DECL}
@@ -56,11 +56,11 @@ int main(int argc, char* argv[])
 		{
 			{CODE}
 
-			Nectar::Event::Loop();
+			NectarCore::Event::Loop();
 		}
 		
 	}
-	catch(Nectar::VAR __Nectar_Global_Exception)
+	catch(NectarCore::VAR __Nectar_Global_Exception)
 	{
 		__Nectar_Log_Console(__Nectar_Global_Exception);
 		exit(1);

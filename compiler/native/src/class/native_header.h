@@ -23,7 +23,7 @@
 #pragma once
 #include "_meta.h"
 
-namespace Nectar::Class
+namespace NectarCore::Class
 {
 	class Native : public virtual Base
 	{
@@ -34,7 +34,7 @@ namespace Nectar::Class
 		// Properties
 		count_t counter = 1;
 		void* value = nullptr;
-		Nectar::Type::object_t object;
+		NectarCore::Type::object_t object;
 		// Methods
 		inline void Delete() noexcept;
 		inline void* Copy() noexcept;
@@ -45,16 +45,16 @@ namespace Nectar::Class
 		explicit operator long long() const noexcept;
 		explicit operator std::string() const noexcept;
 		// Main operators
-		Nectar::VAR const operator[](Nectar::VAR key) const;
-		Nectar::VAR &operator[](Nectar::VAR key);
-		Nectar::VAR &operator[](int key);
-		Nectar::VAR &operator[](double key);
-		Nectar::VAR &operator[](const char* key);
+		NectarCore::VAR const operator[](NectarCore::VAR key) const;
+		NectarCore::VAR &operator[](NectarCore::VAR key);
+		NectarCore::VAR &operator[](int key);
+		NectarCore::VAR &operator[](double key);
+		NectarCore::VAR &operator[](const char* key);
 		template <class... Args>
-		Nectar::VAR operator()(Args... args) const
+		NectarCore::VAR operator()(Args... args) const
 		{
-			auto _args = Nectar::Type::vector_t{(Nectar::VAR)args...};
-			return (*static_cast<std::function<Nectar::VAR(Nectar::Type::vector_t)> *>(value))(_args);
+			auto _args = NectarCore::Type::vector_t{(NectarCore::VAR)args...};
+			return (*static_cast<std::function<NectarCore::VAR(NectarCore::Type::vector_t)> *>(value))(_args);
 		}
 	
 		// Comparation operators
@@ -96,4 +96,4 @@ namespace Nectar::Class
 		Native operator<<=(const Native &_v1);
 		// TODO: ">>>" and ">>>=" operators
 	};
-} // namespace Nectar::Class
+} // namespace NectarCore::Class

@@ -22,10 +22,10 @@
  
 #include <deque>
 
-namespace Nectar::Event
+namespace NectarCore::Event
 {
-	std::deque<Nectar::VAR> evQ = {};
-	std::deque<std::tuple<uint64_t,bool,Nectar::VAR>> timeQ = {};
+	std::deque<NectarCore::VAR> evQ = {};
+	std::deque<std::tuple<uint64_t,bool,NectarCore::VAR>> timeQ = {};
 
 	inline uint64_t getMillis()
 	{
@@ -44,7 +44,7 @@ namespace Nectar::Event
 		#endif
 	}
 
-	void setTimer(Nectar::VAR _var, int _timer, bool repeat)
+	void setTimer(NectarCore::VAR _var, int _timer, bool repeat)
 	{
 		uint64_t _trigger = getMillis();
 		_trigger += _timer;
@@ -63,18 +63,18 @@ namespace Nectar::Event
 				{
 					#ifndef __Nectar_ENV_ARDUINO
 						uint64_t& _t = std::get<0>(*it);
-						Nectar::VAR _ev = std::get<2>(*it);
+						NectarCore::VAR _ev = std::get<2>(*it);
 						bool& _b = std::get<1>(*it);
 					#else
 						uint64_t _t = it->get<0>();
-						Nectar::VAR _ev = it->get<2>();
+						NectarCore::VAR _ev = it->get<2>();
 						bool _b = it->get<1>();
 					#endif
 					if(_t <= _now)
 					{
 						if(!_b) timeQ.erase(it);
 						_ev();
-						if(!_b) ((Nectar::Class::Base*)_ev.data.ptr)->Delete();
+						if(!_b) ((NectarCore::Class::Base*)_ev.data.ptr)->Delete();
 						else it++;
 					}
 					else
@@ -85,16 +85,16 @@ namespace Nectar::Event
 				}
 				if(evQ.size() == 0 && timeQ.size() > 0)
 				{
-					Nectar::Event::sleep(min);
+					NectarCore::Event::sleep(min);
 				}
 			}
 
 			if(evQ.size())
 			{
-				Nectar::VAR _ev = evQ.front();
+				NectarCore::VAR _ev = evQ.front();
 				evQ.pop_front();
 				_ev();
-				((Nectar::Class::Base*)_ev.data.ptr)->Delete();
+				((NectarCore::Class::Base*)_ev.data.ptr)->Delete();
 			}
 		}
 	}

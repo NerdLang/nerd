@@ -64,7 +64,7 @@ function __Nectar_fs_writeFileSync(_name, _content)
   {
     return __Nectar_Create_Boolean(0);
   }
-  myfile.write(((Nectar::Class::String*)_content.data.ptr)->value.c_str(), ((Nectar::Class::String*)_content.data.ptr)->value.size());
+  myfile.write(((NectarCore::Class::String*)_content.data.ptr)->value.c_str(), ((NectarCore::Class::String*)_content.data.ptr)->value.size());
   myfile.close();
 
   return __Nectar_Create_Boolean(1);
@@ -77,7 +77,7 @@ function __Nectar_fs_appendFileSync(_name, _content)
   {
     return __Nectar_Create_Boolean(0);
   }
-  myfile.write(((Nectar::Class::String*)_content.data.ptr)->value.c_str(), ((Nectar::Class::String*)_content.data.ptr)->value.size());
+  myfile.write(((NectarCore::Class::String*)_content.data.ptr)->value.c_str(), ((NectarCore::Class::String*)_content.data.ptr)->value.size());
   myfile.close();
 
   return __Nectar_Create_Boolean(1);
@@ -128,7 +128,7 @@ function __Nectar_fs_readFile(_name, _cb)
   if(fp == NULL)
   {
 	if(_cb) _cb(null, "");
-    return Nectar::Global::undefined;
+    return NectarCore::Global::undefined;
   }
 
   fseek(fp, 0L, SEEK_END);
@@ -151,9 +151,9 @@ function __Nectar_fs_writeFile(_name, _content, _cb)
   if(!myfile)
   {
 	if(_cb) _cb(null, __Nectar_Boolean_FALSE);
-    return Nectar::Global::undefined;
+    return NectarCore::Global::undefined;
   }
-  myfile.write(((Nectar::Class::String*)_content.data.ptr)->value.c_str(), ((Nectar::Class::String*)_content.data.ptr)->value.size());
+  myfile.write(((NectarCore::Class::String*)_content.data.ptr)->value.c_str(), ((NectarCore::Class::String*)_content.data.ptr)->value.size());
   myfile.close();
 
   if(_cb) _cb(null, __Nectar_Boolean_TRUE);
@@ -165,9 +165,9 @@ function __Nectar_fs_appendFile(_name, _content, _cb)
   if(!myfile)
   {
 	if(_cb) _cb(null, __Nectar_Boolean_FALSE);
-    return Nectar::Global::undefined;
+    return NectarCore::Global::undefined;
   }
-  myfile.write(((Nectar::Class::String*)_content.data.ptr)->value.c_str(), ((Nectar::Class::String*)_content.data.ptr)->value.size());
+  myfile.write(((NectarCore::Class::String*)_content.data.ptr)->value.c_str(), ((NectarCore::Class::String*)_content.data.ptr)->value.size());
   myfile.close();
 
   if(_cb) _cb(null, __Nectar_Boolean_TRUE);

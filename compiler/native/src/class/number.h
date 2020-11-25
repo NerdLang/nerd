@@ -20,21 +20,21 @@
  *
  */
  
-namespace Nectar::Class::NUMBER 
+namespace NectarCore::Class::NUMBER 
 {
-	Nectar::VAR _fn;
+	NectarCore::VAR _fn;
 	
-	std::string toString(Nectar::VAR& __Nectar_THIS, Nectar::VAR* _args, int _length)
+	std::string toString(NectarCore::VAR& __Nectar_THIS, NectarCore::VAR* _args, int _length)
 	{
 		return (std::string)__Nectar_THIS;
 	}
 	
-	double valueOf(Nectar::VAR& __Nectar_THIS, Nectar::VAR* _args, int _length)
+	double valueOf(NectarCore::VAR& __Nectar_THIS, NectarCore::VAR* _args, int _length)
 	{
 		return __Nectar_THIS.data.number;
 	}
 	
-	std::string toFixed(Nectar::VAR& __Nectar_THIS, Nectar::VAR* _args, int _length)
+	std::string toFixed(NectarCore::VAR& __Nectar_THIS, NectarCore::VAR* _args, int _length)
 	{
 		int precision;
 		if(_length > 0)
@@ -48,27 +48,27 @@ namespace Nectar::Class::NUMBER
 		return str;
 	}
 	
-	inline Nectar::VAR& Accessor(Nectar::VAR _this, Nectar::VAR key)
+	inline NectarCore::VAR& Accessor(NectarCore::VAR _this, NectarCore::VAR key)
 	{
 		if(((std::string)key).compare("toFixed") == 0)
 		{
 			_fn = __Nectar_Create_Var_Scoped_Anon( return toFixed(__Nectar_THIS, __Nectar_VARARGS, __Nectar_VARLENGTH); );
-			((Nectar::Class::Function*)_fn.data.ptr)->This = _this;
+			((NectarCore::Class::Function*)_fn.data.ptr)->This = _this;
 			return _fn;
 		}
 		else if(((std::string)key).compare("toString") == 0)
 		{
 			_fn = __Nectar_Create_Var_Scoped_Anon( return toString(__Nectar_THIS, __Nectar_VARARGS, __Nectar_VARLENGTH); );
-			((Nectar::Class::Function*)_fn.data.ptr)->This = _this;
+			((NectarCore::Class::Function*)_fn.data.ptr)->This = _this;
 			return _fn;
 		}
 		else if(((std::string)key).compare("valueOf") == 0)
 		{
 			_fn = __Nectar_Create_Var_Scoped_Anon( return valueOf(__Nectar_THIS, __Nectar_VARARGS, __Nectar_VARLENGTH); );
-			((Nectar::Class::Function*)_fn.data.ptr)->This = _this;
+			((NectarCore::Class::Function*)_fn.data.ptr)->This = _this;
 			return _fn;
 		}
 		
-		return Nectar::Global::undefined;
+		return NectarCore::Global::undefined;
 	}
 }

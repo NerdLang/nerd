@@ -20,19 +20,19 @@
  *
  */
  
-inline Nectar::VAR operator+(double _i, Nectar::VAR _v);
-void operator+=(double& _i, Nectar::VAR _v);
-inline double operator-(double _i, Nectar::VAR _v);
-void operator-=(double& _i, Nectar::VAR _v);
-inline double operator*(double _i, Nectar::VAR _v);
-void operator*=(double& _i, Nectar::VAR _v);
-inline double operator/(double _i, Nectar::VAR _v);
-void operator/=(double& _i, Nectar::VAR _v);
-inline double operator%(double _i, Nectar::VAR _v);
-void operator%=(double& _i, Nectar::VAR _v);
-inline double operator==(double _i, Nectar::VAR _v);
-inline double operator!=(double _i, Nectar::VAR _v);
-inline double operator>(double _i, Nectar::VAR _v);
-inline double operator>=(double _i, Nectar::VAR _v);
-inline double operator<(double _i, Nectar::VAR _v);
-inline double operator<=(double _i, Nectar::VAR _v);
+inline NectarCore::VAR operator+(double _i, NectarCore::VAR _v);
+void operator+=(double& _i, NectarCore::VAR _v);
+inline double operator-(double _i, NectarCore::VAR _v);
+void operator-=(double& _i, NectarCore::VAR _v);
+inline double operator*(double _i, NectarCore::VAR _v);
+void operator*=(double& _i, NectarCore::VAR _v);
+inline double operator/(double _i, NectarCore::VAR _v);
+void operator/=(double& _i, NectarCore::VAR _v);
+inline double operator%(double _i, NectarCore::VAR _v);
+void operator%=(double& _i, NectarCore::VAR _v);
+inline double operator==(double _i, NectarCore::VAR _v);
+inline double operator!=(double _i, NectarCore::VAR _v);
+inline double operator>(double _i, NectarCore::VAR _v);
+inline double operator>=(double _i, NectarCore::VAR _v);
+inline double operator<(double _i, NectarCore::VAR _v);
+inline double operator<=(double _i, NectarCore::VAR _v);

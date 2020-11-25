@@ -20,9 +20,9 @@
  *
  */
 
-Nectar::VAR getArguments(int argc, char** argv)
+NectarCore::VAR getArguments(int argc, char** argv)
 {
-	Nectar::VAR __NJS_ARGS = new Nectar::Class::Array();
+	NectarCore::VAR __NJS_ARGS = new NectarCore::Class::Array();
 	for( int i = 0; i < argc; i++)
 	{
 		__NJS_ARGS[i] = argv[i];

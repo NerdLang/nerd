@@ -27,10 +27,10 @@
 
 function maybeCallback(cb) 
 {
-  if (cb.type == Nectar::Enum::Type::Function)
+  if (cb.type == NectarCore::Enum::Type::Function)
     return cb;
 
-  throw Nectar::VAR("Invalid Callback");
+  throw NectarCore::VAR("Invalid Callback");
 }
 
 long GetFileSize(std::string filename)
@@ -168,7 +168,7 @@ void onOpenFile(uv_fs_t* openReq)
 struct __Nectar_UV_FS_DATA
 {
 	std::string filename;
-	Nectar::Class::Function* fn;
+	NectarCore::Class::Function* fn;
 	char* charbuf;
 	int size;
 	uv_buf_t buffer;
@@ -177,7 +177,7 @@ struct __Nectar_UV_FS_DATA
 function __Nectar_fs_readFile(_name, _cb)
 { 
 	uv_fs_t* _openReq = new uv_fs_t();
-	__Nectar_UV_FS_DATA* _data = new __Nectar_UV_FS_DATA{.filename = (std::string)_name, .fn = (Nectar::Class::Function*)_cb.data.ptr};
+	__Nectar_UV_FS_DATA* _data = new __Nectar_UV_FS_DATA{.filename = (std::string)_name, .fn = (NectarCore::Class::Function*)_cb.data.ptr};
 	
 	_openReq->data = _data;
 	
@@ -186,7 +186,7 @@ function __Nectar_fs_readFile(_name, _cb)
 	{
 		if (openReq->result < 0)
 		{
-			Nectar::Class::Function* fn = ((__Nectar_UV_FS_DATA*)openReq->data)->fn;
+			NectarCore::Class::Function* fn = ((__Nectar_UV_FS_DATA*)openReq->data)->fn;
 			std::string result = uv_strerror(openReq->result);
 			
 			free(((__Nectar_UV_FS_DATA*)openReq->data)->charbuf);
@@ -214,7 +214,7 @@ function __Nectar_fs_readFile(_name, _cb)
 			{
 				if (readReq->result < 0)
 				{
-					Nectar::Class::Function* fn = ((__Nectar_UV_FS_DATA*)readReq->data)->fn;
+					NectarCore::Class::Function* fn = ((__Nectar_UV_FS_DATA*)readReq->data)->fn;
 					std::string result = uv_strerror(readReq->result);
 					
 					free(((__Nectar_UV_FS_DATA*)readReq->data)->charbuf);
@@ -228,7 +228,7 @@ function __Nectar_fs_readFile(_name, _cb)
 					uv_fs_close(__Nectar_UV_DEFAULT_LOOP, readReq, readReq->result,
 					[](uv_fs_t* closeReq)
 					{
-						Nectar::Class::Function* fn = ((__Nectar_UV_FS_DATA*)closeReq->data)->fn;
+						NectarCore::Class::Function* fn = ((__Nectar_UV_FS_DATA*)closeReq->data)->fn;
 						free(((__Nectar_UV_FS_DATA*)closeReq->data)->charbuf);
 						free((__Nectar_UV_FS_DATA*)closeReq->data);
 						free(closeReq);
@@ -242,8 +242,8 @@ function __Nectar_fs_readFile(_name, _cb)
 					memset(strBuf, 0, ((__Nectar_UV_FS_DATA*)readReq->data)->size);
 					memcpy(strBuf, ((__Nectar_UV_FS_DATA*)readReq->data)->charbuf, ((__Nectar_UV_FS_DATA*)readReq->data)->size);
 					
-					Nectar::Class::Function* fn = ((__Nectar_UV_FS_DATA*)readReq->data)->fn;
-					Nectar::VAR _res = strBuf;
+					NectarCore::Class::Function* fn = ((__Nectar_UV_FS_DATA*)readReq->data)->fn;
+					NectarCore::VAR _res = strBuf;
 					
 					free(((__Nectar_UV_FS_DATA*)readReq->data)->charbuf);
 					free((__Nectar_UV_FS_DATA*)readReq->data);

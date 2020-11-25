@@ -571,6 +571,7 @@ function Build(prepare)
 		}
 		catch(e)
 		{
+			console.log(e);
 			console.log("[!] Compilation error");
 			process.exit(1);
     }

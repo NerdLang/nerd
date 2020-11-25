@@ -42,7 +42,7 @@ function UnaryExpression(_path)
 	else if(_path.node.operator == "void")
 	{
 		var _rnd = "__Nectar_VOID_" + RND();
-		COMPILER.DECL.push(`Nectar::VAR ${_rnd}() { ${babel.generate(_path.node.arguments).code} return Nectar::Global::undefined;};`);
+		COMPILER.DECL.push(`NectarCore::VAR ${_rnd}() { ${babel.generate(_path.node.arguments).code} return NectarCore::Global::undefined;};`);
 		VISITOR.pushDeclVar(_rnd);
 		_path.replaceWithSourceString(`${_rnd}()`);
 	}

@@ -20,18 +20,18 @@
  *
  */
  
-namespace Nectar::Global
+namespace NectarCore::Global
 {	
-	using var = Nectar::VAR;
-	using let = Nectar::VAR;
-	extern Nectar::VAR undefined;
-	extern Nectar::VAR null;
-	extern Nectar::VAR Infinity;
-	extern Nectar::VAR NaN;
+	using var = NectarCore::VAR;
+	using let = NectarCore::VAR;
+	extern NectarCore::VAR undefined;
+	extern NectarCore::VAR null;
+	extern NectarCore::VAR Infinity;
+	extern NectarCore::VAR NaN;
 	
 	template <typename T>
-	Nectar::VAR __Nectar_InitVar(T _init)
+	NectarCore::VAR __Nectar_InitVar(T _init)
 	{
-		return Nectar::VAR(_init);
+		return NectarCore::VAR(_init);
 	}
 }

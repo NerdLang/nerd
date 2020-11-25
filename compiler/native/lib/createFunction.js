@@ -22,13 +22,13 @@
  
 function createFunction(_code, _scope)
 {	
-	var _return = ";return Nectar::Global::undefined;}";
+	var _return = ";return NectarCore::Global::undefined;}";
 	var _searchFN = new RegExp(/function +(.[a-zA-Z0-9_\-]*) *\((.*)\)/);
 	var _index = _code.search(_searchFN);
 	while(_index > -1)
 	{
 		var _genFN = "__NJS_FN_" + RND();
-		var _genVAR = "Nectar::VAR_" + RND();
+		var _genVAR = "NectarCore::VAR_" + RND();
 
 		var _var = "";
 		var _count = 0;
@@ -60,7 +60,7 @@ function createFunction(_code, _scope)
 		{
 			
 			_variadic = true;
-			_parameters = "var __Nectar_THIS, Nectar::VAR* __Nectar_VARARGS, int __Nectar_VARLENGTH";
+			_parameters = "var __Nectar_THIS, NectarCore::VAR* __Nectar_VARARGS, int __Nectar_VARLENGTH";
 
 			if(COMPILER.INFO.SCOPE[_match[1]].param.length == 1)
 			{
@@ -119,10 +119,10 @@ function createFunction(_code, _scope)
 							COMPILER.DECL.push("var " + _match[1] +";");
 							
 							var __STR_MARKER = "__LIT" + RND();
-							var _formated = `Nectar::Type::function_t* ${_genFN} = new Nectar::Type::function_t([${_catch}]( ${_parameters} ) -> Nectar::VAR ${_fn} ${_return} );`;
-							_formated += _match[1] + "=Nectar::VAR(Nectar::Enum::Type::Function, " + _genFN + ");";
-							if(CLI.cli["--debug"]) _formated += `((Nectar::Class::Function*)${_match[1]}._ptr)->code = R"${__STR_MARKER}(Function ${_match[1]}(${_match[2]}) ${_code.substring(_start, _end )}})${__STR_MARKER}";`
-							//else _formated += `((Nectar::Class::Function*)${_match[1]}._ptr)->code = R"([Function: ${_match[1]}])";`
+							var _formated = `NectarCore::Type::function_t* ${_genFN} = new NectarCore::Type::function_t([${_catch}]( ${_parameters} ) -> NectarCore::VAR ${_fn} ${_return} );`;
+							_formated += _match[1] + "=NectarCore::VAR(NectarCore::Enum::Type::Function, " + _genFN + ");";
+							if(CLI.cli["--debug"]) _formated += `((NectarCore::Class::Function*)${_match[1]}._ptr)->code = R"${__STR_MARKER}(Function ${_match[1]}(${_match[2]}) ${_code.substring(_start, _end )}})${__STR_MARKER}";`
+							//else _formated += `((NectarCore::Class::Function*)${_match[1]}._ptr)->code = R"([Function: ${_match[1]}])";`
 
 							_code = [_code.slice(0, _index), _formated, _code.slice(_end + 1)].join('');
 						}

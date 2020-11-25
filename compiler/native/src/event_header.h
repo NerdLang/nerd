@@ -22,13 +22,13 @@
  
 #include <deque>
 
-namespace Nectar::Event
+namespace NectarCore::Event
 {
-	extern std::deque<Nectar::VAR> evQ;
-	extern std::deque<std::tuple<uint64_t,bool,Nectar::VAR>> timeQ;
+	extern std::deque<NectarCore::VAR> evQ;
+	extern std::deque<std::tuple<uint64_t,bool,NectarCore::VAR>> timeQ;
 	
 	inline uint64_t getMillis();
 	void sleep(uint64_t _timer);
-	void setTimer(Nectar::VAR _var, int _timer, bool repeat);
+	void setTimer(NectarCore::VAR _var, int _timer, bool repeat);
 	void Loop();
 }

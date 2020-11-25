@@ -20,12 +20,12 @@
  *
  */
  
-Nectar::VAR __Nectar_Log_Console(Nectar::VAR _var);
-Nectar::VAR __Nectar_Object_Keys(Nectar::VAR _var);
-Nectar::VAR __Nectar_Object_Stringify(Nectar::VAR _var);
-Nectar::VAR __Nectar_Object_Stringify(Nectar::VAR _var, bool _bracket);
-Nectar::VAR __Nectar_Object_Clone(Nectar::VAR& _var);
-Nectar::VAR __Nectar_Object_Set(std::string _index, Nectar::VAR _value, Nectar::Type::object_t *_obj);
+NectarCore::VAR __Nectar_Log_Console(NectarCore::VAR _var);
+NectarCore::VAR __Nectar_Object_Keys(NectarCore::VAR _var);
+NectarCore::VAR __Nectar_Object_Stringify(NectarCore::VAR _var);
+NectarCore::VAR __Nectar_Object_Stringify(NectarCore::VAR _var, bool _bracket);
+NectarCore::VAR __Nectar_Object_Clone(NectarCore::VAR& _var);
+NectarCore::VAR __Nectar_Object_Set(std::string _index, NectarCore::VAR _value, NectarCore::Type::object_t *_obj);
 std::string __Nectar_DOUBLE_TO_STRING(double _var);
 
 /*** String MANIPULATION ***/
@@ -107,4 +107,4 @@ double __Nectar_Str_To_Double(m _left)
 }
 /* END Number MANIPULATION */
 
-Nectar::VAR getArguments(int argc, char** argv);
+NectarCore::VAR getArguments(int argc, char** argv);

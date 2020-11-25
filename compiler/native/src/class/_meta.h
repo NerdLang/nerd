@@ -23,7 +23,7 @@
 #pragma once
 #include <exception>
 
-namespace Nectar::Class
+namespace NectarCore::Class
 {
 #ifdef __Nectar_ENV_ARDUINO
 	typedef uint16_t count_t;
@@ -40,4 +40,4 @@ namespace Nectar::Class
 	const int SMI_MAX = 1073741823;
 	const int SMI_MIN = -1073741824;
 	#endif
-} // namespace Nectar::Class
+} // namespace NectarCore::Class

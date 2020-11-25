@@ -23,7 +23,7 @@
 #pragma once
 #include "_meta.h"
 
-namespace Nectar::Class
+namespace NectarCore::Class
 {
 	class Object : public virtual Base
 	{
@@ -33,8 +33,8 @@ namespace Nectar::Class
 		// Properties
 		std::bitset<4> property; // writable, prototype, configurable, enumarable
 		count_t counter = 0;
-		Nectar::Type::object_t object;
-		Nectar::Type::vector_p instance;
+		NectarCore::Type::object_t object;
+		NectarCore::Type::vector_p instance;
 		// Methods
 		inline void Delete() noexcept;
 		inline void jsDelete(const std::string _key) noexcept;
@@ -47,18 +47,18 @@ namespace Nectar::Class
 		explicit operator long long() const noexcept;
 		explicit operator std::string() const noexcept;
 		// Main operators
-		Nectar::VAR const operator[](Nectar::VAR key) const;
-		Nectar::VAR &operator[](Nectar::VAR key);
-		Nectar::VAR &operator[](int key);
-		Nectar::VAR &operator[](double key);
-		Nectar::VAR &operator[](const char* key);
+		NectarCore::VAR const operator[](NectarCore::VAR key) const;
+		NectarCore::VAR &operator[](NectarCore::VAR key);
+		NectarCore::VAR &operator[](int key);
+		NectarCore::VAR &operator[](double key);
+		NectarCore::VAR &operator[](const char* key);
 		template <class... Args>
-		Nectar::VAR operator()(Args... args) const 
+		NectarCore::VAR operator()(Args... args) const 
 		{
 			#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 			throw InvalidTypeException();
 			#endif
-			return Nectar::Global::undefined;
+			return NectarCore::Global::undefined;
 		}
 	
 		// Comparation operators
@@ -100,4 +100,4 @@ namespace Nectar::Class
 		Object operator<<=(const Object &_v1);
 		// TODO: ">>>" and ">>>=" operators
 	};
-} // namespace Nectar::Class
+} // namespace NectarCore::Class

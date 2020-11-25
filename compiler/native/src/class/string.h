@@ -25,7 +25,7 @@
 #include <string>
 #include <limits>
 
-namespace Nectar::Class
+namespace NectarCore::Class
 {
 	// Constructors
 	String::String()
@@ -101,34 +101,34 @@ namespace Nectar::Class
 	}
 	String::operator std::string() const noexcept { return value; }
 	// Main operators
-	Nectar::VAR const String::operator[](Nectar::VAR key) const
+	NectarCore::VAR const String::operator[](NectarCore::VAR key) const
 	{
-		if (key.type == Nectar::Enum::Type::Number)
+		if (key.type == NectarCore::Enum::Type::Number)
 		{
 			auto i = (int)key;
 			if (i >= 0 && i <= value.size())
 			{
 				return value.at(i);
 			}
-			else return Nectar::Global::undefined;
+			else return NectarCore::Global::undefined;
 		}
 		std::string _str = ((std::string)key);
-		Nectar::Type::StringView _sview = _str;
+		NectarCore::Type::StringView _sview = _str;
 		
 		if(_sview.compare("length") == 0)
 		{
 			return (int)value.size();
 		}
 		
-		return Nectar::Global::undefined;
+		return NectarCore::Global::undefined;
 	}
-	static Nectar::VAR _char;
-	static Nectar::VAR _length;
+	static NectarCore::VAR _char;
+	static NectarCore::VAR _length;
 		
 	#ifndef __Nectar__OBJECT_VECTOR
-	Nectar::VAR &String::operator[](Nectar::VAR key)
+	NectarCore::VAR &String::operator[](NectarCore::VAR key)
 	{
-		if (key.type == Nectar::Enum::Type::Number)
+		if (key.type == NectarCore::Enum::Type::Number)
 		{
 			auto i = (int)key;
 			if (i >= 0)
@@ -144,9 +144,9 @@ namespace Nectar::Class
 		}
 		
 		std::string _str = ((std::string)key);
-		Nectar::Type::StringView _sview = _str;
+		NectarCore::Type::StringView _sview = _str;
 		
-		Nectar::VAR& _obj = object[_str];
+		NectarCore::VAR& _obj = object[_str];
 		if(_obj) return _obj; 
 		
 		__Nectar_Method_Lazy_Loader("toString", toString);
@@ -167,9 +167,9 @@ namespace Nectar::Class
 		return _obj;
 	}
 	#else
-	Nectar::VAR &String::operator[](Nectar::VAR key)
+	NectarCore::VAR &String::operator[](NectarCore::VAR key)
 	{		
-		if (key.type == Nectar::Enum::Type::Number)
+		if (key.type == NectarCore::Enum::Type::Number)
 		{
 			auto i = (int)key;
 			if (i >= 0)
@@ -185,7 +185,7 @@ namespace Nectar::Class
 		}
 		
 		std::string _str = ((std::string)key);
-		Nectar::Type::StringView _sview = _str;
+		NectarCore::Type::StringView _sview = _str;
 		for (auto & search : object)
 		{
 			if (_sview.compare(search.first) == 0)
@@ -209,12 +209,12 @@ namespace Nectar::Class
 			return _length;
 		}
 		
-		object.push_back(Nectar::Type::pair_t(((std::string)*this), Nectar::Global::undefined));
+		object.push_back(NectarCore::Type::pair_t(((std::string)*this), NectarCore::Global::undefined));
 		return object[object.size() - 1].second;
 	}
 	#endif
 	
-	Nectar::VAR &String::operator[](int key)
+	NectarCore::VAR &String::operator[](int key)
 	{		
 		if (key >= 0)
 		{
@@ -228,7 +228,7 @@ namespace Nectar::Class
 		return _char;
 	}
 	
-	Nectar::VAR &String::operator[](double key)
+	NectarCore::VAR &String::operator[](double key)
 	{		
 		if (key >= 0)
 		{
@@ -244,12 +244,12 @@ namespace Nectar::Class
 
 	
 	#ifndef __Nectar__OBJECT_VECTOR
-	Nectar::VAR &String::operator[](const char* key)
+	NectarCore::VAR &String::operator[](const char* key)
 	{
 		std::string _str = key;
-		Nectar::Type::StringView _sview = _str;
+		NectarCore::Type::StringView _sview = _str;
 		
-		Nectar::VAR& _obj = object[_str];
+		NectarCore::VAR& _obj = object[_str];
 		if(_obj) return _obj; 
 		
 		__Nectar_Method_Lazy_Loader("toString", toString);
@@ -270,10 +270,10 @@ namespace Nectar::Class
 		return _obj;
 	}
 	#else
-	Nectar::VAR &String::operator[](const char* key)
+	NectarCore::VAR &String::operator[](const char* key)
 	{		
 		std::string _str = key;
-		Nectar::Type::StringView _sview = _str;
+		NectarCore::Type::StringView _sview = _str;
 		for (auto & search : object)
 		{
 			if (_sview.compare(search.first) == 0)
@@ -297,7 +297,7 @@ namespace Nectar::Class
 			return _length;
 		}
 		
-		object.push_back(Nectar::Type::pair_t(((std::string)*this), Nectar::Global::undefined));
+		object.push_back(NectarCore::Type::pair_t(((std::string)*this), NectarCore::Global::undefined));
 		return object[object.size() - 1].second;
 	}
 	#endif
@@ -485,20 +485,20 @@ namespace Nectar::Class
 	}
 	// TODO: ">>>" and ">>>=" operators
 	/*** STRING METHODS ***/
-	Nectar::VAR String::toString(Nectar::VAR* _args, int _length) const
+	NectarCore::VAR String::toString(NectarCore::VAR* _args, int _length) const
 	{
 		return value;
 	}
 	
-	Nectar::VAR String::split(Nectar::VAR* _args, int _length) const
+	NectarCore::VAR String::split(NectarCore::VAR* _args, int _length) const
 	{
-		Nectar::VAR _needle;
+		NectarCore::VAR _needle;
 		if (_length > 0)
 			_needle = _args[0];
 		else
-			return Nectar::VAR(this->value);
+			return NectarCore::VAR(this->value);
 
-		Nectar::VAR _arr = new Nectar::Class::Array();
+		NectarCore::VAR _arr = new NectarCore::Class::Array();
 		char *_v = (char *)malloc(strlen(this->value.c_str()) + 1);
 		strcpy(_v, this->value.c_str());
 		char *delim = (char *)malloc(strlen(((std::string)_needle).c_str()) + 1);
@@ -521,106 +521,106 @@ namespace Nectar::Class
 		return _arr;
 	}
 	
-	Nectar::VAR String::indexOf(Nectar::VAR* _args, int _length) const
+	NectarCore::VAR String::indexOf(NectarCore::VAR* _args, int _length) const
 	{
-		Nectar::VAR _needle;
+		NectarCore::VAR _needle;
 		if (_length > 0)
 			_needle = _args[0];
 		else
-			return Nectar::VAR(-1);
+			return NectarCore::VAR(-1);
 
 		std::string::size_type loc = this->value.find((std::string)_needle, 0);
 		if (loc != std::string::npos)
 		{
-			return Nectar::VAR((int)loc);
+			return NectarCore::VAR((int)loc);
 		}
-		return Nectar::VAR(-1);
+		return NectarCore::VAR(-1);
 	}
 	
-	Nectar::VAR String::lastIndexOf(Nectar::VAR* _args, int _length) const
+	NectarCore::VAR String::lastIndexOf(NectarCore::VAR* _args, int _length) const
 	{
-		Nectar::VAR _needle;
+		NectarCore::VAR _needle;
 		if (_length > 0)
 			_needle = _args[0];
 		else
-			return Nectar::VAR(-1);
+			return NectarCore::VAR(-1);
 
 		std::string::size_type loc = this->value.find_last_of((std::string)_needle, 0);
 		if (loc != std::string::npos)
 		{
-			return Nectar::VAR((int)loc);
+			return NectarCore::VAR((int)loc);
 		}
-		return Nectar::VAR(-1);
+		return NectarCore::VAR(-1);
 	}
 	
-	Nectar::VAR String::search(Nectar::VAR* _args, int _length) const
+	NectarCore::VAR String::search(NectarCore::VAR* _args, int _length) const
 	{
-		Nectar::VAR _needle;
+		NectarCore::VAR _needle;
 		if (_length > 0)
 			_needle = _args[0];
 		else
-			return Nectar::VAR(-1);
+			return NectarCore::VAR(-1);
 
 		std::string::size_type loc = this->value.find((std::string)_needle, 0);
 		if (loc != std::string::npos)
 		{
-			return Nectar::VAR((int)loc);
+			return NectarCore::VAR((int)loc);
 		}
-		return Nectar::VAR(-1);
+		return NectarCore::VAR(-1);
 	}
 	
-	Nectar::VAR String::slice(Nectar::VAR* _args, int _length) const
+	NectarCore::VAR String::slice(NectarCore::VAR* _args, int _length) const
 	{
-		Nectar::VAR _start;
-		Nectar::VAR _end;
+		NectarCore::VAR _start;
+		NectarCore::VAR _end;
 		if (_length > 0)
 			_start = _args[0];
 		else
-			return Nectar::VAR(this->value);
+			return NectarCore::VAR(this->value);
 		if (_length > 1)
 			_end = _args[1];
 
-		if (_end.type == Nectar::Enum::Type::Undefined)
-			return Nectar::VAR(this->value.substr((int)_start, std::string::npos));
+		if (_end.type == NectarCore::Enum::Type::Undefined)
+			return NectarCore::VAR(this->value.substr((int)_start, std::string::npos));
 		int _endIndex = (int)_end - (int)_start;
-		return Nectar::VAR(this->value.substr((int)_start, _endIndex));
+		return NectarCore::VAR(this->value.substr((int)_start, _endIndex));
 	}
 	
-	Nectar::VAR String::substr(Nectar::VAR* _args, int _length) const
+	NectarCore::VAR String::substr(NectarCore::VAR* _args, int _length) const
 	{
-		Nectar::VAR _start;
-		Nectar::VAR _end;
+		NectarCore::VAR _start;
+		NectarCore::VAR _end;
 		if (_length > 0)
 			_start = _args[0];
 		else
-			return Nectar::VAR(this->value);
+			return NectarCore::VAR(this->value);
 		if (_length > 1)
 			_end = _args[1];
 
-		if (_end.type == Nectar::Enum::Type::Undefined)
-			return Nectar::VAR(this->value.substr((int)_start, std::string::npos));
-		return Nectar::VAR(this->value.substr((int)_start, (int)_end));
+		if (_end.type == NectarCore::Enum::Type::Undefined)
+			return NectarCore::VAR(this->value.substr((int)_start, std::string::npos));
+		return NectarCore::VAR(this->value.substr((int)_start, (int)_end));
 	}
 		
-	Nectar::VAR String::replace(Nectar::VAR* _args, int _length) const
+	NectarCore::VAR String::replace(NectarCore::VAR* _args, int _length) const
 	{
-		Nectar::VAR _search;
-		Nectar::VAR _replace;
+		NectarCore::VAR _search;
+		NectarCore::VAR _replace;
 		if (_length > 0)
 			_search = _args[0];
 		else
-			return Nectar::VAR(this->value);
+			return NectarCore::VAR(this->value);
 		if (_length > 1)
 			_replace = _args[1];
 
 		size_t start_pos = this->value.find((std::string)_search);
 		if (start_pos == std::string::npos)
 		{
-			return Nectar::VAR(value);
+			return NectarCore::VAR(value);
 		}
 		
 		std::string _new = value;
-		return Nectar::VAR(_new.replace(start_pos, ((std::string)_search).length(), (std::string)_replace));
+		return NectarCore::VAR(_new.replace(start_pos, ((std::string)_search).length(), (std::string)_replace));
 	}
 	/* END STRING METHODS */
-} // namespace Nectar::Class
+} // namespace NectarCore::Class

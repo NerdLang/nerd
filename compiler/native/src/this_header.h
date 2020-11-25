@@ -20,7 +20,7 @@
  *
  */
  
-namespace Nectar::Global
+namespace NectarCore::Global
 {
-	extern Nectar::VAR __Nectar_THIS;
+	extern NectarCore::VAR __Nectar_THIS;
 }

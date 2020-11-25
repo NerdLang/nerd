@@ -23,7 +23,7 @@
 #pragma once
 #include "_meta.h"
 
-namespace Nectar::Class
+namespace NectarCore::Class
 {
 	class Undefined : public virtual Base
 	{
@@ -42,19 +42,19 @@ namespace Nectar::Class
 		explicit operator long long() const noexcept;
 		explicit operator std::string() const noexcept;
 		// Main operators
-		Nectar::VAR const operator[](Nectar::VAR key) const;
-		Nectar::VAR &operator[](Nectar::VAR key);
-		Nectar::VAR &operator[](int key);
-		Nectar::VAR &operator[](double key);
-		Nectar::VAR &operator[](const char* key);
+		NectarCore::VAR const operator[](NectarCore::VAR key) const;
+		NectarCore::VAR &operator[](NectarCore::VAR key);
+		NectarCore::VAR &operator[](int key);
+		NectarCore::VAR &operator[](double key);
+		NectarCore::VAR &operator[](const char* key);
 		
 		template <class... Args>
-		Nectar::VAR operator()(Args... args) const 
+		NectarCore::VAR operator()(Args... args) const 
 		{
 			#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
 			throw InvalidTypeException();
 			#endif
-			return Nectar::Global::undefined;
+			return NectarCore::Global::undefined;
 		}
 		
 		// Comparation operators
@@ -96,4 +96,4 @@ namespace Nectar::Class
 		Undefined operator<<=(const Undefined &_v1);
 		// TODO: ">>>" and ">>>=" operators
 	};
-} // namespace Nectar::Class
+} // namespace NectarCore::Class

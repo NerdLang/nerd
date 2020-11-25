@@ -24,9 +24,9 @@
 
 using namespace std::chrono;
 
-Nectar::VAR __Nectar_NATIVE_PERFORMANCE_NOW()
+NectarCore::VAR __Nectar_NATIVE_PERFORMANCE_NOW()
 {
-   return Nectar::VAR( (double)duration_cast<microseconds>(
+   return NectarCore::VAR( (double)duration_cast<microseconds>(
       system_clock::now().time_since_epoch()
    ).count());
 };

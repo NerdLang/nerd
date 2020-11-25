@@ -20,11 +20,11 @@
  *
  */
  
-int __Nectar_Get_Int(Nectar::VAR _v);
-const char *__Nectar_Get_String(Nectar::VAR _v);
+int __Nectar_Get_Int(NectarCore::VAR _v);
+const char *__Nectar_Get_String(NectarCore::VAR _v);
 extern const std::string _array[11];
-Nectar::VAR __Nectar_typeof(Nectar::VAR _var);
-Nectar::VAR __Nectar_instanceof(Nectar::VAR _left, Nectar::VAR _right);
-Nectar::VAR __Nectar_delete(Nectar::VAR _left, std::string _right);
-Nectar::VAR __Nectar_Object_Set(std::string _index, Nectar::VAR _value, Nectar::Type::object_t *_obj);
-Nectar::VAR __Nectar_Object_Set(Nectar::VAR _index, Nectar::VAR _value, Nectar::VAR _array);
+NectarCore::VAR __Nectar_typeof(NectarCore::VAR _var);
+NectarCore::VAR __Nectar_instanceof(NectarCore::VAR _left, NectarCore::VAR _right);
+NectarCore::VAR __Nectar_delete(NectarCore::VAR _left, std::string _right);
+NectarCore::VAR __Nectar_Object_Set(std::string _index, NectarCore::VAR _value, NectarCore::Type::object_t *_obj);
+NectarCore::VAR __Nectar_Object_Set(NectarCore::VAR _index, NectarCore::VAR _value, NectarCore::VAR _array);

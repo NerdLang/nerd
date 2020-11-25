@@ -24,7 +24,7 @@
 #include "undefined_header.h"
 #include <limits>
 
-namespace Nectar::Class
+namespace NectarCore::Class
 {
 	// Constructors
 	Undefined::Undefined() { }
@@ -43,40 +43,40 @@ namespace Nectar::Class
 	Undefined::operator long long() const noexcept { return std::numeric_limits<long long>::quiet_NaN(); }
 	Undefined::operator std::string() const noexcept { return "undefined"; }
 	// Main operators
-	Nectar::VAR const Undefined::operator[](Nectar::VAR key) const
+	NectarCore::VAR const Undefined::operator[](NectarCore::VAR key) const
 	{
 		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
-		throw Nectar::VAR("TypeError: Cannot read property '" + (std::string)key + "' of undefined ");
+		throw NectarCore::VAR("TypeError: Cannot read property '" + (std::string)key + "' of undefined ");
 		#endif
-		return Nectar::Global::undefined;
+		return NectarCore::Global::undefined;
 	}
-	Nectar::VAR &Undefined::operator[](Nectar::VAR key)
+	NectarCore::VAR &Undefined::operator[](NectarCore::VAR key)
 	{
 		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
-		throw Nectar::VAR("TypeError: Cannot read property '" + (std::string)key + "' of undefined ");
+		throw NectarCore::VAR("TypeError: Cannot read property '" + (std::string)key + "' of undefined ");
 		#endif
-		return Nectar::Global::undefined;
+		return NectarCore::Global::undefined;
 	}
-	Nectar::VAR &Undefined::operator[](int key)
+	NectarCore::VAR &Undefined::operator[](int key)
 	{
 		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
-		throw Nectar::VAR("TypeError: Cannot read property " + std::to_string(key) + " of undefined ");
+		throw NectarCore::VAR("TypeError: Cannot read property " + std::to_string(key) + " of undefined ");
 		#endif
-		return Nectar::Global::undefined;
+		return NectarCore::Global::undefined;
 	}
-	Nectar::VAR &Undefined::operator[](double key)
+	NectarCore::VAR &Undefined::operator[](double key)
 	{
 		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
-		throw Nectar::VAR("TypeError: Cannot read property " + std::to_string(key) + " of undefined ");
+		throw NectarCore::VAR("TypeError: Cannot read property " + std::to_string(key) + " of undefined ");
 		#endif
-		return Nectar::Global::undefined;
+		return NectarCore::Global::undefined;
 	}
-	Nectar::VAR &Undefined::operator[](const char* key)
+	NectarCore::VAR &Undefined::operator[](const char* key)
 	{
 		#if !defined(__Nectar_ENV_ARDUINO) && !defined(__Nectar_ENV_ESP32)
-		throw Nectar::VAR("TypeError: Cannot read property '" + (std::string)key + "' of undefined ");
+		throw NectarCore::VAR("TypeError: Cannot read property '" + (std::string)key + "' of undefined ");
 		#endif
-		return Nectar::Global::undefined;
+		return NectarCore::Global::undefined;
 	}
 	
 	// Comparation operators
@@ -273,4 +273,4 @@ namespace Nectar::Class
 		return Undefined();
 	}
 	// TODO: ">>>" and ">>>=" operators
-} // namespace Nectar::Class
+} // namespace NectarCore::Class

@@ -23,7 +23,7 @@
 #pragma once
 #include "_meta.h"
 
-namespace Nectar::Class
+namespace NectarCore::Class
 {
 	class Base
 	{
@@ -38,9 +38,9 @@ namespace Nectar::Class
 		virtual explicit operator int() const noexcept {return 0;};
 		virtual explicit operator double() const noexcept {return 0.0;};
 		virtual explicit operator long long() const noexcept {return 0;};
-		virtual Nectar::VAR &operator[](Nectar::VAR key){static Nectar::VAR _ret = Nectar::VAR(); return _ret;};
-		virtual Nectar::VAR &operator[](int key){static Nectar::VAR _ret = Nectar::VAR(); return _ret;};
-		virtual Nectar::VAR &operator[](double key){static Nectar::VAR _ret = Nectar::VAR(); return _ret;};
-		virtual Nectar::VAR &operator[](const char* key){static Nectar::VAR _ret = Nectar::VAR(); return _ret;};
+		virtual NectarCore::VAR &operator[](NectarCore::VAR key){static NectarCore::VAR _ret = NectarCore::VAR(); return _ret;};
+		virtual NectarCore::VAR &operator[](int key){static NectarCore::VAR _ret = NectarCore::VAR(); return _ret;};
+		virtual NectarCore::VAR &operator[](double key){static NectarCore::VAR _ret = NectarCore::VAR(); return _ret;};
+		virtual NectarCore::VAR &operator[](const char* key){static NectarCore::VAR _ret = NectarCore::VAR(); return _ret;};
 	};
 }

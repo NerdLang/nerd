@@ -23,13 +23,13 @@
 std::unordered_map<std::string, std::mutex> __Nectar_Thread_mutexList;
 std::vector<std::thread> __Nectar_Thread_List;
 
-void __Nectar_THREADED_CALL(Nectar::VAR _fn)
+void __Nectar_THREADED_CALL(NectarCore::VAR _fn)
 {
 	try
 	{
 		_fn();
 	}
-	catch(Nectar::VAR e)
+	catch(NectarCore::VAR e)
 	{
 		__Nectar_Log_Console(e);
 	}

@@ -26,7 +26,7 @@ function arrayExpression(_path, _main)
 	var _rnd = RND();
 	var _set = "__NJS_GEN_RND_" + RND();
 
-	var _setter = `inline Nectar::VAR ${_set}() { Nectar::VAR ${_rnd} = __NJS_Create_Array();`;
+	var _setter = `inline NectarCore::VAR ${_set}() { NectarCore::VAR ${_rnd} = __NJS_Create_Array();`;
 	for(var i = 0; i < _path.elements.length; i++)
 	{
 		if(_path.elements[i].type == "NumericLiteral") _setter += `${_rnd}[${i}] =  ${_path.elements[i].extra.raw};`;

@@ -20,7 +20,7 @@
  *
  */
  
-namespace Nectar
+namespace NectarCore
 {
 	union Data
 	{
@@ -32,7 +32,7 @@ namespace Nectar
 	
 	struct VAR
 	{
-		Nectar::Enum::Type type;
+		NectarCore::Enum::Type type;
 		std::bitset<2> property; // const, enumerable
 		Data data;
 		
@@ -46,52 +46,52 @@ namespace Nectar
 		
 		/*** CONSTRUCTOR ***/
 
-		VAR(Nectar::Enum::Type _type, int _value);
-		VAR(Nectar::Enum::Type _type, double _value);
+		VAR(NectarCore::Enum::Type _type, int _value);
+		VAR(NectarCore::Enum::Type _type, double _value);
 		VAR(int _value);
 		VAR(double _value);
 		VAR(long long _value);
 		VAR(char *_value);
 		VAR(std::string _value);
 		VAR(const char *_value);
-		VAR(Nectar::Class::FixedArray *_value);
-		VAR(Nectar::Class::Array *_value);
-		VAR(const Nectar::Class::Array *_value);
+		VAR(NectarCore::Class::FixedArray *_value);
+		VAR(NectarCore::Class::Array *_value);
+		VAR(const NectarCore::Class::Array *_value);
 		VAR(bool _value);
-		VAR(Nectar::Class::Function *_value);
-		VAR(Nectar::Class::Object *_value);
-		VAR(Nectar::Class::String *_value);
-		VAR(Nectar::Class::Native *_value);
-		VAR(Nectar::Class::Undefined *_value);
+		VAR(NectarCore::Class::Function *_value);
+		VAR(NectarCore::Class::Object *_value);
+		VAR(NectarCore::Class::String *_value);
+		VAR(NectarCore::Class::Native *_value);
+		VAR(NectarCore::Class::Undefined *_value);
 		VAR(void *_value, void* fn);
-		VAR(Nectar::Enum::Type _type, void *_value);
-		VAR(Nectar::Enum::Type _type, void *_value, VAR _this);
-		VAR(std::function<VAR(Nectar::VAR*, int)> &_value);
+		VAR(NectarCore::Enum::Type _type, void *_value);
+		VAR(NectarCore::Enum::Type _type, void *_value, VAR _this);
+		VAR(std::function<VAR(NectarCore::VAR*, int)> &_value);
 		
 		template <class... Args>
 		VAR operator() (Args... args)
 		{
-			if (type != Nectar::Enum::Type::Function)
+			if (type != NectarCore::Enum::Type::Function)
 			{
 		#ifndef __Nectar_NO_EXCEPT
 				throw VAR("TypeError: object is not a function");
 		#endif
 				exit(1);
 			}
-			else return (*(Nectar::Class::Function*)data.ptr)((VAR)(args)...);
+			else return (*(NectarCore::Class::Function*)data.ptr)((VAR)(args)...);
 		}
 		
 		template <class... Args>
 		VAR operator() (Args... args) const
 		{
-			if (type != Nectar::Enum::Type::Function)
+			if (type != NectarCore::Enum::Type::Function)
 			{
 		#ifndef __Nectar_NO_EXCEPT
 				throw VAR("TypeError: object is not a function");
 		#endif
 				exit(1);
 			}
-			else return (*(Nectar::Class::Function*)data.ptr)((VAR)(args)...);
+			else return (*(NectarCore::Class::Function*)data.ptr)((VAR)(args)...);
 		}
 		
 		/* END CALL OVERLOAD */
@@ -170,4 +170,4 @@ namespace Nectar
 		explicit operator long long() const;
 		
 	};
-} // namespace Nectar
+} // namespace NectarCore

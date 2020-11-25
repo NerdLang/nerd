@@ -25,27 +25,27 @@
 #include <functional>
 #include <limits>
 
-namespace Nectar::Class
+namespace NectarCore::Class
 {
 	// Constructors
 	Function::Function(){}
 	Function::Function(void *val)
 	{
 		counter++;
-		value = (Nectar::Type::function_t*)val;
+		value = (NectarCore::Type::function_t*)val;
 	}
-	Function::Function(void *val, Nectar::VAR bind)
+	Function::Function(void *val, NectarCore::VAR bind)
 	{
 		counter++;
 		This = bind;
-		value = (Nectar::Type::function_t*)val;
+		value = (NectarCore::Type::function_t*)val;
 	}
 	// Methods
 	inline void Function::Delete() noexcept
 	{
 		if (--counter == 0)
 		{
-			delete (Nectar::Type::function_t*)value;
+			delete (NectarCore::Type::function_t*)value;
 			delete this;
 		}
 	}
@@ -54,7 +54,7 @@ namespace Nectar::Class
 		#ifndef __Nectar__OBJECT_VECTOR
 			object.erase(_key);
 		#else
-			for (Nectar::Type::object_t::iterator it = object.begin() ; it != object.end(); ++it)
+			for (NectarCore::Type::object_t::iterator it = object.begin() ; it != object.end(); ++it)
 			{
 				if (_key.compare(it->first) == 0)
 				{
@@ -92,19 +92,19 @@ namespace Nectar::Class
 		#endif
 	}
 	// Main operators
-	Nectar::VAR const Function::operator[](Nectar::VAR key) const
+	NectarCore::VAR const Function::operator[](NectarCore::VAR key) const
 	{
-		return Nectar::Global::undefined;
+		return NectarCore::Global::undefined;
 	}
 	
 	#ifndef __Nectar__OBJECT_VECTOR
-	Nectar::VAR &Function::operator[](Nectar::VAR key)
+	NectarCore::VAR &Function::operator[](NectarCore::VAR key)
 	{
 		std::string _str = ((std::string)key);
-		Nectar::Type::StringView _sview = _str;
+		NectarCore::Type::StringView _sview = _str;
 		
-		Nectar::VAR& _obj = object[_str];
-		if(_obj.type != Nectar::Enum::Type::Undefined) return _obj; 		
+		NectarCore::VAR& _obj = object[_str];
+		if(_obj.type != NectarCore::Enum::Type::Undefined) return _obj; 		
 		
 		__Nectar_Object_Lazy_Loader("prototype");
 		
@@ -117,10 +117,10 @@ namespace Nectar::Class
 		return _obj;
 	}
 	#else
-	Nectar::VAR &Function::operator[](Nectar::VAR key)
+	NectarCore::VAR &Function::operator[](NectarCore::VAR key)
 	{
 		std::string _str = ((std::string)key);
-		Nectar::Type::StringView _sview = _str;
+		NectarCore::Type::StringView _sview = _str;
 		
 		for (auto & search : object)
 		{
@@ -138,19 +138,19 @@ namespace Nectar::Class
 		__Nectar_Method_Lazy_Loader("call", call);
 		__Nectar_Method_Lazy_Loader("apply", apply);
 		
-		object.push_back(Nectar::Type::pair_t(_str, Nectar::Global::undefined));
+		object.push_back(NectarCore::Type::pair_t(_str, NectarCore::Global::undefined));
 		return object[object.size() - 1].second;
 	}
 	#endif
 	
 	#ifndef __Nectar__OBJECT_VECTOR
-	Nectar::VAR &Function::operator[](int key)
+	NectarCore::VAR &Function::operator[](int key)
 	{
 		std::string _str = std::to_string(key);
-		Nectar::Type::StringView _sview = _str;
+		NectarCore::Type::StringView _sview = _str;
 		
-		Nectar::VAR& _obj = object[_str];
-		if(_obj.type != Nectar::Enum::Type::Undefined) return _obj; 		
+		NectarCore::VAR& _obj = object[_str];
+		if(_obj.type != NectarCore::Enum::Type::Undefined) return _obj; 		
 		
 		__Nectar_Object_Lazy_Loader("prototype");
 		
@@ -163,10 +163,10 @@ namespace Nectar::Class
 		return _obj;
 	}
 	#else
-	Nectar::VAR &Function::operator[](int key)
+	NectarCore::VAR &Function::operator[](int key)
 	{
 		std::string _str = std::to_string(key);
-		Nectar::Type::StringView _sview = _str;
+		NectarCore::Type::StringView _sview = _str;
 		
 		for (auto & search : object)
 		{
@@ -184,19 +184,19 @@ namespace Nectar::Class
 		__Nectar_Method_Lazy_Loader("call", call);
 		__Nectar_Method_Lazy_Loader("apply", apply);
 		
-		object.push_back(Nectar::Type::pair_t(_str, Nectar::Global::undefined));
+		object.push_back(NectarCore::Type::pair_t(_str, NectarCore::Global::undefined));
 		return object[object.size() - 1].second;
 	}
 	#endif
 	
 	#ifndef __Nectar__OBJECT_VECTOR
-	Nectar::VAR &Function::operator[](double key)
+	NectarCore::VAR &Function::operator[](double key)
 	{
 		std::string _str = std::to_string(key);
-		Nectar::Type::StringView _sview = _str;
+		NectarCore::Type::StringView _sview = _str;
 		
-		Nectar::VAR& _obj = object[_str];
-		if(_obj.type != Nectar::Enum::Type::Undefined) return _obj; 		
+		NectarCore::VAR& _obj = object[_str];
+		if(_obj.type != NectarCore::Enum::Type::Undefined) return _obj; 		
 		
 		__Nectar_Object_Lazy_Loader("prototype");
 		
@@ -209,10 +209,10 @@ namespace Nectar::Class
 		return _obj;
 	}
 	#else
-	Nectar::VAR &Function::operator[](double key)
+	NectarCore::VAR &Function::operator[](double key)
 	{
 		std::string _str = std::to_string(key);
-		Nectar::Type::StringView _sview = _str;
+		NectarCore::Type::StringView _sview = _str;
 		
 		for (auto & search : object)
 		{
@@ -230,19 +230,19 @@ namespace Nectar::Class
 		__Nectar_Method_Lazy_Loader("call", call);
 		__Nectar_Method_Lazy_Loader("apply", apply);
 		
-		object.push_back(Nectar::Type::pair_t(_str, Nectar::Global::undefined));
+		object.push_back(NectarCore::Type::pair_t(_str, NectarCore::Global::undefined));
 		return object[object.size() - 1].second;
 	}
 	#endif
 	
 	#ifndef __Nectar__OBJECT_VECTOR
-	Nectar::VAR &Function::operator[](const char* key)
+	NectarCore::VAR &Function::operator[](const char* key)
 	{
 		std::string _str = key;
-		Nectar::Type::StringView _sview = _str;
+		NectarCore::Type::StringView _sview = _str;
 		
-		Nectar::VAR& _obj = object[_str];
-		if(_obj.type != Nectar::Enum::Type::Undefined) return _obj; 		
+		NectarCore::VAR& _obj = object[_str];
+		if(_obj.type != NectarCore::Enum::Type::Undefined) return _obj; 		
 		
 		__Nectar_Object_Lazy_Loader("prototype");
 		
@@ -255,10 +255,10 @@ namespace Nectar::Class
 		return _obj;
 	}
 	#else
-	Nectar::VAR &Function::operator[](const char* key)
+	NectarCore::VAR &Function::operator[](const char* key)
 	{
 		std::string _str = key;
-		Nectar::Type::StringView _sview = _str;
+		NectarCore::Type::StringView _sview = _str;
 		
 		for (auto & search : object)
 		{
@@ -276,13 +276,13 @@ namespace Nectar::Class
 		__Nectar_Method_Lazy_Loader("call", call);
 		__Nectar_Method_Lazy_Loader("apply", apply);
 		
-		object.push_back(Nectar::Type::pair_t(_str, Nectar::Global::undefined));
+		object.push_back(NectarCore::Type::pair_t(_str, NectarCore::Global::undefined));
 		return object[object.size() - 1].second;
 	}
 	#endif
 	
 	// Comparation operators
-	Nectar::VAR Function::operator!() const 
+	NectarCore::VAR Function::operator!() const 
 	{
 		return __Nectar_Boolean_FALSE;
 	}
@@ -472,47 +472,47 @@ namespace Nectar::Class
 		return Function();
 	}
 	// TODO: ">>>" and ">>>=" operators
-	Nectar::VAR Function::toString(Nectar::VAR* _args, int _length) const
+	NectarCore::VAR Function::toString(NectarCore::VAR* _args, int _length) const
 	{
 		return (std::string)*this;
 	}
 	
-	Nectar::VAR Function::valueOf(Nectar::VAR* _args, int _length) const
+	NectarCore::VAR Function::valueOf(NectarCore::VAR* _args, int _length) const
 	{
 		// TODO return this
-		return Nectar::Global::undefined;
+		return NectarCore::Global::undefined;
 	}
-	Nectar::VAR Function::bind(Nectar::VAR* _args, int _length)
+	NectarCore::VAR Function::bind(NectarCore::VAR* _args, int _length)
 	{
 		return __Nectar_Create_Var_Scoped_Anon(
 		counter++;
-		Nectar::VAR _bind;
+		NectarCore::VAR _bind;
 		if(_length > 0)
 		{
 			_bind = _args[0];
 		}
-		Nectar::VAR _binded = new Nectar::Class::Function(value, _bind);
+		NectarCore::VAR _binded = new NectarCore::Class::Function(value, _bind);
 		return _binded;
 		);
 	}
 	
-	Nectar::VAR Function::call(Nectar::VAR* _args, int _length)
+	NectarCore::VAR Function::call(NectarCore::VAR* _args, int _length)
 	{
-		Nectar::VAR __THIS;
+		NectarCore::VAR __THIS;
 		if(_length > 0)
 		{
 			__THIS = _args[0];
 			_length--;
 		}
-		Nectar::VAR _newArgs[_length];
+		NectarCore::VAR _newArgs[_length];
 		for(int i = 1; i < _length; i++) _newArgs[i-1] = _args[i];
 		
 		return Call(__THIS, _newArgs, _length);
 	}
 	
-	Nectar::VAR Function::apply(Nectar::VAR* _args, int _length)
+	NectarCore::VAR Function::apply(NectarCore::VAR* _args, int _length)
 	{
-		Nectar::VAR __THIS;
+		NectarCore::VAR __THIS;
 		if(_length > 0)
 		{
 			__THIS = _args[0];
@@ -521,11 +521,11 @@ namespace Nectar::Class
 		
 		if(_length > 0)
 		{
-			Nectar::VAR _arr = _args[1];
-			if(_arr.type == Nectar::Enum::Type::Array)
+			NectarCore::VAR _arr = _args[1];
+			if(_arr.type == NectarCore::Enum::Type::Array)
 			{
-				Nectar::Type::vector_t _v = ((Nectar::Class::Array*)_arr.data.ptr)->value;
-				Nectar::VAR __ARGS[_v.size()];
+				NectarCore::Type::vector_t _v = ((NectarCore::Class::Array*)_arr.data.ptr)->value;
+				NectarCore::VAR __ARGS[_v.size()];
 				int i = 0;
 				for( auto _var: _v)
 				{
@@ -536,7 +536,7 @@ namespace Nectar::Class
 			}
 		}
 		
-		Nectar::VAR __ARGS[0];
+		NectarCore::VAR __ARGS[0];
 		return Call(__THIS, __ARGS, 0);
 	}
-} // namespace Nectar::Class
+} // namespace NectarCore::Class

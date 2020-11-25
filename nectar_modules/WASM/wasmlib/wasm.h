@@ -23,7 +23,7 @@
 #include <emscripten.h>
 #include <emscripten/bind.h>
 
-std::vector<std::pair<std::string, Nectar::VAR>> __Nectar_INTERNAL_BIND;
+std::vector<std::pair<std::string, NectarCore::VAR>> __Nectar_INTERNAL_BIND;
 
 function __Nectar_WASM_RUN_SCRIPT(_script)
 {

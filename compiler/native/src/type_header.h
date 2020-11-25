@@ -23,19 +23,19 @@
 #ifndef __Nectar__OBJECT_VECTOR
 #include <unordered_map>
 #endif
-namespace Nectar
+namespace NectarCore
 {
 	namespace Type
 	{
-		typedef std::vector<Nectar::VAR> vector_t;
+		typedef std::vector<NectarCore::VAR> vector_t;
 		typedef std::vector<void*> vector_p;
-		typedef std::pair<std::string, Nectar::VAR> pair_t;
+		typedef std::pair<std::string, NectarCore::VAR> pair_t;
 		#ifndef __Nectar__OBJECT_VECTOR
-		typedef std::unordered_map<std::string, Nectar::VAR> object_t;
+		typedef std::unordered_map<std::string, NectarCore::VAR> object_t;
 		#else
 		typedef std::vector<pair_t> object_t;
 		#endif
-		typedef std::function<Nectar::VAR (VAR&, VAR*, int)> function_t;
+		typedef std::function<NectarCore::VAR (VAR&, VAR*, int)> function_t;
 		typedef std::function<void (void*)> clean_struct;
 		
 		#ifdef __Nectar_ENV_ARDUINO

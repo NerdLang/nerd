@@ -42,7 +42,7 @@ function __Nectar_CHILD_PROCESS_EXEC_SYNC(_cmd)
   if (fp == NULL)
   {
     printf("Failed to run command\n" );
-    return Nectar::VAR();
+    return NectarCore::VAR();
   }
 
   while (fgets(pChar, sizeof(pChar), fp) != NULL)
@@ -58,7 +58,7 @@ function __Nectar_CHILD_PROCESS_EXEC_SYNC(_cmd)
 
 	pclose(fp);
 
-  Nectar::VAR _return = buffer;
+  NectarCore::VAR _return = buffer;
   free(buffer);
   return _return;
 }

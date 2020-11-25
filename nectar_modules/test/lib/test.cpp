@@ -32,7 +32,7 @@ var __FFI_SIMPLE_MSGBOX()
 	#else 
 		cout << "this platform is not compatible with MessageBox" << "\n";
 	#endif
-	return Nectar::VAR();
+	return NectarCore::VAR();
 };
 
 function __WIN_MESSAGE_BOX(_message, _title)

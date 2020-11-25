@@ -20,9 +20,9 @@
  *
  */
  
-namespace Nectar::JS
+namespace NectarCore::JS
 {
-	extern Nectar::VAR setImmediate;
-	extern Nectar::VAR setTimeout;
-	extern Nectar::VAR setInterval;
+	extern NectarCore::VAR setImmediate;
+	extern NectarCore::VAR setTimeout;
+	extern NectarCore::VAR setInterval;
 }

@@ -34,17 +34,21 @@
  #include <memory>
  #include <jni.h>
 
- #include "njs.h"
- using namespace NJS::Global;
- #include "httplib.h"
+ #include "nectar.cpp"
+ using namespace NectarCore::Global;
+ using namespace NectarCore::Functions;
+ //#include "httplib.h"
  
  var __NJS_ENV = "android";
  var __NJS_PLATFORM = "{{__PLATFORM__}}";
+ #define __NJS_Create_Object() new NectarCore::Class::Object()
+ #define __NJS_Create_Array(_arr) new NectarCore::Class::Array(_arr)
+ #define __NJS_InitVar() NectarCore::VAR()
  
 JNIEnv* globalEnv;
 jobject mainObject;
 
-void drawJNI(char* _str)
+void drawJNI(const char* _str)
 {
     jclass mainClass = globalEnv->GetObjectClass(mainObject);
     jmethodID _draw        = globalEnv->GetMethodID(mainClass, "drawNectar",
@@ -53,7 +57,7 @@ void drawJNI(char* _str)
     globalEnv->CallVoidMethod(mainObject, _draw, _html);
 }
 
-void navigateJNI(char* _str)
+void navigateJNI(const char* _str)
 {
     jclass mainClass = globalEnv->GetObjectClass(mainObject);
     jmethodID _draw        = globalEnv->GetMethodID(mainClass, "navigateNectar",
@@ -89,11 +93,11 @@ Java_com_nectarjs_nectar_1android_1app_MainActivity_serveFromJNI(
     globalEnv = env;
     mainObject = thiz;
 
-    using namespace httplib;
+    //using namespace httplib;
 
-    Server svr;
-    svr.set_mount_point("/", "/data/user/0/com.nectarjs.nectar_android_app/files/raw/");
-    svr.listen("localhost", 12001);
+    //Server svr;
+    //svr.set_mount_point("/", "/data/user/0/com.nectarjs.nectar_android_app/files/raw/");
+    //svr.listen("localhost", 12001);
 
 }
 

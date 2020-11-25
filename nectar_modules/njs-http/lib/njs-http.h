@@ -34,10 +34,10 @@ var __Nectar_HTTP_LISTEN(var _host, var _port, var _cb, var _opt)
 {
 	Server __Nectar_HTTP_SRV;
 	
-	if(_opt.type == Nectar::Enum::Type::Object)
+	if(_opt.type == NectarCore::Enum::Type::Object)
 	{
 		var _static = _opt["static"];
-		if(_static.type == Nectar::Enum::Type::String) 
+		if(_static.type == NectarCore::Enum::Type::String) 
 		{
 			auto ret = __Nectar_HTTP_SRV.set_mount_point("/", ((std::string)_static).c_str());
 			if (!ret) 
@@ -81,7 +81,7 @@ var __Nectar_HTTP_LISTEN(var _host, var _port, var _cb, var _opt)
   /*** LOAD POST ***/
   __Nectar_HTTP_SRV.Post(".*", [&](const Request& request, Response& response, const ContentReader &content_reader)
   {
-	Nectar::Type::function_t* __Nectar_HTTP_RES_END = new Nectar::Type::function_t([&](Nectar::VAR& __Nectar_THIS, Nectar::VAR* _args, int _length)
+	NectarCore::Type::function_t* __Nectar_HTTP_RES_END = new NectarCore::Type::function_t([&](NectarCore::VAR& __Nectar_THIS, NectarCore::VAR* _args, int _length)
 	{
 		var _str = "";
 		if(_length == 1) _str = _args[0];
@@ -145,7 +145,7 @@ var __Nectar_HTTP_LISTEN(var _host, var _port, var _cb, var _opt)
   /*** LOAD PUT ***/
   __Nectar_HTTP_SRV.Put(".*", [&](const Request& request, Response& response, const ContentReader &content_reader)
   {
-	Nectar::Type::function_t* __Nectar_HTTP_RES_END = new Nectar::Type::function_t([&](Nectar::VAR& __Nectar_THIS, Nectar::VAR* _args, int _length)
+	NectarCore::Type::function_t* __Nectar_HTTP_RES_END = new NectarCore::Type::function_t([&](NectarCore::VAR& __Nectar_THIS, NectarCore::VAR* _args, int _length)
 	{
 		var _str = "";
 		if(_length == 1) _str = _args[0];
@@ -209,7 +209,7 @@ var __Nectar_HTTP_LISTEN(var _host, var _port, var _cb, var _opt)
   /*** LOAD DELETE ***/
   __Nectar_HTTP_SRV.Delete(".*", [&](const Request& request, Response& response)
   {
-	Nectar::Type::function_t* __Nectar_HTTP_RES_END = new Nectar::Type::function_t([&](Nectar::VAR& __Nectar_THIS, Nectar::VAR* _args, int _length)
+	NectarCore::Type::function_t* __Nectar_HTTP_RES_END = new NectarCore::Type::function_t([&](NectarCore::VAR& __Nectar_THIS, NectarCore::VAR* _args, int _length)
 	{
 		var _str = "";
 		if(_length == 1) _str = _args[0];

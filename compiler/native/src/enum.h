@@ -20,7 +20,7 @@
  *
  */
  
-namespace Nectar::Enum
+namespace NectarCore::Enum
 {
 	enum Type
 	{

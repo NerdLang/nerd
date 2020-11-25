@@ -20,17 +20,17 @@
  *
  */
  
-namespace Nectar::Functions
+namespace NectarCore::Functions
 {
-	Nectar::VAR println(Nectar::VAR _var)
+	NectarCore::VAR println(NectarCore::VAR _var)
 	{
 		std::cout << _var << std::endl;
-		return Nectar::Global::undefined;
+		return NectarCore::Global::undefined;
 	}
 	
-	Nectar::VAR print(Nectar::VAR _var)
+	NectarCore::VAR print(NectarCore::VAR _var)
 	{
 		std::cout << _var;
-		return Nectar::Global::undefined;
+		return NectarCore::Global::undefined;
 	}
 }

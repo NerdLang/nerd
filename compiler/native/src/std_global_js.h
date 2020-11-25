@@ -20,34 +20,34 @@
  *
  */
  
-namespace Nectar::JS
+namespace NectarCore::JS
 {
-	Nectar::VAR setImmediate = __Nectar_Create_Var_Unscoped_Anon(
-		Nectar::VAR _fn;
+	NectarCore::VAR setImmediate = __Nectar_Create_Var_Unscoped_Anon(
+		NectarCore::VAR _fn;
 		if (__Nectar_VARLENGTH > 0) _fn = __Nectar_VARARGS[0];
-		Nectar::Event::evQ.push_back(_fn);
-		return Nectar::Global::undefined;	
+		NectarCore::Event::evQ.push_back(_fn);
+		return NectarCore::Global::undefined;	
 	);
 
-	Nectar::VAR setTimeout = __Nectar_Create_Var_Unscoped_Anon(
-		Nectar::VAR _fn;
-		Nectar::VAR _delay;
+	NectarCore::VAR setTimeout = __Nectar_Create_Var_Unscoped_Anon(
+		NectarCore::VAR _fn;
+		NectarCore::VAR _delay;
 		if (__Nectar_VARLENGTH > 0) _fn = __Nectar_VARARGS[0];
 		if (__Nectar_VARLENGTH > 1) _delay = __Nectar_VARARGS[1];
 		
-		Nectar::Event::setTimer(_fn, (int)_delay, false);
+		NectarCore::Event::setTimer(_fn, (int)_delay, false);
 		
-		return Nectar::Global::undefined;
+		return NectarCore::Global::undefined;
 	);
 
-	Nectar::VAR setInterval = __Nectar_Create_Var_Unscoped_Anon(
-		Nectar::VAR _fn;
-		Nectar::VAR _delay;
+	NectarCore::VAR setInterval = __Nectar_Create_Var_Unscoped_Anon(
+		NectarCore::VAR _fn;
+		NectarCore::VAR _delay;
 		if (__Nectar_VARLENGTH > 0) _fn = __Nectar_VARARGS[0];
 		if (__Nectar_VARLENGTH > 1) _delay = __Nectar_VARARGS[1];
 		
-		Nectar::Event::setTimer(_fn, (int)_delay, true);
+		NectarCore::Event::setTimer(_fn, (int)_delay, true);
 		
-		return Nectar::Global::undefined;
+		return NectarCore::Global::undefined;
 	);
 }

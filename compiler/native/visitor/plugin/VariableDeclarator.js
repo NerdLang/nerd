@@ -56,7 +56,7 @@ var VariableDeclarator =
 			  {
 				var _obj = "__Nectar_TMP_OBJ_" + RND();
 				var _set = "__Nectar_SET_OBJ_" + RND();
-				var _setter = `inline Nectar::VAR ${_set}() { var ${_obj} = __NJS_Create_Object();`;
+				var _setter = `inline NectarCore::VAR ${_set}() { var ${_obj} = __NJS_Create_Object();`;
 				
 				for(var j = 0; j < _el[i].properties.length; j++)
 				{
