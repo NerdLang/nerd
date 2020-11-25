@@ -5,15 +5,19 @@
 #include "esp_system.h"
 #include "esp_spi_flash.h"
 
-#define __NJS_ENV_ESP32
-#define __NJS_NO_EXCEPT
+#define __Nectar_ENV_ESP32
+#define __Nectar_NO_EXCEPT
 
-#include "njs.h"
-using namespace NJS::Global;
+#include "nectar.cpp"
+using namespace NectarCore::Global;
+using namespace NectarCore::Functions;
 
 var __NJS_ENV = "esp32";
 var __NJS_PLATFORM = "{{__PLATFORM__}}";
-
+#define __NJS_Create_Object() new NectarCore::Class::Object()
+#define __NJS_Create_Array(_arr) new NectarCore::Class::Array(_arr)
+#define __NJS_InitVar() NectarCore::VAR()
+ 
  {INCLUDE}
  
  {DECL}
