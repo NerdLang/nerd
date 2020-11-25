@@ -23,7 +23,7 @@
 var WASM =
 {
   name: "wasm",
-  main: "std.cpp",
+  main: "wasm.cpp",
   compiler: "em++",
   stdlib: [{bind: "Nectar", module: "WASM"},"console", "Math", "JSON"],
   check: {
@@ -43,16 +43,25 @@ var WASM =
 		{
 			"undefined": false,
 			"eval": false,
-			"Nectar": false,
-			"__njs_typeof": false,
-			"console": false,
-			"module": false,
-			"require": false,
-			"__NJS_Log_Console": false,
-			"__NJS_Object_Keys": false,
-			"__NJS_ARGS": false,
-            "__NJS_Call_Function": false,
-			"JSON": false,
+            "__njs_typeof": false,
+            "console": false,
+            "module": false,
+            "require": false,
+            "__Nectar_Log_Console": false,
+			"__Nectar_InitVar": false,
+            "__Nectar_Object_Keys": false,
+            "__Nectar_Object_Stringify": false,
+            "__Nectar_Call_Function": false,
+            "__NJS_ARGS": false,
+            "__NJS_ENV": false,
+            "__NJS_PLATFORM": false,
+			"__Nectar_typeof": false,
+			"__Nectar_THIS": false,
+			"__Nectar_instanceof": false,
+            "JSON": false,
+            "Object": false,
+            "isNaN": false,
+			"Array": false,
 		}
 	},
 	out: function(_name)
@@ -72,6 +81,18 @@ var WASM =
   },
   cli: function(compiler, preset, out, _in, option)
   {
+	  /*
+	  var _cachePath = path.join(process.cwd(), "..", "cached_" + COMPILER.ENV.name + "_" + VERSION);
+	  var _precompiled = path.join(_cachePath, "nectar.o");		
+		
+	  if(!fs.existsSync(_precompiled))
+	  {
+	    console.log(`[+] Creating Nectar binary lib for ${COMPILER.ENV.name + "_" + VERSION}`);
+		try { fs.mkdirSync(_cachePath); } catch(e){};
+		execSync(`${compiler} -std=c++17 -c nectar.cpp -O3 -o "${_precompiled}"`);
+		console.log("[+] Compiling with precompiled Nectar lib");
+	  }
+	  */
 	  var _cliOption = "";
 	  if(CLI.cli["--option"]) _cliOption = CLI.cli["--option"].argument;
 		
