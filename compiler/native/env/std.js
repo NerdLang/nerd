@@ -71,7 +71,7 @@ var STD =
     },
     cli: function(compiler, preset, out, _in, option)
     {
-		var _cachePath = path.join(process.cwd(), "..", "cached_" + COMPILER.ENV.name + "_" + VERSION);
+		var _cachePath = path.join(process.cwd(), "..", "cached_" + COMPILER.ENV.name + "_" + os.platform + "_" + VERSION);
 		var _precompiled = path.join(_cachePath, "nectar.o");
 
         var _stack = 0;
@@ -90,7 +90,7 @@ var STD =
 		
 		if(!fs.existsSync(_precompiled))
 		{
-			console.log(`[+] Creating Nectar binary lib for ${COMPILER.ENV.name + "_" + VERSION}`);
+			console.log(`[+] Creating Nectar binary lib for ${COMPILER.ENV.name + "_" + os.platform + "_" + VERSION}`);
 			try { fs.mkdirSync(_cachePath); } catch(e){};
 			execSync(`${compiler} -std=c++17 -c nectar.cpp -Ofast -o "${_precompiled}"`);
 			console.log("[+] Compiling with precompiled Nectar lib");
@@ -134,13 +134,16 @@ var STD =
 			}
 		}
 		
+		var _files = `"${_precompiled}" "${_in}"`;
+		if(os.platform == "win32") _files = `"${_in}" "${_precompiled}"`;
+		
         if(preset == "none")
         {
-            return `${compiler} ${_stack} -std=c++17 "${_in}" "${_precompiled}" -O1 -s ${COMPILER.LIBS} -lpthread -o "${out}" ${_sysVNetLibs} ${_cliOption}`;
+            return `${compiler} ${_stack} -std=c++17 ${_files} -O1 -s ${COMPILER.LIBS} -lpthread -o "${out}" ${_sysVNetLibs} ${_cliOption}`;
         }
         else if(preset == "size")
         {
-            return `${compiler} ${_stack} -std=c++17 "${_in}" "${_precompiled}" -lpthread -Os -fno-rtti -fno-stack-protector -fomit-frame-pointer -s ${COMPILER.LIBS} -o "${out}" ${_sysVNetLibs} ${_cliOption}`;
+            return `${compiler} ${_stack} -std=c++17 ${_files} -lpthread -Os -fno-rtti -fno-stack-protector -fomit-frame-pointer -s ${COMPILER.LIBS} -o "${out}" ${_sysVNetLibs} ${_cliOption}`;
         }
         else
         {   
@@ -148,7 +151,7 @@ var STD =
             if(os.platform() == "darwin" || compiler.indexOf("clang") > -1) _opt += "3";
             else _opt += "fast";
 			
-			return `${compiler} ${_stack} -std=c++17 "${_in}" "${_precompiled}" ${_opt} -lpthread -s ${COMPILER.LIBS}  -o "${out}" ${_sysVNetLibs} ${_cliOption}`;
+			return `${compiler} ${_stack} -std=c++17 ${_files} ${_opt} -lpthread -s ${COMPILER.LIBS}  -o "${out}" ${_sysVNetLibs} ${_cliOption}`;
         }
     },
 	write: function(_content, _in)

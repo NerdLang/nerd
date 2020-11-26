@@ -229,6 +229,8 @@ public class MainActivity extends AppCompatActivity
         webSettings.setAllowContentAccess(true);
         webSettings.setSupportZoom(true);
 		webSettings.setGeolocationEnabled(true);
+		webSettings.setBuiltInZoomControls(true);
+		webSettings.setDisplayZoomControls(false);
         mainWebView.addJavascriptInterface(new NectarInterface(), "Nectar");
 
         mainWebView.setWebChromeClient(new WebChromeClient()

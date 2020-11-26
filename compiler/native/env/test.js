@@ -30,11 +30,11 @@ var TEST =
   stdlib: [],
   cli: function(compiler, preset, out, _in, option)
   {
-	var _cachePath = path.join(process.cwd(), "..", "cached_" + COMPILER.ENV.name + "_" + VERSION);
+	var _cachePath = path.join(process.cwd(), "..", "cached_" + COMPILER.ENV.name + "_" + os.platform + "_" + VERSION);
 	var _precompiled = path.join(_cachePath, "nectar.o");
 	if(!fs.existsSync(_precompiled))
 	{
-		console.log(`[+] Creating Nectar binary lib for ${COMPILER.ENV.name + "_" + VERSION}`);
+		console.log(`[+] Creating Nectar binary lib for ${COMPILER.ENV.name + "_" + os.platform + "_" + VERSION}`);
 		try { fs.mkdirSync(_cachePath); } catch(e){};
 		execSync(`${compiler} -std=c++17 -c nectar.cpp -Ofast -o "${_precompiled}"`);
 		console.log("[+] Compiling with precompiled Nectar lib");
@@ -50,15 +50,18 @@ var TEST =
 	var _cliOption = "";
 	if(CLI.cli["--option"]) _cliOption = CLI.cli["--option"].argument;
 	
+	  var _files = `"${_precompiled}" "${_in}"`;
+	  if(os.platform == "win32") _files = `"${_in}" "${_precompiled}"`;
+	  
 	  if(preset == "none")
 	  {
-		  return `${compiler} -std=c++17 "${_in}" "${_precompiled}" ${option} -I ${extern}/lib/ -s ${COMPILER.LIBS} -o ${out} ${_cliOption}`;
+		  return `${compiler} -std=c++17 ${_files} ${option} -I ${extern}/lib/ -s ${COMPILER.LIBS} -o ${out} ${_cliOption}`;
 	  }
 	  else if(preset == "size")
 	  {
-		  return `${compiler} -std=c++17 "${_in}" "${_precompiled}" ${option} -I ${extern}/lib/ -fno-rtti -fno-stack-protector -fomit-frame-pointer -s ${COMPILER.LIBS}  -o ${out} ${_cliOption}`;
+		  return `${compiler} -std=c++17 ${_files} ${option} -I ${extern}/lib/ -fno-rtti -fno-stack-protector -fomit-frame-pointer -s ${COMPILER.LIBS}  -o ${out} ${_cliOption}`;
 	  }
-	  else return `${compiler} -std=c++17 "${_in}" "${_precompiled}" -I ${extern}/lib/ ${option} -s ${COMPILER.LIBS} -o ${out} ${_cliOption}`;
+	  else return `${compiler} -std=c++17 ${_files} -I ${extern}/lib/ ${option} -s ${COMPILER.LIBS} -o ${out} ${_cliOption}`;
   },
   check: {
     "env": {

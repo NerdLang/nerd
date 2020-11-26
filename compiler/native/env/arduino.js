@@ -56,11 +56,7 @@ var ARDUINO =
   name: "arduino",
   main: "arduino.cpp",
   cli: function(compiler, preset, out, _in, option, target, spec)
-  {
-	  var _cachePath = path.join(process.cwd(), "..", "cached_" + COMPILER.ENV.name + "_" + VERSION);
-	  var _precompiledArduino = path.join(_cachePath, "nectar.o");
-	  var _precompiled = path.join(_cachePath, "nectar.o");
-	  
+  {  
 	  var OPT = getOptions();		
 	  var _cliOption = "";
 	  if(CLI.cli["--option"]) _cliOption = CLI.cli["--option"].argument;
