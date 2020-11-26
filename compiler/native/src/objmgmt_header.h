@@ -25,6 +25,6 @@ const char *__Nectar_Get_String(NectarCore::VAR _v);
 extern const std::string _array[11];
 NectarCore::VAR __Nectar_typeof(NectarCore::VAR _var);
 NectarCore::VAR __Nectar_instanceof(NectarCore::VAR _left, NectarCore::VAR _right);
-NectarCore::VAR __Nectar_delete(NectarCore::VAR _left, std::string _right);
+NectarCore::VAR __Nectar_delete(NectarCore::VAR _left, NectarCore::VAR _right);
 NectarCore::VAR __Nectar_Object_Set(std::string _index, NectarCore::VAR _value, NectarCore::Type::object_t *_obj);
 NectarCore::VAR __Nectar_Object_Set(NectarCore::VAR _index, NectarCore::VAR _value, NectarCore::VAR _array);

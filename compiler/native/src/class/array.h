@@ -44,6 +44,28 @@ namespace NectarCore::Class
 			delete this;
 		}
 	}
+	inline void Array::jsDelete(NectarCore::VAR _key) noexcept
+	{
+		if(_key.type == NectarCore::Enum::Type::String)
+		{
+			#ifndef __Nectar__OBJECT_VECTOR
+				object.erase((std::string)_key);
+			#else
+				for (NectarCore::Type::object_t::iterator it = object.begin() ; it != object.end(); ++it)
+				{
+					if (((std::string_key)).compare(it->first) == 0)
+					{
+						object.erase(it);
+						return;
+					}
+				}
+			#endif
+		}
+		else if(_key.type == NectarCore::Enum::Type::Number)
+		{
+			value[(double)_key] = NectarCore::Global::undefined;
+		}
+	}
 	inline void* Array::Copy() noexcept
 	{
 		counter++;

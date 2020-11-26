@@ -58,6 +58,7 @@ var NODE =
 			"__Nectar_typeof": false,
 			"__Nectar_THIS": false,
 			"__Nectar_instanceof": false,
+			"__Nectar_delete": false,
             "JSON": false,
             "Object": false,
             "isNaN": false,

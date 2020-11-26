@@ -38,6 +38,7 @@ namespace NectarCore::Class
 		NectarCore::Type::object_t object;
 		// Methods
 		inline void Delete() noexcept;
+		inline void jsDelete(const NectarCore::VAR _key) noexcept;
 		inline void* Copy() noexcept;
 		// Native cast
 		explicit operator bool() const noexcept;

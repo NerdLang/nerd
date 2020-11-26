@@ -27,7 +27,8 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
-import 	android.webkit.GeolocationPermissions;
+import android.webkit.GeolocationPermissions;
+import android.webkit.PermissionRequest;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -235,6 +236,13 @@ public class MainActivity extends AppCompatActivity
 
         mainWebView.setWebChromeClient(new WebChromeClient()
         {
+			@Override
+			public void onPermissionRequest(PermissionRequest request) {
+				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+					request.grant(request.getResources());
+				}
+			}
+				
 			public void onGeolocationPermissionsShowPrompt(String origin, GeolocationPermissions.Callback callback) 
 			{
 				callback.invoke(origin, true, false);

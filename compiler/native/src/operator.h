@@ -222,7 +222,6 @@ NectarCore::VAR __Nectar_Object_Stringify(NectarCore::VAR _var, bool _bracket)
 		NectarCore::VAR *_arr = ((NectarCore::Class::FixedArray*)_var.data.ptr)->value;
 		NectarCore::Type::object_t *_obj = &((NectarCore::Class::FixedArray*)_var.data.ptr)->object;
 		if(_bracket) _res += " [ ";
-		int i = 0;
 		int j = ((NectarCore::Class::FixedArray*)_var.data.ptr)->length;
 		int k = 0;
 		int l = 0;

@@ -54,11 +54,16 @@ NectarCore::VAR __Nectar_instanceof(NectarCore::VAR _left, NectarCore::VAR _righ
 	return __Nectar_Boolean_FALSE;
 }
 
-NectarCore::VAR __Nectar_delete(NectarCore::VAR _left, std::string _right)
+NectarCore::VAR __Nectar_delete(NectarCore::VAR _left, NectarCore::VAR _right)
 {
 	if(_left.type == NectarCore::Enum::Type::Object)
 	{
 		((NectarCore::Class::Object*)_left.data.ptr)->jsDelete(_right);
+		return __Nectar_Boolean_TRUE;
+	}
+	else if(_left.type == NectarCore::Enum::Type::Array)
+	{
+		((NectarCore::Class::Array*)_left.data.ptr)->jsDelete(_right);
 		return __Nectar_Boolean_TRUE;
 	}
 	else if(_left.type == NectarCore::Enum::Type::Function)
