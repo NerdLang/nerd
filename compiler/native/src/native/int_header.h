@@ -20,19 +20,19 @@
  *
  */
  
-inline NectarCore::VAR operator+(int _i, NectarCore::VAR _v);
+NectarCore::VAR operator+(int _i, NectarCore::VAR _v);
 void operator+=(int& _i, NectarCore::VAR _v);
-inline double operator-(int _i, NectarCore::VAR _v);
+double operator-(int _i, NectarCore::VAR _v);
 void operator-=(int& _i, NectarCore::VAR _v);
-inline double operator*(int _i, NectarCore::VAR _v);
+double operator*(int _i, NectarCore::VAR _v);
 void operator*=(int& _i, NectarCore::VAR _v);
-inline double operator/(int _i, NectarCore::VAR _v);
+double operator/(int _i, NectarCore::VAR _v);
 void operator/=(int& _i, NectarCore::VAR _v);
-inline double operator%(int _i, NectarCore::VAR _v);
+double operator%(int _i, NectarCore::VAR _v);
 void operator%=(int& _i, NectarCore::VAR _v);
-inline double operator==(int _i, NectarCore::VAR _v);
-inline double operator!=(int _i, NectarCore::VAR _v);
-inline double operator>(int _i, NectarCore::VAR _v);
-inline double operator>=(int _i, NectarCore::VAR _v);
-inline double operator<(int _i, NectarCore::VAR _v);
-inline double operator<=(int _i, NectarCore::VAR _v);
+double operator==(int _i, NectarCore::VAR _v);
+double operator!=(int _i, NectarCore::VAR _v);
+double operator>(int _i, NectarCore::VAR _v);
+double operator>=(int _i, NectarCore::VAR _v);
+double operator<(int _i, NectarCore::VAR _v);
+double operator<=(int _i, NectarCore::VAR _v);
