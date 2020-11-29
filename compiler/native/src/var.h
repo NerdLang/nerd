@@ -101,8 +101,8 @@ namespace NectarCore
 		type = NectarCore::Enum::Type::String;
 		data.ptr = new NectarCore::Class::String(_value);
 	}
-
-	VAR::VAR(std::string _value)
+	
+	VAR::VAR(const std::string _value)
 	{
 		type = NectarCore::Enum::Type::String;
 		data.ptr = new NectarCore::Class::String(_value);
@@ -112,6 +112,12 @@ namespace NectarCore
 	{
 		type = NectarCore::Enum::Type::String;
 		data.ptr = new NectarCore::Class::String(_value);
+	}
+	
+	VAR::VAR(std::string_view _value)
+	{
+		type = NectarCore::Enum::Type::String;
+		data.ptr = new NectarCore::Class::String({_value.data(), _value.size()});
 	}
 
 	VAR::VAR(NectarCore::Class::FixedArray *_value)
@@ -592,6 +598,18 @@ namespace NectarCore
 		else if(type == NectarCore::Enum::Type::Boolean || type == NectarCore::Enum::Type::Number) return data.number;
 		else return (bool)(*(NectarCore::Class::Base*)data.ptr);
 	}
+	
+	VAR::operator const char*() const
+	{
+		if(type == NectarCore::Enum::Type::String)
+		{
+			return ((NectarCore::Class::String*)this->data.ptr)->value.c_str();
+		}
+		else 
+		{
+			throw(NectarCore::VAR("Char* conversion error: variable is not a string"));
+		}
+	}
 
 	VAR::operator std::string() const
 	{
@@ -615,6 +633,18 @@ namespace NectarCore
 	{
 		if(type < NectarCore::Enum::Type::String) return data.number;
 		return (long long)((double)*this);
+	}
+
+	VAR::operator std::string_view() const
+	{
+		if(type == NectarCore::Enum::Type::String)
+		{
+			return std::string_view(((NectarCore::Class::String*)this->data.ptr)->value.c_str());
+		}
+		else 
+		{
+			throw(NectarCore::VAR("string_view conversion error: variable is not a string"));
+		}
 	}
 
 		

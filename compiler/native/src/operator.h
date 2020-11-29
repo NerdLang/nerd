@@ -20,6 +20,12 @@
  *
  */
 
+NectarCore::VAR operator+ (const char* _left, const NectarCore::VAR &_right)
+{
+	return std::string(_left) + (std::string)_right;
+}
+
+
 NectarCore::VAR __Nectar_Boolean_Result(NectarCore::VAR _v)
 {
 	if (_v.type == NectarCore::Enum::Type::Number)
@@ -73,7 +79,7 @@ std::ostream &operator<<(std::ostream &os, const NectarCore::VAR &_v)
 		else os << "false";
 		break;
 	case NectarCore::Enum::Type::Number:
-		os << (std::string)_v;
+		os << _v.data.number;
 		break;
 	case NectarCore::Enum::Type::String:
 		os << (std::string)(*(NectarCore::Class::String*)_v.data.ptr);

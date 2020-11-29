@@ -54,6 +54,7 @@ namespace NectarCore
 		VAR(char *_value);
 		VAR(std::string _value);
 		VAR(const char *_value);
+		VAR(std::string_view _value);
 		VAR(NectarCore::Class::FixedArray *_value);
 		VAR(NectarCore::Class::Array *_value);
 		VAR(const NectarCore::Class::Array *_value);
@@ -165,9 +166,10 @@ namespace NectarCore
 		operator bool();
 		explicit operator std::string() const;
 		operator std::string();
-		explicit operator const char*() const;
-		explicit operator long long();
+		operator const char*() const;
+		operator long long();
 		explicit operator long long() const;
+		operator std::string_view() const;
 		
 	};
 } // namespace NectarCore

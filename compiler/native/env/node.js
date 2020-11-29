@@ -134,7 +134,7 @@ var NODE =
 		var _opt = "-O";
             if(os.platform() == "darwin" || compiler.indexOf("clang") > -1) _opt += "3";
             else _opt += "fast";
-
+				console.log(`${compiler} ${_hashmap} -D__NJS_REGISTER_SIZE=${COMPILER.REGISTER} ${_stack} -std=c++17 ${_uvParam} ${_files} ${_opt} -s ${COMPILER.LIBS}  ${_uvLib} -o a.exe && mv a.exe ${out} ${_cliOption}`);
             return `${compiler} ${_hashmap} -D__NJS_REGISTER_SIZE=${COMPILER.REGISTER} ${_stack} -std=c++17 ${_uvParam} ${_files} ${_opt} -s ${COMPILER.LIBS}  ${_uvLib} -o a.exe && mv a.exe ${out} ${_cliOption}`;
 	  }
   }

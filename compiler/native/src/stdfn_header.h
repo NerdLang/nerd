@@ -22,6 +22,8 @@
  
 namespace NectarCore::Functions
 {
+	NectarCore::VAR println();
 	NectarCore::VAR println(NectarCore::VAR _var);
+	NectarCore::VAR print();
 	NectarCore::VAR print(NectarCore::VAR _var);
 }

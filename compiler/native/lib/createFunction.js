@@ -62,7 +62,7 @@ function createFunction(_code, _scope)
 			_variadic = true;
 			_parameters = "var __Nectar_THIS, NectarCore::VAR* __Nectar_VARARGS, int __Nectar_VARLENGTH";
 
-			if(COMPILER.INFO.SCOPE[_match[1]].param.length == 1)
+			if(COMPILER.INFO.SCOPE[_match[1]] && COMPILER.INFO.SCOPE[_match[1]].param.length == 1)
 			{
 				for(var i = 0; i < _match[2].length; i++)
 				{

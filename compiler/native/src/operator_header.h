@@ -36,6 +36,8 @@ void *__Nectar_Get_Native(NectarCore::VAR _native);
 
 /*** REDIFINING STD OPERATORS ***/
 
+NectarCore::VAR operator+ (const char* _left, const NectarCore::VAR &_right);
+
 template <typename t>
 t operator+(t _left, const NectarCore::VAR &_right)
 {
