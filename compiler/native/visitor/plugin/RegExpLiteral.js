@@ -20,20 +20,8 @@
  *
  */
  
-function ReturnStatement(_path)
+function RegExpLiteral(_path) 
 {
-	if(_path.node && _path.node.argument && _path.node.argument.type == "MemberExpression")
-	{
-		const _arg = _path.get("argument");
-		VISITOR.memberExpression(_path.node.argument);
-	}
-	else if(!_path.node.argument)
-	{
-		_path.node.argument =
-		{
-			"type":"Identifier",
-			"name": "undefined",
-		}
-	}
+	_path.replaceWithSourceString(`"${_path.node.extra.raw.replace(/\\/g, "\\\\")}"`);
 }
-module.exports = ReturnStatement;
+module.exports = RegExpLiteral;

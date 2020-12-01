@@ -96,6 +96,10 @@ function objectExpression(_path, _name)
 		
 		_code += _name + "[\"" + _key + "\"] = " + babel.generate(_path.value).code + ";";
 	}
+	else if(_path.value.type == "UnaryExpression")
+	{
+		_code += _name + "[\"" + _key + "\"] = " + babel.generate(_path.value).code + ";";
+	}
 	else if(_path.value.extra) _value = _path.value.extra.raw;
 	else
 	{

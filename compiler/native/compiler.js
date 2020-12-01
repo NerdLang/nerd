@@ -251,7 +251,7 @@ function Compiler()
 	{
 		if((!CLI.cli["--profile"]) || CLI.cli["--profile"].argument != "use")
 		{
-			copyDirSync(path.join(__dirname, "src"), _folder, true);
+			copyDirSync(path.join(__dirname, "nectarcpp", "src"), _folder, true);
 		}
 	};
 

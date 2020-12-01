@@ -27,7 +27,7 @@ var STD =
     name: "std",
     main: "std.cpp",
     compiler: "g++",
-    stdlib: ["console", {bind:"performance", module:"Performance"}, "RegExp", "Number", "Object", "Math", "JSON", "Array", "Date"],
+    stdlib: ["console", {bind:"performance", module:"Performance"}, "Error", "RegExp", "Number", "Object", "Math", "JSON", "Array", "Date"],
     check: 
     {
         "env": 
@@ -64,6 +64,8 @@ var STD =
 			"__Nectar_THIS": false,
 			"__Nectar_instanceof": false,
 			"__Nectar_delete": false,
+			"__Nectar_EQUAL_VALUE_AND_TYPE": false,
+			"__Nectar_NOT_EQUAL_VALUE_AND_TYPE": false,
             "JSON": false,
             "Object": false,
             "isNaN": false,

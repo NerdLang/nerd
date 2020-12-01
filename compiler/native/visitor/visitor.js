@@ -46,6 +46,7 @@ var njsVisitor =
 	Identifier: require("./plugin/Identifier.js"),
 	MemberExpression: require("./plugin/MemberExpression.js"),
 	NewExpression: require("./plugin/NewExpression.js"),
+	RegExpLiteral: require("./plugin/RegExpLiteral.js"),
 	ReturnStatement: require("./plugin/ReturnStatement.js"),
 	StringLiteral: require("./plugin/StringLiteral.js"),
 	ThisExpression: require("./plugin/ThisExpression.js"),

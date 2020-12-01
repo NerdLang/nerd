@@ -36,6 +36,8 @@
  
  {DECL}
 
+var window; // browser check
+
 int main(int argc, char* argv[])
 {
 	var __NJS_ARGS = __NJS_Create_Array();

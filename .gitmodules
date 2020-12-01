@@ -1,0 +1,3 @@
+[submodule "compiler/native/nectarcpp"]
+	path = compiler/native/nectarcpp
+	url = https://github.com/nectar-lang/NectarCPP
