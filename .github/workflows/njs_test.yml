@@ -20,6 +20,7 @@ jobs:
       
     - name: Install
       run: | 
+        git submodule update --init --recursive
         sudo add-apt-repository ppa:ubuntu-toolchain-r/test
         sudo apt-get update
         sudo apt install g++-10
