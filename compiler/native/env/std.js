@@ -19,6 +19,8 @@
  * along with NectarJS.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+ 
+//TODO for (NaN == NaN) -> false correctness, we need the -fno-finite-math-only flag with -Ofast
 
 var os = require("os");
 
