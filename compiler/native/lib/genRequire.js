@@ -147,9 +147,9 @@ function genRequire(from, src)
 				pkgObject = pkg;
 				if(pkg.nectar)
 				{
-					if(pkg.nectar.comment)
+				  if(pkg.nectar.message)
 				  {
-					  showModuleComment(pkg.nectar.comment, pkg.name);
+					  showModuleComment(pkg.nectar.message, pkg.name);
 				  }
 				  if(pkg.nectar.env)
 				  {

@@ -1,21 +1,14 @@
-var http = require("njs-http");
-var host = "localhost";
-var port = 1337;
+var http = require("http");
+var port = 8080;
 
-function cb (req, res)
+function listening()
 {
-	console.log("Log: " + req.method + req.url);
-	
-	if(req.method == "POST") console.log("POST: " + req.data);
-	else if(req.method == "PUT") console.log("PUT: " + req.data);
-	
-	res.end("Hello NectarJS !");
-};
+	console.log("Listening on port:", port);
+}
 
-var options =
+function cbGet(req, res)
 {
-		static: "./",
-};
+	res.end("Hello World!");
+}
 
-console.log("Listening on " + host + ":" + port);
-http.listen(host, port, cb, options);
+http.createServer().get("/", "Hello Nectar!").get("/cb", cbGet).listen(port, listening).run();

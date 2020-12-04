@@ -25,7 +25,7 @@
  
  using namespace NectarCore::Global;
  using namespace NectarCore::Functions;
- 
+ using namespace NectarCore::JS;
  var __NJS_ENV = "std";
  var __NJS_PLATFORM = "{{__PLATFORM__}}";
  
