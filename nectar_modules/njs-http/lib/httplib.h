@@ -737,7 +737,7 @@ private:
   SocketOptions socket_options_ = default_socket_options;
 };
 
-enum Error {
+enum HTTPError {
   Success = 0,
   Unknown,
   Connection,
@@ -754,7 +754,7 @@ enum Error {
 
 class Result {
 public:
-  Result(std::unique_ptr<Response> res, Error err)
+  Result(std::unique_ptr<Response> res, HTTPError err)
       : res_(std::move(res)), err_(err) {}
   operator bool() const { return res_ != nullptr; }
   bool operator==(std::nullptr_t) const { return res_ == nullptr; }
@@ -765,11 +765,11 @@ public:
   Response &operator*() { return *res_; }
   const Response *operator->() const { return res_.get(); }
   Response *operator->() { return res_.get(); }
-  Error error() const { return err_; }
+  HTTPError error() const { return err_; }
 
 private:
   std::unique_ptr<Response> res_;
-  Error err_;
+  HTTPError err_;
 };
 
 class ClientImpl {
@@ -918,12 +918,12 @@ protected:
   bool process_request(Stream &strm, const Request &req, Response &res,
                        bool close_connection);
 
-  Error get_last_error() const;
+  HTTPError get_last_error() const;
 
   void copy_settings(const ClientImpl &rhs);
 
-  // Error state
-  mutable Error error_ = Error::Success;
+  // HTTPError state
+  mutable HTTPError error_ = HTTPError::Success;
 
   // Socket endoint information
   const std::string host_;
@@ -1994,7 +1994,7 @@ inline socket_t create_client_socket(const char *host, int port,
                                      bool tcp_nodelay,
                                      SocketOptions socket_options,
                                      time_t timeout_sec, time_t timeout_usec,
-                                     const std::string &intf, Error &error) {
+                                     const std::string &intf, HTTPError &error) {
   auto sock = create_socket(
       host, port, 0, tcp_nodelay, std::move(socket_options),
       [&](socket_t sock, struct addrinfo &ai) -> bool {
@@ -2003,7 +2003,7 @@ inline socket_t create_client_socket(const char *host, int port,
           auto ip = if2ip(intf);
           if (ip.empty()) { ip = intf; }
           if (!bind_ip_address(sock, ip.c_str())) {
-            error = Error::BindIPAddress;
+            error = HTTPError::BindIPAddress;
             return false;
           }
 #endif
@@ -2018,20 +2018,20 @@ inline socket_t create_client_socket(const char *host, int port,
           if (is_connection_error() ||
               !wait_until_socket_is_ready(sock, timeout_sec, timeout_usec)) {
             close_socket(sock);
-            error = Error::Connection;
+            error = HTTPError::Connection;
             return false;
           }
         }
 
         set_nonblocking(sock, false);
-        error = Error::Success;
+        error = HTTPError::Success;
         return true;
       });
 
   if (sock != INVALID_SOCKET) {
-    error = Error::Success;
+    error = HTTPError::Success;
   } else {
-    if (error == Error::Success) { error = Error::Connection; }
+    if (error == HTTPError::Success) { error = HTTPError::Connection; }
   }
 
   return sock;
@@ -2171,7 +2171,7 @@ inline const char *status_message(int status) {
   case 511: return "Network Authentication Required";
 
   default:
-  case 500: return "Internal Server Error";
+  case 500: return "Internal Server HTTPError";
   }
 }
 
@@ -4712,7 +4712,7 @@ inline ClientImpl::~ClientImpl() { stop_core(); }
 
 inline bool ClientImpl::is_valid() const { return true; }
 
-inline Error ClientImpl::get_last_error() const { return error_; }
+inline HTTPError ClientImpl::get_last_error() const { return error_; }
 
 inline void ClientImpl::copy_settings(const ClientImpl &rhs) {
   client_cert_path_ = rhs.client_cert_path_;
@@ -4848,7 +4848,7 @@ inline bool ClientImpl::send(const Request &req, Response &res) {
   if (close_connection || !ret) { stop_core(); }
 
   if (!ret) {
-    if (error_ == Error::Success) { error_ = Error::Unknown; }
+    if (error_ == HTTPError::Success) { error_ = HTTPError::Unknown; }
   }
 
   return ret;
@@ -4857,7 +4857,7 @@ inline bool ClientImpl::send(const Request &req, Response &res) {
 inline bool ClientImpl::handle_request(Stream &strm, const Request &req,
                                        Response &res, bool close_connection) {
   if (req.path.empty()) {
-    error_ = Error::Connection;
+    error_ = HTTPError::Connection;
     return false;
   }
 
@@ -4911,7 +4911,7 @@ inline bool ClientImpl::handle_request(Stream &strm, const Request &req,
 
 inline bool ClientImpl::redirect(const Request &req, Response &res) {
   if (req.redirect_count == 0) {
-    error_ = Error::ExceedRedirectCount;
+    error_ = HTTPError::ExceedRedirectCount;
     return false;
   }
 
@@ -5047,7 +5047,7 @@ inline bool ClientImpl::write_request(Stream &strm, const Request &req,
   // Flush buffer
   auto &data = bstrm.get_buffer();
   if (!detail::write_data(strm, data.data(), data.size())) {
-    error_ = Error::Write;
+    error_ = HTTPError::Write;
     return false;
   }
 
@@ -5073,11 +5073,11 @@ inline bool ClientImpl::write_request(Stream &strm, const Request &req,
 
       while (offset < end_offset) {
         if (!req.content_provider(offset, end_offset - offset, data_sink)) {
-          error_ = Error::Canceled;
+          error_ = HTTPError::Canceled;
           return false;
         }
         if (!ok) {
-          error_ = Error::Write;
+          error_ = HTTPError::Write;
           return false;
         }
       }
@@ -5132,7 +5132,7 @@ inline std::unique_ptr<Response> ClientImpl::send_with_content_provider(
 
       while (ok && offset < content_length) {
         if (!content_provider(offset, content_length - offset, data_sink)) {
-          error_ = Error::Canceled;
+          error_ = HTTPError::Canceled;
           return nullptr;
         }
       }
@@ -5171,13 +5171,13 @@ inline bool ClientImpl::process_request(Stream &strm, const Request &req,
   // Receive response and headers
   if (!read_response_line(strm, res) ||
       !detail::read_headers(strm, res.headers)) {
-    error_ = Error::Read;
+    error_ = HTTPError::Read;
     return false;
   }
 
   if (req.response_handler) {
     if (!req.response_handler(res)) {
-      error_ = Error::Canceled;
+      error_ = HTTPError::Canceled;
       return false;
     }
   }
@@ -5189,7 +5189,7 @@ inline bool ClientImpl::process_request(Stream &strm, const Request &req,
             ? static_cast<ContentReceiverWithProgress>(
                   [&](const char *buf, size_t n, uint64_t off, uint64_t len) {
                     auto ret = req.content_receiver(buf, n, off, len);
-                    if (!ret) { error_ = Error::Canceled; }
+                    if (!ret) { error_ = HTTPError::Canceled; }
                     return ret;
                   })
             : static_cast<ContentReceiverWithProgress>(
@@ -5205,7 +5205,7 @@ inline bool ClientImpl::process_request(Stream &strm, const Request &req,
     auto progress = [&](uint64_t current, uint64_t total) {
       if (!req.progress) { return true; }
       auto ret = req.progress(current, total);
-      if (!ret) { error_ = Error::Canceled; }
+      if (!ret) { error_ = HTTPError::Canceled; }
       return ret;
     };
 
@@ -5213,7 +5213,7 @@ inline bool ClientImpl::process_request(Stream &strm, const Request &req,
     if (!detail::read_content(strm, res, (std::numeric_limits<size_t>::max)(),
                               dummy_status, std::move(progress), std::move(out),
                               decompress_)) {
-      if (error_ != Error::Canceled) { error_ = Error::Read; }
+      if (error_ != HTTPError::Canceled) { error_ = HTTPError::Read; }
       return false;
     }
   }
@@ -5408,7 +5408,7 @@ inline Result ClientImpl::Post(const char *path, const Headers &headers,
   for (size_t i = 0; i < boundary.size(); i++) {
     char c = boundary[i];
     if (!std::isalnum(c) && c != '-' && c != '_') {
-      error_ = Error::UnsupportedMultipartBoundaryChars;
+      error_ = HTTPError::UnsupportedMultipartBoundaryChars;
       return Result{nullptr, error_};
     }
   }
@@ -5562,7 +5562,7 @@ inline size_t ClientImpl::is_socket_open() const {
 
 inline void ClientImpl::stop() {
   stop_core();
-  error_ = Error::Canceled;
+  error_ = HTTPError::Canceled;
 }
 
 inline void ClientImpl::stop_core() {
@@ -6136,7 +6136,7 @@ inline bool SSLClient::initialize_ssl(Socket &socket) {
       [&](SSL *ssl) {
         if (server_certificate_verification_) {
           if (!load_certs()) {
-            error_ = Error::SSLLoadingCerts;
+            error_ = HTTPError::SSLLoadingCerts;
             return false;
           }
           SSL_set_verify(ssl, SSL_VERIFY_NONE, nullptr);
@@ -6145,7 +6145,7 @@ inline bool SSLClient::initialize_ssl(Socket &socket) {
         if (!detail::ssl_connect_or_accept_nonblocking(
                 socket.sock, ssl, SSL_connect, connection_timeout_sec_,
                 connection_timeout_usec_)) {
-          error_ = Error::SSLConnection;
+          error_ = HTTPError::SSLConnection;
           return false;
         }
 
@@ -6153,20 +6153,20 @@ inline bool SSLClient::initialize_ssl(Socket &socket) {
           verify_result_ = SSL_get_verify_result(ssl);
 
           if (verify_result_ != X509_V_OK) {
-            error_ = Error::SSLServerVerification;
+            error_ = HTTPError::SSLServerVerification;
             return false;
           }
 
           auto server_cert = SSL_get_peer_certificate(ssl);
 
           if (server_cert == nullptr) {
-            error_ = Error::SSLServerVerification;
+            error_ = HTTPError::SSLServerVerification;
             return false;
           }
 
           if (!verify_host(server_cert)) {
             X509_free(server_cert);
-            error_ = Error::SSLServerVerification;
+            error_ = HTTPError::SSLServerVerification;
             return false;
           }
           X509_free(server_cert);
