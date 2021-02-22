@@ -10,6 +10,8 @@ Code everything, everywhere, for everything, in JavaScript.
 
 No VM. No Bytecode. No packaging. No Garbage Collector. Fully compiled to native binaries.
 
+Help needed to integrate NodeJS std modules
+
 </p>
 
 # Table of contents
