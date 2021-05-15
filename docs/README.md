@@ -120,7 +120,7 @@ You can enable the quiet mode with --quiet:
 nectar file.js --quiet
 ```
 
-Changing the stack size (usefull on Windows):
+Changing the stack size (useful on Windows):
 ```
 nectar --stack 10000000 flood.js
 ```
