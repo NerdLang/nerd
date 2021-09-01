@@ -20,7 +20,7 @@
  *
  */
  
-global.strip = require("strip-comments");
+global.transpile = require('estree-cpp');
 global.babel = require( '@babel/core' );
 babel.generate = require( '@babel/generator' ).default;
 
@@ -35,7 +35,6 @@ var createFunction = require("./lib/createFunction.js");
 var createAnon = require("./lib/createAnon.js");
 var createReturnAnon = require("./lib/createReturnAnon.js");
 var createClass = require("./lib/createClass.js");
-var hoistingFunction = require("./lib/hoistingFunction.js");
 
 global.RND = function() { return "__" + Math.random().toString(36).substring(7); };
 
@@ -189,7 +188,6 @@ function Compiler()
 	/*** METHODS ***/
 	this.Parse = function(_code)
 	{
-		_code = strip(_code);
 		if(CLI.cli["--preset"] && CLI.cli["--preset"].argument == "speed") 
 		{
 			_code = babel.transformSync(_code, 
@@ -207,7 +205,7 @@ function Compiler()
 		_code = genRequire(_handler.PATH, COMPILER.STD) + genRequire(_handler.PATH, _code);
 		
 		COMPILER.STATE = "REQUIRE";
-		COMPILER.REQUIRE = babel.transformSync(COMPILER.REQUIRE, visitor).code;
+		COMPILER.REQUIRE = transpile(COMPILER.REQUIRE, visitor);
 		checkFastFunction();
 		COMPILER.REQUIRE = createClass(COMPILER.REQUIRE);
 		COMPILER.REQUIRE = createFunction(COMPILER.REQUIRE);
@@ -216,23 +214,9 @@ function Compiler()
 
 		COMPILER.STATE = "CODE";
 
-		_handler.CODE = babel.transformSync(_code, visitor).code;
-		_code = hoistingFunction(_code);
-		checkFastFunction();
-		_handler.CODE = createClass(_handler.CODE, true);
-		
-		_handler.CODE = createFunction(_handler.CODE, true);
-		_handler.CODE = createAnon(_handler.CODE, true);
-		_handler.CODE = createReturnAnon(_handler.CODE, true);
-
-		var _hoisting = "";
-		for(var i = 0; i < COMPILER.INFO.HOISTING.length; i++)
-		{
-			_hoisting += "var " + COMPILER.INFO.HOISTING[i] + ";";
-		}
-		_handler.CODE = _handler.CODE;
-
-		COMPILER.INIT += COMPILER.REQUIRE + _hoisting;
+		_handler.CODE = transpile(_code);
+		debugger
+		COMPILER.INIT += COMPILER.REQUIRE;
 		
 		_handler.DECL = _handler.DECL.filter(function(v,i)
 		{
