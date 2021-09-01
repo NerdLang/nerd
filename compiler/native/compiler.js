@@ -205,7 +205,8 @@ function Compiler()
 		_code = genRequire(_handler.PATH, COMPILER.STD) + genRequire(_handler.PATH, _code);
 		
 		COMPILER.STATE = "REQUIRE";
-		COMPILER.REQUIRE = transpile(COMPILER.REQUIRE, visitor);
+		COMPILER.REQUIRE = babel.transformSync(COMPILER.REQUIRE, visitor).code;
+		COMPILER.REQUIRE = transpile(COMPILER.REQUIRE);
 		checkFastFunction();
 		COMPILER.REQUIRE = createClass(COMPILER.REQUIRE);
 		COMPILER.REQUIRE = createFunction(COMPILER.REQUIRE);
