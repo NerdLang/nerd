@@ -73,8 +73,6 @@ function addModuleLib(_lib, modSource)
 
 function genRequire(from, src)
 {
-  // strip comments
-  src = strip(src);
   src = genPackage(from, src);
   var _SEARCH = new RegExp(/ *require\(['"](.*?)['"]\)/);
   var seek = ["require('", "require(\""];
