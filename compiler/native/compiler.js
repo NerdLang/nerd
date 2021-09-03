@@ -23,18 +23,11 @@
 global.transpile = require('estree-cpp');
 global.babel = require( '@babel/core' );
 babel.generate = require( '@babel/generator' ).default;
-
- var visitor = require("./visitor/visitor.js");
  
 var genRequire = require("./lib/genRequire.js");
 global.genMetaFunction = require("./lib/genMetaFunction.js");
 global.genPackage = require("./lib/genPackage.js");
 global.replaceObjAddr = require("./lib/replaceObjAddr.js");
-
-var createFunction = require("./lib/createFunction.js");
-var createAnon = require("./lib/createAnon.js");
-var createReturnAnon = require("./lib/createReturnAnon.js");
-var createClass = require("./lib/createClass.js");
 
 global.RND = function() { return "__" + Math.random().toString(36).substring(7); };
 
@@ -161,16 +154,12 @@ function Compiler()
 	{
 		for(var _s in this.ENV.stdlib)
 		{
-			if(typeof this.ENV.stdlib[_s] == "string")
-			{
-				this.DECL.push("var " + this.ENV.stdlib[_s] + ";");
-				this.STD += this.ENV.stdlib[_s] +  " = require(\"" + this.ENV.stdlib[_s] + "\");";
-			}
-			else if(typeof this.ENV.stdlib[_s] == "object")
-			{
-				this.DECL.push("var " + this.ENV.stdlib[_s].bind + ";");
-				this.STD += this.ENV.stdlib[_s].bind +  " = require(\"" + this.ENV.stdlib[_s].module + "\");";
-			}
+			const { bind, modules } = (typeof this.ENV.stdlib[_s] === "object"
+				? this.ENV.stdlib[_s]
+				: { bind: this.ENV.stdlib[_s], modules: this.ENV.stdlib[_s] }
+			)
+			_handler.DECL.push('var ' + bind + ';')
+			this.STD += 'var ' + bind +  " = require(\"" + modules + "\");";
 		}
 	}
 	if(this.ENV.check && this.ENV.check.globals)
@@ -205,18 +194,10 @@ function Compiler()
 		_code = genRequire(_handler.PATH, COMPILER.STD) + genRequire(_handler.PATH, _code);
 		
 		COMPILER.STATE = "REQUIRE";
-		COMPILER.REQUIRE = babel.transformSync(COMPILER.REQUIRE, visitor).code;
 		COMPILER.REQUIRE = transpile(COMPILER.REQUIRE);
-		checkFastFunction();
-		COMPILER.REQUIRE = createClass(COMPILER.REQUIRE);
-		COMPILER.REQUIRE = createFunction(COMPILER.REQUIRE);
-		COMPILER.REQUIRE = createAnon(COMPILER.REQUIRE);
-		COMPILER.REQUIRE = createReturnAnon(COMPILER.REQUIRE);
 
 		COMPILER.STATE = "CODE";
-
 		_handler.CODE = transpile(_code);
-		debugger
 		COMPILER.INIT += COMPILER.REQUIRE;
 		
 		_handler.DECL = _handler.DECL.filter(function(v,i)
