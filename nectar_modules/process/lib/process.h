@@ -19,15 +19,9 @@
  * along with NectarJS.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
- 
-var process = 
-{
-	argv: __NJS_ARGS,
-	exit: function(_code)
-	{
-		if (!_code) _code = 0;
-		__Nectar_EXIT(_code);
-	}
-};
+#include <cstdlib>
 
-module.exports = process;
+function __Nectar_EXIT(var code)
+{
+	std::exit((int)code);
+};
