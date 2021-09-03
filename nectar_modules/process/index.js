@@ -19,7 +19,8 @@
  * along with NectarJS.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
- 
+"!_ffi_include lib/process.h";
+
 var process = 
 {
 	argv: __NJS_ARGS,

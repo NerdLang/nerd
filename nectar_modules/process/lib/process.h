@@ -21,7 +21,7 @@
  */
 #include <cstdlib>
 
-function __Nectar_EXIT(var code)
+function __Nectar_EXIT(code)
 {
 	std::exit((int)code);
 };

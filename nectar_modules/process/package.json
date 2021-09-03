@@ -9,7 +9,8 @@
 
   "directories":
   {
-    "root": "."
+    "root": ".",
+    "lib": "lib"
   },
   "homepage": "https://github.com/NectarJS/nectarjs#readme",
   "keywords":
