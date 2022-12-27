@@ -1,0 +1,334 @@
+/*
+	Copyright (c) 2021 NerdLang - Adrien THIERRY and contributors
+
+	Permission is hereby granted, free of charge, to any person obtaining a copy
+	of this software and associated documentation files (the "Software"), to deal
+	in the Software without restriction, including without limitation the rights
+	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+	copies of the Software, and to permit persons to whom the Software is
+	furnished to do so, subject to the following conditions:
+
+	The above copyright notice and this permission notice shall be included in all
+	copies or substantial portions of the Software.
+
+	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+	SOFTWARE.
+
+*/
+
+var math = 
+{
+	"E": 2.71828182845904523536,
+	"LN2": 0.693147180559945309417,
+	"LN10": 2.30258509299404568402,
+	"LOG2E": 1.44269504088896340736,
+	"LOG10E": 0.434294481903251827651,
+	"PI": 3.14159265358979323846,
+	"PIx2": 1.57079632679489661923,
+	"PIx4": 0.785398163397448309616,
+	"1/PI": 0.318309886183790671538,
+	"2/PI": 0.636619772367581343076,
+	"2/SQRTP1": 1.12837916709551257390,
+	"SQRT1/2": 0.707106781186547524401,
+	"SQRT2": 1.41421356237309504880,
+};
+
+/*** PROPERTIES ***/
+
+
+
+/*** END PROPERTIES ***/
+
+/*** METHODS ***/
+
+math.abs = function (x) 
+{ 
+	{{
+		return std::abs((double)(x)); 
+	}}
+};
+
+math.acos = function (x) 
+{ 
+	{{
+		std::acos((double)(x));
+	}}
+};
+
+math.acosh = function (x) 
+{ 
+	{{
+		std::acosh((double)(x));
+	}}
+};
+
+math.asin = function (x) 
+{ 
+	{{
+		std::asin((double)(x));
+	}}
+};
+
+math.asinh = function (x) 
+{ 
+	{{
+		std::asinh((double)(x));
+	}}
+};
+
+math.atan = function (x) 
+{ 
+	{{
+		std::atan((double)(x));
+	}}
+};
+
+math.atanh = function (x) 
+{ 
+	{{
+		std::atanh((double)(x));
+	}}
+};
+
+math.atan2 = function (x, y) 
+{ 
+	{{
+		std::atan2((double)(x), (double)(y));
+	}}
+};
+
+math.cbrt = function (x) 
+{ 
+	{{
+		std::cbrt((double)(x));
+	}}
+};
+
+math.ceil = function (x) 
+{ 
+	{{
+		std::ceil((double)(x));
+	}}
+};
+
+math.clz32 = function (x) 
+{ 
+	{{
+		int n = (int)(x);
+		return NerdCore::Global::var(n > 0 ? (int)(31 - std::log2(n >> 0)) : 32);
+	}}
+};
+
+math.cos = function (x) 
+{ 
+	{{
+		return std::cos((double)(x));
+	}}
+};
+
+math.cosh = function (x) 
+{ 
+	{{
+		return std::cosh((double)(x));
+	}}
+};
+
+math.exp = function (x) 
+{ 
+	{{
+		return std::exp((double)(x));
+	}}
+};
+
+math.expm1 = function (x) 
+{ 
+	{{
+		return std::expm1((double)(x));
+	}}
+};
+
+
+math.floor = function (x) 
+{ 
+	{{
+		return std::floor((double)(x));
+	}}
+};
+
+math.fround = function (x) 
+{ 
+	{{
+		return (double)(x);
+	}}
+};
+
+math.hypot = function () 
+{ 
+	{{
+		double max = 0;
+		double s = 0;
+		for (int i = 0; i < __NERD_VARLENGTH; i++) {
+			double x = std::abs((double)(__NERD_VARARGS[i]));
+			if (x > max) {
+				s *= (max / x) * (max / x);
+				max = x;
+			}
+			s += (x == 0 && max == 0) ? 0 : (x / max) * (x / max);
+		}
+		return NerdCore::Global::var(max == INFINITY ? INFINITY : max * std::sqrt(s));
+	}}
+};
+
+math.imul = function (x, y) 
+{ 
+	{{
+		return x * y;
+	}}
+};
+
+math.log = function (x) 
+{ 
+	{{
+		return std::log((double)(x));
+	}}
+};
+
+math.log1p = function (x) 
+{ 
+	{{
+		return std::log1p((double)(x));
+	}}
+};
+
+math.log10 = function (x) 
+{ 
+	{{
+		return std::log10((double)(x));
+	}}
+};
+
+math.log2 = function (x) 
+{ 
+	{{
+		return std::log2((double)(x));
+	}}
+};
+
+math.max = function () 
+{ 
+	{{
+		double max = -INFINITY;
+		for (int i = 0; i < __NERD_VARLENGTH; i++) 
+		{
+			double n = (double)(__NERD_VARARGS[i]);
+			if (n > max)
+			{
+				max = n;
+			}
+		}
+		return max;
+	}}
+};
+
+math.min = function () 
+{ 
+	{{
+		double min = INFINITY;
+		for (int i = 0; i < __NERD_VARLENGTH; i++)
+		{
+			double n = (double)(__NERD_VARARGS[i]);
+			if (n < min)
+			{
+				min = n;
+			}
+		}
+		return min;
+	}}
+};
+
+math.pow = function (x, y) 
+{ 
+	{{
+		return std::pow((double)x, (double)y);
+	}}
+};
+
+math.random = function () 
+{ 
+	{{
+		return (double)(std::rand()) / (double)(RAND_MAX);
+	}}
+};
+
+math.round = function (x, y) 
+{ 
+	{{
+		return std::round((double)x);
+	}}
+};
+
+math.sign = function (x, y) 
+{ 
+	{{
+		double n = (double)(x);
+		if (n == 0) 
+		{
+			return 0; 
+		}
+		else
+		{
+			return n > 0 ? 1 : -1;
+		};
+	}}
+};
+
+math.sin = function (x, y) 
+{ 
+	{{
+		return std::sin((double)x);
+	}}
+};
+
+math.sinh = function (x, y) 
+{ 
+	{{
+		return std::sinh((double)x);
+	}}
+};
+
+math.sqrt = function (x, y) 
+{ 
+	{{
+		return std::sqrt((double)x);
+	}}
+};
+
+math.tan = function (x, y) 
+{ 
+	{{
+		return std::tan((double)x);
+	}}
+};
+
+math.tanh = function (x, y) 
+{ 
+	{{
+		return std::tanh((double)x);
+	}}
+};
+
+math.trunc = function (x, y) 
+{ 
+	{{
+		return std::trunc((double)x);
+	}}
+};
+
+/*** END METHODS ***/
+
+return math;

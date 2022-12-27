@@ -1,0 +1,11 @@
+var console = require("console");
+var error = require("error");
+
+try
+{
+	error.throw("An error");
+}
+catch(e)
+{
+	console.log(e);
+}

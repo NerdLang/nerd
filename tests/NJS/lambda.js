@@ -1,1 +1,0 @@
-(function(){ console.log("in Lambda");})();

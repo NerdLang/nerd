@@ -1,0 +1,13 @@
+var _json = require("JSON");
+var _console = require("console");
+
+var obj = 
+{
+	"key": "value",
+};
+
+var str = "{\"name\":\"Nerd\"}";
+
+
+_console.log(_json.stringify(obj));
+_console.log(_json.parse(str).name);

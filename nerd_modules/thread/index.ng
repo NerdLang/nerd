@@ -1,0 +1,60 @@
+// WIP
+	{{
+		using __NERD_UNORDERED = std::unordered_map<std::string,std::mutex>;
+		
+		auto __Nerd_THREADED_CALL = [](NerdCore::VAR _fn)
+		{
+			try
+			{
+				_fn();
+			}
+			catch(NerdCore::VAR e)
+			{
+				std::cout << e << std::endl;
+			}
+		};
+	
+	}}
+var thread = function()
+{
+	var _self = {};
+	_self.mutex = {};
+	_self.list = {};
+	{{
+		__NERD_OBJECT(_self["mutex"])->bind = new __NERD_UNORDERED();
+		__NERD_OBJECT(_self["list"])->bind = new std::vector<std::thread>();
+	}}
+
+	_self.run = function(_cb)
+	{
+		{{
+			if(_cb.type == NerdCore::Enum::Type::Function)
+			{
+				((std::vector<std::thread>*)__NERD_OBJECT(_self["list"])->bind)->emplace_back(std::thread(__Nerd_THREADED_CALL, _cb));
+			}
+		}}
+	};
+
+	_self.lock = function(_key)
+	{
+		{{
+			if(!_key) _key = "default";
+			std::lock_guard<std::mutex> guard((*(((__NERD_UNORDERED*)__NERD_OBJECT(_self["mutex"])->bind)))[(std::string)_key]);
+		}}
+	};
+
+	_self.waitForAll = function()
+	{
+		{{
+			for(auto& _thread: *((std::vector<std::thread>*)__NERD_OBJECT(_self["list"])->bind))
+			{
+				_thread.join();
+			}
+		}}
+	};
+	return _self;
+};
+
+
+
+return thread;

@@ -1,0 +1,10 @@
+var _world = "world";
+var _console = require("console");
+
+var _fn = function(_const, assignable )
+{
+	assignable = _world;
+	_console.log(_const, assignable);
+};
+
+_fn("hello", _world);

@@ -1,0 +1,26 @@
+var _thread = require("thread");
+var thread = _thread();
+
+var console = require("console");
+
+var fn1 = function()
+{
+	for(var i = 0; i < 10; i++)
+	{
+		console.log("fn1");
+	}
+};
+
+var fn2 = function()
+{
+	for(var i = 0; i < 10; i++)
+	{
+		console.log("fn2");
+	}
+};
+
+thread.run(fn1);
+
+thread.run(fn2);
+
+thread.waitForAll();

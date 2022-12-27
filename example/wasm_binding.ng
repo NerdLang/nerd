@@ -1,0 +1,21 @@
+var wasm = require("wasm");
+
+// function proto for binding : string(string)
+var callFromNerd = function(_data)
+{
+	if(_data)
+	{
+		wasm.run("document.write('<h1>" + _data + "</h1>');");
+	}
+	else
+	{
+		wasm.run("document.write('<h1>No Data</h1>');");
+	}
+	return "Executed from wasm";
+};
+
+// bind function to be executed in Browser env with Module.call(_functionName, _data);
+wasm.bind("callFromNerd", callFromNerd);
+
+// Fire a JS function to know when env is set up, see wasm.html
+wasm.run("WasmLoaded();");

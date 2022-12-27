@@ -1,0 +1,17 @@
+for(var i = 0; i < 10; i++)
+{
+	var a = i + 1;
+}
+
+var a = 3;
+
+while(a)
+{
+	a--;
+}
+
+
+do
+{
+	a++;
+}while(a < 3);

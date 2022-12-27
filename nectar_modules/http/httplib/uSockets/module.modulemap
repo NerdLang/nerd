@@ -1,4 +1,0 @@
-module uSockets {
-	header "src/libusockets.h"
-	export *
-}

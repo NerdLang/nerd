@@ -1,0 +1,5 @@
+var os = require("os");
+var console = require("console");
+
+
+console.log(os.version(), os.arch());

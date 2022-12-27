@@ -1,0 +1,5 @@
+var inNative = "Hello from native";
+
+{{
+	std::cout << inNative << "!" << std::endl;
+}}

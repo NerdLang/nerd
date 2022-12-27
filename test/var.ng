@@ -1,0 +1,55 @@
+var a = 0;
+
+var b = 1.1;
+
+var c = "Hello";
+
+var d = true;
+
+var e = false;
+
+var f = 1 < 1;
+
+var g = null;
+
+var h = function(){};
+
+var i = function(arg, brg, crg) 
+{
+	return arg + 1;
+};
+
+var j = [];
+
+var k = {};
+
+var l = 
+{
+	a: "a",
+	b: "b",
+}
+
+var m = [0,1,2,3,4];
+
+m = [[]];
+
+a = 1;
+
+b = 0;
+
+c = {};
+
+d = [];
+
+e = {
+	hello: "world"
+};
+
+f = ["0", 1, "2"];
+
+g = function(_arg)
+{
+	return _arg++;
+};
+
+a = g(1);

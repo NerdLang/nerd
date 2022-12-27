@@ -1,0 +1,13 @@
+var _console = require("console");
+var a = 1;
+var b = 0;
+var c = 0;
+var n = 102;
+while (n > 0)
+{
+c = a;
+a = b + a;
+b = c;
+n--;
+}
+_console.log(b);

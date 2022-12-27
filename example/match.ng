@@ -1,0 +1,4 @@
+var console = require("console");
+var regexp = require("regexp");
+
+console.log(regexp.match(".*.", "1234"));

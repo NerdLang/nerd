@@ -1,0 +1,57 @@
+{
+  "name": "nerdlang",
+  "version": "0.0.16",
+  "description": "NerdLang. Simple yet efficient.",
+  "main": "nerd",
+  "bin": {
+    "nerd": "./nerd.js"
+  },
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nerdlang/nerd.git"
+  },
+  "keywords": [
+    "nerd",
+    "nerdlang",
+    "nerd-lang",
+    "compilation",
+    "crossplatform",
+    "simple",
+    "speed",
+    "io",
+    "iot",
+    "socket",
+    "android",
+    "linux",
+    "windows",
+    "arduino",
+    "raspberry",
+    "stm32",
+    "nucleo",
+    "http",
+    "https",
+    "bytecode",
+    "wasm",
+    "arm",
+    "arm64",
+    "msbuild",
+    "cl",
+    "webserver",
+    "webview"
+  ],
+  "author": "Adrien THIERRY <adrien.thierryfr@gmail.com> (https://seraum.com)",
+  "license": "MIT",
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/nerdlang/nerd/blob/master/LICENSE"
+    }
+  ],
+  "bugs": {
+    "url": "https://github.com/nerdlang/nerd/issues"
+  },
+  "homepage": "https://nerdlang.org",
+  "dependencies": {
+  }
+}

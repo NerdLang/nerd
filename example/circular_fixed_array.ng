@@ -1,0 +1,10 @@
+var console = require("console");
+
+while (true) 
+{
+   var x = FixedArray();
+   x[0] = "Hello Circular Fixed Array";
+   var y = [x];
+   x[1] = y;
+   console.log(x[1][0][0]);
+}

@@ -1,0 +1,21 @@
+var str = "abcdef";
+var args = arguments();
+
+var obj = {
+	"1":1,
+	"2":2,
+	"3":3,
+}
+
+var length = length_of(str);
+var size = size_of(str);
+var sizeOfObj = size_of(obj);
+var lengthOfObj = length_of(obj);
+
+{{
+	std::cout << "length of('abcdef'): " << length << std::endl;
+	std::cout << "size of('abcdef'): " << size << std::endl;
+	std::cout << std::endl;
+	std::cout << "lengthof(obj): " << lengthOfObj << std::endl;
+	std::cout << "sizeof(obj): " << sizeOfObj << std::endl;
+}}

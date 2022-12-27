@@ -1,28 +1,20 @@
 {
-  "name": "nectarjs",
-  "version": "0.7.115",
-  "description": "Javascript's God Mode. No VM. No Bytecode. No GC. Just native binaries.",
-  "main": "nectar",
+  "name": "nerd",
+  "version": "0.0.16",
+  "description": "Nerd. JS native compiler.",
+  "main": "nerd",
   "bin": {
-    "nectar": "./nectar.js",
-    "njs": "./nectar.js"
+    "nerd": "./nerd.js"
   },
-  "scripts": {
-    "njs_test": "node script/njs_tests.js",
-    "njs_clang_test": "node script/njs_clang_tests.js",
-    "es3_test": "node script/es3_tests.js"
-  },
+  "scripts": {},
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/nectarjs/nectarjs.git"
+    "url": "git+https://github.com/nerdlang/nerd.git"
   },
   "keywords": [
-    "nectar",
-    "nectarjs",
-    "nectar-lang",
-    "javascript",
-    "js",
-    "god mode",
+    "nerd",
+    "nerdlang",
+    "nerd-lang",
     "compilation",
     "crossplatform",
     "simple",
@@ -37,37 +29,29 @@
     "raspberry",
     "stm32",
     "nucleo",
-    "express",
-    "uwebsocket",
     "http",
     "https",
-    "bytcode",
+    "bytecode",
     "wasm",
     "arm",
     "arm64",
     "msbuild",
     "cl",
-    "http",
     "webserver",
-    "webview",
-    "typescript",
-    "ts",
-    "tsc"
+    "webview"
   ],
-  "author": "Adrien THIERRY <adrien.thierryfr@gmail.com> (https://seraum.com)",
+  "author": "Adrien THIERRY <adrien.thierryfr@gmail.com>",
   "license": "MIT",
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/nerdlang/nerd/blob/master/LICENSE"
+    }
+  ],
   "bugs": {
-    "url": "https://github.com/nectarjs/nectarjs/issues"
+    "url": "https://github.com/nerdlang/nerd/issues"
   },
-  "homepage": "https://nectarjs.com",
+  "homepage": "https://nerdlang.org",
   "dependencies": {
-    "@babel/core": "^7.12.3",
-    "@babel/generator": "^7.12.5",
-    "babel-plugin-minify-dead-code-elimination": "^0.5.1",
-    "babel-plugin-minify-guarded-expressions": "^0.4.4",
-    "babel-plugin-remove-unused-vars": "^2.2.0",
-    "eslint": "^7.13.0",
-    "strip-comments": "^2.0.1",
-    "typescript": "^4.0.5"
   }
 }
