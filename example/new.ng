@@ -1,0 +1,20 @@
+var console = require("console");
+
+var a = function()
+{
+	this.dic = "Hello";
+	return this;
+};
+a.prototype.dic = "ok";
+a.prototype = Object();
+a.prototype.talk = function()
+{
+	console.log(this.dic);
+}
+
+var obj1 = new a();
+obj1.dic = "ownProp";
+obj1.talk();
+
+var obj2 = new a();
+obj2.talk();

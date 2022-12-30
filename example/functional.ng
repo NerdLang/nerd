@@ -1,0 +1,21 @@
+var console = require("console");
+
+var Functional = function()
+{
+	var obj = {};
+	obj.fn = function(_arg)
+	{
+		console.write(_arg);
+		return obj;
+	};
+	return obj;
+};
+
+var a = Functional();
+var b = a.fn("Hello ");
+var c = b.fn("world");
+var d = c.fn("!");
+
+console.log("");
+
+d.fn("Good ").fn("Morning").fn("!");

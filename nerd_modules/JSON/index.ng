@@ -1,0 +1,82 @@
+/*
+ * This file is part of NectarJS
+ * Copyright (c) 2017 - 2020 Adrien THIERRY
+ * http://nectarjs.com - https://seraum.com/
+ *
+ * sources : https://github.com/nectarjs/nectarjs
+ * 
+ * NectarJS is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * NectarJS is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with NectarJS.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
+include("./lib/json.h");
+
+var _JSON = {};
+
+_JSON.stringify = function(_obj)
+{
+	{{
+		return __NERD_Object_Stringify(_obj);
+	}}
+};
+
+_JSON.parse = function(__json)
+{
+	{{
+		if(!__json) return null;
+		size_t tokcount = 32;
+		int r;
+		int j = 0;
+		var __RESULT;
+		const char* JSON_STRING = ((NerdCore::Class::String*)__json.data.ptr)->value.c_str();
+		
+		jsmn_parser p;
+		jsmntok_t *tok = (jsmntok_t*)malloc(sizeof(*tok) * tokcount);
+
+		jsmn_init(&p);
+		
+		bool _again = true;
+		while(_again)
+		{
+			r = jsmn_parse(&p, JSON_STRING, strlen(JSON_STRING), tok, tokcount);
+			
+			if (r < 0) 
+			{
+			
+				if (r == (int)JSMN_ERROR_NOMEM) 
+				{
+					tokcount = tokcount * 2;
+					tok = (jsmntok_t *)realloc_it(tok, sizeof(*tok) * tokcount);
+				}
+				else
+				{
+					printf("Failed to parse JSON: %d\n", r);
+					return __RESULT;
+				}
+			
+			}
+			else 
+			{
+				dump(JSON_STRING, tok, p.toknext, 0, __RESULT);
+				_again = false;
+			}
+		}
+		
+		free(tok);
+		return __RESULT;
+	}}
+	
+};
+
+return _JSON;

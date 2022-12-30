@@ -1,0 +1,18 @@
+var a = "abcdef";
+var b = [0,1,2,3];
+var c = 
+{
+	"zero": 0,
+	"one": 1,
+};
+
+var fn = function(_arg)
+{
+	return _arg;
+};
+
+fn(a[0]);
+
+fn(b[0]);
+
+fn(c["zero"]);

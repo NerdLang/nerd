@@ -1,0 +1,15 @@
+var console = require("console");
+
+while (true) 
+{
+   var x =
+   {
+		a: "Hello Circular Object"
+	}; // x = 1
+   var y = 
+   {
+		x: x
+    };  // x = 2 y = 1
+   x.y = y; // x = 2 y = 2
+   console.log(x.y.x.y.x.y.x.a);
+}

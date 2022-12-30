@@ -1,0 +1,28 @@
+var console = require("console");
+
+var cliAgs = arguments(); // cli args 
+
+console.log();
+console.log("Cli Args:");
+for(var i = 0; i < length_of(cliAgs); i++)
+{
+	console.log("cliAgs", i, ":", cliAgs[i]);
+}
+
+var fn = function()
+{
+	var fnArgs = arguments(); // local function args
+	
+	for(var i = 0; i < length_of(fnArgs); i++)
+	{
+		console.log("fnArgs", i, ":", fnArgs[i]);
+	}
+};
+
+console.log();
+console.log(`FnArgs: fn(0, "one", 2, "three")`);
+fn(0, "one", 2, "three");
+
+console.log();
+console.log(`FnArgs: fn("Hello", "World", "!")`);
+fn("Hello", "World", "!");

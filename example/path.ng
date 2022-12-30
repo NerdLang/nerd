@@ -1,0 +1,4 @@
+var _path = require("path");
+var _console = require("console");
+
+_console.log(_path.join("a", "b", "c"));

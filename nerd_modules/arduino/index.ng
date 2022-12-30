@@ -1,0 +1,64 @@
+var high;
+var low;
+var input;
+var output;
+var led_builtin;
+
+{{
+	high = HIGH;
+	low = LOW;
+	input = INPUT;
+	output = OUTPUT;
+	led_builtin = LED_BUILTIN;
+}}
+
+var nerdDelay = function(_value)
+{ 
+	{{
+		delay((int)_value);
+	}}
+};
+
+var nerdPinMode = function(_pin, _mode)
+{ 
+	{{
+		pinMode((int)_pin, (int)_mode);
+	}}
+};
+
+var nerdDigitalWrite = function( _pin, _mode)
+{
+	{{
+		digitalWrite((int)_pin, (int)_mode);
+	}}
+};
+
+var nerdMillis = function( )
+{
+	{{
+		return var((double)millis());
+	}}
+};
+
+var nerdSec = function( )
+{
+	{{
+		return var((int)(millis()/1000));
+	}}
+};
+
+var arduino = 
+{
+	delay: nerdDelay,
+	pinMode: nerdPinMode,
+	digitalWrite: nerdDigitalWrite,
+	high: high,
+	low: low,
+	input: input,
+	output: output,
+	led_builtin: led_builtin,
+	millis: nerdMillis,
+	seconds: nerdSec,
+};
+
+return arduino;

@@ -1,0 +1,36 @@
+var path = {};
+
+{{
+		#ifdef _WIN32
+			var SEP = "\\";
+		#elif _WIN64
+			var SEP = "\\";
+		#else
+			var SEP = "/";
+		#endif
+}}
+
+
+path.join = function()
+{
+	var joined = "";
+	
+	var fnArgs = arguments();
+	
+	for(var i = 0; i < length_of(fnArgs); i++)
+	{
+		var j = i - 1;
+		if(i > 0 && length_of(fnArgs[j]) > 0) 
+		{
+			{{
+				joined += SEP;
+			}}
+		}
+		joined += fnArgs[i];
+		
+	}
+
+	return joined;
+};
+
+return path;

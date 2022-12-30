@@ -1,0 +1,16 @@
+var arduino = require("arduino");
+var LCD = require("arduino-lcd");
+
+var lcd = LCD(8, 9, 4, 5, 6, 7);
+
+lcd.clear();
+lcd.begin(16, 2);
+lcd.print("Chrono:");
+
+while(true)
+{	
+	lcd.setCursor(0,1);
+	var _sec = arduino.seconds();
+	lcd.print(_sec);
+	arduino.delay(1);
+}

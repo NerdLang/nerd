@@ -1,0 +1,156 @@
+/*
+	Copyright (c) 2021 NerdLang - Adrien THIERRY and contributors
+
+	Permission is hereby granted, free of charge, to any person obtaining a copy
+	of this software and associated documentation files (the "Software"), to deal
+	in the Software without restriction, including without limitation the rights
+	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+	copies of the Software, and to permit persons to whom the Software is
+	furnished to do so, subject to the following conditions:
+
+	The above copyright notice and this permission notice shall be included in all
+	copies or substantial portions of the Software.
+
+	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+	SOFTWARE.
+
+*/
+
+include("<iostream>");
+include("<fstream>");
+include("<unistd.h>");
+include("<dirent.h>");
+
+var fs = {};
+
+fs.readFile = function(_name)
+{
+	{{
+		std::ifstream _ifs((std::string)_name);
+		std::string str((std::istreambuf_iterator<char>(_ifs)), std::istreambuf_iterator<char>());
+		return str;
+	}}
+};
+fs.readFileSync = fs.readFile;
+
+fs.writeFile = function(_name, _content)
+{
+	{{
+		std::ofstream _file((std::string)_name);
+		if(_file.is_open())
+		{
+			_file << _content;
+			_file.close();
+			return true;
+		}	
+		else
+		{
+			return false;
+		}
+	}}
+};
+fs.writeFileSync = fs.writeFile;
+
+fs.appendFile = function(_name, _content)
+{
+	{{
+		std::ofstream _file;
+		_file.open((std::string)_name, std::ofstream::out | std::ofstream::app);
+		if(_file.is_open())
+		{
+			_file << _content;
+			_file.close();
+			return true;
+		}	
+		else
+		{
+			return false;
+		}
+	}}
+};
+fs.appendFileSync = fs.appendFile;
+
+fs.unlink = function(_name)
+{
+	{{
+		unlink(_name);
+	}}
+	return true;
+};
+fs.unlinkSync = fs.unlink;
+
+
+fs.rmdir = function(_name)
+{
+	{{
+		rmdir(_name);
+	}}
+	return true;
+};
+fs.rmdirSync = fs.rmdir;
+
+fs.remove = function(_name)
+{
+	{{
+		remove(_name);
+	}}
+	return true;
+};
+fs.removeSync = fs.remove;
+
+fs.rename = function(_old, _new)
+{
+	{{
+		rename(_old, _new);
+	}}
+	return true;
+};
+fs.renameSync = fs.rename;
+
+fs.mkdir = function(_path)
+{
+	{{
+		#ifndef __linux__ 
+			mkdir(_path);
+		#else
+			// TODO
+		#endif
+	}}
+	return true;
+};
+fs.mkdirSync = fs.mkdir;
+
+
+fs.readdir = function(_path)
+{
+	var _list = [];
+	
+	{{
+		int i = 0;
+		DIR *dir; struct dirent *diread;
+		std::string str;
+		if ((dir = opendir(_path)) != nullptr) 
+		{
+			while ((diread = readdir(dir)) != nullptr) 
+			{
+				str = diread->d_name;
+				_list[i] = str;
+				i++;
+			}
+			closedir (dir);
+		}
+		else
+		{
+			throw(var("Cannont open dir: " + _path));
+		}
+	}}
+	return _list;
+};
+fs.readdirSync = fs.readdir;
+
+return fs;

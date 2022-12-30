@@ -1,0 +1,84 @@
+#ifndef ARDUINO_TUPLE_H
+#define ARDUINO_TUPLE_H
+
+namespace std
+{
+template<size_t idx, typename T>
+struct microTupleGetHelper;
+
+template<typename ... T>
+struct tuple
+{
+};
+
+template<int ...> struct seq {};
+
+template<int N, int ...S> struct gens : gens<N - 1, N - 1, S...> { };
+
+template<int ...S> struct gens<0, S...>{ typedef seq<S...> type; };
+
+
+
+template<typename T, typename ... Rest>
+struct tuple<T, Rest ...>
+{
+    tuple(){};
+    tuple(const T& first, const Rest& ... rest)
+        : first(first)
+        , rest(rest...)
+    {}
+    
+    T first;
+    tuple<Rest ... > rest;
+    
+    template<size_t idx>
+    auto get() ->  decltype(microTupleGetHelper<idx, tuple<T,Rest...>>::get(*this))
+    {
+        return microTupleGetHelper<idx, tuple<T,Rest...>>::get(*this);
+    }
+};
+
+
+template<typename T, typename ... Rest>
+struct microTupleGetHelper<0, tuple<T, Rest ... >>
+{
+    static T get(tuple<T, Rest...>& data)
+    {
+        return data.first;
+    }
+};
+
+template<size_t idx, typename T, typename ... Rest>
+struct microTupleGetHelper<idx, tuple<T, Rest ... >>
+{
+    static auto get(tuple<T, Rest...>& data) ->  decltype(microTupleGetHelper<idx-1, tuple<Rest ...>>::get(data.rest))
+    {
+        return microTupleGetHelper<idx-1, tuple<Rest ...>>::get(data.rest);
+    }
+};
+
+
+
+template <typename ...Args>
+class ParamsPack
+{
+public:
+    tuple<Args...> params;
+    operator bool() const { if (func) return true; return false; };
+    void (*func)(Args...);
+private:
+    template<int ...S>
+    auto callFunc(seq<S...>) -> decltype(this->func(this->params.template get<S>() ...))
+    {
+    	return func(params.template get<S>() ...);
+    }
+public:
+    auto getPack() -> decltype(this->callFunc(typename gens<sizeof...(Args)>::type()))
+    {
+        return this->callFunc(typename gens<sizeof...(Args)>::type()); // Item #1
+    }
+
+};
+
+}
+#endif

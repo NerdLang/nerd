@@ -1,0 +1,12 @@
+var console = require("console");
+var object = require("object");
+
+var obj = 
+{
+	"a": 0,
+	"b": 1,
+	"c": 8,
+	"d": "ahah",
+};
+
+console.log(object.keys(obj));

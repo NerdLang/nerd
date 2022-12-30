@@ -1,0 +1,13 @@
+var console = require("console");
+var fs = require("fs");
+
+var args = arguments();
+
+if(args[1])
+{
+	console.log(fs.readFile(args[1]));
+}
+else
+{
+	console.log("[*] Usage:", args[0], " file_to_read.txt");
+}

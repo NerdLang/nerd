@@ -1,0 +1,4 @@
+var date = require("date");
+var console = require("console");
+
+console.log(date.now());

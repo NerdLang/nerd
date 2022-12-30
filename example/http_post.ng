@@ -1,0 +1,38 @@
+var console = require("console");
+var http = require("http");
+
+var _port = 8080;
+
+var _endCB = function(req, res)
+{
+	res.end("Hello Nerd World");
+};
+
+var _cb = function(req, res)
+{
+	if(req.getMethod() == "post")
+	{
+		req.data = "";
+		req.onData = function(chunk, last)
+		{
+			console.log(chunk, last);
+			req.data += chunk;
+			if(last)
+			{
+				res.write("Received: " + req.data + "\n");
+				_endCB(req, res);
+			}
+		};
+	}
+	else
+	{
+		_endCB(req, res);
+	}
+};
+
+var _listenCB = function()
+{
+	console.log("Listening on port", _port);
+};
+
+var server = http.createServer(_cb).listen(_port, _listenCB);

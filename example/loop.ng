@@ -1,0 +1,31 @@
+var console = require("console");
+var a = 10;
+
+var obj = 
+{
+	a: "a",
+	b: "b",
+	c: "c",
+	d: "d",
+};
+
+while(a--)
+{
+	console.log(a);
+}
+
+for(var i = 0; i < 10; i++)
+{
+	console.log("i:", i);
+}
+
+do
+{
+	console.log("a:", a);
+	a++;
+}while(a < 10);
+
+for(var key in obj)
+{
+	console.log(key, ":", obj[key]);
+}

@@ -1,0 +1,17 @@
+/*
+	multiline comment
+*/
+
+// one line comment 
+
+var a = "ok";
+
+var fn = function()
+{
+	/*
+		Multiline comment 
+	*/
+	// One line comment
+};
+
+fn();

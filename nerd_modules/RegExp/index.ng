@@ -1,0 +1,68 @@
+/*
+	Copyright (c) 2022 NerdLang - Adrien THIERRY and contributors
+
+	Permission is hereby granted, free of charge, to any person obtaining a copy
+	of this software and associated documentation files (the "Software"), to deal
+	in the Software without restriction, including without limitation the rights
+	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+	copies of the Software, and to permit persons to whom the Software is
+	furnished to do so, subject to the following conditions:
+
+	The above copyright notice and this permission notice shall be included in all
+	copies or substantial portions of the Software.
+
+	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+	SOFTWARE.
+
+*/
+
+include("<regex>");
+var regexp = function(_regExp, flag)
+{
+	this.source = _regExp;
+	this.flag = flag;
+};
+
+regexp.prototype.test = function(_string)
+{
+	{{
+		if( std::regex_match ( (std::string)_string, std::regex((std::string)__NERD_THIS["source"], std::regex::ECMAScript) ) )
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}}
+};
+
+regexp.prototype.exec = function(_string)
+{
+	{{
+		var _res = new NerdCore::Class::Array();
+		std::string s = (std::string)_string;
+		std::smatch m;
+		while(std::regex_search ( s, m, std::regex((std::string)__NERD_THIS["source"], std::regex::ECMAScript) ))
+		{
+			int i = 0;
+			for(auto x:m)
+			{
+				_res[i] = (std::string)x;
+				i++;
+			}		
+			s = m.suffix().str();
+		}
+		return _res;
+	}}
+};
+
+regexp.prototype.match = regexp.prototype.exec;
+
+
+return regexp;

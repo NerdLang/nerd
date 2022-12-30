@@ -1,0 +1,16 @@
+var console = require("console");
+
+var a = {
+	b: "ok",
+	c: "hello",
+	d: {
+		x: "z",
+		y: {},
+		p: "q",
+	},
+	e: "e",
+};	
+
+
+
+console.log(a.d.p);

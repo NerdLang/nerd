@@ -1,0 +1,11 @@
+var arduino = require("arduino");
+
+arduino.pinMode(arduino.led_builtin, arduino.output);
+
+while(true)
+{
+	arduino.digitalWrite(arduino.led_builtin, arduino.high);
+	arduino.delay(50);
+	arduino.digitalWrite(arduino.led_builtin, arduino.low);
+	arduino.delay(50);
+}

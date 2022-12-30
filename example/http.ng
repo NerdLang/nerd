@@ -1,0 +1,25 @@
+var console = require("console");
+var http = require("http");
+
+var _port = 8080;
+
+var _cb = function(req, res)
+{
+	/* API EXAMPLE
+	console.log(req.getUrl());
+	console.log(req.getHeader("user-agent"));
+	console.log(req.getMethod());
+	res.setHeader("server", "Nerd");
+	res.setStatus(200);
+	res.write("test - ");
+	*/
+	
+	res.end("Hello Nerd World");
+};
+
+var _listenCB = function()
+{
+	console.log("Listening on port", _port);
+};
+
+var server = http.createServer(_cb).listen(_port, _listenCB);

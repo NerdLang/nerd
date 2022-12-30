@@ -1,0 +1,31 @@
+var String = function(value)
+{
+	if(!value)
+	{
+		value = "";
+	}
+
+	return value;
+};
+
+String.prototype.replace = function(_search, _replace)
+{
+	{{
+		size_t start_pos = ((NerdCore::Class::String*)(__NERD_THIS.data.ptr))->value.find((std::string)_search);
+		if (start_pos == std::string::npos)
+		{
+			return NerdCore::VAR(((NerdCore::Class::String*)(__NERD_THIS.data.ptr))->value);
+		}
+		
+		std::string _new = ((NerdCore::Class::String*)(__NERD_THIS.data.ptr))->value;
+		return NerdCore::VAR(_new.replace(start_pos, ((std::string)_search).length(), (std::string)_replace));
+	}}
+
+}
+
+String.prototype.toString = function()
+{
+	return this;
+}
+
+return String;

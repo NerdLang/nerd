@@ -1,0 +1,3 @@
+var zero = 0;
+
+exit(zero);
