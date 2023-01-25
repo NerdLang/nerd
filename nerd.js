@@ -62,9 +62,8 @@ require("./lib/env.js");
 global.parseCode = require("./lib/parser.js");
 global.verifyFlow = require("./lib/verify.js");
 
-
-global.CONFIGPATH = global.os.homedir() + path.sep + ".nerd";
-global.CONFIGFILE = global.CONFIGPATH + "/" + "nerd.json";
+global.CONFIGPATH = process.env.XDG_CONFIG_HOME ? (process.env.XDG_CONFIG_HOME + path.sep + "nerd") : (global.os.homedir() + path.sep + ".nerd");
+global.CONFIGFILE = global.CONFIGPATH + path.sep + "nerd.json";
 global.CONFIG = {};
 
 
